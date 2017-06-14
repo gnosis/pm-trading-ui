@@ -1,5 +1,4 @@
-gnosis-interface-webapp
+gnosis-management
 ------
 
-Dev running in
-`localhost:8000/`
+Start with `npm start`, server available under `http://localhost:8000/`
