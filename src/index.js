@@ -9,8 +9,8 @@ import { Router, Route, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
 import App from 'containers/App'
+import MarketOverviewPage from 'containers/EventOverviewPage'
 
-import 'font-awesome/less/font-awesome.less'
 import 'less/style.less'
 
 import store from './store'
@@ -31,6 +31,7 @@ render(
     <Router history={history}>
       <Route path="/" component={App}>
         <IndexRedirect to="markets" />
+        <Route path="markets" component={MarketOverviewPage} />
       </Route>
     </Router>
   </Provider>,
