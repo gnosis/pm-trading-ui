@@ -13,6 +13,7 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: 'index.js',
+  devtool: 'source-map',
   output: {
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
