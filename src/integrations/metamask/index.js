@@ -8,24 +8,29 @@ class Metamask {
     this.store = store
     this.store.dispatch(registerWallet({ provider: WALLET_PROVIDER.METAMASK }))
 
-    const walletEnabled = await new Promise((resolve, reject) => {
+    const walletEnabled = await new Promise((resolve) => {
       /* global Web3, window */
       window.addEventListener('load', () => {
         if (typeof window.web3 !== 'undefined') {
           this.web3 = new Web3(window.web3.currentProvider)
-          resolve(true)
-        } else {
-          reject(false)
+          return resolve(true)
         }
+
+        return resolve(false)
       })
     })
 
-    const network = await this.getNetwork()
-    const account = await this.getAccount()
+    let account
+    let network
+
+    if (walletEnabled) {
+      network = await this.getNetwork()
+      account = await this.getAccount()
+    }
 
     this.store.dispatch(updateWallet({
       provider: WALLET_PROVIDER.METAMASK,
-      enabled: walletEnabled,
+      available: walletEnabled,
       network,
       account,
     }))

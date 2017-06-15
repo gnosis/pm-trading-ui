@@ -11,6 +11,7 @@ const reducer = handleActions({
         ...state.providers,
         [name]: {
           name,
+          loaded: false,
           ...provider,
         },
       },
@@ -24,10 +25,12 @@ const reducer = handleActions({
         ...state.providers,
         [name]: {
           ...state.providers[name],
+          loaded: true,
           ...provider,
         },
       },
-      activeProvider: !state.activeProvider && provider.enabled ? name : state.activeProvider,
+      activeProvider: !state.activeProvider && provider.available ? name : state.activeProvider,
+      providersLoaded: true,
     }
   },
 }, {

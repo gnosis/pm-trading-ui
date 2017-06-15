@@ -5,10 +5,14 @@ class WalletIntegrationProvider extends Component {
     super(props)
 
     const { integrations, store } = props
-    Object.keys(integrations).forEach(integrationName => integrations[integrationName].initialize(store))
+    Object.keys(integrations)
+      .forEach(integrationName => integrations[integrationName].initialize(store))
   }
+
   render() {
-    return this.props.children
+    const { children } = this.props
+
+    return children
   }
 }
 
