@@ -8,8 +8,11 @@ import { Provider } from 'react-redux'
 import { Router, Route, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
+import * as walletIntegrations from 'integrations'
+
 import App from 'containers/App'
 import EventOverviewPage from 'containers/EventOverviewPage'
+import WalletIntegrationProvider from 'containers/WalletIntegrationProvider'
 
 import 'less/style.less'
 
@@ -28,12 +31,14 @@ const history = syncHistoryWithStore(hashHistory, store)
 
 render(
   <Provider store={store}>
-    <Router history={history}>
-      <Route path="/" component={App}>
-        <IndexRedirect to="markets" />
-        <Route path="markets" component={EventOverviewPage} />
-      </Route>
-    </Router>
+    <WalletIntegrationProvider store={store} integrations={walletIntegrations}>
+      <Router history={history}>
+        <Route path="/" component={App}>
+          <IndexRedirect to="markets" />
+          <Route path="markets" component={EventOverviewPage} />
+        </Route>
+      </Router>
+    </WalletIntegrationProvider>
   </Provider>,
   rootElement,
 )

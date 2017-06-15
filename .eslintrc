@@ -7,6 +7,6 @@
     "semi": ["error", "never"],
     "import/no-unresolved" : 0,
     "import/no-extraneous-dependencies": 0,
-    "import/extensions": [1, "never", { "js": "never", "json": "always" }]
+    "import/extensions": 0
   }
 }
