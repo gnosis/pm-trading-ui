@@ -30,7 +30,7 @@ class Metamask {
 
     this.store.dispatch(updateWallet({
       provider: WALLET_PROVIDER.METAMASK,
-      available: walletEnabled,
+      available: walletEnabled && account,
       network,
       account,
     }))
@@ -80,7 +80,8 @@ class Metamask {
         if (accounts.length > 0) {
           resolve(accounts[0])
         } else {
-          reject('No Accounts available')
+          console.warn('No Accounts available for metamask')
+          resolve(null)
         }
       }, 0)
     })

@@ -11,9 +11,13 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import * as walletIntegrations from 'integrations'
 
 import App from 'containers/App'
-import EventOverviewPage from 'containers/EventOverviewPage'
+import MarketListPage from 'containers/MarketListPage'
+import MarketDetailPage from 'containers/MarketDetailPage'
+import SettingsPage from 'containers/SettingsPage'
+import DashboardPage from 'containers/DashboardPage'
 import WalletIntegrationProvider from 'containers/WalletIntegrationProvider'
 
+import 'normalize.css'
 import 'less/style.less'
 
 import store from './store'
@@ -34,8 +38,14 @@ render(
     <WalletIntegrationProvider store={store} integrations={walletIntegrations}>
       <Router history={history}>
         <Route path="/" component={App}>
-          <IndexRedirect to="markets" />
-          <Route path="markets" component={EventOverviewPage} />
+          <IndexRedirect to="dashboard" />
+          <Route path="dashboard" component={DashboardPage} />
+          <Route path="settings" component={SettingsPage} />
+          <Route path="markets">
+            <IndexRedirect to="list" />
+            <Route path="list" component={MarketListPage} />
+            <Route path=":id" component={MarketDetailPage} />
+          </Route>
         </Route>
       </Router>
     </WalletIntegrationProvider>
