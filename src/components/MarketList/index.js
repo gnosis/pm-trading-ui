@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import moment from 'moment'
 import 'moment-duration-format'
 import { reduxForm, submit, Field } from 'redux-form'
@@ -7,8 +8,7 @@ import SelectLabeled from 'components/SelectLabeled'
 
 import './marketList.less'
 
-const RELATIVE_FORMAT = 'y[Y] M[M] D[D] h[hrs] m[mins]'
-const ABSOLUTE_FORMAT = 'LLL'
+import { RESOLUTION_TIME } from 'utils/constants'
 
 class MarketList extends Component {
   componentWillMount() {
@@ -17,7 +17,7 @@ class MarketList extends Component {
 
   renderMarkets() {
     const { markets } = this.props
-
+    console.log(markets)
     if (markets.length > 0) {
       const marketList = markets.map((market) => {
         const timeUntilEvent = moment
@@ -26,14 +26,16 @@ class MarketList extends Component {
 
         return (
           <div className="market" key={market.id}>
-            <div className="market__field market__field--header">{market.eventDescription.title}</div>
+            <div className="market__field market__field--header">
+              <Link to={`markets/${market.id}`}>{ market.eventDescription.title }</Link>
+            </div>
             <div className="market__field market__field--liveTime">
-              {timeUntilEvent.format(RELATIVE_FORMAT)}
+              {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_FORMAT)}
             </div>
             <div className="market__field market__field--creator">{market.creator}</div>
             <div className="market__field market__field--oracle">{market.oracle.owner}</div>
             <div className="market__field market__field--resolutionDate">
-              {moment(market.eventDescription.resolutionDate).format(ABSOLUTE_FORMAT)}
+              {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
           </div>
         )

@@ -8,3 +8,49 @@ html, body, #root {
 a, a:visited {
   color: @link-color;
 }
+
+#root h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+}
+
+/* bootstrap customization */
+#root .btn, #root .btn.btn-primary, #root .btn.btn-default {
+  color: @btn-font-color;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 12px;
+  padding: 10px 24px;
+  background: transparent;
+  border: none;
+  position: relative;
+  z-index: 2;
+
+  &::before {
+    border-radius: 9999px;
+    content: '';
+    position: absolute;
+    z-index: -2;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: @btn-gradient;
+  }
+}
+
+#root .btn.btn-default {
+  color: @btn-invert-font-color;
+
+  &::after {
+    border-radius: 9999px;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: @btn-inset;
+    right: @btn-inset;
+    left: @btn-inset;
+    bottom: @btn-inset;
+    background: white;
+  }
+}

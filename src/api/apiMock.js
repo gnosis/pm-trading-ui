@@ -85,7 +85,7 @@ export const requestScalarEventDescriptions = async () => normalize([
     ipfsHash: 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme',
     title: 'DAX Performance in 2 weeks',
     description: 'Stock prices!',
-    resolutionDate: moment.utc().add(5, 'hours'),
+    resolutionDate: moment.utc().add(13, 'minutes'),
     units: 'Points',
   },
 ], [ScalarEventDescriptionSchema])
