@@ -5,7 +5,7 @@ import HeaderContainer from 'containers/HeaderContainer'
 import './app.less'
 
 export default ({ children }) => (
-  <div className="appContainer">
+  <div className="appContainer container">
     <HeaderContainer />
     {children}
   </div>

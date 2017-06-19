@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
-
 import moment from 'moment'
+import 'moment-duration-format'
+import { reduxForm, submit, Field } from 'redux-form'
 
-import ResolutionTimer from 'components/RelativeTime'
+import SelectLabeled from 'components/SelectLabeled'
 
 import './marketList.less'
 
-export default class MarketList extends Component {
+const RELATIVE_FORMAT = 'y[Y] M[M] D[D] h[hrs] m[mins]'
+const ABSOLUTE_FORMAT = 'LLL'
+
+class MarketList extends Component {
   componentWillMount() {
     this.props.requestMarkets()
   }
@@ -15,60 +19,96 @@ export default class MarketList extends Component {
     const { markets } = this.props
 
     if (markets.length > 0) {
-      const marketList = markets.map(market => (
-        <div className="market" key={market.id}>
-          <div className="market__header">{market.eventDescription.title}</div>
-          <div className="market__resolutionDateRelative">
-            <ResolutionTimer target={market.eventDescription.resolutionDate} />
-          </div>
-          <div className="market__creator">{market.creator}</div>
-          <div className="market__oracle">{market.oracle.owner}</div>
-          <div className="market_resolutionDate">
-            {moment(market.eventDescription.resolutionDate).local().format('LLL')}
-          </div>
-        </div>
-      ))
+      const marketList = markets.map((market) => {
+        const timeUntilEvent = moment
+          .duration(moment(market.eventDescription.resolutionDate)
+          .diff())
 
-      return <div className="marketList">{marketList}</div>
+        return (
+          <div className="market" key={market.id}>
+            <div className="market__field market__field--header">{market.eventDescription.title}</div>
+            <div className="market__field market__field--liveTime">
+              {timeUntilEvent.format(RELATIVE_FORMAT)}
+            </div>
+            <div className="market__field market__field--creator">{market.creator}</div>
+            <div className="market__field market__field--oracle">{market.oracle.owner}</div>
+            <div className="market__field market__field--resolutionDate">
+              {moment(market.eventDescription.resolutionDate).format(ABSOLUTE_FORMAT)}
+            </div>
+          </div>
+        )
+      })
+
+      return <div className="marketList col-xs-10">{marketList}</div>
     }
     return (
-      <div className="marketList">
+      <div className="marketList col-xs-10">
         <div className="market">No Markets available</div>
       </div>
     )
   }
 
   renderMarketFilter() {
+    const { handleSubmit } = this.props
+
     return (
-      <div className="marketFilter">
-        <div className="marketFilter__input">
-          <label>Preset</label>
-          <select></select>
-        </div>
-        <div className="marketFilter__input">
-          <label>OracleType</label>
-          <select></select>
-        </div>
+      <div className="marketFilter col-xs-2">
+        <form onSubmit={handleSubmit}>
+          <div className="marketFilter__group">
+            <Field
+              component={SelectLabeled}
+              name="preset"
+              label="Preset"
+              labelClassName="marketFilter__label"
+              className="marketFilter__input"
+              defaultValue={'none'}
+              values={{ none: 'None' }}
+            />
+          </div>
+          <div className="marketFilter__group">
+            <Field
+              component={SelectLabeled}
+              name="oracle"
+              label="Oracle"
+              labelClassName="marketFilter__label"
+              className="marketFilter__input"
+              defaultValue={'CENTRALIZED'}
+              values={{ CENTRALIZED: 'Centralized', ULTIMATE: 'Ultimate' }}
+            />
+          </div>
+        </form>
       </div>
     )
   }
 
   render() {
+    const { markets } = this.props
     return (
       <div className="marketListPage">
-        <div className="marketOverview">
-          <h1>Marketoverview</h1>
-          <p>Here you can see all the markets!</p>
+        <div className="row">
+          <div className="marketOverview col-xs-12">
+            <h1>Marketoverview</h1>
+            <p>Here you can see all the markets!</p>
 
-          <div className="marketStats">
-            <p className="marketStats__stat">200 markets open</p>
-            <p className="marketStats__stat">2 closing soon</p>
-            <p className="marketStats__stat">5 new (since last visit)</p>
+            <div className="marketStats">
+              <p className="marketStats__stat">{ markets.length } markets open</p>
+              <p className="marketStats__stat">{ markets.length } closing soon</p>
+              <p className="marketStats__stat">{ markets.length } new (since last visit)</p>
+            </div>
           </div>
+          { this.renderMarkets() }
+          { this.renderMarketFilter() }
         </div>
-        { this.renderMarketFilter() }
-        { this.renderMarkets() }
       </div>
     )
   }
 }
+
+export default reduxForm({
+  form: 'marketList',
+  onChange: (values, dispatch) => {
+    dispatch(submit('marketList'))
+  },
+  onSubmit: () => {
+  }
+})(MarketList)

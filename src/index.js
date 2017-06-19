@@ -17,7 +17,6 @@ import SettingsPage from 'containers/SettingsPage'
 import DashboardPage from 'containers/DashboardPage'
 import WalletIntegrationProvider from 'containers/WalletIntegrationProvider'
 
-import 'normalize.css'
 import 'less/style.less'
 
 import store from './store'

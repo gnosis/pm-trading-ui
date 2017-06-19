@@ -1,3 +1,5 @@
+@import "../../less/vars.less";
+
 .marketStats__stat {
   font-size: 22px;
 
@@ -5,15 +7,37 @@
   padding-right: 100px;
 }
 
-.market__header {
-  font-size: 20px;
-  font-weight: 400;
-}
-
-.marketFilter {
-  float: right;
-}
-
 .marketList {
   float: left;
+  width: 80%;
+}
+
+.market__field.market__field--header {
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.market__field.market__field--liveTime {
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.marketFilter__group {
+  display: block;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.marketFilter__label {
+  display: block;
+  color: lighten(@font-color-dark, 10%);
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+
+.marketFilter__input {
+  width: 100%;
 }
