@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
 import { getOracleByAddress } from './oracle'
