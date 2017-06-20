@@ -17,25 +17,25 @@ class MarketList extends Component {
 
   renderMarkets() {
     const { markets } = this.props
-    console.log(markets)
+    
     if (markets.length > 0) {
       const marketList = markets.map((market) => {
         const timeUntilEvent = moment
-          .duration(moment(market.eventDescription.resolutionDate)
+          .duration(moment(market.resolutionDate)
           .diff())
 
         return (
-          <div className="market" key={market.id}>
+          <div className="market" key={market.address}>
             <div className="market__field market__field--header">
-              <Link to={`markets/${market.id}`}>{ market.eventDescription.title }</Link>
+              <Link to={`markets/${market.address}`}>{ market.title }</Link>
             </div>
             <div className="market__field market__field--liveTime">
               {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_FORMAT)}
             </div>
-            <div className="market__field market__field--creator">{market.creator}</div>
-            <div className="market__field market__field--oracle">{market.oracle.owner}</div>
+            <div className="market__field market__field--creator">{market.marketCreator}</div>
+            <div className="market__field market__field--oracle">{market.oracleOwner}</div>
             <div className="market__field market__field--resolutionDate">
-              {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+              {moment(market.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
           </div>
         )

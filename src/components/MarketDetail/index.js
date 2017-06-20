@@ -6,9 +6,18 @@ import { RESOLUTION_TIME } from 'utils/constants'
 
 import './marketDetail.less'
 
+const EXPAND_BUY_SHARES = 'BUY_SHARES'
+const EXPAND_SHORT_SELL = 'SHORT_SELL'
+const EXPAND_MY_SHARES = 'MY_SHARES'
+const EXPAND_RESOLVE = 'RESOLVE'
+
 export default class MarketDetail extends Component {
   componentWillMount() {
     this.props.requestMarket(this.props.params.id)
+  }
+
+  handleExpand = (type) => {
+
   }
 
   renderLoading() {
@@ -19,15 +28,13 @@ export default class MarketDetail extends Component {
     )
   }
 
-  renderInfos() {
-    const { market } = this.props
-
+  renderInfos(market) {
     const keyValueInfo = {
-      Creator: market.event.creator,
-      Oracle: market.oracle.id,
-      Token: market.event.collateralToken,
+      Creator: market.marketCreator,
+      Oracle: market.oracleOwner,
+      Token: market.collateralToken,
       Fee: market.fee.toFixed(2),
-      Funding: `${market.funding.toFixed(2)} ${market.event.collateralToken}`,
+      Funding: `${market.funding.toFixed(2)} ${market.collateralToken}`,
     }
 
     return (
@@ -42,33 +49,44 @@ export default class MarketDetail extends Component {
     )
   }
 
-  renderControls() {
-    const { market } = this.props
+  renderDetails(market) {
 
+    return (
+      <div className="marketDetails col-xs-10">
+        <p>{ market.description }</p>
+      </div>
+    )
+  }
+
+  renderControls(market) {
     return (
       <div className="marketControls">
         <div className="row">
           <button
             type="button"
             className="marketControls__button btn btn-primary col-xs-2"
+            onClick={() => this.handleExpand(EXPAND_BUY_SHARES)}
           >
             Buy Shares
           </button>
           <button
             type="button"
             className="marketControls__button btn btn-primary col-xs-2"
+            onClick={() => this.handleExpand(EXPAND_SHORT_SELL)}
           >
             Short Sell
           </button>
           <button
             type="button"
             className="marketControls__button btn btn-default col-xs-2"
+            onClick={() => this.handleExpand(EXPAND_MY_SHARES)}
           >
             My Shares
           </button>
           <button
             type="button"
             className="marketControls__button btn btn-default col-xs-2"
+            onClick={() => this.handleExpand(EXPAND_RESOLVE)}
           >
             Resolve
           </button>
@@ -77,20 +95,18 @@ export default class MarketDetail extends Component {
     )
   }
 
-  renderTimer() {
-    const { market } = this.props
-
+  renderTimer(market) {
     const timeUntilEvent = moment
-      .duration(moment(market.eventDescription.resolutionDate)
+      .duration(moment(market.resolutionDate)
       .diff())
 
     return (
-      <div className="marketTimer">
+      <div className="marketTimer col-xs-10">
         <div className="marketTimer__live">
           {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}
         </div>
         <small className="marketTime__absolute">
-          {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+          {moment(market.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
         </small>
       </div>
     )
@@ -106,13 +122,17 @@ export default class MarketDetail extends Component {
     return (
       <div className="marketDetailPage">
         <div className="row">
-          <div className="marketDetails col-xs-10">
-            <h1>{ market.eventDescription.title }</h1>
-            <p>{ market.eventDescription.description }</p>
-            { this.renderTimer() }
+          <div className="col-xs-12">
+            <h1>{ market.title }</h1>
           </div>
-          { this.renderInfos() }
-          { this.renderControls() }
+        </div>
+        <div className="row">
+          { this.renderDetails(market) }
+          { this.renderInfos(market) }
+          { this.renderTimer(market) }
+        </div>
+        <div className="row">
+          { this.renderControls(market) }
         </div>
       </div>
     )
