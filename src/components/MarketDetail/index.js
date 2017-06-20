@@ -75,7 +75,7 @@ export default class MarketDetail extends Component {
 
   renderInfos(market) {
     const infos = {
-      Creator: market.marketCreator,
+      Creator: market.creator,
       Oracle: market.oracleOwner,
       Token: market.collateralToken,
       Fee: market.fee.toFixed(2),

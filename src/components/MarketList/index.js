@@ -17,7 +17,7 @@ class MarketList extends Component {
 
   renderMarkets() {
     const { markets } = this.props
-    
+
     if (markets.length > 0) {
       const marketList = markets.map((market) => {
         const timeUntilEvent = moment
@@ -32,7 +32,7 @@ class MarketList extends Component {
             <div className="market__field market__field--liveTime">
               {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_FORMAT)}
             </div>
-            <div className="market__field market__field--creator">{market.marketCreator}</div>
+            <div className="market__field market__field--creator">{market.creator}</div>
             <div className="market__field market__field--oracle">{market.oracleOwner}</div>
             <div className="market__field market__field--resolutionDate">
               {moment(market.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}

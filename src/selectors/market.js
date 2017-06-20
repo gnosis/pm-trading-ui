@@ -6,7 +6,7 @@ import { getEventDescriptionByAddress } from './eventDescription'
 export const getMarketById = state => (marketAddress) => {
   const marketEntities = entitySelector(state, 'market')
 
-  let market
+  let market = {}
   if (marketEntities[marketAddress]) {
     const marketEntity = marketEntities[marketAddress]
 
@@ -17,9 +17,9 @@ export const getMarketById = state => (marketAddress) => {
 
     market = {
       address: marketAddress,
-      marketCreator: marketEntity.creator,
-      marketCreationDate: marketEntity.creationDate,
-      marketCreationBlock: marketEntity.creationBlock,
+      creator: marketEntity.creator,
+      creationDate: marketEntity.creationDate,
+      creationBlock: marketEntity.creationBlock,
       marketMaker: marketEntity.marketMaker,
       fee: marketEntity.fee,
       funding: marketEntity.funding,
