@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import _ from 'lodash'
 import 'moment-duration-format'
+import autobind from 'autobind-decorator'
 
 import { RESOLUTION_TIME } from 'utils/constants'
+import Expandable from 'components/Expandable'
 
 import './marketDetail.less'
 
@@ -11,13 +14,46 @@ const EXPAND_SHORT_SELL = 'SHORT_SELL'
 const EXPAND_MY_SHARES = 'MY_SHARES'
 const EXPAND_RESOLVE = 'RESOLVE'
 
+
+const controlButtons = {
+  [EXPAND_BUY_SHARES]: {
+    label: 'Buy Shares',
+    className: 'btn btn-primary',
+    component: <span>Buy Shares</span>,
+  },
+  [EXPAND_SHORT_SELL]: {
+    label: 'Short Sell',
+    className: 'btn btn-primary',
+    component: <span>Short Sell</span>,
+  },
+  [EXPAND_MY_SHARES]: {
+    label: 'My Shares',
+    className: 'btn btn-default',
+    component: <span>My Shares</span>,
+  },
+  [EXPAND_RESOLVE]: {
+    label: 'Resolve',
+    className: 'btn btn-default',
+    component: <span>Resolve</span>,
+  },
+}
+
 export default class MarketDetail extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      expandableSelected: undefined,
+    }
+  }
   componentWillMount() {
     this.props.requestMarket(this.props.params.id)
   }
 
-  handleExpand = (type) => {
-
+  @autobind
+  handleExpand(type) {
+    // Toggle
+    this.setState({ expandableSelected: (this.state.expandableSelected === type ? null : type) })
   }
 
   renderLoading() {
@@ -28,8 +64,17 @@ export default class MarketDetail extends Component {
     )
   }
 
+  renderExpandableContent() {
+    return (
+      <Expandable
+        selected={this.state.expandableSelected}
+        components={_.mapValues(controlButtons, control => control.component)}
+      />
+    )
+  }
+
   renderInfos(market) {
-    const keyValueInfo = {
+    const infos = {
       Creator: market.marketCreator,
       Oracle: market.oracleOwner,
       Token: market.collateralToken,
@@ -39,9 +84,9 @@ export default class MarketDetail extends Component {
 
     return (
       <div className="marketInfos col-xs-2">
-        {Object.keys(keyValueInfo).map(label => (
+        {Object.keys(infos).map(label => (
           <div className="marketInfo" key={label}>
-            <p className="marketInfo__info marketInfo__info--value">{keyValueInfo[label]}</p>
+            <p className="marketInfo__info marketInfo__info--value">{infos[label]}</p>
             <p className="marketInfo__info marketInfo__info--label">{label}</p>
           </div>
         ))}
@@ -50,7 +95,6 @@ export default class MarketDetail extends Component {
   }
 
   renderDetails(market) {
-
     return (
       <div className="marketDetails col-xs-10">
         <p>{ market.description }</p>
@@ -60,36 +104,23 @@ export default class MarketDetail extends Component {
 
   renderControls(market) {
     return (
-      <div className="marketControls">
+      <div className="marketControls container">
         <div className="row">
-          <button
-            type="button"
-            className="marketControls__button btn btn-primary col-xs-2"
-            onClick={() => this.handleExpand(EXPAND_BUY_SHARES)}
-          >
-            Buy Shares
-          </button>
-          <button
-            type="button"
-            className="marketControls__button btn btn-primary col-xs-2"
-            onClick={() => this.handleExpand(EXPAND_SHORT_SELL)}
-          >
-            Short Sell
-          </button>
-          <button
-            type="button"
-            className="marketControls__button btn btn-default col-xs-2"
-            onClick={() => this.handleExpand(EXPAND_MY_SHARES)}
-          >
-            My Shares
-          </button>
-          <button
-            type="button"
-            className="marketControls__button btn btn-default col-xs-2"
-            onClick={() => this.handleExpand(EXPAND_RESOLVE)}
-          >
-            Resolve
-          </button>
+          {Object.keys(controlButtons).map(type => (
+            <button
+              key={type}
+              type="button"
+              className={`
+                marketControls__button
+                ${controlButtons[type].className}
+                col-xs-2
+                ${type == this.state.expandableSelected ? 'marketControls__button--active' : ''}`
+              }
+              onClick={() => this.handleExpand(type)}
+            >
+              {controlButtons[type].label}
+            </button>
+          ))}
         </div>
       </div>
     )
@@ -131,9 +162,8 @@ export default class MarketDetail extends Component {
           { this.renderInfos(market) }
           { this.renderTimer(market) }
         </div>
-        <div className="row">
-          { this.renderControls(market) }
-        </div>
+        { this.renderControls(market) }
+        { this.renderExpandableContent() }
       </div>
     )
   }
