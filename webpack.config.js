@@ -14,7 +14,7 @@ module.exports = {
   context: path.join(__dirname, 'src'),
   entry: [
     'index.js',
-    'bootstrap-loader',
+    'bootstrap-loader/extractStyles',
   ],
   devtool: 'source-map',
   output: {
@@ -45,11 +45,7 @@ module.exports = {
       {
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]',
-      },
-      {
-        test: /bootstrap-sass\/assets\/javascripts\//,
-        loader: 'imports-loader?jQuery=jquery',
-      },
+      }
     ],
   },
   devServer: {

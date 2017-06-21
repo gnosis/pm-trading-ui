@@ -24,9 +24,16 @@ const generateRandomGraph = () => {
   const graphData = []
   let i = 0
 
+  let dir = 0
+  let dirChangeForce = 0.0001
+
   while (endDate.diff(curDate) > 0) {
     curDate.add(12, 'hour')
-    let outcome1 = (Math.sin(++i / 12) + 1) / 2
+
+    dir = dir + (dirChangeForce * Math.random())
+
+    let outcome1 = Math.min(dir * 50, 1)
+
     graphData.push({ date: curDate.toDate(), outcome1, outcome2: 1 - outcome1 })
   }
 

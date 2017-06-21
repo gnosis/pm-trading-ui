@@ -68,7 +68,7 @@ export default class MarketGraph extends Component {
       .y1(d => y(d[1]))
     const chartLine = line()
       .x(d => x(d.data.date))
-      .y(d => y(d[0]))
+      .y(d => y(d[1]))
 
     const g = svg
       .selectAll('g')
@@ -88,8 +88,9 @@ export default class MarketGraph extends Component {
           .attr('y2', y(0))
         .selectAll('stop')
           .data(d => [
-            { offset: '0%', color: z(d.key), stopOpacity: '0.6' },
-            { offset: '100%', color: 'black', stopOpacity: '0' },
+            { offset: '0%', color: z(d.key), stopOpacity: '0.8' },
+            { offset: '50%', color: z(d.key), stopOpacity: '0.5' },
+            { offset: '100%', color: 'black', stopOpacity: '0.3' },
           ])
         .enter()
         .append('stop')
