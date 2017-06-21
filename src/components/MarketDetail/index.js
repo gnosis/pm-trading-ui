@@ -197,11 +197,7 @@ export default class MarketDetail extends Component {
         </div>
         { this.renderControls(market) }
         { this.renderExpandableContent() }
-        <div className="marketGraphContainer">
-          <div className="container">
-            <MarketGraph data={testData} />
-          </div>
-        </div>
+        <MarketGraph data={testData} />
       </div>
     )
   }

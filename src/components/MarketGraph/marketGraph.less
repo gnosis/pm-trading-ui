@@ -1,48 +1,12 @@
 @import "../../less/vars.less";
 
 .marketGraph {
-  position: relative;
-  width: 100%;
 }
 
-.marketGraph__svg {
-  width: 100%;
-}
-
-.marketGraph__tooltipLine {
-  stroke: black;
-  opacity: 0;
+.tooltip {
   pointer-events: none;
-}
-
-.marketGraph__tooltip {
-  display: none;
-  pointer-events: none;
-  position: absolute;
-  width: 150px;
-  min-height: 10px;
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 12px;
   padding: 12px 8px;
   margin: 5px;
-}
-
-.area {
-  stroke: none;
-}
-
-.curve {
-  stroke-width: 5px;
-}
-
-.axis text {
-  fill: white;
-}
-
-.axis path {
-  stroke: @highlight-dark;
-}
-
-.axis line {
-  stroke: @highlight-dark;
 }
