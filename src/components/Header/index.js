@@ -25,7 +25,7 @@ export default ({ wallet, walletLoaded }) => {
     </div>
   )*/
   return (
-    <div className="headerContainer">
+    <div className="headerContainer container">
       <Link to="/dashboard" className="headerContainer__navLink">Home</Link>
       <Link to="/markets/list" className="headerContainer__navLink">Markets</Link>
       <Link to="/settings" className="headerContainer__navLink">Settings</Link>

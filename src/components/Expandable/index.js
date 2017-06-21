@@ -1,7 +1,5 @@
 import React from 'react'
 
-import './expandable.less'
-
 export default ({ components, selected }) => {
   if (!selected) {
     return (
@@ -11,7 +9,9 @@ export default ({ components, selected }) => {
 
   return (
     <div className="expandable">
-      {components[selected]}
+      <div className="container">
+        {components[selected]}
+      </div>
     </div>
   )
 }

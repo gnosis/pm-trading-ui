@@ -6,6 +6,7 @@ import autobind from 'autobind-decorator'
 
 import { RESOLUTION_TIME } from 'utils/constants'
 import Expandable from 'components/Expandable'
+import MarketGraph from 'components/MarketGraph'
 
 import './marketDetail.less'
 
@@ -13,6 +14,27 @@ const EXPAND_BUY_SHARES = 'BUY_SHARES'
 const EXPAND_SHORT_SELL = 'SHORT_SELL'
 const EXPAND_MY_SHARES = 'MY_SHARES'
 const EXPAND_RESOLVE = 'RESOLVE'
+
+// start debug history
+const generateRandomGraph = () => {
+  const startDate = moment().subtract(4, 'month')
+  const endDate = moment()
+  const curDate = startDate.clone()
+
+  const graphData = []
+  let i = 0
+
+  while (endDate.diff(curDate) > 0) {
+    curDate.add(12, 'hour')
+    let outcome1 = (Math.sin(++i / 12) + 1) / 2
+    graphData.push({ date: curDate.toDate(), outcome1, outcome2: 1 - outcome1 })
+  }
+
+  return graphData
+}
+
+const testData = generateRandomGraph()
+// end debug history
 
 
 const controlButtons = {
@@ -114,7 +136,7 @@ export default class MarketDetail extends Component {
                 marketControls__button
                 ${controlButtons[type].className}
                 col-xs-2
-                ${type == this.state.expandableSelected ? 'marketControls__button--active' : ''}`
+                ${type === this.state.expandableSelected ? 'marketControls__button--active' : ''}`
               }
               onClick={() => this.handleExpand(type)}
             >
@@ -146,24 +168,33 @@ export default class MarketDetail extends Component {
   render() {
     const { market } = this.props
 
-    if (!market) {
+    if (!market.address) {
       return this.renderLoading()
     }
 
     return (
       <div className="marketDetailPage">
-        <div className="row">
-          <div className="col-xs-12">
-            <h1>{ market.title }</h1>
+        <div className="container">
+          <div className="row">
+            <div className="col-xs-12">
+              <h1>{ market.title }</h1>
+            </div>
           </div>
         </div>
-        <div className="row">
-          { this.renderDetails(market) }
-          { this.renderInfos(market) }
-          { this.renderTimer(market) }
+        <div className="container">
+          <div className="row">
+            { this.renderDetails(market) }
+            { this.renderInfos(market) }
+            { this.renderTimer(market) }
+          </div>
         </div>
         { this.renderControls(market) }
         { this.renderExpandableContent() }
+        <div className="marketGraphContainer">
+          <div className="container">
+            <MarketGraph data={testData} />
+          </div>
+        </div>
       </div>
     )
   }

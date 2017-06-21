@@ -21,28 +21,21 @@ a, a:visited {
   font-weight: 400;
   font-size: 12px;
   padding: 10px 24px;
-  background: transparent;
+  background: @btn-gradient;
   border: none;
   position: relative;
   z-index: 2;
 
-  &::before {
-    border-radius: 9999px;
-    content: '';
-    position: absolute;
-    z-index: -2;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    background: @btn-gradient;
+  &:focus {
+    outline: none;
   }
 }
+
 
 #root .btn.btn-default {
   color: @btn-invert-font-color;
 
-  &::after {
+  &::before {
     border-radius: 9999px;
     content: '';
     position: absolute;

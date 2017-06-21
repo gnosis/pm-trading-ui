@@ -87,19 +87,21 @@ class MarketList extends Component {
     const { markets } = this.props
     return (
       <div className="marketListPage">
-        <div className="row">
-          <div className="marketOverview col-xs-12">
-            <h1>Marketoverview</h1>
-            <p>Here you can see all the markets!</p>
+        <div className="container">
+          <div className="row">
+            <div className="marketOverview col-xs-12">
+              <h1>Marketoverview</h1>
+              <p>Here you can see all the markets!</p>
 
-            <div className="marketStats">
-              <p className="marketStats__stat">{ markets.length } markets open</p>
-              <p className="marketStats__stat">{ markets.length } closing soon</p>
-              <p className="marketStats__stat">{ markets.length } new (since last visit)</p>
+              <div className="marketStats">
+                <p className="marketStats__stat">{ markets.length } markets open</p>
+                <p className="marketStats__stat">{ markets.length } closing soon</p>
+                <p className="marketStats__stat">{ markets.length } new (since last visit)</p>
+              </div>
             </div>
+            { this.renderMarkets() }
+            { this.renderMarketFilter() }
           </div>
-          { this.renderMarkets() }
-          { this.renderMarketFilter() }
         </div>
       </div>
     )
