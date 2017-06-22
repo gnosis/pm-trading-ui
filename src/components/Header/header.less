@@ -1,10 +1,39 @@
+@import "../../less/vars.less";
+
+@navbarHeight: 40px;
+
 .headerContainer {
-  height: 50px;
-  line-height: 50px;
+  height: @navbarHeight;
   vertical-align: middle;
+  margin: 12px 0;
 }
 
 .headerContainer__navLink {
   margin: 0 12px;
-  line-height: inherit;
+  line-height: @navbarHeight;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding-bottom: 2px;
+  border-bottom: 2px solid @link-color;
+  color: black;
+}
+
+.headerContainer__group {
+  display: inline-block;
+
+  &--left {
+    float: left;
+  }
+
+  &--right {
+    float: right;
+  }
+
+  &--logo {
+    float: left;
+  }
+}
+
+.headerLogo {
+  height: @navbarHeight;
 }

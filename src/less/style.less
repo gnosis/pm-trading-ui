@@ -5,8 +5,16 @@ html, body, #root {
   font-family: 'Montserrat', sans-serif;
 }
 
-a, a:visited {
+a {
   color: @link-color;
+
+  &:visited {
+    color: inherit;
+  }
+
+  &:focus {
+    color: inherit;
+  }
 }
 
 #root h1, h2, h3, h4, h5, h6 {
