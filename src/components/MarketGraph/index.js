@@ -12,7 +12,7 @@ const DateAxisTick = ({ x, y, payload }) => (
   </g>
 )
 
-const PercentAxisTick = ({ x, y, payload, payload: { value } }) => (
+const PercentAxisTick = ({ x, y, payload: { value } }) => (
   <g transform={`translate(${x}, ${y})`}>
     {(value === 0 || value === 1) &&
     <text x={0} y={0} dy={5} textAnchor="end" fill="white">{(value * 100).toFixed(0)}%</text>
