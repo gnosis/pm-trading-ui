@@ -28,7 +28,9 @@ export default ({ wallet, walletLoaded }) => {
   return (
     <div className="headerContainer container">
       <div className="headerContainer__group headerContainer__group--logo">
-        <img src={logo} alt="GNOSIS" className="headerLogo" />
+        <Link to="/">
+          <img src={logo} alt="GNOSIS" className="headerLogo" />
+        </Link>
       </div>
       <div className="headerContainer__group headerContainer__group--left">
         <Link to="/dashboard" className="headerContainer__navLink">Dashboard</Link>

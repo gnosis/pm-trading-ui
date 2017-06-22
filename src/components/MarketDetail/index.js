@@ -183,7 +183,7 @@ export default class MarketDetail extends Component {
       <div className="marketDetailPage">
         <div className="container">
           <div className="row">
-            <div className="col-xs-12">
+            <div className="col-xs-10">
               <h1>{ market.title }</h1>
             </div>
           </div>
