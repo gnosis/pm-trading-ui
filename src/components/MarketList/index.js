@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import autobind from 'autobind-decorator'
+import { schemeDark2 } from 'd3-scale-chromatic'
+import { scaleOrdinal } from 'd3'
 import moment from 'moment'
 import 'moment-duration-format'
 import { reduxForm, submit, Field } from 'redux-form'
@@ -16,52 +18,108 @@ class MarketList extends Component {
     this.props.requestMarkets()
   }
 
+  @autobind
+  handleViewMarket(market) {
+    this.props.changeUrl(`/markets/${market.address}`)
+  }
+
+  renderCategoricalOutcomes(outcomes, resolved) {
+    let renderOutcomes = outcomes
+
+    if (resolved) {
+      // test
+      renderOutcomes = [outcomes[0]]
+    }
+
+    const colorScale = scaleOrdinal(schemeDark2)
+    colorScale.domain(outcomes)
+
+
+    return (<div className="market__outcomes">
+      {renderOutcomes.map((outcome, outcomeIndex) => (
+        <div key={outcomeIndex} className="outcome">
+          <div className="outcome__bar">
+            <div
+              className="outcome__bar--inner"
+              style={{ width: `${outcome.value * 100}%`, backgroundColor: colorScale(outcomeIndex) }}
+            >
+              <div className="outcome__bar--value">{ `${Math.round(outcome.value * 100).toFixed(0)}%` }</div>
+              <div className="outcome__bar--label">{ outcome.label }</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>)
+  }
+
+  renderScalarOutcomes(outcomes, resolved) {
+    // todo: implement
+  }
+
+  @autobind
   renderMarket(market) {
     const timeUntilEvent = moment
       .duration(moment(market.resolutionDate)
       .diff())
 
-      let isResolved = timeUntilEvent < 0
+    const isResolved = timeUntilEvent < 0
+
+    // test
+    const testVal = Math.random()
+    const testOutcomes = [
+      { value: testVal, label: 'Yes' },
+      { value: 1 - testVal, label: 'No' },
+    ]
 
     return (
-      <button type="button" className="market" key={market.address}>
+      <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
         <div className="market__header">
           <h1 className="market__title">{ market.title }</h1>
           <div className="market__control">
             <Link to={`/markets/${market.address}/resolve`}>Resolve</Link>
           </div>
         </div>
-        <div className="market__outcomes" />
+        {this.renderCategoricalOutcomes(testOutcomes, isResolved)}
         <div className="market__info row">
           {isResolved ? (
             <div className="info__group col-xs-3">
-              <div className="info_icon" />
-              <div className="info_field">Resolved</div>
+              <div className="info_field">
+                <div className="info__field--icon icon icon--checkmark" />
+                <div className="info__field--label">Resolved</div>
+              </div>
             </div>
           ) : (
             <div className="info__group col-xs-3">
-              <div className="info__icon" />
               <div className="info__field">
-                {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_FORMAT)}
+                <div className="info__field--icon icon icon--countdown" />
+                <div className="info__field--label">
+                  {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_FORMAT)}
+                </div>
               </div>
             </div>
           )}
           <div className="info__group col-xs-3">
-            <div className="info__icon" />
             <div className="info__field">
-              {moment(market.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+              <div className="info__field--icon icon icon--enddate" />
+              <div className="info__field--label">
+                {moment(market.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+              </div>
             </div>
           </div>
           <div className="info__group col-xs-3">
-            <div className="info__icon" />
             <div className="info__field">
-              {market.oracleAddress}
+              <div className="info__field--icon icon icon--oracle" />
+              <div className="info__field--label">
+                {market.oracleAddress}
+              </div>
             </div>
           </div>
           <div className="info__group col-xs-3">
-            <div className="info__icon" />
             <div className="info__field">
-              {market.collateralToken}
+              <div className="info__field--icon icon icon--currency" />
+              <div className="info__field--label">
+                {market.collateralToken}
+              </div>
             </div>
           </div>
         </div>

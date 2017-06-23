@@ -2,6 +2,8 @@
 
 @market-border-radius: 12px;
 @market-highlight-stripe-width: 5px;
+@outcome-bar-height: 20px;
+@info-row-height: 25px;
 
 .marketStats {
   &__label {
@@ -75,7 +77,19 @@
   overflow: hidden;
   text-align: left;
 
+  &--resolved {
+    .market__title {
+      color: @font-color-muted;
+    }
+  }
+
+  &:active,&:focus {
+    outline: 0;
+    box-shadow: 0 0 5px @link-color-highlight;
+  }
+
   &:hover,&:focus {
+    outline: 0;
     color: inherit !important;
     cursor: pointer;
 
@@ -128,19 +142,76 @@
     font-size: 20px;
     font-weight: 500;
   }
+
+  &__outcomes {
+    margin: 20px 0;
+  }
 }
 
 .info {
   &__group {
-    padding-right: 20px;
+    padding-right: @info-row-height;
     color: @font-color-muted;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: 12px;
+    vertical-align: middle;
+    height: @info-row-height;
+
+    .info__field--icon {
+      width: @info-row-height;
+      height: @info-row-height;
+      float: left;
+    }
   }
 
-  &__field {
+  &__field--label {
+    line-height: @info-row-height;
+    padding-right: @info-row-height;
+    padding-left: 5px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    vertical-align: middle;
+  }
+
+}
+
+
+.outcome {
+  &__bar {
+    display: inline-block;
+    position: relative;
+    width: 30%;
+    margin: 5px 0;
+
+    &--inner {
+      height: @outcome-bar-height;
+      position: relative;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &--value {
+      font-weight: 300;
+      line-height: @outcome-bar-height;
+      vertical-align: middle;
+      padding-left: 5px;
+      float: left;
+      min-width: 30px;
+    }
+
+    &--label {
+      margin-left: 100%;
+      padding-left: 5px;
+      line-height: @outcome-bar-height;
+      vertical-align: middle;
+      text-transform: uppercase;
+    }
+  }
+
+  &__label {
+    display: inline-block;
   }
 }

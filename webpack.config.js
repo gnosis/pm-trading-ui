@@ -39,13 +39,23 @@ module.exports = {
         ],
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', { loader: 'less-loader', options: { strictMath: true } }],
+          use: [
+            'css-loader',
+            { loader: 'postcss-loader',
+                options: {
+                plugins: loader => [
+                  require('autoprefixer')(),
+                ],
+              }
+            },
+            { loader: 'less-loader', options: { strictMath: true } },
+          ],
         }),
       },
       {
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]',
-      }
+      },
     ],
   },
   devServer: {
