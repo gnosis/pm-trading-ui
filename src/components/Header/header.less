@@ -5,17 +5,21 @@
 .headerContainer {
   height: @navbarHeight;
   vertical-align: middle;
-  margin: 12px 0;
+  margin: 40px 0;
 }
 
 .headerContainer__navLink {
-  margin: 0 12px;
+  margin-left: 20px;
   line-height: @navbarHeight;
   text-transform: uppercase;
   font-weight: 500;
   padding-bottom: 2px;
   border-bottom: 2px solid @link-color;
   color: black;
+
+  &:hover {
+    color: @link-color;
+  }
 }
 
 .headerContainer__group {
