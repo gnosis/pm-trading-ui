@@ -12,7 +12,10 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
 module.exports = {
   context: path.join(__dirname, 'src'),
-  entry: 'index.js',
+  entry: [
+    'index.js',
+    'bootstrap-loader/extractStyles',
+  ],
   devtool: 'source-map',
   output: {
     path: `${__dirname}/dist`,
@@ -36,7 +39,17 @@ module.exports = {
         ],
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', { loader: 'less-loader', options: { strictMath: true } }],
+          use: [
+            'css-loader',
+            { loader: 'postcss-loader',
+                options: {
+                plugins: loader => [
+                  require('autoprefixer')(),
+                ],
+              }
+            },
+            { loader: 'less-loader', options: { strictMath: true } },
+          ],
         }),
       },
       {
