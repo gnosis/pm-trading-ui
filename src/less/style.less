@@ -1,22 +1,71 @@
+@import "./icons.less";
 @import "./vars.less";
-
-html {
-  font-family: 'Monoserrat', Helvetica, Arial, sans-serif;
-}
 
 html, body, #root {
   height: 100%;
+  font-family: 'Montserrat', sans-serif;
 }
 
-a, a:visited {
-  color: @link-color;
-}
+#root {
+  a {
+    color: @link-color;
+    text-decoration: none;
 
-* {
-  box-sizing: border-box;
-  font-weight: 300;
-}
+    &:visited {
+      color: inherit;
+    }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 300;
+    &:focus {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    &:hover {
+      color: @link-color-highlight;
+      text-decoration: none;
+    }
+
+    &:active {
+      text-decoration: none;
+    }
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+  }
+
+  .btn,
+  .btn.btn-primary,
+  .btn.btn-default {
+    color: @btn-font-color;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 12px;
+    padding: 10px 24px;
+    background: @btn-gradient;
+    border: none;
+    position: relative;
+    z-index: 2;
+
+    &:focus {
+      outline: none;
+    }
+
+    &.btn-default {
+      color: @btn-invert-font-color;
+
+      &::before {
+        border-radius: 9999px;
+        content: '';
+        position: absolute;
+        z-index: -1;
+        top: @btn-inset;
+        right: @btn-inset;
+        left: @btn-inset;
+        bottom: @btn-inset;
+        background: white;
+      }
+    }
+  }
 }

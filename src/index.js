@@ -13,11 +13,12 @@ import * as walletIntegrations from 'integrations'
 import App from 'containers/App'
 import MarketListPage from 'containers/MarketListPage'
 import MarketDetailPage from 'containers/MarketDetailPage'
+import TransactionsPage from 'containers/TransactionsPage'
+import AccountPage from 'containers/AccountPage'
 import SettingsPage from 'containers/SettingsPage'
 import DashboardPage from 'containers/DashboardPage'
 import WalletIntegrationProvider from 'containers/WalletIntegrationProvider'
 
-import 'normalize.css'
 import 'less/style.less'
 
 import store from './store'
@@ -40,6 +41,8 @@ render(
         <Route path="/" component={App}>
           <IndexRedirect to="dashboard" />
           <Route path="dashboard" component={DashboardPage} />
+          <Route path="transactions" component={TransactionsPage} />
+          <Route path="account" component={AccountPage} />
           <Route path="settings" component={SettingsPage} />
           <Route path="markets">
             <IndexRedirect to="list" />
