@@ -82,14 +82,14 @@ class MarketList extends Component {
         {this.renderCategoricalOutcomes(testOutcomes, isResolved)}
         <div className="market__info row">
           {isResolved ? (
-            <div className="info__group col-xs-3">
+            <div className="info__group col-md-3">
               <div className="info_field">
                 <div className="info__field--icon icon icon--checkmark" />
                 <div className="info__field--label">Resolved</div>
               </div>
             </div>
           ) : (
-            <div className="info__group col-xs-3">
+            <div className="info__group col-md-3">
               <div className="info__field">
                 <div className="info__field--icon icon icon--countdown" />
                 <div className="info__field--label">
@@ -98,7 +98,7 @@ class MarketList extends Component {
               </div>
             </div>
           )}
-          <div className="info__group col-xs-3">
+          <div className="info__group col-md-3">
             <div className="info__field">
               <div className="info__field--icon icon icon--enddate" />
               <div className="info__field--label">
@@ -106,7 +106,7 @@ class MarketList extends Component {
               </div>
             </div>
           </div>
-          <div className="info__group col-xs-3">
+          <div className="info__group col-md-3">
             <div className="info__field">
               <div className="info__field--icon icon icon--oracle" />
               <div className="info__field--label">
@@ -114,7 +114,7 @@ class MarketList extends Component {
               </div>
             </div>
           </div>
-          <div className="info__group col-xs-3">
+          <div className="info__group col-md-3">
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
@@ -132,7 +132,7 @@ class MarketList extends Component {
 
     if (markets.length > 0) {
       return (
-        <div className="marketList col-xs-10">
+        <div className="marketList col-md-10">
           <div className="marketList__title">Showing {markets.length} of {markets.length}</div>
           <div className="marketListContainer">
             {markets.map(this.renderMarket)}
@@ -141,7 +141,7 @@ class MarketList extends Component {
       )
     }
     return (
-      <div className="marketList col-xs-10">
+      <div className="marketList col-md-10">
         <div className="marketListContainer">
           <div className="market">No Markets available</div>
         </div>
@@ -153,7 +153,7 @@ class MarketList extends Component {
     const { handleSubmit } = this.props
 
     return (
-      <div className="marketFilter col-xs-2">
+      <div className="marketFilter col-md-2">
         <form onSubmit={handleSubmit}>
           <div className="marketFilter__group">
             <Field
@@ -193,20 +193,23 @@ class MarketList extends Component {
         </div>
         <div className="marketListPage__stats">
           <div className="container">
-            <div className="row">
-              <div className="col-xs-3 marketStats__stat">
+            <div className="row marketStats">
+              <div className="col-md-3 marketStats__stat">
+                <div className="marketStats__icon icon icon--market" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">Open Markets</div>
               </div>
-              <div className="col-xs-3 marketStats__stat">
+              <div className="col-md-3 marketStats__stat">
+                <div className="marketStats__icon icon icon--market--countdown" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">Closing Soon</div>
               </div>
-              <div className="col-xs-3 marketStats__stat">
+              <div className="col-md-3 marketStats__stat">
+                <div className="marketStats__icon icon icon--new" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">New Markets</div>
               </div>
-              <div className="col-xs-3">
+              <div className="col-md-3">
                 <button type="button" className="marketStats__control btn btn-primary">Create Market</button>
               </div>
             </div>

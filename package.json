@@ -6,7 +6,7 @@
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "clean": "rm -rf dist",
-    "start": "node_modules/.bin/webpack-dev-server",
+    "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0",
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix",
     "test": "jest"

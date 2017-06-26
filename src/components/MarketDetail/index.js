@@ -112,7 +112,7 @@ export default class MarketDetail extends Component {
     }
 
     return (
-      <div className="marketInfos col-xs-2">
+      <div className="marketInfos col-md-2">
         {Object.keys(infos).map(label => (
           <div className="marketInfo" key={label}>
             <p className="marketInfo__info marketInfo__info--value">{infos[label]}</p>
@@ -125,7 +125,7 @@ export default class MarketDetail extends Component {
 
   renderDetails(market) {
     return (
-      <div className="marketDetails col-xs-10">
+      <div className="marketDetails col-md-10">
         <p>{ market.description }</p>
       </div>
     )
@@ -142,7 +142,7 @@ export default class MarketDetail extends Component {
               className={`
                 marketControls__button
                 ${controlButtons[type].className}
-                col-xs-2
+                col-md-2
                 ${type === this.state.expandableSelected ? 'marketControls__button--active' : ''}`
               }
               onClick={() => this.handleExpand(type)}
@@ -161,7 +161,7 @@ export default class MarketDetail extends Component {
       .diff())
 
     return (
-      <div className="marketTimer col-xs-10">
+      <div className="marketTimer col-md-10">
         <div className="marketTimer__live">
           {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}
         </div>
@@ -183,7 +183,7 @@ export default class MarketDetail extends Component {
       <div className="marketDetailPage">
         <div className="container">
           <div className="row">
-            <div className="col-xs-10">
+            <div className="col-md-10">
               <h1>{ market.title }</h1>
             </div>
           </div>
