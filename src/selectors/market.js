@@ -4,30 +4,22 @@ import { getOracleByAddress } from './oracle'
 import { getEventDescriptionByAddress } from './eventDescription'
 
 export const getMarketById = state => (marketAddress) => {
-  const marketEntities = entitySelector(state, 'market')
+  const marketEntities = entitySelector(state, 'markets')
 
   let market = {}
   if (marketEntities[marketAddress]) {
     const marketEntity = marketEntities[marketAddress]
 
     const marketEvent = getEventByAddress(state)(marketEntity.event)
-    const eventOracle = getOracleByAddress(state)(marketEvent.oracleAddress)
-    const eventDescription =
-      getEventDescriptionByAddress(state)(eventOracle.eventDescriptionAddress)
+    const eventOracle = getOracleByAddress(state)(marketEvent.oracle)
+    const oracleEventDescription =
+      getEventDescriptionByAddress(state)(eventOracle.eventDescription)
 
     market = {
-      address: marketAddress,
-      creator: marketEntity.creator,
-      creationDate: marketEntity.creationDate,
-      creationBlock: marketEntity.creationBlock,
-      marketMaker: marketEntity.marketMaker,
-      fee: marketEntity.fee,
-      funding: marketEntity.funding,
-      netOutcomeTokensSold: marketEntity.netOutcomeTokensSold,
-      stage: marketEntity.stage,
-      ...marketEvent,
-      ...eventOracle,
-      ...eventDescription,
+      ...marketEntities[marketAddress],
+      event: marketEvent,
+      oracle: eventOracle,
+      eventDescription: oracleEventDescription,
     }
   }
 
@@ -35,7 +27,7 @@ export const getMarketById = state => (marketAddress) => {
 }
 
 export const getMarkets = (state) => {
-  const marketEntities = entitySelector(state, 'market')
+  const marketEntities = entitySelector(state, 'markets')
 
   return Object.keys(marketEntities).map(getMarketById(state))
 }

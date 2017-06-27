@@ -3,6 +3,7 @@ import moment from 'moment'
 import _ from 'lodash'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
+import BigNumber from 'bignumber.js'
 
 import { RESOLUTION_TIME } from 'utils/constants'
 import Expandable from 'components/Expandable'
@@ -105,10 +106,10 @@ export default class MarketDetail extends Component {
   renderInfos(market) {
     const infos = {
       Creator: market.creator,
-      Oracle: market.oracleOwner,
-      Token: market.collateralToken,
-      Fee: market.fee.toFixed(2),
-      Funding: `${market.funding.toFixed(2)} ${market.collateralToken}`,
+      Oracle: market.oracle.owner,
+      Token: market.event.collateralToken,
+      Fee: new BigNumber(market.fee).toFixed(2),
+      Funding: `${new BigNumber(market.funding).toFixed(2)} ${market.event.collateralToken}`,
     }
 
     return (
@@ -126,7 +127,7 @@ export default class MarketDetail extends Component {
   renderDetails(market) {
     return (
       <div className="marketDetails col-md-10">
-        <p>{ market.description }</p>
+        <p>{ market.eventDescription.description }</p>
       </div>
     )
   }
@@ -157,7 +158,7 @@ export default class MarketDetail extends Component {
 
   renderTimer(market) {
     const timeUntilEvent = moment
-      .duration(moment(market.resolutionDate)
+      .duration(moment(market.event.resolutionDate)
       .diff())
 
     return (
@@ -166,7 +167,7 @@ export default class MarketDetail extends Component {
           {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}
         </div>
         <small className="marketTime__absolute">
-          {moment(market.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+          {moment(market.event.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
         </small>
       </div>
     )
@@ -184,7 +185,7 @@ export default class MarketDetail extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-10">
-              <h1>{ market.title }</h1>
+              <h1>{ market.eventDescription.title }</h1>
             </div>
           </div>
         </div>

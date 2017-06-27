@@ -18,8 +18,11 @@
   "author": "Gnosis",
   "license": "ISC",
   "dependencies": {
+    "@gnosis.pm/gnosis-core-contracts": "github:gnosis/gnosis-contracts-truffle#solidity-tests",
+    "@gnosis.pm/gnosisjs": "github:gnosis/gnosis.js",
     "autobind-decorator": "^1.4.1",
     "babel-polyfill": "^6.23.0",
+    "bignumber.js": "^4.0.2",
     "d3": "^4.9.1",
     "d3-scale-chromatic": "^1.1.1",
     "es6-promise": "4.0.5",

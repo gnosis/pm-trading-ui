@@ -1,1 +1,1 @@
-export * from './apiMock'
+export * from './api'

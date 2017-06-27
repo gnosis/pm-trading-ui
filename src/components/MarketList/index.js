@@ -58,8 +58,9 @@ class MarketList extends Component {
 
   @autobind
   renderMarket(market) {
+    console.log(market)
     const timeUntilEvent = moment
-      .duration(moment(market.resolutionDate)
+      .duration(moment(market.eventDescription.resolutionDate)
       .diff())
 
     const isResolved = timeUntilEvent < 0
@@ -74,7 +75,7 @@ class MarketList extends Component {
     return (
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
         <div className="market__header">
-          <h1 className="market__title">{ market.title }</h1>
+          <h1 className="market__title">{ market.eventDescription.title }</h1>
           <div className="market__control">
             <Link to={`/markets/${market.address}/resolve`}>Resolve</Link>
           </div>
@@ -110,7 +111,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--oracle" />
               <div className="info__field--label">
-                {market.oracleAddress}
+                {market.oracle.address}
               </div>
             </div>
           </div>
@@ -118,7 +119,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                {market.collateralToken}
+                {market.event.collateralToken}
               </div>
             </div>
           </div>

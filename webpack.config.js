@@ -60,7 +60,13 @@ module.exports = {
   },
   devServer: {
     contentBase: false,
-    port: 8000,
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        secure: false,
+      },
+    },
   },
   plugins: [
     new ExtractTextPlugin('styles.css'),

@@ -13,9 +13,11 @@ import * as api from 'api'
 
 export const requestMarketList = () => async (dispatch) => {
   await dispatch(requestMarkets())
+  /*
   await dispatch(requestCentralizedOracles())
   await dispatch(requestCategoricalEvents())
   await dispatch(requestCategoricalEventDescriptions())
   await dispatch(requestScalarEvents())
   await dispatch(requestScalarEventDescriptions())
+  */
 }

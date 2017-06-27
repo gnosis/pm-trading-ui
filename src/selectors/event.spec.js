@@ -12,7 +12,7 @@ describe('eventSelector', () => {
   test('it should return event structure for valid address', () => {
     const state = {
       entities: {
-        categoricalEvent: {
+        events: {
           test123: {
             id: 'test123',
           },
@@ -21,7 +21,7 @@ describe('eventSelector', () => {
     }
 
     const desired = {
-      eventAddress: 'test123',
+      address: 'test123',
     }
 
     expect(getEventByAddress(state)('test123')).toMatchObject(desired)

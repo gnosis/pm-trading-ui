@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-import { keys, values, set } from 'lodash'
+import { keys, values, set, map } from 'lodash'
 
 import { updateEntity, receiveEntities, removeEntity } from 'actions/entities'
 
@@ -14,8 +14,8 @@ const reducer = handleActions({
   [receiveEntities]: (state, action) => {
     const result = { ...state }
     keys(action.payload.entities).forEach((entityType) => {
-      values(action.payload.entities[entityType]).forEach((entity) => {
-        set(result, `${entityType}.${entity.id}`, entity)
+      keys(action.payload.entities[entityType]).forEach((entityId) => {
+        set(result, `${entityType}.${entityId}`, action.payload.entities[entityType][entityId])
       })
     })
     return result
