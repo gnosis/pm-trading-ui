@@ -6,7 +6,7 @@
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "clean": "rm -rf dist",
-    "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0",
+    "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info",
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix",
     "test": "jest"
@@ -18,7 +18,6 @@
   "author": "Gnosis",
   "license": "ISC",
   "dependencies": {
-    "@gnosis.pm/gnosis-core-contracts": "github:gnosis/gnosis-contracts-truffle#solidity-tests",
     "@gnosis.pm/gnosisjs": "github:gnosis/gnosis.js",
     "autobind-decorator": "^1.4.1",
     "babel-polyfill": "^6.23.0",

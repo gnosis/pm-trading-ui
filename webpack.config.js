@@ -42,11 +42,11 @@ module.exports = {
           use: [
             'css-loader',
             { loader: 'postcss-loader',
-                options: {
+              options: {
                 plugins: loader => [
                   require('autoprefixer')(),
                 ],
-              }
+              },
             },
             { loader: 'less-loader', options: { strictMath: true } },
           ],
@@ -64,6 +64,10 @@ module.exports = {
     proxy: {
       '/api': {
         target: 'http://localhost:8000',
+        secure: false,
+      },
+      '/testrpc': {
+        target: 'http://localhost:8545',
         secure: false,
       },
     },

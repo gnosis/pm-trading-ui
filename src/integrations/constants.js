@@ -10,3 +10,13 @@ export const ETHERIUM_NETWORKS = {
 export const WALLET_PROVIDER = {
   METAMASK: 'METAMASK',
 }
+
+export const EVENT_TYPES = {
+  CATEGORICAL: 'CATEGORICAL',
+  SCALAR: 'SCALAR',
+}
+
+export const ORACLE_TYPES = {
+  ULTIMATE: 'ULTIMATE',
+  CENTRALIZED: 'CENTRALIZED',
+}
