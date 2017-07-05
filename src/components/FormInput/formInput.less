@@ -1,0 +1,20 @@
+@import url('../../less/vars.less');
+
+.inputField .inputField__label {
+  font-weight: 600;
+}
+
+.inputField__label {
+  .defaultStyle__inputLabel();
+}
+
+.inputField__input {
+  border: none;
+  background: none;
+  border-bottom: 1px solid @bg-color-muted;
+  font-size: 24px;
+
+  &:active, &:focus {
+    outline: 0;
+  }
+}

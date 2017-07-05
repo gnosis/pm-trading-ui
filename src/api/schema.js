@@ -1,5 +1,5 @@
 import { schema } from 'normalizr'
-import { flow, mapValues, trimStart } from 'lodash'
+import { mapValues, trimStart } from 'lodash'
 
 const HEX_VALUE_REGEX = /(0x)?[0-9A-Fa-f]{40}/
 
@@ -41,7 +41,7 @@ const normalizeHexValues = entity =>
 
 const NORMALIZE_OPTIONS_DEFAULT = {
   idAttribute: value => value.address || value.contract.address,
-  processStrategy: flow(mergeContract, normalizeHexValues),
+  processStrategy: entity => mergeContract(normalizeHexValues(entity)),
 }
 
 export const eventDescriptionSchema = new schema.Entity('eventDescriptions', {}, {

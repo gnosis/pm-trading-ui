@@ -31,7 +31,22 @@ html, body, #root {
   }
 
   h1, h2, h3, h4, h5, h6 {
+    margin: 0;
     font-weight: 300;
+  }
+
+  label {
+    font-weight: normal;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  textarea,
+  input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox]) {
+    display: block;
+    width: 100%;
   }
 
   .btn,
@@ -60,10 +75,10 @@ html, body, #root {
         content: '';
         position: absolute;
         z-index: -1;
-        top: @btn-inset;
-        right: @btn-inset;
-        left: @btn-inset;
-        bottom: @btn-inset;
+        top: @btn-border-width;
+        right: @btn-border-width;
+        left: @btn-border-width;
+        bottom: @btn-border-width;
         background: white;
       }
     }

@@ -1,0 +1,38 @@
+@import url("../../less/vars.less");
+
+.radioButton {
+  &__text {
+    position: relative;
+    line-height: 16px;
+    padding-left: (16px + 6px);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      display: inline;
+      width: 16px;
+      height: 16px;
+      border-radius: 9999px;
+      background-color: @bg-color-muted;
+      border: 0px solid @bg-color-muted;
+
+      transition: background-color 0.2s ease, border 0.2s ease;
+    }
+  }
+
+  &__label {
+    .defaultStyle__inputLabel();
+  }
+
+  &__input[type="radio"] {
+    width: 0;
+    height: 0;
+    opacity: 0;
+
+    &:checked ~ .radioButton__text::before {
+      background-color: @active-highlight;
+      border-width: 4px;
+    }
+  }
+}

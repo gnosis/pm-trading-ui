@@ -1,3 +1,5 @@
+@import url('defaults.less');
+
 @font-color-light: #182a36;
 @font-color-dark: #87949c;
 @font-color-muted: lighten(@font-color-dark, 10%);
@@ -8,19 +10,29 @@
 @highlight-dark: #284659;
 
 @active-highlight: #00a6c4;
-@highlight-green: #0be1b1;
-@highglight-yellow: #f2cc0a;
-@highlight-red: #e01563;
 
+//@highlight-green: #0be1b1;
+//@highglight-yellow: #f2cc0a;
+//@highlight-red: #e01563;
+
+// default background color
 @bg-color: #FFFFFF;
+// alternative background color
 @bg-color-dark: #182a36;
+// background color for inset elements
 @bg-color-muted: #f0f1f1;
 
-@btn-inset: 4px;
-@btn-gradient-start: #09d6b5;
-@btn-gradient-end: #02b1c1;
+// inset of white background overlay (basically border-size)
+@btn-border-width: 4px;
 
-@btn-gradient: linear-gradient(to right, @btn-gradient-start, @btn-gradient-end);
+// gradient for buttons and interactive elements
+@btn-gradient: linear-gradient(139deg, rgba(0,166,196,1) 0%,rgba(0,166,196,1) 46%,rgba(10,220,196,1) 100%);
 
+// font color for buttons
 @btn-font-color: #FFFFFF;
+
+// font color for buttons with whitebackground (dark font)
 @btn-invert-font-color: #02b1c1;
+
+// margin for heading elements
+@page-heading-margins: 60px 0 90px 0;
