@@ -22,9 +22,12 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
+    symlinks: false,
     modules: [
       `${__dirname}/src`,
       'node_modules',
+      `${__dirname}/../gnosis.js`,
+      `${__dirname}/../gnosis.js/node_modules`
     ] },
   module: {
     rules: [

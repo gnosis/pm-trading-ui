@@ -3,11 +3,13 @@ import { reduxForm, formValueSelector } from 'redux-form'
 
 import MarketCreateWizard from 'components/MarketCreateWizard'
 
+import { composeMarket } from 'actions/gnosis'
+
 const FORM = {
   form: 'marketCreateWizard',
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const selector = formValueSelector('marketCreateWizard')
   return {
     selectedOracleType: selector(state, 'oracleType'),
@@ -15,4 +17,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(reduxForm(FORM)(MarketCreateWizard))
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createMarket: market => dispatch(composeMarket(market))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm(FORM)(MarketCreateWizard))

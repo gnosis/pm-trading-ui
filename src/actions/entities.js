@@ -11,27 +11,7 @@ export const requestMarkets = () => async (dispatch) => {
   return await dispatch(receiveEntities(payload))
 }
 
-export const requestCategoricalEvents = () => async (dispatch) => {
-  const payload = await api.requestCategoricalEvents()
-  return await dispatch(receiveEntities(payload))
-}
-
-export const requestCategoricalEventDescriptions = () => async (dispatch) => {
-  const payload = await api.requestCategoricalEventDescriptions()
-  return await dispatch(receiveEntities(payload))
-}
-
-export const requestScalarEvents = () => async (dispatch) => {
-  const payload = await api.requestScalarEvents()
-  return await dispatch(receiveEntities(payload))
-}
-
-export const requestScalarEventDescriptions = () => async (dispatch) => {
-  const payload = await api.requestScalarEventDescriptions()
-  return await dispatch(receiveEntities(payload))
-}
-
-export const requestCentralizedOracles = () => async (dispatch) => {
-  const payload = await api.requestCentralizedOracles()
+export const requestFactories = () => async (dispatch) => {
+  const payload = await api.requestFactories()
   return await dispatch(receiveEntities(payload))
 }
