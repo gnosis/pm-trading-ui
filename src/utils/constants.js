@@ -16,3 +16,5 @@ export const ORACLE_TYPES = {
   BLOCK_DIFFICULTY: 'BLOCK_DIFFICULTY',
   REALITY_KEYS: 'REALITY_KEYS',
 }
+
+export const HEX_VALUE_REGEX = /(0x)?[0-9A-Fa-f]{40}/

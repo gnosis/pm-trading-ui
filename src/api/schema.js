@@ -1,7 +1,7 @@
 import { schema } from 'normalizr'
-import { mapValues, trimStart } from 'lodash'
+import { mapValues } from 'lodash'
 
-const HEX_VALUE_REGEX = /(0x)?[0-9A-Fa-f]{40}/
+import { normalizeHex } from 'utils/helpers'
 
 /**
  * Merges entity.contract into entity, discarding "contract" from the original entity
@@ -30,14 +30,7 @@ const mergeContract = (entity) => {
  * Iterates over every field of the entity and normalizes hex values from "0xABC" to "ABC"
  * @param {object} entity
  */
-const normalizeHexValues = entity =>
-  mapValues(entity, (value) => {
-    if (HEX_VALUE_REGEX.test(value)) {
-      return trimStart(value, '0x')
-    }
-
-    return value
-  })
+const normalizeHexValues = entity => mapValues(entity, normalizeHex)
 
 const NORMALIZE_OPTIONS_DEFAULT = {
   idAttribute: value => value.address || value.contract.address,
