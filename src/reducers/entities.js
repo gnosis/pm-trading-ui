@@ -1,7 +1,11 @@
 import { handleActions } from 'redux-actions'
 import { keys, values, set, map } from 'lodash'
 
-import { updateEntity, receiveEntities, removeEntity } from 'actions/entities'
+import {
+  updateEntity,
+  receiveEntities,
+  removeEntity
+} from 'actions/entities'
 
 const reducer = handleActions({
   [updateEntity]: (state, action) => ({

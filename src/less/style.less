@@ -31,7 +31,31 @@ html, body, #root {
   }
 
   h1, h2, h3, h4, h5, h6 {
+    margin: 0;
     font-weight: 300;
+  }
+
+  label {
+    font-weight: normal;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  textarea,
+  input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox]) {
+    // fluid inputs may use inline-blocks
+    &:not(.fluid) {
+      display: block;
+      width: 100%;
+    }
+
+    padding: 0;
+
+    &::placeholder {
+      color: @font-color-muted;
+    }
   }
 
   .btn,
@@ -60,12 +84,37 @@ html, body, #root {
         content: '';
         position: absolute;
         z-index: -1;
-        top: @btn-inset;
-        right: @btn-inset;
-        left: @btn-inset;
-        bottom: @btn-inset;
+        top: @btn-border-width;
+        right: @btn-border-width;
+        left: @btn-border-width;
+        bottom: @btn-border-width;
         background: white;
       }
     }
+  }
+
+  .colorScheme_0 {
+    background-color: @highlightGreen;
+  }
+  .colorScheme_1 {
+    background-color: @highlightRed;
+  }
+  .colorScheme_2 {
+    background-color: @highlightOrange;
+  }
+  .colorScheme_3 {
+    background-color: @highlightGray;
+  }
+  .colorScheme_4 {
+    background-color: @highlightBlue;
+  }
+  .colorScheme_5 {
+    background-color: @highlightPink;
+  }
+  .colorScheme_6 {
+    background-color: @highlightYellow;
+  }
+  .colorScheme_7 {
+    background-color: @highlightBrown;
   }
 }

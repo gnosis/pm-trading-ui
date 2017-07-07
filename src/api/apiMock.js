@@ -2,148 +2,271 @@ import { normalize } from 'normalizr'
 import moment from 'moment'
 
 import {
-  MarketSchema,
-  CategoricalEventSchema,
-  ScalarEventSchema,
-  CategoricalEventDescriptionSchema,
-  ScalarEventDescriptionSchema,
-  CentralizedOracleSchema,
+  marketSchema,
 } from './schema'
 
 export const requestMarkets = async () => normalize([
   {
-    id: '0xhghx4j2cgTn41rrydvOuNHgVJ0uF67oYW2KQjKtQMhIMIGw1TSDiWzPrUHeS1yx',
-    factory: 'test',
-    creator: '0xB00A24C899F88e5514583CFa8c40e4CDAB6C473e',
-    creationDate: moment.utc('2017-06-03 12:53:22'),
-    creationBlock: '53094839',
-    event: '0xTG6TgmyRL8eFAf4cbe1jV91s8zIEdEWE75wNOOlVDX3jfof9xN2CSydx5AH8JoB',
-    marketMaker: 'LSRM',
-    fee: 2.323204,
-    funding: 402.232323,
-    netOutcomeTokensSold: [1, 4, 2], // ???
+    contract: {
+      creationBlock: 16,
+      creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+      factoryAddress: '0290fb167208af455bb137780163b7b7a9a10c16',
+      creationDate: '2017-07-06T14:13:17',
+      address: '4dbf58ee60dc2dadd93bffdd3d86499d35d42c2d',
+    },
+    event: {
+      contract: {
+        creationBlock: 14,
+        creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        factoryAddress: 'cfeb869f69431e42cdb54a4f4f105c19c080a601',
+        creationDate: '2017-07-06T14:13:17',
+        address: '4aacf4d276dba7c1d486aa57f1758665898d49a9',
+      },
+      collateralToken: '9b1f7f645351af3631a656421ed2e40f2802e6c0',
+      oracle: {
+        contract: {
+          creationBlock: 13,
+          creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+          factoryAddress: 'c89ce4735882c9f0f0fe26686c53074e09b0d550',
+          creationDate: '2017-07-06T14:13:17',
+          address: '00588b2b4583971b0cd9f46751b9879fd28c7925',
+        },
+        isOutcomeSet: false,
+        outcome: null,
+        owner: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        eventDescription: {
+          outcomes: [
+            'Yes',
+            'No',
+            '',
+          ],
+          ipfsHash: 'QmYvyaSYXYXRxKU2C4E3DV6LG4fRgWwxsgZ5WVMndj52V1',
+          description: 'Will it work?!',
+          resolutionDate: '2017-07-07T13:00:00',
+          title: 'Testmarket',
+        },
+      },
+      isWinningOutcomeSet: false,
+      outcome: null,
+      type: 'CATEGORICAL',
+    },
+    marketMaker: '59d3631c86bbe35ef041872d502f218a39fba150',
+    fee: 2,
+    funding: null,
+    netOutcomeTokensSold: [
+      '0',
+      '0',
+    ],
     stage: 0,
   },
   {
-    id: '0xoZ5B3daQFrMMcUFXFAS7VV8mLUz0EOaAK684r1rFEnYPtwQoA7KpmGiikQ1Nd9T',
-    factory: 'test',
-    creator: '0xB00A24C899F88e5514583CFa8c40e4CDAB6C473e',
-    creationDate: moment.utc('2017-06-03 12:53:22'),
-    creationBlock: '53094839',
-    event: '0xlRDVeyFmqyL3NQFaQ7uYgtrNWydMvoez1ad7YGAi1ZsBIETF3E8vJm8UlKvqjgm',
-    marketMaker: 'LSRM',
-    fee: 2.323204,
-    funding: 402.232323,
-    netOutcomeTokensSold: [1, 4, 2], // ???
+    contract: {
+      creationBlock: 20,
+      creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+      factoryAddress: '0290fb167208af455bb137780163b7b7a9a10c16',
+      creationDate: '2017-07-06T14:25:10',
+      address: 'f68f5498dd766a8d65c4785219d61fcc5e0e920a',
+    },
+    event: {
+      contract: {
+        creationBlock: 18,
+        creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        factoryAddress: 'cfeb869f69431e42cdb54a4f4f105c19c080a601',
+        creationDate: '2017-07-06T14:25:10',
+        address: '79183957be84c0f4da451e534d5ba5ba3fb9c696',
+      },
+      collateralToken: '9b1f7f645351af3631a656421ed2e40f2802e6c0',
+      oracle: {
+        contract: {
+          creationBlock: 17,
+          creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+          factoryAddress: 'c89ce4735882c9f0f0fe26686c53074e09b0d550',
+          creationDate: '2017-07-06T14:25:10',
+          address: '141f5fca84cc82ef0a6751241019471731289456',
+        },
+        isOutcomeSet: false,
+        outcome: null,
+        owner: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        eventDescription: {
+          outcomes: [
+            'Yes',
+            'No',
+            '',
+          ],
+          ipfsHash: 'QmZRoQf96duYbm2EAcRJBhxcqPDbDxdCZHv2mjwbBfAnMa',
+          description: 'Maybe it will crash...',
+          resolutionDate: '2017-07-07T13:00:00',
+          title: 'Will this work?',
+        },
+      },
+      isWinningOutcomeSet: false,
+      outcome: null,
+      type: 'CATEGORICAL',
+    },
+    marketMaker: '59d3631c86bbe35ef041872d502f218a39fba150',
+    fee: 1,
+    funding: null,
+    netOutcomeTokensSold: [
+      '0',
+      '0',
+    ],
     stage: 0,
   },
   {
-    id: '0xSdsjsakldjakEJIQWUoixc87a89w3kldjkldJEWJLKejkdsjlkjxcsnmqwewqes',
-    factory: 'test',
-    creator: '0xBSJdhaehwJKEHWeisducdaisdjklasdjklasjdlk',
-    creationDate: moment.utc('2017-02-01 09:32:11'),
-    creationBlock: '32320202',
-    event: '0xdfdkjewklrkewrewriudvioxuioxcvnm6nfdms0nfdfseof9xN2CSydx5AH8JoB',
-    marketMaker: 'LSRM',
-    fee: 5.23222,
-    funding: 2.23232,
-    netOutcomeTokensSold: [1, 4, 2], // ???
+    contract: {
+      creationBlock: 24,
+      creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+      factoryAddress: '0290fb167208af455bb137780163b7b7a9a10c16',
+      creationDate: '2017-07-06T14:26:16',
+      address: 'e2c88959da6c4be1d52bbafdac45c7b8ca065cf1',
+    },
+    event: {
+      contract: {
+        creationBlock: 22,
+        creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        factoryAddress: 'cfeb869f69431e42cdb54a4f4f105c19c080a601',
+        creationDate: '2017-07-06T14:26:16',
+        address: '0d370b0974454d7b0e0e3b4512c0735a6489a71a',
+      },
+      collateralToken: '9b1f7f645351af3631a656421ed2e40f2802e6c0',
+      oracle: {
+        contract: {
+          creationBlock: 21,
+          creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+          factoryAddress: 'c89ce4735882c9f0f0fe26686c53074e09b0d550',
+          creationDate: '2017-07-06T14:26:16',
+          address: '5cb1848a868b67c6e8d2719647ffe6c092a64ebd',
+        },
+        isOutcomeSet: false,
+        outcome: null,
+        owner: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        eventDescription: {
+          outcomes: [
+            'Donald Trump',
+            '12 averagely smart monkeys',
+            '',
+          ],
+          ipfsHash: 'QmVx6zBYihXr9YDAXXsx2cU48gGeuPP84x5yRqNtiJG5Tn',
+          description: 'Test McGee',
+          resolutionDate: '2017-07-07T13:00:00',
+          title: 'Another Test',
+        },
+      },
+      isWinningOutcomeSet: false,
+      outcome: null,
+      type: 'CATEGORICAL',
+    },
+    marketMaker: '59d3631c86bbe35ef041872d502f218a39fba150',
+    fee: 6,
+    funding: null,
+    netOutcomeTokensSold: [
+      '0',
+      '0',
+    ],
     stage: 0,
   },
-], [MarketSchema])
-
-export const requestCategoricalEvents = async () => normalize([
   {
-    id: '0xTG6TgmyRL8eFAf4cbe1jV91s8zIEdEWE75wNOOlVDX3jfof9xN2CSydx5AH8JoB',
-    factory: 'test',
-    creator: '0xB00A24C899F88e5514583CFa8c40e4CDAB6C473e',
-    creationDate: moment.utc('2017-06-03 12:53:22'),
-    creationBlock: '53094839',
-    oracle: '0xu4QOAydUtR34M9VcjxHqb7aAVyA2OYruA9ZlBUvUO6Qj27P9McNjPwBJLB2AvxW',
-    isOutcomeSet: false,
-    outcome: null,
-    collateralToken: 'Ether Tokens', // string or hex key
+    contract: {
+      creationBlock: 44,
+      creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+      factoryAddress: '0290fb167208af455bb137780163b7b7a9a10c16',
+      creationDate: '2017-07-06T15:34:06',
+      address: 'f21aff051ca7beb167c73236490917b1bf94c89f',
+    },
+    event: {
+      contract: {
+        creationBlock: 42,
+        creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        factoryAddress: 'cfeb869f69431e42cdb54a4f4f105c19c080a601',
+        creationDate: '2017-07-06T15:34:05',
+        address: '46d6cdc1dc33a3bf63bb2e654e5622173365ed6a',
+      },
+      collateralToken: '9b1f7f645351af3631a656421ed2e40f2802e6c0',
+      oracle: {
+        contract: {
+          creationBlock: 41,
+          creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+          factoryAddress: 'c89ce4735882c9f0f0fe26686c53074e09b0d550',
+          creationDate: '2017-07-06T15:34:05',
+          address: '79e7654eaae77cdff937ec7b6f3156f7dea4fc4c',
+        },
+        isOutcomeSet: false,
+        outcome: null,
+        owner: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        eventDescription: {
+          outcomes: [
+            'Yes',
+            'No',
+          ],
+          ipfsHash: 'QmR2JidyjEGcUPnvFBdVZEqWX4vA98RRSwjhxWnmGZmF85',
+          description: 't e s t',
+          resolutionDate: '2017-07-07T13:00:00',
+          title: 'Test',
+        },
+      },
+      isWinningOutcomeSet: false,
+      outcome: null,
+      type: 'CATEGORICAL',
+    },
+    marketMaker: '59d3631c86bbe35ef041872d502f218a39fba150',
+    fee: 2,
+    funding: null,
+    netOutcomeTokensSold: [
+      '0',
+      '0',
+    ],
+    stage: 0,
   },
   {
-    id: '0xdfdkjewklrkewrewriudvioxuioxcvnm6nfdms0nfdfseof9xN2CSydx5AH8JoB',
-    factory: 'test',
-    creator: '0xB00A24C899F88e5514583CFa8c40e4CDAB6C473e',
-    creationDate: moment.utc('2017-06-03 12:53:22'),
-    creationBlock: '53094839',
-    oracle: '0xSDdSnSDXYBN6sjahkasdkjHSDJKsKJHDWEUQZWiuoicuoixyosBJLB2AvxW',
-    isOutcomeSet: false,
-    outcome: null,
-    collateralToken: 'Bitcoin', // string or hex key
+    contract: {
+      creationBlock: 49,
+      creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+      factoryAddress: '0290fb167208af455bb137780163b7b7a9a10c16',
+      creationDate: '2017-07-06T15:55:27',
+      address: 'bd4835c8404d3033d265c664f1bc41f3a1f2002a',
+    },
+    event: {
+      contract: {
+        creationBlock: 46,
+        creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        factoryAddress: 'cfeb869f69431e42cdb54a4f4f105c19c080a601',
+        creationDate: '2017-07-06T15:55:27',
+        address: 'f9ee78b1230e65b8fa5d144ca394028ddbed9f62',
+      },
+      collateralToken: '9b1f7f645351af3631a656421ed2e40f2802e6c0',
+      oracle: {
+        contract: {
+          creationBlock: 45,
+          creator: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+          factoryAddress: 'c89ce4735882c9f0f0fe26686c53074e09b0d550',
+          creationDate: '2017-07-06T15:55:27',
+          address: '57c3a9391c7430e5389c301ee0456908279332fe',
+        },
+        isOutcomeSet: false,
+        outcome: null,
+        owner: '90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        eventDescription: {
+          outcomes: [
+            'Yes',
+            'No',
+          ],
+          ipfsHash: 'QmQNNWF2wGEBdYxyTNsYVFNfywxBdHGgZUhABT8GPapkTk',
+          description: 'ttttteeeesssssttttt',
+          resolutionDate: '2017-07-07T13:00:00',
+          title: 'test',
+        },
+      },
+      isWinningOutcomeSet: false,
+      outcome: null,
+      type: 'CATEGORICAL',
+    },
+    marketMaker: '59d3631c86bbe35ef041872d502f218a39fba150',
+    fee: 1,
+    funding: null,
+    netOutcomeTokensSold: [
+      '0',
+      '0',
+    ],
+    stage: 0,
   },
-], [CategoricalEventSchema])
-
-export const requestScalarEvents = async () => normalize([
-  {
-    id: '0xlRDVeyFmqyL3NQFaQ7uYgtrNWydMvoez1ad7YGAi1ZsBIETF3E8vJm8UlKvqjgm',
-    factory: 'test',
-    creator: '0xB00A24C899F88e5514583CFa8c40e4CDAB6C473e',
-    creationDate: moment.utc('2017-06-03 12:53:22'),
-    creationBlock: '53094839',
-    oracle: '0xsjf4eWG2mvhiuZ1xtAPLvx4v15rcGr7b2vGMBcK244RvoP4aSR9hrvtqnOvyWAP',
-    isOutcomeSet: false,
-    outcome: null,
-    collateralToken: 'Ether Tokens', // string or hex key
-    lowerBound: 5000.00,
-    upperBound: 12000.00,
-  },
-], [ScalarEventSchema])
-
-export const requestCategoricalEventDescriptions = async () => normalize([
-  {
-    id: '0xIaSSn4ANXaOCoKbVx6NDjNMGKYVF456NuBpNn1d05DmNfdLcujgWKXlz0swMlQm',
-    ipfsHash: 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme',
-    title: 'Who will be the next President of the United States of America?',
-    description: 'Who will be the new president in 2020?',
-    resolutionDate: moment.utc('2020-11-03 10:00:00'),
-  }, {
-    id: '0xSg323hjgdjhsgiuaisdaUIDZzdshdagdsjhgahdjgasjhdgshjdgajhseazeu5t',
-    ipfsHash: 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme',
-    title: 'When will the Gnosis Token Auction start?',
-    description: 'When will the auction start?',
-    resolutionDate: moment.utc('2017-06-01 10:00:00'),
-  },
-], [CategoricalEventDescriptionSchema])
-
-export const requestScalarEventDescriptions = async () => normalize([
-  {
-    id: '0xQfOe6hhJPyMJ7M3ep5JLUGOOGbYnLqbQZDdj9nHRPZx4yzyq3txq1B1gH1mDT4b',
-    ipfsHash: 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme',
-    title: 'DAX Performance in 2 weeks',
-    description: 'Stock prices!',
-    resolutionDate: moment.utc().add(13, 'minutes'),
-    units: 'Points',
-  },
-], [ScalarEventDescriptionSchema])
-
-export const requestCentralizedOracles = async () => normalize([
-  {
-    id: '0xSDdSnSDXYBN6sjahkasdkjHSDJKsKJHDWEUQZWiuoicuoixyosBJLB2AvxW',
-    factory: 'test',
-    creator: '0xBSJdhaehwJKEHWeisducdaisdjklasdjklasjdlk',
-    creationDate: moment.utc('2017-06-03 12:53:22'),
-    creationBlock: '53094839',
-    owner: '0xBSJdhaehwJKEHWeisducdaisdjklasdjklasjdlk',
-    eventDescription: '0xSg323hjgdjhsgiuaisdaUIDZzdshdagdsjhgahdjgasjhdgshjdgajhseazeu5t',
-  }, {
-    id: '0xsjf4eWG2mvhiuZ1xtAPLvx4v15rcGr7b2vGMBcK244RvoP4aSR9hrvtqnOvyWAP',
-    factory: 'test',
-    creator: '0xB00A24C899F88e5514583CFa8c40e4CDAB6C473e',
-    creationDate: moment.utc('2017-06-03 12:53:22'),
-    creationBlock: '53094839',
-    owner: '0xB00A24C899F88e5514583CFa8c40e4CDAB6C473e',
-    eventDescription: '0xQfOe6hhJPyMJ7M3ep5JLUGOOGbYnLqbQZDdj9nHRPZx4yzyq3txq1B1gH1mDT4b',
-  }, {
-    id: '0xu4QOAydUtR34M9VcjxHqb7aAVyA2OYruA9ZlBUvUO6Qj27P9McNjPwBJLB2AvxW',
-    factory: 'bob',
-    creator: '0xB00A24C899F88e5514583CFa8c40e4CDAB6C473e',
-    creationDate: moment.utc('2017-06-03 12:53:22'),
-    creationBlock: '53094839',
-    owner: '0xB00A24C899F88e5514583CFa8c40e4CDAB6C473e',
-    eventDescription: '0xIaSSn4ANXaOCoKbVx6NDjNMGKYVF456NuBpNn1d05DmNfdLcujgWKXlz0swMlQm',
-  },
-], [CentralizedOracleSchema])
+], [marketSchema])

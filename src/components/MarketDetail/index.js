@@ -108,8 +108,8 @@ export default class MarketDetail extends Component {
       Creator: market.creator,
       Oracle: market.oracle.owner,
       Token: market.event.collateralToken,
-      Fee: new BigNumber(market.fee).toFixed(2),
-      Funding: `${new BigNumber(market.funding).toFixed(2)} ${market.event.collateralToken}`,
+      Fee: new BigNumber(market.fee || 0).toFixed(2),
+      Funding: `${new BigNumber(market.funding || 0).toFixed(2)} ${market.event.collateralToken}`,
     }
 
     return (

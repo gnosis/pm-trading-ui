@@ -1,7 +1,11 @@
 import Gnosis from '@gnosis.pm/gnosisjs'
 import { flow } from 'lodash'
 
-import { EVENT_TYPES, ORACLE_TYPES } from 'integrations/constants'
+import { normalizeHex } from 'utils/helpers'
+
+import { receiveEntities } from 'actions/entities'
+
+import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 import * as api from 'api'
 
 const GNOSIS_OPTIONS = {}
@@ -12,6 +16,7 @@ const getGnosisConnection = async () => {
     return Promise.resolve(gnosisInstance)
   }
 
+  //console.log('instance creation')
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
@@ -23,40 +28,23 @@ const getGnosisConnection = async () => {
   return gnosisInstance
 }
 
-const getFactories = async () => await api.requestFactories()
-
-const createEventDescription = async (opts) => {
+const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
 
-  const description = {
-    description: opts.description,
-    title: opts.title,
-    outcomes: opts.outcomes,
-    resolutionDate: opts.resolutionDate,
-  }
+  return gnosis.web3.eth.accounts[0]
+}
 
-  console.log("eventDescription deploy", JSON.stringify(description, null, 2))
+const createEventDescription = async (description) => {
+  const gnosis = await getGnosisConnection()
 
-  const ipfsHash = await gnosis.publishEventDescription(description)
-
-  return {
-    ...opts,
-    ...description,
-    ipfsHash,
-  }
+  return await gnosis.publishEventDescription(description)
 }
 
 const createOracle = async (opts) => {
   const gnosis = await getGnosisConnection()
-
-  console.log("deploying oracle", opts)
-
   let oracleContract
 
   if (opts.oracleType === ORACLE_TYPES.CENTRALIZED) {
-
-    console.log("oracle deploy", JSON.stringify(opts.ipfsHash, null, 2))
-
     oracleContract = await gnosis.createCentralizedOracle(opts.ipfsHash)
   } else if (opts.oracleType === ORACLE_TYPES.ULTIMATE) {
     const oracle = {
@@ -64,67 +52,68 @@ const createOracle = async (opts) => {
       // TODO: add remaining parameters and document
     }
     oracleContract = await gnosis.createUltimateOracle(oracle)
+  } else {
+    throw new Error('invalid oracle type')
   }
 
-  console.log(oracleContract)
-
-  return {
-    ...opts,
-    oracle: oracleContract,
-  }
+  return oracleContract
 }
 
-const createEvent = async (opts) => {
+const createEvent = async (event) => {
   const gnosis = await getGnosisConnection()
 
-  console.log("deploying event", opts)
-
   let eventContract
+  //console.log('creating event', event)
 
-  if (opts.eventType === EVENT_TYPES.CATEGORICAL) {
+  if (event.outcomeType === OUTCOME_TYPES.CATEGORICAL) {
+    //console.log('creating categorical event')
+    /*
     const event = {
       collateralToken: opts.collateralToken,
       oracle: opts.oracle,
       outcomeCount: opts.outcomes.length,
     }
+    */
+    //console.log('event data', event)
 
     eventContract = await gnosis.createCategoricalEvent(event)
-  } else if (opts.eventType === EVENT_TYPES.SCALAR) {
+  } else if (event.outcomeType === OUTCOME_TYPES.SCALAR) {
+    /*
     const event = {
       collateralToken: opts.collateralToken,
       oracle: opts.oracle,
       lowerBound: opts.lowerBound,
       upperBound: opts.upperBound,
     }
+    */
     eventContract = await gnosis.createScalarEvent(event)
+  } else {
+    throw new Error('invalid outcome/event type')
   }
 
-  return {
-    ...opts,
-    event: eventContract,
-  }
+  return eventContract
 }
 
-const createMarket = async (opts) => {
+const createMarket = async (market) => {
   const gnosis = await getGnosisConnection()
+  const account = await getCurrentAccount()
+  //console.log('market data', market)
+  //console.log(gnosis)
+  await gnosis.etherToken.deposit(market.funding)
+  await gnosis.etherToken.approve(account, market.funding)
 
-  await gnosis.etherToken.deposit(1000000000)
-  //await gnosis.etherToken.approve(1000000000)
-
+  /*
   const market = {
     marketFactory: gnosis.standardMarketFactory,
     event: opts.event,
     marketMaker: opts.marketMaker,
     fee: opts.fee,
   }
+  */
 
-  const marketContract = await gnosis.createMarket(market)
-
-  return {
-    ...opts,
-    ...marketContract,
-  }
+  return await gnosis.createMarket(market)
 }
+
 /**
  * Creates all necessary contracts to create a whole market.
  *
@@ -139,19 +128,88 @@ const createMarket = async (opts) => {
  * @param {(number|BigNumber)} opts.funding
  * @param {(number|BigNumber)} opts.fee
  */
-export const composeMarket = opts => async (dispatch) => {
+export const composeMarket = marketValues => async (dispatch) => {
   const gnosis = await getGnosisConnection()
-  opts.collateralToken = gnosis.etherToken
-  opts.marketFactory = gnosis.standardMarketFactory
-  opts.marketMaker = gnosis.lmsrMarketMaker
+  const account = await getCurrentAccount()
 
-  let contractBundle = opts
-  contractBundle = await createEventDescription(opts)
-  contractBundle = await createOracle(contractBundle)
-  contractBundle = await createEvent(contractBundle)
-  contractBundle = await createMarket(contractBundle)
+  const eventDescriptionData = {
+    description: marketValues.description,
+    title: marketValues.title,
+    outcomes: marketValues.outcomes,
+    resolutionDate: marketValues.resolutionDate,
+  }
+  const ipfsHash = await createEventDescription(eventDescriptionData)
+  //console.log('eventDescription ipfsHash:', ipfsHash)
 
-  console.log("successfully deployed", contractBundle)
+  const oracleData = {
+    oracleType: marketValues.oracleType,
+    ipfsHash,
+  }
+  const oracle = await createOracle(oracleData)
+  //console.log('oracle:', oracle)
 
-  return contractBundle
+  const eventData = {
+    collateralToken: gnosis.etherToken, // default token right now
+    outcomeCount: marketValues.outcomes.length,
+    outcomeType: marketValues.outcomeType,
+    oracle,
+  }
+  const event = await createEvent(eventData)
+  //console.log('event:', event)
+
+  const marketData = {
+    funding: marketValues.funding,
+    fee: marketValues.fee,
+    marketMaker: gnosis.lmsrMarketMaker,
+    marketFactory: gnosis.standardMarketFactory,
+    event,
+  }
+  const market = await createMarket(marketData)
+  //console.log('market:', market)
+
+  const oracleAddress = normalizeHex(oracle.address)
+  const accountAddress = normalizeHex(account.address)
+  const eventAddress = normalizeHex(event.address)
+  const marketAddress = normalizeHex(market.address)
+  const collateralTokenAddress = normalizeHex(event.collateralToken.address)
+
+  dispatch(receiveEntities({
+    entities: {
+      eventDescriptions: {
+        [ipfsHash]: {
+          ...eventDescriptionData,
+          ipfsHash,
+        },
+      },
+      oracles: {
+        [oracleAddress]: {
+          ...oracleData,
+          address: oracleAddress,
+          isOutcomeSet: false,
+          outcome: null,
+          creator: accountAddress,
+          owner: accountAddress,
+          eventDescription: ipfsHash,
+        },
+      },
+      events: {
+        [eventAddress]: {
+          ...eventData,
+          collateralToken: collateralTokenAddress,
+          creator: accountAddress,
+          oracle: oracleAddress,
+        },
+      },
+      markets: {
+        [marketAddress]: {
+          ...marketData,
+          marketMaker: normalizeHex(marketData.marketMaker.address),
+          marketFactory: normalizeHex(marketData.marketFactory.address),
+          event: eventAddress,
+          creationDate: new Date(),
+          creator: accountAddress,
+        },
+      },
+    },
+  }))
 }

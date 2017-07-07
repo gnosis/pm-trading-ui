@@ -12,6 +12,7 @@ import { syncHistoryWithStore } from 'react-router-redux'
 
 import App from 'containers/App'
 import MarketListPage from 'containers/MarketListPage'
+import MarketCreateWizardPage from 'containers/MarketCreateWizardPage'
 import MarketDetailPage from 'containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
 import AccountPage from 'containers/AccountPage'
@@ -46,6 +47,7 @@ render(
         <Route path="settings" component={SettingsPage} />
         <Route path="markets">
           <IndexRedirect to="list" />
+          <Route path="new" component={MarketCreateWizardPage} />
           <Route path="list" component={MarketListPage} />
           <Route path=":id" component={MarketDetailPage} />
         </Route>

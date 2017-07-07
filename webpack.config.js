@@ -22,21 +22,22 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
+    symlinks: false,
     modules: [
       `${__dirname}/src`,
       'node_modules',
+      `${__dirname}/../gnosis.js`,
+      `${__dirname}/../gnosis.js/node_modules`
     ] },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader' },
+      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader?babelrc=false&extends=' + path.join(__dirname, '/.babelrc') },
       {
         test: /\.(jpe?g|png)$/i,
         loader: 'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
       },
       { test: /\.(less|css)$/,
-        exclude: [
-          // `${__dirname}/node_modules`,
-        ],
+        exclude: /(node_modules)/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [

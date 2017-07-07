@@ -1,0 +1,72 @@
+@import url('../../less/vars.less');
+
+.formSlider {
+  display: inline-block;
+
+  &__label {
+    .defaultStyle__inputLabel();
+  }
+  
+  &__value {
+    text-align: center;
+    display: block;
+  }
+
+  &__input[type="range"] {
+    width: auto;
+    display: inline-block;
+
+    margin: 0 8px;
+
+    appearance: none;
+    vertical-align: middle;
+
+    .slider() {
+      border: none;
+      border-radius: 3px;
+      width: 100%;
+      height: 5px;
+      margin: 10px 0;
+      background-color: @bg-color-muted;
+      line-height: 12px;
+    }
+
+    &::slider-runnable-track {
+      .slider();
+    }
+    &::-webkit-slider-runnable-track {
+      .slider();
+    }
+    &::-moz-range-track {
+      .slider();
+    }
+    &::-ms-track {
+      .slider();
+    }
+
+    .thumb() {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background-color: @active-highlight;
+      line-height: 0;
+      vertical-align: middle;
+      margin-top: -6px;
+      border: 4px solid @bg-color-muted;
+      border-radius: 9999px;
+    }
+
+    &::slider-thumb {
+      .thumb();
+    }
+    &::-webkit-slider-thumb {
+      .thumb();
+    }
+    &::-moz-range-thumb {
+      .thumb();
+    }
+    &::-ms-thumb {
+      .thumb();
+    }
+  }
+}

@@ -8,7 +8,7 @@ import 'moment-duration-format'
 import BigNumber from 'bignumber.js'
 import { reduxForm, submit, Field } from 'redux-form'
 
-import SelectLabeled from 'components/SelectLabeled'
+import FormSelect from 'components/FormSelect'
 
 import './marketList.less'
 
@@ -26,6 +26,7 @@ class MarketList extends Component {
 
   @autobind
   handleCreateMarket() {
+  /*
     const options = {
       title: 'Test Market',
       description: 'Test123',
@@ -37,7 +38,8 @@ class MarketList extends Component {
       oracleType: 'CENTRALIZED',
     }
 
-    this.props.createMarket(options)
+    this.props.createMarket(options)*/
+    this.props.changeUrl(`/markets/new`)
   }
 
   renderCategoricalOutcomes(outcomes, resolved) {
@@ -175,7 +177,7 @@ class MarketList extends Component {
         <form onSubmit={handleSubmit}>
           <div className="marketFilter__group">
             <Field
-              component={SelectLabeled}
+              component={FormSelect}
               name="preset"
               label="Preset"
               labelClassName="marketFilter__label"
@@ -186,7 +188,7 @@ class MarketList extends Component {
           </div>
           <div className="marketFilter__group">
             <Field
-              component={SelectLabeled}
+              component={FormSelect}
               name="oracle"
               label="Oracle"
               labelClassName="marketFilter__label"
