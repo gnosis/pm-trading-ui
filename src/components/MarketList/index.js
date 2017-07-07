@@ -5,9 +5,10 @@ import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import moment from 'moment'
 import 'moment-duration-format'
+import BigNumber from 'bignumber.js'
 import { reduxForm, submit, Field } from 'redux-form'
 
-import SelectLabeled from 'components/SelectLabeled'
+import FormSelect from 'components/FormSelect'
 
 import './marketList.less'
 
@@ -21,6 +22,24 @@ class MarketList extends Component {
   @autobind
   handleViewMarket(market) {
     this.props.changeUrl(`/markets/${market.address}`)
+  }
+
+  @autobind
+  handleCreateMarket() {
+  /*
+    const options = {
+      title: 'Test Market',
+      description: 'Test123',
+      outcomes: ['Yes', 'No'],
+      resolutionDate: new Date().toISOString(),
+      funding: new BigNumber('0.2345'),
+      fee: new BigNumber('12.00'),
+      eventType: 'CATEGORICAL',
+      oracleType: 'CENTRALIZED',
+    }
+
+    this.props.createMarket(options)*/
+    this.props.changeUrl(`/markets/new`)
   }
 
   renderCategoricalOutcomes(outcomes, resolved) {
@@ -158,7 +177,7 @@ class MarketList extends Component {
         <form onSubmit={handleSubmit}>
           <div className="marketFilter__group">
             <Field
-              component={SelectLabeled}
+              component={FormSelect}
               name="preset"
               label="Preset"
               labelClassName="marketFilter__label"
@@ -169,7 +188,7 @@ class MarketList extends Component {
           </div>
           <div className="marketFilter__group">
             <Field
-              component={SelectLabeled}
+              component={FormSelect}
               name="oracle"
               label="Oracle"
               labelClassName="marketFilter__label"
@@ -211,7 +230,7 @@ class MarketList extends Component {
                 <div className="marketStats__label">New Markets</div>
               </div>
               <div className="col-md-3">
-                <button type="button" className="marketStats__control btn btn-primary">Create Market</button>
+                <button type="button" onClick={this.handleCreateMarket} className="marketStats__control btn btn-primary">Create Market</button>
               </div>
             </div>
           </div>

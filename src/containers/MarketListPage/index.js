@@ -5,6 +5,7 @@ import { formValueSelector } from 'redux-form'
 import MarketList from 'components/MarketList'
 import { getMarkets } from 'selectors/market'
 import { requestMarketList } from 'actions/market'
+import { composeMarket } from 'actions/gnosis'
 
 const filterMarkets = state => market => true // todo: implement
 
@@ -20,6 +21,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   requestMarkets: () => dispatch(requestMarketList()),
   changeUrl: url => dispatch(push(url)),
+  createMarket: opts => dispatch(composeMarket(opts)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketList)
