@@ -60,7 +60,7 @@ export default class MarketCreateWizard extends Component {
 
   renderMarketDetails() {
     const currencies = {
-      0xa586074fa4fe3e546a132a16238abe37951d41fe: 'Ether Token',
+      0x9b1f7f645351af3631a656421ed2e40f2802e6c0: 'Ether Token',
     }
 
     return (

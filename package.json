@@ -17,8 +17,10 @@
   },
   "author": "Gnosis",
   "license": "ISC",
+  "dependenciesOptional": {
+    "@gnosis.pm/gnosisjs": "gnosis/gnosis.js"
+  },
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "file:../gnosis.js",
     "autobind-decorator": "^1.4.1",
     "babel-polyfill": "^6.23.0",
     "bignumber.js": "^4.0.2",

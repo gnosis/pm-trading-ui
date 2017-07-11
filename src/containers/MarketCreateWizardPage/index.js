@@ -3,7 +3,7 @@ import { reduxForm, formValueSelector } from 'redux-form'
 
 import MarketCreateWizard from 'components/MarketCreateWizard'
 
-import { composeMarket } from 'actions/gnosis'
+import { createMarket } from 'actions/market'
 
 const FORM = {
   form: 'marketCreateWizard',
@@ -19,7 +19,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createMarket: market => dispatch(composeMarket(market))
+    createMarket: market => dispatch(createMarket(market))
   }
 }
 
