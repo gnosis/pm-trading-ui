@@ -1,7 +1,7 @@
 import Gnosis from '@gnosis.pm/gnosisjs'
 import { flow } from 'lodash'
 
-import { normalizeHex } from 'utils/helpers'
+import { normalizeHex, hexWithPrefix } from 'utils/helpers'
 
 import { receiveEntities } from 'actions/entities'
 
@@ -212,4 +212,22 @@ export const composeMarket = marketValues => async (dispatch) => {
       },
     },
   }))
+}
+
+export const buyShares = (market, outcomeIndex, amount) => async (dispatch) => {
+  const gnosis = await getGnosisConnection()
+  console.log(market)
+  // calculate buy cost
+
+  // TODO: get actual market maker here
+  // TODO: calculate cost + fee from amount
+
+  const maxCost = Math.pow(10, 18) * 5
+  const amountWei = amount * (Math.pow(10, 18))
+
+  const marketContract = await gnosis.contracts.Market.at(hexWithPrefix(market.address))
+
+  gnosis.etherToken.approve(hexWithPrefix(market.address), amountWei.toString())
+  marketContract.buy(outcomeIndex, amountWei.toString(), maxCost.toString())
+  debugger;
 }

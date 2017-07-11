@@ -2,37 +2,47 @@
 
 .radioButton {
   &__text {
-    position: relative;
     line-height: 16px;
-    padding-left: (16px + 6px);
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      display: inline;
-      width: 16px;
-      height: 16px;
-      border-radius: 9999px;
-      background-color: @bg-color-muted;
-      border: 0px solid @bg-color-muted;
-
-      transition: background-color 0.2s ease, border 0.2s ease;
-    }
+    vertical-align: middle;
+    padding-left: 6px;
   }
 
   &__label {
     .defaultStyle__inputLabel();
+    margin: 0;
   }
 
   &__input[type="radio"] {
-    width: 0;
-    height: 0;
-    opacity: 0;
+    margin: 0;
+    float: left;
+    appearance: none;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background-color: @bg-color-muted;
+    border: 0px solid @bg-color-muted;
 
-    &:checked ~ .radioButton__text::before {
-      background-color: @active-highlight;
+    // for use with currentColor:
+    color: @active-highlight;
+
+    transition: background-color 0.2s ease, border 0.2s ease;
+
+    // current color is highlight color
+    &:checked {
+      background-color: currentColor;
       border-width: 4px;
     }
+
+    &:checked, &:hover, &:focus {
+      outline: none;
+      box-shadow: 0 0 4px 1px currentColor;
+    }
+  }
+
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
   }
 }

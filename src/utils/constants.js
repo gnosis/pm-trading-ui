@@ -18,3 +18,14 @@ export const ORACLE_TYPES = {
 }
 
 export const HEX_VALUE_REGEX = /(0x)?[0-9A-Fa-f]{40}/
+
+export const COLOR_SCHEME_DEFAULT = [
+  '#0be1b1', // green
+  '#e01563', // red
+  '#f2a00a', // orange
+  '#6f6f6f', // gray
+  '#0abcf2', // blue
+  '#f20ae0', // pink
+  '#e4f20a', // yellow
+  '#73472c', // brown
+]

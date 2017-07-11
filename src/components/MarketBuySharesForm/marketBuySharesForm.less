@@ -1,0 +1,31 @@
+@import url('../../less/vars.less');
+
+.marketBuyOutcome {
+  margin: 20px 0;
+
+  &__input[type="radio"] {
+    width: 32px;
+    height: 32px;
+
+    // current color is highlight color
+    background-color: currentColor;
+
+    &:checked {
+      border-color: @bg-color-muted;
+    }
+  }
+
+  &__text {
+    line-height: 32px;
+    padding-left: 20px;
+  }
+}
+
+.marketBuyInvest {
+  &__input {
+    border-color: @bg-color-dark;
+    border-bottom-style: dotted;
+    border-bottom-width: 4px;
+    font-size: 32px;
+  }
+}

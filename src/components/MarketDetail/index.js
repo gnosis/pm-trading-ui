@@ -9,6 +9,8 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import Expandable from 'components/Expandable'
 import MarketGraph from 'components/MarketGraph'
 
+import MarketBuySharesForm from 'components/MarketBuySharesForm'
+
 import './marketDetail.less'
 
 const EXPAND_BUY_SHARES = 'BUY_SHARES'
@@ -49,7 +51,7 @@ const controlButtons = {
   [EXPAND_BUY_SHARES]: {
     label: 'Buy Shares',
     className: 'btn btn-primary',
-    component: <span>Buy Shares</span>,
+    component: MarketBuySharesForm,
   },
   [EXPAND_SHORT_SELL]: {
     label: 'Short Sell',
@@ -95,9 +97,17 @@ export default class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
+    const { market, buyShares } = this.props
+    
+    const transferProps = {
+      market,
+      buyShares,
+    }
+
     return (
       <Expandable
         selected={this.state.expandableSelected}
+        props={transferProps}
         components={_.mapValues(controlButtons, control => control.component)}
       />
     )
