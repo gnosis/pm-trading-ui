@@ -42,13 +42,13 @@ class MarketBuySharesForm extends Component {
                     Maximum Win
                   </div>
                   <div className="col-md-6">
-                    <span className="marketBuyWin__row marketBuyWin__max">28€ (0.07) ETH</span>
-                    <span className="marketBuyWin__row marketBuyWin__min">20€ (0.05) ETH</span>
+                    <span className="marketBuyWin__row marketBuyWin__max">28€ (0.07) ETH</span> {/* TODO: calculate this */}
+                    <span className="marketBuyWin__row marketBuyWin__min">20€ (0.05) ETH</span> {/* TODO: calculate this */}
                   </div>
                 </div>
                 <div className="row marketBuySharesForm__row">
                   <div className="col-md-6">Share Count</div>
-                  <div className="col-md-6">3</div>
+                  <div className="col-md-6">3</div> {/* TODO: fetch this */}
                 </div>
                 <div className="row marketBuySharesForm__row">
                   <div className="col-md-12">
