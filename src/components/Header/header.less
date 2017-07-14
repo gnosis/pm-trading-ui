@@ -14,11 +14,15 @@
   text-transform: uppercase;
   font-weight: 500;
   padding-bottom: 2px;
-  border-bottom: 2px solid @link-color;
-  color: black;
+  letter-spacing: .5px;
+  border-bottom: 2px solid transparent;
+  color: black !important;
+  font-size: 14px;
 
-  &:hover {
-    color: @link-color;
+  &:hover,
+  &--active {
+    color: black !important;
+    border-color: @link-color;
   }
 }
 
