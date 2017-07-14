@@ -1,6 +1,7 @@
 import {
   requestMarkets,
   receiveEntities,
+  updateEntity
 } from 'actions/entities'
 
 import * as api from 'api'
@@ -18,11 +19,24 @@ export const requestMarketList = () => async (dispatch) => {
 
 export const createMarket = options => async (dispatch) => {
   const createdEntities = await api.composeMarket(options)
-  console.log(JSON.stringify(createdEntities))
-  return dispatch(receiveEntities(createdEntities))
+
+  if (createdEntities) {
+    return dispatch(receiveEntities(createdEntities))
+  }
 }
 
-export const buyMarketShares = options => async (dispatch) => {
-  // placeholder
-  return Promise.resolve()
+export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
+  await api.buyShares(market, outcomeIndex, amount)
+
+  const netOutcomeTokensSold = market.netOutcomeTokensSold
+  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + (amount * 1e18)
+  netOutcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
+
+  return dispatch(updateEntity({
+    entityType: 'markets',
+    data: {
+      id: market.address,
+      netOutcomeTokensSold,
+    },
+  }))
 }

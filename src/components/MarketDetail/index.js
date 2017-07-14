@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
+import { mapValues } from 'lodash'
 import moment from 'moment'
-import _ from 'lodash'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
-import BigNumber from 'bignumber.js'
 
 import { RESOLUTION_TIME } from 'utils/constants'
-import Expandable from 'components/Expandable'
 import MarketGraph from 'components/MarketGraph'
 
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
@@ -85,7 +83,7 @@ export default class MarketDetail extends Component {
   @autobind
   handleExpand(type) {
     // Toggle
-    this.setState({ expandableSelected: (this.state.expandableSelected === type ? null : type) })
+    this.setState({ visibleControl: (this.state.visibleControl === type ? null : type) })
   }
 
   renderLoading() {
@@ -97,20 +95,27 @@ export default class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
-    const { market, buyShares } = this.props
-    
-    const transferProps = {
-      market,
-      buyShares,
-    }
+    const { visibleControl } = this.state
 
-    return (
-      <Expandable
-        selected={this.state.expandableSelected}
-        props={transferProps}
-        components={_.mapValues(controlButtons, control => control.component)}
-      />
-    )
+    if (visibleControl === EXPAND_BUY_SHARES) {
+      const {
+        market,
+        selectedCategoricalOutcome,
+        selectedBuyInvest,
+        buyShares
+      } = this.props
+
+      return (
+        <MarketBuySharesForm
+          {...{
+            market,
+            selectedCategoricalOutcome,
+            selectedBuyInvest,
+            buyShares,
+          }}
+        />
+      )
+    }
   }
 
   renderInfos(market) {
@@ -118,8 +123,8 @@ export default class MarketDetail extends Component {
       Creator: market.creator,
       Oracle: market.oracle.owner,
       Token: market.event.collateralToken,
-      Fee: new BigNumber(market.fee || 0).toFixed(2),
-      Funding: `${new BigNumber(market.funding || 0).toFixed(2)} ${market.event.collateralToken}`,
+      Fee: market.fee.toFixed(2),
+      Funding: `${market.funding} ${market.event.collateralToken}`,
     }
 
     return (
@@ -154,7 +159,7 @@ export default class MarketDetail extends Component {
                 marketControls__button
                 ${controlButtons[type].className}
                 col-md-2
-                ${type === this.state.expandableSelected ? 'marketControls__button--active' : ''}`
+                ${type === this.state.visibleControl ? 'marketControls__button--active' : ''}`
               }
               onClick={() => this.handleExpand(type)}
             >
@@ -207,7 +212,11 @@ export default class MarketDetail extends Component {
           </div>
         </div>
         { this.renderControls(market) }
-        { this.renderExpandableContent() }
+        <div className="expandable">
+          <div className="container">
+            { this.renderExpandableContent() }
+          </div>
+        </div>
         <MarketGraph data={testData} />
       </div>
     )

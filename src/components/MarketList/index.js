@@ -5,7 +5,6 @@ import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import moment from 'moment'
 import 'moment-duration-format'
-import BigNumber from 'bignumber.js'
 import { reduxForm, submit, Field } from 'redux-form'
 
 import FormSelect from 'components/FormSelect'

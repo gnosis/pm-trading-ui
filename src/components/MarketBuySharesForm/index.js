@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
+import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
+
+import { calcLMSROutcomeTokenCount } from 'api'
 
 import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 
@@ -13,60 +16,95 @@ import './marketBuySharesForm.less'
 class MarketBuySharesForm extends Component {
   @autobind
   handleBuyShares(values) {
-    const { buyShares, market } = this.props
+    const {
+      market,
+      buyShares,
+      selectedBuyInvest,
+    } = this.props
 
-    buyShares(market, values.outcome, parseFloat(values.invest))
+    buyShares(market, values.outcome, selectedBuyInvest)
   }
 
   render() {
-    const { handleSubmit, market: { event: { collateralToken } } } = this.props
+    console.log(this.props)
+    const {
+      handleSubmit,
+      selectedCategoricalOutcome,
+      selectedBuyInvest,
+      market: {
+        funding,
+        netOutcomeTokensSold,
+        event: {
+          collateralToken,
+        },
+      },
+    } = this.props
+
+
+    let maximumWin = 0
+    let percentWin = 0
+    try {
+      if (selectedBuyInvest > 0) {
+        const investInWei = new Decimal(selectedBuyInvest).mul(1e18)
+        const outcomeTokenIndex = parseInt(selectedCategoricalOutcome, 10)
+
+        const shareCostWei = calcLMSROutcomeTokenCount({
+          netOutcomeTokensSold,
+          funding,
+          outcomeTokenIndex,
+          cost: investInWei.toString(),
+        })
+
+        maximumWin = shareCostWei.sub(investInWei.toString()).div(1e18)
+        percentWin = shareCostWei.div(investInWei.toString()).mul(100).sub(100)
+      }
+    } catch (err) {
+      console.error(err)
+    }
 
     return (
-        <div className="marketBuySharesForm">
-          <form onSubmit={handleSubmit(this.handleBuyShares)}>
-            <div className="row">
-              {this.renderOutcomes()}
-              <div className="col-md-6">
-                <div className="row marketBuySharesForm__row">
-                  <div className="col-md-8">
-                    <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
-                  </div>
-                  <div className="col-md-4">
-                    <div className="marketBuyCurrency">
-                      {collateralToken}
-                    </div>
-                  </div>
+      <div className="marketBuySharesForm">
+        <form onSubmit={handleSubmit(this.handleBuyShares)}>
+          <div className="row">
+            {this.renderOutcomes()}
+            <div className="col-md-6">
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-8">
+                  <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
                 </div>
-                <div className="row marketBuySharesForm__row">
-                  <div className="col-md-6">
-                    Maximum Win
-                  </div>
-                  <div className="col-md-6">
-                    <span className="marketBuyWin__row marketBuyWin__max">28€ (0.07) ETH</span> {/* TODO: calculate this */}
-                    <span className="marketBuyWin__row marketBuyWin__min">20€ (0.05) ETH</span> {/* TODO: calculate this */}
-                  </div>
-                </div>
-                <div className="row marketBuySharesForm__row">
-                  <div className="col-md-6">Share Count</div>
-                  <div className="col-md-6">3</div> {/* TODO: fetch this */}
-                </div>
-                <div className="row marketBuySharesForm__row">
-                  <div className="col-md-12">
-                    <Field name="confirm" component={Checkbox} className="marketBuySharesForm__checkbox" text="Confirm Purchase" />
-                  </div>
-                </div>
-                <div className="row marketBuySharesForm__row">
-                  <div className="col-md-6">
-                    <button className="btn btn-primary col-md-12">Buy Shares</button>
-                  </div>
-                  <div className="col-md-6">
-                    <button className="btn btn-default col-md-12 marketBuySharesForm__cancel">Cancel</button>
+                <div className="col-md-4">
+                  <div className="marketBuyCurrency">
+                    {collateralToken}
                   </div>
                 </div>
               </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-6">
+                    Maximum Win
+                  </div>
+                <div className="col-md-6">
+                  <span className="marketBuyWin__row marketBuyWin__max">
+                    {maximumWin.toFixed(2)} (+{percentWin.toFixed(2)} %) {collateralToken}
+                  </span>
+                </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-12">
+                  <Field name="confirm" component={Checkbox} className="marketBuySharesForm__checkbox" text="Confirm Purchase" />
+                </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-6">
+                  <button className="btn btn-primary col-md-12">Buy Shares</button>
+                </div>
+                <div className="col-md-6">
+                  <button className="btn btn-default col-md-12 marketBuySharesForm__cancel">Cancel</button>
+                </div>
+              </div>
             </div>
-          </form>
-        </div>)
+          </div>
+        </form>
+      </div>)
   }
 
   renderOutcomes() {
@@ -87,13 +125,14 @@ class MarketBuySharesForm extends Component {
 
   renderCategorical() {
     const { market: { eventDescription } } = this.props
+
     return (
       <div className="col-md-6">
         {eventDescription.outcomes.map((label, index) => (
           <Field
             key={index}
             component={FormRadioButton}
-            name="outcome"
+            name="selectedOutcome"
             highlightColor={COLOR_SCHEME_DEFAULT[index]}
             className="marketBuyOutcome"
             radioValue={index}
@@ -105,12 +144,23 @@ class MarketBuySharesForm extends Component {
   }
 
   renderScalar() {
-    const { market: { eventDescription } } = this.props
-
-    // TODO: missing template from vianney
+    const {
+      market: {
+        event: {
+          lowerBound,
+          upperBound
+        },
+        eventDescription: {
+          decimals,
+          unit,
+        },
+      }
+    } = this.props
+    console.log(this.props.market)
     return (
       <div className="col-md-6">
-        <Field name="outcome" component={Input} label="Value" />
+        <span>{lowerBound} to {upperBound}</span>
+        <Field name="outcome" component={Input} label={`Value in ${unit}`} step={Math.pow(10, -(parseInt(decimals, 10))).toFixed(decimals)} />
       </div>
     )
   }

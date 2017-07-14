@@ -23,8 +23,7 @@ export default class MarketCreateWizard extends Component {
     market.fee = parseFloat(fee)
     market.funding = parseFloat(funding)
     market.resolutionDate = moment(resolutionDate).format()
-    market.outcomes = outcomes.filter(outcome => outcome.length > 0)
-    console.log(market)
+
     return this.props.createMarket(market)
   }
 
@@ -80,7 +79,7 @@ export default class MarketCreateWizard extends Component {
         </div>
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="funding" component={FormInput} type="number" label="Funding" />
+            <Field name="funding" component={FormInput} step={0.01} type="number" label="Funding" />
           </div>
         </div>
       </div>
