@@ -3,9 +3,11 @@ import { Field, reduxForm } from 'redux-form'
 import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
 
-import { calcLMSROutcomeTokenCount } from 'api'
+import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
+
+import ScalarSlider from 'components/ScalarSlider'
 
 import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
 import Input from 'components/FormInput'
@@ -22,45 +24,74 @@ class MarketBuySharesForm extends Component {
       selectedBuyInvest,
     } = this.props
 
-    buyShares(market, values.outcome, selectedBuyInvest)
+    buyShares(market, 1, selectedBuyInvest)
   }
 
-  render() {
-    console.log(this.props)
+  getShareCost(investment, outcomeIndex) {
+    if (!investment || !(parseFloat(investment) > 0)) {
+      return new Decimal(0)
+    }
+
+    const invest = new Decimal(investment).mul(1e18)
     const {
-      handleSubmit,
-      selectedCategoricalOutcome,
-      selectedBuyInvest,
       market: {
         funding,
         netOutcomeTokensSold,
+      },
+    } = this.props
+
+    let shareCost
+    try {
+      shareCost = calcLMSROutcomeTokenCount({
+        netOutcomeTokensSold,
+        funding,
+        outcomeTokenIndex: parseInt(outcomeIndex, 10),
+        cost: invest.toString(),
+      })
+    } catch (e) {
+      return new Decimal(0)
+    }
+
+    return shareCost
+  }
+
+  getMaximumWin(shareCost) {
+    return shareCost.div(1e18).toFixed(4)
+  }
+
+  getPercentageWin(shareCost, investment) {
+    if (!investment || !(parseFloat(investment) > 0)) {
+      return '0'
+    }
+
+    const invest = new Decimal(investment).mul(1e18)
+    return shareCost.div(invest.toString()).mul(100).sub(100).toFixed(4)
+  }
+
+  render() {
+    const {
+      handleSubmit,
+      selectedBuyInvest,
+      market: {
         event: {
+          type: eventType,
           collateralToken,
         },
       },
     } = this.props
 
+    let outcomeIndex
 
-    let maximumWin = 0
-    let percentWin = 0
-    try {
-      if (selectedBuyInvest > 0) {
-        const investInWei = new Decimal(selectedBuyInvest).mul(1e18)
-        const outcomeTokenIndex = parseInt(selectedCategoricalOutcome, 10)
-
-        const shareCostWei = calcLMSROutcomeTokenCount({
-          netOutcomeTokensSold,
-          funding,
-          outcomeTokenIndex,
-          cost: investInWei.toString(),
-        })
-
-        maximumWin = shareCostWei.sub(investInWei.toString()).div(1e18)
-        percentWin = shareCostWei.div(investInWei.toString()).mul(100).sub(100)
-      }
-    } catch (err) {
-      console.error(err)
+    if (eventType === OUTCOME_TYPES.CATEGORICAL) {
+      outcomeIndex = this.props.selectedCategoricalOutcome
+    } else if (eventType === OUTCOME_TYPES.SCALAR) {
+      outcomeIndex = 0 // short
     }
+
+    const shareCost = this.getShareCost(selectedBuyInvest, outcomeIndex)
+
+    const maximumWin = this.getMaximumWin(shareCost, selectedBuyInvest)
+    const percentageWin = this.getPercentageWin(shareCost, selectedBuyInvest)
 
     return (
       <div className="marketBuySharesForm">
@@ -68,6 +99,11 @@ class MarketBuySharesForm extends Component {
           <div className="row">
             {this.renderOutcomes()}
             <div className="col-md-6">
+              <div className="row">
+                <div className="col-md-12">
+                  <h2 className="marketBuyHeading">Bet Amount & Checkout</h2>
+                </div>
+              </div>
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-8">
                   <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
@@ -84,7 +120,7 @@ class MarketBuySharesForm extends Component {
                   </div>
                 <div className="col-md-6">
                   <span className="marketBuyWin__row marketBuyWin__max">
-                    {maximumWin.toFixed(2)} (+{percentWin.toFixed(2)} %) {collateralToken}
+                    {maximumWin} ({percentageWin} %) {collateralToken}
                   </span>
                 </div>
               </div>
@@ -128,39 +164,94 @@ class MarketBuySharesForm extends Component {
 
     return (
       <div className="col-md-6">
-        {eventDescription.outcomes.map((label, index) => (
-          <Field
-            key={index}
-            component={FormRadioButton}
-            name="selectedOutcome"
-            highlightColor={COLOR_SCHEME_DEFAULT[index]}
-            className="marketBuyOutcome"
-            radioValue={index}
-            text={label}
-          />
-        ))}
+        <div className="row">
+          <div className="col-md-12">
+            <h2 className="marketBuyHeading">Preview & Setting</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            {eventDescription.outcomes.map((label, index) => (
+              <Field
+                key={index}
+                component={FormRadioButton}
+                name="selectedOutcome"
+                highlightColor={COLOR_SCHEME_DEFAULT[index]}
+                className="marketBuyOutcome"
+                radioValue={index}
+                text={label}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     )
   }
 
   renderScalar() {
     const {
+      selectedBuyInvest,
       market: {
         event: {
           lowerBound,
-          upperBound
+          upperBound,
         },
         eventDescription: {
           decimals,
           unit,
         },
-      }
+        netOutcomeTokensSold,
+        funding,
+      },
     } = this.props
-    console.log(this.props.market)
+
+    const shareCost = this.getShareCost(selectedBuyInvest, 0)
+    const netOutcomeTokensSoldWithFunding = netOutcomeTokensSold.map(
+      sold => Decimal(sold).add(funding).toString()
+    )
+
+    const marginalPrice = calcLMSRMarginalPrice({
+      netOutcomeTokensSold: netOutcomeTokensSoldWithFunding,
+      funding,
+      outcomeTokenIndex: 1,
+    })
+    console.log("marginal price", marginalPrice.toString())
+
+    const newNetOutcomeTokensSold = netOutcomeTokensSoldWithFunding.slice()
+    console.log(shareCost.div(1e18).toString())
+    newNetOutcomeTokensSold[1] = Decimal(
+      netOutcomeTokensSoldWithFunding[1].toString()
+    ).add(shareCost.toString()).toString()
+
+    console.log(netOutcomeTokensSoldWithFunding, newNetOutcomeTokensSold)
+    const newMarginalPrice = calcLMSRMarginalPrice({
+      netOutcomeTokensSold: newNetOutcomeTokensSold,
+      funding,
+      outcomeTokenIndex: 1,
+    })
+    console.log("new marginal price", newMarginalPrice.toString())
+
     return (
       <div className="col-md-6">
-        <span>{lowerBound} to {upperBound}</span>
-        <Field name="outcome" component={Input} label={`Value in ${unit}`} step={Math.pow(10, -(parseInt(decimals, 10))).toFixed(decimals)} />
+        <div className="row">
+          <div className="col-md-12">
+            <h2 className="marketBuyHeading">Preview & Setting</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            {/* <Field name="outcome" component={Input} type="number" label={`Enter in ${unit}`} step={(10 ** -(parseInt(decimals, 10))).toFixed(decimals)} /> */}
+            <ScalarSlider
+              lowerBound={lowerBound}
+              upperBound={upperBound}
+              unit={unit}
+              decimals={decimals}
+              marginalPriceCurrent={marginalPrice}
+              marginalPriceSelected={newMarginalPrice}
+              selectedCost={shareCost}
+            />
+          </div>
+        </div>
       </div>
     )
   }

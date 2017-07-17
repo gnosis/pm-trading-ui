@@ -18,7 +18,7 @@ import FormInput from 'components/FormInput'
 export default class MarketCreateWizard extends Component {
   @autobind
   handleSubmit(values) {
-    const { resolutionDate, fee, funding, outcomes, ...market } = values
+    const { resolutionDate, fee, funding, ...market } = values
 
     market.fee = parseFloat(fee)
     market.funding = parseFloat(funding)

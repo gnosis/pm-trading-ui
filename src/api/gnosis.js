@@ -3,6 +3,8 @@ import Gnosis from '@gnosis.pm/gnosisjs'
 import { normalizeHex, hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 
+import Decimal from 'decimal.js'
+
 const GNOSIS_OPTIONS = {}
 
 let gnosisInstance
@@ -32,6 +34,7 @@ const getCurrentAccount = async () => {
 
 export const createEventDescription = async (description) => {
   const gnosis = await getGnosisConnection()
+  console.log(description)
 
   return await gnosis.publishEventDescription(description)
 }
@@ -63,7 +66,13 @@ export const createEvent = async (event) => {
   if (event.outcomeType === OUTCOME_TYPES.CATEGORICAL) {
     eventContract = await gnosis.createCategoricalEvent(event)
   } else if (event.outcomeType === OUTCOME_TYPES.SCALAR) {
-    eventContract = await gnosis.createScalarEvent(event)
+    const scalarEvent = {
+      ...event,
+      lowerBound: event.lowerBound * (10 ** event.decimals),
+      upperBound: event.upperBound * (10 ** event.decimals),
+    }
+    console.log(scalarEvent)
+    eventContract = await gnosis.createScalarEvent(scalarEvent)
   } else {
     throw new Error('invalid outcome/event type')
   }
@@ -78,7 +87,8 @@ export const createMarket = async (market) => {
 
   await gnosis.etherToken.deposit({ value: marketFunding.toString() })
   const balance = await gnosis.etherToken.balanceOf(gnosis.web3.eth.accounts[0])
-  
+  console.log(`Ethertoken balance: ${balance.div(1e18).toFixed(4)}`)
+
   if (balance.lt(marketFunding)) {
     throw new Error(`Not enough funds: required ${(marketFunding / 1e18).toFixed(5)} of ${balance.div(1e18).toFixed(5)}`)
   }
@@ -114,7 +124,7 @@ export const composeMarket = async (marketValues) => {
     title: marketValues.title,
     outcomes: marketValues.outcomes,
     unit: marketValues.unit,
-    decimals: (marketValues.decimals || 0).toString(),
+    decimals: (marketValues.decimals || 2).toString(),
     resolutionDate: marketValues.resolutionDate,
   }
   let ipfsHash
@@ -144,6 +154,7 @@ export const composeMarket = async (marketValues) => {
     collateralToken: gnosis.etherToken, // default token right now
     upperBound: (marketValues.upperBound || 0).toString(),
     lowerBound: (marketValues.lowerBound || 0).toString(),
+    decimals: marketValues.decimals || 0,
     outcomeCount: (marketValues.outcomes ? marketValues.outcomes.length : 0),
     outcomeType: marketValues.outcomeType,
     oracle,
@@ -213,6 +224,7 @@ export const composeMarket = async (marketValues) => {
       markets: {
         [marketAddress]: {
           ...marketData,
+          address: marketAddress,
           marketMaker: normalizeHex(marketData.marketMaker.address),
           marketFactory: normalizeHex(marketData.marketFactory.address),
           event: eventAddress,
@@ -227,20 +239,26 @@ export const composeMarket = async (marketValues) => {
 export const buyShares = async (market, selectedOutcomeIndex, collateralTokenAmount) => {
   const gnosis = await getGnosisConnection()
 
+  const collateralTokenWei = new Decimal(collateralTokenAmount).mul(1e18).toString()
+  console.log(collateralTokenWei)
+
   const marketContract = await gnosis.contracts.Market.at(hexWithPrefix(market.address))
   const outcomeIndex = parseInt(selectedOutcomeIndex, 10)
 
   const outcomeTokenAmount = Gnosis.calcLMSROutcomeTokenCount({
-    netOutcomeTokensSold: marketContract.netOutcomeTokensSold,
-    cost: collateralTokenAmount,
-    funding: marketContract.funding,
-    outcomeIndex,
+    netOutcomeTokensSold: market.netOutcomeTokensSold,
+    cost: collateralTokenWei,
+    funding: market.funding,
+    outcomeTokenIndex: outcomeIndex,
   })
+  console.log(outcomeTokenAmount.div(1e18).toString())
+  console.log("deposit")
+  await gnosis.etherToken.deposit({ value: collateralTokenWei })
+  console.log("approve")
+  await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenWei)
 
-  await gnosis.etherToken.deposit({ value: collateralTokenAmount })
-  await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenAmount)
-
-  return await marketContract.buy(outcomeIndex, outcomeTokenAmount, collateralTokenAmount)
+  console.log("buy shares")
+  return await marketContract.buy(outcomeIndex, outcomeTokenAmount.toString(), collateralTokenWei)
 }
 
 export const calcLMSRCost = Gnosis.calcLMSRCost
