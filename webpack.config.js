@@ -13,8 +13,8 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: [
-    'index.js',
     'bootstrap-loader/extractStyles',
+    'index.js',
   ],
   devtool: 'source-map',
   output: {

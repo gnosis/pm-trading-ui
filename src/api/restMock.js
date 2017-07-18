@@ -42,7 +42,7 @@ export const requestMarkets = async () => normalize([
           ],
           ipfsHash: 'QmYvyaSYXYXRxKU2C4E3DV6LG4fRgWwxsgZ5WVMndj52V1',
           description: 'Will it work?!',
-          resolutionDate: '2017-07-07T13:00:00',
+          resolutionDate: '2017-09-07T13:00:00',
           title: 'Testmarket',
         },
       },
