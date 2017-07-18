@@ -21,7 +21,7 @@
     "@gnosis.pm/gnosisjs": "file:../gnosis.js"
   },
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "file:../gnosis.js",
+    "@gnosis.pm/gnosisjs": "gnosis/gnosis.js",
     "autobind-decorator": "^1.4.1",
     "babel-polyfill": "^6.23.0",
     "d3": "^4.9.1",

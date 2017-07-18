@@ -1,2 +1,2 @@
-export * from './rest'
-export * from './gnosis'
+export * from './restMock'
+export * from './gnosisMock'
