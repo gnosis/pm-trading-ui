@@ -21,6 +21,11 @@ const OutcomeScalar = () => (
         <Field name="unit" component={Input} label="Unit" />
       </div>
     </div>
+    <div className="row">
+      <div className="col-md-12">
+        <Field name="decimals" component={Input} label="Number of significant decimals" placeholder="2" />
+      </div>
+    </div>
   </div>
 )
 

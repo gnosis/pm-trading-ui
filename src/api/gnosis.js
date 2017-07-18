@@ -1,12 +1,9 @@
 import Gnosis from '@gnosis.pm/gnosisjs'
-import { flow } from 'lodash'
 
-import { normalizeHex } from 'utils/helpers'
-
-import { receiveEntities } from 'actions/entities'
-
+import { normalizeHex, hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
-import * as api from 'api'
+
+import Decimal from 'decimal.js'
 
 const GNOSIS_OPTIONS = {}
 
@@ -16,9 +13,9 @@ const getGnosisConnection = async () => {
     return Promise.resolve(gnosisInstance)
   }
 
-  //console.log('instance creation')
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
+    window.gnosis = gnosisInstance
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
   } catch (err) {
     console.error('Gnosis Integration: connection failed') // eslint-disable-line no-console
@@ -34,13 +31,15 @@ const getCurrentAccount = async () => {
   return gnosis.web3.eth.accounts[0]
 }
 
-const createEventDescription = async (description) => {
+
+export const createEventDescription = async (description) => {
   const gnosis = await getGnosisConnection()
+  // console.log(description)
 
   return await gnosis.publishEventDescription(description)
 }
 
-const createOracle = async (opts) => {
+export const createOracle = async (opts) => {
   const gnosis = await getGnosisConnection()
   let oracleContract
 
@@ -59,34 +58,21 @@ const createOracle = async (opts) => {
   return oracleContract
 }
 
-const createEvent = async (event) => {
+export const createEvent = async (event) => {
   const gnosis = await getGnosisConnection()
 
   let eventContract
-  //console.log('creating event', event)
 
   if (event.outcomeType === OUTCOME_TYPES.CATEGORICAL) {
-    //console.log('creating categorical event')
-    /*
-    const event = {
-      collateralToken: opts.collateralToken,
-      oracle: opts.oracle,
-      outcomeCount: opts.outcomes.length,
-    }
-    */
-    //console.log('event data', event)
-
     eventContract = await gnosis.createCategoricalEvent(event)
   } else if (event.outcomeType === OUTCOME_TYPES.SCALAR) {
-    /*
-    const event = {
-      collateralToken: opts.collateralToken,
-      oracle: opts.oracle,
-      lowerBound: opts.lowerBound,
-      upperBound: opts.upperBound,
+    const scalarEvent = {
+      ...event,
+      lowerBound: event.lowerBound * (10 ** event.decimals),
+      upperBound: event.upperBound * (10 ** event.decimals),
     }
-    */
-    eventContract = await gnosis.createScalarEvent(event)
+    // console.log(scalarEvent)
+    eventContract = await gnosis.createScalarEvent(scalarEvent)
   } else {
     throw new Error('invalid outcome/event type')
   }
@@ -94,24 +80,25 @@ const createEvent = async (event) => {
   return eventContract
 }
 
-const createMarket = async (market) => {
+export const createMarket = async (market) => {
   const gnosis = await getGnosisConnection()
-  const account = await getCurrentAccount()
-  //console.log('market data', market)
-  //console.log(gnosis)
-  await gnosis.etherToken.deposit(market.funding)
-  await gnosis.etherToken.approve(account, market.funding)
 
-  /*
-  const market = {
-    marketFactory: gnosis.standardMarketFactory,
-    event: opts.event,
-    marketMaker: opts.marketMaker,
-    fee: opts.fee,
+  const marketFunding = market.funding * 1e18
+
+  await gnosis.etherToken.deposit({ value: marketFunding.toString() })
+  const balance = await gnosis.etherToken.balanceOf(gnosis.web3.eth.accounts[0])
+  // console.log(`Ethertoken balance: ${balance.div(1e18).toFixed(4)}`)
+
+  if (balance.lt(marketFunding)) {
+    throw new Error(`Not enough funds: required ${(marketFunding / 1e18).toFixed(5)} of ${balance.div(1e18).toFixed(5)}`)
   }
-  */
 
-  return await gnosis.createMarket(market)
+  const marketContract = await gnosis.createMarket(market)
+
+  await gnosis.etherToken.approve(marketContract.address, marketFunding.toString())
+  await marketContract.fund(marketFunding.toString())
+
+  return marketContract
 }
 
 /**
@@ -128,7 +115,7 @@ const createMarket = async (market) => {
  * @param {(number|BigNumber)} opts.funding
  * @param {(number|BigNumber)} opts.fee
  */
-export const composeMarket = marketValues => async (dispatch) => {
+export const composeMarket = async (marketValues) => {
   const gnosis = await getGnosisConnection()
   const account = await getCurrentAccount()
 
@@ -136,26 +123,51 @@ export const composeMarket = marketValues => async (dispatch) => {
     description: marketValues.description,
     title: marketValues.title,
     outcomes: marketValues.outcomes,
+    unit: marketValues.unit,
+    decimals: (marketValues.decimals || 2).toString(),
     resolutionDate: marketValues.resolutionDate,
   }
-  const ipfsHash = await createEventDescription(eventDescriptionData)
-  //console.log('eventDescription ipfsHash:', ipfsHash)
+  let ipfsHash
+  try {
+    ipfsHash = await createEventDescription(eventDescriptionData)
+  } catch (err) {
+    console.error('IPFS failed:', err)
+    console.log(eventDescriptionData)
+  }
+
 
   const oracleData = {
     oracleType: marketValues.oracleType,
     ipfsHash,
   }
-  const oracle = await createOracle(oracleData)
-  //console.log('oracle:', oracle)
+  let oracle
+  try {
+    oracle = await createOracle(oracleData)
+  } catch (err) {
+    console.error('oracle creation failed', err)
+    console.log(oracleData)
+    return
+  }
+
 
   const eventData = {
     collateralToken: gnosis.etherToken, // default token right now
-    outcomeCount: marketValues.outcomes.length,
+    upperBound: (marketValues.upperBound || 0).toString(),
+    lowerBound: (marketValues.lowerBound || 0).toString(),
+    decimals: marketValues.decimals || 0,
+    outcomeCount: (marketValues.outcomes ? marketValues.outcomes.length : 0),
     outcomeType: marketValues.outcomeType,
     oracle,
   }
-  const event = await createEvent(eventData)
-  //console.log('event:', event)
+  let event
+  try {
+    event = await createEvent(eventData)
+  } catch (err) {
+    console.error('event creation failed', err)
+    console.log(eventData)
+    return
+  }
+
 
   const marketData = {
     funding: marketValues.funding,
@@ -164,8 +176,15 @@ export const composeMarket = marketValues => async (dispatch) => {
     marketFactory: gnosis.standardMarketFactory,
     event,
   }
-  const market = await createMarket(marketData)
-  //console.log('market:', market)
+  let market
+  try {
+    market = await createMarket(marketData)
+  } catch (err) {
+    console.error('market creation failed', err)
+    console.log(marketData)
+    return
+  }
+
 
   const oracleAddress = normalizeHex(oracle.address)
   const accountAddress = normalizeHex(account.address)
@@ -173,7 +192,8 @@ export const composeMarket = marketValues => async (dispatch) => {
   const marketAddress = normalizeHex(market.address)
   const collateralTokenAddress = normalizeHex(event.collateralToken.address)
 
-  dispatch(receiveEntities({
+  // fix-me: horrible
+  return {
     entities: {
       eventDescriptions: {
         [ipfsHash]: {
@@ -195,6 +215,7 @@ export const composeMarket = marketValues => async (dispatch) => {
       events: {
         [eventAddress]: {
           ...eventData,
+          address: eventAddress,
           collateralToken: collateralTokenAddress,
           creator: accountAddress,
           oracle: oracleAddress,
@@ -203,6 +224,7 @@ export const composeMarket = marketValues => async (dispatch) => {
       markets: {
         [marketAddress]: {
           ...marketData,
+          address: marketAddress,
           marketMaker: normalizeHex(marketData.marketMaker.address),
           marketFactory: normalizeHex(marketData.marketFactory.address),
           event: eventAddress,
@@ -211,5 +233,37 @@ export const composeMarket = marketValues => async (dispatch) => {
         },
       },
     },
-  }))
+  }
 }
+
+export const buyShares = async (market, selectedOutcomeIndex, collateralTokenAmount) => {
+  const gnosis = await getGnosisConnection()
+
+  const collateralTokenWei = new Decimal(collateralTokenAmount).mul(1e18).toString()
+  // console.log(collateralTokenWei)
+
+  const marketContract = await gnosis.contracts.Market.at(hexWithPrefix(market.address))
+  const outcomeIndex = parseInt(selectedOutcomeIndex, 10)
+
+  const outcomeTokenAmount = Gnosis.calcLMSROutcomeTokenCount({
+    netOutcomeTokensSold: market.netOutcomeTokensSold,
+    cost: collateralTokenWei,
+    funding: market.funding,
+    outcomeTokenIndex: outcomeIndex,
+  })
+
+  const outcomeTokenAmountFix = outcomeTokenAmount.mul(0.99).floor()
+
+  // console.log(outcomeTokenAmount.div(1e18).toString())
+  // console.log("deposit")
+  await gnosis.etherToken.deposit({ value: collateralTokenWei })
+  // console.log("approve")
+  await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenWei)
+
+  // console.log("buy shares")
+  return await marketContract.buy(outcomeIndex, outcomeTokenAmountFix.toString(), collateralTokenWei.toString())
+}
+
+export const calcLMSRCost = Gnosis.calcLMSRCost
+export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
+export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice

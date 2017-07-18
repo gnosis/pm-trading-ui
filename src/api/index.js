@@ -1,1 +1,2 @@
-export * from './api'
+export * from './restMock'
+export * from './gnosisMock'

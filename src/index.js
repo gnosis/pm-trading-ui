@@ -10,6 +10,8 @@ import { syncHistoryWithStore } from 'react-router-redux'
 
 //import * as walletIntegrations from 'integrations'
 
+import 'less/style.less'
+
 import App from 'containers/App'
 import MarketListPage from 'containers/MarketListPage'
 import MarketCreateWizardPage from 'containers/MarketCreateWizardPage'
@@ -20,8 +22,6 @@ import SettingsPage from 'containers/SettingsPage'
 import DashboardPage from 'containers/DashboardPage'
 
 //import 'integrations/gnosis'
-
-import 'less/style.less'
 
 import store from './store'
 

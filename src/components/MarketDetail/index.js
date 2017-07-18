@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
+import { mapValues } from 'lodash'
 import moment from 'moment'
-import _ from 'lodash'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
-import BigNumber from 'bignumber.js'
 
 import { RESOLUTION_TIME } from 'utils/constants'
-import Expandable from 'components/Expandable'
 import MarketGraph from 'components/MarketGraph'
+
+import MarketBuySharesForm from 'components/MarketBuySharesForm'
 
 import './marketDetail.less'
 
@@ -49,7 +49,7 @@ const controlButtons = {
   [EXPAND_BUY_SHARES]: {
     label: 'Buy Shares',
     className: 'btn btn-primary',
-    component: <span>Buy Shares</span>,
+    component: MarketBuySharesForm,
   },
   [EXPAND_SHORT_SELL]: {
     label: 'Short Sell',
@@ -83,7 +83,7 @@ export default class MarketDetail extends Component {
   @autobind
   handleExpand(type) {
     // Toggle
-    this.setState({ expandableSelected: (this.state.expandableSelected === type ? null : type) })
+    this.setState({ visibleControl: (this.state.visibleControl === type ? null : type) })
   }
 
   renderLoading() {
@@ -95,12 +95,27 @@ export default class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
-    return (
-      <Expandable
-        selected={this.state.expandableSelected}
-        components={_.mapValues(controlButtons, control => control.component)}
-      />
-    )
+    const { visibleControl } = this.state
+
+    if (visibleControl === EXPAND_BUY_SHARES) {
+      const {
+        market,
+        selectedCategoricalOutcome,
+        selectedBuyInvest,
+        buyShares
+      } = this.props
+
+      return (
+        <MarketBuySharesForm
+          {...{
+            market,
+            selectedCategoricalOutcome,
+            selectedBuyInvest,
+            buyShares,
+          }}
+        />
+      )
+    }
   }
 
   renderInfos(market) {
@@ -108,12 +123,12 @@ export default class MarketDetail extends Component {
       Creator: market.creator,
       Oracle: market.oracle.owner,
       Token: market.event.collateralToken,
-      Fee: new BigNumber(market.fee || 0).toFixed(2),
-      Funding: `${new BigNumber(market.funding || 0).toFixed(2)} ${market.event.collateralToken}`,
+      Fee: market.fee.toFixed(2),
+      Funding: `${market.funding} ${market.event.collateralToken}`,
     }
 
     return (
-      <div className="marketInfos col-md-2">
+      <div className="marketInfos col-md-3">
         {Object.keys(infos).map(label => (
           <div className="marketInfo" key={label}>
             <p className="marketInfo__info marketInfo__info--value">{infos[label]}</p>
@@ -125,9 +140,23 @@ export default class MarketDetail extends Component {
   }
 
   renderDetails(market) {
+    const timeUntilEvent = moment
+      .duration(moment(market.event.resolutionDate)
+      .diff())
+
     return (
-      <div className="marketDetails col-md-10">
-        <p>{ market.eventDescription.description }</p>
+      <div className="marketDetails col-md-9">
+        <div className="marketDescription">
+          <p className="marketDescription__text">{ market.eventDescription.description }</p>
+        </div>
+        <div className="marketTimer">
+          <div className="marketTimer__live">
+            {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}
+          </div>
+          <small className="marketTime__absolute">
+            {moment(market.event.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+          </small>
+        </div>
       </div>
     )
   }
@@ -143,8 +172,7 @@ export default class MarketDetail extends Component {
               className={`
                 marketControls__button
                 ${controlButtons[type].className}
-                col-md-2
-                ${type === this.state.expandableSelected ? 'marketControls__button--active' : ''}`
+                ${type === this.state.visibleControl ? 'marketControls__button--active' : ''}`
               }
               onClick={() => this.handleExpand(type)}
             >
@@ -152,23 +180,6 @@ export default class MarketDetail extends Component {
             </button>
           ))}
         </div>
-      </div>
-    )
-  }
-
-  renderTimer(market) {
-    const timeUntilEvent = moment
-      .duration(moment(market.event.resolutionDate)
-      .diff())
-
-    return (
-      <div className="marketTimer col-md-10">
-        <div className="marketTimer__live">
-          {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}
-        </div>
-        <small className="marketTime__absolute">
-          {moment(market.event.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-        </small>
       </div>
     )
   }
@@ -184,8 +195,8 @@ export default class MarketDetail extends Component {
       <div className="marketDetailPage">
         <div className="container">
           <div className="row">
-            <div className="col-md-10">
-              <h1>{ market.eventDescription.title }</h1>
+            <div className="col-md-6">
+              <h1 className="marketTitle__heading">{ market.eventDescription.title }</h1>
             </div>
           </div>
         </div>
@@ -193,11 +204,14 @@ export default class MarketDetail extends Component {
           <div className="row">
             { this.renderDetails(market) }
             { this.renderInfos(market) }
-            { this.renderTimer(market) }
           </div>
         </div>
         { this.renderControls(market) }
-        { this.renderExpandableContent() }
+        <div className="expandable">
+          <div className="container">
+            { this.renderExpandableContent() }
+          </div>
+        </div>
         <MarketGraph data={testData} />
       </div>
     )
