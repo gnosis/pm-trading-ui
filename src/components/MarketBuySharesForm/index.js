@@ -52,7 +52,7 @@ class MarketBuySharesForm extends Component {
       return new Decimal(0)
     }
 
-    return shareCost
+    return shareCost.mul(0.99).floor()
   }
 
   getMaximumWin(shareCost) {
@@ -205,25 +205,22 @@ class MarketBuySharesForm extends Component {
       },
     } = this.props
 
-    const shareCost = this.getShareCost(selectedBuyInvest, 0)
-    const netOutcomeTokensSoldWithFunding = netOutcomeTokensSold.map(
-      sold => Decimal(sold).add(funding).toString()
-    )
+    const shareCost = this.getShareCost(selectedBuyInvest, 1)
 
     const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: netOutcomeTokensSoldWithFunding,
+      netOutcomeTokensSold,
       funding,
       outcomeTokenIndex: 1,
     })
     console.log("marginal price", marginalPrice.toString())
 
-    const newNetOutcomeTokensSold = netOutcomeTokensSoldWithFunding.slice()
+    const newNetOutcomeTokensSold = netOutcomeTokensSold.slice()
     console.log(shareCost.div(1e18).toString())
     newNetOutcomeTokensSold[1] = Decimal(
-      netOutcomeTokensSoldWithFunding[1].toString()
+      netOutcomeTokensSold[1].toString()
     ).add(shareCost.toString()).toString()
 
-    console.log(netOutcomeTokensSoldWithFunding, newNetOutcomeTokensSold)
+    console.log(netOutcomeTokensSold, newNetOutcomeTokensSold)
     const newMarginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: newNetOutcomeTokensSold,
       funding,
@@ -231,6 +228,7 @@ class MarketBuySharesForm extends Component {
     })
     console.log("new marginal price", newMarginalPrice.toString())
 
+    //debugger
     return (
       <div className="col-md-6">
         <div className="row">
