@@ -128,7 +128,7 @@ export default class MarketDetail extends Component {
     }
 
     return (
-      <div className="marketInfos col-md-2">
+      <div className="marketInfos col-md-3">
         {Object.keys(infos).map(label => (
           <div className="marketInfo" key={label}>
             <p className="marketInfo__info marketInfo__info--value">{infos[label]}</p>
@@ -140,9 +140,23 @@ export default class MarketDetail extends Component {
   }
 
   renderDetails(market) {
+    const timeUntilEvent = moment
+      .duration(moment(market.event.resolutionDate)
+      .diff())
+
     return (
-      <div className="marketDetails col-md-10">
-        <p>{ market.eventDescription.description }</p>
+      <div className="marketDetails col-md-9">
+        <div className="marketDescription">
+          <p className="marketDescription__text">{ market.eventDescription.description }</p>
+        </div>
+        <div className="marketTimer">
+          <div className="marketTimer__live">
+            {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}
+          </div>
+          <small className="marketTime__absolute">
+            {moment(market.event.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+          </small>
+        </div>
       </div>
     )
   }
@@ -158,7 +172,6 @@ export default class MarketDetail extends Component {
               className={`
                 marketControls__button
                 ${controlButtons[type].className}
-                col-md-2
                 ${type === this.state.visibleControl ? 'marketControls__button--active' : ''}`
               }
               onClick={() => this.handleExpand(type)}
@@ -167,23 +180,6 @@ export default class MarketDetail extends Component {
             </button>
           ))}
         </div>
-      </div>
-    )
-  }
-
-  renderTimer(market) {
-    const timeUntilEvent = moment
-      .duration(moment(market.event.resolutionDate)
-      .diff())
-
-    return (
-      <div className="marketTimer col-md-10">
-        <div className="marketTimer__live">
-          {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}
-        </div>
-        <small className="marketTime__absolute">
-          {moment(market.event.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-        </small>
       </div>
     )
   }
@@ -199,8 +195,8 @@ export default class MarketDetail extends Component {
       <div className="marketDetailPage">
         <div className="container">
           <div className="row">
-            <div className="col-md-10">
-              <h1>{ market.eventDescription.title }</h1>
+            <div className="col-md-6">
+              <h1 className="marketTitle__heading">{ market.eventDescription.title }</h1>
             </div>
           </div>
         </div>
@@ -208,7 +204,6 @@ export default class MarketDetail extends Component {
           <div className="row">
             { this.renderDetails(market) }
             { this.renderInfos(market) }
-            { this.renderTimer(market) }
           </div>
         </div>
         { this.renderControls(market) }

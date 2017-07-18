@@ -61,7 +61,7 @@ class MarketList extends Component {
               className="outcome__bar--inner"
               style={{ width: `${outcome.value * 100}%`, backgroundColor: colorScale(outcomeIndex) }}
             >
-              <div className="outcome__bar--value">{ `${Math.round(outcome.value * 100).toFixed(0)}%` }</div>
+              {/*<div className="outcome__bar--value">{ `${Math.round(outcome.value * 100).toFixed(0)}%` }</div>*/}
               <div className="outcome__bar--label">{ outcome.label }</div>
             </div>
           </div>
@@ -93,7 +93,7 @@ class MarketList extends Component {
     return (
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
         <div className="market__header">
-          <h1 className="market__title">{ market.eventDescription.title }</h1>
+          <h2 className="market__title">{ market.eventDescription.title }</h2>
           <div className="market__control">
             <Link to={`/markets/${market.address}/resolve`}>Resolve</Link>
           </div>
