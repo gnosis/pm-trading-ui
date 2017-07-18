@@ -41,7 +41,7 @@ export const requestMarkets = async () => normalize([
             '',
           ],
           ipfsHash: 'QmYvyaSYXYXRxKU2C4E3DV6LG4fRgWwxsgZ5WVMndj52V1',
-          description: 'Will it work?!',
+          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet...',
           resolutionDate: '2017-09-07T13:00:00',
           title: 'When will the Gnosis auction start?',
         },
