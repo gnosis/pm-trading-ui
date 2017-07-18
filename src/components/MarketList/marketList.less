@@ -2,7 +2,7 @@
 
 @market-border-radius: 12px;
 @market-highlight-stripe-width: 5px;
-@outcome-bar-height: 20px;
+@outcome-bar-height: 15px;
 @info-row-height: 25px;
 
 .marketStats {
@@ -52,6 +52,7 @@
     margin: 12px 0;
     text-transform: uppercase;
     color: @font-color-dark;
+    font-weight: 400;
   }
 }
 
@@ -90,7 +91,9 @@
 
   &--resolved {
     .market__title {
-      color: @font-color-muted;
+      color: @font-color-dark;
+      opacity: .6;
+      font-weight: 300;
     }
   }
 
@@ -130,7 +133,7 @@
   }
 
   &__header {
-    padding: 12px 0 18px 0;
+    //padding: 12px 0 18px 0;
     &::after {
       content: '';
       display: table;
@@ -149,9 +152,9 @@
     margin: 0;
     float: left;
     color: black;
-
-    font-size: 20px;
-    font-weight: 500;
+    letter-spacing: 1px;
+    font-size: 22px;
+    font-weight: 400;
   }
 
   &__outcomes {
@@ -162,9 +165,11 @@
 .info {
   &__group {
     padding-right: @info-row-height;
-    color: @font-color-muted;
+    color: @font-color-dark;
+    opacity: .6;
+    letter-spacing: .5px;
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 10px;
     vertical-align: middle;
     height: @info-row-height;
 
@@ -172,6 +177,7 @@
       width: @info-row-height;
       height: @info-row-height;
       float: left;
+      opacity: .6;
     }
   }
 
@@ -205,12 +211,16 @@
     }
 
     &--value {
-      font-weight: 300;
       line-height: @outcome-bar-height;
       vertical-align: middle;
       padding-left: 5px;
       float: left;
       min-width: 30px;
+      opacity: .6;
+      color: @font-color-dark;
+      font-size: 10px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
     }
 
     &--label {
@@ -219,6 +229,8 @@
       line-height: @outcome-bar-height;
       vertical-align: middle;
       text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: .5px;
     }
   }
 
