@@ -22,7 +22,7 @@ export const requestMarkets = async () => normalize([
         creationDate: '2017-07-06T14:13:17',
         address: '4aacf4d276dba7c1d486aa57f1758665898d49a9',
       },
-      collateralToken: '9b1f7f645351af3631a656421ed2e40f2802e6c0',
+      collateralToken: 'ETH',
       oracle: {
         contract: {
           creationBlock: 13,
