@@ -1,8 +1,9 @@
 import { connect } from 'react-redux'
 import { reduxForm, formValueSelector } from 'redux-form'
-import { push } from 'react-router-redux'
 
-import MarketCreateWizard from 'components/MarketCreateWizard'
+import MarketCreateReview from 'components/MarketCreateReview'
+
+import { composeMarket } from 'actions/market'
 
 const FORM = {
   form: 'marketCreateWizard',
@@ -18,8 +19,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeUrl: url => dispatch(push(url))
+    createMarket: market => dispatch(composeMarket(market))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxForm(FORM)(MarketCreateWizard))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm(FORM)(MarketCreateReview))

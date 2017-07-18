@@ -8,8 +8,6 @@ import { Provider } from 'react-redux'
 import { Router, Route, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
-//import * as walletIntegrations from 'integrations'
-
 import App from 'containers/App'
 import MarketListPage from 'containers/MarketListPage'
 import MarketCreateWizardPage from 'containers/MarketCreateWizardPage'
@@ -18,8 +16,7 @@ import TransactionsPage from 'containers/TransactionsPage'
 import AccountPage from 'containers/AccountPage'
 import SettingsPage from 'containers/SettingsPage'
 import DashboardPage from 'containers/DashboardPage'
-
-//import 'integrations/gnosis'
+import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
 
 import 'less/style.less'
 
@@ -48,6 +45,7 @@ render(
         <Route path="markets">
           <IndexRedirect to="list" />
           <Route path="new" component={MarketCreateWizardPage} />
+          <Route path="review" component={MarketCreateReviewPage} />
           <Route path="list" component={MarketListPage} />
           <Route path=":id" component={MarketDetailPage} />
         </Route>
