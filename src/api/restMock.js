@@ -22,7 +22,7 @@ export const requestMarkets = async () => normalize([
         creationDate: '2017-07-06T14:13:17',
         address: '4aacf4d276dba7c1d486aa57f1758665898d49a9',
       },
-      collateralToken: '9b1f7f645351af3631a656421ed2e40f2802e6c0',
+      collateralToken: 'ETH',
       oracle: {
         contract: {
           creationBlock: 13,
@@ -41,9 +41,9 @@ export const requestMarkets = async () => normalize([
             '',
           ],
           ipfsHash: 'QmYvyaSYXYXRxKU2C4E3DV6LG4fRgWwxsgZ5WVMndj52V1',
-          description: 'Will it work?!',
-          resolutionDate: '2017-07-07T13:00:00',
-          title: 'Testmarket',
+          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet...',
+          resolutionDate: '2017-09-07T13:00:00',
+          title: 'When will the Gnosis auction start?',
         },
       },
       isWinningOutcomeSet: false,
