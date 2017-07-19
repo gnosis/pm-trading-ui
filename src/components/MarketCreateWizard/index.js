@@ -20,8 +20,10 @@ export default class MarketCreateWizard extends Component {
   handleShowReview() {
     return this.props.changeUrl('markets/review')
   }
-  /*
+
   handleSubmit(values) {
+    console.log("submit?", values)
+    /*
     const { resolutionDate, fee, funding, outcomes, ...market } = values
 
     market.fee = parseFloat(fee)
@@ -30,8 +32,8 @@ export default class MarketCreateWizard extends Component {
     market.outcomes = outcomes.filter(outcome => outcome.length > 0)
     console.log(market)
     return this.props.createMarket(market)
+    */
   }
-  */
 
   renderHeading(index, title) {
     return (
@@ -124,7 +126,7 @@ export default class MarketCreateWizard extends Component {
             <h1>Create Market</h1>
           </div>
         </div>
-        <form ref={(node) => { this.formElement = node }}>
+        <form ref={(node) => { this.formElement = node }} onSubmit={handleSubmit(this.handleSubmit)}>
           <div className="container">
             <div className="row">
               <div className="col-md-8">
@@ -132,7 +134,7 @@ export default class MarketCreateWizard extends Component {
               </div>
               <div className="col-md-4">
                 <MarketSidebar fields={{ Test: true, Bla: false }} />
-                <button className="marketCreateButton btn btn-primary" type="button" onClick={() => this.handleShowReview()}>Review &#10140;</button>
+                <button className="marketCreateButton btn btn-primary" type="button" onClick={() => this.handleShowReview()}>Review <i className="arrow" /></button>
               </div>
             </div>
           </div>

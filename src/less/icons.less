@@ -1,3 +1,5 @@
+
+// Icon Definitions
 .icon {
   display: inline-block;
   position: relative;
@@ -47,5 +49,32 @@
   &--new {
     background-image: url('../assets/img/icons/icon_new.svg');
     mask-image: url('../assets/img/icons/icon_new.svg');
+  }
+}
+
+// Glyphs Definitions
+i {
+  font-style: normal;
+
+  // Right/Left Arrow
+  &.arrow {
+    display: inline;
+    font-style: normal;
+    padding: 0 10px;
+    position: relative;
+
+    &::before {
+      content: '\279C';
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    &--right {
+      &::before {
+        transform-origin: 50% 50%;
+        transform: rotate(180deg);
+      }
+    }
   }
 }

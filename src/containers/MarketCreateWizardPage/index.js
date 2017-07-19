@@ -6,6 +6,7 @@ import MarketCreateWizard from 'components/MarketCreateWizard'
 
 const FORM = {
   form: 'marketCreateWizard',
+  destroyOnUnmount: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -16,10 +17,8 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeUrl: url => dispatch(push(url))
-  }
-}
+const mapDispatchToProps = dispatch => ({
+  changeUrl: url => dispatch(push(url)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm(FORM)(MarketCreateWizard))
