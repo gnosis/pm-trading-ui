@@ -17,13 +17,16 @@
   },
   "author": "Gnosis",
   "license": "ISC",
+  "dependenciesOptional": {
+    "@gnosis.pm/gnosisjs": "file:../gnosis.js"
+  },
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "file:../gnosis.js",
+    "@gnosis.pm/gnosisjs": "gnosis/gnosis.js",
     "autobind-decorator": "^1.4.1",
     "babel-polyfill": "^6.23.0",
-    "bignumber.js": "^4.0.2",
     "d3": "^4.9.1",
     "d3-scale-chromatic": "^1.1.1",
+    "decimal.js": "^7.2.3",
     "es6-promise": "4.0.5",
     "lodash": "4.17.2",
     "moment": "^2.17.1",

@@ -21,20 +21,6 @@ export default class MarketCreateWizard extends Component {
     return this.props.changeUrl('markets/review')
   }
 
-  handleSubmit(values) {
-    console.log("submit?", values)
-    /*
-    const { resolutionDate, fee, funding, outcomes, ...market } = values
-
-    market.fee = parseFloat(fee)
-    market.funding = parseFloat(funding)
-    market.resolutionDate = moment(resolutionDate).format()
-    market.outcomes = outcomes.filter(outcome => outcome.length > 0)
-    console.log(market)
-    return this.props.createMarket(market)
-    */
-  }
-
   renderHeading(index, title) {
     return (
       <div className="row">
@@ -67,7 +53,7 @@ export default class MarketCreateWizard extends Component {
 
   renderMarketDetails() {
     const currencies = {
-      0xa586074fa4fe3e546a132a16238abe37951d41fe: 'Ether Token',
+      0x9b1f7f645351af3631a656421ed2e40f2802e6c0: 'Ether Token',
     }
 
     return (
@@ -87,7 +73,7 @@ export default class MarketCreateWizard extends Component {
         </div>
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="funding" component={FormInput} type="number" label="Funding" />
+            <Field name="funding" component={FormInput} step={0.01} type="number" label="Funding" />
           </div>
         </div>
       </div>
@@ -126,7 +112,7 @@ export default class MarketCreateWizard extends Component {
             <h1>Create Market</h1>
           </div>
         </div>
-        <form ref={(node) => { this.formElement = node }} onSubmit={handleSubmit(this.handleSubmit)}>
+        <form ref={(node) => { this.formElement = node }}>
           <div className="container">
             <div className="row">
               <div className="col-md-8">

@@ -8,3 +8,10 @@ export const normalizeHex = (value) => {
 
   return value
 }
+
+export const hexWithPrefix = (value) => {
+  if (HEX_VALUE_REGEX.test(value)) {
+    return `0x${trimStart(value, '0x')}`
+  }
+  return value
+}

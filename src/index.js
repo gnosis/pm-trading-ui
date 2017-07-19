@@ -8,6 +8,8 @@ import { Provider } from 'react-redux'
 import { Router, Route, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
+import 'less/style.less'
+
 import App from 'containers/App'
 import MarketListPage from 'containers/MarketListPage'
 import MarketCreateWizardPage from 'containers/MarketCreateWizardPage'
@@ -17,8 +19,6 @@ import AccountPage from 'containers/AccountPage'
 import SettingsPage from 'containers/SettingsPage'
 import DashboardPage from 'containers/DashboardPage'
 import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
-
-import 'less/style.less'
 
 import store from './store'
 

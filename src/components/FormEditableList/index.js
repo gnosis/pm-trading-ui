@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { isArray } from 'lodash'
 import autobind from 'autobind-decorator'
 
+import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+
 import './formEditableList.less'
 
 class FormEditableList extends Component {
@@ -66,7 +68,7 @@ class FormEditableList extends Component {
     return (
       <div key={index} className={`formEditableList__entry ${lastEntry ? 'formEditableList__entry--new' : ''}`}>
         <div
-          className={`entry__color colorScheme_${index}`}
+          className={'entry__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }}
         />
         <input
           type="text"
