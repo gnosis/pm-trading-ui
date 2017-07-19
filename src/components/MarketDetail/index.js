@@ -106,14 +106,18 @@ export default class MarketDetail extends Component {
       } = this.props
 
       return (
-        <MarketBuySharesForm
-          {...{
-            market,
-            selectedCategoricalOutcome,
-            selectedBuyInvest,
-            buyShares,
-          }}
-        />
+        <div className="expandable__inner">
+          <div className="container">
+            <MarketBuySharesForm
+              {...{
+                market,
+                selectedCategoricalOutcome,
+                selectedBuyInvest,
+                buyShares,
+              }}
+            />
+          </div>
+        </div>
       )
     }
   }
@@ -208,9 +212,7 @@ export default class MarketDetail extends Component {
         </div>
         { this.renderControls(market) }
         <div className="expandable">
-          <div className="container">
-            { this.renderExpandableContent() }
-          </div>
+          { this.renderExpandableContent() }
         </div>
         <MarketGraph data={testData} />
       </div>
