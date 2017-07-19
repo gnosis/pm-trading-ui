@@ -29,6 +29,33 @@ export default class Dashboard extends Component {
     }
   }
 
+  componentWillMount() {
+    this.props.requestMarkets()
+  }
+
+  @autobind
+  handleViewMarket(market) {
+    this.props.changeUrl(`/markets/${market.address}`)
+  }
+
+  @autobind
+  handleCreateMarket() {
+  /*
+    const options = {
+      title: 'Test Market',
+      description: 'Test123',
+      outcomes: ['Yes', 'No'],
+      resolutionDate: new Date().toISOString(),
+      funding: new BigNumber('0.2345'),
+      fee: new BigNumber('12.00'),
+      eventType: 'CATEGORICAL',
+      oracleType: 'CENTRALIZED',
+    }
+
+    this.props.createMarket(options)*/
+    this.props.changeUrl(`/markets/new`)
+  }
+
   @autobind
   handleExpand(type) {
     // Toggle
@@ -47,7 +74,11 @@ export default class Dashboard extends Component {
       } = this.props
 
       return (
-        <span>Something comes here</span>
+      	<div className="expandable__inner">
+          <div className="container">
+        		<span>Something comes here</span>
+        	</div>
+        </div>
       )
     }
   }
@@ -55,57 +86,73 @@ export default class Dashboard extends Component {
 
   renderControls() {
     return (
-      <div className="marketControls container">
+      <div className="dashboardControls container">
         <div className="row">
           {Object.keys(controlButtons).map(type => (
             <button
               key={type}
               type="button"
               className={`
-                marketControls__button
+                dashboardControls__button
                 ${controlButtons[type].className}
-                ${type === this.state.visibleControl ? 'marketControls__button--active' : ''}`
+                ${type === this.state.visibleControl ? 'dashboardControls__button--active' : ''}`
               }
               onClick={() => this.handleExpand(type)}
             >
               {controlButtons[type].label}
             </button>
           ))}
+          <button type="button" onClick={this.handleCreateMarket} className="dashboardControls__button btn btn-default">Create Market</button>
         </div>
       </div>
     )
   }
 
+
+  renderWidget() {
+    const { markets } = this.props
+
+    return (
+     	<div className="dashboardWidget col-md-6">
+          <div className="dashboardWidget__title">New Markets</div>
+          <div className="dashboardWidget__container">
+            <div className="market">Something</div>
+          </div>
+        </div>
+    )
+  }
+
   render() {
+  	const { markets } = this.props
     return (
       <div className="dashboardPage">
-        <div className="marketListPage__header">
+        <div className="dashboardPage__header">
           <div className="container">
           	<div className="row">
           		<div className="col-md-12">
-          			<h1 className="marketTitle__heading">Welcome!</h1>
+          			<h1>Welcome!</h1>
           			<p className="marketDescription__text">Here is what happened since your last visit.</p>
           		</div>
           	</div>
           </div>
         </div>
-        <div className="marketListPage__stats">
+        <div className="dashboardPage__stats">
           <div className="container">
-            <div className="row marketStats">
-              <div className="col-md-3 marketStats__stat">
-                <div className="marketStats__icon icon icon--market" />
-                <span className="marketStats__value">Value</span>
-                <div className="marketStats__label">Open Markets</div>
+            <div className="row dashboardStats">
+              <div className="col-md-3 dashboardStats__stat">
+                <div className="dashboardStats__icon icon icon--market" />
+                <span className="dashboardStats__value">235</span>
+                <div className="dashboardStats__label">Ether Tokens</div>
               </div>
-              <div className="col-md-3 marketStats__stat">
-                <div className="marketStats__icon icon icon--market--countdown" />
-                <span className="marketStats__value">Value</span>
-                <div className="marketStats__label">Closing Soon</div>
+              <div className="col-md-3 dashboardStats__stat">
+                <div className="dashboardStats__icon icon icon--market--countdown" />
+                <span className="dashboardStats__value">Value</span>
+                <div className="dashboardStats__label">Predicted Profits</div>
               </div>
-              <div className="col-md-3 marketStats__stat">
-                <div className="marketStats__icon icon icon--new" />
-                <span className="marketStats__value">Value</span>
-                <div className="marketStats__label">New Markets</div>
+              <div className="col-md-3 dashboardStats__stat">
+                <div className="dashboardStats__icon icon icon--new" />
+                <span className="dashboardStats__value">Value</span>
+                <div className="dashboardStats__label">Participating in Markets</div>
               </div>
               <div className="col-md-3">
               </div>
@@ -114,17 +161,27 @@ export default class Dashboard extends Component {
         </div>
         { this.renderControls() }
         <div className="expandable">
-          <div className="container">
-            { this.renderExpandableContent() }
-          </div>
+          { this.renderExpandableContent() }
         </div>
-        <div className="marketListPage__markets">
+        <div className="dashboardWidgets dashboardWidgets__markets">
           <div className="container">
             <div className="row">
-            	widgets
+            	{ this.renderWidget("newMarkets") }
+            	{ this.renderWidget("newMarkets") }
+            </div>
+            <div className="row">
+            	{ this.renderWidget("newMarkets") }
+            	{ this.renderWidget("newMarkets") }
             </div>
           </div>
-
+        </div>
+        <div className="dashboardWidgets dashboardWidgets__financial">
+          <div className="container">
+            <div className="row">
+            	{ this.renderWidget("newMarkets") }
+            	{ this.renderWidget("newMarkets") }
+            </div>
+          </div>
         </div>
       </div>
     )

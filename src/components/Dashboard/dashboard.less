@@ -4,8 +4,10 @@
 @market-highlight-stripe-width: 5px;
 @outcome-bar-height: 15px;
 @info-row-height: 25px;
+@expandable-arrow-size: 15px;
+@expandable-margin: 40px;
 
-.marketStats {
+.dashboardStats {
   &__label {
     color: @font-color-dark;
     opacity: .6;
@@ -24,7 +26,7 @@
     float: right;
   }
 
-  .marketStats__icon {
+  .dashboardStats__icon {
     float: left;
     width: 50px;
     height: 50px;
@@ -33,7 +35,7 @@
 
 }
 
-.marketListPage {
+.dashboardPage {
   &__markets {
     background-color: @bg-color-muted;
     padding: 40px 0;
@@ -48,15 +50,36 @@
   }
 }
 
-.marketList {
-  float: left;
-  width: 80%;
+.dashboardControls__button {
+  margin-right: 20px;
+}
+
+.dashboardWidgets {
+  padding: 40px 0;
+  &__markets {
+    background-color: @bg-color-muted;
+  }
+
+  &__financial {
+    background-color: @bg-color-dark;
+  }
+}
+
+.dashboardWidget {
 
   &__title {
-    margin: 12px 0;
+    margin: 0 0 12px 0;
+    font-size: 12px;
+    opacity: .6;
     text-transform: uppercase;
     color: @font-color-dark;
     font-weight: 400;
+    letter-spacing: .5px;
+  }
+
+  &__container {
+    background-color: white;
+    border-radius: @market-border-radius;
   }
 }
 
@@ -81,164 +104,19 @@
   }
 }
 
-.market {
-  width: 100%;
-  -webkit-appearance: none;
-  border: none;
-  display: block;
+.expandable {
   position: relative;
-  background-color: white;
-  padding: 20px 20px;
-  margin: 2px 0;
-  overflow: hidden;
-  text-align: left;
+  z-index: 2;
+  margin-top: @expandable-margin;
+  &__inner {
+    padding: 40px 0;
+    background-color: @bg-color-muted;
 
-  &--resolved {
-    .market__title {
-      color: @font-color-dark;
-      opacity: .6;
-      font-weight: 300;
-    }
-  }
-
-  &:active,&:focus {
-    outline: 0;
-    box-shadow: none;
-  }
-
-  &:hover,&:focus {
-    outline: 0;
-    color: inherit !important;
-    cursor: pointer;
-
-    // .market__title {
-    //   color: @link-color;
-    // }
-
-    &:after {
+    &::before {
+      visibility: visible;
       content: '';
       position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      width: @market-highlight-stripe-width;
-      background-color: @link-color;
+      margin-bottom: 50px;
     }
-  }
-
-  &:first-child {
-    border-top-left-radius: @market-border-radius;
-    border-top-right-radius: @market-border-radius;
-  }
-
-  &:last-child {
-    border-bottom-left-radius: @market-border-radius;
-    border-bottom-right-radius: @market-border-radius;
-  }
-
-  &__header {
-    //padding: 12px 0 18px 0;
-    &::after {
-      content: '';
-      display: table;
-      clear: both;
-    }
-  }
-
-  &__control {
-    font-weight: 500;
-    margin: 0;
-    float: right;
-    text-transform: uppercase;
-  }
-
-  &__title {
-    margin: 0;
-    float: left;
-    color: black;
-    letter-spacing: 1px;
-    font-size: 22px;
-    font-weight: 400;
-  }
-
-  &__outcomes {
-    margin: 20px 0;
-  }
-}
-
-.info {
-  &__group {
-    padding-right: @info-row-height;
-    color: @font-color-dark;
-    opacity: .6;
-    letter-spacing: .5px;
-    text-transform: uppercase;
-    font-size: 10px;
-    vertical-align: middle;
-    height: @info-row-height;
-
-    .info__field--icon {
-      width: @info-row-height;
-      height: @info-row-height;
-      float: left;
-      opacity: .6;
-    }
-  }
-
-  &__field--label {
-    line-height: @info-row-height;
-    padding-right: @info-row-height;
-    padding-left: 5px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    vertical-align: middle;
-  }
-
-}
-
-
-.outcome {
-  &__bar {
-    display: inline-block;
-    position: relative;
-    width: 30%;
-    margin: 5px 0;
-
-    &--inner {
-      height: @outcome-bar-height;
-      position: relative;
-      border-top-right-radius: 5px;
-      border-bottom-right-radius: 5px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    &--value {
-      line-height: @outcome-bar-height;
-      vertical-align: middle;
-      padding-left: 5px;
-      float: left;
-      min-width: 30px;
-      opacity: .6;
-      color: @font-color-dark;
-      font-size: 10px;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-    }
-
-    &--label {
-      margin-left: 100%;
-      padding-left: 5px;
-      line-height: @outcome-bar-height;
-      vertical-align: middle;
-      text-transform: uppercase;
-      font-size: 10px;
-      letter-spacing: .5px;
-    }
-  }
-
-  &__label {
-    display: inline-block;
   }
 }
