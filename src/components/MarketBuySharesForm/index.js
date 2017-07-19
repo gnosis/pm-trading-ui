@@ -126,7 +126,7 @@ class MarketBuySharesForm extends Component {
               </div>
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-12">
-                  <Field name="confirm" component={Checkbox} className="marketBuySharesForm__checkbox" text="Confirm Purchase" />
+                  <Field name="confirm" component={Checkbox} className="marketBuyCheckbox" text="Confirm Purchase" />
                 </div>
               </div>
               <div className="row marketBuySharesForm__row">

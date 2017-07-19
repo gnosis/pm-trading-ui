@@ -17,14 +17,8 @@ import FormInput from 'components/FormInput'
 
 export default class MarketCreateWizard extends Component {
   @autobind
-  handleSubmit(values) {
-    const { resolutionDate, fee, funding, ...market } = values
-
-    market.fee = parseFloat(fee)
-    market.funding = parseFloat(funding)
-    market.resolutionDate = moment(resolutionDate).format()
-
-    return this.props.createMarket(market)
+  handleShowReview() {
+    return this.props.changeUrl('markets/review')
   }
 
   renderHeading(index, title) {
@@ -118,7 +112,7 @@ export default class MarketCreateWizard extends Component {
             <h1>Create Market</h1>
           </div>
         </div>
-        <form ref={(node) => { this.formElement = node }} onSubmit={handleSubmit(this.handleSubmit)}>
+        <form ref={(node) => { this.formElement = node }}>
           <div className="container">
             <div className="row">
               <div className="col-md-8">
@@ -126,7 +120,7 @@ export default class MarketCreateWizard extends Component {
               </div>
               <div className="col-md-4">
                 <MarketSidebar fields={{ Test: true, Bla: false }} />
-                <button className="marketCreateButton btn btn-primary" type="submit">Review &#10140;</button>
+                <button className="marketCreateButton btn btn-primary" type="button" onClick={() => this.handleShowReview()}>Review <i className="arrow" /></button>
               </div>
             </div>
           </div>

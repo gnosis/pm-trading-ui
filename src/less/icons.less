@@ -1,3 +1,5 @@
+
+// Icon Definitions
 .icon {
   display: inline-block;
   position: relative;
@@ -11,33 +13,68 @@
 
   &--countdown {
     background-image: url('../assets/img/icons/icon_countdown.svg');
+    mask-image: url('../assets/img/icons/icon_countdown.svg');
   }
 
   &--enddate {
     background-image: url('../assets/img/icons/icon_enddate.svg');
+    mask-image: url('../assets/img/icons/icon_enddate.svg');
   }
 
   &--oracle {
     background-image: url('../assets/img/icons/icon_oracle.svg');
+    mask-image: url('../assets/img/icons/icon_oracle.svg');
   }
 
   &--currency {
     background-image: url('../assets/img/icons/icon_currency.svg');
+    mask-image: url('../assets/img/icons/icon_currency.svg');
   }
 
   &--checkmark {
     background-image: url('../assets/img/icons/icon_checkmark.svg');
+    mask-image: url('../assets/img/icons/icon_checkmark.svg');
   }
 
   &--market {
     background-image: url('../assets/img/icons/icon_market.svg');
+    mask-image: url('../assets/img/icons/icon_market.svg');
   }
 
   &--market--countdown {
     background-image: url('../assets/img/icons/icon_market--countdown.svg');
+    mask-image: url('../assets/img/icons/icon_market--countdown.svg');
   }
 
   &--new {
     background-image: url('../assets/img/icons/icon_new.svg');
+    mask-image: url('../assets/img/icons/icon_new.svg');
+  }
+}
+
+// Glyphs Definitions
+i {
+  font-style: normal;
+
+  // Right/Left Arrow
+  &.arrow {
+    display: inline;
+    font-style: normal;
+    padding: 0 10px;
+    position: relative;
+
+    &::before {
+      content: '\279C';
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    &--right {
+      &::before {
+        transform-origin: 50% 50%;
+        transform: rotate(180deg);
+      }
+    }
   }
 }

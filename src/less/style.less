@@ -95,7 +95,18 @@ html, body, #root {
         right: @btn-border-width;
         left: @btn-border-width;
         bottom: @btn-border-width;
-        background: white;
+        background: @bg-color;
       }
+    }
+
+    &.btn-default--muted {
+      &::before {
+        background: @bg-color-muted;
+      }
+    }
+
+    &.btn-primary--disabled {
+      cursor: not-allowed;
+      opacity: 0.3;
     }
   }

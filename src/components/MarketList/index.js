@@ -76,10 +76,8 @@ class MarketList extends Component {
 
   @autobind
   renderMarket(market) {
-    console.log(market)
-    const timeUntilEvent = moment
-      .duration(moment(market.eventDescription.resolutionDate)
-      .diff())
+    const timeUntilEvent = moment(market.eventDescription.resolutionDate).diff(moment())
+    const durationTilEvent = moment.duration(timeUntilEvent)
 
     const isResolved = timeUntilEvent < 0
 
@@ -112,7 +110,7 @@ class MarketList extends Component {
               <div className="info__field">
                 <div className="info__field--icon icon icon--countdown" />
                 <div className="info__field--label">
-                  {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_FORMAT)}
+                  {durationTilEvent.format(RESOLUTION_TIME.RELATIVE_FORMAT)}
                 </div>
               </div>
             </div>
