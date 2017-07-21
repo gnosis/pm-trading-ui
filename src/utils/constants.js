@@ -29,3 +29,16 @@ export const COLOR_SCHEME_DEFAULT = [
   '#e4f20a', // yellow
   '#73472c', // brown
 ]
+
+export const TRANSACTION_STATUS = {
+  RUNNING: 'RUNNING',
+  ERROR: 'ERROR',
+  TIMEOUT: 'TIMEOUT',
+  DONE: 'DONE',
+}
+
+export const TRANSACTION_COMPLETE_STATUS = {
+  NO_ERROR: 'NO_ERROR',
+  ERROR: 'ERROR',
+  TIMEOUT: 'TIMEOUT',
+}

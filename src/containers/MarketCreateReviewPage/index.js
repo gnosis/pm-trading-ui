@@ -2,41 +2,81 @@ import { connect } from 'react-redux'
 import { reduxForm, formValueSelector, submit } from 'redux-form'
 import { push } from 'react-router-redux'
 import moment from 'moment'
+import uuid from 'uuid/v4'
 
 import MarketCreateReview from 'components/MarketCreateReview'
 
-import { composeMarket } from 'actions/market'
+import { createMarket } from 'actions/market'
+import { openModal } from 'actions/modal'
 
 const FORM = {
   form: 'marketCreateWizard',
-  onSubmit: (values, dispatch, props) => {
-    const { formValues: { resolutionDate, ...market } } = props
+  onSubmit: async (values, dispatch, props) => {
+    const { formValues } = props
 
-    market.resolutionDate = moment(props.formValues.resolutionDate)
+    // build models
+    const eventDescription = {
+      description: formValues.description,
+      title: formValues.title,
+      resolutionDate: moment(formValues.resolutionDate).format(),
+      decimals: formValues.decimals,
+      unit: formValues.unit,
+    }
 
-    return dispatch(composeMarket(market))
-  }
+    const oracle = {
+      eventDescription: undefined,
+      type: formValues.oracleType,
+      // TODO: Add for Ultimate Oracle
+    }
+
+    const event = {
+      oracle: undefined,
+      collateralToken: undefined,
+      type: formValues.outcomeType,
+      outcomes: formValues.outcomes,
+      outcomeCount: (formValues.outcomes || []).length,
+      lowerBound: formValues.lowerBound,
+      upperBound: formValues.upperBound,
+    }
+
+    const market = {
+      event: undefined,
+      fee: formValues.fee,
+      funding: formValues.funding,
+    }
+
+    const transactionLogId = uuid()
+    await dispatch(openModal({ modalName: 'ModalMarketProgress', transactionId: transactionLogId }))
+
+    return await dispatch(createMarket({
+      eventDescription,
+      oracle,
+      event,
+      market,
+      transactionId: transactionLogId,
+    }))
+  },
 }
 
 const mapStateToProps = (state, ownProps) => {
   const selector = formValueSelector('marketCreateWizard')
   return {
     formValues: {
-      oracleType: 'CENTRALIZED', //selector(state, 'oracleType'),
-      collateralToken: 'ETH', //selector(state, 'collateralToken'),
-      fee: 1.422, //selector(state, 'fee'),
-      funding: 2.21, //selector(state, 'funding'),
-      title: "This is a testmarket!", //selector(state, 'title'),
-      description: "Lorem Ipsum dolor sit amet bla blabl alba bla test foo bar test bla blu bleh", //selector(state, 'description'),
-      resolutionDate: "2019-09-09 09:00:00", //selector(state, 'resolutionDate'),
-      ultimateOracle: false, //selector(state, 'ultimateOracle'),
-      outcomeType: 'CATEGORICAL', //selector(state, 'outcomeType'),
-      outcomes: ['This is a', 'Test'], // selector(state, 'outcomes'),
+      oracleType: selector(state, 'oracleType'),
+      collateralToken: selector(state, 'collateralToken'),
+      fee: selector(state, 'fee'),
+      funding: selector(state, 'funding'),
+      title: selector(state, 'title'),
+      description: selector(state, 'description'),
+      resolutionDate: selector(state, 'resolutionDate'),
+      ultimateOracle: selector(state, 'ultimateOracle'),
+      outcomeType: selector(state, 'outcomeType'),
+      outcomes: selector(state, 'outcomes'),
       upperBound: selector(state, 'upperBound'),
       lowerBound: selector(state, 'lowerBound'),
       decimals: selector(state, 'decimals'),
       unit: selector(state, 'unit'),
-    }
+    },
   }
 }
 

@@ -6,13 +6,16 @@ import {
 } from 'actions/modal'
 
 const reducer = handleActions({
-  [openModal]: (state, action) => ({
-    ...state,
-    isOpen: true,
-    currentModal: action.modalName,
-  }),
-  [closeModal]: (state, action) => ({
-    ...state,
+  [openModal]: (state, action) => {
+    const { modalName: currentModal, ...modalData } = action.payload
+    return {
+      ...state,
+      isOpen: true,
+      currentModal,
+      ...modalData,
+    }
+  },
+  [closeModal]: state => ({
     isOpen: false,
     currentModal: undefined,
   }),

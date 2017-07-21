@@ -15,3 +15,10 @@ export const hexWithPrefix = (value) => {
   }
   return value
 }
+
+export const toEntity = (data, entityType, idKey = 'address') => ({
+  [entityType]: {
+    id: data[idKey],
+    ...data,
+  },
+})

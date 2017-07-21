@@ -14,7 +14,7 @@ class MarketCreateReview extends Component {
     super(props)
 
     this.state = {
-      confirmed: false
+      confirmed: false,
     }
   }
   componentDidMount() {
@@ -140,7 +140,7 @@ class MarketCreateReview extends Component {
           <Checkbox
             input={{
               name: 'confirm',
-              onChange: this.handleOnChange
+              onChange: this.handleOnChange,
             }}
             className="paymentCheckbox"
             text={
@@ -173,17 +173,15 @@ class MarketCreateReview extends Component {
       return (
         <div className="outcomes__categorical">
           <h3 className="outcomeCategorical__header">Outcome Options</h3>
-          {outcomes.map((outcome, index) => {
-            return (
-              <div className="outcomeCategorical" key={index}>
-                <div
-                  className="outcomeCategorical__color"
-                  style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }}
-                />
-                <div className="outcomeCategorical__label">{outcome}</div>
-              </div>
-            )
-          })}
+          {outcomes.map((outcome, index) => (
+            <div className="outcomeCategorical" key={index}>
+              <div
+                className="outcomeCategorical__color"
+                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }}
+              />
+              <div className="outcomeCategorical__label">{outcome}</div>
+            </div>
+            ))}
         </div>
       )
     } else if (outcomeType == OUTCOME_TYPES.SCALAR) {

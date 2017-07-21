@@ -1,21 +1,32 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import * as modals from 'components/modals'
+import * as modals from 'containers/modals'
+
+import './backdrop.less'
 
 class BackdropProvider extends Component {
   renderBackdropContent() {
-    const { currentModal, isOpen } = this.props
-    
+    const { currentModal, isOpen, ...data } = this.props.modal
+
     if (isOpen) {
+      /*
+       * Implement more modals here by adding to components/modals.js
+       */
       const Modal = modals[currentModal]
 
-      return <Modal />
+      if (!Modal) {
+        throw Error('Invalid Modal Type', currentModal)
+      }
+
+      return <Modal {...data} />
     }
+
+    return undefined
   }
 
   render() {
-    const { isOpen, children } = this.props
+    const { children, modal: { isOpen } } = this.props
     return (
       <div className="backdrop">
         <div className={`backdrop__filter ${isOpen ? 'backdrop__filter--visible' : ''}`}>
@@ -29,11 +40,8 @@ class BackdropProvider extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    currentModal: state.modal.currentModal,
-    isOpen: state.modal.isOpen,
-  }
-}
+const mapStateToProps = state => ({
+  modal: state.modal,
+})
 
 export default connect(mapStateToProps)(BackdropProvider)

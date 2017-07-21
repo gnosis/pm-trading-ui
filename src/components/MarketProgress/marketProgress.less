@@ -1,0 +1,72 @@
+@import url('../../less/vars.less');
+
+.marketProgress {
+  &__header {
+    text-align: center;
+    font-size: 48px;
+    font-weight: 300;
+    margin: 100px 0;
+  }
+
+  &__disclaimer {
+    text-align: center;
+    font-size: 24px;
+    margin: auto;
+    font-weight: 300;
+    margin-bottom: 100px;
+  }
+
+  &__logs {
+    font-size: 24px;
+  }
+
+  &__logItem {
+    font-weight: 300;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+
+    &--running {
+      color: @font-color-muted;
+      opacity: 0.5;
+    }
+  }
+}
+
+.radialProgressBar {
+  position: relative;
+  width: 400px;
+  height: 400px;
+
+  &--success {
+    #bar {
+      stroke: @active-highlight-success;
+    }
+  }
+
+  #inner {
+    fill: transparent;
+    stroke-width: 10px;
+    stroke: @bg-color-muted;
+  } 
+
+  #bar {
+    transform: rotate(-90deg);
+    transform-origin: 50%;
+    fill: transparent;
+    stroke-width: 10px;
+    stroke-linecap: round;
+    transition: stroke-dashoffset .5s ease;
+  }
+
+  &__label {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    line-height: 400px;
+    font-size: 42px;
+  }
+}

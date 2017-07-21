@@ -53,7 +53,7 @@ export default class MarketCreateWizard extends Component {
 
   renderMarketDetails() {
     const currencies = {
-      0x9b1f7f645351af3631a656421ed2e40f2802e6c0: 'Ether Token',
+      '0x9b1f7f645351af3631a656421ed2e40f2802e6c0': 'Ether Token',
     }
 
     return (
@@ -103,8 +103,6 @@ export default class MarketCreateWizard extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props
-
     return (
       <div className="marketCreateWizardPage">
         <div className="marketCreateWizardPage__header">
@@ -112,14 +110,14 @@ export default class MarketCreateWizard extends Component {
             <h1>Create Market</h1>
           </div>
         </div>
-        <form ref={(node) => { this.formElement = node }}>
+        <form>
           <div className="container">
             <div className="row">
               <div className="col-md-8">
                 {this.renderForm()}
               </div>
               <div className="col-md-4">
-                <MarketSidebar fields={{ Test: true, Bla: false }} />
+                <MarketSidebar fields={{ }} />
                 <button className="marketCreateButton btn btn-primary" type="button" onClick={() => this.handleShowReview()}>Review <i className="arrow" /></button>
               </div>
             </div>
