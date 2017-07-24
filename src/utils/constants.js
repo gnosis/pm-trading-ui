@@ -22,10 +22,11 @@ export const HEX_VALUE_REGEX = /(0x)?[0-9A-Fa-f]{40}/
 export const COLOR_SCHEME_DEFAULT = [
   '#0be1b1', // green
   '#e01563', // red
-  '#f2a00a', // orange
+  '#f2cc0a', // yellow
+  '#9c8ae3', // lilac
   '#6f6f6f', // gray
   '#0abcf2', // blue
   '#f20ae0', // pink
-  '#e4f20a', // yellow
+  '#e4f20a', // orange
   '#73472c', // brown
 ]
