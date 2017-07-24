@@ -3,13 +3,20 @@
 .formSlider {
   display: inline-block;
 
-  &__label {
-    .defaultStyle__inputLabel();
-  }
-  
   &__value {
     text-align: center;
     display: block;
+    text-transform: none;
+    color: @font-color-light;
+  }
+
+
+  &__range {
+    &--min, &--max {
+      display: inline-block;
+      text-transform: none;
+      color: @font-color-light;
+    }
   }
 
   &__input[type="range"] {

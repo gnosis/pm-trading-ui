@@ -37,7 +37,6 @@ module.exports = {
         loader: 'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
       },
       { test: /\.(less|css)$/,
-        exclude: /(node_modules)/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
@@ -56,7 +55,7 @@ module.exports = {
       {
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]',
-      },
+      }
     ],
   },
   devServer: {

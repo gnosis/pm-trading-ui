@@ -40,12 +40,14 @@ export default class MarketCreateWizard extends Component {
     }
 
     return (
-      <div className="row">
-        <div className="col-md-offset-2 col-md-10">
-          <FormRadioButtonLabel label="Oracle Type" />
-          {Object.keys(oracleValueLabels).map(fieldValue =>
-            <Field key={fieldValue} name="oracleType" component={FormRadioButton} radioValue={fieldValue} text={oracleValueLabels[fieldValue]} />,
-          )}
+      <div className="marketOracle">
+        <div className="row">
+          <div className="col-md-offset-2 col-md-10">
+            <FormRadioButtonLabel label="Oracle Type" />
+            {Object.keys(oracleValueLabels).map(fieldValue =>
+              <Field key={fieldValue} name="oracleType" component={FormRadioButton} radioValue={fieldValue} text={oracleValueLabels[fieldValue]} />,
+            )}
+          </div>
         </div>
       </div>
     )

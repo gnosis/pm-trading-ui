@@ -9,9 +9,10 @@ class MarketProgress extends Component {
     const strokeDasharray = Math.abs((progress) - 1) * Math.PI * (190 * 2)
 
     const timeDiff = (startTime && endTime) ? moment(startTime).to(moment(endTime), true) : undefined
-
+    console.log(this.props)
     return (
       <div className="marketProgress">
+        <a className="marketProgress__close" href="javascript:void(0);" onClick={() => this.props.closeModal()} ></a>
         <div className="container">
           <div className="marketProgress__header">
             {
@@ -49,6 +50,10 @@ class MarketProgress extends Component {
                     {log.label}
                   </div>
                   ))}
+                  <div className="marketProgress__logItem">Done</div>
+                  <div className="marketProgress__logItem">Doooone</div>
+                  <div className="marketProgress__logItem marketProgress__logItem--running">Creating everything</div>
+                  <div className="marketProgress__logItem marketProgress__logItem--running">oh yes</div>
               </div>
             </div>
           </div>

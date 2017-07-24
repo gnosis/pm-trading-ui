@@ -79,7 +79,7 @@ class FormEditableList extends Component {
           onFocus={this.handleFocus}
           onChange={e => this.handleEntryChange(index, e)}
         />
-        <a className="entry__delete" href="" onClick={e => this.handleEntryDelete(index, e)}>Delete</a>
+        <a className="entry__delete" href="" tabIndex="-1" onClick={e => this.handleEntryDelete(index, e)}>Delete</a>
       </div>
     )
   }
