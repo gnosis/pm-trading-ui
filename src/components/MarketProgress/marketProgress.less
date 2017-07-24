@@ -63,20 +63,43 @@
       opacity: 0.5;
     }
 
-    &--running:first-of-type {
-      &::after {
+    &--currentActive {
+      color: darken(@font-color-muted, 10%);
+      &::after, &::before {
         content: '';
         position: absolute;
-        left: 0;
-        width: 10px;
+        left: -20px;
+        top: 50%;
+        width: 12px;
         height: 2px;
-
-        transform: rotate(45deg);
+        transform-origin: 100%;
         background-color: black;
+        animation: pulse 1s ease infinite;
+      }
+
+      &::after {
+        transform: rotate(45deg);
+      }
+
+      &::before {
+        transform: rotate(-45deg);
       }
     }
   }
 }
+
+@keyframes pulse {
+  0% {
+    margin-left: 0px;
+  }
+  66% {
+    margin-left: -20px;
+  }
+  100% {
+    margin-left: 0px;
+  }
+}
+
 
 .radialProgressBar {
   position: relative;

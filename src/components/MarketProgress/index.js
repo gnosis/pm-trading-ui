@@ -12,7 +12,7 @@ class MarketProgress extends Component {
     console.log(this.props)
     return (
       <div className="marketProgress">
-        <a className="marketProgress__close" href="javascript:void(0);" onClick={() => this.props.closeModal()} ></a>
+        <a className="marketProgress__close" href="javascript:void(0);" onClick={() => this.props.closeModal()}  />
         <div className="container">
           <div className="marketProgress__header">
             {
@@ -45,15 +45,18 @@ class MarketProgress extends Component {
             </div>
             <div className="col-md-6">
               <div className="marketProgress__logs">
-                {logs.map((log, index) => (
-                  <div className={`marketProgress__logItem ${log.isDone ? '' : 'marketProgress__logItem--running'}`} key={index}>
-                    {log.label}
-                  </div>
-                  ))}
-                  <div className="marketProgress__logItem">Done</div>
-                  <div className="marketProgress__logItem">Doooone</div>
-                  <div className="marketProgress__logItem marketProgress__logItem--running">Creating everything</div>
-                  <div className="marketProgress__logItem marketProgress__logItem--running">oh yes</div>
+                {logs.length > 0 ?
+                  logs.map((log, index) => {
+                    const isLastRunning = (!log.isDone && logs[index - 1] && logs[index - 1].isDone) || (index === 0 && !log.isDone)
+                    return (
+                      <div className={`marketProgress__logItem ${log.isDone ? '' : 'marketProgress__logItem--running'} ${isLastRunning ? 'marketProgress__logItem--currentActive' : ''}`} key={index}>
+                        {log.label}
+                      </div>
+                    )
+                  })
+                  : <div className="marketProgress__logItem">Starting Transactions</div>
+                }
+                
               </div>
             </div>
           </div>
