@@ -36,16 +36,19 @@
     opacity: 1;
   }
 
-}
+  &:checked+.checkboxField__textWrapper {
+    font-weight: 800;
+  }
 
-.checkboxField__label {
-  .defaultStyle__inputLabel();
 }
 
 .checkboxField__text {
   position: relative;
   font-size: 14px;
+  font-weight: 400;
   line-height: 24px;
   margin: 0;
   vertical-align: middle;
+  text-transform: none;
+  color: @font-color-light;
 }

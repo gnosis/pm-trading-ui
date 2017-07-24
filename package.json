@@ -21,8 +21,9 @@
     "@gnosis.pm/gnosisjs": "file:../gnosis.js"
   },
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "gnosis/gnosis.js",
+    "@gnosis.pm/gnosisjs": "file:../gnosis.js",
     "autobind-decorator": "^1.4.1",
+    "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
     "d3": "^4.9.1",
     "d3-scale-chromatic": "^1.1.1",
@@ -36,6 +37,7 @@
     "react-autosize-textarea": "^0.4.7",
     "react-autosuggest": "^9.0.0",
     "react-custom-scroll": "^1.8.0",
+    "react-datetime": "^2.8.10",
     "react-dnd": "^2.2.4",
     "react-dnd-html5-backend": "^2.2.4",
     "react-dom": "15.4.1",
@@ -51,7 +53,8 @@
     "redux-actions": "^2.0.1",
     "redux-form": "^6.6.3",
     "redux-thunk": "^2.2.0",
-    "reselect": "^2.5.4"
+    "reselect": "^2.5.4",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.1",

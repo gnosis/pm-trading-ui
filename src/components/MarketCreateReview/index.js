@@ -14,7 +14,7 @@ class MarketCreateReview extends Component {
     super(props)
 
     this.state = {
-      confirmed: false
+      confirmed: false,
     }
   }
   componentDidMount() {
@@ -67,39 +67,39 @@ class MarketCreateReview extends Component {
     )
   }
 
-  renderMarketDetails() {
+  rendermarketReviewDetails() {
     const { formValues: { resolutionDate, collateralToken, fee, funding, ultimateOracle } } = this.props
 
     return (
-      <div className="marketDetails">
+      <div className="marketReviewDetails">
         <div className="row">
           <div className="col-md-12">
-            <div className="marketDetails__label">Resolution Date</div>
-            <div className="marketDetails__value">{moment(resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}</div>
+            <div className="marketReviewDetails__label">Resolution Date</div>
+            <div className="marketReviewDetails__value">{moment(resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}</div>
           </div>
         </div>
         <div className="row">
           <div className="col-md-12">
-            <div className="marketDetails__label">Currency</div>
-            <div className="marketDetails__value">{collateralToken}</div>
+            <div className="marketReviewDetails__label">Currency</div>
+            <div className="marketReviewDetails__value">{collateralToken}</div>
           </div>
         </div>
         <div className="row">
           <div className="col-md-12">
-            <div className="marketDetails__label">Fee</div>
-            <div className="marketDetails__value">{Decimal(fee || 0).toFixed(2)}%</div>
+            <div className="marketReviewDetails__label">Fee</div>
+            <div className="marketReviewDetails__value">{Decimal(fee || 0).toFixed(2)}%</div>
           </div>
         </div>
         <div className="row">
           <div className="col-md-12">
-            <div className="marketDetails__label">Funding</div>
-            <div className="marketDetails__value">{Decimal(funding || 0).toFixed(4)} {collateralToken}</div>
+            <div className="marketReviewDetails__label">Funding</div>
+            <div className="marketReviewDetails__value">{Decimal(funding || 0).toFixed(4)} {collateralToken}</div>
           </div>
         </div>
         <div className="row">
           <div className="col-md-12">
-            <div className="marketDetails__label">Ultimate Oracle</div>
-            <div className="marketDetails__value">
+            <div className="marketReviewDetails__label">Ultimate Oracle</div>
+            <div className="marketReviewDetails__value">
               {ultimateOracle ? (
                 <span>This Event will be using an ultimate Oracle.</span>
               ) : (
@@ -140,7 +140,7 @@ class MarketCreateReview extends Component {
           <Checkbox
             input={{
               name: 'confirm',
-              onChange: this.handleOnChange
+              onChange: this.handleOnChange,
             }}
             className="paymentCheckbox"
             text={
@@ -173,17 +173,15 @@ class MarketCreateReview extends Component {
       return (
         <div className="outcomes__categorical">
           <h3 className="outcomeCategorical__header">Outcome Options</h3>
-          {outcomes.map((outcome, index) => {
-            return (
-              <div className="outcomeCategorical" key={index}>
-                <div
-                  className="outcomeCategorical__color"
-                  style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }}
-                />
-                <div className="outcomeCategorical__label">{outcome}</div>
-              </div>
-            )
-          })}
+          {outcomes.map((outcome, index) => (
+            <div className="outcomeCategorical" key={index}>
+              <div
+                className="outcomeCategorical__color"
+                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }}
+              />
+              <div className="outcomeCategorical__label">{outcome}</div>
+            </div>
+            ))}
         </div>
       )
     } else if (outcomeType == OUTCOME_TYPES.SCALAR) {
@@ -226,7 +224,7 @@ class MarketCreateReview extends Component {
               {this.renderMarketSummary()}
             </div>
             <div className="col-md-4">
-              {this.renderMarketDetails()}
+              {this.rendermarketReviewDetails()}
             </div>
           </div>
         </div>

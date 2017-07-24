@@ -3,6 +3,7 @@ import Gnosis from '@gnosis.pm/gnosisjs'
 import { normalizeHex, hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 
+import delay from 'await-delay'
 import Decimal from 'decimal.js'
 
 const GNOSIS_OPTIONS = {}
@@ -32,73 +33,116 @@ const getCurrentAccount = async () => {
 }
 
 
-export const createEventDescription = async (description) => {
+export const createEventDescription = async (eventDescription) => {
+  console.log('eventDescription', eventDescription)
   const gnosis = await getGnosisConnection()
   // console.log(description)
 
-  return await gnosis.publishEventDescription(description)
+  const ipfsHash = await gnosis.publishEventDescription(eventDescription)
+
+  await delay(5000)
+  
+  return {
+    ipfsHash,
+    ...eventDescription,
+  }
 }
 
-export const createOracle = async (opts) => {
+export const createOracle = async (oracle) => {
+  console.log('oracle', oracle)
   const gnosis = await getGnosisConnection()
   let oracleContract
 
-  if (opts.oracleType === ORACLE_TYPES.CENTRALIZED) {
-    oracleContract = await gnosis.createCentralizedOracle(opts.ipfsHash)
-  } else if (opts.oracleType === ORACLE_TYPES.ULTIMATE) {
-    const oracle = {
-      ipfsHash: opts.ipfsHash,
-      // TODO: add remaining parameters and document
-    }
+  if (oracle.type === ORACLE_TYPES.CENTRALIZED) {
+    oracleContract = await gnosis.createCentralizedOracle(oracle.eventDescription)
+  } else if (oracle.type === ORACLE_TYPES.ULTIMATE) {
+    // TODO: add remaining parameters and document
     oracleContract = await gnosis.createUltimateOracle(oracle)
   } else {
     throw new Error('invalid oracle type')
   }
 
-  return oracleContract
+  await delay(5000)
+
+  return {
+    oracle: oracleContract.address,
+    ...oracle,
+  }
 }
 
 export const createEvent = async (event) => {
+  console.log('event', event)
   const gnosis = await getGnosisConnection()
+
+  // hardcoded for current version
+  // event.collateralToken = gnosis.etherToken
 
   let eventContract
 
-  if (event.outcomeType === OUTCOME_TYPES.CATEGORICAL) {
-    eventContract = await gnosis.createCategoricalEvent(event)
-  } else if (event.outcomeType === OUTCOME_TYPES.SCALAR) {
-    const scalarEvent = {
+  if (event.type === OUTCOME_TYPES.CATEGORICAL) {
+    eventContract = await gnosis.createCategoricalEvent({
       ...event,
+      collateralToken: gnosis.etherToken,
+    })
+  } else if (event.type === OUTCOME_TYPES.SCALAR) {
+    eventContract = await gnosis.createScalarEvent({
+      ...event,
+      collateralToken: gnosis.etherToken,
       lowerBound: event.lowerBound * (10 ** event.decimals),
       upperBound: event.upperBound * (10 ** event.decimals),
-    }
-    // console.log(scalarEvent)
-    eventContract = await gnosis.createScalarEvent(scalarEvent)
+    })
   } else {
     throw new Error('invalid outcome/event type')
   }
 
-  return eventContract
+  await delay(5000)
+
+  return {
+    event: eventContract.address,
+    ...event,
+  }
 }
 
 export const createMarket = async (market) => {
+  console.log('market', market)
   const gnosis = await getGnosisConnection()
 
-  const marketFunding = market.funding * 1e18
+  const marketContract = await gnosis.createMarket({
+    ...market,
+    marketMaker: gnosis.lmsrMarketMaker,
+    marketFactory: gnosis.standardMarketFactory,
+  })
+
+  await delay(5000)
+
+  return {
+    ...market,
+    market: marketContract.address,
+  }
+}
+
+export const fundMarket = async (market) => {
+  console.log('funding', market)
+  const gnosis = await getGnosisConnection()
+
+  const marketContract = gnosis.contracts.Market.at(market.market)
+  const marketFunding = Decimal(market.funding).div(1e18)
 
   await gnosis.etherToken.deposit({ value: marketFunding.toString() })
+  await gnosis.etherToken.approve(marketContract.address, marketFunding.toString())
+
   const balance = await gnosis.etherToken.balanceOf(gnosis.web3.eth.accounts[0])
   // console.log(`Ethertoken balance: ${balance.div(1e18).toFixed(4)}`)
 
   if (balance.lt(marketFunding)) {
-    throw new Error(`Not enough funds: required ${(marketFunding / 1e18).toFixed(5)} of ${balance.div(1e18).toFixed(5)}`)
+    throw new Error(`Not enough funds: required ${marketFunding.toFixed(5)} of ${balance.div(1e18).toFixed(5)}`)
   }
 
-  const marketContract = await gnosis.createMarket(market)
-
-  await gnosis.etherToken.approve(marketContract.address, marketFunding.toString())
   await marketContract.fund(marketFunding.toString())
 
-  return marketContract
+  await delay(5000)
+
+  return market
 }
 
 /**

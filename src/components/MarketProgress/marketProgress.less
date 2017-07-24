@@ -1,0 +1,142 @@
+@import url('../../less/vars.less');
+
+.marketProgress {
+  &__header {
+    text-align: center;
+    font-size: 48px;
+    font-weight: 300;
+    margin: 100px 0;
+  }
+
+  &__disclaimer {
+    text-align: center;
+    font-size: 24px;
+    margin: auto;
+    font-weight: 300;
+    margin-bottom: 100px;
+  }
+
+  &__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    
+    &::after, &::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 5px;
+      transition: background-color .4s ease-in;
+      background-color: black;
+      transform-origin: 50% 50%;
+    } 
+
+    &::after {
+      transform: rotate(45deg);
+    }
+    &::before {
+      transform: rotate(-45deg);  
+    }
+
+    &:hover {
+      &::after, &::before {
+        background-color: @active-highlight;
+        background-color: @active-highlight;
+      }
+    }
+  }
+
+  &__logs {
+    font-size: 24px;
+  }
+
+  &__logItem {
+    font-weight: 300;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    position: relative;
+
+    &--running {
+      color: @font-color-muted;
+      opacity: 0.5;
+    }
+
+    &--currentActive {
+      color: darken(@font-color-muted, 10%);
+      &::after, &::before {
+        content: '';
+        position: absolute;
+        left: -20px;
+        top: 50%;
+        width: 12px;
+        height: 2px;
+        transform-origin: 100%;
+        background-color: black;
+        animation: pulse 1s ease infinite;
+      }
+
+      &::after {
+        transform: rotate(45deg);
+      }
+
+      &::before {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    margin-left: 0px;
+  }
+  66% {
+    margin-left: -20px;
+  }
+  100% {
+    margin-left: 0px;
+  }
+}
+
+
+.radialProgressBar {
+  position: relative;
+  width: 400px;
+  height: 400px;
+
+  &--success {
+    #bar {
+      stroke: @active-highlight-success;
+    }
+  }
+
+  #inner {
+    fill: transparent;
+    stroke-width: 10px;
+    stroke: @bg-color-muted;
+  } 
+
+  #bar {
+    transform: rotate(-90deg);
+    transform-origin: 50%;
+    fill: transparent;
+    stroke-width: 10px;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 3s ease, stroke 5s ease;
+    transition-delay: stroke 3s;
+  }
+
+  &__label {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    line-height: 400px;
+    font-size: 42px;
+  }
+}
