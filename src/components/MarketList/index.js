@@ -41,7 +41,7 @@ class MarketList extends Component {
       return marginalPrice.toFixed()
     })
 
-    return (<div className="market__outcomes">
+    return (<div className="market__outcomes market-outcomes--categorical">
       {renderOutcomes.map((outcome, outcomeIndex) => (
         <div key={outcomeIndex} className="outcome">
           <div className="outcome__bar">
@@ -76,7 +76,18 @@ class MarketList extends Component {
     const bounds = upperBound.sub(lowerBound)
     const value = Decimal(marginalPrice.toString()).times(bounds).add(lowerBound)
 
-    return (<div>{lowerBound.toString()} to {upperBound.toString()}: {value.toString()}</div>)
+    return (
+      <div className="market__outcomes market__outcomes--scalar">
+        <div className="outcome outcome--scalar">
+          <div className="outcome__bound outcome__bound--lower">{lowerBound.toString()}</div>
+          <div className="outcome__currentPrediction">
+            <div className="outcome__currentPrediction--line" />
+            <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>{value.toString()}</div>
+          </div>
+          <div className="outcome__bound outcome__bound--upper">{upperBound.toString()}</div>
+        </div>
+      </div>
+    )
   }
 
   @autobind
