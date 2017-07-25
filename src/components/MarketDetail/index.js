@@ -47,7 +47,7 @@ const testData = generateRandomGraph()
 // end debug history
 
 
-const controlButtons = {
+const expandableViews = {
   [EXPAND_BUY_SHARES]: {
     label: 'Buy Shares',
     className: 'btn btn-primary',
@@ -56,12 +56,12 @@ const controlButtons = {
   [EXPAND_SHORT_SELL]: {
     label: 'Short Sell',
     className: 'btn btn-primary',
-    component: <span>Short Sell</span>,
+    component: undefined,
   },
   [EXPAND_MY_SHARES]: {
     label: 'My Shares',
     className: 'btn btn-default',
-    component: <span>My Shares</span>,
+    component: undefined,
   },
   [EXPAND_RESOLVE]: {
     label: 'Resolve',
@@ -98,13 +98,15 @@ export default class MarketDetail extends Component {
   renderExpandableContent() {
     const currentView = this.props.params.view
 
-    if (currentView) {
-      const view = controlButtons[currentView]
+    if (currentView && expandableViews[currentView] && expandableViews[currentView].component) {
+      const view = expandableViews[currentView]
       const ViewComponent = view.component
 
       // Not sure if this is a good idea; If I need to optimize, here's a good place to start
       return <ViewComponent {...this.props} />
     }
+    
+    return <div />
   }
 
   renderInfos(market) {
@@ -154,18 +156,18 @@ export default class MarketDetail extends Component {
     return (
       <div className="marketControls container">
         <div className="row">
-          {Object.keys(controlButtons).map(view => (
+          {Object.keys(expandableViews).map(view => (
             <button
               key={view}
               type="button"
               className={`
                 marketControls__button
-                ${controlButtons[view].className}
+                ${expandableViews[view].className}
                 ${view === this.props.params.view ? 'marketControls__button--active' : ''}`
               }
               onClick={() => this.handleExpand(view)}
             >
-              {controlButtons[view].label}
+              {expandableViews[view].label}
             </button>
           ))}
         </div>

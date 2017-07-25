@@ -4,8 +4,8 @@ import { replace } from 'react-router-redux'
 
 import MarketDetail from 'components/MarketDetail'
 
-import { buyMarketShares } from 'actions/market'
-import { requestMarketList } from 'actions/market'
+import { buyMarketShares, requestMarketList } from 'actions/market'
+import { resolveOracle } from 'actions/oracle'
 import { getMarketById } from 'selectors/market'
 
 const mapStateToProps = (state, ownProps) => {
@@ -20,6 +20,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   requestMarket: () => dispatch(requestMarketList(ownProps.params.id)),
   buyShares: (market, outcomeIndex, amount) => dispatch(buyMarketShares(market, outcomeIndex, amount)),
+  resolveOracle: (oracle, outcomeIndex) => dispatch(resolveOracle(oracle, outcomeIndex)),
   changeUrl: (url) => dispatch(replace(url)),
 })
 
