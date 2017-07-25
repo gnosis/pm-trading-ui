@@ -1,6 +1,6 @@
 import Gnosis from '@gnosis.pm/gnosisjs'
 
-import { normalizeHex, hexWithPrefix } from 'utils/helpers'
+import { hexWithoutPrefix, hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 
 import delay from 'await-delay'
@@ -26,7 +26,7 @@ const getGnosisConnection = async () => {
   return gnosisInstance
 }
 
-const getCurrentAccount = async () => {
+export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
 
   return gnosis.web3.eth.accounts[0]
@@ -230,11 +230,11 @@ export const composeMarket = async (marketValues) => {
   }
 
 
-  const oracleAddress = normalizeHex(oracle.address)
-  const accountAddress = normalizeHex(account.address)
-  const eventAddress = normalizeHex(event.address)
-  const marketAddress = normalizeHex(market.address)
-  const collateralTokenAddress = normalizeHex(event.collateralToken.address)
+  const oracleAddress = hexWithoutPrefix(oracle.address)
+  const accountAddress = hexWithoutPrefix(account.address)
+  const eventAddress = hexWithoutPrefix(event.address)
+  const marketAddress = hexWithoutPrefix(market.address)
+  const collateralTokenAddress = hexWithoutPrefix(event.collateralToken.address)
 
   // fix-me: horrible
   return {
@@ -269,8 +269,8 @@ export const composeMarket = async (marketValues) => {
         [marketAddress]: {
           ...marketData,
           address: marketAddress,
-          marketMaker: normalizeHex(marketData.marketMaker.address),
-          marketFactory: normalizeHex(marketData.marketFactory.address),
+          marketMaker: hexWithoutPrefix(marketData.marketMaker.address),
+          marketFactory: hexWithoutPrefix(marketData.marketFactory.address),
           event: eventAddress,
           creationDate: new Date(),
           creator: accountAddress,

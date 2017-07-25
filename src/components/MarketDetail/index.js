@@ -9,13 +9,14 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import MarketGraph from 'components/MarketGraph'
 
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
+import MarketResolveForm from 'components/MarketResolveForm'
 
 import './marketDetail.less'
 
-const EXPAND_BUY_SHARES = 'BUY_SHARES'
-const EXPAND_SHORT_SELL = 'SHORT_SELL'
-const EXPAND_MY_SHARES = 'MY_SHARES'
-const EXPAND_RESOLVE = 'RESOLVE'
+const EXPAND_BUY_SHARES = 'buy-shares'
+const EXPAND_SHORT_SELL = 'short-sell'
+const EXPAND_MY_SHARES = 'my-shares'
+const EXPAND_RESOLVE = 'resolve'
 
 // start debug history
 const generateRandomGraph = () => {
@@ -65,26 +66,25 @@ const controlButtons = {
   [EXPAND_RESOLVE]: {
     label: 'Resolve',
     className: 'btn btn-default',
-    component: <span>Resolve</span>,
+    component: MarketResolveForm,
   },
 }
 
 export default class MarketDetail extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      expandableSelected: undefined,
-    }
-  }
   componentWillMount() {
     this.props.requestMarket(this.props.params.id)
   }
 
   @autobind
-  handleExpand(type) {
-    // Toggle
-    this.setState({ visibleControl: (this.state.visibleControl === type ? null : type) })
+  handleExpand(view) {
+    const currentView = this.props.params.view
+
+    if (currentView === view) {
+      this.props.changeUrl(`markets/${this.props.params.id}`)
+    } else {
+      this.props.changeUrl(`markets/${this.props.params.id}/${view}`)
+    }
+
   }
 
   renderLoading() {
@@ -96,26 +96,14 @@ export default class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
-    const { visibleControl } = this.state
+    const currentView = this.props.params.view
 
-    if (visibleControl === EXPAND_BUY_SHARES) {
-      const {
-        market,
-        selectedCategoricalOutcome,
-        selectedBuyInvest,
-        buyShares,
-      } = this.props
+    if (currentView) {
+      const view = controlButtons[currentView]
+      const ViewComponent = view.component
 
-      return (
-        <MarketBuySharesForm
-          {...{
-            market,
-            selectedCategoricalOutcome,
-            selectedBuyInvest,
-            buyShares,
-          }}
-        />
-      )
+      // Not sure if this is a good idea; If I need to optimize, here's a good place to start
+      return <ViewComponent {...this.props} />
     }
   }
 
@@ -166,18 +154,18 @@ export default class MarketDetail extends Component {
     return (
       <div className="marketControls container">
         <div className="row">
-          {Object.keys(controlButtons).map(type => (
+          {Object.keys(controlButtons).map(view => (
             <button
-              key={type}
+              key={view}
               type="button"
               className={`
                 marketControls__button
-                ${controlButtons[type].className}
-                ${type === this.state.visibleControl ? 'marketControls__button--active' : ''}`
+                ${controlButtons[view].className}
+                ${view === this.props.params.view ? 'marketControls__button--active' : ''}`
               }
-              onClick={() => this.handleExpand(type)}
+              onClick={() => this.handleExpand(view)}
             >
-              {controlButtons[type].label}
+              {controlButtons[view].label}
             </button>
           ))}
         </div>

@@ -1,7 +1,7 @@
 import { schema } from 'normalizr'
 import { mapValues } from 'lodash'
 
-import { normalizeHex } from 'utils/helpers'
+import { hexWithoutPrefix } from 'utils/helpers'
 
 /**
  * Merges entity.contract into entity, discarding "contract" from the original entity
@@ -30,11 +30,11 @@ const mergeContract = (entity) => {
  * Iterates over every field of the entity and normalizes hex values from "0xABC" to "ABC"
  * @param {object} entity
  */
-const normalizeHexValues = entity => mapValues(entity, normalizeHex)
+const hexWithoutPrefixValues = entity => mapValues(entity, hexWithoutPrefix)
 
 const NORMALIZE_OPTIONS_DEFAULT = {
   idAttribute: value => value.address || value.contract.address,
-  processStrategy: entity => mergeContract(normalizeHexValues(entity)),
+  processStrategy: entity => mergeContract(hexWithoutPrefixValues(entity)),
 }
 
 export const eventDescriptionSchema = new schema.Entity('eventDescriptions', {}, {

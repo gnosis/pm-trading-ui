@@ -49,7 +49,9 @@ render(
             <Route path="new" component={MarketCreateWizardPage} />
             <Route path="review" component={MarketCreateReviewPage} />
             <Route path="list" component={MarketListPage} />
-            <Route path=":id" component={MarketDetailPage} />
+            <Route path=":id" component={MarketDetailPage}>
+              <Route path=":view" />
+            </Route>
           </Route>
         </Route>
       </Router>

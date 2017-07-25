@@ -16,11 +16,20 @@ import { RESOLUTION_TIME } from 'utils/constants'
 class MarketList extends Component {
   componentWillMount() {
     this.props.requestMarkets()
+    this.props.connectBlockchain()
   }
 
   @autobind
   handleViewMarket(market) {
     this.props.changeUrl(`/markets/${market.address}`)
+  }
+
+  @autobind
+  handleViewMarketResolve(event, resolveUrl) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    this.props.changeUrl(resolveUrl)
   }
 
   @autobind
@@ -80,6 +89,9 @@ class MarketList extends Component {
     const durationTilEvent = moment.duration(timeUntilEvent)
 
     const isResolved = timeUntilEvent < 0
+    const isOwner = market.creator === this.props.defaultAccount
+
+    const resolveUrl = `/markets/${market.address}/resolve`
 
     // test
     const testVal = Math.random()
@@ -92,9 +104,10 @@ class MarketList extends Component {
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
         <div className="market__header">
           <h2 className="market__title">{ market.eventDescription.title }</h2>
-          <div className="market__control">
-            <Link to={`/markets/${market.address}/resolve`}>Resolve</Link>
-          </div>
+          {isOwner && !isResolved && 
+            <div className="market__control">
+              <a href={`/#${resolveUrl}`} onClick={(e) => this.handleViewMarketResolve(e, resolveUrl)}>Resolve</a>
+            </div>}
         </div>
         {this.renderCategoricalOutcomes(testOutcomes, isResolved)}
         <div className="market__info row">

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
+import { replace } from 'react-router-redux'
 
 import MarketDetail from 'components/MarketDetail'
 
@@ -19,6 +20,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   requestMarket: () => dispatch(requestMarketList(ownProps.params.id)),
   buyShares: (market, outcomeIndex, amount) => dispatch(buyMarketShares(market, outcomeIndex, amount)),
+  changeUrl: (url) => dispatch(replace(url)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)
