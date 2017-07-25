@@ -1,0 +1,21 @@
+@import url('../../less/vars.less');
+
+.formDateTimePicker {
+  &__datetime input {
+    border: none;
+    background: none;
+    border-bottom: 1px solid @bg-color-muted;
+    border-radius: 0;
+    line-height: normal;
+    box-shadow: none;
+    height: auto;
+    font-size: 24px;
+    transition: none;
+
+    &:active, &:focus {
+      outline: 0;
+      box-shadow: none;
+      border-color: @bg-color-muted;
+    }
+  }
+}

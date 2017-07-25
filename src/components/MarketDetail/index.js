@@ -3,6 +3,7 @@ import { mapValues } from 'lodash'
 import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
+import Decimal from 'decimal.js'
 
 import { RESOLUTION_TIME } from 'utils/constants'
 import MarketGraph from 'components/MarketGraph'
@@ -23,17 +24,17 @@ const generateRandomGraph = () => {
   const curDate = startDate.clone()
 
   const graphData = []
-  let i = 0
+  const i = 0
 
   let dir = 0
-  let dirChangeForce = 0.0001
+  const dirChangeForce = 0.0001
 
   while (endDate.diff(curDate) > 0) {
     curDate.add(12, 'hour')
 
-    dir = dir + (dirChangeForce * Math.random())
+    dir += (dirChangeForce * Math.random())
 
-    let outcome1 = Math.min(dir * 50, 1)
+    const outcome1 = Math.min(dir * 50, 1)
 
     graphData.push({ date: curDate.toDate(), outcome1, outcome2: 1 - outcome1 })
   }
@@ -102,7 +103,7 @@ export default class MarketDetail extends Component {
         market,
         selectedCategoricalOutcome,
         selectedBuyInvest,
-        buyShares
+        buyShares,
       } = this.props
 
       return (
@@ -127,8 +128,8 @@ export default class MarketDetail extends Component {
       Creator: market.creator,
       Oracle: market.oracle.owner,
       Token: market.event.collateralToken,
-      Fee: market.fee.toFixed(2),
-      Funding: `${market.funding} ${market.event.collateralToken}`,
+      Fee: Decimal(market.fee || 0).toFixed(2),
+      Funding: `${Decimal(market.funding || 0).toFixed(4)} ${market.event.collateralToken}`,
     }
 
     return (

@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
 import { reduxForm, formValueSelector } from 'redux-form'
+import { push } from 'react-router-redux'
 
 import MarketCreateWizard from 'components/MarketCreateWizard'
 
-import { createMarket } from 'actions/market'
-
 const FORM = {
   form: 'marketCreateWizard',
+  destroyOnUnmount: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -17,10 +17,8 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    createMarket: market => dispatch(createMarket(market))
-  }
-}
+const mapDispatchToProps = dispatch => ({
+  changeUrl: url => dispatch(push(url)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm(FORM)(MarketCreateWizard))

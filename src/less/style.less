@@ -10,7 +10,7 @@ html, body, #root {
 a {
   color: @link-color;
   text-decoration: none;
-
+  
   &:visited {
     color: inherit;
   }
@@ -30,20 +30,17 @@ a {
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  font-weight: 300;
-}
-
-h1 {
-  font-size: 42px;
-  line-height: 65px;
-  letter-spacing: .5px;
-  font-weight: 300;
-}
-
 label {
-  font-weight: normal;
+  display: block;
+  text-transform: uppercase;
+  margin: 20px 0 6px 0;
+  font-size: 12px;
+  color: @font-color-muted;
+  font-weight: 800;
+
+  &:empty {
+    display: none;
+  }
 }
 
 textarea {
@@ -83,10 +80,6 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
   transition: all .15s ease;
   -webkit-transition: all .15s ease;
 
-  &:focus {
-    outline: none;
-  }
-
   &:hover {
     //transform: translateY(-1px);
     background: @btn-gradient-hover;
@@ -104,8 +97,19 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
     transition: all .15s ease;
     -webkit-transition: all .15s ease;
   }
-}
+  
+  &.btn-default--muted {
+    &::before {
+      background: @bg-color-muted;
+    }
+  }
 
+  &.btn-primary--disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
+}
+  
 .btn.btn-default {
   color: @btn-invert-font-color;
 
@@ -124,4 +128,16 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
   &:hover {
     color: lighten(@btn-invert-font-color, 5%);
   }
+}
+  
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 42px;
+  line-height: 65px;
+  letter-spacing: .5px;
+  font-weight: 300;
 }

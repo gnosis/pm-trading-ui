@@ -2,13 +2,15 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form'
 import entities from './entities'
-import walletReducer from './WalletReducer'
+import modal from './modal'
+import transactions from './transactions'
 
 const reducers = combineReducers({
   routing: routerReducer,
   form: formReducer,
-  wallet: walletReducer,
+  modal,
   entities,
+  transactions,
 })
 
 /*

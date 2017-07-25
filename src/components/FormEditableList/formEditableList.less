@@ -2,12 +2,6 @@
 @import url('../FormInput/formInput.less');
 
 .formEditableList {
-  .formEditableList__label {
-    .defaultStyle__inputLabel();
-  }
-}
-
-.formEditableList__entry {
   display: block;
   line-height: 20px;
   margin-bottom: 8px;
@@ -37,6 +31,11 @@
     &__delete {
       line-height: 24px;
       margin-left: 10px;
+      color: @font-color-muted;
+
+      &:hover {
+        color: @font-color-light;
+      }
 
       &--hidden {
         display: none;
