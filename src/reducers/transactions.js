@@ -35,22 +35,26 @@ const reducer = handleActions({
       ...state[action.payload.id],
     },
   }),
-  [addTransactionLogEntry]: (state, action) => ({
-    ...state,
-    [action.payload.id]: {
-      ...state[action.payload.id],
-      events: state[action.payload.id].events.map((event) => {
-        if (event.event === action.payload.event) {
-          return {
-            ...event,
-            ...action.payload,
-          }
-        }
+  [addTransactionLogEntry]: (state, action) => {
+    const { id, ...transactionLog } = action.payload
 
-        return event
-      }),
-    },
-  }),
+    return {
+      ...state,
+      [id]: {
+        ...state[id],
+        events: state[id].events.map((log) => {
+          if (log.event === transactionLog.event) {
+            return {
+              ...log,
+              ...transactionLog,
+            }
+          }
+
+          return log
+        }),
+      },
+    }
+  },
 }, {})
 
 

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import autobind from 'autobind-decorator'
-import { schemeDark2 } from 'd3-scale-chromatic'
-import { scaleOrdinal } from 'd3'
+import { calcLMSRMarginalPrice } from 'api'
 import moment from 'moment'
+import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, submit, Field } from 'redux-form'
 
@@ -11,7 +11,7 @@ import FormSelect from 'components/FormSelect'
 
 import './marketList.less'
 
-import { RESOLUTION_TIME } from 'utils/constants'
+import { RESOLUTION_TIME, OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
 class MarketList extends Component {
   componentWillMount() {
@@ -25,33 +25,21 @@ class MarketList extends Component {
 
   @autobind
   handleCreateMarket() {
-  /*
-    const options = {
-      title: 'Test Market',
-      description: 'Test123',
-      outcomes: ['Yes', 'No'],
-      resolutionDate: new Date().toISOString(),
-      funding: new BigNumber('0.2345'),
-      fee: new BigNumber('12.00'),
-      eventType: 'CATEGORICAL',
-      oracleType: 'CENTRALIZED',
-    }
-
-    this.props.createMarket(options)*/
-    this.props.changeUrl(`/markets/new`)
+    this.props.changeUrl('/markets/new')
   }
 
-  renderCategoricalOutcomes(outcomes, resolved) {
-    let renderOutcomes = outcomes
+  renderCategoricalOutcomes(market) {
+    const renderOutcomes = market.eventDescription.outcomes
+    const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
+      const marginalPrice = calcLMSRMarginalPrice({
+        netOutcomeTokensSold: market.netOutcomeTokensSold,
+        // This is a temporary fix to avoid NaN when there is no funding, which should never occour
+        funding: Decimal(parseInt(market.funding, 10) || 1).times(1e18), // In wei
+        outcomeTokenIndex: outcomeIndex,
+      })
 
-    if (resolved) {
-      // test
-      renderOutcomes = [outcomes[0]]
-    }
-
-    const colorScale = scaleOrdinal(schemeDark2)
-    colorScale.domain(outcomes)
-
+      return marginalPrice.toFixed()
+    })
 
     return (<div className="market__outcomes">
       {renderOutcomes.map((outcome, outcomeIndex) => (
@@ -59,10 +47,12 @@ class MarketList extends Component {
           <div className="outcome__bar">
             <div
               className="outcome__bar--inner"
-              style={{ width: `${outcome.value * 100}%`, backgroundColor: colorScale(outcomeIndex) }}
+              style={{ width: `${tokenDistribution[outcomeIndex] * 100}%`, backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex] }}
             >
-              {/*<div className="outcome__bar--value">{ `${Math.round(outcome.value * 100).toFixed(0)}%` }</div>*/}
-              <div className="outcome__bar--label">{ outcome.label }</div>
+              <div className="outcome__bar--label">
+                { renderOutcomes[outcomeIndex] }
+                <div className="outcome__bar--value">{ `${Math.round(tokenDistribution[outcomeIndex] * 100).toFixed(0)}%` }</div>
+              </div>
             </div>
           </div>
         </div>
@@ -70,8 +60,23 @@ class MarketList extends Component {
     </div>)
   }
 
-  renderScalarOutcomes(outcomes, resolved) {
-    // todo: implement
+  renderScalarOutcomes(market) {
+    const marginalPrice = calcLMSRMarginalPrice({
+      netOutcomeTokensSold: market.netOutcomeTokensSold,
+      // This is a temporary fix to avoid NaN when there is no funding, which should never occour
+      funding: Decimal(parseInt(market.funding, 10) || 1).times(1e18), // In wei
+      outcomeTokenIndex: 1, // always calc for long when calculating estimation
+    })
+
+    const decimals = parseInt(market.eventDescription.decimals, 10)
+
+    const upperBound = Decimal(market.event.upperBound).div(10 ** decimals)
+    const lowerBound = Decimal(market.event.lowerBound).div(10 ** decimals)
+
+    const bounds = upperBound.sub(lowerBound)
+    const value = Decimal(marginalPrice.toString()).times(bounds).add(lowerBound)
+
+    return (<div>{lowerBound.toString()} to {upperBound.toString()}: {value.toString()}</div>)
   }
 
   @autobind
@@ -81,12 +86,10 @@ class MarketList extends Component {
 
     const isResolved = timeUntilEvent < 0
 
-    // test
-    const testVal = Math.random()
-    const testOutcomes = [
-      { value: testVal, label: 'Yes' },
-      { value: 1 - testVal, label: 'No' },
-    ]
+    const outcomes = market.event.type === OUTCOME_TYPES.SCALAR ?
+      this.renderScalarOutcomes(market) :
+      this.renderCategoricalOutcomes(market)
+
 
     return (
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
@@ -96,7 +99,7 @@ class MarketList extends Component {
             <Link to={`/markets/${market.address}/resolve`}>Resolve</Link>
           </div>
         </div>
-        {this.renderCategoricalOutcomes(testOutcomes, isResolved)}
+        {outcomes}
         <div className="market__info row">
           {isResolved ? (
             <div className="info__group col-md-3">
