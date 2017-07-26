@@ -4,6 +4,7 @@ import { hexWithoutPrefix, hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 
 import delay from 'await-delay'
+import moment from 'moment'
 import Decimal from 'decimal.js'
 
 const GNOSIS_OPTIONS = {}
@@ -40,10 +41,11 @@ export const createEventDescription = async (eventDescription) => {
 
   const ipfsHash = await gnosis.publishEventDescription(eventDescription)
 
-  await delay(5000)
+  await delay(1000)
   
   return {
     ipfsHash,
+    local: true,
     ...eventDescription,
   }
 }
@@ -62,10 +64,16 @@ export const createOracle = async (oracle) => {
     throw new Error('invalid oracle type')
   }
 
-  await delay(5000)
+  await delay(1000)
 
   return {
-    oracle: oracleContract.address,
+    address: oracleContract.address,
+    isOutcomeSet: false,
+    owner: await getCurrentAccount(),
+    creator: await getCurrentAccount(),
+    creationBlock: undefined,
+    creationDate: moment().format(),
+    local: true,
     ...oracle,
   }
 }
@@ -98,10 +106,17 @@ export const createEvent = async (event) => {
     throw new Error('invalid outcome/event type')
   }
 
-  await delay(5000)
+  await delay(1000)
 
   return {
-    event: eventContract.address,
+    address: eventContract.address,
+    collateralToken: gnosis.etherToken.address,
+    isWinningOutcomeSet: false,
+    owner: await getCurrentAccount(),
+    creator: await getCurrentAccount(),
+    creationBlock: undefined,
+    creationDate: moment().format(),
+    local: true,
     ...event,
   }
 }
@@ -116,12 +131,22 @@ export const createMarket = async (market) => {
     marketMaker: gnosis.lmsrMarketMaker,
     marketFactory: gnosis.standardMarketFactory,
   })
+  console.log(marketContract)
 
-  await delay(5000)
+  await delay(1000)
 
   return {
     ...market,
-    market: marketContract.address,
+    netOutcomeTokensSold: market.outcomes.map(() => '0'),
+    stage: 1,
+    local: true,
+    owner: await getCurrentAccount(),
+    creator: await getCurrentAccount(),
+    creationBlock: undefined,
+    creationDate: moment().format(),
+    marketMaker: gnosis.lmsrMarketMaker.address,
+    marketFactory: gnosis.standardMarketFactory.address,
+    address: marketContract.address,
   }
 }
 
@@ -129,7 +154,7 @@ export const fundMarket = async (market) => {
   console.log('funding', market)
   const gnosis = await getGnosisConnection()
 
-  const marketContract = gnosis.contracts.Market.at(market.market)
+  const marketContract = gnosis.contracts.Market.at(market.address)
   const marketFunding = Decimal(market.funding).div(1e18)//.mul(1+1e-9)
   console.log(marketFunding.toFixed(5))
 
@@ -145,7 +170,7 @@ export const fundMarket = async (market) => {
 
   await marketContract.fund(marketFunding.toString())
 
-  await delay(5000)
+  await delay(1000)
 
   return market
 }
