@@ -21,6 +21,7 @@ const FORM = {
       resolutionDate: moment(formValues.resolutionDate).format(),
       decimals: formValues.decimals,
       unit: formValues.unit,
+      outcomes: formValues.outcomes,
     }
 
     const oracle = {
@@ -33,7 +34,7 @@ const FORM = {
       oracle: undefined,
       collateralToken: undefined,
       type: formValues.outcomeType,
-      outcomes: formValues.outcomes,
+      decimals: formValues.decimals || 0,
       outcomeCount: (formValues.outcomes || []).length,
       lowerBound: formValues.lowerBound,
       upperBound: formValues.upperBound,

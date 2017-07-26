@@ -82,15 +82,18 @@ export const createEvent = async (event) => {
   if (event.type === OUTCOME_TYPES.CATEGORICAL) {
     eventContract = await gnosis.createCategoricalEvent({
       ...event,
-      collateralToken: gnosis.etherToken,
+      collateralToken: gnosis.etherToken.address,
     })
   } else if (event.type === OUTCOME_TYPES.SCALAR) {
-    eventContract = await gnosis.createScalarEvent({
+    console.log(event)
+    const scalarEvent = {
       ...event,
-      collateralToken: gnosis.etherToken,
-      lowerBound: event.lowerBound * (10 ** event.decimals),
-      upperBound: event.upperBound * (10 ** event.decimals),
-    })
+      collateralToken: gnosis.etherToken.address,
+      lowerBound: Decimal(event.lowerBound).times(10 ** event.decimals).toString(),
+      upperBound: Decimal(event.upperBound).times(10 ** event.decimals).toString(),
+    }
+    console.log(scalarEvent)
+    eventContract = await gnosis.createScalarEvent(scalarEvent)
   } else {
     throw new Error('invalid outcome/event type')
   }
@@ -106,6 +109,7 @@ export const createEvent = async (event) => {
 export const createMarket = async (market) => {
   console.log('market', market)
   const gnosis = await getGnosisConnection()
+  market.funding = Decimal(market.funding).div(1e18).toString()
 
   const marketContract = await gnosis.createMarket({
     ...market,
@@ -126,16 +130,17 @@ export const fundMarket = async (market) => {
   const gnosis = await getGnosisConnection()
 
   const marketContract = gnosis.contracts.Market.at(market.market)
-  const marketFunding = Decimal(market.funding).div(1e18)
+  const marketFunding = Decimal(market.funding).div(1e18)//.mul(1+1e-9)
+  console.log(marketFunding.toFixed(5))
 
   await gnosis.etherToken.deposit({ value: marketFunding.toString() })
   await gnosis.etherToken.approve(marketContract.address, marketFunding.toString())
 
   const balance = await gnosis.etherToken.balanceOf(gnosis.web3.eth.accounts[0])
-  // console.log(`Ethertoken balance: ${balance.div(1e18).toFixed(4)}`)
+  console.log(`Ethertoken balance: ${balance.div(1e18).toFixed(4)}`)
 
   if (balance.lt(marketFunding)) {
-    throw new Error(`Not enough funds: required ${marketFunding.toFixed(5)} of ${balance.div(1e18).toFixed(5)}`)
+  //  throw new Error(`Not enough funds: required ${marketFunding.toFixed(5)} of ${balance.div(1e18).toFixed(5)}`)
   }
 
   await marketContract.fund(marketFunding.toString())
@@ -143,141 +148,6 @@ export const fundMarket = async (market) => {
   await delay(5000)
 
   return market
-}
-
-/**
- * Creates all necessary contracts to create a whole market.
- *
- * @param {string} opts.title
- * @param {string} opts.description
- * @param {string[]} opts.outcomes
- * @param {string} opts.resolutionDate - ISO String Date
- * @param {(string|Contract)} opts.collateralToken
- * @param {(string|Contract)} opts.oracle
- * @param {(string|Contract)} opts.marketFactory
- * @param {(string|Contract)} opts.marketMaker
- * @param {(number|BigNumber)} opts.funding
- * @param {(number|BigNumber)} opts.fee
- */
-export const composeMarket = async (marketValues) => {
-  const gnosis = await getGnosisConnection()
-  const account = await getCurrentAccount()
-
-  const eventDescriptionData = {
-    description: marketValues.description,
-    title: marketValues.title,
-    outcomes: marketValues.outcomes,
-    unit: marketValues.unit,
-    decimals: (marketValues.decimals || 2).toString(),
-    resolutionDate: marketValues.resolutionDate,
-  }
-  let ipfsHash
-  try {
-    ipfsHash = await createEventDescription(eventDescriptionData)
-  } catch (err) {
-    console.error('IPFS failed:', err)
-    console.log(eventDescriptionData)
-  }
-
-
-  const oracleData = {
-    oracleType: marketValues.oracleType,
-    ipfsHash,
-  }
-  let oracle
-  try {
-    oracle = await createOracle(oracleData)
-  } catch (err) {
-    console.error('oracle creation failed', err)
-    console.log(oracleData)
-    return
-  }
-
-
-  const eventData = {
-    collateralToken: gnosis.etherToken, // default token right now
-    upperBound: (marketValues.upperBound || 0).toString(),
-    lowerBound: (marketValues.lowerBound || 0).toString(),
-    decimals: marketValues.decimals || 0,
-    outcomeCount: (marketValues.outcomes ? marketValues.outcomes.length : 0),
-    outcomeType: marketValues.outcomeType,
-    oracle,
-  }
-  let event
-  try {
-    event = await createEvent(eventData)
-  } catch (err) {
-    console.error('event creation failed', err)
-    console.log(eventData)
-    return
-  }
-
-
-  const marketData = {
-    funding: marketValues.funding,
-    fee: marketValues.fee,
-    marketMaker: gnosis.lmsrMarketMaker,
-    marketFactory: gnosis.standardMarketFactory,
-    event,
-  }
-  let market
-  try {
-    market = await createMarket(marketData)
-  } catch (err) {
-    console.error('market creation failed', err)
-    console.log(marketData)
-    return
-  }
-
-
-  const oracleAddress = hexWithoutPrefix(oracle.address)
-  const accountAddress = hexWithoutPrefix(account.address)
-  const eventAddress = hexWithoutPrefix(event.address)
-  const marketAddress = hexWithoutPrefix(market.address)
-  const collateralTokenAddress = hexWithoutPrefix(event.collateralToken.address)
-
-  // fix-me: horrible
-  return {
-    entities: {
-      eventDescriptions: {
-        [ipfsHash]: {
-          ...eventDescriptionData,
-          ipfsHash,
-        },
-      },
-      oracles: {
-        [oracleAddress]: {
-          ...oracleData,
-          address: oracleAddress,
-          isOutcomeSet: false,
-          outcome: null,
-          creator: accountAddress,
-          owner: accountAddress,
-          eventDescription: ipfsHash,
-        },
-      },
-      events: {
-        [eventAddress]: {
-          ...eventData,
-          address: eventAddress,
-          collateralToken: collateralTokenAddress,
-          creator: accountAddress,
-          oracle: oracleAddress,
-        },
-      },
-      markets: {
-        [marketAddress]: {
-          ...marketData,
-          address: marketAddress,
-          marketMaker: hexWithoutPrefix(marketData.marketMaker.address),
-          marketFactory: hexWithoutPrefix(marketData.marketFactory.address),
-          event: eventAddress,
-          creationDate: new Date(),
-          creator: accountAddress,
-        },
-      },
-    },
-  }
 }
 
 export const buyShares = async (market, selectedOutcomeIndex, collateralTokenAmount) => {
