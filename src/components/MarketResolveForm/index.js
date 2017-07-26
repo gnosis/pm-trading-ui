@@ -1,27 +1,38 @@
 import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import autobind from 'autobind-decorator'
+import Decimal from 'decimal.js'
 
 import './marketResolveForm.less'
 
 import { OUTCOME_TYPES } from 'utils/constants'
 
 import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
+import FormInput from 'components/FormInput'
 
 class MarketResolveForm extends Component {
   @autobind
   handleResolve(values) {
-    const { market: { oracle: { address } } } = this.props
-    const { selectedOutcome } = values
-    return this.props.resolveOracle(address, selectedOutcome)
+    const { market: { event: { type }, eventDescription: { decimals }, oracle: { address } } } = this.props
+    const { selectedOutcome, selectedValue } = values
+
+    if (type === OUTCOME_TYPES.CATEGORICAL) {
+      return this.props.resolveOracle(address, selectedOutcome)
+    } else if (type === OUTCOME_TYPES.SCALAR) {
+      const outcome = Decimal(selectedValue).times(10 ** decimals)
+      return this.props.resolveOracle(address, outcome.trunc())
+    }
   }
   renderResolveScalar() {
+    const { handleSubmit } = this.props
+
     return (
-      <div className="marketResolve">
+      <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
         <div className="marketResolveScalar">
-          Scalar
+          <Field name="selectedValue" component={FormInput} label={'Enter outcome'} />
         </div>
-      </div>
+        <button type="submit" className="btn btn-primary">Resolve Oracle</button>
+      </form>
     )
   }
 
@@ -32,11 +43,9 @@ class MarketResolveForm extends Component {
       <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
         <div className="marketResolveCategorical">
           <FormRadioButtonLabel label="Choose outcome" />
-          {outcomes.map((outcome, outcomeIndex) => {
-            return (
+          {outcomes.map((outcome, outcomeIndex) => (
               <Field key={outcomeIndex} className="marketResolveFormRadio" name="selectedOutcome" component={FormRadioButton} text={outcome} radioValue={outcomeIndex} />
-            )
-          })}
+            ))}
         </div>
         <button type="submit" className="btn btn-primary">Resolve Oracle</button>
       </form>
