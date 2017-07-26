@@ -42,7 +42,7 @@ export const createEventDescription = async (eventDescription) => {
   const ipfsHash = await gnosis.publishEventDescription(eventDescription)
 
   await delay(1000)
-  
+
   return {
     ipfsHash,
     local: true,
@@ -86,7 +86,7 @@ export const createEvent = async (event) => {
   // event.collateralToken = gnosis.etherToken
 
   let eventContract
-  
+
   const eventData = {
     ...event,
     collateralToken: gnosis.etherToken.address,
@@ -118,7 +118,7 @@ export const createEvent = async (event) => {
 export const createMarket = async (market) => {
   console.log('market', market)
   const gnosis = await getGnosisConnection()
-  market.funding = Decimal(market.funding).div(1e18).toString()
+  // market.funding = Decimal(market.funding).div(1e18).toString()
 
   const marketContract = await gnosis.createMarket({
     ...market,
@@ -148,19 +148,15 @@ export const fundMarket = async (market) => {
   console.log('funding', market)
   const gnosis = await getGnosisConnection()
 
+  // this would be great:
+  // await gnosis.approveToken(gnosis.etherToken.address, marketFunding.toString())
+  // await gnosis.fundMarket(marketAddress, marketFunding)
+
   const marketContract = gnosis.contracts.Market.at(market.address)
-  const marketFunding = Decimal(market.funding).div(1e18)//.mul(1+1e-9)
-  console.log(marketFunding.toFixed(5))
+  const marketFunding = Decimal(market.funding)
 
   await gnosis.etherToken.deposit({ value: marketFunding.toString() })
   await gnosis.etherToken.approve(marketContract.address, marketFunding.toString())
-
-  const balance = await gnosis.etherToken.balanceOf(gnosis.web3.eth.accounts[0])
-  console.log(`Ethertoken balance: ${balance.div(1e18).toFixed(4)}`)
-
-  if (balance.lt(marketFunding)) {
-  //  throw new Error(`Not enough funds: required ${marketFunding.toFixed(5)} of ${balance.div(1e18).toFixed(5)}`)
-  }
 
   await marketContract.fund(marketFunding.toString())
 
@@ -173,7 +169,6 @@ export const buyShares = async (market, selectedOutcomeIndex, collateralTokenAmo
   const gnosis = await getGnosisConnection()
 
   const collateralTokenWei = new Decimal(collateralTokenAmount).mul(1e18).toString()
-  // console.log(collateralTokenWei)
 
   const marketContract = await gnosis.contracts.Market.at(hexWithPrefix(market.address))
   const outcomeIndex = parseInt(selectedOutcomeIndex, 10)
@@ -185,16 +180,10 @@ export const buyShares = async (market, selectedOutcomeIndex, collateralTokenAmo
     outcomeTokenIndex: outcomeIndex,
   })
 
-  const outcomeTokenAmountFix = outcomeTokenAmount.mul(0.99).floor()
-
-  // console.log(outcomeTokenAmount.div(1e18).toString())
-  // console.log("deposit")
   await gnosis.etherToken.deposit({ value: collateralTokenWei })
-  // console.log("approve")
   await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenWei)
 
-  // console.log("buy shares")
-  return await marketContract.buy(outcomeIndex, outcomeTokenAmountFix.toString(), collateralTokenWei.toString())
+  return await marketContract.buy(outcomeIndex, outcomeTokenAmount.toString(), collateralTokenWei.toString())
 }
 
 export const resolveOracle = async (oracle, selectedOutcomeIndex) => {

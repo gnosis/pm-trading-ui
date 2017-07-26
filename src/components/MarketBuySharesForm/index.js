@@ -52,7 +52,7 @@ class MarketBuySharesForm extends Component {
       return new Decimal(0)
     }
 
-    return shareCost.mul(0.99).floor()
+    return shareCost
   }
 
   getMaximumWin(shareCost) {
@@ -206,29 +206,24 @@ class MarketBuySharesForm extends Component {
     } = this.props
 
     const shareCost = this.getShareCost(selectedBuyInvest, 1)
-
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold,
       funding,
       outcomeTokenIndex: 1,
     })
-    console.log("marginal price", marginalPrice.toString())
 
     const newNetOutcomeTokensSold = netOutcomeTokensSold.slice()
-    console.log(shareCost.div(1e18).toString())
     newNetOutcomeTokensSold[1] = Decimal(
       netOutcomeTokensSold[1].toString()
     ).add(shareCost.toString()).toString()
 
-    console.log(netOutcomeTokensSold, newNetOutcomeTokensSold)
     const newMarginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: newNetOutcomeTokensSold,
       funding,
       outcomeTokenIndex: 1,
     })
-    console.log("new marginal price", newMarginalPrice.toString())
 
-    //debugger
+    // debugger
     return (
       <div className="col-md-6">
         <div className="row">
@@ -238,7 +233,6 @@ class MarketBuySharesForm extends Component {
         </div>
         <div className="row">
           <div className="col-md-12">
-            {/* <Field name="outcome" component={Input} type="number" label={`Enter in ${unit}`} step={(10 ** -(parseInt(decimals, 10))).toFixed(decimals)} /> */}
             <ScalarSlider
               lowerBound={lowerBound}
               upperBound={upperBound}
