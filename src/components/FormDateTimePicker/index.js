@@ -9,11 +9,17 @@ import FormInput from 'components/FormInput'
 import 'react-datetime/css/react-datetime.css'
 import './formDateTimePicker.less'
 
-const FormDateTimePicker = ({ label, input }) => {
+const FormDateTimePicker = ({ label, input, validDateCheck }) => {
+  let isValidDate = validDateCheck
+  if (typeof validDateCheck !== 'function') {
+    const yesterday = moment().subtract(1, 'day')
+    isValidDate = current => current.isAfter(yesterday)
+  }
+
   return (
     <div className="formDateTimePicker">
       <label>{label}</label>
-      <Datetime className="formDateTimePicker__datetime" {...input} />
+      <Datetime className="formDateTimePicker__datetime" isValidDate={isValidDate} {...input} />
     </div>
   )
 }
