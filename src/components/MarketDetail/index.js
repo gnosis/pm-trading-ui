@@ -67,6 +67,7 @@ const expandableViews = {
     label: 'Resolve',
     className: 'btn btn-default',
     component: MarketResolveForm,
+    showCondition: (marketComponent, market) => marketComponent.props.defaultAccount === market.owner && !market.oracle.isOutcomeSet,
   },
 }
 
@@ -84,7 +85,6 @@ export default class MarketDetail extends Component {
     } else {
       this.props.changeUrl(`markets/${this.props.params.id}/${view}`)
     }
-
   }
 
   renderLoading() {
@@ -105,7 +105,7 @@ export default class MarketDetail extends Component {
       // Not sure if this is a good idea; If I need to optimize, here's a good place to start
       return <ViewComponent {...this.props} />
     }
-    
+
     return <div />
   }
 
@@ -156,7 +156,9 @@ export default class MarketDetail extends Component {
     return (
       <div className="marketControls container">
         <div className="row">
-          {Object.keys(expandableViews).map(view => (
+          {Object.keys(expandableViews).filter(view =>
+            !expandableViews[view].showCondition || expandableViews[view].showCondition(this, market),
+          ).map(view => (
             <button
               key={view}
               type="button"
