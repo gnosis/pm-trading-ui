@@ -5,7 +5,7 @@ export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
     return startsWith(value, '0x') ? value.substring(2) : value
   }
-
+  
   return value
 }
 

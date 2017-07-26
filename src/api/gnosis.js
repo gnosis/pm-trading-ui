@@ -1,6 +1,6 @@
 import Gnosis from '@gnosis.pm/gnosisjs'
 
-import { normalizeHex, hexWithPrefix } from 'utils/helpers'
+import { hexWithoutPrefix, hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 
 import delay from 'await-delay'
@@ -27,7 +27,7 @@ const getGnosisConnection = async () => {
   return gnosisInstance
 }
 
-const getCurrentAccount = async () => {
+export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
 
   return gnosis.web3.eth.accounts[0]
@@ -169,21 +169,6 @@ export const fundMarket = async (market) => {
   return market
 }
 
-/**
- * Creates all necessary contracts to create a whole market.
- *
- * @param {string} opts.title
- * @param {string} opts.description
- * @param {string[]} opts.outcomes
- * @param {string} opts.resolutionDate - ISO String Date
- * @param {(string|Contract)} opts.collateralToken
- * @param {(string|Contract)} opts.oracle
- * @param {(string|Contract)} opts.marketFactory
- * @param {(string|Contract)} opts.marketMaker
- * @param {(number|BigNumber)} opts.funding
- * @param {(number|BigNumber)} opts.fee
- */
-
 export const buyShares = async (market, selectedOutcomeIndex, collateralTokenAmount) => {
   const gnosis = await getGnosisConnection()
 
@@ -210,6 +195,18 @@ export const buyShares = async (market, selectedOutcomeIndex, collateralTokenAmo
 
   // console.log("buy shares")
   return await marketContract.buy(outcomeIndex, outcomeTokenAmountFix.toString(), collateralTokenWei.toString())
+}
+
+export const resolveOracle = async (oracle, selectedOutcomeIndex) => {
+  const gnosis = await getGnosisConnection()
+
+  const oracleContract = await gnosis.contracts.CentralizedOracle.at(hexWithPrefix(oracle.address))
+
+  if (oracleContract) {
+    return await oracleContract.setOutcome(parseInt(selectedOutcomeIndex, 10))
+  }
+
+  throw Error('Oracle contract could not be found - unsupported oracle type?')
 }
 
 export const calcLMSRCost = Gnosis.calcLMSRCost

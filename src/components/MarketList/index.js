@@ -16,11 +16,20 @@ import { RESOLUTION_TIME, OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/cons
 class MarketList extends Component {
   componentWillMount() {
     this.props.requestMarkets()
+    this.props.connectBlockchain()
   }
 
   @autobind
   handleViewMarket(market) {
     this.props.changeUrl(`/markets/${market.address}`)
+  }
+
+  @autobind
+  handleViewMarketResolve(event, resolveUrl) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    this.props.changeUrl(resolveUrl)
   }
 
   @autobind
@@ -95,7 +104,10 @@ class MarketList extends Component {
     const timeUntilEvent = moment(market.eventDescription.resolutionDate).diff(moment())
     const durationTilEvent = moment.duration(timeUntilEvent)
 
-    const isResolved = timeUntilEvent < 0
+    const isResolved = timeUntilEvent < 0 || (market.oracle && market.oracle.isOutcomeSet)
+    const isOwner = market.creator === this.props.defaultAccount
+
+    const resolveUrl = `/markets/${market.address}/resolve`
 
     const outcomes = market.event.type === OUTCOME_TYPES.SCALAR ?
       this.renderScalarOutcomes(market) :
@@ -106,9 +118,10 @@ class MarketList extends Component {
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
         <div className="market__header">
           <h2 className="market__title">{ market.eventDescription.title }</h2>
-          <div className="market__control">
-            <Link to={`/markets/${market.address}/resolve`}>Resolve</Link>
-          </div>
+          {isOwner && !isResolved && 
+            <div className="market__control">
+              <a href={`/#${resolveUrl}`} onClick={(e) => this.handleViewMarketResolve(e, resolveUrl)}>Resolve</a>
+            </div>}
         </div>
         {outcomes}
         <div className="market__info row">
