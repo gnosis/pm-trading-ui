@@ -104,7 +104,7 @@ class MarketList extends Component {
     const timeUntilEvent = moment(market.eventDescription.resolutionDate).diff(moment())
     const durationTilEvent = moment.duration(timeUntilEvent)
 
-    const isResolved = timeUntilEvent < 0
+    const isResolved = timeUntilEvent < 0 || (market.oracle && market.oracle.isOutcomeSet)
     const isOwner = market.creator === this.props.defaultAccount
 
     const resolveUrl = `/markets/${market.address}/resolve`
