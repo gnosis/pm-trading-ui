@@ -35,7 +35,6 @@ const FORM = {
       collateralToken: undefined,
       type: formValues.outcomeType,
       decimals: formValues.decimals || 0,
-      outcomeCount: (formValues.outcomes || []).length,
       lowerBound: formValues.lowerBound,
       upperBound: formValues.upperBound,
     }

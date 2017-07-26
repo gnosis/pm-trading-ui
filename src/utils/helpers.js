@@ -1,4 +1,4 @@
-import { trimStart } from 'lodash'
+import { trimStart, mapValues } from 'lodash'
 import { HEX_VALUE_REGEX } from 'utils/constants'
 
 export const normalizeHex = (value) => {
@@ -16,9 +16,20 @@ export const hexWithPrefix = (value) => {
   return value
 }
 
-export const toEntity = (data, entityType, idKey = 'address') => ({
-  [entityType]: {
-    id: data[idKey],
-    ...data,
-  },
-})
+export const toEntity = (data, entityType, idKey = 'address') => {
+  const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
+  
+  return {
+    entities: {
+      [entityType]: {
+        [id]: {
+          [idKey]: id,
+          ...entityPayload,
+        },
+      },
+    },
+    result: [
+      id,
+    ],
+  }
+}

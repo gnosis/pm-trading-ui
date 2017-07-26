@@ -27,14 +27,16 @@ const reducer = handleActions({
       }),
     },
   }),
-  [closeTransactionLog]: (state, action) => ({
-    ...state,
-    [action.payload.id]: {
-      completed: true,
-      completionStatus: action.payload.completionStatus || TRANSACTION_COMPLETE_STATUS.NO_ERROR,
-      ...state[action.payload.id],
-    },
-  }),
+  [closeTransactionLog]: (state, action) => {
+    const { id, ...payload} = action.payload
+    return {
+      ...state,
+      [id]: {
+        ...state[id],
+        ...payload,
+      },
+    }
+  },
   [addTransactionLogEntry]: (state, action) => {
     const { id, ...transactionLog } = action.payload
 
