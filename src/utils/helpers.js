@@ -1,9 +1,9 @@
-import { trimStart, mapValues } from 'lodash'
+import { mapValues, startsWith } from 'lodash'
 import { HEX_VALUE_REGEX } from 'utils/constants'
 
 export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
-    return trimStart(value, '0x')
+    return startsWith(value, '0x') ? value.substring(2) : value
   }
   
   return value
@@ -11,7 +11,7 @@ export const hexWithoutPrefix = (value) => {
 
 export const hexWithPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
-    return `0x${trimStart(value, '0x')}`
+    return startsWith(value, '0x') ? value : `0x${value}`
   }
   return value
 }
