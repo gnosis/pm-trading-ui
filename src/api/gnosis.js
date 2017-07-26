@@ -86,22 +86,16 @@ export const createEvent = async (event) => {
   // event.collateralToken = gnosis.etherToken
 
   let eventContract
+  
+  const eventData = {
+    ...event,
+    collateralToken: gnosis.etherToken.address,
+  }
 
   if (event.type === OUTCOME_TYPES.CATEGORICAL) {
-    eventContract = await gnosis.createCategoricalEvent({
-      ...event,
-      collateralToken: gnosis.etherToken.address,
-    })
+    eventContract = await gnosis.createCategoricalEvent(eventData)
   } else if (event.type === OUTCOME_TYPES.SCALAR) {
-    console.log(event)
-    const scalarEvent = {
-      ...event,
-      collateralToken: gnosis.etherToken.address,
-      lowerBound: Decimal(event.lowerBound).times(10 ** event.decimals).toString(),
-      upperBound: Decimal(event.upperBound).times(10 ** event.decimals).toString(),
-    }
-    console.log(scalarEvent)
-    eventContract = await gnosis.createScalarEvent(scalarEvent)
+    eventContract = await gnosis.createScalarEvent(eventData)
   } else {
     throw new Error('invalid outcome/event type')
   }
@@ -110,7 +104,6 @@ export const createEvent = async (event) => {
 
   return {
     address: eventContract.address,
-    collateralToken: gnosis.etherToken.address,
     isWinningOutcomeSet: false,
     owner: await getCurrentAccount(),
     creator: await getCurrentAccount(),
@@ -118,6 +111,7 @@ export const createEvent = async (event) => {
     creationDate: moment().format(),
     local: true,
     ...event,
+    collateralToken: gnosis.etherToken.address,
   }
 }
 

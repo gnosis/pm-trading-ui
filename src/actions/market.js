@@ -1,4 +1,5 @@
 import moment from 'moment'
+import Decimal from 'decimal.js'
 
 import {
   requestMarkets,
@@ -91,6 +92,9 @@ export const createMarket = options => async (dispatch) => {
 
   if (event.type === OUTCOME_TYPES.CATEGORICAL) {
     event.outcomeCount = (eventDescription.outcomes || []).length
+  } else if (event.type === OUTCOME_TYPES.SCALAR) {
+    event.lowerBound = Decimal(event.lowerBound).times(10 ** event.decimals).toString()
+    event.upperBound = Decimal(event.upperBound).times(10 ** event.decimals).toString()
   }
 
   // Create Event
