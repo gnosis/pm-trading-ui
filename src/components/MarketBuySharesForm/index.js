@@ -21,10 +21,13 @@ class MarketBuySharesForm extends Component {
     const {
       market,
       buyShares,
+      selectedCategoricalOutcome,
       selectedBuyInvest,
     } = this.props
 
-    buyShares(market, 1, selectedBuyInvest)
+    console.log(selectedBuyInvest, selectedCategoricalOutcome)
+
+    buyShares(market, selectedCategoricalOutcome, selectedBuyInvest)
   }
 
   getShareCost(investment, outcomeIndex) {
@@ -89,6 +92,7 @@ class MarketBuySharesForm extends Component {
     }
 
     const shareCost = this.getShareCost(selectedBuyInvest, outcomeIndex)
+    console.log(shareCost.toString())
 
     const maximumWin = this.getMaximumWin(shareCost, selectedBuyInvest)
     const percentageWin = this.getPercentageWin(shareCost, selectedBuyInvest)
@@ -211,18 +215,7 @@ class MarketBuySharesForm extends Component {
       funding,
       outcomeTokenIndex: 1,
     })
-
-    const newNetOutcomeTokensSold = netOutcomeTokensSold.slice()
-    newNetOutcomeTokensSold[1] = Decimal(
-      netOutcomeTokensSold[1].toString()
-    ).add(shareCost.toString()).toString()
-
-    const newMarginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: newNetOutcomeTokensSold,
-      funding,
-      outcomeTokenIndex: 1,
-    })
-
+    
     // debugger
     return (
       <div className="col-md-6">

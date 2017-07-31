@@ -10,7 +10,7 @@ import Decimal from 'decimal.js'
 const GNOSIS_OPTIONS = {}
 
 let gnosisInstance
-const getGnosisConnection = async () => {
+export const getGnosisConnection = async () => {
   if (gnosisInstance) {
     return Promise.resolve(gnosisInstance)
   }
@@ -154,11 +154,12 @@ export const fundMarket = async (market) => {
 
   const marketContract = gnosis.contracts.Market.at(market.address)
   const marketFunding = Decimal(market.funding)
+  const marketFundingWei = marketFunding.times(1e18)
 
-  await gnosis.etherToken.deposit({ value: marketFunding.toString() })
-  await gnosis.etherToken.approve(marketContract.address, marketFunding.toString())
+  await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
+  await gnosis.etherToken.approve(marketContract.address, marketFundingWei.toString())
 
-  await marketContract.fund(marketFunding.toString())
+  await marketContract.fund(marketFundingWei.toString())
 
   await delay(1000)
 
@@ -168,22 +169,25 @@ export const fundMarket = async (market) => {
 export const buyShares = async (market, selectedOutcomeIndex, collateralTokenAmount) => {
   const gnosis = await getGnosisConnection()
 
-  const collateralTokenWei = new Decimal(collateralTokenAmount).mul(1e18).toString()
-
+  const collateralTokenWei = Decimal(collateralTokenAmount).mul(1e18)
+  
   const marketContract = await gnosis.contracts.Market.at(hexWithPrefix(market.address))
   const outcomeIndex = parseInt(selectedOutcomeIndex, 10)
 
-  const outcomeTokenAmount = Gnosis.calcLMSROutcomeTokenCount({
+  const fundingInWei = Decimal(market.funding)
+
+  const calcOpts = {
     netOutcomeTokensSold: market.netOutcomeTokensSold,
-    cost: collateralTokenWei,
-    funding: market.funding,
+    cost: collateralTokenWei.toString(),
+    funding: fundingInWei.toString(),
     outcomeTokenIndex: outcomeIndex,
-  })
+  }
 
-  await gnosis.etherToken.deposit({ value: collateralTokenWei })
-  await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenWei)
-
-  return await marketContract.buy(outcomeIndex, outcomeTokenAmount.toString(), collateralTokenWei.toString())
+  await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
+  await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenWei.toString())
+  
+  const res = await marketContract.buy(outcomeIndex, 1e18, collateralTokenWei.toString())
+  return res
 }
 
 export const resolveOracle = async (oracle, selectedOutcomeIndex) => {
