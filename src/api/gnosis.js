@@ -132,6 +132,7 @@ export const createMarket = async (market) => {
   return {
     ...market,
     netOutcomeTokensSold: market.outcomes.map(() => '0'),
+    funding: Decimal(market.funding).mul(1e18).toString(),
     stage: 1,
     local: true,
     owner: await getCurrentAccount(),
@@ -155,6 +156,7 @@ export const fundMarket = async (market) => {
   const marketContract = gnosis.contracts.Market.at(market.address)
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
+  console.log("funding with " + marketFundingWei.toString())
 
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
   await gnosis.etherToken.approve(marketContract.address, marketFundingWei.toString())

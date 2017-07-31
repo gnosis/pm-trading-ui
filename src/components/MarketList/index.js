@@ -9,7 +9,7 @@ import { reduxForm, submit, Field } from 'redux-form'
 
 import FormSelect from 'components/FormSelect'
 
-import ContractName from 'containers/ContractName'
+// import ContractName from 'containers/ContractName'
 
 import './marketList.less'
 
@@ -42,7 +42,6 @@ class MarketList extends Component {
   renderCategoricalOutcomes(market) {
     const renderOutcomes = market.eventDescription.outcomes
     const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
-      console.log(market.netOutcomeTokensSold)
       const marginalPrice = calcLMSRMarginalPrice({
         netOutcomeTokensSold: market.netOutcomeTokensSold,
         funding: market.funding,
@@ -75,7 +74,7 @@ class MarketList extends Component {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.netOutcomeTokensSold,
       // This is a temporary fix to avoid NaN when there is no funding, which should never occour
-      funding: Decimal(parseInt(market.funding, 10) || 1).times(1e18), // In wei
+      funding: Decimal(parseInt(market.funding, 10) || 1e18),
       outcomeTokenIndex: 1, // always calc for long when calculating estimation
     })
 
@@ -164,7 +163,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                <ContractName contractAddress={market.event.collateralToken} />
+                {market.event.collateralToken} {/*<ContractName contractAddress={market.event.collateralToken} />*/}
               </div>
             </div>
           </div>
