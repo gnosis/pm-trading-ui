@@ -232,7 +232,7 @@ class MarketBuySharesForm extends Component {
               unit={unit}
               decimals={decimals}
               marginalPriceCurrent={marginalPrice}
-              marginalPriceSelected={newMarginalPrice}
+              marginalPriceSelected={marginalPrice}
               selectedCost={shareCost}
             />
           </div>
