@@ -15,6 +15,6 @@ const Input = ({ input, meta: { error }, label, type, className, placeholder }) 
     />
     {error && <span>{error}</span>}
   </div>
-  )
+)
 
 export default Input

@@ -1,5 +1,3 @@
-import { get } from 'lodash'
-
 import { getCurrentAccount } from 'api'
 
 import { hexWithoutPrefix } from 'utils/helpers'

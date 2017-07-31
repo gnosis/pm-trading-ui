@@ -1,5 +1,6 @@
 import React from 'react'
 import Datetime from 'react-datetime'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import 'react-datetime/css/react-datetime.css'
@@ -18,6 +19,12 @@ const FormDateTimePicker = ({ label, input, validDateCheck }) => {
       <Datetime className="formDateTimePicker__datetime" isValidDate={isValidDate} {...input} />
     </div>
   )
+}
+
+FormDateTimePicker.propTypes = {
+  label: PropTypes.string,
+  input: PropTypes.object,
+  validDateCheck: PropTypes.func,
 }
 
 export default FormDateTimePicker

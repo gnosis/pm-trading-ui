@@ -1,6 +1,7 @@
 /* global __VERSION__ */
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { getDefaultAccount } from 'selectors/blockchain'
@@ -33,6 +34,10 @@ class App extends Component {
       </div>
     )
   }
+}
+
+App.propTypes = {
+  children: PropTypes.node,
 }
 
 const mapStateToProps = state => ({
