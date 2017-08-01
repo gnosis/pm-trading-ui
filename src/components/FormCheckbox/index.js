@@ -19,7 +19,7 @@ const Checkbox = ({ input, label, text, className }) => (
 Checkbox.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
-  text: PropTypes.string,
+  text: PropTypes.node,
   className: PropTypes.string,
 }
 

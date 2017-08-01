@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import './formRadioButton.less'
 
@@ -21,6 +22,14 @@ const FormRadioButton = ({ input, radioValue, text, className, highlightColor })
   </div>
 )
 
+FormRadioButton.propTypes = {
+  input: PropTypes.object,
+  radioValue: PropTypes.string,
+  text: PropTypes.string,
+  className: PropTypes.string,
+  highlightColor: PropTypes.string,
+}
+
 export default FormRadioButton
 
 export const FormRadioButtonLabel = ({ label, className }) => (
@@ -28,3 +37,7 @@ export const FormRadioButtonLabel = ({ label, className }) => (
     {label}
   </label>
 )
+
+FormRadioButtonLabel.propTypes = {
+  label: PropTypes.string,
+}

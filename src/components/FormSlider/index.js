@@ -1,14 +1,15 @@
 import React from 'react'
-import { isNumber } from 'lodash'
+import PropTypes from 'prop-types'
 
 import './formSlider.less'
 
-const Slider = ({ input, input: { value }, label, type, min, max, decimals, unit }) => {
-  let displayValue = parseFloat(value)
+const Slider = ({ input, label, min, max, decimals, unit }) => {
+  let displayValue = parseFloat(input.value)
 
   if (Number.isNaN(displayValue)) {
     displayValue = 0
   }
+
   return (
     <div className="formSlider">
       <label htmlFor={input.name} className="formSlider__label">{ label }</label>
@@ -18,6 +19,15 @@ const Slider = ({ input, input: { value }, label, type, min, max, decimals, unit
       <label className="formSlider__value">{(displayValue).toFixed(decimals || 2)} {unit}</label>
     </div>
   )
+}
+
+Slider.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string,
+  min: PropTypes.number,
+  max: PropTypes.number,
+  decimals: PropTypes.number,
+  unit: PropTypes.string,
 }
 
 export default Slider

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { isArray } from 'lodash'
 import autobind from 'autobind-decorator'
 
@@ -8,7 +9,7 @@ import './formEditableList.less'
 
 class FormEditableList extends Component {
   getValues() {
-    const { input } = this.props
+    const { input } = this.props
     if (isArray(input.value) && input.value.length > 0) {
       const values = input.value.slice(0)
 
@@ -58,12 +59,10 @@ class FormEditableList extends Component {
 
   @autobind
   renderEntry(value, index) {
-    const { input: { onFocus, onBlur } } = this.props
-
     const entryCount = this.getValues().length
 
     const lastEntry = entryCount <= 1
-    const isLast = index == entryCount - 1
+    const isLast = index === entryCount - 1
 
     return (
       <div key={index} className={`formEditableList__entry ${lastEntry ? 'formEditableList__entry--new' : ''}`}>
@@ -94,6 +93,11 @@ class FormEditableList extends Component {
       </div>
     )
   }
+}
+
+FormEditableList.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string,
 }
 
 export default FormEditableList

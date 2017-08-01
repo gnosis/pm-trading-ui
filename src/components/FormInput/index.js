@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import './formInput.less'
 
@@ -16,5 +17,13 @@ const Input = ({ input, meta: { error }, label, type, className, placeholder }) 
     {error && <span>{error}</span>}
   </div>
 )
+
+Input.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  className: PropTypes.string,
+  placeholder: PropTypes.string,
+}
 
 export default Input

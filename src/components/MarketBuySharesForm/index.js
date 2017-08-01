@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Field, reduxForm } from 'redux-form'
 import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
@@ -12,7 +13,7 @@ import DecimalValue, { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
 
-import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
+import FormRadioButton from 'components/FormRadioButton'
 import Input from 'components/FormInput'
 import Checkbox from 'components/FormCheckbox'
 
@@ -240,6 +241,14 @@ class MarketBuySharesForm extends Component {
       </div>
     )
   }
+}
+
+MarketBuySharesForm.propTypes = {
+  market: PropTypes.object,
+  buyShares: PropTypes.func,
+  selectedCategoricalOutcome: PropTypes.number,
+  selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  handleSubmit: PropTypes.func,
 }
 
 const form = {

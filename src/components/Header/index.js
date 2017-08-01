@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-import './header.less'
 import logo from 'assets/img/gnosis_logo.svg'
+import './header.less'
 
-export default ({ wallet, walletLoaded, version }) => (
+export default ({ version }) => (
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">

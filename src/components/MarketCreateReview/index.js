@@ -30,7 +30,7 @@ class MarketCreateReview extends Component {
   }
 
   @autobind
-  handleCreateMarket(e) {
+  handleCreateMarket() {
     this.props.submitForm()
   }
 
@@ -69,7 +69,15 @@ class MarketCreateReview extends Component {
   }
 
   rendermarketReviewDetails() {
-    const { formValues: { resolutionDate, collateralToken, fee, funding, ultimateOracle } } = this.props
+    const {
+      formValues: {
+        resolutionDate,
+        collateralToken,
+        fee,
+        funding,
+        ultimateOracle,
+      }
+    } = this.props
 
     return (
       <div className="marketReviewDetails">
