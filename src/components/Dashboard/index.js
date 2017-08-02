@@ -7,6 +7,7 @@ const EXPAND_DEPOSIT = 'DEPOSIT'
 const EXPAND_WITHDRAW = 'WITHDRAW'
 
 const controlButtons = {
+	/*
   [EXPAND_DEPOSIT]: {
     label: 'Make Deposit',
     className: 'btn btn-primary',
@@ -16,12 +17,13 @@ const controlButtons = {
     label: 'Withdraw Money',
     className: 'btn btn-default',
     component: <span>Withdraw Money</span>,
-  },
+	},
+	*/
 }
 
 export default class Dashboard extends Component {
 
-	constructor(props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -53,7 +55,7 @@ export default class Dashboard extends Component {
     }
 
     this.props.createMarket(options)*/
-    this.props.changeUrl(`/markets/new`)
+    this.props.changeUrl('/markets/new')
   }
 
   @autobind
@@ -70,14 +72,14 @@ export default class Dashboard extends Component {
         market,
         selectedCategoricalOutcome,
         selectedBuyInvest,
-        buyShares
+        buyShares,
       } = this.props
 
       return (
-      	<div className="expandable__inner">
+        <div className="expandable__inner">
           <div className="container">
-        		<span>Something comes here</span>
-        	</div>
+            <span>Something comes here</span>
+          </div>
         </div>
       )
     }
@@ -112,242 +114,234 @@ export default class Dashboard extends Component {
   renderWidget(marketType) {
     const { markets } = this.props
 
-    if (marketType == 'newMarkets') {
-
+    if (marketType === 'newMarkets') {
     	return (
-     	<div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__title">New Markets</div>
-          <div className="dashboardWidget__container">
+      <div className="dashboardWidget col-md-6">
+        <div className="dashboardWidget__title">New Markets</div>
+        <div className="dashboardWidget__container">
 
-          	<div className="dashboardMarket dashboardMarket--new">
-            	<div className="dashboardMarket__title">Something</div>
-            	<div className="outcome">
-			          <div className="outcome__bar">
-			            <div
-			              className="outcome__bar--inner"
-			              style={{ width: `${.54 * 100}%`, 'backgroundColor': '#f2cc0a' }}
-			            >
-			            	<div className="outcome__bar--value">54%</div>
-			              <div className="outcome__bar--label">May 2017</div>
-			            </div>
-			          </div>
-			        </div>
-          	</div>
-
-          	<div className="dashboardMarket dashboardMarket--new">
-            	<div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
-            	<div className="outcome">
-			          <div className="outcome__bar">
-			            <div
-			              className="outcome__bar--inner"
-			              style={{ width: `${0.91 * 100}%`, 'backgroundColor': '#e01563' }}
-			            >
-			            	<div className="outcome__bar--value">91%</div>
-			              <div className="outcome__bar--label">No</div>
-			            </div>
-			          </div>
-			        </div>
-          	</div>
-
+          <div className="dashboardMarket dashboardMarket--new">
+            <div className="dashboardMarket__title">Something</div>
+            <div className="outcome">
+              <div className="outcome__bar">
+                <div
+                  className="outcome__bar--inner"
+                  style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
+                >
+                  <div className="outcome__bar--value">54%</div>
+                  <div className="outcome__bar--label">May 2017</div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-    	)
 
+          <div className="dashboardMarket dashboardMarket--new">
+            <div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
+            <div className="outcome">
+              <div className="outcome__bar">
+                <div
+                  className="outcome__bar--inner"
+                  style={{ width: `${0.91 * 100}%`, backgroundColor: '#e01563' }}
+                >
+                  <div className="outcome__bar--value">91%</div>
+                  <div className="outcome__bar--label">No</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    	)
     }
 
     if (marketType == 'hotMarkets') {
-
     	return (
-     	<div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__title">Hot Markets</div>
-          <div className="dashboardWidget__container">
+      <div className="dashboardWidget col-md-6">
+        <div className="dashboardWidget__title">Hot Markets</div>
+        <div className="dashboardWidget__container">
 
-          	<div className="dashboardMarket dashboardMarket--hot dashboardMarket--twoColumns">
-          		<div className="dashboardMarket__leftCol">
-          			<div className="value">1315</div>
-          			<div className="caption">Trading</div>
-          		</div>
-          		<div className="dashboardMarket__rightCol">
-          			<div className="dashboardMarket__title">Something</div>
-	            	<div className="outcome">
-				          <div className="outcome__bar">
-				            <div
-				              className="outcome__bar--inner"
-				              style={{ width: `${.50 * 100}%`, 'backgroundColor': '#9c8ae3' }}
-				            >
-				            	<div className="outcome__bar--value">50%</div>
-				              <div className="outcome__bar--label">Blue Jeans</div>
-				            </div>
-				          </div>
-				        </div>
-          		</div>
-          	</div>
-
-          	<div className="dashboardMarket dashboardMarket--hot dashboardMarket--twoColumns">
-          		<div className="dashboardMarket__leftCol">
-          			<div className="value">299</div>
-          			<div className="caption">Trading</div>
-          		</div>
-          		<div className="dashboardMarket__rightCol">
-            	<div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
-	            	<div className="outcome">
-				          <div className="outcome__bar">
-				            <div
-				              className="outcome__bar--inner"
-				              style={{ width: `${.73 * 100}%`, 'backgroundColor': '#f2cc0a' }}
-				            >
-				            	<div className="outcome__bar--value">73%</div>
-				              <div className="outcome__bar--label">Blue Jeans</div>
-				            </div>
-				          </div>
-				        </div>
-          		</div>
-          	</div>
-
-          	<div className="dashboardMarket dashboardMarket--hot dashboardMarket--twoColumns">
-          		<div className="dashboardMarket__leftCol">
-          			<div className="value">98</div>
-          			<div className="caption">Trading</div>
-          		</div>
-          		<div className="dashboardMarket__rightCol">
-          			<div className="dashboardMarket__title">Something else wow looking good</div>
-	            	<div className="outcome">
-				          <div className="outcome__bar">
-				            <div
-				              className="outcome__bar--inner"
-				              style={{ width: `${1 * 100}%`, 'backgroundColor': '#0be1b1' }}
-				            >
-				            	<div className="outcome__bar--value">100%</div>
-				              <div className="outcome__bar--label">Blue Jeans</div>
-				            </div>
-				          </div>
-				        </div>
-          		</div>
-          	</div>
-
+          <div className="dashboardMarket dashboardMarket--hot dashboardMarket--twoColumns">
+            <div className="dashboardMarket__leftCol">
+              <div className="value">1315</div>
+              <div className="caption">Trading</div>
+            </div>
+            <div className="dashboardMarket__rightCol">
+              <div className="dashboardMarket__title">Something</div>
+              <div className="outcome">
+                <div className="outcome__bar">
+                  <div
+                    className="outcome__bar--inner"
+                    style={{ width: `${0.50 * 100}%`, backgroundColor: '#9c8ae3' }}
+                  >
+                    <div className="outcome__bar--value">50%</div>
+                    <div className="outcome__bar--label">Blue Jeans</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-    	)
 
+          <div className="dashboardMarket dashboardMarket--hot dashboardMarket--twoColumns">
+            <div className="dashboardMarket__leftCol">
+              <div className="value">299</div>
+              <div className="caption">Trading</div>
+            </div>
+            <div className="dashboardMarket__rightCol">
+              <div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
+              <div className="outcome">
+                <div className="outcome__bar">
+                  <div
+                    className="outcome__bar--inner"
+                    style={{ width: `${0.73 * 100}%`, backgroundColor: '#f2cc0a' }}
+                  >
+                    <div className="outcome__bar--value">73%</div>
+                    <div className="outcome__bar--label">Blue Jeans</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="dashboardMarket dashboardMarket--hot dashboardMarket--twoColumns">
+            <div className="dashboardMarket__leftCol">
+              <div className="value">98</div>
+              <div className="caption">Trading</div>
+            </div>
+            <div className="dashboardMarket__rightCol">
+              <div className="dashboardMarket__title">Something else wow looking good</div>
+              <div className="outcome">
+                <div className="outcome__bar">
+                  <div
+                    className="outcome__bar--inner"
+                    style={{ width: `${1 * 100}%`, backgroundColor: '#0be1b1' }}
+                  >
+                    <div className="outcome__bar--value">100%</div>
+                    <div className="outcome__bar--label">Blue Jeans</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    	)
     }
 
     if (marketType == 'closingMarkets') {
-
     	return (
-     	<div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__title">Soon-Closing Markets</div>
-          <div className="dashboardWidget__container">
+      <div className="dashboardWidget col-md-6">
+        <div className="dashboardWidget__title">Soon-Closing Markets</div>
+        <div className="dashboardWidget__container">
 
-          	<div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
-          		<div className="dashboardMarket__leftCol">
-          			<div className="value">1315</div>
-          			<div className="caption">Trading</div>
-          		</div>
-          		<div className="dashboardMarket__rightCol">
-          			<div className="dashboardMarket__title">Something</div>
-	            	<div className="outcome">
-				          <div className="outcome__bar">
-				            <div
-				              className="outcome__bar--inner"
-				              style={{ width: `${.50 * 100}%`, 'backgroundColor': '#9c8ae3' }}
-				            >
-				            	<div className="outcome__bar--value">50%</div>
-				              <div className="outcome__bar--label">Blue Jeans</div>
-				            </div>
-				          </div>
-				        </div>
-          		</div>
-          	</div>
-
-          	<div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
-          		<div className="dashboardMarket__leftCol">
-          			<div className="value">299</div>
-          			<div className="caption">Trading</div>
-          		</div>
-          		<div className="dashboardMarket__rightCol">
-            	<div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
-	            	<div className="outcome">
-				          <div className="outcome__bar">
-				            <div
-				              className="outcome__bar--inner"
-				              style={{ width: `${.73 * 100}%`, 'backgroundColor': '#f2cc0a' }}
-				            >
-				            	<div className="outcome__bar--value">73%</div>
-				              <div className="outcome__bar--label">Blue Jeans</div>
-				            </div>
-				          </div>
-				        </div>
-          		</div>
-          	</div>
-
-          	<div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
-          		<div className="dashboardMarket__leftCol">
-          			<div className="value">98</div>
-          			<div className="caption">Trading</div>
-          		</div>
-          		<div className="dashboardMarket__rightCol">
-          			<div className="dashboardMarket__title">Something else wow looking good</div>
-	            	<div className="outcome">
-				          <div className="outcome__bar">
-				            <div
-				              className="outcome__bar--inner"
-				              style={{ width: `${1 * 100}%`, 'backgroundColor': '#0be1b1' }}
-				            >
-				            	<div className="outcome__bar--value">100%</div>
-				              <div className="outcome__bar--label">Blue Jeans</div>
-				            </div>
-				          </div>
-				        </div>
-          		</div>
-          	</div>
-
+          <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
+            <div className="dashboardMarket__leftCol">
+              <div className="value">1315</div>
+              <div className="caption">Trading</div>
+            </div>
+            <div className="dashboardMarket__rightCol">
+              <div className="dashboardMarket__title">Something</div>
+              <div className="outcome">
+                <div className="outcome__bar">
+                  <div
+                    className="outcome__bar--inner"
+                    style={{ width: `${0.50 * 100}%`, backgroundColor: '#9c8ae3' }}
+                  >
+                    <div className="outcome__bar--value">50%</div>
+                    <div className="outcome__bar--label">Blue Jeans</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-    	)
 
+          <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
+            <div className="dashboardMarket__leftCol">
+              <div className="value">299</div>
+              <div className="caption">Trading</div>
+            </div>
+            <div className="dashboardMarket__rightCol">
+              <div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
+              <div className="outcome">
+                <div className="outcome__bar">
+                  <div
+                    className="outcome__bar--inner"
+                    style={{ width: `${0.73 * 100}%`, backgroundColor: '#f2cc0a' }}
+                  >
+                    <div className="outcome__bar--value">73%</div>
+                    <div className="outcome__bar--label">Blue Jeans</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
+            <div className="dashboardMarket__leftCol">
+              <div className="value">98</div>
+              <div className="caption">Trading</div>
+            </div>
+            <div className="dashboardMarket__rightCol">
+              <div className="dashboardMarket__title">Something else wow looking good</div>
+              <div className="outcome">
+                <div className="outcome__bar">
+                  <div
+                    className="outcome__bar--inner"
+                    style={{ width: `${1 * 100}%`, backgroundColor: '#0be1b1' }}
+                  >
+                    <div className="outcome__bar--value">100%</div>
+                    <div className="outcome__bar--label">Blue Jeans</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    	)
     }
 
     if (marketType == 'myHoldings') {
-
     	return (
-     	<div className="dashboardWidget dashboardWidget--onDark col-md-6">
-          <div className="dashboardWidget__title">My Holdings</div>
-          <div className="dashboardWidget__container">
+      <div className="dashboardWidget dashboardWidget--onDark col-md-6">
+        <div className="dashboardWidget__title">My Holdings</div>
+        <div className="dashboardWidget__container">
 
-          	<div className="dashboardMarket dashboardMarket--onDark">
-            	<div className="dashboardMarket__title">Something</div>
-            	<div className="outcome">
-			          <div className="outcome__bar">
-			            <div
-			              className="outcome__bar--inner"
-			              style={{ width: `${.54 * 100}%`, 'backgroundColor': '#f2cc0a' }}
-			            >
-			            	<div className="outcome__bar--value">54%</div>
-			              <div className="outcome__bar--label">May 2017</div>
-			            </div>
-			          </div>
-			        </div>
-          	</div>
-
-          	<div className="dashboardMarket dashboardMarket--onDark">
-            	<div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
-            	<div className="outcome">
-			          <div className="outcome__bar">
-			            <div
-			              className="outcome__bar--inner"
-			              style={{ width: `${0.91 * 100}%`, 'backgroundColor': '#e01563' }}
-			            >
-			            	<div className="outcome__bar--value">91%</div>
-			              <div className="outcome__bar--label">No</div>
-			            </div>
-			          </div>
-			        </div>
-          	</div>
-
+          <div className="dashboardMarket dashboardMarket--onDark">
+            <div className="dashboardMarket__title">Something</div>
+            <div className="outcome">
+              <div className="outcome__bar">
+                <div
+                  className="outcome__bar--inner"
+                  style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
+                >
+                  <div className="outcome__bar--value">54%</div>
+                  <div className="outcome__bar--label">May 2017</div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      )
 
+          <div className="dashboardMarket dashboardMarket--onDark">
+            <div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
+            <div className="outcome">
+              <div className="outcome__bar">
+                <div
+                  className="outcome__bar--inner"
+                  style={{ width: `${0.91 * 100}%`, backgroundColor: '#e01563' }}
+                >
+                  <div className="outcome__bar--value">91%</div>
+                  <div className="outcome__bar--label">No</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    )
     }
   }
 
@@ -357,12 +351,12 @@ export default class Dashboard extends Component {
       <div className="dashboardPage">
         <div className="dashboardPage__header">
           <div className="container">
-          	<div className="row">
-          		<div className="col-md-12">
-          			<h1>Welcome!</h1>
-          			<p className="marketDescription__text">Here is what happened since your last visit.</p>
-          		</div>
-          	</div>
+            <div className="row">
+              <div className="col-md-12">
+                <h1>Welcome!</h1>
+                <p className="marketDescription__text">Here is what happened since your last visit.</p>
+              </div>
+            </div>
           </div>
         </div>
         <div className="dashboardPage__stats">
@@ -383,8 +377,7 @@ export default class Dashboard extends Component {
                 <span className="dashboardStats__value">Value</span>
                 <div className="dashboardStats__label">Participating in Markets</div>
               </div>
-              <div className="col-md-3">
-              </div>
+              <div className="col-md-3" />
             </div>
           </div>
         </div>
@@ -395,20 +388,20 @@ export default class Dashboard extends Component {
         <div className="dashboardWidgets dashboardWidgets--markets">
           <div className="container">
             <div className="row">
-            	{ this.renderWidget("newMarkets") }
-            	{ this.renderWidget("hotMarkets") }
+              { this.renderWidget('newMarkets') }
+              { this.renderWidget('hotMarkets') }
             </div>
             <div className="row">
-            	{ this.renderWidget("closingMarkets") }
-            	{ this.renderWidget("myMarkets") }
+              { this.renderWidget('closingMarkets') }
+              { this.renderWidget('myMarkets') }
             </div>
           </div>
         </div>
         <div className="dashboardWidgets dashboardWidgets--financial">
           <div className="container">
             <div className="row">
-            	{ this.renderWidget("myHoldings") }
-            	{ this.renderWidget("myTrades") }
+              { this.renderWidget('myHoldings') }
+              { this.renderWidget('myTrades') }
             </div>
           </div>
         </div>

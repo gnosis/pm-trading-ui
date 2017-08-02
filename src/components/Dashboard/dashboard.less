@@ -58,7 +58,7 @@
   margin-right: 20px;
 
   &--active {
-    &:after {
+    &::after {
       content: '';
       position: absolute;
       bottom: -@expandable-margin;
@@ -130,7 +130,7 @@
     color: inherit !important;
     cursor: pointer;
     padding-left: 13px;
-    .transition(.05s);
+    transition: all .5s ease;
 
     // .market__title {
     //   color: @link-color;
@@ -158,9 +158,109 @@
     border-bottom: 0;
   }
 
-  .outcome__bar {
-    width: 65%;
+  .outcome {
+    &__bar {
+      display: inline-block;
+      position: relative;
+      width: 30%;
+      margin: 5px 0;
+      line-height: @outcome-bar-height;
+
+      &--inner {
+        height: @outcome-bar-height;
+        position: relative;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &--value {
+        line-height: @outcome-bar-height;
+        vertical-align: middle;
+        padding-left: 5px;
+        display: inline;
+        min-width: 30px;
+        //opacity: .6;
+        color: white;
+        font-size: 10px;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+      }
+
+      &--label {
+        margin-left: 100%;
+        padding-left: 5px;
+        line-height: @outcome-bar-height;
+        position: absolute;
+        top: 0;
+        text-transform: uppercase;
+        font-size: 10px;
+        letter-spacing: .5px;
+      }
+    }
+
+    &__label {
+      display: inline-block;
+    }
+
+    &--scalar {
+      margin-top: 40px;
+      width: 50%;
+      display: table;
+      .outcome__bound {
+        display: table-cell;
+        width: 15%;
+        height: 30px;
+        vertical-align: middle;
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: .5px;
+        &--lower {
+          text-align: left;
+        }
+        &--upper {
+          text-align: right;
+        }
+      }
+      .outcome__currentPrediction {
+        position: relative;
+        height: 30px;
+        width: 100%;
+        .outcome__currentPrediction--line {
+          position: absolute;
+          background-color: @bg-color-muted;
+          height: 2px;
+          width: 100%;
+          top: 50%;
+          transform: translateY(-1px);
+        }
+        .outcome__currentPrediction--value {
+          position: absolute;
+          background-color: @link-color;
+          padding: 5px;
+          border-radius: 5px;
+          color: white;
+          top: 50%;
+          transform: translate(-50%, -38px);
+          left: 0;
+          &:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            margin-left: -@expandable-arrow-size;
+            width: 0;
+            height: 0;
+            border-left: @expandable-arrow-size solid transparent;
+            border-right: @expandable-arrow-size solid transparent;
+            border-top: @expandable-arrow-size solid @link-color;
+          }
+        }
+      }
+    }
   }
+
 
   &--twoColumns {
     display: table;
@@ -207,6 +307,8 @@
     }
 
     .outcome__bar--label {
+      position: absolute;
+      top: 0;
       color: rgba(255,255,255,.4);
     }
   }

@@ -89,6 +89,10 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
     -webkit-transition: all .15s ease;
   }
 
+  &:focus {
+    outline: 0;
+  }
+
   &:active {
     //transform: translateY(1px);
     background: @btn-gradient-active;

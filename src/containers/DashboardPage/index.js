@@ -4,18 +4,18 @@ import { push } from 'react-router-redux'
 
 import DashboardPage from 'components/Dashboard'
 import { getMarkets } from 'selectors/market'
-import { requestMarketList } from 'actions/market'
+import { requestMarkets } from 'actions/market'
 
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
   return {
-    markets: markets,
+    markets,
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  requestMarkets: () => dispatch(requestMarketList()),
+  requestMarkets: () => dispatch(requestMarkets()),
   changeUrl: url => dispatch(push(url)),
 })
 
