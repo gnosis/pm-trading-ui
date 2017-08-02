@@ -8,6 +8,7 @@ import 'moment-duration-format'
 import { reduxForm, submit, Field } from 'redux-form'
 
 import FormSelect from 'components/FormSelect'
+import FormInput from 'components/FormInput'
 
 // import ContractName from 'containers/ContractName'
 
@@ -202,24 +203,21 @@ class MarketList extends Component {
         <form onSubmit={handleSubmit}>
           <div className="marketFilter__group">
             <Field
-              component={FormSelect}
-              name="preset"
-              label="Preset"
-              labelClassName="marketFilter__label"
-              className="marketFilter__input"
-              defaultValue={'none'}
-              values={{ none: 'None' }}
+              component={FormInput}
+              name="search"
+              label="Search"
+              placeholder="Title, Description"
+              className="marketFilterField marketFilterSearch"
             />
           </div>
           <div className="marketFilter__group">
             <Field
               component={FormSelect}
-              name="oracle"
-              label="Oracle"
-              labelClassName="marketFilter__label"
-              className="marketFilter__input"
-              defaultValue={'CENTRALIZED'}
-              values={{ CENTRALIZED: 'Centralized', ULTIMATE: 'Ultimate' }}
+              name="resolved"
+              label="Show Resolved"
+              className="marketFilterField marketFilterResolved"
+              defaultValue={''}
+              values={{ '': 'Both', RESOLVED: 'Show only resolved Markets', UNRESOLVED: 'Show only unresolved Markets' }}
             />
           </div>
         </form>
@@ -275,10 +273,5 @@ class MarketList extends Component {
 }
 
 export default reduxForm({
-  form: 'marketListFilter',
-  onChange: (values, dispatch) => {
-    dispatch(submit('marketListFilter'))
-  },
-  onSubmit: () => {
-  },
+  form: 'marketListFilter'
 })(MarketList)
