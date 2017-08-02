@@ -1,9 +1,12 @@
-import { trimStart } from 'lodash'
+/* globals fetch */
+
+import { mapValues, startsWith, isArray } from 'lodash'
+
 import { HEX_VALUE_REGEX } from 'utils/constants'
 
-export const normalizeHex = (value) => {
+export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
-    return trimStart(value, '0x')
+    return startsWith(value, '0x') ? value.substring(2) : value
   }
 
   return value
@@ -11,14 +14,50 @@ export const normalizeHex = (value) => {
 
 export const hexWithPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
-    return `0x${trimStart(value, '0x')}`
+    return startsWith(value, '0x') ? value : `0x${value}`
   }
   return value
 }
 
-export const toEntity = (data, entityType, idKey = 'address') => ({
-  [entityType]: {
-    id: data[idKey],
-    ...data,
-  },
-})
+export const toEntity = (data, entityType, idKey = 'address') => {
+  const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
+
+  return {
+    entities: {
+      [entityType]: {
+        [id]: {
+          [idKey]: id,
+          ...entityPayload,
+        },
+      },
+    },
+    result: [
+      id,
+    ],
+  }
+}
+
+export const restFetch = url =>
+  fetch(url)
+    .then(res => res.json())
+    .catch(err => console.warn(`Gnosis DB: ${err}`))
+
+export const bemifyClassName = (className, element, modifier) => {
+  const classNameDefined = className || ''
+  const classNames = isArray(classNameDefined) ? classNameDefined : classNameDefined.split(' ')
+
+  if (classNames && classNames.length) {
+    let classPath = ''
+
+    if (element) {
+      classPath += `__${element}`
+    }
+    if (element && modifier) {
+      classPath += `--${modifier}`
+    }
+
+    return classNames.filter(s => s.length).map(cls => `${cls}${classPath}`).join(' ')
+  }
+
+  return ''
+}

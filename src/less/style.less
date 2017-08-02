@@ -55,7 +55,7 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
     width: 100%;
   }
 
-  padding: 0;
+  //padding: 0;
 
   &::placeholder {
     color: @font-color-muted;
@@ -102,6 +102,12 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
     &::before {
       background: @bg-color-muted;
     }
+  }
+
+  &.btn-link {
+    color: @btn-invert-font-color;
+    background: none;
+    border-radius: none;
   }
 
   &.btn-primary--disabled {

@@ -4,6 +4,8 @@
 @market-highlight-stripe-width: 5px;
 @outcome-bar-height: 15px;
 @info-row-height: 25px;
+@expandable-arrow-size: 7px;
+@expandable-margin: 40px;
 
 .marketStats {
   &__label {
@@ -61,13 +63,17 @@
 }
 
 .marketFilter {
-  padding-top: 12px;
+  // magic number: this is the height of the text on the right, above the marketlist
+  padding-top: 31px;
 
   &__group {
     display: block;
     position: relative;
     margin-bottom: 30px;
   }
+}
+
+.marketFilterField {
   &__label {
     display: block;
     color: lighten(@font-color-dark, 10%);
@@ -78,6 +84,14 @@
   }
   &__input {
     width: 100%;
+    font-size: 12px;
+  }
+}
+
+.marketFilterSearch {
+  &__input {
+    padding-bottom: 10px;
+    border-bottom: 2px dotted darken(@bg-color-muted, 30%);
   }
 }
 
@@ -218,7 +232,7 @@
       line-height: @outcome-bar-height;
       vertical-align: middle;
       padding-left: 5px;
-      float: left;
+      display: inline;
       min-width: 30px;
       //opacity: .6;
       color: white;
@@ -231,7 +245,6 @@
       margin-left: 100%;
       padding-left: 5px;
       line-height: @outcome-bar-height;
-      vertical-align: middle;
       text-transform: uppercase;
       font-size: 10px;
       letter-spacing: .5px;
@@ -240,5 +253,61 @@
 
   &__label {
     display: inline-block;
+  }
+
+  &--scalar {
+    margin-top: 40px;
+    width: 50%;
+    display: table;
+    .outcome__bound {
+      display: table-cell;
+      width: 15%;
+      height: 30px;
+      vertical-align: middle;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      &--lower {
+        text-align: left;
+      }
+      &--upper {
+        text-align: right;
+      }
+    }
+    .outcome__currentPrediction {
+      position: relative;
+      height: 30px;
+      width: 100%;
+      .outcome__currentPrediction--line {
+        position: absolute;
+        background-color: @bg-color-muted;
+        height: 2px;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-1px);
+      }
+      .outcome__currentPrediction--value {
+        position: absolute;
+        background-color: @link-color;
+        padding: 5px;
+        border-radius: 5px;
+        color: white;
+        top: 50%;
+        transform: translate(-50%, -38px);
+        left: 0;
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: -5px;
+          left: 50%;
+          margin-left: -@expandable-arrow-size;
+          width: 0;
+          height: 0;
+          border-left: @expandable-arrow-size solid transparent;
+          border-right: @expandable-arrow-size solid transparent;
+          border-top: @expandable-arrow-size solid @link-color;
+        }
+      }
+    }
   }
 }

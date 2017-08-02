@@ -3,22 +3,27 @@ import { push } from 'react-router-redux'
 import { formValueSelector } from 'redux-form'
 
 import MarketList from 'components/MarketList'
-import { getMarkets } from 'selectors/market'
-import { requestMarketList } from 'actions/market'
 
-const filterMarkets = state => market => true // todo: implement
+import { filterMarkets } from 'selectors/market'
+import { getDefaultAccount } from 'selectors/blockchain'
+
+import { requestMarkets } from 'actions/market'
 
 const mapStateToProps = (state) => {
-  const markets = getMarkets(state)
-  const marketsTotal = markets.length
+  //const markets = getMarkets(state)
+
+  const filterForm = formValueSelector('marketListFilter')
+  const filterSearch = filterForm(state, 'search')
+  const filterShowResolved = filterForm(state, 'resolved')
+
   return {
-    markets: markets.filter(filterMarkets(state)),
-    marketsTotal,
+    markets: filterMarkets(state)({ textSearch: filterSearch, resolved: filterShowResolved }),
+    defaultAccount: getDefaultAccount(state),
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  requestMarkets: () => dispatch(requestMarketList()),
+  fetchMarkets: () => dispatch(requestMarkets()),
   changeUrl: url => dispatch(push(url)),
 })
 

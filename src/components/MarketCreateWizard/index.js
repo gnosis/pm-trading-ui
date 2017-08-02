@@ -36,7 +36,6 @@ export default class MarketCreateWizard extends Component {
   renderOracleTypes() {
     const oracleValueLabels = {
       [ORACLE_TYPES.CENTRALIZED]: 'Centralized Oracle',
-      [ORACLE_TYPES.BLOCK_DIFFICULTY]: 'Block Difficulty',
     }
 
     return (

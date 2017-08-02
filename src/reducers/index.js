@@ -4,6 +4,7 @@ import { reducer as formReducer } from 'redux-form'
 import entities from './entities'
 import modal from './modal'
 import transactions from './transactions'
+import blockchain from './blockchain'
 
 const reducers = combineReducers({
   routing: routerReducer,
@@ -11,6 +12,7 @@ const reducers = combineReducers({
   modal,
   entities,
   transactions,
+  blockchain,
 })
 
 /*

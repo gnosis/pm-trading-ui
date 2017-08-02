@@ -7,6 +7,9 @@ import MarketCreateWizard from 'components/MarketCreateWizard'
 const FORM = {
   form: 'marketCreateWizard',
   destroyOnUnmount: false,
+  initialValues: {
+    oracleType: 'CENTRALIZED',
+  },
 }
 
 const mapStateToProps = (state, ownProps) => {

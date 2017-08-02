@@ -1,8 +1,9 @@
 import moment from 'moment'
+import Decimal from 'decimal.js'
 
 import {
-  requestMarkets,
   receiveEntities,
+  receiveEntity,
   updateEntity,
 } from 'actions/entities'
 
@@ -17,13 +18,31 @@ import {
 } from 'utils/helpers'
 
 import {
+  OUTCOME_TYPES,
   TRANSACTION_STATUS,
+  TRANSACTION_COMPLETE_STATUS,
 } from 'utils/constants'
 
 import * as api from 'api'
 
-export const requestMarketList = () => async (dispatch) => {
-  await dispatch(requestMarkets())
+export const requestMarket = (marketAddress) => async (dispatch) => {
+  const payload = await api.requestMarket(marketAddress)
+  return await dispatch(receiveEntities(payload))
+}
+
+export const requestMarkets = () => async (dispatch) => {
+  const payload = await api.requestMarkets()
+  return await dispatch(receiveEntities(payload))
+}
+
+export const requestMarketShares = (marketAddress, accountAddress) => async (dispatch) => {
+  const payload = await api.requestMarketShares(marketAddress, accountAddress)
+  return await dispatch(receiveEntities(payload))
+}
+
+export const requestFactories = () => async (dispatch) => {
+  const payload = await api.requestFactories()
+  return await dispatch(receiveEntities(payload))
 }
 
 export const createMarket = options => async (dispatch) => {
@@ -38,6 +57,7 @@ export const createMarket = options => async (dispatch) => {
   // Start a new transaction log
   await dispatch(startTransactionLog({
     id: transactionId,
+    startTime: moment().format(),
     events: [
       {
         event: 'eventDescription',
@@ -67,7 +87,6 @@ export const createMarket = options => async (dispatch) => {
   await dispatch(receiveEntities(toEntity(eventDescriptionContractData, 'eventDescriptions', 'ipfsHash')))
   await dispatch(addTransactionLogEntry({
     id: options.transactionId,
-    startTime: moment().format(),
     event: 'eventDescription',
     status: TRANSACTION_STATUS.DONE,
   }))
@@ -85,7 +104,14 @@ export const createMarket = options => async (dispatch) => {
   }))
 
   // Take from Oracle
-  event.oracle = oracleContractData.oracle
+  event.oracle = oracleContractData.address
+
+  if (event.type === OUTCOME_TYPES.CATEGORICAL) {
+    event.outcomeCount = (eventDescription.outcomes || []).length
+  } else if (event.type === OUTCOME_TYPES.SCALAR) {
+    event.lowerBound = Decimal(event.lowerBound).times(10 ** event.decimals).toString()
+    event.upperBound = Decimal(event.upperBound).times(10 ** event.decimals).toString()
+  }
 
   // Create Event
   const eventContractData = await api.createEvent(event)
@@ -97,11 +123,17 @@ export const createMarket = options => async (dispatch) => {
   }))
 
   // Take from Event
-  market.event = eventContractData.event
+  market.event = eventContractData.address
+
+  if (event.type === OUTCOME_TYPES.CATEGORICAL) {
+    market.outcomes = eventDescription.outcomes
+  } else if (event.type === OUTCOME_TYPES.SCALAR) {
+    market.outcomes = [0, 1] // short, long
+  }
 
   // Create Market
   const marketContractData = await api.createMarket(market)
-  await dispatch(receiveEntities(toEntity(market, 'markets')))
+  await dispatch(receiveEntities(toEntity(marketContractData, 'markets')))
   await dispatch(addTransactionLogEntry({
     id: options.transactionId,
     event: 'market',
@@ -109,7 +141,10 @@ export const createMarket = options => async (dispatch) => {
   }))
 
   // Fund Market
-  await api.fundMarket(marketContractData)
+  await api.fundMarket({
+    ...marketContractData,
+    funding: market.funding,
+  })
   await dispatch(addTransactionLogEntry({
     id: options.transactionId,
     event: 'funding',
@@ -118,6 +153,8 @@ export const createMarket = options => async (dispatch) => {
 
   await dispatch(closeTransactionLog({
     id: options.transactionId,
+    completed: true,
+    completionStatus: TRANSACTION_COMPLETE_STATUS.NO_ERROR,
     endTime: moment().format(),
   }))
 }
@@ -136,4 +173,10 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
       netOutcomeTokensSold,
     },
   }))
+}
+
+export const sellMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
+  return await api.sellShares(market, outcomeIndex, amount)
+
+  // calculate new values
 }
