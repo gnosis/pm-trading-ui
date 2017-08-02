@@ -11,7 +11,7 @@ class FormEditableList extends Component {
     const { input } = this.props
     if (isArray(input.value) && input.value.length > 0) {
       const values = input.value.slice(0)
-      
+
       // if last entry is not empty, add a new line
       if (values[values.length - 1].length > 0) {
         values.push('')

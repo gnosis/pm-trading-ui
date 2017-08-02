@@ -9,7 +9,7 @@ const reducer = handleActions({
     //   ...state,
     //   defaultAccount: account,
     // }
-    console.log(action)
+    console.log('REDUCER: ', action)
     return state
   },
 }, {})

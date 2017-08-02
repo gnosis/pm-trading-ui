@@ -1,17 +1,30 @@
 import React, { Component } from 'react'
-import { reduxForm } from 'redux-form'
-// import autobind from 'autobind-decorator'
+import { reduxForm, Field } from 'redux-form'
+import EditableKeyValueList from 'components/FormEditableKeyValueList'
+/* USEFUL FOR THE NEXT SETTINGS STEP
 import GenericForm from './genericForm'
-import ModeratorsForm from './moderatorsForm'
+import ModeratorsForm from './moderatorsForm'*/
 
 
 class Settings extends Component {
 
-  _renderForm() {
+  /* renderForm() {
     return (
       <div>
         <GenericForm {...this.props} />
         <ModeratorsForm {...this.props} />
+      </div>
+    )
+  }*/
+
+  _renderForm() {
+    return (
+      <div className="settings">
+        <div className="row">
+          <div className="col-md-12">
+            <Field name="values" component={EditableKeyValueList} label="VALUE" normalize={val => val.filter(entry => entry.length > 0)} />
+          </div>
+        </div>
       </div>
     )
   }

@@ -4,6 +4,7 @@ import { reduxForm, formValueSelector, submit } from 'redux-form'
 import Settings from 'components/Settings'
 import { updateSettings } from 'actions/settings'
 
+/* USEFUL FOR THE NEXT SETTINGS VERSION
 const FORM = {
   form: 'settingsForm',
   onSubmit: async (values, dispatch, props) => {
@@ -28,6 +29,28 @@ const mapStateToProps = (state, ownProps) => {
       descriptionle: selector(state, 'description'),
       subdomain: selector(state, 'subdomain'),
       moderators: selector(state, 'moderators'),
+    },
+  }
+}*/
+
+const FORM = {
+  form: 'settingsForm',
+  onChange: async (values, dispatch, props) => {
+    const { formValues } = props
+
+    let settingsValues = {
+      values: formValues.values
+    }
+    console.log('REDUX: ', settingsValues)
+    return await dispatch(updateSettings(settingsValues))
+  },
+}
+
+const mapStateToProps = (state, ownProps) => {
+  const selector = formValueSelector('settingsForm')
+  return {
+    formValues: {
+      values: selector(state, 'values'),
     },
   }
 }
