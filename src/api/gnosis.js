@@ -191,6 +191,14 @@ export const resolveOracle = async (oracle, selectedOutcomeIndex) => {
   throw Error('Oracle contract could not be found - unsupported oracle type?')
 }
 
+export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenCount) => {
+  const gnosis = await getGnosisConnection()
+
+  const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
+
+  return await gnosis.sellOutcomeTokens({market: hexWithPrefix(marketAddress), outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei})
+}
+
 export const calcLMSRCost = Gnosis.calcLMSRCost
 export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
 export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice

@@ -175,3 +175,9 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
     },
   }))
 }
+
+export const sellMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
+  return await api.sellShares(market, outcomeIndex, amount)
+
+  // calculate new values
+}

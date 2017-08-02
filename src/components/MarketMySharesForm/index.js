@@ -32,11 +32,24 @@ class MarketMySharesForm extends Component {
     this.setState({ extendedSellIndex: undefined })
   }
 
+  @autobind
+  handleSellShare(e, shareIndex, shareAmount) {
+    e.preventDefault()
+    if (window.confirm('Are you sure?')) {
+      this.props.sellShares(this.props.market.address, shareIndex, shareAmount)
+    }
+  }
+
   renderSellShareView() {
     const { extendedSellIndex } = this.state
-    const { selectedSellAmount, marketShares: { [extendedSellIndex]: share }, market } = this.props
+    const { invalid, selectedSellAmount, marketShares: { [extendedSellIndex]: share }, market } = this.props
 
-    const selectedSellAmountWei = Decimal(selectedSellAmount || 0).mul(1e18).toString()
+    let selectedSellAmountWei
+    try {
+      selectedSellAmountWei = Decimal(selectedSellAmount || 0).mul(1e18).toString()
+    } catch (e) {
+      selectedSellAmountWei = '0'
+    }
 
     let currentProbability
     try {
@@ -113,14 +126,30 @@ class MarketMySharesForm extends Component {
             name="sellAmount"
             placeholder="ETH"
             className="marketMySharesSellAmount"
-            validate={(val) => Decimal(val) < 0 || Decimal(val) > share.balance ? 'Invalid value' : undefined}
+            validate={(val) => {
+              let decimalValue
+              try {
+                decimalValue = Decimal(val || 0)
+              } catch (e) {
+                return 'Invalid Number value'
+              }
+              if (decimalValue < 0) {
+                return 'Number can\'t be negative.'
+              }
+              
+              if (decimalValue.gt(Decimal(share.balance).div(1e18).toString())) {
+                return 'You\'re trying to sell more than you invested.'
+              }
+
+              return undefined
+            }}
           />
         </td>
         <td>
           {newTokenValue.div(1e18).toDecimalPlaces(4).toString()} ETH
           {!diffTokenValue.isZero() && <span>
             (<span className={`marketMyShares__diff ${diffTokenValue.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffTokenValue.gt(0) ? ' +' : ' -'}{diffTokenValue.div(1e18).toDecimalPlaces(4).toString()} ETH
+              {diffTokenValue.gt(0) ? ' +' : ' '}{diffTokenValue.div(1e18).toDecimalPlaces(4).toString()} ETH
               </span>)
           </span>}
         </td>
@@ -128,13 +157,13 @@ class MarketMySharesForm extends Component {
           {newProbability.mul(100).toDecimalPlaces(4).toString()}
           {!diffProbability.isZero() && <span>
             (<span className={`marketMyShares__diff ${diffProbability.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffProbability.gt(0) ? ' +' : ' -'}{diffProbability.mul(100).toDecimalPlaces(4).toString()} %
+              {diffProbability.gt(0) ? ' +' : ' '}{diffProbability.mul(100).toDecimalPlaces(4).toString()} %
             </span>)
           </span>}
         </td>
         <td>
           <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
-          <button type="button" className="btn btn-primary">Sell Shares</button>
+          <button type="button" className={`btn btn-primary ${invalid ? 'disabled' : ''}`} disabled={invalid} onClick={(e) => this.handleSellShare(e, extendedSellIndex, selectedSellAmount)}>Sell Shares</button>
         </td>
       </tr>),
     ]
@@ -143,8 +172,7 @@ class MarketMySharesForm extends Component {
   render() {
     const { marketShares, market, selectedSellAmount } = this.props
     const { extendedSellIndex } = this.state
-    console.log(selectedSellAmount)
-
+    
     if (!marketShares || !marketShares.length) {
       return (
         <div className="marketMyShares">
