@@ -42,6 +42,7 @@ const FORM = {
       values: formValues.values
     }
     console.log('REDUX: ', settingsValues)
+    console.log('REUDX2: ', updateSettings(settingsValues))
     return await dispatch(updateSettings(settingsValues))
   },
 }
@@ -56,7 +57,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  submitForm: () => dispatch(submit('settingsForm')),
+  updateSettings: () => dispatch(submit('settingsForm')),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm(FORM)(Settings))

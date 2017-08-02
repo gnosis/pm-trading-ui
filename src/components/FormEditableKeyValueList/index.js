@@ -3,31 +3,32 @@ import { isArray } from 'lodash'
 import autobind from 'autobind-decorator'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-
+import store from '../../store'
 import './formEditableList.less'
 
 class FormEditableKeyValueList extends Component {
 
   constructor() {
     super()
-    this.state = { 'values': [] }
+    this.state = { 'values': store.getState().settings.slice() }
   }
 
-  getValues() {
-    const { input } = this.props
-    if (isArray(input.value) && input.value.length > 0) {
-      const values = input.value.slice(0)
-
-      // if last entry is not empty, add a new line
-      if (values[values.length - 1].length > 0) {
-        values.push('')
-      }
-
-      return values
-    }
-
-    return ['']
-  }
+  // getValues() {
+  //   const { input } = this.props
+  //   if (values && values.length > 0) {
+  //   // if (isArray(input.value) && input.value.length > 0) {
+  //     //const values = input.value.slice(0)
+  //     values.slice(0)
+  //     // if last entry is not empty, add a new line
+  //     if (values[values.length - 1].length > 0) {
+  //       values.push('')
+  //     }
+  //
+  //     return values
+  //   }
+  //
+  //   return ['']
+  // }
 
   @autobind
   handleEntryChange(index, type, event) {
@@ -60,8 +61,6 @@ class FormEditableKeyValueList extends Component {
 
     this.setState({ 'values': values })
     onChange(values)
-
-    // execute submit
   }
 
   @autobind
@@ -81,12 +80,12 @@ class FormEditableKeyValueList extends Component {
 
   @autobind
   handleBlur() {
-    this.props.input.onBlur(this.getValues())
+    this.props.input.onBlur(this.state.values)
   }
 
   @autobind
   handleFocus() {
-    this.props.input.onFocus(this.getValues())
+    this.props.input.onFocus(this.state.values)
   }
 
 
@@ -94,7 +93,7 @@ class FormEditableKeyValueList extends Component {
   renderEntry(value, index) {
     const { input: { onFocus, onBlur } } = this.props
 
-    const entryCount = this.getValues().length
+    const entryCount = this.state.values.length
 
     const lastEntry = entryCount <= 1
     const isLast = index == entryCount - 1
@@ -122,7 +121,9 @@ class FormEditableKeyValueList extends Component {
   }
 
   render() {
-    const values = this.getValues()
+    // TODO retrieve stored settings
+    const values = this.state.values
+    console.log(values)
 
     return (
       <div className="formEditableList">
