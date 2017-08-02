@@ -110,7 +110,12 @@ export default class MarketDetail extends Component {
       const ViewComponent = view.component
 
       // Not sure if this is a good idea; If I need to optimize, here's a good place to start
-      return <ViewComponent {...this.props} />
+      return 
+        <div className="expandable__inner">
+          <div className="container">
+            <ViewComponent {...this.props} />
+          </div>
+        </div>
     }
 
     return <div />
@@ -208,9 +213,7 @@ export default class MarketDetail extends Component {
         </div>
         { this.renderControls(market) }
         <div className="expandable">
-          <div className="container">
-            { this.renderExpandableContent() }
-          </div>
+          { this.renderExpandableContent() }
         </div>
         <MarketGraph data={testData} />
       </div>

@@ -106,20 +106,12 @@
 }
 
 .expandable {
-  min-height: 200px;
   position: relative;
   z-index: 2;
-  background: transparent;
-
-  padding: 40px 0;
   margin-top: @expandable-margin;
-
-  background-color: @bg-color-muted;
-  &.expandable--closed {
-    visibility: hidden;
-    min-height: 0;
-    padding: 0;
-    height: 0;
+  &__inner {
+    padding: 40px 0;
+    background-color: @bg-color-muted;
 
     &::before {
       visibility: visible;

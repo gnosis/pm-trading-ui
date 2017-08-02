@@ -9,7 +9,7 @@ html, body, #root {
 a {
   color: @link-color;
   text-decoration: none;
-
+  
   &:visited {
     color: inherit;
   }
@@ -27,18 +27,6 @@ a {
   &:active {
     text-decoration: none;
   }
-}
-
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  font-weight: 300;
-}
-
-h1 {
-  font-size: 42px;
-  line-height: 65px;
-  letter-spacing: .5px;
-  font-weight: 300;
 }
 
 label {
@@ -87,27 +75,32 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
   border: none;
   position: relative;
   z-index: 2;
+  transition: .15s;
+  transition: all .15s ease;
+  -webkit-transition: all .15s ease;
+
+  &:hover {
+    //transform: translateY(-1px);
+    background: @btn-gradient-hover;
+    //box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+    transition: .15s;
+    transition: all .15s ease;
+    -webkit-transition: all .15s ease;
+  }
 
   &:focus {
-    outline: none;
+    outline: 0;
   }
 
-  &.btn-default {
-    color: @btn-invert-font-color;
-
-    &::before {
-      border-radius: 9999px;
-      content: '';
-      position: absolute;
-      z-index: -1;
-      top: @btn-border-width;
-      right: @btn-border-width;
-      left: @btn-border-width;
-      bottom: @btn-border-width;
-      background: @bg-color;
-    }
+  &:active {
+    //transform: translateY(1px);
+    background: @btn-gradient-active;
+    //box-shadow: inset 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+    transition: .15s;
+    transition: all .15s ease;
+    -webkit-transition: all .15s ease;
   }
-
+  
   &.btn-default--muted {
     &::before {
       background: @bg-color-muted;
@@ -124,4 +117,36 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
     cursor: not-allowed;
     opacity: 0.3;
   }
+}
+  
+.btn.btn-default {
+  color: @btn-invert-font-color;
+
+  &::before {
+    border-radius: 9999px;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: @btn-border-width;
+    right: @btn-border-width;
+    left: @btn-border-width;
+    bottom: @btn-border-width;
+    background: white;
+  }
+
+  &:hover {
+    color: lighten(@btn-invert-font-color, 5%);
+  }
+}
+  
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 42px;
+  line-height: 65px;
+  letter-spacing: .5px;
+  font-weight: 300;
 }

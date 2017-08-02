@@ -34,13 +34,13 @@ export default ({ wallet, walletLoaded }) => {
           </Link>
         </div>
         <div className="headerContainer__group headerContainer__group--left">
-          <Link to="/dashboard" className="headerContainer__navLink">Dashboard</Link>
-          <Link to="/markets/list" className="headerContainer__navLink">Markets</Link>
-          <Link to="/transactions" className="headerContainer__navLink">Transactions</Link>
+          <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Dashboard</Link>
+          <Link to="/markets/list" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Markets</Link>
+          <Link to="/transactions" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Transactions</Link>
         </div>
         <div className="headerContainer__group headerContainer__group--right">
-          <Link to="/account" className="headerContainer__navLink">Account</Link>
-          <Link to="/settings" className="headerContainer__navLink">Settings</Link>
+          <Link to="/account" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Account</Link>
+          <Link to="/settings" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Settings</Link>
         </div>
       </div>
     </div>
