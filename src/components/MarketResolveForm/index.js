@@ -44,7 +44,7 @@ class MarketResolveForm extends Component {
         <div className="marketResolveCategorical">
           <FormRadioButtonLabel label="Choose outcome" />
           {outcomes.map((outcome, outcomeIndex) => (
-              <Field key={outcomeIndex} className="marketResolveFormRadio" name="selectedOutcome" component={FormRadioButton} text={outcome} radioValue={outcomeIndex} />
+            <Field key={outcomeIndex} className="marketResolveFormRadio" name="selectedOutcome" component={FormRadioButton} text={outcome} radioValue={outcomeIndex} />
             ))}
         </div>
         <button type="submit" className="btn btn-primary">Resolve Oracle</button>

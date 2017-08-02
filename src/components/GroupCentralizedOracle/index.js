@@ -17,7 +17,6 @@ const OracleCentralized = ({ selectedOutcomeType }) => {
     }
 
     return outcomeSections[selectedOutcomeType]
-
   }
 
 

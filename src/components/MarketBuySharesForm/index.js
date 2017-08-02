@@ -212,7 +212,7 @@ class MarketBuySharesForm extends Component {
       funding,
       outcomeTokenIndex: 1,
     })
-    
+
     // debugger
     return (
       <div className="col-md-6">

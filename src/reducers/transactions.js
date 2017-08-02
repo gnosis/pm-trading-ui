@@ -28,7 +28,7 @@ const reducer = handleActions({
     },
   }),
   [closeTransactionLog]: (state, action) => {
-    const { id, ...payload} = action.payload
+    const { id, ...payload } = action.payload
     return {
       ...state,
       [id]: {

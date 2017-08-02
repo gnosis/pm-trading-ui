@@ -78,7 +78,7 @@ export default class MarketDetail extends Component {
       this.props.fetchMarket(this.props.params.id)
     }
 
-    if(this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
+    if (this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
       this.props.fetchMarketShares(this.props.defaultAccount)
     }
   }
@@ -110,12 +110,12 @@ export default class MarketDetail extends Component {
       const ViewComponent = view.component
 
       // Not sure if this is a good idea; If I need to optimize, here's a good place to start
-      return 
+      return
         <div className="expandable__inner">
-          <div className="container">
+        <div className="container">
             <ViewComponent {...this.props} />
           </div>
-        </div>
+      </div>
     }
 
     return <div />

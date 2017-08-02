@@ -21,10 +21,10 @@ class BackdropProvider extends Component {
         throw Error('Invalid Modal Type', currentModal)
       }
 
-      return <Modal 
+      return (<Modal
         {...data}
         closeModal={closeModal}
-      />
+      />)
     }
 
     return undefined
@@ -50,6 +50,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  closeModal: () => dispatch(closeModal())
+  closeModal: () => dispatch(closeModal()),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(BackdropProvider)

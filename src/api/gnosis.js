@@ -156,7 +156,7 @@ export const fundMarket = async (market) => {
   const marketContract = gnosis.contracts.Market.at(market.address)
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
-  console.log('funding with ' + marketFundingWei.toString())
+  console.log(`funding with ${marketFundingWei.toString()}`)
 
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
   await gnosis.etherToken.approve(marketContract.address, marketFundingWei.toString())
@@ -196,7 +196,7 @@ export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenC
 
   const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
 
-  return await gnosis.sellOutcomeTokens({market: hexWithPrefix(marketAddress), outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei})
+  return await gnosis.sellOutcomeTokens({ market: hexWithPrefix(marketAddress), outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei })
 }
 
 export const calcLMSRCost = Gnosis.calcLMSRCost

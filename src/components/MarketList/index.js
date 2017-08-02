@@ -119,9 +119,9 @@ class MarketList extends Component {
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
         <div className="market__header">
           <h2 className="market__title">{ market.eventDescription.title }</h2>
-          {isOwner && !isResolved && 
+          {isOwner && !isResolved &&
             <div className="market__control">
-              <a href={`/#${resolveUrl}`} onClick={(e) => this.handleViewMarketResolve(e, resolveUrl)}>Resolve</a>
+              <a href={`/#${resolveUrl}`} onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>Resolve</a>
             </div>}
         </div>
         {outcomes}
@@ -163,7 +163,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                {market.event.collateralToken} {/*<ContractName contractAddress={market.event.collateralToken} />*/}
+                {market.event.collateralToken} {/* <ContractName contractAddress={market.event.collateralToken} />*/}
               </div>
             </div>
           </div>
@@ -272,5 +272,5 @@ class MarketList extends Component {
 }
 
 export default reduxForm({
-  form: 'marketListFilter'
+  form: 'marketListFilter',
 })(MarketList)

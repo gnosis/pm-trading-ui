@@ -11,7 +11,7 @@ class ScalarSlider extends Component {
       unit,
       marginalPriceCurrent,
       marginalPriceSelected,
-      decimals
+      decimals,
     } = this.props
 
     const bigLowerBound = new Decimal(lowerBound)
@@ -19,7 +19,7 @@ class ScalarSlider extends Component {
 
     // current value
     const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
-    
+
     const value = marginalPriceCurrent.mul(bounds.toString()).add(bigLowerBound.div(10 ** decimals).toString())
     const percentage = marginalPriceCurrent.mul(100)
 
@@ -40,12 +40,12 @@ class ScalarSlider extends Component {
                 {value.toFixed(decimals)} {unit}
               </div>
             </div>
-              <div className="slider__handle slider__handle--below" style={{ left: `${selectedPercentage.toFixed(4)}%` }}>
-                <div className="slider__handleText">
-                  <div className="slider__handleTextLabel">Selected Bet</div>
-                  {value.toFixed(decimals)} {unit}
-                </div>
+            <div className="slider__handle slider__handle--below" style={{ left: `${selectedPercentage.toFixed(4)}%` }}>
+              <div className="slider__handleText">
+                <div className="slider__handleTextLabel">Selected Bet</div>
+                {value.toFixed(decimals)} {unit}
               </div>
+            </div>
           </div>
           <div className="slider__upperBound">
             {bigUpperBound.div(10 ** decimals).toFixed(0)} {unit}

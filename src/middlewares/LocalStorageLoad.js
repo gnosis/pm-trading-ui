@@ -1,4 +1,4 @@
-export default store => next => action => {
+export default store => next => (action) => {
   const { type } = action
 
   if (type !== 'INIT') return next(action)

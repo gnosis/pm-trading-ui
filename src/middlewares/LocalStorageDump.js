@@ -1,6 +1,6 @@
 const CLEAR_LOCAL_STORAGE = 'CLEAR_LOCAL_STORAGE'
 
-export default store => next => action => {
+export default store => next => (action) => {
   const state = store.getState()
 
   if (action.type !== CLEAR_LOCAL_STORAGE) {

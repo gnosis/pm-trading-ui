@@ -10,7 +10,7 @@ import { getDefaultAccount } from 'selectors/blockchain'
 import { requestMarkets } from 'actions/market'
 
 const mapStateToProps = (state) => {
-  //const markets = getMarkets(state)
+  // const markets = getMarkets(state)
 
   const filterForm = formValueSelector('marketListFilter')
   const filterSearch = filterForm(state, 'search')

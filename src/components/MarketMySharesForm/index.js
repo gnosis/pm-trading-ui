@@ -136,7 +136,7 @@ class MarketMySharesForm extends Component {
               if (decimalValue < 0) {
                 return 'Number can\'t be negative.'
               }
-              
+
               if (decimalValue.gt(Decimal(share.balance).div(1e18).toString())) {
                 return 'You\'re trying to sell more than you invested.'
               }
@@ -163,7 +163,7 @@ class MarketMySharesForm extends Component {
         </td>
         <td>
           <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
-          <button type="button" className={`btn btn-primary ${invalid ? 'disabled' : ''}`} disabled={invalid} onClick={(e) => this.handleSellShare(e, extendedSellIndex, selectedSellAmount)}>Sell Shares</button>
+          <button type="button" className={`btn btn-primary ${invalid ? 'disabled' : ''}`} disabled={invalid} onClick={e => this.handleSellShare(e, extendedSellIndex, selectedSellAmount)}>Sell Shares</button>
         </td>
       </tr>),
     ]
@@ -172,7 +172,7 @@ class MarketMySharesForm extends Component {
   render() {
     const { marketShares, market, selectedSellAmount } = this.props
     const { extendedSellIndex } = this.state
-    
+
     if (!marketShares || !marketShares.length) {
       return (
         <div className="marketMyShares">

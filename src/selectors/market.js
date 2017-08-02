@@ -27,9 +27,9 @@ export const getMarketById = state => (marketAddress) => {
     const oracleEventDescription =
       getEventDescriptionByAddress(state)(eventOracle.eventDescription)
 
-      if (!oracleEventDescription) {
-        return market
-      }
+    if (!oracleEventDescription) {
+      return market
+    }
 
     market = {
       ...marketEntities[marketAddress],
@@ -54,17 +54,17 @@ export const getMarkets = (state) => {
   return Object.keys(marketEntities).map(getMarketById(state))
 }
 
-export const getMarketSharesById = (state) => (marketAddress, accountAddress) => {
+export const getMarketSharesById = state => (marketAddress, accountAddress) => {
   const marketEntity = getMarketById(state)(marketAddress)
   const shares = get(marketEntity, 'shares', [])
-  return shares.map((shareAddress) => getMarketShareById(state)(shareAddress))
+  return shares.map(shareAddress => getMarketShareById(state)(shareAddress))
 }
 
 export const filterMarkets = state => (opts) => {
   const marketEntities = getMarkets(state)
 
   const { textSearch, resolved } = opts
-  
+
   return marketEntities
     .filter(market =>
     (!textSearch ||

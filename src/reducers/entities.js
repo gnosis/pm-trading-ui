@@ -24,13 +24,13 @@ const reducer = handleActions({
       // preserve old entities
       const entitiesState = get(state, `${entityType}`, {})
       set(result, `${entityType}`, entitiesState)
-      
+
       keys(action.payload.entities[entityType]).forEach((entityId) => {
         // preserve old entity (only update if not exists)
         const entityState = get(state, `${entityType}.${entityId}`, {})
         set(result, `${entityType}.${entityId}`, {
           ...entityState,
-          ...action.payload.entities[entityType][entityId]
+          ...action.payload.entities[entityType][entityId],
         })
       })
     })

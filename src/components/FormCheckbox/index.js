@@ -2,7 +2,7 @@ import React from 'react'
 
 import './formCheckbox.less'
 
-import { bemifyClassName  } from 'utils/helpers'
+import { bemifyClassName } from 'utils/helpers'
 
 const Checkbox = ({ input, label, type, text, className }) => (
   <div className={`checkboxField ${bemifyClassName(className)}`}>

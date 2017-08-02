@@ -25,7 +25,7 @@ import {
 
 import * as api from 'api'
 
-export const requestMarket = (marketAddress) => async (dispatch) => {
+export const requestMarket = marketAddress => async (dispatch) => {
   const payload = await api.requestMarket(marketAddress)
   return await dispatch(receiveEntities(payload))
 }
@@ -175,8 +175,7 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
   }))
 }
 
-export const sellMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
-  return await api.sellShares(market, outcomeIndex, amount)
+export const sellMarketShares = (market, outcomeIndex, amount) => async dispatch => await api.sellShares(market, outcomeIndex, amount)
 
   // calculate new values
-}
+
