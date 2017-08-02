@@ -60,6 +60,20 @@ export const getMarketSharesById = (state) => (marketAddress, accountAddress) =>
   return shares.map((shareAddress) => getMarketShareById(state)(shareAddress))
 }
 
+export const filterMarkets = state => (opts) => {
+  const marketEntities = getMarkets(state)
+
+  const { textSearch, resolved } = opts
+  
+  return marketEntities
+    .filter(market =>
+    (!textSearch ||
+      market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
+      market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
+    (typeof resolved === 'undefined' || (resolved === 'RESOLVED' && market.oracle.isOutcomeSet) || (resolved === 'UNRESOLVED' && !market.oracle.isOutcomeSet)),
+  )
+}
+
 export default {
   getMarkets,
 }
