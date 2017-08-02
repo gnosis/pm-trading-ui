@@ -37,7 +37,6 @@ export const requestMarkets = () => async (dispatch) => {
 
 export const requestMarketShares = (marketAddress, accountAddress) => async (dispatch) => {
   const payload = await api.requestMarketShares(marketAddress, accountAddress)
-  console.log(payload)
   return await dispatch(receiveEntities(payload))
 }
 

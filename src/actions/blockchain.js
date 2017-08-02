@@ -17,6 +17,4 @@ export const connectBlockchain = () => async (dispatch) => {
     console.warn(`Blockchain connection Error: ${e}`)
     return await dispatch(setConnectionStatus({ connected: false }))
   }
-
-  console.log(account)
 }

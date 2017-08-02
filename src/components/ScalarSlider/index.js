@@ -19,7 +19,7 @@ class ScalarSlider extends Component {
 
     // current value
     const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
-    console.log(bounds.toString())
+    
     const value = marginalPriceCurrent.mul(bounds.toString()).add(bigLowerBound.div(10 ** decimals).toString())
     const percentage = marginalPriceCurrent.mul(100)
 

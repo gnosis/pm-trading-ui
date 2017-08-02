@@ -25,8 +25,6 @@ class MarketBuySharesForm extends Component {
       selectedBuyInvest,
     } = this.props
 
-    console.log(selectedBuyInvest, selectedCategoricalOutcome)
-
     buyShares(market, selectedCategoricalOutcome, selectedBuyInvest)
   }
 
@@ -92,7 +90,6 @@ class MarketBuySharesForm extends Component {
     }
 
     const shareCost = this.getShareCost(selectedBuyInvest, outcomeIndex)
-    console.log(shareCost.toString())
 
     const maximumWin = this.getMaximumWin(shareCost, selectedBuyInvest)
     const percentageWin = this.getPercentageWin(shareCost, selectedBuyInvest)
