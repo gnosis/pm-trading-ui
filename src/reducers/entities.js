@@ -37,7 +37,7 @@ const reducer = handleActions({
     return result
   },
   [removeEntity]: (state, action) => {
-    const { [action.payload.id]: removed, ...rest } = state[action.payload.entityType]
+    const { ...rest } = state[action.payload.entityType]
     return {
       ...state,
       [action.payload.entityType]: { ...rest } }

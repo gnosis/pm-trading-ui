@@ -14,7 +14,7 @@ const FORM = {
   },
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const selector = formValueSelector('marketCreateWizard')
   return {
     selectedOracleType: selector(state, 'oracleType'),

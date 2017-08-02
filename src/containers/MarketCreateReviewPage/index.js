@@ -58,7 +58,7 @@ const FORM = {
   },
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const selector = formValueSelector('marketCreateWizard')
   return {
     formValues: {
@@ -81,7 +81,6 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  createMarket: market => dispatch(composeMarket(market)),
   changeUrl: url => dispatch(push(url)),
   submitForm: () => dispatch(submit('marketCreateWizard')),
 })

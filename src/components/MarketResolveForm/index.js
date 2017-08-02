@@ -1,19 +1,27 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { reduxForm, Field } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
-
-import './marketResolveForm.less'
 
 import { OUTCOME_TYPES } from 'utils/constants'
 
 import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
 
+import './marketResolveForm.less'
+
 class MarketResolveForm extends Component {
   @autobind
   handleResolve(values) {
-    const { market: { event: { type }, eventDescription: { decimals }, oracle: { address } } } = this.props
+    const {
+      market: {
+        event: { type },
+        eventDescription: { decimals },
+        oracle: { address },
+      },
+    } = this.props
+
     const { selectedOutcome, selectedValue } = values
 
     if (type === OUTCOME_TYPES.CATEGORICAL) {
@@ -22,6 +30,8 @@ class MarketResolveForm extends Component {
       const outcome = Decimal(selectedValue).times(10 ** decimals)
       return this.props.resolveOracle(address, outcome.trunc())
     }
+
+    throw new Error(`got unexpected type ${type}`)
   }
   renderResolveScalar() {
     const { handleSubmit } = this.props
@@ -71,6 +81,13 @@ class MarketResolveForm extends Component {
 
     return <span>Something went wrong. Please reload the page</span>
   }
+}
+
+MarketResolveForm.propTypes = {
+  market: PropTypes.object,
+  submitting: PropTypes.bool,
+  resolveOracle: PropTypes.func,
+  handleSubmit: PropTypes.func,
 }
 
 const FORM = {

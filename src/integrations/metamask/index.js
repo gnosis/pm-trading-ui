@@ -74,7 +74,7 @@ class Metamask {
   }
 
   async getAccount() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         const accounts = _.get(this, 'web3.eth.accounts', [])
         if (accounts.length > 0) {

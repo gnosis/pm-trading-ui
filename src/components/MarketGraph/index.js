@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
-import autobind from 'autobind-decorator'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -11,6 +11,12 @@ const DateAxisTick = ({ x, y, payload }) => (
   </g>
 )
 
+DateAxisTick.propTypes = {
+  x: PropTypes.number,
+  y: PropTypes.number,
+  payload: PropTypes.string,
+}
+
 const PercentAxisTick = ({ x, y, payload: { value } }) => (
   <g transform={`translate(${x}, ${y})`}>
     {(value === 0 || value === 1) &&
@@ -18,7 +24,16 @@ const PercentAxisTick = ({ x, y, payload: { value } }) => (
       }
   </g>
   )
-export default ({ data }) => {
+
+PercentAxisTick.propTypes = {
+  x: PropTypes.number,
+  y: PropTypes.number,
+  payload: PropTypes.shape({
+    value: PropTypes.number,
+  }),
+}
+
+const MarketGraph = ({ data }) => {
   const stacks = Object.keys(data[0]).slice(1)
   const z = scaleOrdinal(schemeDark2)
   z.domain(stacks)
@@ -49,3 +64,9 @@ export default ({ data }) => {
     </div>
   )
 }
+
+MarketGraph.propTypes = {
+  data: PropTypes.object,
+}
+
+export default MarketGraph
