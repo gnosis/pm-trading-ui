@@ -1,4 +1,7 @@
+/* globals fetch */
+
 import { mapValues, startsWith, isArray } from 'lodash'
+
 import { HEX_VALUE_REGEX } from 'utils/constants'
 
 export const hexWithoutPrefix = (value) => {
@@ -33,6 +36,11 @@ export const toEntity = (data, entityType, idKey = 'address') => {
     ],
   }
 }
+
+export const restFetch = url =>
+  fetch(url)
+    .then(res => res.json())
+    .catch(err => console.warn(`Gnosis DB: ${err}`))
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''

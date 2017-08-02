@@ -10,6 +10,7 @@ import MarketGraph from 'components/MarketGraph'
 
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
+import MarketMySharesForm from 'components/MarketMySharesForm'
 
 import './marketDetail.less'
 
@@ -59,9 +60,9 @@ const expandableViews = {
     component: undefined,
   },
   [EXPAND_MY_SHARES]: {
-    label: 'My Shares',
+    label: 'My Holdings',
     className: 'btn btn-default',
-    component: undefined,
+    component: MarketMySharesForm,
   },
   [EXPAND_RESOLVE]: {
     label: 'Resolve',
@@ -73,7 +74,13 @@ const expandableViews = {
 
 export default class MarketDetail extends Component {
   componentWillMount() {
-    this.props.requestMarket(this.props.params.id)
+    if (!this.props.market || !this.props.market.address) {
+      this.props.fetchMarket(this.props.params.id)
+    }
+
+    if(this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
+      this.props.fetchMarketShares(this.props.defaultAccount)
+    }
   }
 
   @autobind
@@ -90,7 +97,7 @@ export default class MarketDetail extends Component {
   renderLoading() {
     return (
       <div className="marketDetailPage">
-        Loading...
+        <div className="container">Loading...</div>
       </div>
     )
   }

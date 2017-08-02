@@ -3,10 +3,11 @@ import { push } from 'react-router-redux'
 import { formValueSelector } from 'redux-form'
 
 import MarketList from 'components/MarketList'
-import { getMarkets, filterMarkets } from 'selectors/market'
+
+import { filterMarkets } from 'selectors/market'
 import { getDefaultAccount } from 'selectors/blockchain'
-import { requestMarketList } from 'actions/market'
-import { connectBlockchain } from 'actions/blockchain'
+
+import { requestMarkets } from 'actions/market'
 
 const mapStateToProps = (state) => {
   //const markets = getMarkets(state)
@@ -22,8 +23,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  requestMarkets: () => dispatch(requestMarketList()),
-  connectBlockchain: () => dispatch(connectBlockchain()),
+  fetchMarkets: () => dispatch(requestMarkets()),
   changeUrl: url => dispatch(push(url)),
 })
 

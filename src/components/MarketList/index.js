@@ -18,8 +18,7 @@ import { RESOLUTION_TIME, OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/cons
 
 class MarketList extends Component {
   componentWillMount() {
-    this.props.requestMarkets()
-    this.props.connectBlockchain()
+    this.props.fetchMarkets()
   }
 
   @autobind
