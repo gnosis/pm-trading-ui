@@ -110,12 +110,13 @@ export default class MarketDetail extends Component {
       const ViewComponent = view.component
 
       // Not sure if this is a good idea; If I need to optimize, here's a good place to start
-      return
+      return (
         <div className="expandable__inner">
-        <div className="container">
+          <div className="container">
             <ViewComponent {...this.props} />
           </div>
-      </div>
+        </div>
+      )
     }
 
     return <div />
