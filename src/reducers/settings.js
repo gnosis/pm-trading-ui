@@ -5,11 +5,12 @@ import { updateSettings } from 'actions/settings'
 const reducer = handleActions({
   [updateSettings]: (state, action) => {
     const data = action.payload
-    return {
-      ...state,
-      settings: data.settings,
-    }
+    let result = {}
+    data.map((item) => {
+      result[item.key] = item.value
+    })
+    return result
   },
-}, [])
+}, {})
 
 export default reducer

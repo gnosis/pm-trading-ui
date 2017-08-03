@@ -38,12 +38,9 @@ const FORM = {
   onChange: async (values, dispatch, props) => {
     const { formValues } = props
 
-    let settingsValues = {
-      settings: formValues.settings
-    }
     //console.log('REUDX2: ', updateSettings(settingsValues))
     //console.log('Form Values: ', formValues)
-    return await dispatch(updateSettings(settingsValues))
+    return await dispatch(updateSettings(formValues.settings))
   },
   onSubmit: async (values, dispatch, props) => {
     console.log('SUBMIT', values)
@@ -52,9 +49,21 @@ const FORM = {
 
 const mapStateToProps = (state, ownProps) => {
   const selector = formValueSelector('settingsForm')
+
+  const settings = Object.keys(state.settings).map(
+    (key) => {
+      if (state.settings[key]){
+        return {key, values: state.settings[key].value}
+      }
+    }
+  )
+
   return {
     formValues: {
       settings: selector(state, 'settings')
+    },
+    initialValues: {
+      settings
     }
   }
 }
