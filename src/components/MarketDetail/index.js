@@ -5,6 +5,8 @@ import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
+
+import { collateralTokenToText } from 'components/CurrencyName'
 import { RESOLUTION_TIME } from 'utils/constants'
 import MarketGraph from 'components/MarketGraph'
 
@@ -126,9 +128,9 @@ export default class MarketDetail extends Component {
     const infos = {
       Creator: market.creator,
       Oracle: market.oracle.owner,
-      Token: market.event.collateralToken,
+      Token: collateralTokenToText(market.event.collateralToken),
       Fee: Decimal(market.fee || 0).toFixed(2),
-      Funding: `${Decimal(market.funding || 0).toFixed(4)} ${market.event.collateralToken}`,
+      Funding: `${Decimal(market.funding || 0).toFixed(4)} ${collateralTokenToText(market.event.collateralToken)}`,
     }
 
     return (
