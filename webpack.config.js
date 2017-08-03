@@ -25,9 +25,10 @@ module.exports = {
     symlinks: false,
     modules: [
       `${__dirname}/src`,
+      `${__dirname}/package.json`,
       'node_modules',
       `${__dirname}/../gnosis.js`,
-      `${__dirname}/../gnosis.js/node_modules`
+      `${__dirname}/../gnosis.js/node_modules`,
     ] },
   module: {
     rules: [

@@ -1,3 +1,5 @@
+/* global __VERSION__ */
+
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
@@ -26,7 +28,7 @@ class App extends Component {
 
     return (
       <div className="appContainer">
-        <HeaderContainer />
+        <HeaderContainer version={__VERSION__} />
         {this.props.children}
       </div>
     )
