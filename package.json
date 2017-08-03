@@ -18,10 +18,10 @@
   "author": "Gnosis",
   "license": "ISC",
   "dependenciesOptional": {
-    "@gnosis.pm/gnosisjs": "file:../gnosis.js"
+    "@gnosis.pm/gnosisjs": "file:../gnosis.js",
   },
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "file:../gnosis.js",
+    "@gnosis.pm/gnosisjs": "gnosis/gnosisjs", // github
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
