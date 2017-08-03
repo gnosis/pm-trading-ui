@@ -161,7 +161,7 @@ export default class MarketDetail extends Component {
             <Countdown target={market.eventDescription.resolutionDate} />
           </div>
           <small className="marketTime__absolute">
-            {moment(market.event.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+            {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
           </small>
         </div>
       </div>
