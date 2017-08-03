@@ -18,7 +18,7 @@
   "author": "Gnosis",
   "license": "ISC",
   "dependenciesOptional": {
-    "@gnosis.pm/gnosisjs": "file:../gnosis.js",
+    "@gnosis.pm/gnosisjs": "file:../gnosis.js"
   },
   "dependencies": {
     "@gnosis.pm/gnosisjs": "gnosis/gnosisjs", // github
