@@ -4,6 +4,7 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
+import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
 
 import './marketMySharesForm.less'
 
@@ -124,7 +125,7 @@ class MarketMySharesForm extends Component {
           <Field
             component={FormInput}
             name="sellAmount"
-            placeholder="ETH"
+            placeholder={collateralTokenToText(market.event.collateralToken)}
             className="marketMySharesSellAmount"
             validate={(val) => {
               let decimalValue
@@ -146,10 +147,10 @@ class MarketMySharesForm extends Component {
           />
         </td>
         <td>
-          {newTokenValue.div(1e18).toDecimalPlaces(4).toString()} ETH
+          {newTokenValue.div(1e18).toDecimalPlaces(4).toString()} <CurrencyName collateralToken={market.event.collateralToken} />
           {!diffTokenValue.isZero() && <span>
             (<span className={`marketMyShares__diff ${diffTokenValue.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffTokenValue.gt(0) ? ' +' : ' '}{diffTokenValue.div(1e18).toDecimalPlaces(4).toString()} ETH
+              {diffTokenValue.gt(0) ? ' +' : ' '}{diffTokenValue.div(1e18).toDecimalPlaces(4).toString()} <CurrencyName collateralToken={market.event.collateralToken} />
               </span>)
           </span>}
         </td>
@@ -209,10 +210,10 @@ class MarketMySharesForm extends Component {
             {market.eventDescription.outcomes[share.outcomeToken.index]}
           </td>
           <td>
-            {Decimal(share.balance).div(1e18).toDecimalPlaces(4).toString()} ETH
+            {Decimal(share.balance).div(1e18).toDecimalPlaces(4).toString()} <CurrencyName collateralToken={market.event.collateralToken} />
           </td>
           <td>
-            {maximumWin.div(1e18).toDecimalPlaces(4).toString()} ETH
+            {maximumWin.div(1e18).toDecimalPlaces(4).toString()} <CurrencyName collateralToken={market.event.collateralToken} />
           </td>
           <td>
             {probability.mul(100).toDecimalPlaces(4).toString()} %

@@ -7,10 +7,10 @@ import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, submit, Field } from 'redux-form'
 
+import CurrencyName from 'components/CurrencyName'
+
 import FormSelect from 'components/FormSelect'
 import FormInput from 'components/FormInput'
-
-// import ContractName from 'containers/ContractName'
 
 import './marketList.less'
 
@@ -163,7 +163,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                {market.event.collateralToken} {/* <ContractName contractAddress={market.event.collateralToken} />*/}
+                <CurrencyName collateralToken={market.event.collateralToken} />
               </div>
             </div>
           </div>

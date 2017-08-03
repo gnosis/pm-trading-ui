@@ -7,6 +7,7 @@ import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 
+import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
 
 import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
@@ -111,7 +112,7 @@ class MarketBuySharesForm extends Component {
                 </div>
                 <div className="col-md-4">
                   <div className="marketBuyCurrency">
-                    {collateralToken}
+                    <CurrencyName collateralToken={collateralToken} />
                   </div>
                 </div>
               </div>
@@ -121,7 +122,7 @@ class MarketBuySharesForm extends Component {
                   </div>
                 <div className="col-md-6">
                   <span className="marketBuyWin__row marketBuyWin__max">
-                    {maximumWin} ({percentageWin} %) {collateralToken}
+                    {maximumWin} ({percentageWin} %) <CurrencyName collateralToken={collateralToken} />
                   </span>
                 </div>
               </div>

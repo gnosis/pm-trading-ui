@@ -5,6 +5,7 @@ import autobind from 'autobind-decorator'
 
 import { OUTCOME_TYPES, RESOLUTION_TIME, COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
+import CurrencyName from 'components/CurrencyName'
 import Checkbox from 'components/FormCheckbox'
 
 import './marketCreateReview.less'
@@ -81,7 +82,7 @@ class MarketCreateReview extends Component {
         <div className="row">
           <div className="col-md-12">
             <div className="marketReviewDetails__label">Currency</div>
-            <div className="marketReviewDetails__value">{collateralToken}</div>
+            <div className="marketReviewDetails__value"><CurrencyName collateralToken={collateralToken} /></div>
           </div>
         </div>
         <div className="row">
@@ -93,7 +94,9 @@ class MarketCreateReview extends Component {
         <div className="row">
           <div className="col-md-12">
             <div className="marketReviewDetails__label">Funding</div>
-            <div className="marketReviewDetails__value">{Decimal(funding || 0).toFixed(4)} {collateralToken}</div>
+            <div className="marketReviewDetails__value">
+              {Decimal(funding || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} />
+              </div>
           </div>
         </div>
         <div className="row">
@@ -122,11 +125,11 @@ class MarketCreateReview extends Component {
         <ul className="checkout__list">
           <li className="checkout__listItem">
             <span className="listItem__label">Market Funding</span>
-            <div className="listItem__value">{Decimal(funding || 0).toFixed(4)} {collateralToken}</div>
+            <div className="listItem__value">{Decimal(funding || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} /></div>
           </li>
           <li className="checkout__listItem">
             <span className="listItem__label">Gas Costs</span>
-            <span className="listItem__value">{Decimal(costEstimation || 0).toFixed(4)} {collateralToken}</span>
+            <span className="listItem__value">{Decimal(costEstimation || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} /></span>
           </li>
           <li className="checkout__seperator" />
           <li className="checkout__listItem checkout__listItem--total">
