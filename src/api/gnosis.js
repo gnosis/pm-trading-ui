@@ -1,3 +1,5 @@
+/* globals __ETHEREUM_HOST__ */
+
 import Gnosis from '@gnosis.pm/gnosisjs'
 
 import { hexWithoutPrefix, hexWithPrefix } from 'utils/helpers'
@@ -7,7 +9,9 @@ import delay from 'await-delay'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
-const GNOSIS_OPTIONS = {}
+const GNOSIS_OPTIONS = {
+  ethereum: __ETHEREUM_HOST__,
+}
 
 let gnosisInstance
 export const getGnosisConnection = async () => {

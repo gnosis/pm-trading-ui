@@ -10,6 +10,9 @@ const nodeEnv = process.env.NODE_ENV || 'development'
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
+const rpcUrl = process.env.ETHEREUM_HOST || 'http://localhost:8545'
+const gnosisDbUrl = process.env.GNOSISDB_HOST || 'http://localhost:8000'
+
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: [
@@ -64,13 +67,9 @@ module.exports = {
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: gnosisDbUrl,
         secure: false,
-      },
-      '/testrpc': {
-        target: 'http://localhost:8545',
-        secure: false,
-      },
+      }
     },
   },
   plugins: [
@@ -99,6 +98,7 @@ module.exports = {
     new webpack.DefinePlugin({
       __VERSION__: JSON.stringify(`${version}#${build}`),
       __ENV__: JSON.stringify(nodeEnv),
+      __ETHEREUM_HOST__: JSON.stringify(rpcUrl),
     }),
   ],
 }
