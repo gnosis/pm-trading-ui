@@ -105,7 +105,7 @@ class MarketCreateReview extends Component {
             <div className="marketReviewDetails__label">Funding</div>
             <div className="marketReviewDetails__value">
               {Decimal(funding || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} />
-              </div>
+            </div>
           </div>
         </div>
         <div className="row">

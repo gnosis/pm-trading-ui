@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './formCheckbox.less'
-
 import { bemifyClassName } from 'utils/helpers'
+
+import './formCheckbox.less'
 
 const Checkbox = ({ input, label, text, className }) => (
   <div className={`checkboxField ${bemifyClassName(className)}`}>

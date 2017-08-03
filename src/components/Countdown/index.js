@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 
 import moment from 'moment'
@@ -12,14 +13,6 @@ class Countdown extends Component {
     this.state = {}
   }
 
-  @autobind
-  updateDuration() {
-    const { til = moment(), target, format = RESOLUTION_TIME.RELATIVE_LONG_FORMAT } = this.props
-
-    const duration = moment.duration(moment(target).diff(til))
-    this.setState({ output: duration.format(format) })
-  }
-
   componentDidMount() {
     this.updateInterval = setInterval(this.updateDuration, 1000)
     this.updateDuration()
@@ -29,11 +22,25 @@ class Countdown extends Component {
     clearInterval(this.updateInterval)
   }
 
+  @autobind
+  updateDuration() {
+    const { til = moment(), target, format = RESOLUTION_TIME.RELATIVE_LONG_FORMAT } = this.props
+
+    const duration = moment.duration(moment(target).diff(til))
+    this.setState({ output: duration.format(format) })
+  }
+
   render() {
     return (
       <span>{this.state.output}</span>
     )
   }
+}
+
+Countdown.propTypes = {
+  til: PropTypes.instanceOf(moment),
+  target: PropTypes.string,
+  format: PropTypes.string,
 }
 
 export default Countdown

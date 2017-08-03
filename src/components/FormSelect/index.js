@@ -4,8 +4,8 @@ import { pick } from 'lodash'
 
 import { bemifyClassName } from 'utils/helpers'
 
-const FormSelect = ({ input, label, values, labelClassName, className, defaultValue, ...props }) => {
-  const selectProps = pick(props, ['className'])
+const FormSelect = ({ input, label, values, className, defaultValue, ...props }) => {
+  const selectProps = pick(props, [])
 
   return (
     <div className={`selectField ${bemifyClassName(className)}`}>
@@ -31,7 +31,7 @@ FormSelect.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
   values: PropTypes.objectOf(valueType),
-  labelClassName: PropTypes.string,
+  className: PropTypes.string,
   defaultValue: valueType,
 }
 

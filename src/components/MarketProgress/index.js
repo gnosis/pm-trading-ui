@@ -81,7 +81,7 @@ MarketProgress.propTypes = {
     isDone: PropTypes.bool,
     label: PropTypes.string,
   })),
-  success: PropTypes.string,
+  success: PropTypes.bool,
   transaction: PropTypes.shape({
     startTime: PropTypes.string,
     endTime: PropTypes.string,

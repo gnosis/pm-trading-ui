@@ -63,7 +63,7 @@ class MarketResolveForm extends Component {
   }
 
   render() {
-    const { submitting, market: { event: { type }, oracle: { isOutcomeSet } } } = this.props
+    const { submitting, market: { event: { type }, oracle: { isOutcomeSet } } } = this.props
 
     if (submitting) {
       return <span>Resolving Oracle...</span>

@@ -1,10 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 
 import logo from 'assets/img/gnosis_logo.svg'
 import './header.less'
 
-export default ({ version }) => (
+const Header = ({ version }) => (
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
@@ -25,3 +26,9 @@ export default ({ version }) => (
     </div>
   </div>
 )
+
+Header.propTypes = {
+  version: PropTypes.string,
+}
+
+export default Header

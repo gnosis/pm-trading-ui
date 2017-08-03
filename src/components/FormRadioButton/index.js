@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './formRadioButton.less'
-
 import { bemifyClassName } from 'utils/helpers'
+
+import './formRadioButton.less'
 
 const FormRadioButton = ({ input, radioValue, text, className, highlightColor }) => (
   <div className={`radioButton ${bemifyClassName(className)}`}>
@@ -40,4 +40,5 @@ export const FormRadioButtonLabel = ({ label, className }) => (
 
 FormRadioButtonLabel.propTypes = {
   label: PropTypes.string,
+  className: PropTypes.string,
 }

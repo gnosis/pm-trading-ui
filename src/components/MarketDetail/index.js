@@ -9,7 +9,7 @@ import { RESOLUTION_TIME } from 'utils/constants'
 
 
 import { collateralTokenToText } from 'components/CurrencyName'
-import DecimalValue, { decimalToText } from 'components/DecimalValue'
+import { decimalToText } from 'components/DecimalValue'
 
 import Countdown from 'components/Countdown'
 
@@ -231,9 +231,11 @@ MarketDetail.propTypes = {
     id: PropTypes.string,
     view: PropTypes.string,
   }),
+  defaultAccount: PropTypes.string,
   market: PropTypes.object,
-  requestMarket: PropTypes.func,
   changeUrl: PropTypes.func,
+  fetchMarket: PropTypes.func,
+  fetchMarketShares: PropTypes.func,
 }
 
 export default MarketDetail

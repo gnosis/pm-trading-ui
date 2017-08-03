@@ -5,7 +5,7 @@ import { calcLMSRMarginalPrice } from 'api'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
-import { reduxForm, submit, Field } from 'redux-form'
+import { reduxForm, Field } from 'redux-form'
 
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
@@ -273,8 +273,7 @@ class MarketList extends Component {
 MarketList.propTypes = {
   markets: PropTypes.arrayOf(PropTypes.object),
   defaultAccount: PropTypes.string,
-  requestMarkets: PropTypes.func,
-  connectBlockchain: PropTypes.func,
+  fetchMarkets: PropTypes.func,
   changeUrl: PropTypes.func,
   handleSubmit: PropTypes.func,
 }

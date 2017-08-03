@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './formInput.less'
-
 import { bemifyClassName } from 'utils/helpers'
+
+import './formInput.less'
 
 const Input = ({ input, meta: { error }, label, type, className, placeholder }) => (
   <div className={`inputField ${bemifyClassName(className)}`}>
@@ -24,6 +24,9 @@ Input.propTypes = {
   type: PropTypes.string,
   className: PropTypes.string,
   placeholder: PropTypes.string,
+  meta: PropTypes.shape({
+    error: PropTypes.string,
+  }),
 }
 
 export default Input

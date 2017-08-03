@@ -199,7 +199,11 @@ export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenC
 
   const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
 
-  return await gnosis.sellOutcomeTokens({ market: hexWithPrefix(marketAddress), outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei })
+  return await gnosis.sellOutcomeTokens({
+    market: hexWithPrefix(marketAddress),
+    outcomeTokenIndex,
+    outcomeTokenCount: outcomeTokenCountWei,
+  })
 }
 
 export const calcLMSRCost = Gnosis.calcLMSRCost

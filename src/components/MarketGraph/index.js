@@ -66,7 +66,7 @@ const MarketGraph = ({ data }) => {
 }
 
 MarketGraph.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.arrayOf(PropTypes.object),
 }
 
 export default MarketGraph

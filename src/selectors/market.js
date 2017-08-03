@@ -54,7 +54,7 @@ export const getMarkets = (state) => {
   return Object.keys(marketEntities).map(getMarketById(state))
 }
 
-export const getMarketSharesById = state => (marketAddress, accountAddress) => {
+export const getMarketSharesById = state => (marketAddress) => {
   const marketEntity = getMarketById(state)(marketAddress)
   const shares = get(marketEntity, 'shares', [])
   return shares.map(shareAddress => getMarketShareById(state)(shareAddress))
