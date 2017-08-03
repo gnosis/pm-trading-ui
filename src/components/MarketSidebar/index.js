@@ -11,7 +11,7 @@ const MarketSidebar = ({ fields }) => (
 
 
 MarketSidebar.propTypes = {
-  fields: PropTypes.arrayOf(PropTypes.string),
+  fields: PropTypes.objectOf(PropTypes.string),
 }
 
 export default MarketSidebar

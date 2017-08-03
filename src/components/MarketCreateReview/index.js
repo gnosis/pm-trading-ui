@@ -273,7 +273,7 @@ MarketCreateReview.propTypes = {
     description: PropTypes.string,
     oracleType: PropTypes.string,
     funding: PropTypes.string,
-    ultimateOracle: PropTypes.string,
+    ultimateOracle: PropTypes.bool,
     collateralToken: PropTypes.string,
     unit: PropTypes.string,
     upperBound: PropTypes.string,

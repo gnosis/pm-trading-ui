@@ -86,7 +86,7 @@ MarketProgress.propTypes = {
     startTime: PropTypes.string,
     endTime: PropTypes.string,
   }),
-  closeModal: PropTypes.string,
+  closeModal: PropTypes.func,
 }
 
 export default MarketProgress
