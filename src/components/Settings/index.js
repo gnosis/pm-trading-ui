@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, FieldArray } from 'redux-form'
 import EditableKeyValueList from 'components/FormEditableKeyValueList'
 /* USEFUL FOR THE NEXT SETTINGS STEP
 import GenericForm from './genericForm'
@@ -8,24 +8,16 @@ import ModeratorsForm from './moderatorsForm'*/
 
 class Settings extends Component {
 
-  /* renderForm() {
-    return (
-      <div>
-        <GenericForm {...this.props} />
-        <ModeratorsForm {...this.props} />
-      </div>
-    )
-  }*/
-
   _renderForm() {
+    const { handleSubmit, pristine, reset, submitting } = this.props
     return (
-      <div className="settings">
+      <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-md-12">
-            <Field name="values" component={EditableKeyValueList} label="VALUE" normalize={val => val.filter(entry => entry.length > 0)} />
+            <FieldArray name="settings" component={renderSettings} />
           </div>
         </div>
-      </div>
+      </form>
     )
   }
 
@@ -38,31 +30,71 @@ class Settings extends Component {
   }
 }
 
-/*const validate = values => {
-  const errors = {}
-  if (!values.title) {
-    errors.title = 'Required'
-  }
-  if (!values.description) {
-    errors.description = 'Required'
-  }
-  if (!values.subdomain) {
-    errors.subdomain = 'Required'
-  }
-  return errors
-}*/
-
-/*const renderField = ({input, label, type, meta: {touched, error, warning}}) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={label} type={type} />
-      {touched &&
-        ((error && <span>{error}</span>) ||
-          (warning && <span>{warning}</span>))}
-    </div>
+const renderField = ({ input, label, type, className, placeholder, meta: { touched, error } }) =>
+  <div className={`inputField ${className || ''}`}>
+    <label htmlFor={input.name} className={`inputField__label ${className ? `${className}__label` : ''}`}>{ label }</label>
+    <input
+      className={`inputField__input ${className ? `${className}__input` : ''}`}
+      placeholder={placeholder}
+      type={`${type || 'text'}`}
+      {...input}
+    />
+    {touched &&
+      error &&
+      <span>
+        {error}
+      </span>}
   </div>
-)*/
+
+const renderSettings = ({ fields, meta: { error, submitFailed } }) =>
+      <div className="row">
+        <div className="col-md-12">
+          <button type="button" onClick={() => fields.push({})} className="btn">
+            {fields.getAll() && fields.getAll().length > 0 ? 'ADD ANOTHER' : 'ADD'}
+          </button>
+        <div>
+      </div>
+      {fields.map((item, index) =>
+        <div className="row" key={index}>
+          <div className="col-md-12">
+            <h4>
+              Setting #{index + 1}
+            </h4>
+            <Field
+              name={`${item}.key`}
+              type="text"
+              component={renderField}
+              label="KEY"
+            />
+            <Field
+              name={`${item}.value`}
+              type="text"
+              component={renderField}
+              label="VALUE"
+            />
+            <button
+              className="btn btn-primary"
+              type="button"
+              title="Remove"
+              onClick={() => fields.remove(index)}
+            >
+              REMOVE
+            </button>
+          </div>
+        </div>
+      )}
+      {fields.getAll() && fields.getAll().length > 0 ?
+        <div className="row">
+          <div className="col-md-4">
+            <button type="submit" className="btn">
+              Save settings
+            </button>
+          </div>
+        </div>
+        : <div />
+      }
+      </div>
+    </div>
 
 
 const form = {

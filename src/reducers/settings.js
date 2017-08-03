@@ -7,11 +7,9 @@ const reducer = handleActions({
     const data = action.payload
     return {
       ...state,
-      settings: data.values,
+      settings: data.settings,
     }
-    console.log('REDUCER: ', action)
-    return state
   },
-}, [''])
+}, [])
 
 export default reducer

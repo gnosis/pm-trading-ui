@@ -39,20 +39,23 @@ const FORM = {
     const { formValues } = props
 
     let settingsValues = {
-      values: formValues.values
+      settings: formValues.settings
     }
-    console.log('REDUX: ', settingsValues)
-    console.log('REUDX2: ', updateSettings(settingsValues))
+    //console.log('REUDX2: ', updateSettings(settingsValues))
+    //console.log('Form Values: ', formValues)
     return await dispatch(updateSettings(settingsValues))
   },
+  onSubmit: async (values, dispatch, props) => {
+    console.log('SUBMIT', values)
+  }
 }
 
 const mapStateToProps = (state, ownProps) => {
   const selector = formValueSelector('settingsForm')
   return {
     formValues: {
-      values: selector(state, 'values'),
-    },
+      settings: selector(state, 'settings')
+    }
   }
 }
 
