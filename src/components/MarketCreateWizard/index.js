@@ -53,18 +53,12 @@ export default class MarketCreateWizard extends Component {
   }
 
   renderMarketDetails() {
-    const currencies = {
-      '0x9b1f7f645351af3631a656421ed2e40f2802e6c0': 'Ether Token',
-    }
-
     return (
       <div className="marketDetails">
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
             <FormRadioButtonLabel label="Currency" />
-            {Object.keys(currencies).map(fieldValue =>
-              <Field key={fieldValue} name="collateralToken" component={FormRadioButton} radioValue={fieldValue} text={currencies[fieldValue]} />,
-            )}
+            <Field name="collateralToken" component={FormRadioButton} radioValue={'eth'} text={'Ether Token'} />
           </div>
         </div>
         <div className="row">

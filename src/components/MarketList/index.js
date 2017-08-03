@@ -8,6 +8,8 @@ import 'moment-duration-format'
 import { reduxForm, submit, Field } from 'redux-form'
 
 import CurrencyName from 'components/CurrencyName'
+import DecimalValue from 'components/DecimalValue'
+import Countdown from 'components/Countdown'
 
 import FormSelect from 'components/FormSelect'
 import FormInput from 'components/FormInput'
@@ -89,12 +91,12 @@ class MarketList extends Component {
     return (
       <div className="market__outcomes market__outcomes--scalar">
         <div className="outcome outcome--scalar">
-          <div className="outcome__bound outcome__bound--lower">{lowerBound.toString()}</div>
+          <div className="outcome__bound outcome__bound--lower"><DecimalValue value={lowerBound} decimals={1} /></div>
           <div className="outcome__currentPrediction">
             <div className="outcome__currentPrediction--line" />
             <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>{value.toString()}</div>
           </div>
-          <div className="outcome__bound outcome__bound--upper">{upperBound.toString()}</div>
+          <div className="outcome__bound outcome__bound--upper"><DecimalValue value={upperBound} decimals={1} /></div>
         </div>
       </div>
     )
@@ -102,10 +104,7 @@ class MarketList extends Component {
 
   @autobind
   renderMarket(market) {
-    const timeUntilEvent = moment(market.eventDescription.resolutionDate).diff(moment())
-    const durationTilEvent = moment.duration(timeUntilEvent)
-
-    const isResolved = timeUntilEvent < 0 || (market.oracle && market.oracle.isOutcomeSet)
+    const isResolved = market.oracle && market.oracle.isOutcomeSet
     const isOwner = market.creator === this.props.defaultAccount
 
     const resolveUrl = `/markets/${market.address}/resolve`
@@ -138,7 +137,7 @@ class MarketList extends Component {
               <div className="info__field">
                 <div className="info__field--icon icon icon--countdown" />
                 <div className="info__field--label">
-                  {durationTilEvent.format(RESOLUTION_TIME.RELATIVE_FORMAT)}
+                  <Countdown target={market.eventDescription.resolutionDate} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
                 </div>
               </div>
             </div>
@@ -147,7 +146,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--enddate" />
               <div className="info__field--label">
-                {moment(market.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+                {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
               </div>
             </div>
           </div>

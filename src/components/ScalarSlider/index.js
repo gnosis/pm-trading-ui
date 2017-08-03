@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Decimal from 'decimal.js'
 
+import DecimalValue from 'components/DecimalValue'
+
 import './scalarSlider.less'
 
 class ScalarSlider extends Component {
@@ -37,13 +39,13 @@ class ScalarSlider extends Component {
             <div className="slider__handle" style={{ left: `${percentage.toFixed(4)}%` }}>
               <div className="slider__handleText">
                 <div className="slider__handleTextLabel">Current Bet</div>
-                {value.toFixed(decimals)} {unit}
+                <DecimalValue value={value} decimals={decimals} /> {unit}
               </div>
             </div>
             <div className="slider__handle slider__handle--below" style={{ left: `${selectedPercentage.toFixed(4)}%` }}>
               <div className="slider__handleText">
                 <div className="slider__handleTextLabel">Selected Bet</div>
-                {value.toFixed(decimals)} {unit}
+                <DecimalValue value={selectedValue} decimals={decimals} /> {unit}
               </div>
             </div>
           </div>

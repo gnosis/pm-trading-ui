@@ -4,6 +4,8 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
+
+import DecimalValue from 'components/DecimalValue'
 import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
 
 import './marketMySharesForm.less'
@@ -147,18 +149,18 @@ class MarketMySharesForm extends Component {
           />
         </td>
         <td>
-          {newTokenValue.div(1e18).toDecimalPlaces(4).toString()} <CurrencyName collateralToken={market.event.collateralToken} />
+          <DecimalValue value={newTokenValue.div(1e18)} /> <CurrencyName collateralToken={market.event.collateralToken} />
           {!diffTokenValue.isZero() && <span>
             (<span className={`marketMyShares__diff ${diffTokenValue.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffTokenValue.gt(0) ? ' +' : ' '}{diffTokenValue.div(1e18).toDecimalPlaces(4).toString()} <CurrencyName collateralToken={market.event.collateralToken} />
+              {diffTokenValue.gt(0) ? ' +' : ' '}<DecimalValue value={diffTokenValue.div(1e18)} /> <CurrencyName collateralToken={market.event.collateralToken} />
               </span>)
           </span>}
         </td>
         <td>
-          {newProbability.mul(100).toDecimalPlaces(4).toString()}
+          <DecimalValue value={newProbability.mul(100)} /> %
           {!diffProbability.isZero() && <span>
             (<span className={`marketMyShares__diff ${diffProbability.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffProbability.gt(0) ? ' +' : ' '}{diffProbability.mul(100).toDecimalPlaces(4).toString()} %
+              {diffProbability.gt(0) ? ' +' : ' '}<DecimalValue value={diffProbability.mul(100)} /> %
             </span>)
           </span>}
         </td>
@@ -210,13 +212,13 @@ class MarketMySharesForm extends Component {
             {market.eventDescription.outcomes[share.outcomeToken.index]}
           </td>
           <td>
-            {Decimal(share.balance).div(1e18).toDecimalPlaces(4).toString()} <CurrencyName collateralToken={market.event.collateralToken} />
+            <DecimalValue value={Decimal(share.balance).div(1e18)} /> <CurrencyName collateralToken={market.event.collateralToken} />
           </td>
           <td>
-            {maximumWin.div(1e18).toDecimalPlaces(4).toString()} <CurrencyName collateralToken={market.event.collateralToken} />
+            <DecimalValue value={maximumWin.div(1e18)} /> <CurrencyName collateralToken={market.event.collateralToken} />
           </td>
           <td>
-            {probability.mul(100).toDecimalPlaces(4).toString()} %
+            <DecimalValue value={probability.mul(100)} /> %
           </td>
           <td>
             <a href="#" onClick={e => this.handleShowSellView(e, shareIndex)}>Sell</a>
