@@ -9,6 +9,8 @@ const FORM = {
   destroyOnUnmount: false,
   initialValues: {
     oracleType: 'CENTRALIZED',
+    fee: '0',
+    collateralToken: 'eth',
   },
 }
 

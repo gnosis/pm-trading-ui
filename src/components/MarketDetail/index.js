@@ -5,9 +5,14 @@ import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
+import { RESOLUTION_TIME } from 'utils/constants'
+
 
 import { collateralTokenToText } from 'components/CurrencyName'
-import { RESOLUTION_TIME } from 'utils/constants'
+import DecimalValue, { decimalToText } from 'components/DecimalValue'
+
+import Countdown from 'components/Countdown'
+
 import MarketGraph from 'components/MarketGraph'
 
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
@@ -129,8 +134,8 @@ export default class MarketDetail extends Component {
       Creator: market.creator,
       Oracle: market.oracle.owner,
       Token: collateralTokenToText(market.event.collateralToken),
-      Fee: Decimal(market.fee || 0).toFixed(2),
-      Funding: `${Decimal(market.funding || 0).toFixed(4)} ${collateralTokenToText(market.event.collateralToken)}`,
+      Fee: `${decimalToText(market.fee, 4)} %`,
+      Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
 
     return (
@@ -146,10 +151,6 @@ export default class MarketDetail extends Component {
   }
 
   renderDetails(market) {
-    const timeUntilEvent = moment
-      .duration(moment(market.event.resolutionDate)
-      .diff())
-
     return (
       <div className="marketDetails col-md-9">
         <div className="marketDescription">
@@ -157,7 +158,7 @@ export default class MarketDetail extends Component {
         </div>
         <div className="marketTimer">
           <div className="marketTimer__live">
-            {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}
+            <Countdown target={market.eventDescription.resolutionDate} />
           </div>
           <small className="marketTime__absolute">
             {moment(market.event.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}

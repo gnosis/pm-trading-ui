@@ -7,6 +7,8 @@ import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 
+
+import DecimalValue, { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
 
@@ -58,7 +60,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getMaximumWin(shareCost) {
-    return shareCost.div(1e18).toFixed(4)
+    return shareCost.div(1e18)
   }
 
   getPercentageWin(shareCost, investment) {
@@ -67,7 +69,7 @@ class MarketBuySharesForm extends Component {
     }
 
     const invest = new Decimal(investment).mul(1e18)
-    return shareCost.div(invest.toString()).mul(100).sub(100).toFixed(4)
+    return shareCost.div(invest.toString()).mul(100).sub(100)
   }
 
   render() {
@@ -122,7 +124,7 @@ class MarketBuySharesForm extends Component {
                   </div>
                 <div className="col-md-6">
                   <span className="marketBuyWin__row marketBuyWin__max">
-                    {maximumWin} ({percentageWin} %) <CurrencyName collateralToken={collateralToken} />
+                    <DecimalValue value={maximumWin} /> (<DecimalValue value={percentageWin} /> %) <CurrencyName collateralToken={collateralToken} />
                   </span>
                 </div>
               </div>
