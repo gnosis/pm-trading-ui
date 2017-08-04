@@ -8,8 +8,8 @@ const reducer = handleActions({
     const data = action.payload
     let result = {}
     data.map((item) => {
-      if (item.key && item.value) {
-        result[item.key] = item.value
+      if (item.address && item.name) {
+        result[item.address] = item.name
       }
     })
     return result

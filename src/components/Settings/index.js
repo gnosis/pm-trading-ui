@@ -29,7 +29,7 @@ class Settings extends Component {
 const renderSettings = ({ fields, meta: { error } }) =>
       <div className="row">
         <div className="col-md-12">
-          <button type="button" onClick={() => fields.push({})} className="btn">
+          <button type="button" onClick={() => fields.push({key: '', value: ''})} className="btn">
             {fields.getAll() && fields.getAll().length > 0 ? 'ADD ANOTHER' : 'ADD'}
           </button>
         <div>
@@ -41,14 +41,14 @@ const renderSettings = ({ fields, meta: { error } }) =>
               Setting #{index + 1}
             </h4>
             <Field
-              name={`${item}.key`}
+              name={`${item}.name`}
               type="text"
               component={Input}
               label="NAME"
               placeholder="George"
             />
             <Field
-              name={`${item}.value`}
+              name={`${item}.address`}
               type="text"
               component={Input}
               label="ADDRESS"
@@ -72,31 +72,30 @@ const renderSettings = ({ fields, meta: { error } }) =>
 const validate = values => {
   const errors = {}
   const settingsErrors = []
-  values.settings.forEach((item, index) => {
+  for (var index=0; index<values.settings.length; index++) {
     const error = {}
-
-    // Key errors
-    if (!item.key || item.key.length < 3) {
-      error.key = 'Required'
+    const item = values.settings[index]
+    // Name errors
+    if (!item.name || item.name.length < 3) {
+      error.name = 'Required'
       settingsErrors[index] = error
     }
-
-    const occurrences = values.settings.filter((other) => {return item.value == other.value})
-
+    const occurrences = values.settings.filter((other) => {return item.address == other.address})
     // Value Errors
     if ( occurrences.length > 1 ) {
-      error.value = 'Duplicated Address'
+      error.address = 'Duplicated Address'
       settingsErrors[index] = error
     }
-    else if (!item.value) {
-      error.value = 'Required'
+    else if (!item.address) {
+      error.address = 'Required'
       settingsErrors[index] = error
     }
-    else if (item.value.length != 42 || item.value.substr(0, 2) != '0x') {
-      error.value = 'Invalid Ethereum address'
+    else if (item.address.length != 42 || item.address.substr(0, 2) != '0x') {
+      error.address = 'Invalid Ethereum address'
       settingsErrors[index] = error
     }
-  })
+
+  }
 
   if (settingsErrors.length > 0) {
     errors.settings = settingsErrors
