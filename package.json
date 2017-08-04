@@ -17,11 +17,8 @@
   },
   "author": "Gnosis",
   "license": "ISC",
-  "dependenciesOptional": {
-    "@gnosis.pm/gnosisjs": "file:../gnosis.js"
-  },
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "gnosis/gnosis.js",
+    "@gnosis.pm/gnosisjs": "^0.4.1",
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",

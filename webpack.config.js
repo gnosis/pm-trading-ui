@@ -63,8 +63,9 @@ module.exports = {
     ],
   },
   devServer: {
+    disableHostCheck: true,
     contentBase: false,
-    port: 3000,
+    port: 5000,
     proxy: {
       '/api': {
         target: gnosisDbUrl,
