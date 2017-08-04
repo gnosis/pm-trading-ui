@@ -8,7 +8,9 @@ const reducer = handleActions({
     const data = action.payload
     let result = {}
     data.map((item) => {
-      result[item.key] = item.value
+      if (item.key && item.value) {
+        result[item.key] = item.value
+      }
     })
     return result
   },

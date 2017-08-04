@@ -72,14 +72,23 @@ const renderSettings = ({ fields, meta: { error } }) =>
 const validate = values => {
   const errors = {}
   const settingsErrors = []
-  console.log('Validating...')
   values.settings.forEach((item, index) => {
     const error = {}
+
+    // Key errors
     if (!item.key || item.key.length < 3) {
       error.key = 'Required'
       settingsErrors[index] = error
     }
-    if (!item.value) {
+
+    const occurrences = values.settings.filter((other) => {return item.value == other.value})
+
+    // Value Errors
+    if ( occurrences.length > 1 ) {
+      error.value = 'Duplicated Address'
+      settingsErrors[index] = error
+    }
+    else if (!item.value) {
       error.value = 'Required'
       settingsErrors[index] = error
     }
@@ -92,7 +101,6 @@ const validate = values => {
   if (settingsErrors.length > 0) {
     errors.settings = settingsErrors
   }
-
   return errors
 }
 
