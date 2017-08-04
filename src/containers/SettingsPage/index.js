@@ -53,7 +53,7 @@ const mapStateToProps = (state, ownProps) => {
   const settings = Object.keys(state.settings).map(
     (key) => {
       if (state.settings[key]){
-        return {key, values: state.settings[key].value}
+        return {key, value: state.settings[key]}
       }
     }
   )
