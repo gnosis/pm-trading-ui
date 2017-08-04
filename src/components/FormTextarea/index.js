@@ -13,7 +13,7 @@ const Input = ({ input, label, className }) => (
 )
 
 Input.propTypes = {
-  input: fieldPropTypes.input,
+  ...fieldPropTypes,
   label: PropTypes.string,
   className: PropTypes.string,
 }

@@ -29,7 +29,7 @@ const FormSelect = ({ input, label, values, className, defaultValue, ...props })
 const valueType = PropTypes.string
 
 FormSelect.propTypes = {
-  input: fieldPropTypes.input,
+  ...fieldPropTypes,
   label: PropTypes.string,
   values: PropTypes.objectOf(valueType),
   className: PropTypes.string,

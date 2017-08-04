@@ -23,7 +23,7 @@ const Slider = ({ input, label, min, max, decimals, unit }) => {
 }
 
 Slider.propTypes = {
-  input: fieldPropTypes.input,
+  ...fieldPropTypes,
   label: PropTypes.string,
   min: PropTypes.number,
   max: PropTypes.number,

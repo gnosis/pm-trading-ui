@@ -97,7 +97,7 @@ class FormEditableList extends Component {
 }
 
 FormEditableList.propTypes = {
-  input: fieldPropTypes.input,
+  ...fieldPropTypes,
   label: PropTypes.string,
 }
 

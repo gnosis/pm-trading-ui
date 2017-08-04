@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { fieldPropTypes } from 'redux-form'
-
+import { fieldInputPropTypes } from 'redux-form'
+import { omit } from 'lodash'
 import { bemifyClassName } from 'utils/helpers'
 
 import './formCheckbox.less'
@@ -17,7 +17,7 @@ const Checkbox = ({ input, label, text, className }) => (
 )
 
 Checkbox.propTypes = {
-  input: fieldPropTypes.input,
+  input: PropTypes.shape(omit(fieldInputPropTypes, ['onBlur', 'onFocus', 'onDragStart', 'onDrop'])),
   label: PropTypes.string,
   text: PropTypes.node,
   className: PropTypes.string,

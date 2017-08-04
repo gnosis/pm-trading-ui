@@ -20,14 +20,11 @@ const Input = ({ input, meta: { error }, label, type, className, placeholder }) 
 )
 
 Input.propTypes = {
-  input: fieldPropTypes.input,
+  ...fieldPropTypes,
   label: PropTypes.string,
   type: PropTypes.string,
   className: PropTypes.string,
   placeholder: PropTypes.string,
-  meta: PropTypes.shape({
-    error: PropTypes.string,
-  }),
 }
 
 export default Input

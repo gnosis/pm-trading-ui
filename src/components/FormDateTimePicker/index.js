@@ -23,8 +23,8 @@ const FormDateTimePicker = ({ label, input, validDateCheck }) => {
 }
 
 FormDateTimePicker.propTypes = {
+  ...fieldPropTypes,
   label: PropTypes.string,
-  input: fieldPropTypes.input,
   validDateCheck: PropTypes.func,
 }
 
