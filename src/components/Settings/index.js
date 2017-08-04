@@ -1,17 +1,13 @@
 import React, { Component } from 'react'
 import { reduxForm, Field, FieldArray } from 'redux-form'
-import EditableKeyValueList from 'components/FormEditableKeyValueList'
-/* USEFUL FOR THE NEXT SETTINGS STEP
-import GenericForm from './genericForm'
-import ModeratorsForm from './moderatorsForm'*/
+import Input from 'components/FormInput'
 
 
 class Settings extends Component {
 
-  _renderForm() {
-    const { handleSubmit, pristine, reset, submitting } = this.props
+  renderForm() {
     return (
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className="row">
           <div className="col-md-12">
             <FieldArray name="settings" component={renderSettings} />
@@ -24,27 +20,11 @@ class Settings extends Component {
   render() {
     return (
       <div className="container">
-        {this._renderForm()}
+        {this.renderForm()}
       </div>
     )
   }
 }
-
-const renderField = ({ input, label, type, className, placeholder, meta: { touched, error } }) =>
-  <div className={`inputField ${className || ''}`}>
-    <label htmlFor={input.name} className={`inputField__label ${className ? `${className}__label` : ''}`}>{ label }</label>
-    <input
-      className={`inputField__input ${className ? `${className}__input` : ''}`}
-      placeholder={placeholder}
-      type={`${type || 'text'}`}
-      {...input}
-    />
-    {touched &&
-      error &&
-      <span>
-        {error}
-      </span>}
-  </div>
 
 const renderSettings = ({ fields, meta: { error, submitFailed } }) =>
       <div className="row">
@@ -63,14 +43,16 @@ const renderSettings = ({ fields, meta: { error, submitFailed } }) =>
             <Field
               name={`${item}.key`}
               type="text"
-              component={renderField}
-              label="KEY"
+              component={Input}
+              label="NAME"
+              placeholder="George"
             />
             <Field
               name={`${item}.value`}
               type="text"
-              component={renderField}
-              label="VALUE"
+              component={Input}
+              label="ADDRESS"
+              placeholder="0x12e87B8CE41184E0688027f370A972A436ABE34e"
             />
             <button
               className="btn btn-primary"
@@ -83,16 +65,6 @@ const renderSettings = ({ fields, meta: { error, submitFailed } }) =>
           </div>
         </div>
       )}
-      {fields.getAll() && fields.getAll().length > 0 ?
-        <div className="row">
-          <div className="col-md-4">
-            <button type="submit" className="btn">
-              Save settings
-            </button>
-          </div>
-        </div>
-        : <div />
-      }
       </div>
     </div>
 
