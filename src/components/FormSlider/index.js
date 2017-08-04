@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { fieldPropTypes } from 'redux-form'
 
 import './formSlider.less'
 
@@ -22,7 +23,7 @@ const Slider = ({ input, label, min, max, decimals, unit }) => {
 }
 
 Slider.propTypes = {
-  input: PropTypes.object,
+  input: fieldPropTypes.input,
   label: PropTypes.string,
   min: PropTypes.number,
   max: PropTypes.number,

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { fieldPropTypes } from 'redux-form'
 
 import { bemifyClassName } from 'utils/helpers'
 
@@ -16,7 +17,7 @@ const Checkbox = ({ input, label, text, className }) => (
 )
 
 Checkbox.propTypes = {
-  input: PropTypes.object,
+  input: fieldPropTypes.input,
   label: PropTypes.string,
   text: PropTypes.node,
   className: PropTypes.string,

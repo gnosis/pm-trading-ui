@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { fieldPropTypes } from 'redux-form'
 
 import { bemifyClassName } from 'utils/helpers'
 
@@ -23,7 +24,7 @@ const FormRadioButton = ({ input, radioValue, text, className, highlightColor })
 )
 
 FormRadioButton.propTypes = {
-  input: PropTypes.object,
+  input: fieldPropTypes.input,
   radioValue: PropTypes.string,
   text: PropTypes.string,
   className: PropTypes.string,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { fieldPropTypes } from 'redux-form'
 import { isArray } from 'lodash'
 import autobind from 'autobind-decorator'
 
@@ -96,7 +97,7 @@ class FormEditableList extends Component {
 }
 
 FormEditableList.propTypes = {
-  input: PropTypes.object,
+  input: fieldPropTypes.input,
   label: PropTypes.string,
 }
 

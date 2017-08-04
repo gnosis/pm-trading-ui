@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { fieldPropTypes } from 'redux-form'
 import { pick } from 'lodash'
 
 import { bemifyClassName } from 'utils/helpers'
@@ -28,7 +29,7 @@ const FormSelect = ({ input, label, values, className, defaultValue, ...props })
 const valueType = PropTypes.string
 
 FormSelect.propTypes = {
-  input: PropTypes.object,
+  input: fieldPropTypes.input,
   label: PropTypes.string,
   values: PropTypes.objectOf(valueType),
   className: PropTypes.string,

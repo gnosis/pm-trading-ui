@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { fieldPropTypes } from 'redux-form'
 import TextareaAutosize from 'react-autosize-textarea'
 
 import './textareaField.less'
@@ -12,7 +13,7 @@ const Input = ({ input, label, className }) => (
 )
 
 Input.propTypes = {
-  input: PropTypes.object,
+  input: fieldPropTypes.input,
   label: PropTypes.string,
   className: PropTypes.string,
 }
