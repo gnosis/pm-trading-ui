@@ -7,8 +7,10 @@ import { updateSettings } from 'actions/settings'
 const FORM = {
   form: 'settingsForm',
   onChange: async (values, dispatch, props) => {
-    const { formValues } = props
-    return await dispatch(updateSettings(formValues.settings))
+    const { formValues, syncErrors, pristine, dirty } = props
+    if (dirty && !syncErrors.settings) {
+      return await dispatch(updateSettings(formValues.settings))
+    }
   }
 }
 

@@ -72,9 +72,10 @@ const renderSettings = ({ fields, meta: { error } }) =>
 const validate = values => {
   const errors = {}
   const settingsErrors = []
+  console.log('Validating...')
   values.settings.forEach((item, index) => {
     const error = {}
-    if (!item.key) {
+    if (!item.key || item.key.length < 3) {
       error.key = 'Required'
       settingsErrors[index] = error
     }
@@ -82,7 +83,7 @@ const validate = values => {
       error.value = 'Required'
       settingsErrors[index] = error
     }
-    else if (item.value.length < 42 || item.value.substr(0, 2) != '0x') {
+    else if (item.value.length != 42 || item.value.substr(0, 2) != '0x') {
       error.value = 'Invalid Ethereum address'
       settingsErrors[index] = error
     }
@@ -92,7 +93,6 @@ const validate = values => {
     errors.settings = settingsErrors
   }
 
-  console.log('Errors: ', errors)
   return errors
 }
 

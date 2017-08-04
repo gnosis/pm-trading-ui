@@ -2,7 +2,7 @@ import React from 'react'
 
 import './formInput.less'
 
-const Input = ({ input, label, type, className, placeholder, meta: { touched, error } }) => {
+const Input = ({ input, label, type, className, placeholder, meta: { dirty, error } }) => {
   return (
     <div className={`inputField ${className || ''}`}>
       <label htmlFor={input.name} className={`inputField__label ${className ? `${className}__label` : ''}`}>{ label }</label>
@@ -12,7 +12,7 @@ const Input = ({ input, label, type, className, placeholder, meta: { touched, er
         type={`${type || 'text'}`}
         {...input}
       />
-      {touched &&
+      {dirty &&
         error &&
         <span>
           {error}
