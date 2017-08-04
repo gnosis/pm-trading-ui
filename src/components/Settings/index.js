@@ -26,7 +26,7 @@ class Settings extends Component {
   }
 }
 
-const renderSettings = ({ fields, meta: { error, submitFailed } }) =>
+const renderSettings = ({ fields, meta: { error } }) =>
       <div className="row">
         <div className="col-md-12">
           <button type="button" onClick={() => fields.push({})} className="btn">
@@ -68,10 +68,39 @@ const renderSettings = ({ fields, meta: { error, submitFailed } }) =>
       </div>
     </div>
 
+// TODO move validate functions to a generic utilities file
+const validate = values => {
+  const errors = {}
+  const settingsErrors = []
+  values.settings.forEach((item, index) => {
+    const error = {}
+    if (!item.key) {
+      error.key = 'Required'
+      settingsErrors[index] = error
+    }
+    if (!item.value) {
+      error.value = 'Required'
+      settingsErrors[index] = error
+    }
+    else if (item.value.length < 42 || item.value.substr(0, 2) != '0x') {
+      error.value = 'Invalid Ethereum address'
+      settingsErrors[index] = error
+    }
+  })
+
+  if (settingsErrors.length > 0) {
+    errors.settings = settingsErrors
+  }
+
+  console.log('Errors: ', errors)
+  return errors
+}
+
 
 const form = {
   form: 'settingsForm',
-  asyncBlurFields: []
+  asyncBlurFields: [],
+  validate
 }
 
 export default reduxForm(form)(Settings)
