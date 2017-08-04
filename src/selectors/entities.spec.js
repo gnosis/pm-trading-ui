@@ -8,14 +8,14 @@ describe('entitySelector', () => {
   test('selects available entities as an object', () => {
     const state = {
       entities: {
-        market: {
+        markets: {
           test123: {
             address: 'test',
           },
         },
       },
     }
-    expect(entitySelector(state, 'market')).toBe(state.entities.market)
+    expect(entitySelector(state, 'markets')).toMatchObject(state.entities.markets)
   })
 
   test('malformed entity name works as intended', () => {

@@ -1,12 +1,12 @@
 const getEventByAddress = require('./event').getEventByAddress
 
 describe('eventSelector', () => {
-  test('it should return an empty object for invalid address', () => {
+  test('it should return undefined for an invalid address', () => {
     const state = {
       entities: {},
     }
 
-    expect(getEventByAddress(state)('test123')).toMatchObject({})
+    expect(getEventByAddress(state)('test123')).toBeUndefined()
   })
 
   test('it should return event structure for valid address', () => {
@@ -21,7 +21,7 @@ describe('eventSelector', () => {
     }
 
     const desired = {
-      address: 'test123',
+      id: 'test123',
     }
 
     expect(getEventByAddress(state)('test123')).toMatchObject(desired)
