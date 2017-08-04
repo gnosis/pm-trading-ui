@@ -26,12 +26,13 @@ const DecimalValue = ({ value, decimals = 4 }) => {
 
 // I don't use PropTypes.instanceOf because Decimal can be cloned with different default properties
 // and instanceOf doesn't deal with that situation. In fact, Decimal.clone is used in gnosis.js
-const numericPropType = function(props, propName, componentName) {
-  if(!/^(Decimal|(Big)?Number)$/.test(
-    props[propName] && props[propName].constructor ? props[propName].constructor.name : null
+const numericPropType = function (props, propName, componentName) {
+  if (!/^(Decimal|(Big)?Number)$/.test(
+    props[propName] && props[propName].constructor ? props[propName].constructor.name : null,
   )) {
     return new Error(`Non-numeric \`${propName}\` supplied to \`${componentName}\`. Validation failed.`)
   }
+  return undefined
 }
 
 DecimalValue.propTypes = {
