@@ -1,9 +1,3 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Account extends Component {
-  render() {
-    return (
-      <div className="accountPage" />
-    )
-  }
-}
+export default () => <div className="accountPage" />

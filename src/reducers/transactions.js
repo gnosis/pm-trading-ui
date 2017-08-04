@@ -2,7 +2,6 @@ import { handleActions } from 'redux-actions'
 
 import {
   TRANSACTION_STATUS,
-  TRANSACTION_COMPLETE_STATUS,
 } from 'utils/constants'
 
 import {

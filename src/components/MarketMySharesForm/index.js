@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { reduxForm, Field } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
@@ -8,11 +9,11 @@ import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
 
-import './marketMySharesForm.less'
-
 import FormInput from 'components/FormInput'
 
-import { OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+
+import './marketMySharesForm.less'
 
 class MarketMySharesForm extends Component {
   constructor(props) {
@@ -132,7 +133,7 @@ class MarketMySharesForm extends Component {
             validate={(val) => {
               let decimalValue
               try {
-                decimalValue = Decimal(val || 0)
+                decimalValue = Decimal(val || 0)
               } catch (e) {
                 return 'Invalid Number value'
               }
@@ -149,11 +150,13 @@ class MarketMySharesForm extends Component {
           />
         </td>
         <td>
-          <DecimalValue value={newTokenValue.div(1e18)} /> <CurrencyName collateralToken={market.event.collateralToken} />
+          <DecimalValue value={newTokenValue.div(1e18)} />
+          <CurrencyName collateralToken={market.event.collateralToken} />
           {!diffTokenValue.isZero() && <span>
             (<span className={`marketMyShares__diff ${diffTokenValue.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffTokenValue.gt(0) ? ' +' : ' '}<DecimalValue value={diffTokenValue.div(1e18)} /> <CurrencyName collateralToken={market.event.collateralToken} />
-              </span>)
+              {diffTokenValue.gt(0) ? '+' : ''}<DecimalValue value={diffTokenValue.div(1e18)} />
+              <CurrencyName collateralToken={market.event.collateralToken} />
+            </span>)
           </span>}
         </td>
         <td>
@@ -173,14 +176,14 @@ class MarketMySharesForm extends Component {
   }
 
   render() {
-    const { marketShares, market, selectedSellAmount } = this.props
+    const { marketShares, market } = this.props
     const { extendedSellIndex } = this.state
 
     if (!marketShares || !marketShares.length) {
       return (
         <div className="marketMyShares">
           <h2 className="marketMyShares__heading">
-            You don't hold any shares for this market.
+            You don&apos;t hold any shares for this market.
             <br />
             <small>It may take some time for the blockchain to mine your share purchase.</small>
           </h2>
@@ -212,16 +215,20 @@ class MarketMySharesForm extends Component {
             {market.eventDescription.outcomes[share.outcomeToken.index]}
           </td>
           <td>
-            <DecimalValue value={Decimal(share.balance).div(1e18)} /> <CurrencyName collateralToken={market.event.collateralToken} />
+            <DecimalValue value={Decimal(share.balance).div(1e18)} />
+            <CurrencyName collateralToken={market.event.collateralToken} />
           </td>
           <td>
-            <DecimalValue value={maximumWin.div(1e18)} /> <CurrencyName collateralToken={market.event.collateralToken} />
+            <DecimalValue value={maximumWin.div(1e18)} />
+            <CurrencyName collateralToken={market.event.collateralToken} />
           </td>
           <td>
             <DecimalValue value={probability.mul(100)} /> %
           </td>
           <td>
-            <a href="#" onClick={e => this.handleShowSellView(e, shareIndex)}>Sell</a>
+            {/* eslint-disable no-script-url */}
+            <a href="javascript:void(0);" onClick={e => this.handleShowSellView(e, shareIndex)}>Sell</a>
+            {/* eslint-enable no-script-url */}
           </td>
         </tr>
       )
@@ -254,6 +261,16 @@ class MarketMySharesForm extends Component {
       </div>
     )
   }
+}
+
+MarketMySharesForm.propTypes = {
+  market: PropTypes.shape({
+    address: PropTypes.string,
+  }),
+  invalid: PropTypes.bool,
+  selectedSellAmount: PropTypes.string,
+  marketShares: PropTypes.arrayOf(PropTypes.object),
+  sellShares: PropTypes.func,
 }
 
 const FORM = {

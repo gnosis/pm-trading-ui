@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { mapValues } from 'lodash'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
@@ -9,7 +9,7 @@ import { RESOLUTION_TIME } from 'utils/constants'
 
 
 import { collateralTokenToText } from 'components/CurrencyName'
-import DecimalValue, { decimalToText } from 'components/DecimalValue'
+import { decimalToText } from 'components/DecimalValue'
 
 import Countdown from 'components/Countdown'
 
@@ -33,7 +33,6 @@ const generateRandomGraph = () => {
   const curDate = startDate.clone()
 
   const graphData = []
-  const i = 0
 
   let dir = 0
   const dirChangeForce = 0.0001
@@ -75,11 +74,12 @@ const expandableViews = {
     label: 'Resolve',
     className: 'btn btn-default',
     component: MarketResolveForm,
-    showCondition: (marketComponent, market) => marketComponent.props.defaultAccount === market.owner && !market.oracle.isOutcomeSet,
+    showCondition: (marketComponent, market) =>
+      marketComponent.props.defaultAccount === market.owner && !market.oracle.isOutcomeSet,
   },
 }
 
-export default class MarketDetail extends Component {
+class MarketDetail extends Component {
   componentWillMount() {
     if (!this.props.market || !this.props.market.address) {
       this.props.fetchMarket(this.props.params.id)
@@ -173,7 +173,8 @@ export default class MarketDetail extends Component {
       <div className="marketControls container">
         <div className="row">
           {Object.keys(expandableViews).filter(view =>
-            !expandableViews[view].showCondition || expandableViews[view].showCondition(this, market),
+            !expandableViews[view].showCondition ||
+            expandableViews[view].showCondition(this, market),
           ).map(view => (
             <button
               key={view}
@@ -224,3 +225,17 @@ export default class MarketDetail extends Component {
     )
   }
 }
+
+MarketDetail.propTypes = {
+  params: PropTypes.shape({
+    id: PropTypes.string,
+    view: PropTypes.string,
+  }),
+  defaultAccount: PropTypes.string,
+  market: PropTypes.object,
+  changeUrl: PropTypes.func,
+  fetchMarket: PropTypes.func,
+  fetchMarketShares: PropTypes.func,
+}
+
+export default MarketDetail

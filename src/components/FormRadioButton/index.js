@@ -1,8 +1,10 @@
 import React from 'react'
-
-import './formRadioButton.less'
+import PropTypes from 'prop-types'
+import { fieldPropTypes } from 'redux-form'
 
 import { bemifyClassName } from 'utils/helpers'
+
+import './formRadioButton.less'
 
 const FormRadioButton = ({ input, radioValue, text, className, highlightColor }) => (
   <div className={`radioButton ${bemifyClassName(className)}`}>
@@ -21,6 +23,14 @@ const FormRadioButton = ({ input, radioValue, text, className, highlightColor })
   </div>
 )
 
+FormRadioButton.propTypes = {
+  ...fieldPropTypes,
+  radioValue: PropTypes.string,
+  text: PropTypes.string,
+  className: PropTypes.string,
+  highlightColor: PropTypes.string,
+}
+
 export default FormRadioButton
 
 export const FormRadioButtonLabel = ({ label, className }) => (
@@ -28,3 +38,8 @@ export const FormRadioButtonLabel = ({ label, className }) => (
     {label}
   </label>
 )
+
+FormRadioButtonLabel.propTypes = {
+  label: PropTypes.string,
+  className: PropTypes.string,
+}

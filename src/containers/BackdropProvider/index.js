@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { closeModal } from 'actions/modal'
@@ -9,7 +10,7 @@ import './backdrop.less'
 
 class BackdropProvider extends Component {
   renderBackdropContent() {
-    const { modal: { currentModal, isOpen, ...data }, closeModal } = this.props
+    const { modal: { currentModal, isOpen, ...data }, closeModal: closeModalProp } = this.props
 
     if (isOpen) {
       /*
@@ -23,7 +24,7 @@ class BackdropProvider extends Component {
 
       return (<Modal
         {...data}
-        closeModal={closeModal}
+        closeModal={closeModalProp}
       />)
     }
 
@@ -43,6 +44,14 @@ class BackdropProvider extends Component {
       </div>
     )
   }
+}
+
+BackdropProvider.propTypes = {
+  modal: PropTypes.shape({
+    isOpen: PropTypes.bool,
+  }),
+  children: PropTypes.node,
+  closeModal: PropTypes.func,
 }
 
 const mapStateToProps = state => ({

@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { get } from 'lodash'
 
 import { getContractInfo } from 'selectors/blockchain'
 
@@ -10,6 +10,13 @@ const ContractName = ({ contract, contractAddress }) => {
   }
 
   return <span>{contractAddress}</span>
+}
+
+ContractName.propTypes = {
+  contract: PropTypes.shape({
+    name: PropTypes.string,
+  }),
+  contractAddress: PropTypes.string,
 }
 
 const mapStateToProps = (state, ownProps) => ({

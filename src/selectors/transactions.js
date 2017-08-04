@@ -44,5 +44,6 @@ export const getTransactionLogs = (state, transactionId) => {
 export const getTransactionComplete = (state, transactionId) => {
   const transaction = transactionSelector(state, transactionId)
 
-  return transaction && transaction.completed && transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR
+  return transaction &&
+    transaction.completed && transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR
 }

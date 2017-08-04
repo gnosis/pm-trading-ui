@@ -43,7 +43,7 @@ export const restFetch = url =>
     .catch(err => console.warn(`Gnosis DB: ${err}`))
 
 export const bemifyClassName = (className, element, modifier) => {
-  const classNameDefined = className || ''
+  const classNameDefined = className || ''
   const classNames = isArray(classNameDefined) ? classNameDefined : classNameDefined.split(' ')
 
   if (classNames && classNames.length) {

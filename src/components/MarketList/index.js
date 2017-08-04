@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { calcLMSRMarginalPrice } from 'api'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
-import { reduxForm, submit, Field } from 'redux-form'
+import { reduxForm, Field } from 'redux-form'
 
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
@@ -14,9 +14,9 @@ import Countdown from 'components/Countdown'
 import FormSelect from 'components/FormSelect'
 import FormInput from 'components/FormInput'
 
-import './marketList.less'
-
 import { RESOLUTION_TIME, OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
+
+import './marketList.less'
 
 class MarketList extends Component {
   componentWillMount() {
@@ -76,7 +76,7 @@ class MarketList extends Component {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.netOutcomeTokensSold,
       // This is a temporary fix to avoid NaN when there is no funding, which should never occour
-      funding: Decimal(parseInt(market.funding, 10) || 1e18),
+      funding: Decimal(parseInt(market.funding, 10) || 1e18),
       outcomeTokenIndex: 1, // always calc for long when calculating estimation
     })
 
@@ -268,6 +268,14 @@ class MarketList extends Component {
       </div>
     )
   }
+}
+
+MarketList.propTypes = {
+  markets: PropTypes.arrayOf(PropTypes.object),
+  defaultAccount: PropTypes.string,
+  fetchMarkets: PropTypes.func,
+  changeUrl: PropTypes.func,
+  handleSubmit: PropTypes.func,
 }
 
 export default reduxForm({

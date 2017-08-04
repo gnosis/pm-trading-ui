@@ -1,8 +1,10 @@
 import React from 'react'
-
-import './formInput.less'
+import PropTypes from 'prop-types'
+import { fieldPropTypes } from 'redux-form'
 
 import { bemifyClassName } from 'utils/helpers'
+
+import './formInput.less'
 
 const Input = ({ input, meta: { error }, label, type, className, placeholder }) => (
   <div className={`inputField ${bemifyClassName(className)}`}>
@@ -15,6 +17,14 @@ const Input = ({ input, meta: { error }, label, type, className, placeholder }) 
     />
     {error && <span>{error}</span>}
   </div>
-  )
+)
+
+Input.propTypes = {
+  ...fieldPropTypes,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  className: PropTypes.string,
+  placeholder: PropTypes.string,
+}
 
 export default Input
