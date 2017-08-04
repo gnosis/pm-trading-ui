@@ -1,5 +1,6 @@
 const getMarketById = require('./market').getMarketById
 const getMarkets = require('./market').getMarkets
+const getMarketSharesByMarket = require('./market').getMarketSharesByMarket
 
 describe('marketSelector', () => {
   describe('getMarketById', () => {
@@ -60,6 +61,78 @@ describe('marketSelector', () => {
       }
 
       expect(getMarkets(state)).toEqual([])
+    })
+  })
+
+  describe('getMarketSharesByMarket', () => {
+    test('it should return an empty array for invalid market', () => {
+      const state = {
+        entities: {},
+      }
+
+      expect(getMarketSharesByMarket(state)('test123')).toEqual([])
+    })
+
+    test('it should return the shares for a market', () => {
+      const state = {
+        entities: {
+          markets: {
+            testmarket123: {
+              address: 'testmarket123',
+              event: 'event1',
+              shares: ['share1', 'share2'],
+            },
+          },
+          events: {
+            event1: {
+              address: 'event1',
+              oracle: 'oracle1',
+              type: 'CATEGORICAL',
+            },
+          },
+          oracles: {
+            oracle1: {
+              address: 'oracle1',
+              eventDescription: 'eventDescription1',
+              type: 'CENTRALIZED',
+            },
+          },
+          eventDescriptions: {
+            eventDescription1: {
+              title: 'müll',
+            },
+          },
+          marketShares: {
+            share1: {
+              id: 'share1',
+              event: 'testevent123',
+              owner: 'testuser123',
+              balance: 1e18,
+            },
+            share2: {
+              id: 'share2',
+              event: 'testevent123',
+              owner: 'testuser123',
+              balance: 1e18,
+            },
+          },
+        },
+      }
+
+      expect(getMarketSharesByMarket(state)('testmarket123')).toMatchObject([
+        {
+          id: 'share1',
+          event: 'testevent123',
+          owner: 'testuser123',
+          balance: 1e18,
+        },
+        {
+          id: 'share2',
+          event: 'testevent123',
+          owner: 'testuser123',
+          balance: 1e18,
+        },
+      ])
     })
   })
 })

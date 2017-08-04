@@ -42,7 +42,7 @@ export const getMarketById = state => (marketAddress) => {
   return market
 }
 
-export const getMarketShareById = state => (shareAddress) => {
+export const getMarketShareByShareId = state => (shareAddress) => {
   const marketShareEntities = entitySelector(state, 'marketShares')
 
   return marketShareEntities[shareAddress]
@@ -54,10 +54,10 @@ export const getMarkets = (state) => {
   return Object.keys(marketEntities).map(getMarketById(state))
 }
 
-export const getMarketSharesById = state => (marketAddress, accountAddress) => {
+export const getMarketSharesByMarket = state => (marketAddress) => {
   const marketEntity = getMarketById(state)(marketAddress)
   const shares = get(marketEntity, 'shares', [])
-  return shares.map(shareAddress => getMarketShareById(state)(shareAddress))
+  return shares.map(shareAddress => getMarketShareByShareId(state)(shareAddress))
 }
 
 export const filterMarkets = state => (opts) => {
