@@ -6,12 +6,14 @@ Start with `npm start`, server available under `http://localhost:8000/`
 Installing gnosis.js
 ------
 
-This package comes with two gnosis.js installation methods in its `package.json` either install gnosis.js locally in `../` and install the optional dependency or if you prefer, just use the github url that is currently installed. `gnosis/gnosis.js`
+This package implements the npm package for gnosis.js as the github repo from [gnosis/gnosis.js](https://github.com/gnosis/gnosis.js)
+
+If you have gnosis.js locally, install it like this: `npm i ../gnosis.js` (if your local gnosis.js installation is in the parent folder)
 
 Running Test-RPC
 ------
 
-In order to run this on a local blockchain, install testrpc `npm install testrpc` and run test-rpc like so:
+In order to run this on a local blockchain, install testrpc `npm install testrpc -g` and run test-rpc like so:
 ```testrpc --gasLimit 400000000 -d -h 0.0.0.0```
 
 Afterwards, go into your gnosis folder (either `../gnosis.js` or `./node_modules/@gnosis.pm/gnosisjs/`) and run `npm run migrate` this will deploy all contracts to TestRPC.

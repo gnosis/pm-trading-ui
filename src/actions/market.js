@@ -1,5 +1,6 @@
 import moment from 'moment'
 import Decimal from 'decimal.js'
+import { normalize } from 'normalizr'
 
 import {
   receiveEntities,
@@ -14,8 +15,18 @@ import {
 } from 'actions/transactions'
 
 import {
-  toEntity,
-} from 'utils/helpers'
+  createLocalEventDescription,
+  createLocalOracle,
+  createLocalEvent,
+  createLocalMarket,
+} from 'api/models'
+
+import {
+  eventDescriptionSchema,
+  eventSchema,
+  oracleSchema,
+  marketSchema,
+} from 'api/schema'
 
 import {
   OUTCOME_TYPES,
@@ -84,7 +95,7 @@ export const createMarket = options => async (dispatch) => {
 
   // Create Event Description
   const eventDescriptionContractData = await api.createEventDescription(eventDescription)
-  await dispatch(receiveEntities(toEntity(eventDescriptionContractData, 'eventDescriptions', 'ipfsHash')))
+  await dispatch(receiveEntities(normalize(createLocalEventDescription(eventDescriptionContractData), eventDescriptionSchema)))
   await dispatch(addTransactionLogEntry({
     id: options.transactionId,
     event: 'eventDescription',
@@ -96,7 +107,7 @@ export const createMarket = options => async (dispatch) => {
 
   // Create Oracle
   const oracleContractData = await api.createOracle(oracle)
-  await dispatch(receiveEntities(toEntity(oracleContractData, 'oracles')))
+  await dispatch(receiveEntities(normalize(createLocalOracle(oracleContractData)), oracleSchema))
   await dispatch(addTransactionLogEntry({
     id: options.transactionId,
     event: 'oracle',
@@ -115,7 +126,7 @@ export const createMarket = options => async (dispatch) => {
 
   // Create Event
   const eventContractData = await api.createEvent(event)
-  await dispatch(receiveEntities(toEntity(eventContractData, 'events')))
+  await dispatch(receiveEntities(normalize(createLocalEvent(eventContractData), eventSchema)))
   await dispatch(addTransactionLogEntry({
     id: options.transactionId,
     event: 'event',
@@ -133,7 +144,7 @@ export const createMarket = options => async (dispatch) => {
 
   // Create Market
   const marketContractData = await api.createMarket(market)
-  await dispatch(receiveEntities(toEntity(marketContractData, 'markets')))
+  await dispatch(receiveEntities(normalize(createLocalMarket(marketContractData), marketSchema)))
   await dispatch(addTransactionLogEntry({
     id: options.transactionId,
     event: 'market',

@@ -12,6 +12,8 @@ const CurrencyName = ({ collateralToken, outcomeToken }) => {
   if (outcomeToken) {
     return <span>{outcomeTokenToText(outcomeToken)}</span>
   }
+
+  return <span>Unknown</span>
 }
 
 export default CurrencyName

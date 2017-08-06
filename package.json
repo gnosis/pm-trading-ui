@@ -17,8 +17,8 @@
   },
   "author": "Gnosis",
   "license": "ISC",
-  "dependenciesOptional": {
-    "@gnosis.pm/gnosisjs": "file:../gnosis.js"
+  "jest": {
+    "modulePaths": ["<rootDir>/src/"]
   },
   "dependencies": {
     "@gnosis.pm/gnosisjs": "gnosis/gnosis.js",
