@@ -1,6 +1,4 @@
-const getMarketById = require('./market').getMarketById
-const getMarkets = require('./market').getMarkets
-const getMarketSharesByMarket = require('./market').getMarketSharesByMarket
+import { getMarkets, getMarketById, getMarketSharesByMarket } from './market'
 
 describe('marketSelector', () => {
   describe('getMarketById', () => {

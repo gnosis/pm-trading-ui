@@ -1,4 +1,4 @@
-const getOracleByAddress = require('./oracle').getOracleByAddress
+import { getOracleByAddress } from './oracle'
 
 describe('oracleSelector', () => {
   describe('getOracleByAddress', () => {

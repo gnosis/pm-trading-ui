@@ -1,7 +1,6 @@
 import { transactionSelector } from 'selectors/transactions'
 
-const TRANSACTION_STATUS = require('utils/constants').TRANSACTION_STATUS
-const TRANSACTION_COMPLETE_STATUS = require('utils/constants').TRANSACTION_COMPLETE_STATUS
+// import { TRANSACTION_STATUS, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 
 describe('transactionsSelector', () => {
   test('it should return a transaction object', () => {

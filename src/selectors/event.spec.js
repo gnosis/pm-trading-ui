@@ -1,4 +1,4 @@
-const getEventByAddress = require('./event').getEventByAddress
+import { getEventByAddress } from './event'
 
 describe('eventSelector', () => {
   describe('getEventByAddress', () => {

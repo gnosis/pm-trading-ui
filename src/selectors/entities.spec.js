@@ -1,4 +1,4 @@
-const entitySelector = require('./entities').entitySelector
+import { entitySelector } from './entities'
 
 describe('entitySelector', () => {
   test('works without any entities available', () => {
