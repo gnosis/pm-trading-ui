@@ -1,9 +1,9 @@
 /* global __VERSION__ */
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { getDefaultAccount } from 'selectors/blockchain'
 import { connectBlockchain } from 'actions/blockchain'
 
 import HeaderContainer from 'containers/HeaderContainer'
@@ -33,6 +33,12 @@ class App extends Component {
       </div>
     )
   }
+}
+
+App.propTypes = {
+  children: PropTypes.node,
+  connectBlockchain: PropTypes.func,
+  blockchainConnection: PropTypes.bool,
 }
 
 const mapStateToProps = state => ({

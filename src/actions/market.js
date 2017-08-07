@@ -4,7 +4,6 @@ import { normalize } from 'normalizr'
 
 import {
   receiveEntities,
-  receiveEntity,
   updateEntity,
 } from 'actions/entities'
 
@@ -186,7 +185,8 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
   }))
 }
 
-export const sellMarketShares = (market, outcomeIndex, amount) => async dispatch => await api.sellShares(market, outcomeIndex, amount)
+export const sellMarketShares = (market, outcomeIndex, amount) =>
+  async () => await api.sellShares(market, outcomeIndex, amount)
 
   // calculate new values
 

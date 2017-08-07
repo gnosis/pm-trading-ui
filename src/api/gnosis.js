@@ -2,7 +2,7 @@
 
 import Gnosis from '@gnosis.pm/gnosisjs'
 
-import { hexWithoutPrefix, hexWithPrefix } from 'utils/helpers'
+import { hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 import { normalize } from 'normalizr'
 
@@ -17,12 +17,11 @@ const GNOSIS_OPTIONS = {
 let gnosisInstance
 export const getGnosisConnection = async () => {
   if (gnosisInstance) {
-    return Promise.resolve(gnosisInstance)
+    return gnosisInstance
   }
 
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
-    window.gnosis = gnosisInstance
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
   } catch (err) {
     console.error('Gnosis Integration: connection failed') // eslint-disable-line no-console
@@ -175,7 +174,11 @@ export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenC
 
   const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
 
-  return await gnosis.sellOutcomeTokens({ market: hexWithPrefix(marketAddress), outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei })
+  return await gnosis.sellOutcomeTokens({
+    market: hexWithPrefix(marketAddress),
+    outcomeTokenIndex,
+    outcomeTokenCount: outcomeTokenCountWei,
+  })
 }
 
 export const calcLMSRCost = Gnosis.calcLMSRCost

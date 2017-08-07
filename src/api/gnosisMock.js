@@ -1,4 +1,4 @@
-export const composeMarket = options => async dispatch => Promise.resolve({
+export const composeMarket = () => async () => ({
   entities: {
     eventDescriptions: {
       QmQQAUVuePKbQhinzbYikuGxf6TpFTzcr6VzMupii6Brvp: {

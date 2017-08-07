@@ -1,4 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
+import { values } from 'lodash'
 
 import { OUTCOME_TYPES } from 'utils/constants'
 
@@ -48,6 +51,10 @@ const OracleCentralized = ({ selectedOutcomeType }) => {
       </div>
     </div>
   )
+}
+
+OracleCentralized.propTypes = {
+  selectedOutcomeType: PropTypes.oneOf(values(OUTCOME_TYPES)),
 }
 
 export default OracleCentralized

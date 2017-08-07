@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import moment from 'moment'
+import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { Field } from 'redux-form'
 
-import { ORACLE_TYPES, OUTCOME_TYPES } from 'utils/constants'
-import './marketCreateWizard.less'
+import { ORACLE_TYPES } from 'utils/constants'
 
 import MarketSidebar from 'components/MarketSidebar'
 
@@ -14,6 +13,8 @@ import GroupBlockDifficulty from 'components/GroupBlockDifficulty'
 import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
 import FormSlider from 'components/FormSlider'
 import FormInput from 'components/FormInput'
+
+import './marketCreateWizard.less'
 
 export default class MarketCreateWizard extends Component {
   @autobind
@@ -78,7 +79,9 @@ export default class MarketCreateWizard extends Component {
   renderForOracleType() {
     const { selectedOracleType, selectedOutcomeType } = this.props
     const oracleSections = {
-      [ORACLE_TYPES.CENTRALIZED]: <GroupCentralizedOracle selectedOutcomeType={selectedOutcomeType} />,
+      [ORACLE_TYPES.CENTRALIZED]: (
+        <GroupCentralizedOracle selectedOutcomeType={selectedOutcomeType} />
+      ),
       [ORACLE_TYPES.BLOCK_DIFFICULTY]: <GroupBlockDifficulty />,
     }
 
@@ -122,4 +125,10 @@ export default class MarketCreateWizard extends Component {
     )
   }
 
+}
+
+MarketCreateWizard.propTypes = {
+  changeUrl: PropTypes.func,
+  selectedOracleType: PropTypes.string,
+  selectedOutcomeType: PropTypes.string,
 }

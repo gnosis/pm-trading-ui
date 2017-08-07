@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import moment from 'moment'
 import autobind from 'autobind-decorator'
@@ -30,7 +31,7 @@ class MarketCreateReview extends Component {
   }
 
   @autobind
-  handleCreateMarket(e) {
+  handleCreateMarket() {
     this.props.submitForm()
   }
 
@@ -69,7 +70,15 @@ class MarketCreateReview extends Component {
   }
 
   rendermarketReviewDetails() {
-    const { formValues: { resolutionDate, collateralToken, fee, funding, ultimateOracle } } = this.props
+    const {
+      formValues: {
+        resolutionDate,
+        collateralToken,
+        fee,
+        funding,
+        ultimateOracle,
+      },
+    } = this.props
 
     return (
       <div className="marketReviewDetails">
@@ -96,7 +105,7 @@ class MarketCreateReview extends Component {
             <div className="marketReviewDetails__label">Funding</div>
             <div className="marketReviewDetails__value">
               {Decimal(funding || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} />
-              </div>
+            </div>
           </div>
         </div>
         <div className="row">
@@ -171,7 +180,7 @@ class MarketCreateReview extends Component {
   renderOutcomes() {
     const { formValues: { outcomeType } } = this.props
 
-    if (outcomeType == OUTCOME_TYPES.CATEGORICAL) {
+    if (outcomeType === OUTCOME_TYPES.CATEGORICAL) {
       const { formValues: { outcomes } } = this.props
       return (
         <div className="outcomes__categorical">
@@ -187,7 +196,9 @@ class MarketCreateReview extends Component {
             ))}
         </div>
       )
-    } else if (outcomeType == OUTCOME_TYPES.SCALAR) {
+    }
+
+    if (outcomeType === OUTCOME_TYPES.SCALAR) {
       const { formValues: { unit, upperBound, lowerBound, decimals } } = this.props
       return (
         <div className="outcomes__scalar">
@@ -206,11 +217,11 @@ class MarketCreateReview extends Component {
           </div>
         </div>
       )
-    } else {
-      return (
-        <div>Something went wrong... Please try again</div>
-      )
     }
+
+    return (
+      <div>Something went wrong... Please try again</div>
+    )
   }
 
   render() {
@@ -254,6 +265,25 @@ class MarketCreateReview extends Component {
       </div>
     )
   }
+}
+
+MarketCreateReview.propTypes = {
+  formValues: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    oracleType: PropTypes.string,
+    funding: PropTypes.string,
+    ultimateOracle: PropTypes.bool,
+    collateralToken: PropTypes.string,
+    unit: PropTypes.string,
+    upperBound: PropTypes.string,
+    lowerBound: PropTypes.string,
+    decimals: PropTypes.string,
+    outcomeType: PropTypes.string,
+    outcomes: PropTypes.arrayOf(PropTypes.string),
+  }),
+  changeUrl: PropTypes.func,
+  submitForm: PropTypes.func,
 }
 
 export default MarketCreateReview

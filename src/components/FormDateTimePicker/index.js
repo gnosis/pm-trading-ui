@@ -1,5 +1,7 @@
 import React from 'react'
 import Datetime from 'react-datetime'
+import PropTypes from 'prop-types'
+import { fieldPropTypes } from 'redux-form'
 import moment from 'moment'
 
 import 'react-datetime/css/react-datetime.css'
@@ -18,6 +20,12 @@ const FormDateTimePicker = ({ label, input, validDateCheck }) => {
       <Datetime className="formDateTimePicker__datetime" isValidDate={isValidDate} {...input} />
     </div>
   )
+}
+
+FormDateTimePicker.propTypes = {
+  ...fieldPropTypes,
+  label: PropTypes.string,
+  validDateCheck: PropTypes.func,
 }
 
 export default FormDateTimePicker
