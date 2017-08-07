@@ -100,6 +100,7 @@ module.exports = {
       __VERSION__: JSON.stringify(`${version}#${build}`),
       __ENV__: JSON.stringify(nodeEnv),
       __ETHEREUM_HOST__: JSON.stringify(rpcUrl),
+      __GNOSISDB_HOST__: JSON.stringify(gnosisDbUrl)
     }),
   ],
 }

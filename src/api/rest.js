@@ -7,7 +7,7 @@ import {
   marketSchema,
 } from './schema'
 
-const API_URL = ''
+const API_URL = __GNOSISDB_HOST__
 
 export const requestMarket = async marketAddress =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}`)

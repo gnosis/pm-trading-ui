@@ -1,1 +1,1 @@
-web: npm run start-dokku
+web: npm run start
