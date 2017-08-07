@@ -4,16 +4,15 @@ import { updateSettings } from 'actions/settings'
 
 const reducer = handleActions({
   [updateSettings]: (state, action) => {
-    console.log('REDUX ', state)
     const data = action.payload
-    let result = {}
+    let result = { mapping: {} }
     data.map((item) => {
       if (item.address && item.name) {
-        result[item.address] = item.name
+        result.mapping[item.address] = item.name
       }
     })
     return result
   },
-}, {})
+}, { mapping: {} })
 
 export default reducer

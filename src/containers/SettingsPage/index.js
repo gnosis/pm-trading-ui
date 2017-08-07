@@ -6,22 +6,18 @@ import { updateSettings } from 'actions/settings'
 
 const FORM = {
   form: 'settingsForm',
-  onChange: async (values, dispatch, props) => {
+  onSubmit: async (values, dispatch, props) => {
     const { formValues, syncErrors, pristine, dirty } = props
-    // TODO should only if no errors but seems to be an issue with
-    // onchange validation
-    // https://github.com/erikras/redux-form/issues/3012
     return await dispatch(updateSettings(formValues.settings))
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   const selector = formValueSelector('settingsForm')
-  console.log('Settings: ', state.settings)
-  const settings = Object.keys(state.settings).map(
+  const settings = Object.keys(state.settings.mapping).map(
     (address) => {
-      if (state.settings[address]){
-        return {address, name: state.settings[address]}
+      if (state.settings.mapping[address]){
+        return {address, name: state.settings.mapping[address]}
       }
     }
   )

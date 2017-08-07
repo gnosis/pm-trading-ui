@@ -6,8 +6,10 @@ import Input from 'components/FormInput'
 class Settings extends Component {
 
   renderForm() {
+    const { handleSubmit } = this.props
+
     return (
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-md-12">
             <FieldArray name="settings" component={renderSettings} />
@@ -29,7 +31,7 @@ class Settings extends Component {
 const renderSettings = ({ fields, meta: { error } }) =>
       <div className="row">
         <div className="col-md-12">
-          <button type="button" onClick={() => fields.push({key: '', value: ''})} className="btn">
+          <button type="button" onClick={() => fields.push({address: '', name: ''})} className="btn">
             {fields.getAll() && fields.getAll().length > 0 ? 'ADD ANOTHER' : 'ADD'}
           </button>
         <div>
@@ -65,16 +67,24 @@ const renderSettings = ({ fields, meta: { error } }) =>
           </div>
         </div>
       )}
+      {fields.getAll() && fields.getAll().length > 0 ?
+        <div className="row">
+          <div className="col-md-4">
+            <button type="submit" className="btn">
+              Save settings
+            </button>
+          </div>
+        </div>
+        : <div />
+      }
       </div>
     </div>
 
-// TODO move validate functions to a generic utilities file
 const validate = values => {
   const errors = {}
   const settingsErrors = []
-  for (var index=0; index<values.settings.length; index++) {
+  values.settings.forEach((item, index) => {
     const error = {}
-    const item = values.settings[index]
     // Name errors
     if (!item.name || item.name.length < 3) {
       error.name = 'Required'
@@ -94,8 +104,7 @@ const validate = values => {
       error.address = 'Invalid Ethereum address'
       settingsErrors[index] = error
     }
-
-  }
+  })
 
   if (settingsErrors.length > 0) {
     errors.settings = settingsErrors
