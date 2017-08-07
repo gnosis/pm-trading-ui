@@ -19,6 +19,10 @@ export const hexWithPrefix = (value) => {
   return value
 }
 
+export const add0xPrefix = (value) => {
+  return startsWith(value, '0x') ? value : `0x${value}`
+}
+
 export const toEntity = (data, entityType, idKey = 'address') => {
   const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
 

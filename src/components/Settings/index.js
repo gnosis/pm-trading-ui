@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import Input from 'components/FormInput'
+import { add0xPrefix } from '../../utils/helpers'
 
 
 class Settings extends Component {
@@ -55,6 +56,7 @@ const renderSettings = ({ fields, meta: { error } }) =>
               component={Input}
               label="ADDRESS"
               placeholder="0x12e87B8CE41184E0688027f370A972A436ABE34e"
+              normalize={add0xPrefix}
             />
             <button
               className="btn btn-primary"
@@ -90,9 +92,9 @@ const validate = values => {
       error.name = 'Required'
       settingsErrors[index] = error
     }
-    const occurrences = values.settings.filter((other) => {return item.address == other.address})
+    const occurrences = values.settings.filter((other) => item.address == other.address)
     // Value Errors
-    if ( occurrences.length > 1 ) {
+    if (occurrences.length > 1) {
       error.address = 'Duplicated Address'
       settingsErrors[index] = error
     }
@@ -100,7 +102,7 @@ const validate = values => {
       error.address = 'Required'
       settingsErrors[index] = error
     }
-    else if (item.address.length != 42 || item.address.substr(0, 2) != '0x') {
+    else if (item.address.length != 42) {
       error.address = 'Invalid Ethereum address'
       settingsErrors[index] = error
     }
