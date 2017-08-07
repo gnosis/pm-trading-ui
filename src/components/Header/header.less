@@ -5,7 +5,11 @@
 .headerContainer {
   height: @navbarHeight;
   vertical-align: middle;
-  margin: 40px 0 60px;
+  padding: 40px 0 40px;
+
+  &__inner {
+    position: relative;
+  }
 }
 
 .headerContainer__navLink {
@@ -28,6 +32,17 @@
 
 .headerContainer__group {
   display: inline-block;
+
+  &--version {
+    position: absolute;
+    float: none;
+    left: 5px;
+    top: 5px;
+    line-height: @navbarHeight;
+    color: white !important;
+    font-size: 12px;
+    letter-spacing: .5px;
+  }
 
   &--left {
     float: left;

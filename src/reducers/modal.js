@@ -15,7 +15,7 @@ const reducer = handleActions({
       ...modalData,
     }
   },
-  [closeModal]: state => ({
+  [closeModal]: () => ({
     isOpen: false,
     currentModal: undefined,
   }),

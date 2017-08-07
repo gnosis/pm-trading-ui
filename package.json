@@ -1,5 +1,5 @@
 {
-  "name": "gnosis-management",
+  "name": "@gnosis.pm/gnosis-management",
   "version": "0.1.0",
   "description": "GnosisInc Admin Interface",
   "main": "src/index.js",
@@ -21,7 +21,7 @@
     "@gnosis.pm/gnosisjs": "file:../gnosis.js"
   },
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "file:../gnosis.js",
+    "@gnosis.pm/gnosisjs": "gnosis/gnosis.js",
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",

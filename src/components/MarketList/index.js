@@ -1,24 +1,26 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { calcLMSRMarginalPrice } from 'api'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
-import { reduxForm, submit, Field } from 'redux-form'
+import { reduxForm, Field } from 'redux-form'
+
+import CurrencyName from 'components/CurrencyName'
+import DecimalValue from 'components/DecimalValue'
+import Countdown from 'components/Countdown'
 
 import FormSelect from 'components/FormSelect'
-
-// import ContractName from 'containers/ContractName'
-
-import './marketList.less'
+import FormInput from 'components/FormInput'
 
 import { RESOLUTION_TIME, OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
+import './marketList.less'
+
 class MarketList extends Component {
   componentWillMount() {
-    this.props.requestMarkets()
-    this.props.connectBlockchain()
+    this.props.fetchMarkets()
   }
 
   @autobind
@@ -74,7 +76,7 @@ class MarketList extends Component {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.netOutcomeTokensSold,
       // This is a temporary fix to avoid NaN when there is no funding, which should never occour
-      funding: Decimal(parseInt(market.funding, 10) || 1e18),
+      funding: Decimal(parseInt(market.funding, 10) || 1e18),
       outcomeTokenIndex: 1, // always calc for long when calculating estimation
     })
 
@@ -89,12 +91,12 @@ class MarketList extends Component {
     return (
       <div className="market__outcomes market__outcomes--scalar">
         <div className="outcome outcome--scalar">
-          <div className="outcome__bound outcome__bound--lower">{lowerBound.toString()}</div>
+          <div className="outcome__bound outcome__bound--lower"><DecimalValue value={lowerBound} decimals={1} /></div>
           <div className="outcome__currentPrediction">
             <div className="outcome__currentPrediction--line" />
             <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>{value.toString()}</div>
           </div>
-          <div className="outcome__bound outcome__bound--upper">{upperBound.toString()}</div>
+          <div className="outcome__bound outcome__bound--upper"><DecimalValue value={upperBound} decimals={1} /></div>
         </div>
       </div>
     )
@@ -102,10 +104,7 @@ class MarketList extends Component {
 
   @autobind
   renderMarket(market) {
-    const timeUntilEvent = moment(market.eventDescription.resolutionDate).diff(moment())
-    const durationTilEvent = moment.duration(timeUntilEvent)
-
-    const isResolved = timeUntilEvent < 0 || (market.oracle && market.oracle.isOutcomeSet)
+    const isResolved = market.oracle && market.oracle.isOutcomeSet
     const isOwner = market.creator === this.props.defaultAccount
 
     const resolveUrl = `/markets/${market.address}/resolve`
@@ -119,9 +118,9 @@ class MarketList extends Component {
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
         <div className="market__header">
           <h2 className="market__title">{ market.eventDescription.title }</h2>
-          {isOwner && !isResolved && 
+          {isOwner && !isResolved &&
             <div className="market__control">
-              <a href={`/#${resolveUrl}`} onClick={(e) => this.handleViewMarketResolve(e, resolveUrl)}>Resolve</a>
+              <a href={`/#${resolveUrl}`} onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>Resolve</a>
             </div>}
         </div>
         {outcomes}
@@ -138,7 +137,7 @@ class MarketList extends Component {
               <div className="info__field">
                 <div className="info__field--icon icon icon--countdown" />
                 <div className="info__field--label">
-                  {durationTilEvent.format(RESOLUTION_TIME.RELATIVE_FORMAT)}
+                  <Countdown target={market.eventDescription.resolutionDate} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
                 </div>
               </div>
             </div>
@@ -147,7 +146,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--enddate" />
               <div className="info__field--label">
-                {moment(market.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+                {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
               </div>
             </div>
           </div>
@@ -163,7 +162,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                {market.event.collateralToken} {/*<ContractName contractAddress={market.event.collateralToken} />*/}
+                <CurrencyName collateralToken={market.event.collateralToken} />
               </div>
             </div>
           </div>
@@ -202,24 +201,21 @@ class MarketList extends Component {
         <form onSubmit={handleSubmit}>
           <div className="marketFilter__group">
             <Field
-              component={FormSelect}
-              name="preset"
-              label="Preset"
-              labelClassName="marketFilter__label"
-              className="marketFilter__input"
-              defaultValue={'none'}
-              values={{ none: 'None' }}
+              component={FormInput}
+              name="search"
+              label="Search"
+              placeholder="Title, Description"
+              className="marketFilterField marketFilterSearch"
             />
           </div>
           <div className="marketFilter__group">
             <Field
               component={FormSelect}
-              name="oracle"
-              label="Oracle"
-              labelClassName="marketFilter__label"
-              className="marketFilter__input"
-              defaultValue={'CENTRALIZED'}
-              values={{ CENTRALIZED: 'Centralized', ULTIMATE: 'Ultimate' }}
+              name="resolved"
+              label="Show Resolved"
+              className="marketFilterField marketFilterResolved"
+              defaultValue={''}
+              values={{ '': 'Both', RESOLVED: 'Show only resolved Markets', UNRESOLVED: 'Show only unresolved Markets' }}
             />
           </div>
         </form>
@@ -274,11 +270,14 @@ class MarketList extends Component {
   }
 }
 
+MarketList.propTypes = {
+  markets: PropTypes.arrayOf(PropTypes.object),
+  defaultAccount: PropTypes.string,
+  fetchMarkets: PropTypes.func,
+  changeUrl: PropTypes.func,
+  handleSubmit: PropTypes.func,
+}
+
 export default reduxForm({
   form: 'marketListFilter',
-  onChange: (values, dispatch) => {
-    dispatch(submit('marketListFilter'))
-  },
-  onSubmit: () => {
-  },
 })(MarketList)

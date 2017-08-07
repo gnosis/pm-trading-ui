@@ -1,23 +1,26 @@
+/* globals __ETHEREUM_HOST__ */
+
 import Gnosis from '@gnosis.pm/gnosisjs'
 
-import { hexWithoutPrefix, hexWithPrefix } from 'utils/helpers'
+import { hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 
 import delay from 'await-delay'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
-const GNOSIS_OPTIONS = {}
+const GNOSIS_OPTIONS = {
+  ethereum: __ETHEREUM_HOST__,
+}
 
 let gnosisInstance
 export const getGnosisConnection = async () => {
   if (gnosisInstance) {
-    return Promise.resolve(gnosisInstance)
+    return gnosisInstance
   }
 
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
-    window.gnosis = gnosisInstance
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
   } catch (err) {
     console.error('Gnosis Integration: connection failed') // eslint-disable-line no-console
@@ -132,7 +135,7 @@ export const createMarket = async (market) => {
   return {
     ...market,
     netOutcomeTokensSold: market.outcomes.map(() => '0'),
-    funding: Decimal(market.funding).mul(1e18).toString(),
+    funding: market.funding,
     stage: 1,
     local: true,
     owner: await getCurrentAccount(),
@@ -156,7 +159,7 @@ export const fundMarket = async (market) => {
   const marketContract = gnosis.contracts.Market.at(market.address)
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
-  console.log("funding with " + marketFundingWei.toString())
+  console.log(`funding with ${marketFundingWei.toString()}`)
 
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
   await gnosis.etherToken.approve(marketContract.address, marketFundingWei.toString())
@@ -168,28 +171,15 @@ export const fundMarket = async (market) => {
   return market
 }
 
-export const buyShares = async (market, selectedOutcomeIndex, collateralTokenAmount) => {
+export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount) => {
   const gnosis = await getGnosisConnection()
 
-  const collateralTokenWei = Decimal(collateralTokenAmount).mul(1e18)
-  
-  const marketContract = await gnosis.contracts.Market.at(hexWithPrefix(market.address))
-  const outcomeIndex = parseInt(selectedOutcomeIndex, 10)
+  const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18)
 
-  const fundingInWei = Decimal(market.funding)
+  await gnosis.etherToken.deposit({ value: outcomeTokenCountWei.toString() })
+  await gnosis.etherToken.approve(hexWithPrefix(market.address), outcomeTokenCountWei.toString())
 
-  const calcOpts = {
-    netOutcomeTokensSold: market.netOutcomeTokensSold,
-    cost: collateralTokenWei.toString(),
-    funding: fundingInWei.toString(),
-    outcomeTokenIndex: outcomeIndex,
-  }
-
-  await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
-  await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenWei.toString())
-  
-  const res = await marketContract.buy(outcomeIndex, 1e18, collateralTokenWei.toString())
-  return res
+  return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei })
 }
 
 export const resolveOracle = async (oracle, selectedOutcomeIndex) => {
@@ -202,6 +192,18 @@ export const resolveOracle = async (oracle, selectedOutcomeIndex) => {
   }
 
   throw Error('Oracle contract could not be found - unsupported oracle type?')
+}
+
+export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenCount) => {
+  const gnosis = await getGnosisConnection()
+
+  const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
+
+  return await gnosis.sellOutcomeTokens({
+    market: hexWithPrefix(marketAddress),
+    outcomeTokenIndex,
+    outcomeTokenCount: outcomeTokenCountWei,
+  })
 }
 
 export const calcLMSRCost = Gnosis.calcLMSRCost

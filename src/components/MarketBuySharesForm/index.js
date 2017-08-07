@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Field, reduxForm } from 'redux-form'
 import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
@@ -7,29 +8,18 @@ import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 
+
+import DecimalValue from 'components/DecimalValue'
+import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
 
-import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
+import FormRadioButton from 'components/FormRadioButton'
 import Input from 'components/FormInput'
 import Checkbox from 'components/FormCheckbox'
 
 import './marketBuySharesForm.less'
 
 class MarketBuySharesForm extends Component {
-  @autobind
-  handleBuyShares(values) {
-    const {
-      market,
-      buyShares,
-      selectedCategoricalOutcome,
-      selectedBuyInvest,
-    } = this.props
-
-    console.log(selectedBuyInvest, selectedCategoricalOutcome)
-
-    buyShares(market, selectedCategoricalOutcome, selectedBuyInvest)
-  }
-
   getShareCost(investment, outcomeIndex) {
     if (!investment || !(parseFloat(investment) > 0)) {
       return new Decimal(0)
@@ -59,7 +49,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getMaximumWin(shareCost) {
-    return shareCost.div(1e18).toFixed(4)
+    return shareCost.div(1e18)
   }
 
   getPercentageWin(shareCost, investment) {
@@ -68,83 +58,19 @@ class MarketBuySharesForm extends Component {
     }
 
     const invest = new Decimal(investment).mul(1e18)
-    return shareCost.div(invest.toString()).mul(100).sub(100).toFixed(4)
+    return shareCost.div(invest.toString()).mul(100).sub(100)
   }
 
-  render() {
+  @autobind
+  handleBuyShares() {
     const {
-      handleSubmit,
+      market,
+      buyShares,
+      selectedCategoricalOutcome,
       selectedBuyInvest,
-      market: {
-        event: {
-          type: eventType,
-          collateralToken,
-        },
-      },
     } = this.props
 
-    let outcomeIndex
-
-    if (eventType === OUTCOME_TYPES.CATEGORICAL) {
-      outcomeIndex = this.props.selectedCategoricalOutcome
-    } else if (eventType === OUTCOME_TYPES.SCALAR) {
-      outcomeIndex = 0 // short
-    }
-
-    const shareCost = this.getShareCost(selectedBuyInvest, outcomeIndex)
-    console.log(shareCost.toString())
-
-    const maximumWin = this.getMaximumWin(shareCost, selectedBuyInvest)
-    const percentageWin = this.getPercentageWin(shareCost, selectedBuyInvest)
-
-    return (
-      <div className="marketBuySharesForm">
-        <form onSubmit={handleSubmit(this.handleBuyShares)}>
-          <div className="row">
-            {this.renderOutcomes()}
-            <div className="col-md-6">
-              <div className="row">
-                <div className="col-md-12">
-                  <h2 className="marketBuyHeading">Bet Amount & Checkout</h2>
-                </div>
-              </div>
-              <div className="row marketBuySharesForm__row">
-                <div className="col-md-8">
-                  <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
-                </div>
-                <div className="col-md-4">
-                  <div className="marketBuyCurrency">
-                    {collateralToken}
-                  </div>
-                </div>
-              </div>
-              <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">
-                    Maximum Win
-                  </div>
-                <div className="col-md-6">
-                  <span className="marketBuyWin__row marketBuyWin__max">
-                    {maximumWin} ({percentageWin} %) {collateralToken}
-                  </span>
-                </div>
-              </div>
-              <div className="row marketBuySharesForm__row">
-                <div className="col-md-12">
-                  <Field name="confirm" component={Checkbox} className="marketBuyCheckbox" text="Confirm Purchase" />
-                </div>
-              </div>
-              <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">
-                  <button className="btn btn-primary col-md-12">Buy Shares</button>
-                </div>
-                <div className="col-md-6">
-                  <button className="btn btn-default col-md-12 marketBuySharesForm__cancel">Cancel</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>)
+    buyShares(market, selectedCategoricalOutcome, selectedBuyInvest)
   }
 
   renderOutcomes() {
@@ -152,15 +78,17 @@ class MarketBuySharesForm extends Component {
 
     if (event.type === OUTCOME_TYPES.CATEGORICAL) {
       return this.renderCategorical()
-    } else if (event.type === OUTCOME_TYPES.SCALAR) {
-      return this.renderScalar()
-    } else {
-      return (
-        <div className="col-md-6">
-          <span>Invalid Outcomes...</span>
-        </div>
-      )
     }
+
+    if (event.type === OUTCOME_TYPES.SCALAR) {
+      return this.renderScalar()
+    }
+
+    return (
+      <div className="col-md-6">
+        <span>Invalid Outcomes...</span>
+      </div>
+    )
   }
 
   renderCategorical() {
@@ -215,7 +143,7 @@ class MarketBuySharesForm extends Component {
       funding,
       outcomeTokenIndex: 1,
     })
-    
+
     // debugger
     return (
       <div className="col-md-6">
@@ -240,6 +168,91 @@ class MarketBuySharesForm extends Component {
       </div>
     )
   }
+
+  render() {
+    const {
+      handleSubmit,
+      selectedBuyInvest,
+      market: {
+        event: {
+          type: eventType,
+          collateralToken,
+        },
+      },
+    } = this.props
+
+    let outcomeIndex
+
+    if (eventType === OUTCOME_TYPES.CATEGORICAL) {
+      outcomeIndex = this.props.selectedCategoricalOutcome
+    } else if (eventType === OUTCOME_TYPES.SCALAR) {
+      outcomeIndex = 0 // short
+    }
+
+    const shareCost = this.getShareCost(selectedBuyInvest, outcomeIndex)
+
+    const maximumWin = this.getMaximumWin(shareCost, selectedBuyInvest)
+    const percentageWin = this.getPercentageWin(shareCost, selectedBuyInvest)
+
+    return (
+      <div className="marketBuySharesForm">
+        <form onSubmit={handleSubmit(this.handleBuyShares)}>
+          <div className="row">
+            {this.renderOutcomes()}
+            <div className="col-md-6">
+              <div className="row">
+                <div className="col-md-12">
+                  <h2 className="marketBuyHeading">Bet Amount & Checkout</h2>
+                </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-8">
+                  <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
+                </div>
+                <div className="col-md-4">
+                  <div className="marketBuyCurrency">
+                    <CurrencyName collateralToken={collateralToken} />
+                  </div>
+                </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-6">
+                    Maximum Win
+                  </div>
+                <div className="col-md-6">
+                  <span className="marketBuyWin__row marketBuyWin__max">
+                    <DecimalValue value={maximumWin} />
+                    (<DecimalValue value={percentageWin} /> %)
+                    <CurrencyName collateralToken={collateralToken} />
+                  </span>
+                </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-12">
+                  <Field name="confirm" component={Checkbox} className="marketBuyCheckbox" text="Confirm Purchase" />
+                </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-6">
+                  <button className="btn btn-primary col-md-12">Buy Shares</button>
+                </div>
+                <div className="col-md-6">
+                  <button className="btn btn-default col-md-12 marketBuySharesForm__cancel">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>)
+  }
+}
+
+MarketBuySharesForm.propTypes = {
+  market: PropTypes.object,
+  buyShares: PropTypes.func,
+  selectedCategoricalOutcome: PropTypes.number,
+  selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  handleSubmit: PropTypes.func,
 }
 
 const form = {

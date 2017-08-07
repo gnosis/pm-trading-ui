@@ -1,15 +1,23 @@
 import React, { Component } from 'react'
-import { mapValues } from 'lodash'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
 import { RESOLUTION_TIME } from 'utils/constants'
+
+
+import { collateralTokenToText } from 'components/CurrencyName'
+import { decimalToText } from 'components/DecimalValue'
+
+import Countdown from 'components/Countdown'
+
 import MarketGraph from 'components/MarketGraph'
 
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
+import MarketMySharesForm from 'components/MarketMySharesForm'
 
 import './marketDetail.less'
 
@@ -25,7 +33,6 @@ const generateRandomGraph = () => {
   const curDate = startDate.clone()
 
   const graphData = []
-  const i = 0
 
   let dir = 0
   const dirChangeForce = 0.0001
@@ -59,21 +66,28 @@ const expandableViews = {
     component: undefined,
   },
   [EXPAND_MY_SHARES]: {
-    label: 'My Shares',
+    label: 'My Holdings',
     className: 'btn btn-default',
-    component: undefined,
+    component: MarketMySharesForm,
   },
   [EXPAND_RESOLVE]: {
     label: 'Resolve',
     className: 'btn btn-default',
     component: MarketResolveForm,
-    showCondition: (marketComponent, market) => marketComponent.props.defaultAccount === market.owner && !market.oracle.isOutcomeSet,
+    showCondition: (marketComponent, market) =>
+      marketComponent.props.defaultAccount === market.owner && !market.oracle.isOutcomeSet,
   },
 }
 
-export default class MarketDetail extends Component {
+class MarketDetail extends Component {
   componentWillMount() {
-    this.props.requestMarket(this.props.params.id)
+    if (!this.props.market || !this.props.market.address) {
+      this.props.fetchMarket(this.props.params.id)
+    }
+
+    if (this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
+      this.props.fetchMarketShares(this.props.defaultAccount)
+    }
   }
 
   @autobind
@@ -90,7 +104,7 @@ export default class MarketDetail extends Component {
   renderLoading() {
     return (
       <div className="marketDetailPage">
-        Loading...
+        <div className="container">Loading...</div>
       </div>
     )
   }
@@ -103,7 +117,13 @@ export default class MarketDetail extends Component {
       const ViewComponent = view.component
 
       // Not sure if this is a good idea; If I need to optimize, here's a good place to start
-      return <ViewComponent {...this.props} />
+      return (
+        <div className="expandable__inner">
+          <div className="container">
+            <ViewComponent {...this.props} />
+          </div>
+        </div>
+      )
     }
 
     return <div />
@@ -113,9 +133,9 @@ export default class MarketDetail extends Component {
     const infos = {
       Creator: market.creator,
       Oracle: market.oracle.owner,
-      Token: market.event.collateralToken,
-      Fee: Decimal(market.fee || 0).toFixed(2),
-      Funding: `${Decimal(market.funding || 0).toFixed(4)} ${market.event.collateralToken}`,
+      Token: collateralTokenToText(market.event.collateralToken),
+      Fee: `${decimalToText(market.fee, 4)} %`,
+      Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
 
     return (
@@ -131,10 +151,6 @@ export default class MarketDetail extends Component {
   }
 
   renderDetails(market) {
-    const timeUntilEvent = moment
-      .duration(moment(market.event.resolutionDate)
-      .diff())
-
     return (
       <div className="marketDetails col-md-9">
         <div className="marketDescription">
@@ -142,10 +158,10 @@ export default class MarketDetail extends Component {
         </div>
         <div className="marketTimer">
           <div className="marketTimer__live">
-            {timeUntilEvent.format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}
+            <Countdown target={market.eventDescription.resolutionDate} />
           </div>
           <small className="marketTime__absolute">
-            {moment(market.event.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+            {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
           </small>
         </div>
       </div>
@@ -157,7 +173,8 @@ export default class MarketDetail extends Component {
       <div className="marketControls container">
         <div className="row">
           {Object.keys(expandableViews).filter(view =>
-            !expandableViews[view].showCondition || expandableViews[view].showCondition(this, market),
+            !expandableViews[view].showCondition ||
+            expandableViews[view].showCondition(this, market),
           ).map(view => (
             <button
               key={view}
@@ -201,12 +218,24 @@ export default class MarketDetail extends Component {
         </div>
         { this.renderControls(market) }
         <div className="expandable">
-          <div className="container">
-            { this.renderExpandableContent() }
-          </div>
+          { this.renderExpandableContent() }
         </div>
         <MarketGraph data={testData} />
       </div>
     )
   }
 }
+
+MarketDetail.propTypes = {
+  params: PropTypes.shape({
+    id: PropTypes.string,
+    view: PropTypes.string,
+  }),
+  defaultAccount: PropTypes.string,
+  market: PropTypes.object,
+  changeUrl: PropTypes.func,
+  fetchMarket: PropTypes.func,
+  fetchMarketShares: PropTypes.func,
+}
+
+export default MarketDetail

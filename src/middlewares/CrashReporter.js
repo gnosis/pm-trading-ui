@@ -1,7 +1,7 @@
 /**
  * Sends crash reports as state is updated and listeners are notified.
  */
-const CrashReporter = () => next => action => {
+const CrashReporter = () => next => (action) => {
   try {
     return next(action)
   } catch (err) {
