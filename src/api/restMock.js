@@ -1,5 +1,4 @@
 import { normalize } from 'normalizr'
-import moment from 'moment'
 
 import {
   marketSchema,

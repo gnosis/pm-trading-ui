@@ -2,7 +2,6 @@ import { handleActions } from 'redux-actions'
 
 import {
   TRANSACTION_STATUS,
-  TRANSACTION_COMPLETE_STATUS,
 } from 'utils/constants'
 
 import {
@@ -28,7 +27,7 @@ const reducer = handleActions({
     },
   }),
   [closeTransactionLog]: (state, action) => {
-    const { id, ...payload} = action.payload
+    const { id, ...payload } = action.payload
     return {
       ...state,
       [id]: {

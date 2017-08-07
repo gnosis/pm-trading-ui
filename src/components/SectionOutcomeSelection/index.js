@@ -1,8 +1,8 @@
 import React from 'react'
 import { Field } from 'redux-form'
 
-import OutcomeCategorical from 'components/OutcomeCategorical'
-import OutcomeScalar from 'components/OutcomeScalar'
+// import OutcomeCategorical from 'components/OutcomeCategorical'
+// import OutcomeScalar from 'components/OutcomeScalar'
 
 import { OUTCOME_TYPES } from 'utils/constants'
 
@@ -15,10 +15,10 @@ const SectionOutcomeSelection = () => {
     [OUTCOME_TYPES.SCALAR]: 'Scalar Outcome',
   }
 
-  const outcomeSections = {
-    [OUTCOME_TYPES.CATEGORICAL]: <OutcomeCategorical />,
-    [OUTCOME_TYPES.SCALAR]: <OutcomeScalar />,
-  }
+  // const outcomeSections = {
+  //   [OUTCOME_TYPES.CATEGORICAL]: <OutcomeCategorical />,
+  //   [OUTCOME_TYPES.SCALAR]: <OutcomeScalar />,
+  // }
 
   return (
     <div className="sectionOutcomeSelection">

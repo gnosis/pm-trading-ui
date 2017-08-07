@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import moment from 'moment'
+import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { Field } from 'redux-form'
 
-import { ORACLE_TYPES, OUTCOME_TYPES } from 'utils/constants'
-import './marketCreateWizard.less'
+import { ORACLE_TYPES } from 'utils/constants'
 
 import MarketSidebar from 'components/MarketSidebar'
 
@@ -14,6 +13,8 @@ import GroupBlockDifficulty from 'components/GroupBlockDifficulty'
 import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
 import FormSlider from 'components/FormSlider'
 import FormInput from 'components/FormInput'
+
+import './marketCreateWizard.less'
 
 export default class MarketCreateWizard extends Component {
   @autobind
@@ -53,18 +54,12 @@ export default class MarketCreateWizard extends Component {
   }
 
   renderMarketDetails() {
-    const currencies = {
-      '0x9b1f7f645351af3631a656421ed2e40f2802e6c0': 'Ether Token',
-    }
-
     return (
       <div className="marketDetails">
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
             <FormRadioButtonLabel label="Currency" />
-            {Object.keys(currencies).map(fieldValue =>
-              <Field key={fieldValue} name="collateralToken" component={FormRadioButton} radioValue={fieldValue} text={currencies[fieldValue]} />,
-            )}
+            <Field name="collateralToken" component={FormRadioButton} radioValue={'eth'} text={'Ether Token'} />
           </div>
         </div>
         <div className="row">
@@ -84,7 +79,9 @@ export default class MarketCreateWizard extends Component {
   renderForOracleType() {
     const { selectedOracleType, selectedOutcomeType } = this.props
     const oracleSections = {
-      [ORACLE_TYPES.CENTRALIZED]: <GroupCentralizedOracle selectedOutcomeType={selectedOutcomeType} />,
+      [ORACLE_TYPES.CENTRALIZED]: (
+        <GroupCentralizedOracle selectedOutcomeType={selectedOutcomeType} />
+      ),
       [ORACLE_TYPES.BLOCK_DIFFICULTY]: <GroupBlockDifficulty />,
     }
 
@@ -128,4 +125,10 @@ export default class MarketCreateWizard extends Component {
     )
   }
 
+}
+
+MarketCreateWizard.propTypes = {
+  changeUrl: PropTypes.func,
+  selectedOracleType: PropTypes.string,
+  selectedOutcomeType: PropTypes.string,
 }

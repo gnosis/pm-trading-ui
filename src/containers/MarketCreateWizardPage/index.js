@@ -9,10 +9,12 @@ const FORM = {
   destroyOnUnmount: false,
   initialValues: {
     oracleType: 'CENTRALIZED',
+    fee: '0',
+    collateralToken: 'eth',
   },
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const selector = formValueSelector('marketCreateWizard')
   return {
     selectedOracleType: selector(state, 'oracleType'),

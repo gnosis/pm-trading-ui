@@ -1,19 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import './marketSidebar.less'
 
-class MarketSidebar extends Component {
-  render() {
-    const { fields } = this.props
-    
-    return (
-      <div className="marketSidebar">
-        {Object.keys(fields || {}).map((key) => {
-          return <p key={key}>{key}</p>
-        })}
-      </div>
-    )
-  }
+const MarketSidebar = ({ fields }) => (
+  <div className="marketSidebar">
+    {Object.keys(fields || {}).map(key => <p key={key}>{key}</p>)}
+  </div>
+)
+
+
+MarketSidebar.propTypes = {
+  fields: PropTypes.objectOf(PropTypes.string),
 }
 
 export default MarketSidebar

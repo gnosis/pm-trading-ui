@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { closeModal } from 'actions/modal'
@@ -9,7 +10,7 @@ import './backdrop.less'
 
 class BackdropProvider extends Component {
   renderBackdropContent() {
-    const { modal: { currentModal, isOpen, ...data }, closeModal } = this.props
+    const { modal: { currentModal, isOpen, ...data }, closeModal: closeModalProp } = this.props
 
     if (isOpen) {
       /*
@@ -21,10 +22,10 @@ class BackdropProvider extends Component {
         throw Error('Invalid Modal Type', currentModal)
       }
 
-      return <Modal 
+      return (<Modal
         {...data}
-        closeModal={closeModal}
-      />
+        closeModal={closeModalProp}
+      />)
     }
 
     return undefined
@@ -45,11 +46,19 @@ class BackdropProvider extends Component {
   }
 }
 
+BackdropProvider.propTypes = {
+  modal: PropTypes.shape({
+    isOpen: PropTypes.bool,
+  }),
+  children: PropTypes.node,
+  closeModal: PropTypes.func,
+}
+
 const mapStateToProps = state => ({
   modal: state.modal,
 })
 
 const mapDispatchToProps = dispatch => ({
-  closeModal: () => dispatch(closeModal())
+  closeModal: () => dispatch(closeModal()),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(BackdropProvider)

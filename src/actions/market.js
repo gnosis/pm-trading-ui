@@ -2,7 +2,6 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 
 import {
-  requestMarkets,
   receiveEntities,
   updateEntity,
 } from 'actions/entities'
@@ -25,8 +24,24 @@ import {
 
 import * as api from 'api'
 
-export const requestMarketList = () => async (dispatch) => {
-  await dispatch(requestMarkets())
+export const requestMarket = marketAddress => async (dispatch) => {
+  const payload = await api.requestMarket(marketAddress)
+  return await dispatch(receiveEntities(payload))
+}
+
+export const requestMarkets = () => async (dispatch) => {
+  const payload = await api.requestMarkets()
+  return await dispatch(receiveEntities(payload))
+}
+
+export const requestMarketShares = (marketAddress, accountAddress) => async (dispatch) => {
+  const payload = await api.requestMarketShares(marketAddress, accountAddress)
+  return await dispatch(receiveEntities(payload))
+}
+
+export const requestFactories = () => async (dispatch) => {
+  const payload = await api.requestFactories()
+  return await dispatch(receiveEntities(payload))
 }
 
 export const createMarket = options => async (dispatch) => {
@@ -125,7 +140,10 @@ export const createMarket = options => async (dispatch) => {
   }))
 
   // Fund Market
-  await api.fundMarket(marketContractData)
+  await api.fundMarket({
+    ...marketContractData,
+    funding: market.funding,
+  })
   await dispatch(addTransactionLogEntry({
     id: options.transactionId,
     event: 'funding',
@@ -155,3 +173,9 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
     },
   }))
 }
+
+export const sellMarketShares = (market, outcomeIndex, amount) =>
+  async () => await api.sellShares(market, outcomeIndex, amount)
+
+  // calculate new values
+
