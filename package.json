@@ -18,10 +18,12 @@
   "author": "Gnosis",
   "license": "ISC",
   "jest": {
-    "modulePaths": ["<rootDir>/src/"]
+    "modulePaths": [
+      "<rootDir>/src/"
+    ]
   },
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "gnosis/gnosis.js",
+    "@gnosis.pm/gnosisjs": "file:../gnosis.js",
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
@@ -51,7 +53,7 @@
     "recharts": "^1.0.0-alpha.1",
     "redux": "^3.6.0",
     "redux-actions": "^2.0.1",
-    "redux-form": "^6.6.3",
+    "redux-form": "^7.0.3",
     "redux-thunk": "^2.2.0",
     "reselect": "^2.5.4",
     "sha1": "^1.1.1",

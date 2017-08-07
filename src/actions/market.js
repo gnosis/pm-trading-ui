@@ -106,7 +106,7 @@ export const createMarket = options => async (dispatch) => {
 
   // Create Oracle
   const oracleContractData = await api.createOracle(oracle)
-  await dispatch(receiveEntities(normalize(createLocalOracle(oracleContractData)), oracleSchema))
+  await dispatch(receiveEntities(normalize(createLocalOracle(oracleContractData), oracleSchema)))
   await dispatch(addTransactionLogEntry({
     id: options.transactionId,
     event: 'oracle',

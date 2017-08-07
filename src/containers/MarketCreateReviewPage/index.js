@@ -48,13 +48,17 @@ const FORM = {
     const transactionLogId = uuid()
     await dispatch(openModal({ modalName: 'ModalMarketProgress', transactionId: transactionLogId }))
 
-    return await dispatch(createMarket({
-      eventDescription,
-      oracle,
-      event,
-      market,
-      transactionId: transactionLogId,
-    }))
+    try {
+      return await dispatch(createMarket({
+        eventDescription,
+        oracle,
+        event,
+        market,
+        transactionId: transactionLogId,
+      }))
+    } catch (e) {
+      console.error(e)
+    }
   },
 }
 
