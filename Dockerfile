@@ -1,4 +1,5 @@
 FROM node:8.2.1
+ENV GNOSISDB_HOST=https://gnosisdb-kovan.gnosis.pm
 RUN apt-get update && apt-get install -y git
 RUN npm install -g webpack babel-cli truffle-contract
 ADD package.json /tmp/package.json
