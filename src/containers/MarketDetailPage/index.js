@@ -6,7 +6,7 @@ import MarketDetail from 'components/MarketDetail'
 
 import { buyMarketShares, sellMarketShares, requestMarketShares, requestMarket } from 'actions/market'
 import { resolveOracle } from 'actions/oracle'
-import { getMarketById, getMarketSharesById } from 'selectors/market'
+import { getMarketById, getMarketSharesByMarket } from 'selectors/market'
 import { getDefaultAccount } from 'selectors/blockchain'
 
 const mapStateToProps = (state, ownProps) => {
@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => {
   const marketMySharesSelector = formValueSelector('marketMyShares')
   return {
     market: getMarketById(state)(ownProps.params.id),
-    marketShares: getMarketSharesById(state)(ownProps.params.id, getDefaultAccount(state)),
+    marketShares: getMarketSharesByMarket(state)(ownProps.params.id, getDefaultAccount(state)),
     selectedCategoricalOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),

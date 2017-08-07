@@ -56,6 +56,7 @@ export const eventSchema = new schema.Entity('events', {
 
 export const marketSharesSchema = new schema.Entity('marketShares', {}, {
   ...NORMALIZE_OPTIONS_DEFAULT,
+  idAttribute: 'id',
 })
 
 export const marketSchema = new schema.Entity('markets', {

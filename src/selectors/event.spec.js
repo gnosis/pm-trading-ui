@@ -1,29 +1,31 @@
-const getEventByAddress = require('./event').getEventByAddress
+import { getEventByAddress } from './event'
 
 describe('eventSelector', () => {
-  test('it should return an empty object for invalid address', () => {
-    const state = {
-      entities: {},
-    }
+  describe('getEventByAddress', () => {
+    test('it should return undefined for an invalid address', () => {
+      const state = {
+        entities: {},
+      }
 
-    expect(getEventByAddress(state)('test123')).toMatchObject({})
-  })
+      expect(getEventByAddress(state)('test123')).toBeUndefined()
+    })
 
-  test('it should return event structure for valid address', () => {
-    const state = {
-      entities: {
-        events: {
-          test123: {
-            id: 'test123',
+    test('it should return event structure for valid address', () => {
+      const state = {
+        entities: {
+          events: {
+            test123: {
+              id: 'test123',
+            },
           },
         },
-      },
-    }
+      }
 
-    const desired = {
-      address: 'test123',
-    }
+      const desired = {
+        id: 'test123',
+      }
 
-    expect(getEventByAddress(state)('test123')).toMatchObject(desired)
+      expect(getEventByAddress(state)('test123')).toMatchObject(desired)
+    })
   })
 })

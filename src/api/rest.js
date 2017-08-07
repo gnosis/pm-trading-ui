@@ -1,6 +1,8 @@
 import { restFetch, hexWithoutPrefix } from 'utils/helpers'
 import { normalize } from 'normalizr'
 
+import sha1 from 'sha1'
+
 import {
   marketSchema,
 } from './schema'
@@ -28,7 +30,7 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
     .then(response => normalize({
       address: marketAddress,
       shares: response.map(share => ({
-        address: share.outcomeToken.address,
+        id: sha1(`${marketAddress}-${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
         event: share.outcomeToken.event,
         ...share,
       })),

@@ -14,7 +14,7 @@ const CurrencyName = ({ collateralToken, outcomeToken }) => {
     return <span>{outcomeTokenToText(outcomeToken)}</span>
   }
 
-  return <span>?</span>
+  return <span>Unknown</span>
 }
 
 CurrencyName.propTypes = {

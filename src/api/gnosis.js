@@ -4,6 +4,7 @@ import Gnosis from '@gnosis.pm/gnosisjs'
 
 import { hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
+import { normalize } from 'normalizr'
 
 import delay from 'await-delay'
 import moment from 'moment'
@@ -67,16 +68,11 @@ export const createOracle = async (oracle) => {
     throw new Error('invalid oracle type')
   }
 
-  await delay(1000)
-
   return {
     address: oracleContract.address,
-    isOutcomeSet: false,
     owner: await getCurrentAccount(),
     creator: await getCurrentAccount(),
-    creationBlock: undefined,
     creationDate: moment().format(),
-    local: true,
     ...oracle,
   }
 }
@@ -84,9 +80,6 @@ export const createOracle = async (oracle) => {
 export const createEvent = async (event) => {
   console.log('event', event)
   const gnosis = await getGnosisConnection()
-
-  // hardcoded for current version
-  // event.collateralToken = gnosis.etherToken
 
   let eventContract
 
@@ -102,17 +95,10 @@ export const createEvent = async (event) => {
   } else {
     throw new Error('invalid outcome/event type')
   }
-
-  await delay(1000)
-
   return {
     address: eventContract.address,
-    isWinningOutcomeSet: false,
-    owner: await getCurrentAccount(),
     creator: await getCurrentAccount(),
-    creationBlock: undefined,
     creationDate: moment().format(),
-    local: true,
     ...event,
     collateralToken: gnosis.etherToken.address,
   }
@@ -121,26 +107,18 @@ export const createEvent = async (event) => {
 export const createMarket = async (market) => {
   console.log('market', market)
   const gnosis = await getGnosisConnection()
-  // market.funding = Decimal(market.funding).div(1e18).toString()
 
   const marketContract = await gnosis.createMarket({
     ...market,
     marketMaker: gnosis.lmsrMarketMaker,
     marketFactory: gnosis.standardMarketFactory,
   })
-  console.log(marketContract)
-
-  await delay(1000)
-
+  
   return {
     ...market,
     netOutcomeTokensSold: market.outcomes.map(() => '0'),
     funding: market.funding,
-    stage: 1,
-    local: true,
-    owner: await getCurrentAccount(),
     creator: await getCurrentAccount(),
-    creationBlock: undefined,
     creationDate: moment().format(),
     marketMaker: gnosis.lmsrMarketMaker.address,
     marketFactory: gnosis.standardMarketFactory.address,
@@ -159,14 +137,11 @@ export const fundMarket = async (market) => {
   const marketContract = gnosis.contracts.Market.at(market.address)
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
-  console.log(`funding with ${marketFundingWei.toString()}`)
 
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
   await gnosis.etherToken.approve(marketContract.address, marketFundingWei.toString())
 
   await marketContract.fund(marketFundingWei.toString())
-
-  await delay(1000)
 
   return market
 }

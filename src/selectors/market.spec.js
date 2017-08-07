@@ -1,111 +1,41 @@
-const getMarketById = require('./market').getMarketById
-const getMarkets = require('./market').getMarkets
+import { getMarkets, getMarketById, getMarketSharesByMarket } from './market'
 
 describe('marketSelector', () => {
   describe('getMarketById', () => {
     test('it should return an empty object for invalid address', () => {
       const state = {
         entities: {
-          foo: { id: 'not to be included' },
+          foo: { address: 'not to be included' },
         },
       }
 
       expect(getMarketById(state)('test123')).toMatchObject({})
     })
 
-    test('it should return a market even without any relations', () => {
-      const state = {
-        entities: {
-          market: {
-            test123: {
-              id: 'test123',
-            },
-          },
-        },
-      }
-
-      expect(getMarketById(state)('test123')).toHaveProperty('address')
-      expect(getMarketById(state)('test123')).toHaveProperty('creationDate')
-      expect(getMarketById(state)('test123')).toHaveProperty('creationBlock')
-      expect(getMarketById(state)('test123')).not.toHaveProperty('eventAddress')
-    })
-
-    test('it should return a market with an event', () => {
-      const state = {
-        entities: {
-          market: {
-            test123: {
-              id: 'test123',
-              event: 'event1',
-            },
-          },
-          categoricalEvent: {
-            event1: {
-              id: 'event1',
-            },
-          },
-        },
-      }
-
-      expect(getMarketById(state)('test123')).toHaveProperty('address')
-      expect(getMarketById(state)('test123')).toHaveProperty('eventAddress', 'event1')
-      expect(getMarketById(state)('test123')).toHaveProperty('eventType', 'CATEGORICAL')
-      expect(getMarketById(state)('test123')).not.toHaveProperty('oracleType')
-    })
-
-    test('it should return a market with an event and oracle', () => {
-      const state = {
-        entities: {
-          market: {
-            test123: {
-              id: 'test123',
-              event: 'event1',
-            },
-          },
-          categoricalEvent: {
-            event1: {
-              id: 'event1',
-              oracle: 'oracle1',
-            },
-          },
-          centralizedOracle: {
-            oracle1: {
-              id: 'oracle1',
-            },
-          },
-        },
-      }
-
-      expect(getMarketById(state)('test123')).toHaveProperty('address')
-      expect(getMarketById(state)('test123')).toHaveProperty('eventAddress', 'event1')
-      expect(getMarketById(state)('test123')).toHaveProperty('eventType', 'CATEGORICAL')
-      expect(getMarketById(state)('test123')).toHaveProperty('oracleAddress', 'oracle1')
-      expect(getMarketById(state)('test123')).toHaveProperty('oracleType', 'CENTRALIZED')
-      expect(getMarketById(state)('test123')).not.toHaveProperty('title')
-    })
-
     test('it should return a market with an event, oracle and eventdescription', () => {
       const state = {
         entities: {
-          market: {
+          markets: {
             test123: {
-              id: 'test123',
+              address: 'test123',
               event: 'event1',
             },
           },
-          categoricalEvent: {
+          events: {
             event1: {
-              id: 'event1',
+              address: 'event1',
               oracle: 'oracle1',
+              type: 'CATEGORICAL',
             },
           },
-          centralizedOracle: {
+          oracles: {
             oracle1: {
-              id: 'oracle1',
+              address: 'oracle1',
               eventDescription: 'eventDescription1',
+              type: 'CENTRALIZED',
             },
           },
-          categoricalEventDescription: {
+          eventDescriptions: {
             eventDescription1: {
               title: 'müll',
             },
@@ -114,11 +44,11 @@ describe('marketSelector', () => {
       }
 
       expect(getMarketById(state)('test123')).toHaveProperty('address')
-      expect(getMarketById(state)('test123')).toHaveProperty('eventAddress', 'event1')
-      expect(getMarketById(state)('test123')).toHaveProperty('eventType', 'CATEGORICAL')
-      expect(getMarketById(state)('test123')).toHaveProperty('oracleAddress', 'oracle1')
-      expect(getMarketById(state)('test123')).toHaveProperty('oracleType', 'CENTRALIZED')
-      expect(getMarketById(state)('test123')).toHaveProperty('title', 'müll')
+      expect(getMarketById(state)('test123')).toHaveProperty('event.address', 'event1')
+      expect(getMarketById(state)('test123')).toHaveProperty('event.type', 'CATEGORICAL')
+      expect(getMarketById(state)('test123')).toHaveProperty('oracle.address', 'oracle1')
+      expect(getMarketById(state)('test123')).toHaveProperty('oracle.type', 'CENTRALIZED')
+      expect(getMarketById(state)('test123')).toHaveProperty('eventDescription.title', 'müll')
     })
   })
 
@@ -129,6 +59,78 @@ describe('marketSelector', () => {
       }
 
       expect(getMarkets(state)).toEqual([])
+    })
+  })
+
+  describe('getMarketSharesByMarket', () => {
+    test('it should return an empty array for invalid market', () => {
+      const state = {
+        entities: {},
+      }
+
+      expect(getMarketSharesByMarket(state)('test123')).toEqual([])
+    })
+
+    test('it should return the shares for a market', () => {
+      const state = {
+        entities: {
+          markets: {
+            testmarket123: {
+              address: 'testmarket123',
+              event: 'event1',
+              shares: ['share1', 'share2'],
+            },
+          },
+          events: {
+            event1: {
+              address: 'event1',
+              oracle: 'oracle1',
+              type: 'CATEGORICAL',
+            },
+          },
+          oracles: {
+            oracle1: {
+              address: 'oracle1',
+              eventDescription: 'eventDescription1',
+              type: 'CENTRALIZED',
+            },
+          },
+          eventDescriptions: {
+            eventDescription1: {
+              title: 'müll',
+            },
+          },
+          marketShares: {
+            share1: {
+              id: 'share1',
+              event: 'testevent123',
+              owner: 'testuser123',
+              balance: 1e18,
+            },
+            share2: {
+              id: 'share2',
+              event: 'testevent123',
+              owner: 'testuser123',
+              balance: 1e18,
+            },
+          },
+        },
+      }
+
+      expect(getMarketSharesByMarket(state)('testmarket123')).toMatchObject([
+        {
+          id: 'share1',
+          event: 'testevent123',
+          owner: 'testuser123',
+          balance: 1e18,
+        },
+        {
+          id: 'share2',
+          event: 'testevent123',
+          owner: 'testuser123',
+          balance: 1e18,
+        },
+      ])
     })
   })
 })
