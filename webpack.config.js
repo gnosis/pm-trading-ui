@@ -101,7 +101,7 @@ module.exports = {
         VERSION: JSON.stringify(`${version}#${build}`),
         // ETHEREUM_HOST: nodeEnv === 'production' ? null : JSON.stringify(ethereumHost),
         NODE_ENV: JSON.stringify(nodeEnv),
-        __GNOSISDB_HOST__: JSON.stringify(gnosisDbUrl),
+        GNOSISDB_HOST: JSON.stringify(gnosisDbUrl),
       }
     }),
   ],
