@@ -45,5 +45,17 @@ export const getTransactionComplete = (state, transactionId) => {
   const transaction = transactionSelector(state, transactionId)
 
   return transaction &&
-    transaction.completed && transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR
+    transaction.completed
+}
+
+export const didTransactionFail = (state, transactionId) => {
+  const transaction = transactionSelector(state, transactionId)
+
+  return transaction && transaction.completed && transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.ERROR
+}
+
+export const didTransactionSucceed = (state, transactionId) => {
+  const transaction = transactionSelector(state, transactionId)
+
+  return transaction && transaction.completed && transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR
 }
