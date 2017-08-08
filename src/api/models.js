@@ -43,22 +43,22 @@ const EventDescription = {
 
 // Model Constructors
 
-export const createLocalEventDescription = options => ({
+export const createEventDescriptionModel = options => ({
   ...EventDescription,
   ...options,
 })
 
-export const createLocalOracle = options => ({
+export const createOracleModel = options => ({
   ...Oracle,
   ...options,
 })
 
-export const createLocalEvent = options => ({
+export const createEventModel = options => ({
   ...Event,
   ...options,
 })
 
-export const createLocalMarket = options => ({
+export const createMarketModel = options => ({
   ...Market,
   ...options,
 })
