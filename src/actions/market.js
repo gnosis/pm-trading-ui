@@ -106,6 +106,7 @@ export const createMarket = options => async (dispatch) => {
     await dispatch(receiveEntities(normalize(createEventDescriptionModel(eventDescriptionContractData), eventDescriptionSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.EVENT_DESCRIPTION))
   } catch (e) {
+    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.EVENT_DESCRIPTION, e))
     return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
   }
@@ -120,6 +121,7 @@ export const createMarket = options => async (dispatch) => {
     await dispatch(receiveEntities(normalize(createOracleModel(oracleContractData), oracleSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.ORACLE))
   } catch (e) {
+    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.ORACLE, e))
     return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
   }
@@ -141,6 +143,7 @@ export const createMarket = options => async (dispatch) => {
     await dispatch(receiveEntities(normalize(createEventModel(eventContractData), eventSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.EVENT))
   } catch (e) {
+    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.EVENT, e))
     return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
   }
@@ -162,6 +165,7 @@ export const createMarket = options => async (dispatch) => {
     await dispatch(receiveEntities(normalize(createMarketModel(marketContractData), marketSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.MARKET))
   } catch (e) {
+    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.MARKET, e))
     return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
   }
@@ -175,6 +179,7 @@ export const createMarket = options => async (dispatch) => {
 
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.FUNDING))
   } catch (e) {
+    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.FUNDING, e))
     return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
   }
