@@ -28,7 +28,7 @@ class App extends Component {
 
     return (
       <div className="appContainer">
-        <HeaderContainer version={__VERSION__} />
+        <HeaderContainer version={process.env.VERSION} />
         {this.props.children}
       </div>
     )

@@ -11,7 +11,7 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 
 const GNOSIS_OPTIONS = {
-  ethereum: __ETHEREUM_HOST__,
+//  ethereum: __ETHEREUM_HOST__,
 }
 
 let gnosisInstance
