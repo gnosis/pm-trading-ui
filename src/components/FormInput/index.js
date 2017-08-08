@@ -6,7 +6,7 @@ import { bemifyClassName } from 'utils/helpers'
 
 import './formInput.less'
 
-const Input = ({ input, meta: { error }, label, type, className, placeholder }) => (
+const Input = ({ input, label, type, className, placeholder, meta: { dirty, error } }) => (
   <div className={`inputField ${bemifyClassName(className)}`}>
     <label htmlFor={input.name} className={`inputField__label ${bemifyClassName(className, 'label')}`}>{ label }</label>
     <input
@@ -15,7 +15,11 @@ const Input = ({ input, meta: { error }, label, type, className, placeholder }) 
       type={`${type || 'text'}`}
       {...input}
     />
-    {error && <span>{error}</span>}
+    {dirty &&
+      error &&
+      <span>
+        {error}
+      </span>}
   </div>
 )
 
