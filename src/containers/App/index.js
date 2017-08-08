@@ -20,7 +20,7 @@ class App extends Component {
       return (
         <div className="appContainer">
           <div className="container">
-            <h1 className="text-center">Connecting</h1>
+            <h1 className="text-center">... Connecting</h1>
           </div>
         </div>
       )
