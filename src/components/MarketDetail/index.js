@@ -59,23 +59,42 @@ const expandableViews = {
     label: 'Buy Shares',
     className: 'btn btn-primary',
     component: MarketBuySharesForm,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount &&
+      props.defaultAccount !== props.market.owner &&
+      !props.market.oracle.isOutcomeSet,
   },
   [EXPAND_SHORT_SELL]: {
     label: 'Short Sell',
     className: 'btn btn-primary',
     component: undefined,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount &&
+      props.defaultAccount !== props.market.owner &&
+      !props.market.oracle.isOutcomeSet &&
+      props.market.eventDescription.outcomes &&
+      props.market.eventDescription.outcomes.length > 2,
   },
   [EXPAND_MY_SHARES]: {
     label: 'My Holdings',
     className: 'btn btn-default',
     component: MarketMySharesForm,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount &&
+      props.defaultAccount !== props.market.owner,
   },
   [EXPAND_RESOLVE]: {
     label: 'Resolve',
     className: 'btn btn-default',
     component: MarketResolveForm,
-    showCondition: (marketComponent, market) =>
-      marketComponent.props.defaultAccount === market.owner && !market.oracle.isOutcomeSet,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount &&
+      props.defaultAccount === props.market.owner &&
+      !props.market.oracle.isOutcomeSet,
   },
 }
 
@@ -114,16 +133,19 @@ class MarketDetail extends Component {
 
     if (currentView && expandableViews[currentView] && expandableViews[currentView].component) {
       const view = expandableViews[currentView]
-      const ViewComponent = view.component
 
-      // Not sure if this is a good idea; If I need to optimize, here's a good place to start
-      return (
-        <div className="expandable__inner">
-          <div className="container">
-            <ViewComponent {...this.props} />
+      if (typeof view.showCondition !== 'function' || view.showCondition(this.props)) {
+        const ViewComponent = view.component
+
+        // Not sure if this is a good idea; If I need to optimize, here's a good place to start
+        return (
+          <div className="expandable__inner">
+            <div className="container">
+              <ViewComponent {...this.props} />
+            </div>
           </div>
-        </div>
-      )
+        )
+      }
     }
 
     return <div />

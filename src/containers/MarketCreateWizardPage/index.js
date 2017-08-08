@@ -2,6 +2,8 @@ import { connect } from 'react-redux'
 import { reduxForm, formValueSelector } from 'redux-form'
 import { push } from 'react-router-redux'
 
+import { getDefaultAccount } from 'selectors/blockchain'
+
 import MarketCreateWizard from 'components/MarketCreateWizard'
 
 const FORM = {
@@ -19,6 +21,7 @@ const mapStateToProps = (state) => {
   return {
     selectedOracleType: selector(state, 'oracleType'),
     selectedOutcomeType: selector(state, 'outcomeType'),
+    defaultAccount: getDefaultAccount(state),
   }
 }
 

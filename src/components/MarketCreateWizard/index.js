@@ -17,6 +17,12 @@ import FormInput from 'components/FormInput'
 import './marketCreateWizard.less'
 
 export default class MarketCreateWizard extends Component {
+  componentDidMount() {
+    if (!this.props.defaultAccount) {
+      this.props.changeUrl('/markets')
+    }
+  }
+
   @autobind
   handleShowReview() {
     return this.props.changeUrl('markets/review')
@@ -131,4 +137,5 @@ MarketCreateWizard.propTypes = {
   changeUrl: PropTypes.func,
   selectedOracleType: PropTypes.string,
   selectedOutcomeType: PropTypes.string,
+  defaultAccount: PropTypes.string,
 }
