@@ -69,7 +69,7 @@ export const createOracle = async (oracle) => {
   }
 
   return {
-    address: oracleContract.address,
+    address: hexWithPrefix(oracleContract.address),
     owner: await getCurrentAccount(),
     creator: await getCurrentAccount(),
     creationDate: moment().format(),
@@ -85,7 +85,7 @@ export const createEvent = async (event) => {
 
   const eventData = {
     ...event,
-    collateralToken: gnosis.etherToken.address,
+    collateralToken: hexWithPrefix(gnosis.etherToken.address),
   }
 
   if (event.type === OUTCOME_TYPES.CATEGORICAL) {
@@ -96,11 +96,11 @@ export const createEvent = async (event) => {
     throw new Error('invalid outcome/event type')
   }
   return {
-    address: eventContract.address,
+    address: hexWithPrefix(eventContract.address),
     creator: await getCurrentAccount(),
     creationDate: moment().format(),
     ...event,
-    collateralToken: gnosis.etherToken.address,
+    collateralToken: hexWithPrefix(gnosis.etherToken.address),
   }
 }
 
@@ -120,9 +120,9 @@ export const createMarket = async (market) => {
     funding: market.funding,
     creator: await getCurrentAccount(),
     creationDate: moment().format(),
-    marketMaker: gnosis.lmsrMarketMaker.address,
-    marketFactory: gnosis.standardMarketFactory.address,
-    address: marketContract.address,
+    marketMaker: hexWithPrefix(gnosis.lmsrMarketMaker.address),
+    marketFactory: hexWithPrefix(gnosis.standardMarketFactory.address),
+    address: hexWithPrefix(marketContract.address),
   }
 }
 
@@ -134,12 +134,12 @@ export const fundMarket = async (market) => {
   // await gnosis.approveToken(gnosis.etherToken.address, marketFunding.toString())
   // await gnosis.fundMarket(marketAddress, marketFunding)
 
-  const marketContract = gnosis.contracts.Market.at(market.address)
+  const marketContract = gnosis.contracts.Market.at(hexWithPrefix(market.address))
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
 
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
-  await gnosis.etherToken.approve(marketContract.address, marketFundingWei.toString())
+  await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), marketFundingWei.toString())
 
   await marketContract.fund(marketFundingWei.toString())
 
