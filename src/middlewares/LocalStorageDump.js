@@ -5,7 +5,7 @@ export default store => next => (action) => {
 
   if (action.type !== CLEAR_LOCAL_STORAGE) {
     // eslint-disable-next-line no-undef
-    localStorage.setItem(`AURATIKUM_${__VERSION__}`, JSON.stringify({
+    localStorage.setItem(`GNOSIS${process.env.VERSION}`, JSON.stringify({
       authentication: state.authentication,
     }))
 
