@@ -99,7 +99,7 @@ module.exports = {
       'process.env': {
         VERSION: JSON.stringify(`${version}#${build}`),
         // ETHEREUM_HOST: nodeEnv === 'production' ? null : JSON.stringify(ethereumHost),
-        NODE_ENV: nodeEnv,
+        NODE_ENV: JSON.stringify(nodeEnv),
       }
     }),
   ],
