@@ -10,7 +10,7 @@ const nodeEnv = process.env.NODE_ENV || 'development'
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
-const rpcUrl = process.env.ETHEREUM_HOST || 'http://localhost:8545'
+//const ethereumHost = process.env.ETHEREUM_HOST
 const gnosisDbUrl = process.env.GNOSISDB_HOST || 'http://localhost:8000'
 
 module.exports = {
@@ -97,10 +97,12 @@ module.exports = {
       template: path.join(__dirname, 'src/html/index.html'),
     }),
     new webpack.DefinePlugin({
-      __VERSION__: JSON.stringify(`${version}#${build}`),
-      __ENV__: JSON.stringify(nodeEnv),
-      __ETHEREUM_HOST__: JSON.stringify(rpcUrl),
-      __GNOSISDB_HOST__: JSON.stringify(gnosisDbUrl)
+      'process.env': {
+        VERSION: JSON.stringify(`${version}#${build}`),
+        // ETHEREUM_HOST: nodeEnv === 'production' ? null : JSON.stringify(ethereumHost),
+        NODE_ENV: nodeEnv,
+        __GNOSISDB_HOST__: JSON.stringify(gnosisDbUrl),
+      }
     }),
   ],
 }
