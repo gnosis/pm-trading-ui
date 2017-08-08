@@ -61,3 +61,9 @@ export const bemifyClassName = (className, element, modifier) => {
 
   return ''
 }
+
+export const timeoutCondition = (timeout, rejectReason) => new Promise((_, reject) => {
+  setTimeout(() => {
+    reject(rejectReason)
+  }, timeout)
+})

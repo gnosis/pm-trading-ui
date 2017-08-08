@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 import logo from 'assets/img/gnosis_logo.svg'
 import './header.less'
 
-const Header = ({ version }) => (
+const Header = ({ version, defaultAccount }) => (
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
@@ -17,10 +17,10 @@ const Header = ({ version }) => (
       <div className="headerContainer__group headerContainer__group--left">
         <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Dashboard</Link>
         <Link to="/markets/list" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Markets</Link>
-        <Link to="/transactions" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Transactions</Link>
+        {defaultAccount && <Link to="/transactions" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Transactions</Link>}
       </div>
       <div className="headerContainer__group headerContainer__group--right">
-        <Link to="/account" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Account</Link>
+        {defaultAccount && <Link to="/account" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Account</Link>}
         <Link to="/settings" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Settings</Link>
       </div>
     </div>

@@ -38,7 +38,9 @@ class MarketList extends Component {
 
   @autobind
   handleCreateMarket() {
-    this.props.changeUrl('/markets/new')
+    if (this.props.defaultAccount) {
+      this.props.changeUrl('/markets/new')
+    }
   }
 
   renderCategoricalOutcomes(market) {
@@ -105,7 +107,7 @@ class MarketList extends Component {
   @autobind
   renderMarket(market) {
     const isResolved = market.oracle && market.oracle.isOutcomeSet
-    const isOwner = market.creator === this.props.defaultAccount
+    const isOwner = this.props.defaultAccount && market.creator === this.props.defaultAccount
 
     const resolveUrl = `/markets/${market.address}/resolve`
 
@@ -251,7 +253,15 @@ class MarketList extends Component {
                 <div className="marketStats__label">New Markets</div>
               </div>
               <div className="col-md-3">
-                <button type="button" onClick={this.handleCreateMarket} className="marketStats__control btn btn-primary">Create Market</button>
+                <button
+                  type="button"
+                  onClick={this.handleCreateMarket}
+                  className="marketStats__control btn btn-primary"
+                  disabled={!this.props.defaultAccount}
+                  title={this.props.defaultAccount ? '' : 'Please connect to an ethereum network to create a market'}
+                >
+                  Create Market
+                </button>
               </div>
             </div>
           </div>
