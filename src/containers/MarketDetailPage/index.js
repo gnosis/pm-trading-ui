@@ -12,12 +12,14 @@ import { getDefaultAccount } from 'selectors/blockchain'
 const mapStateToProps = (state, ownProps) => {
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
+  const marketShortSellSelector = formValueSelector('marketShortSell')
   return {
     market: getMarketById(state)(ownProps.params.id),
     marketShares: getMarketSharesByMarket(state)(ownProps.params.id, getDefaultAccount(state)),
     selectedCategoricalOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
+    selectedShortSell: marketShortSellSelector(state, ''),
     defaultAccount: getDefaultAccount(state),
   }
 }

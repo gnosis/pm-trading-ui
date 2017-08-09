@@ -18,6 +18,7 @@ import MarketGraph from 'components/MarketGraph'
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
 import MarketMySharesForm from 'components/MarketMySharesForm'
+import MarketShortSellForm from 'components/MarketShortSellForm'
 
 import './marketDetail.less'
 
@@ -68,11 +69,10 @@ const expandableViews = {
   [EXPAND_SHORT_SELL]: {
     label: 'Short Sell',
     className: 'btn btn-primary',
-    component: undefined,
-    showCondition: props =>
+    component: MarketShortSellForm,
+    showCondition: props =>    
       props.market &&
-      props.defaultAccount &&
-      props.defaultAccount !== props.market.owner &&
+      props.defaultAccount &&      
       !props.market.oracle.isOutcomeSet &&
       props.market.eventDescription.outcomes &&
       props.market.eventDescription.outcomes.length > 2,
@@ -93,7 +93,6 @@ const expandableViews = {
     showCondition: props =>
       props.market &&
       props.defaultAccount &&
-      props.defaultAccount === props.market.owner &&
       !props.market.oracle.isOutcomeSet,
   },
 }
@@ -112,7 +111,7 @@ class MarketDetail extends Component {
   @autobind
   handleExpand(view) {
     const currentView = this.props.params.view
-
+    
     if (currentView === view) {
       this.props.changeUrl(`markets/${this.props.params.id}`)
     } else {
@@ -195,8 +194,8 @@ class MarketDetail extends Component {
       <div className="marketControls container">
         <div className="row">
           {Object.keys(expandableViews).filter(view =>
-            !expandableViews[view].showCondition ||
-            expandableViews[view].showCondition(this, market),
+            typeof expandableViews[view].showCondition !== 'function' ||
+            expandableViews[view].showCondition(this.props, market),
           ).map(view => (
             <button
               key={view}
@@ -218,7 +217,7 @@ class MarketDetail extends Component {
 
   render() {
     const { market } = this.props
-
+    
     if (!market.address) {
       return this.renderLoading()
     }

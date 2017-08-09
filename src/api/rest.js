@@ -29,7 +29,7 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
     // so we create an array for the market shares with the entities we receive here.
     .then(response => normalize({
       address: marketAddress,
-      shares: response.map(share => ({
+      shares: response.results.map(share => ({
         id: sha1(`${marketAddress}-${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
         event: share.outcomeToken.event,
         ...share,
