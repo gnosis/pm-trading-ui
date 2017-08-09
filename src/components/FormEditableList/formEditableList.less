@@ -1,0 +1,67 @@
+@import url('../../less/vars.less');
+
+.formEditableList {
+  display: block;
+  line-height: 20px;
+  margin-bottom: 8px;
+
+  .entry {
+    &__color {
+      vertical-align: middle;
+      display: inline-block;
+      float: left;
+      margin-top: 2px;
+      width: 20px;
+      height: 20px;
+
+      border-radius: 4px;
+    }
+
+    &__input[type="text"] {
+      border: none;
+      background: none;
+      border-bottom: 1px solid @bg-color-muted;
+      font-size: 24px;
+
+      &:active, &:focus {
+        outline: 0;
+      }
+
+      margin: 0 8px;
+
+      font-size: 14px;
+      display: inline-block;
+      float: left;
+    }
+
+    &__delete {
+      line-height: 24px;
+      margin-left: 10px;
+      color: @font-color-muted;
+
+      &:hover {
+        color: @font-color-light;
+      }
+
+      &--hidden {
+        display: none;
+      }
+    }
+  }
+
+  &--new {
+    .entry__delete {
+      display: none;
+    }
+
+    .entry__color {
+
+    }
+  }
+
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}

@@ -1,9 +1,11 @@
 import { connect } from 'react-redux'
 
-import { activeWallet, walletsLoaded } from 'selectors/wallet'
 import Header from 'components/Header'
 
-export default connect(state => ({
-  wallet: activeWallet(state),
-  walletLoaded: walletsLoaded(state),
-}))(Header)
+import { getDefaultAccount } from 'selectors/blockchain'
+
+const mapStateToProps = state => ({
+  defaultAccount: getDefaultAccount(state),
+})
+
+export default connect(mapStateToProps)(Header)

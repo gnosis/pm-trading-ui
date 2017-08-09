@@ -1,11 +1,39 @@
 @font-color-light: #182a36;
 @font-color-dark: #87949c;
+@font-color-muted: lighten(@font-color-dark, 10%);
+
+@brand-primary: #00a6c4;
 
 @link-color: #00a6c4;
+@link-color-highlight: darken(@link-color, 10%);
+
+@highlight-dark: #284659;
 
 @active-highlight: #00a6c4;
-@highlight-green: #0be1b1;
-@highglight-yellow: #f2cc0a;
-@highlight-red: #e01563;
+@active-highlight-success: #26cc1e;
+@active-highlight-error: #f44336;
 
+// default background color
 @bg-color: #FFFFFF;
+// alternative background color
+@bg-color-dark: #182a36;
+// background color for inset elements
+@bg-color-muted: #f0f1f1;
+
+// inset of white background overlay (basically border-size)
+@btn-border-width: 2px;
+
+// gradient for buttons and interactive elements
+@btn-gradient: linear-gradient(153deg, rgba(5,189,196,1) 0%, rgba(0,166,196,1) 100%);
+@btn-gradient-hover: linear-gradient(153deg, rgba(15,199,206,1) 0%, rgba(0,176,206,1) 100%);
+@btn-gradient-active: linear-gradient(153deg, rgba(0,179,186,1) 0%, rgba(0,156,186,1) 100%);
+
+
+// font color for buttons
+@btn-font-color: #FFFFFF;
+
+// font color for buttons with whitebackground (dark font)
+@btn-invert-font-color: #02b1c1;
+
+// margin for heading elements
+@page-heading-margins: 60px 0;

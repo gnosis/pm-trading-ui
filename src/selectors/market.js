@@ -1,57 +1,77 @@
-import _ from 'lodash'
+import { get } from 'lodash'
 
 import { entitySelector } from './entities'
+import { getEventByAddress } from './event'
+import { getOracleByAddress } from './oracle'
+import { getEventDescriptionByAddress } from './eventDescription'
 
-const EVENT_TYPE_CATEGORICAL = 'CATEGORICAL'
-const EVENT_TYPE_SCALAR = 'SCALAR'
+export const getMarketById = state => (marketAddress) => {
+  const marketEntities = entitySelector(state, 'markets')
 
-const ORACLE_TYPE_CENTRALIZED = 'CENTRALIZED'
+  let market = {}
+  if (marketEntities[marketAddress]) {
+    const marketEntity = marketEntities[marketAddress]
+
+    const marketEvent = getEventByAddress(state)(marketEntity.event)
+
+    if (!marketEvent) {
+      return market
+    }
+
+    const eventOracle = getOracleByAddress(state)(marketEvent.oracle)
+
+    if (!eventOracle) {
+      return market
+    }
+
+    const oracleEventDescription =
+      getEventDescriptionByAddress(state)(eventOracle.eventDescription)
+
+    if (!oracleEventDescription) {
+      return market
+    }
+
+    market = {
+      ...marketEntities[marketAddress],
+      event: marketEvent,
+      oracle: eventOracle,
+      eventDescription: oracleEventDescription,
+    }
+  }
+
+  return market
+}
+
+export const getMarketShareByShareId = state => (shareAddress) => {
+  const marketShareEntities = entitySelector(state, 'marketShares')
+
+  return marketShareEntities[shareAddress]
+}
 
 export const getMarkets = (state) => {
-  const marketEntities = entitySelector(state, 'market')
-  const categoricalEventEntities = entitySelector(state, 'categoricalEvent')
-  const scalarEventEntities = entitySelector(state, 'scalarEvent')
+  const marketEntities = entitySelector(state, 'markets')
 
-  const centralizedOracleEntities = entitySelector(state, 'centralizedOracle')
-  const categoricalEventDescriptionEntities = entitySelector(state, 'categoricalEventDescription')
-  const scalarEventDescriptionEntities = entitySelector(state, 'scalarEventDescription')
+  return Object.keys(marketEntities).map(getMarketById(state))
+}
 
-  return Object.keys(marketEntities).map((marketAddress) => {
-    const { event: eventAddress, ...market } = marketEntities[marketAddress]
+export const getMarketSharesByMarket = state => (marketAddress) => {
+  const marketEntity = getMarketById(state)(marketAddress)
+  const shares = get(marketEntity, 'shares', [])
+  return shares.map(shareAddress => getMarketShareByShareId(state)(shareAddress))
+}
 
-    // Event assignment
-    market.event = {}
-    if (categoricalEventEntities[eventAddress]) {
-      market.event = categoricalEventEntities[eventAddress]
-      market.eventType = EVENT_TYPE_CATEGORICAL
-    } else if (scalarEventEntities[eventAddress]) {
-      market.event = scalarEventEntities[eventAddress]
-      market.eventType = EVENT_TYPE_SCALAR
-    }
+export const filterMarkets = state => (opts) => {
+  const marketEntities = getMarkets(state)
 
-    // Oracle assignment
-    market.oracle = {}
-    if (market.event.oracle) {
-      if (centralizedOracleEntities[market.event.oracle]) {
-        market.oracle = centralizedOracleEntities[market.event.oracle]
-        market.oracleType = ORACLE_TYPE_CENTRALIZED
-      }
-    }
+  const { textSearch, resolved } = opts
 
-    // Event description assignment
-    market.eventDescription = {}
-    if (market.oracle.eventDescription) {
-      if (categoricalEventDescriptionEntities[market.oracle.eventDescription]) {
-        market.eventDescription =
-          categoricalEventDescriptionEntities[market.oracle.eventDescription]
-      } else if (scalarEventDescriptionEntities[market.oracle.eventDescription]) {
-        market.eventDescription =
-          scalarEventDescriptionEntities[market.oracle.eventDescription]
-      }
-    }
-
-    return market
-  })
+  return marketEntities
+    .filter(market =>
+    (!textSearch ||
+      market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
+      market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
+    (typeof resolved === 'undefined' || (resolved === 'RESOLVED' && market.oracle.isOutcomeSet) || (resolved === 'UNRESOLVED' && !market.oracle.isOutcomeSet)),
+  )
 }
 
 export default {

@@ -1,4 +1,4 @@
-export default store => next => action => {
+export default store => next => (action) => {
   const { type } = action
 
   if (type !== 'INIT') return next(action)
@@ -19,4 +19,6 @@ export default store => next => action => {
   } catch (e) {
     // Unable to load or parse stored state, proceed as usual
   }
+
+  return null
 }
