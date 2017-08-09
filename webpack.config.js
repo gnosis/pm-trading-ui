@@ -63,8 +63,9 @@ module.exports = {
     ],
   },
   devServer: {
+    disableHostCheck: true,
     contentBase: false,
-    port: 3000,
+    port: 5000,
     proxy: {
       '/api': {
         target: gnosisDbUrl,
@@ -98,9 +99,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         VERSION: JSON.stringify(`${version}#${build}`),
-        GNOSISDB_HOST: JSON.stringify(gnosisDbUrl),
         // ETHEREUM_HOST: nodeEnv === 'production' ? null : JSON.stringify(ethereumHost),
         NODE_ENV: JSON.stringify(nodeEnv),
+        GNOSISDB_HOST: JSON.stringify(gnosisDbUrl),
       }
     }),
   ],
