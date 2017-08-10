@@ -73,6 +73,39 @@ class MarketShortSellForm extends Component {
     )
   }
 
+  renderReturnedOutcomeTokens() {
+    const { selectedShortSellOutcome, market: { eventDescription }, selectedShortSellAmount } = this.props
+
+    let renderedOutcomes = []
+    if (!isNaN(parseFloat(selectedShortSellOutcome))) {
+      // if (event.type === OUTCOME_TYPES.CATEGORICAL) {
+      renderedOutcomes = eventDescription.outcomes
+      .filter((outcome, index) => index !== parseFloat(selectedShortSellOutcome))      
+    }
+    /*
+    <Field
+            key={index}
+            name="returnedOutcomes"
+            highlightColor={COLOR_SCHEME_DEFAULT[index]}
+          />
+    
+          */
+    return renderedOutcomes.map(
+      (outcome, index) =>
+        (
+          <div key={index} className="row">
+            <div
+              className={'entry__color col-md-4'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }}
+            />
+            <div className="col-md-8">
+              {outcome}
+            </div>
+            {selectedShortSellAmount} Tokens
+          </div>
+        ),
+    )
+  }
+
   renderCategorical() {
     const { market: { eventDescription }, selectedShortSellOutcome } = this.props
     return (
@@ -140,9 +173,10 @@ class MarketShortSellForm extends Component {
                   </div>
                 </div>
               </div>
+              {this.renderReturnedOutcomeTokens()}
               <div className="row marketShortSellForm__row">
                 <div className="col-md-6">
-                    Maximum Win
+                    Maximum return
                   </div>
                 <div className="col-md-6">
                   <span className="marketBuyWin__row marketBuyWin__max">                    
