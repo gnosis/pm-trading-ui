@@ -22,27 +22,18 @@ import '../MarketBuySharesForm/marketBuySharesForm.less'
 class MarketShortSellForm extends Component {
 
   getMaximumReturn(collateralTokenCount, profit) {    
-    if (collateralTokenCount !== undefined && profit !== undefined 
-        && new Decimal(collateralTokenCount).gte(0) && new Decimal(profit).gte(0)) {      
-      
+    if (!isNaN(parseFloat(collateralTokenCount)) && !isNaN(profit)
+        && new Decimal(collateralTokenCount).gt(0) && new Decimal(profit).gte(0)) {
       collateralTokenCount = new Decimal(collateralTokenCount).mul(1e18)
       return collateralTokenCount.div(collateralTokenCount.sub(profit))
     }
     return new Decimal(0)
   }
 
-  getMaximumReturnPercentage(collateralTokenProfit, collateralTokenInvest) {  
-    if (collateralTokenProfit !== undefined && collateralTokenInvest !== undefined 
-        && new Decimal(collateralTokenProfit).gte(0) && new Decimal(collateralTokenInvest).gte(0)) {
-      return (collateralTokenProfit.div(new Decimal(collateralTokenInvest).mul(1e18)).mul(100))     
-    } 
-    return new Decimal(0)
-  }  
-
   getMinProfit(market, outcomeTokenIndex, collateralTokenCount) {
     // Ratio outcomeTokenCount : collateralTokenCount is always 1:1
     if (outcomeTokenIndex !== undefined && collateralTokenCount !== undefined
-        && new Decimal(outcomeTokenIndex).gte(0) && new Decimal(collateralTokenCount).gte(0)) {
+        && new Decimal(outcomeTokenIndex).gte(0) && new Decimal(collateralTokenCount).gt(0)) {
 
       const args = {
         'netOutcomeTokensSold': market.netOutcomeTokensSold,
