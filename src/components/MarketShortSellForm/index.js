@@ -36,13 +36,13 @@ class MarketShortSellForm extends Component {
         && new Decimal(collateralTokenProfit).gte(0) && new Decimal(collateralTokenInvest).gte(0)) {
       return (collateralTokenProfit.div(new Decimal(collateralTokenInvest).mul(1e18)).mul(100))     
     } 
-    return new Decimal(0)   
+    return new Decimal(0)
   }  
 
   getMinProfit(market, outcomeTokenIndex, collateralTokenCount) {
-    // Ratio outcomeTokenIndex : collateralTokenCount is always 1:1
-    if (outcomeTokenIndex !== undefined && collateralTokenCount !== undefined 
-        && new Decimal(outcomeTokenIndex).gte(0) && new Decimal(collateralTokenCount).gte(0)) {            
+    // Ratio outcomeTokenCount : collateralTokenCount is always 1:1
+    if (outcomeTokenIndex !== undefined && collateralTokenCount !== undefined
+        && new Decimal(outcomeTokenIndex).gte(0) && new Decimal(collateralTokenCount).gte(0)) {
 
       const args = {
         'netOutcomeTokensSold': market.netOutcomeTokensSold,
@@ -62,16 +62,6 @@ class MarketShortSellForm extends Component {
 
   @autobind
   handleShortSell() {
-    /*
-    calc outcome tokens and min profit from ether value.
-    1 ETH(collateral token) = 1 shares of outcome1, outcome2, outcome3
-    1 ETH => 1 outcome token count
-    1 ETH => min profit = https://github.com/gnosis/gnosis.js/blob/master/src/lmsr.js#L62
-
-    Deposit ether value
-    approve market to use ether value amount of collateral token
-    Short sell selected outcome
-    */
     event.preventDefault
     const { market: { eventDescription } } = this.props
     const outcomeIndex = event.target.value    
@@ -93,8 +83,7 @@ class MarketShortSellForm extends Component {
   }
 
   renderCategorical() {
-    const { market: { eventDescription } } = this.props
-    
+    const { market: { eventDescription }, selectedShortSellOutcome } = this.props
     return (
       <div className="col-md-4">
         <div className="row">
@@ -110,16 +99,16 @@ class MarketShortSellForm extends Component {
                 component={FormRadioButton}
                 name="selectedOutcome"
                 highlightColor={COLOR_SCHEME_DEFAULT[index]}
-                className="marketBuyOutcome"
+                className={index === parseInt(selectedShortSellOutcome, 10) ? 'marketBuyOutcome selected-outcome' : 'marketBuyOutcome'}
                 radioValue={index}
-                text={label}                
+                text={label}
               />
             ))}
           </div>
         </div>
       </div>
     )
-  }  
+  }
 
   render() {
     const {
@@ -179,8 +168,10 @@ class MarketShortSellForm extends Component {
               </div>
               <div className="row marketShortSellForm__row">
                 <div className="col-md-12">
-                  <Field name="confirm" component={Checkbox} className="marketBuyCheckbox" 
-                    text="I AGREE AND UNDERSTAND THAT ETH WILL BE TRANSFERRED FROM MY ACCOUNT" />
+                  <Field
+                    name="confirm" component={Checkbox} className="marketBuyCheckbox"
+                    text="I AGREE AND UNDERSTAND THAT ETH WILL BE TRANSFERRED FROM MY ACCOUNT"
+                  />
                 </div>
               </div>
               <div className="row marketShortSellForm__row">
@@ -190,13 +181,13 @@ class MarketShortSellForm extends Component {
                 <div className="col-md-6">
                   <button className="btn btn-default col-md-12 marketShortSell__cancel">DISCARD</button>
                 </div>
-              </div>                                
+              </div>
             </div>
           </div>
         </form>
       </div>
     )
-  }  
+  }
 
 }
 
@@ -204,10 +195,8 @@ MarketShortSellForm.propTypes = {
   market: PropTypes.shape({
     address: PropTypes.string,
   }),
-  invalid: PropTypes.bool,
-  marketShares: PropTypes.arrayOf(PropTypes.object),
-  shortSellAmount: PropTypes.string,
-  selectedOutcome: PropTypes.string
+  selectedShortSellAmount: PropTypes.string,
+  selectedShortSellOutcome: PropTypes.string,
 }
 
 const FORM = {
