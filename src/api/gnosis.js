@@ -184,3 +184,4 @@ export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenC
 export const calcLMSRCost = Gnosis.calcLMSRCost
 export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
 export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
+export const calcLMSRProfit = Gnosis.calcLMSRProfit

@@ -19,7 +19,8 @@ const mapStateToProps = (state, ownProps) => {
     selectedCategoricalOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
-    selectedShortSell: marketShortSellSelector(state, ''),
+    selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'), // TODO
+    selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'), // TODO
     defaultAccount: getDefaultAccount(state),
   }
 }

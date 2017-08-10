@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form'
 import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
 
-import { calcLMSROutcomeTokenCount } from 'api'
+import { calcLMSRProfit } from 'api'
 
 import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 
@@ -21,57 +21,61 @@ import '../MarketBuySharesForm/marketBuySharesForm.less'
 
 class MarketShortSellForm extends Component {
 
-  getShareCost(investment, outcomeIndex) {
-    if (!investment || !(parseFloat(investment) > 0)) {
-      return new Decimal(0)
+  getMaximumReturn(collateralTokenCount, profit) {    
+    if (collateralTokenCount !== undefined && profit !== undefined 
+        && new Decimal(collateralTokenCount).gte(0) && new Decimal(profit).gte(0)) {      
+      
+      collateralTokenCount = new Decimal(collateralTokenCount).mul(1e18)
+      return collateralTokenCount.div(collateralTokenCount.sub(profit))
     }
-
-    const invest = new Decimal(investment).mul(1e18)
-    const {
-      market: {
-        funding,
-        netOutcomeTokensSold,
-      },
-    } = this.props
-
-    let shareCost
-    try {
-      shareCost = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold,
-        funding,
-        outcomeTokenIndex: parseInt(outcomeIndex, 10),
-        cost: invest.toString(),
-      })
-    } catch (e) {
-      return new Decimal(0)
-    }
-
-    return shareCost
+    return new Decimal(0)
   }
 
-  getMaximumWin(shareCost) {
-    return shareCost.div(1e18)
-  }
+  getMaximumReturnPercentage(collateralTokenProfit, collateralTokenInvest) {  
+    if (collateralTokenProfit !== undefined && collateralTokenInvest !== undefined 
+        && new Decimal(collateralTokenProfit).gte(0) && new Decimal(collateralTokenInvest).gte(0)) {
+      return (collateralTokenProfit.div(new Decimal(collateralTokenInvest).mul(1e18)).mul(100))     
+    } 
+    return new Decimal(0)   
+  }  
 
-  getPercentageWin(shareCost, investment) {
-    if (!investment || !(parseFloat(investment) > 0)) {
-      return '0'
+  getMinProfit(market, outcomeTokenIndex, collateralTokenCount) {
+    // Ratio outcomeTokenIndex : collateralTokenCount is always 1:1
+    if (outcomeTokenIndex !== undefined && collateralTokenCount !== undefined 
+        && new Decimal(outcomeTokenIndex).gte(0) && new Decimal(collateralTokenCount).gte(0)) {            
+
+      const args = {
+        'netOutcomeTokensSold': market.netOutcomeTokensSold,
+        'funding': market.funding,
+        'outcomeTokenIndex': outcomeTokenIndex,
+        'outcomeTokenCount': new Decimal(collateralTokenCount).mul(1e18),
+        'feeFactor': market.fee
+      }
+
+      // Calculate minimum profit      
+      const minProfit = calcLMSRProfit(args)
+      return minProfit
     }
 
-    const invest = new Decimal(investment).mul(1e18)
-    return shareCost.div(invest.toString()).mul(100).sub(100)
+    return new Decimal(0)
   }
 
   @autobind
   handleShortSell() {
-    // TODO
-  }
+    /*
+    calc outcome tokens and min profit from ether value.
+    1 ETH(collateral token) = 1 shares of outcome1, outcome2, outcome3
+    1 ETH => 1 outcome token count
+    1 ETH => min profit = https://github.com/gnosis/gnosis.js/blob/master/src/lmsr.js#L62
 
-  @autobind
-  handleSelectOutcome(event) {
+    Deposit ether value
+    approve market to use ether value amount of collateral token
+    Short sell selected outcome
+    */
     event.preventDefault
-    console.log(event.target.value)
-    // TODO develop
+    const { market: { eventDescription } } = this.props
+    const outcomeIndex = event.target.value    
+    const outcome = eventDescription.outcomes[outcomeIndex]      
   }
 
   renderOutcomes() {
@@ -108,8 +112,7 @@ class MarketShortSellForm extends Component {
                 highlightColor={COLOR_SCHEME_DEFAULT[index]}
                 className="marketBuyOutcome"
                 radioValue={index}
-                text={label}
-                onChange={this.handleSelectOutcome}
+                text={label}                
               />
             ))}
           </div>
@@ -120,28 +123,20 @@ class MarketShortSellForm extends Component {
 
   render() {
     const {
-      handleSubmit,
-      selectedBuyInvest,
-      market: {
+      handleSubmit,      
+      selectedShortSellAmount,
+      selectedShortSellOutcome,      
+      market: {        
         event: {
           type: eventType,
           collateralToken,
         },
-      },
-    } = this.props
-
-    let outcomeIndex
-
-    if (eventType === OUTCOME_TYPES.CATEGORICAL) {
-      outcomeIndex = this.props.selectedCategoricalOutcome
-    } else if (eventType === OUTCOME_TYPES.SCALAR) {
-      outcomeIndex = 0 // short
-    }
-
-    const shareCost = this.getShareCost(selectedBuyInvest, outcomeIndex)
-
-    const maximumWin = this.getMaximumWin(shareCost, selectedBuyInvest)
-    const percentageWin = this.getPercentageWin(shareCost, selectedBuyInvest)
+        ...market,
+      },      
+    } = this.props    
+        
+    const minProfit = this.getMinProfit(market, selectedShortSellOutcome, selectedShortSellAmount)    
+    const maximumReturn = this.getMaximumReturn(selectedShortSellAmount, minProfit)    
 
     return (
       <div className="marketBuySharesForm">
@@ -156,7 +151,8 @@ class MarketShortSellForm extends Component {
               </div>
               <div className="row marketShortSellForm__row">
                 <div className="col-md-8">
-                  <Field name="amount" component={Input} className="marketSellAmount" placeholder="Enter amount" />
+                  <Field name="shortSellAmount" component={Input} className="marketSellAmount" 
+                    placeholder="Enter amount" />
                 </div>
                 <div className="col-md-4">
                   <div className="marketBuyCurrency">
@@ -169,10 +165,8 @@ class MarketShortSellForm extends Component {
                     Maximum Win
                   </div>
                 <div className="col-md-6">
-                  <span className="marketBuyWin__row marketBuyWin__max">
-                    <DecimalValue value={maximumWin} />
-                    (<DecimalValue value={percentageWin} /> %)
-                    <CurrencyName collateralToken={collateralToken} />
+                  <span className="marketBuyWin__row marketBuyWin__max">                    
+                    <DecimalValue value={maximumReturn} /> %                    
                   </span>
                 </div>
               </div>
@@ -211,9 +205,9 @@ MarketShortSellForm.propTypes = {
     address: PropTypes.string,
   }),
   invalid: PropTypes.bool,
-  selectedSellAmount: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
-  sellShares: PropTypes.func,
+  shortSellAmount: PropTypes.string,
+  selectedOutcome: PropTypes.string
 }
 
 const FORM = {
