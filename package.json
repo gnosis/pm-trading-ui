@@ -7,7 +7,7 @@
     "build": "./node_modules/.bin/webpack",
     "clean": "rm -rf dist",
     "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info",
-    "start:demo": "export GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' && npm start",
+    "start:standalone": "cross-env GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' npm start",
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix",
     "test": "jest"
@@ -28,6 +28,7 @@
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
+    "cross-env": "^5.0.5",
     "d3": "^4.9.1",
     "d3-scale-chromatic": "^1.1.1",
     "decimal.js": "^7.2.3",
