@@ -96,7 +96,7 @@ export const createMarket = options => async (dispatch) => {
   } = options
 
   // Start a new transaction log
-  await dispatch(startLog(transactionId, TRANSACTION_EVENTS))
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS, `Creating Market "${eventDescription.title}"`))
 
   // Create Event Description
   let eventDescriptionContractData

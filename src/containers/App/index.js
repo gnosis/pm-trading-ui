@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 
 import { connectBlockchain } from 'actions/blockchain'
 
+import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
 import './app.less'
@@ -29,6 +30,7 @@ class App extends Component {
     return (
       <div className="appContainer">
         <HeaderContainer version={process.env.VERSION} />
+        <TransactionFloaterContainer />
         {this.props.children}
       </div>
     )
