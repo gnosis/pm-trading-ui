@@ -12,5 +12,5 @@ after_success:
 - eval "$(ssh-agent -s)"
 - chmod 600 .travis/deploy_key
 - ssh-add .travis/deploy_key
-- git remote add deploy dokku@gnosisdb-kovan.gnosis.pm:gnosisdb-kovan.gnosis.pm
+- git remote add deploy dokku@management-beta.gnosis.pm:management-beta.gnosis.pm
 - git push deploy development:master -f
