@@ -5,6 +5,7 @@ import sha1 from 'sha1'
 
 import {
   marketSchema,
+  tradeSchema,
 } from './schema'
 
 const API_URL = process.env.GNOSISDB_HOST
@@ -35,3 +36,7 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
         ...share,
       })),
     }, marketSchema))
+
+export const requestMarketParticipantTrades = async (marketAddress, accountAddress) =>
+  restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
+    .then(response => normalize(response.results, [tradeSchema]))

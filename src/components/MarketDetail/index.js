@@ -18,12 +18,14 @@ import MarketGraph from 'components/MarketGraph'
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
 import MarketMySharesForm from 'components/MarketMySharesForm'
-import MarketShortSellForm from 'components/MarketShortSellForm'
+// import MarketShortSellForm from 'components/MarketShortSellForm'
+import MarketMyTrades from 'components/MarketMyTrades'
 
 import './marketDetail.less'
 
 const EXPAND_BUY_SHARES = 'buy-shares'
-const EXPAND_SHORT_SELL = 'short-sell'
+// const EXPAND_SHORT_SELL = 'short-sell'
+const EXPAND_MY_TRADES = 'my-trades'
 const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
 
@@ -82,6 +84,15 @@ const expandableViews = {
     label: 'My Holdings',
     className: 'btn btn-default',
     component: MarketMySharesForm,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount &&
+      props.defaultAccount !== props.market.owner,
+  },
+  [EXPAND_MY_TRADES]: {
+    label: 'My Trades',
+    className: 'btn btn-default',
+    component: MarketMyTrades,
     showCondition: props =>
       props.market &&
       props.defaultAccount &&
