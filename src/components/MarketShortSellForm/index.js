@@ -21,7 +21,7 @@ import '../MarketBuySharesForm/marketBuySharesForm.less'
 
 class MarketShortSellForm extends Component {
 
-  getMaximumReturn(collateralTokenCount, profit) {    
+  getMaximumReturn(collateralTokenCount, profit) {
     if (!isNaN(parseFloat(collateralTokenCount)) && !isNaN(profit)
         && new Decimal(collateralTokenCount).gt(0) && new Decimal(profit).gte(0)) {
       collateralTokenCount = new Decimal(collateralTokenCount).mul(1e18)
@@ -36,14 +36,14 @@ class MarketShortSellForm extends Component {
         && new Decimal(outcomeTokenIndex).gte(0) && new Decimal(collateralTokenCount).gt(0)) {
 
       const args = {
-        'netOutcomeTokensSold': market.netOutcomeTokensSold,
-        'funding': market.funding,
-        'outcomeTokenIndex': outcomeTokenIndex,
-        'outcomeTokenCount': new Decimal(collateralTokenCount).mul(1e18),
-        'feeFactor': market.fee
+        outcomeTokenIndex,
+        netOutcomeTokensSold: market.netOutcomeTokensSold,
+        funding: market.funding,
+        outcomeTokenCount: new Decimal(collateralTokenCount).mul(1e18),
+        feeFactor: market.fee,
       }
 
-      // Calculate minimum profit      
+      // Calculate minimum profit
       const minProfit = calcLMSRProfit(args)
       return minProfit
     }
@@ -53,10 +53,11 @@ class MarketShortSellForm extends Component {
 
   @autobind
   handleShortSell() {
+    // TODO
     event.preventDefault
     const { market: { eventDescription } } = this.props
-    const outcomeIndex = event.target.value    
-    const outcome = eventDescription.outcomes[outcomeIndex]      
+    const outcomeIndex = event.target.value
+    const outcome = eventDescription.outcomes[outcomeIndex]
   }
 
   renderOutcomes() {
@@ -80,22 +81,19 @@ class MarketShortSellForm extends Component {
     if (!isNaN(parseFloat(selectedShortSellOutcome))) {
       // if (event.type === OUTCOME_TYPES.CATEGORICAL) {
       renderedOutcomes = eventDescription.outcomes
-      .filter((outcome, index) => index !== parseFloat(selectedShortSellOutcome))      
+      .filter((outcome, index) => index !== parseFloat(selectedShortSellOutcome))
     }
-    /*
-    <Field
-            key={index}
-            name="returnedOutcomes"
-            highlightColor={COLOR_SCHEME_DEFAULT[index]}
-          />
-    
-          */
+    // Remove the current selected outcome from color_scheme, this allows us to
+    // show the right colors for the unselected outcomes
+    const colorScheme = Object.assign([], COLOR_SCHEME_DEFAULT)
+    colorScheme.splice(selectedShortSellOutcome, 1)
+
     return renderedOutcomes.map(
       (outcome, index) =>
         (
           <div key={index} className="row">
             <div
-              className={'entry__color col-md-4'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }}
+              className={'entry__color col-md-4'} style={{ backgroundColor: colorScheme[index] }}
             />
             <div className="col-md-8">
               {outcome}
@@ -136,20 +134,20 @@ class MarketShortSellForm extends Component {
 
   render() {
     const {
-      handleSubmit,      
+      handleSubmit,
       selectedShortSellAmount,
-      selectedShortSellOutcome,      
-      market: {        
+      selectedShortSellOutcome,
+      market: {
         event: {
           type: eventType,
           collateralToken,
         },
         ...market,
-      },      
-    } = this.props    
+      },
+    } = this.props
         
-    const minProfit = this.getMinProfit(market, selectedShortSellOutcome, selectedShortSellAmount)    
-    const maximumReturn = this.getMaximumReturn(selectedShortSellAmount, minProfit)    
+    const minProfit = this.getMinProfit(market, selectedShortSellOutcome, selectedShortSellAmount)
+    const maximumReturn = this.getMaximumReturn(selectedShortSellAmount, minProfit)
 
     return (
       <div className="marketBuySharesForm">
@@ -164,8 +162,10 @@ class MarketShortSellForm extends Component {
               </div>
               <div className="row marketShortSellForm__row">
                 <div className="col-md-8">
-                  <Field name="shortSellAmount" component={Input} className="marketSellAmount" 
-                    placeholder="Enter amount" />
+                  <Field
+                    name="shortSellAmount" component={Input} className="marketSellAmount"
+                    placeholder="Enter amount"
+                  />
                 </div>
                 <div className="col-md-4">
                   <div className="marketBuyCurrency">
