@@ -66,6 +66,7 @@ const expandableViews = {
       props.defaultAccount !== props.market.owner &&
       !props.market.oracle.isOutcomeSet,
   },
+  /* HIDDEN
   [EXPAND_SHORT_SELL]: {
     label: 'Short Sell',
     className: 'btn btn-primary',
@@ -76,7 +77,7 @@ const expandableViews = {
       !props.market.oracle.isOutcomeSet &&
       props.market.eventDescription.outcomes &&
       props.market.eventDescription.outcomes.length > 2,
-  },
+  },*/
   [EXPAND_MY_SHARES]: {
     label: 'My Holdings',
     className: 'btn btn-default',
