@@ -1,0 +1,16 @@
+language: node_js
+dist: trusty
+node_js:
+  node
+addons:
+  ssh_known_hosts:
+  - management-beta.gnosis.pm
+before_install:
+- npm i -g babel-cli webpack truffle-contract
+- openssl aes-256-cbc -K $encrypted_9be2b8044ff6_key -iv $encrypted_9be2b8044ff6_iv -in deploy_key.enc -out .travis/deploy_key -d
+after_success:
+- eval "$(ssh-agent -s)"
+- chmod 600 .travis/deploy_key
+- ssh-add .travis/deploy_key
+- git remote add deploy dokku@gnosisdb-kovan.gnosis.pm:gnosisdb-kovan.gnosis.pm
+- git push deploy development:master -f
