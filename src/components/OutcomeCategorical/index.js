@@ -34,7 +34,7 @@ const OutcomeCategorical = ({ market, showLeadOnly }) => {
       }
 
       return (
-        <div key={outcomeIndex} className={`outcome ${showLeadOnly && outcomeIndex === leadingIndex ? 'outcome--leading' : ''}`}>
+        <div key={outcomeIndex} className="outcome">
           <div className="outcome__bar">
             <div
               className="outcome__bar--inner"
