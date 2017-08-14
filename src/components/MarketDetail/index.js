@@ -201,6 +201,36 @@ class MarketDetail extends Component {
             {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
           </small>
         </div>
+        <div className="redeemWinning">
+          <div className="redeemWinning__icon icon icon--achievementBadge" />
+          <div className="redeemWinning__details">
+            <div className="redeemWinning__heading">200 {collateralTokenToText(market.event.collateralToken)}</div>
+            <div className="redeemWinning__label">Your Winnings</div>
+          </div>
+          <div className="redeemWinning__action">
+            <button className="btn btn-link">Redeem Winnings</button>
+          </div>
+        </div>
+        <div className="redeemWinning redeemWinning--lost">
+          <div className="redeemWinning__icon icon icon--cross" />
+          <div className="redeemWinning__details">
+            <div className="redeemWinning__heading">200 {collateralTokenToText(market.event.collateralToken)}</div>
+            <div className="redeemWinning__label">You lost</div>
+          </div>
+          <div className="redeemWinning__action">
+            <button className="btn btn-link">Redeem Winnings</button>
+          </div>
+        </div>
+        <div className="withdrawFees">
+          <div className="withdrawFees__icon icon icon--earnedTokens" />
+          <div className="withdrawFees__details">
+            <div className="withdrawFees__heading">200 {collateralTokenToText(market.event.collateralToken)}</div>
+            <div className="withdrawFees__label">Earnings through market fees</div>
+          </div>
+          <div className="withdrawFees__action">
+            <button className="btn btn-link">Withdraw fees</button>
+          </div>
+        </div>
       </div>
     )
   }
