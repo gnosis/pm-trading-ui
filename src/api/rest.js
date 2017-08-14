@@ -1,4 +1,4 @@
-import { restFetch, hexWithoutPrefix } from 'utils/helpers'
+import { restFetch, hexWithoutPrefix, addIdToObjectsInArray } from 'utils/helpers'
 import { normalize } from 'normalizr'
 
 import sha1 from 'sha1'
@@ -39,4 +39,4 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
 
 export const requestMarketParticipantTrades = async (marketAddress, accountAddress) =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
-    .then(response => normalize(response.results, [tradeSchema]))
+    .then(response => normalize(addIdToObjectsInArray(response.results), [tradeSchema]))

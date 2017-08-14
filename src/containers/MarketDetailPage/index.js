@@ -6,7 +6,7 @@ import MarketDetail from 'components/MarketDetail'
 
 import { buyMarketShares, sellMarketShares, requestMarketShares, requestMarket, requestMarketParticipantTrades } from 'actions/market'
 import { resolveOracle } from 'actions/oracle'
-import { getMarketById, getMarketSharesByMarket } from 'selectors/market'
+import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
 import { getDefaultAccount } from 'selectors/blockchain'
 
 const mapStateToProps = (state, ownProps) => {
@@ -23,6 +23,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
     defaultAccount: getDefaultAccount(state),
+    trades: getMarketParticipantsTrades(state)(),
   }
 }
 
