@@ -7,7 +7,7 @@ import autobind from 'autobind-decorator'
 import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
-
+import { marketShape } from 'utils/shapes'
 
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -248,7 +248,7 @@ class MarketBuySharesForm extends Component {
 }
 
 MarketBuySharesForm.propTypes = {
-  market: PropTypes.object,
+  market: marketShape,
   buyShares: PropTypes.func,
   selectedCategoricalOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

@@ -12,6 +12,7 @@ import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
 import FormInput from 'components/FormInput'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
 
@@ -264,9 +265,7 @@ class MarketMySharesForm extends Component {
 }
 
 MarketMySharesForm.propTypes = {
-  market: PropTypes.shape({
-    address: PropTypes.string,
-  }),
+  market: marketShape,
   invalid: PropTypes.bool,
   selectedSellAmount: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),

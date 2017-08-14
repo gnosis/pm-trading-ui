@@ -5,6 +5,7 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
 import { OUTCOME_TYPES } from 'utils/constants'
+import { marketShape } from 'utils/shapes'
 
 import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
@@ -84,7 +85,7 @@ class MarketResolveForm extends Component {
 }
 
 MarketResolveForm.propTypes = {
-  market: PropTypes.object,
+  market: marketShape,
   submitting: PropTypes.bool,
   resolveOracle: PropTypes.func,
   handleSubmit: PropTypes.func,

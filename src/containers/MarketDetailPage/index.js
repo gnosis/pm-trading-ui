@@ -8,6 +8,7 @@ import { buyMarketShares, sellMarketShares, requestMarketShares, requestMarket }
 import { resolveOracle } from 'actions/oracle'
 import { getMarketById, getMarketSharesByMarket } from 'selectors/market'
 import { getDefaultAccount } from 'selectors/blockchain'
+import { getIsModerator } from 'selectors/settings'
 
 const mapStateToProps = (state, ownProps) => {
   const marketBuySelector = formValueSelector('marketBuyShares')
@@ -19,6 +20,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
     defaultAccount: getDefaultAccount(state),
+    isModerator: getIsModerator(state, getDefaultAccount(state)),
   }
 }
 

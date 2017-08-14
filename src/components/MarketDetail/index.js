@@ -5,8 +5,8 @@ import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
-import { RESOLUTION_TIME } from 'utils/constants'
-
+import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
+import { marketShape } from 'utils/shapes'
 
 import { collateralTokenToText } from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
@@ -14,6 +14,9 @@ import { decimalToText } from 'components/DecimalValue'
 import Countdown from 'components/Countdown'
 
 import MarketGraph from 'components/MarketGraph'
+
+import OutcomeCategorical from 'components/OutcomeCategorical'
+import OutcomeScalar from 'components/OutcomeScalar'
 
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
@@ -93,7 +96,7 @@ const expandableViews = {
     showCondition: props =>
       props.market &&
       props.defaultAccount &&
-      props.defaultAccount === props.market.owner &&
+      props.defaultAccount === props.market.oracle.owner &&
       !props.market.oracle.isOutcomeSet,
   },
 }
@@ -153,11 +156,13 @@ class MarketDetail extends Component {
 
   renderInfos(market) {
     const infos = {
-      Creator: market.creator,
-      Oracle: market.oracle.owner,
       Token: collateralTokenToText(market.event.collateralToken),
       Fee: `${decimalToText(market.fee, 4)} %`,
       Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
+    }
+
+    if (this.props.isModerator) {
+      infos.Creator = market.creator
     }
 
     return (
@@ -172,12 +177,22 @@ class MarketDetail extends Component {
     )
   }
 
+  renderOutcome(market) {
+    const resolved = market.oracle.isOutcomeSet
+    const { event: { type: eventType } } = market
+
+    return eventType === OUTCOME_TYPES.CATEGORICAL ?
+      <OutcomeCategorical market={market} showLeadOnly={resolved} /> :
+      <OutcomeScalar market={market} showLeadOnly={resolved} />
+  }
+
   renderDetails(market) {
     return (
       <div className="marketDetails col-md-9">
         <div className="marketDescription">
           <p className="marketDescription__text">{ market.eventDescription.description }</p>
         </div>
+        {this.renderOutcome(market)}
         <div className="marketTimer">
           <div className="marketTimer__live">
             <Countdown target={market.eventDescription.resolutionDate} />
@@ -190,13 +205,13 @@ class MarketDetail extends Component {
     )
   }
 
-  renderControls(market) {
+  renderControls() {
     return (
       <div className="marketControls container">
         <div className="row">
           {Object.keys(expandableViews).filter(view =>
             !expandableViews[view].showCondition ||
-            expandableViews[view].showCondition(this, market),
+            expandableViews[view].showCondition(this.props),
           ).map(view => (
             <button
               key={view}
@@ -254,10 +269,11 @@ MarketDetail.propTypes = {
     view: PropTypes.string,
   }),
   defaultAccount: PropTypes.string,
-  market: PropTypes.object,
+  market: marketShape,
   changeUrl: PropTypes.func,
   fetchMarket: PropTypes.func,
   fetchMarketShares: PropTypes.func,
+  isModerator: PropTypes.bool,
 }
 
 export default MarketDetail
