@@ -18,11 +18,14 @@ import MarketGraph from 'components/MarketGraph'
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
 import MarketMySharesForm from 'components/MarketMySharesForm'
+// import MarketShortSellForm from 'components/MarketShortSellForm'
+import MarketMyTrades from 'components/MarketMyTrades'
 
 import './marketDetail.less'
 
 const EXPAND_BUY_SHARES = 'buy-shares'
-const EXPAND_SHORT_SELL = 'short-sell'
+// const EXPAND_SHORT_SELL = 'short-sell'
+const EXPAND_MY_TRADES = 'my-trades'
 const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
 
@@ -65,22 +68,31 @@ const expandableViews = {
       props.defaultAccount !== props.market.owner &&
       !props.market.oracle.isOutcomeSet,
   },
+  /* HIDDEN
   [EXPAND_SHORT_SELL]: {
     label: 'Short Sell',
     className: 'btn btn-primary',
-    component: undefined,
-    showCondition: props =>
+    component: MarketShortSellForm,
+    showCondition: props =>    
       props.market &&
-      props.defaultAccount &&
-      props.defaultAccount !== props.market.owner &&
+      props.defaultAccount &&      
       !props.market.oracle.isOutcomeSet &&
       props.market.eventDescription.outcomes &&
       props.market.eventDescription.outcomes.length > 2,
-  },
+  },*/
   [EXPAND_MY_SHARES]: {
     label: 'My Holdings',
     className: 'btn btn-default',
     component: MarketMySharesForm,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount &&
+      props.defaultAccount !== props.market.owner,
+  },
+  [EXPAND_MY_TRADES]: {
+    label: 'My Trades',
+    className: 'btn btn-default',
+    component: MarketMyTrades,
     showCondition: props =>
       props.market &&
       props.defaultAccount &&
@@ -93,7 +105,6 @@ const expandableViews = {
     showCondition: props =>
       props.market &&
       props.defaultAccount &&
-      props.defaultAccount === props.market.owner &&
       !props.market.oracle.isOutcomeSet,
   },
 }
@@ -112,7 +123,7 @@ class MarketDetail extends Component {
   @autobind
   handleExpand(view) {
     const currentView = this.props.params.view
-
+    
     if (currentView === view) {
       this.props.changeUrl(`markets/${this.props.params.id}`)
     } else {
@@ -195,8 +206,8 @@ class MarketDetail extends Component {
       <div className="marketControls container">
         <div className="row">
           {Object.keys(expandableViews).filter(view =>
-            !expandableViews[view].showCondition ||
-            expandableViews[view].showCondition(this, market),
+            typeof expandableViews[view].showCondition !== 'function' ||
+            expandableViews[view].showCondition(this.props),
           ).map(view => (
             <button
               key={view}
@@ -218,7 +229,7 @@ class MarketDetail extends Component {
 
   render() {
     const { market } = this.props
-
+    
     if (!market.address) {
       return this.renderLoading()
     }
