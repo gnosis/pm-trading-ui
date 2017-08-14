@@ -13,6 +13,8 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 //const ethereumHost = process.env.ETHEREUM_HOST
 const gnosisDbUrl = process.env.GNOSISDB_HOST || 'http://localhost:8000'
 
+console.log(JSON.stringify(gnosisDbUrl))
+
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: [
