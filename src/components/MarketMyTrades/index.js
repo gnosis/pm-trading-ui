@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import Decimal from 'decimal.js'
-
-// import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
-
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
@@ -28,12 +25,14 @@ class MarketMyTrades extends Component {
     }
     else if (order.orderType == 'SHORT SELL') {
       return order.cost/1e18
-    }    
+    }
+    else {
+      return undefined
+    }
   }
 
   renderTrades() {
-    const { market, trades } = this.props    
-    console.log(trades)
+    const { market, trades } = this.props
     const tableRowElements = trades.map((trade) => {
       return (
         <tr className="marketMyTrades__share" key={trade['_id']}>
@@ -92,7 +91,7 @@ class MarketMyTrades extends Component {
       return (
         <div className="marketMyTrades">
           <h2 className="marketMyTrades__heading">You haven't interacted with this market yet.</h2>
-          <h3 className="marketMyTrades">Every transaction that happens on this market will be shown here.</h3>
+          <h3>Every transaction that happens on this market will be shown here.</h3>
         </div>
       )
     }

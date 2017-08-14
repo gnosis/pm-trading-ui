@@ -207,7 +207,7 @@ class MarketDetail extends Component {
         <div className="row">
           {Object.keys(expandableViews).filter(view =>
             typeof expandableViews[view].showCondition !== 'function' ||
-            expandableViews[view].showCondition(this.props, market),
+            expandableViews[view].showCondition(this.props),
           ).map(view => (
             <button
               key={view}
