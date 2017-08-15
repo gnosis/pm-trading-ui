@@ -76,9 +76,9 @@ const expandableViews = {
     label: 'Short Sell',
     className: 'btn btn-primary',
     component: MarketShortSellForm,
-    showCondition: props =>    
+    showCondition: props =>
       props.market &&
-      props.defaultAccount &&      
+      props.defaultAccount &&
       !props.market.oracle.isOutcomeSet &&
       props.market.eventDescription.outcomes &&
       props.market.eventDescription.outcomes.length > 2,
@@ -127,7 +127,7 @@ class MarketDetail extends Component {
   @autobind
   handleExpand(view) {
     const currentView = this.props.params.view
-    
+
     if (currentView === view) {
       this.props.changeUrl(`markets/${this.props.params.id}`)
     } else {
@@ -137,12 +137,12 @@ class MarketDetail extends Component {
 
   @autobind
   handleRedeemWinnings() {
-
+    this.props.redeemWinnings(this.props.market)
   }
 
   @autobind
   handleWithdrawFees() {
-
+    this.props.withdrawFees(this.props.market)
   }
 
   renderLoading() {
@@ -200,7 +200,6 @@ class MarketDetail extends Component {
   }
 
   renderOutcome(market) {
-    const resolved = market.oracle.isOutcomeSet
     const { event: { type: eventType } } = market
 
     return eventType === OUTCOME_TYPES.CATEGORICAL ?
@@ -210,8 +209,8 @@ class MarketDetail extends Component {
 
   renderDetails(market) {
     const showWinning = market.oracle.isOutcomeSet
-    const showLost = false
-    const showWithdrawFees = false
+    const showLost = false // determine if we lost?
+    const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
 
     return (
       <div className="marketDetails col-md-9">
@@ -231,7 +230,7 @@ class MarketDetail extends Component {
           <div className="withdrawFees">
             <div className="withdrawFees__icon icon icon--earnedTokens" />
             <div className="withdrawFees__details">
-              <div className="withdrawFees__heading">200 {collateralTokenToText(market.event.collateralToken)}</div>
+              <div className="withdrawFees__heading">12 {collateralTokenToText(market.event.collateralToken)}</div>
               <div className="withdrawFees__label">Earnings through market fees</div>
             </div>
             <div className="withdrawFees__action">
@@ -292,7 +291,7 @@ class MarketDetail extends Component {
 
   render() {
     const { market } = this.props
-    
+
     if (!market.address) {
       return this.renderLoading()
     }

@@ -11,6 +11,8 @@ import {
   requestMarket,
   requestMarketParticipantTrades,
   resolveMarket,
+  redeemWinnings,
+  withdrawFees,
 } from 'actions/market'
 import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
 import { getDefaultAccount } from 'selectors/blockchain'
@@ -44,6 +46,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   sellShares: (market, outcomeIndex, amount) => dispatch(sellMarketShares(market, outcomeIndex, amount)),
   resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),
   changeUrl: url => dispatch(replace(url)),
+  redeemWinnings: market => dispatch(redeemWinnings(market)),
+  withdrawFees: market => dispatch(withdrawFees(market)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)
