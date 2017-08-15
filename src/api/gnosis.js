@@ -4,7 +4,7 @@ import Gnosis from '@gnosis.pm/gnosisjs'
 
 import { hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
-import { normalize } from 'normalizr'
+// import { normalize } from 'normalizr'
 
 import delay from 'await-delay'
 import moment from 'moment'
@@ -45,7 +45,9 @@ export const createEventDescription = async (eventDescription) => {
 
   const ipfsHash = await gnosis.publishEventDescription(eventDescription)
 
-  await delay(1000)
+  if (process.env.NODE_ENV !== 'production') {
+    await delay(5000)
+  }
 
   return {
     ipfsHash,
@@ -66,6 +68,10 @@ export const createOracle = async (oracle) => {
     oracleContract = await gnosis.createUltimateOracle(oracle)
   } else {
     throw new Error('invalid oracle type')
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    await delay(5000)
   }
 
   return {
@@ -95,6 +101,11 @@ export const createEvent = async (event) => {
   } else {
     throw new Error('invalid outcome/event type')
   }
+
+  if (process.env.NODE_ENV !== 'production') {
+    await delay(5000)
+  }
+
   return {
     address: hexWithPrefix(eventContract.address),
     creator: await getCurrentAccount(),
@@ -116,6 +127,10 @@ export const createMarket = async (market) => {
     marketFactory: gnosis.standardMarketFactory,
   })
   
+  if (process.env.NODE_ENV !== 'production') {
+    await delay(5000)
+  }
+
   return {
     ...market,
     netOutcomeTokensSold: market.outcomes.map(() => '0'),
@@ -143,6 +158,10 @@ export const fundMarket = async (market) => {
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
   await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), marketFundingWei.toString())
 
+  if (process.env.NODE_ENV !== 'production') {
+    await delay(5000)
+  }
+
   await marketContract.fund(marketFundingWei.toString())
 
   return market
@@ -159,16 +178,10 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount) =>
   return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei })
 }
 
-export const resolveOracle = async (oracle, selectedOutcomeIndex) => {
+export const resolveEvent = async (event, selectedOutcomeIndex) => {
   const gnosis = await getGnosisConnection()
 
-  const oracleContract = await gnosis.contracts.CentralizedOracle.at(hexWithPrefix(oracle.address))
-
-  if (oracleContract) {
-    return await oracleContract.setOutcome(parseInt(selectedOutcomeIndex, 10))
-  }
-
-  throw Error('Oracle contract could not be found - unsupported oracle type?')
+  return await gnosis.resolveEvent(event.address, parseInt(selectedOutcomeIndex, 10))
 }
 
 export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenCount) => {
@@ -186,3 +199,4 @@ export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenC
 export const calcLMSRCost = Gnosis.calcLMSRCost
 export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
 export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
+export const calcLMSRProfit = Gnosis.calcLMSRProfit

@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 
 import { connectBlockchain } from 'actions/blockchain'
 
+import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
 import './app.less'
@@ -29,6 +30,7 @@ class App extends Component {
     return (
       <div className="appContainer">
         <HeaderContainer version={process.env.VERSION} />
+        {this.props.hasWallet && <TransactionFloaterContainer />}
         {this.props.children}
       </div>
     )
@@ -39,10 +41,12 @@ App.propTypes = {
   children: PropTypes.node,
   connectBlockchain: PropTypes.func,
   blockchainConnection: PropTypes.bool,
+  hasWallet: PropTypes.bool,
 }
 
 const mapStateToProps = state => ({
   blockchainConnection: state.blockchain.connectionTried,
+  hasWallet: state.blockchain.defaultAccount != null,
 })
 
 export default connect(mapStateToProps, {

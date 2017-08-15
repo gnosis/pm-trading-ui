@@ -42,6 +42,17 @@ export const toEntity = (data, entityType, idKey = 'address') => {
   }
 }
 
+/** 
+ * Adds _id incremental numeric property to each object in the array
+ * @param {Array of objects} arrayData 
+ */
+export const addIdToObjectsInArray = (arrayData) => {
+  arrayData.forEach((item, index) => {
+    item['_id'] = index
+  })
+  return arrayData
+}
+
 export const restFetch = url =>
   fetch(url)
     .then(res => res.json())

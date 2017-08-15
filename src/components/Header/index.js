@@ -29,6 +29,7 @@ const Header = ({ version, defaultAccount }) => (
 
 Header.propTypes = {
   version: PropTypes.string,
+  defaultAccount: PropTypes.string,
 }
 
 export default Header

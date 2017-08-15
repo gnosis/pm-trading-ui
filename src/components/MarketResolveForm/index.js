@@ -19,17 +19,16 @@ class MarketResolveForm extends Component {
       market: {
         event: { type },
         eventDescription: { decimals },
-        oracle: { address },
       },
     } = this.props
 
     const { selectedOutcome, selectedValue } = values
 
     if (type === OUTCOME_TYPES.CATEGORICAL) {
-      return this.props.resolveOracle(address, selectedOutcome)
+      return this.props.resolveMarket(this.props.market, selectedOutcome)
     } else if (type === OUTCOME_TYPES.SCALAR) {
       const outcome = Decimal(selectedValue).times(10 ** decimals)
-      return this.props.resolveOracle(address, outcome.trunc())
+      return this.props.resolveMarket(this.props.market, outcome.trunc())
     }
 
     throw new Error(`got unexpected type ${type}`)
@@ -87,7 +86,7 @@ class MarketResolveForm extends Component {
 MarketResolveForm.propTypes = {
   market: marketShape,
   submitting: PropTypes.bool,
-  resolveOracle: PropTypes.func,
+  resolveMarket: PropTypes.func,
   handleSubmit: PropTypes.func,
 }
 
