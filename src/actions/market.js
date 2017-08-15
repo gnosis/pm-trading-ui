@@ -33,6 +33,8 @@ import {
   TRANSACTION_COMPLETE_STATUS,
 } from 'utils/constants'
 
+import { getOracleByAddress } from 'selectors/oracle'
+
 const TRANSACTION_STAGES = {
   EVENT_DESCRIPTION: 'eventDescription',
   ORACLE: 'oracle',
@@ -202,9 +204,3 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
     },
   }))
 }
-
-export const sellMarketShares = (market, outcomeIndex, amount) =>
-  async () => await api.sellShares(market, outcomeIndex, amount)
-
-  // calculate new values
-

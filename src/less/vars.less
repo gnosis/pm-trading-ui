@@ -37,3 +37,34 @@
 
 // margin for heading elements
 @page-heading-margins: 60px 0;
+
+.closeButton(@size, @stroke) {
+  position: absolute;
+  width: @size;
+  height: @size;
+  cursor: pointer;
+  
+  &::after, &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: @stroke;
+    transition: background-color .4s ease-in;
+    background-color: black;
+    transform-origin: 50% 50%;
+  } 
+
+  &::after {
+    transform: rotate(45deg);
+  }
+  &::before {
+    transform: rotate(-45deg);  
+  }
+
+  &:hover {
+    &::after, &::before {
+      background-color: @active-highlight;
+      background-color: @active-highlight;
+    }
+  }
+}

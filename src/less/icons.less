@@ -1,9 +1,9 @@
 .svgIcon(@iconName) {
   @iconClass: ~"icon--@{iconName}";
-  .@{iconClass} {
+  .icon.@{iconClass} {
     @url: "../assets/img/icons/icon_@{iconName}.svg";
-    background-image: url(@url);
-    mask-image: url(@url);
+    background-image: url("@{url}");
+    mask-image: url("@{url}");
   }
 }
 
@@ -58,3 +58,26 @@
 .svgIcon("achievementBadge");
 .svgIcon("incomeForecast");
 .svgIcon("earnedTokens");
+
+// add svg later
+.icon.icon--cross {
+  font-style: normal;
+
+  .closeButton(64px, 2px);
+  position: relative;
+  display: inline-block;
+  content: '\00a0';
+
+  &::before, &::after {
+    background-color: @active-highlight-error;
+    top: 50%;
+  }
+  cursor: default;
+
+  &:hover {
+    cursor: default;
+    &::before, &::after {
+      background-color: @active-highlight-error;
+    }
+  }
+}

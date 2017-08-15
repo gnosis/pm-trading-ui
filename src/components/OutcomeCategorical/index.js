@@ -7,11 +7,9 @@ import { calcLMSRMarginalPrice } from 'api'
 
 import './outcomeCategorical.less'
 
-const OutcomeCategorical = ({ market, showLeadOnly }) => {
+const OutcomeCategorical = ({ market }) => {
   const renderOutcomes = market.eventDescription.outcomes
 
-  let leadingIndex
-  let leadingValue
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.netOutcomeTokensSold,
@@ -19,18 +17,13 @@ const OutcomeCategorical = ({ market, showLeadOnly }) => {
       outcomeTokenIndex: outcomeIndex,
     })
 
-    if (!leadingValue || marginalPrice.gt(leadingValue)) {
-      leadingIndex = outcomeIndex
-      leadingValue = marginalPrice
-    }
-
     return marginalPrice.toFixed()
   })
 
   return (<div className="outcomes outcomes--categorical">
     {renderOutcomes.map((outcome, outcomeIndex) => {
-      if (showLeadOnly && outcomeIndex !== leadingIndex) {
-        return <div className="outcome" key={outcomeIndex} />
+      if (market.oracle.isOutcomeSet && market.oracle.outcome !== outcomeIndex) {
+        return <div key={outcomeIndex} className="outcome" />
       }
 
       return (
@@ -54,7 +47,6 @@ const OutcomeCategorical = ({ market, showLeadOnly }) => {
 
 OutcomeCategorical.propTypes = {
   market: marketShape,
-  showLeadOnly: PropTypes.bool,
 }
 
 export default OutcomeCategorical
