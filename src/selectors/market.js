@@ -74,6 +74,19 @@ export const filterMarkets = state => (opts) => {
   )
 }
 
+/**
+ * Returns the array of a markets participant's related trades 
+ * @param {*} state 
+ */
+export const getMarketParticipantsTrades = state => () => {
+  const tradesArray = []
+  const tradesObject = state.entities.trades
+  if (tradesObject) {
+    Object.keys(state.entities.trades).map(key => tradesArray.push(tradesObject[key]))
+  }
+  return tradesArray
+}
+
 export default {
   getMarkets,
 }
