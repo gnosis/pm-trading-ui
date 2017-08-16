@@ -67,35 +67,33 @@ class MarketMySharesForm extends Component {
       currentProbability = Decimal('0')
     }
 
-    let currentTokenValue
+    let currentTokenCount
     try {
-      currentTokenValue = calcLMSROutcomeTokenCount({
+      currentTokenCount = calcLMSROutcomeTokenCount({
         netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
         funding: market.funding,
         outcomeTokenIndex: share.outcomeToken.index,
         cost: share.balance,
       })
     } catch (e) {
-      currentTokenValue = Decimal('0')
+      currentTokenCount = Decimal('0')
     }
 
-    let newTokenValue
+    let newTokenCount
     try {
-      newTokenValue = calcLMSROutcomeTokenCount({
+      newTokenCount = calcLMSROutcomeTokenCount({
         netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
         funding: market.funding,
         outcomeTokenIndex: share.outcomeToken.index,
         cost: Decimal(share.balance).sub(selectedSellAmountWei).toString(),
       })
     } catch (e) {
-      newTokenValue = currentTokenValue
+      newTokenCount = currentTokenCount
     }
 
-    const diffTokenValue = currentTokenValue.sub(newTokenValue.toString())
-
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (outcomeTokenIndex === share.outcomeToken.index && !diffTokenValue.isZero()) {
-        return Decimal(outcomeTokenAmount).sub(diffTokenValue.toString())
+      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
+        return Decimal(outcomeTokenAmount).sub(currentTokenCount.sub(newTokenCount.toString()).toString()).toString()
       }
 
       return Decimal(outcomeTokenAmount).toString()
@@ -112,15 +110,25 @@ class MarketMySharesForm extends Component {
       newProbability = currentProbability
     }
 
-    const diffProbability = currentProbability.sub(newProbability.toString())
+    const currentValue = currentTokenCount.mul(currentProbability.toString())
+    const newValue = newTokenCount.mul(newProbability.toString())
+
+    /*
+    console.log('balance', Decimal(share.balance).div(1e18).toString())
+    console.log('currentProb', currentProbability.toString())
+    console.log('currentCount', currentTokenCount.toString())
+    console.log('newProb', newProbability.toString())
+    console.log('newCount', newTokenCount.toString())
+    */
+
+    const diffTokenValue = newValue.sub(currentValue.toString())
 
     return [
       (<tr key={'sellViewHeading'} className="marketMyShares__sell marketMyShares__sell--heading">
         <th />
         <th />
-        <th>Amount</th>
+        <th>Token Count</th>
         <th>New Value</th>
-        <th>Probability after Sale</th>
         <th />
       </tr>),
       (<tr key={'sellView'} className="marketMyShares__sell">
@@ -151,26 +159,18 @@ class MarketMySharesForm extends Component {
           />
         </td>
         <td>
-          <DecimalValue value={newTokenValue.div(1e18)} />
-          <CurrencyName collateralToken={market.event.collateralToken} />
+          <DecimalValue value={newValue.div(1e18)} />&nbsp;
+          <CurrencyName collateralToken={market.event.collateralToken} />&nbsp;
           {!diffTokenValue.isZero() && <span>
             (<span className={`marketMyShares__diff ${diffTokenValue.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffTokenValue.gt(0) ? '+' : ''}<DecimalValue value={diffTokenValue.div(1e18)} />
+              {diffTokenValue.gt(0) ? '+' : ''}<DecimalValue value={diffTokenValue.div(1e18)} />&nbsp;
               <CurrencyName collateralToken={market.event.collateralToken} />
             </span>)
           </span>}
         </td>
         <td>
-          <DecimalValue value={newProbability.mul(100)} /> %
-          {!diffProbability.isZero() && <span>
-            (<span className={`marketMyShares__diff ${diffProbability.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffProbability.gt(0) ? ' +' : ' '}<DecimalValue value={diffProbability.mul(100)} /> %
-            </span>)
-          </span>}
-        </td>
-        <td>
-          <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
           <button type="button" className={`btn btn-primary ${invalid ? 'disabled' : ''}`} disabled={invalid} onClick={e => this.handleSellShare(e, extendedSellIndex, selectedSellAmount)}>Sell Shares</button>
+          <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
         </td>
       </tr>),
     ]
@@ -192,6 +192,8 @@ class MarketMySharesForm extends Component {
       )
     }
 
+    const resolved = market.oracle.isOutcomeSet || market.event.isWinningOutcomeSet
+
     const tableRowElements = marketShares.map((share, shareIndex) => {
       const probability = calcLMSRMarginalPrice({
         netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
@@ -206,7 +208,7 @@ class MarketMySharesForm extends Component {
       })
 
       return (
-        <tr className="marketMyShares__share" key={share.address}>
+        <tr className="marketMyShares__share" key={share.id}>
           <td>
             <div
               className={'shareOutcome__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
@@ -217,18 +219,14 @@ class MarketMySharesForm extends Component {
           </td>
           <td>
             <DecimalValue value={Decimal(share.balance).div(1e18)} />
-            <CurrencyName collateralToken={market.event.collateralToken} />
           </td>
           <td>
-            <DecimalValue value={maximumWin.div(1e18)} />
+            <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
             <CurrencyName collateralToken={market.event.collateralToken} />
-          </td>
-          <td>
-            <DecimalValue value={probability.mul(100)} /> %
           </td>
           <td>
             {/* eslint-disable no-script-url */}
-            <a href="javascript:void(0);" onClick={e => this.handleShowSellView(e, shareIndex)}>Sell</a>
+            {!resolved && <a href="javascript:void(0);" onClick={e => this.handleShowSellView(e, shareIndex)}>Sell</a>}
             {/* eslint-enable no-script-url */}
           </td>
         </tr>
@@ -248,9 +246,8 @@ class MarketMySharesForm extends Component {
               <tr>
                 <th className="marketMyShares__tableHeading marketMyShares__tableHeading--index" />
                 <th className="marketMyShares__tableHeading">Outcome</th>
-                <th className="marketMyShares__tableHeading">Investment</th>
+                <th className="marketMyShares__tableHeading">Token Count</th>
                 <th className="marketMyShares__tableHeading">Current Value</th>
-                <th className="marketMyShares__tableHeading">Current Probability</th>
                 <th className="marketMyShares__tableHeading" />
               </tr>
             </thead>

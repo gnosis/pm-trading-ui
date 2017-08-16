@@ -31,6 +31,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
+    isConfirmed: marketBuySelector(state, 'confirm'),
     defaultAccount: getDefaultAccount(state),
     isModerator: getIsModerator(state, getDefaultAccount(state)),
     trades: getMarketParticipantsTrades(state)(),
