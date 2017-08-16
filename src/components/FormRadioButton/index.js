@@ -25,7 +25,7 @@ const FormRadioButton = ({ input, radioValue, text, className, highlightColor })
 
 FormRadioButton.propTypes = {
   ...fieldPropTypes,
-  radioValue: PropTypes.string,
+  radioValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   text: PropTypes.string,
   className: PropTypes.string,
   highlightColor: PropTypes.string,

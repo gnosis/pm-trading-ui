@@ -53,7 +53,7 @@ class TransactionFloater extends Component {
             )}
             {runningTransactions.map((transaction) => {
               const startTime = transaction.startTime ? moment(transaction.startTime).format('LLL') : ''
-              console.log(transaction.progress)
+              
               return (
                 <div key={transaction.id} className="transactionLog">
                   <div className="transactionLog__progress">

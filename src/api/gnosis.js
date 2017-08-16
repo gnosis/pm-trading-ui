@@ -179,16 +179,10 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount) =>
   return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei })
 }
 
-export const resolveOracle = async (oracle, selectedOutcomeIndex) => {
+export const resolveEvent = async (event, selectedOutcomeIndex) => {
   const gnosis = await getGnosisConnection()
 
-  const oracleContract = await gnosis.contracts.CentralizedOracle.at(hexWithPrefix(oracle.address))
-
-  if (oracleContract) {
-    return await oracleContract.setOutcome(parseInt(selectedOutcomeIndex, 10))
-  }
-
-  throw Error('Oracle contract could not be found - unsupported oracle type?')
+  return await gnosis.resolveEvent(event.address, parseInt(selectedOutcomeIndex, 10))
 }
 
 export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenCount) => {
@@ -201,6 +195,31 @@ export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenC
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCountWei,
   })
+}
+
+export const redeemWinnings = async (eventType, eventAddress) => {
+  const gnosis = await getGnosisConnection()
+
+  const eventContract = eventType === OUTCOME_TYPES.CATEGORICAL ?
+    await gnosis.contracts.CategoricalEvent.at(eventAddress) :
+    await gnosis.contracts.ScalarEvent.at(eventAddress)
+
+  if (eventContract) {
+    return await eventContract.redeemWinnings()
+  }
+  throw new Error('Invalid Event - can\'t find the specified Event, invalid Eventtype?')
+}
+
+export const withdrawFees = async (marketAddress) => {
+  const gnosis = await getGnosisConnection()
+
+  const marketContract = gnosis.contracts.Market.at(marketAddress)
+
+  if (marketContract) {
+    return await marketContract.withdrawFees()
+  }
+
+  throw new Error('Invalid Market - can\'t find the specified Market')
 }
 
 export const calcLMSRCost = Gnosis.calcLMSRCost

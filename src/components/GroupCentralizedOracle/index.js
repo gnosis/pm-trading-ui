@@ -9,14 +9,14 @@ import SectionDescription from 'components/SectionDescription'
 import SectionEventOptions from 'components/SectionEventOptions'
 import SectionOutcomeSelection from 'components/SectionOutcomeSelection'
 
-import OutcomeCategorical from 'components/OutcomeCategorical'
-import OutcomeScalar from 'components/OutcomeScalar'
+import SectionOutcomeCategorical from 'components/SectionOutcomeCategorical'
+import SectionOutcomeScalar from 'components/SectionOutcomeScalar'
 
 const OracleCentralized = ({ selectedOutcomeType }) => {
   const renderOutcomeType = () => {
     const outcomeSections = {
-      [OUTCOME_TYPES.CATEGORICAL]: <OutcomeCategorical />,
-      [OUTCOME_TYPES.SCALAR]: <OutcomeScalar />,
+      [OUTCOME_TYPES.CATEGORICAL]: <SectionOutcomeCategorical />,
+      [OUTCOME_TYPES.SCALAR]: <SectionOutcomeScalar />,
     }
 
     return outcomeSections[selectedOutcomeType]
