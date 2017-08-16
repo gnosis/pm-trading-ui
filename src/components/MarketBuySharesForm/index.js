@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Field, reduxForm } from 'redux-form'
+import React, { Component, PropTypes } from 'react'
+import { Field, reduxForm, propTypes } from 'redux-form'
 import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
 
@@ -68,9 +67,13 @@ class MarketBuySharesForm extends Component {
       buyShares,
       selectedCategoricalOutcome,
       selectedBuyInvest,
+      reset,
     } = this.props
 
-    buyShares(market, selectedCategoricalOutcome, selectedBuyInvest)
+    return buyShares(market, selectedCategoricalOutcome, selectedBuyInvest)
+      .then(() => {
+        return reset()
+      })
   }
 
   renderOutcomes() {
@@ -174,6 +177,8 @@ class MarketBuySharesForm extends Component {
       handleSubmit,
       selectedBuyInvest,
       isConfirmed,
+      submitFailed,
+      submitting,
       market: {
         event: {
           type: eventType,
@@ -201,7 +206,7 @@ class MarketBuySharesForm extends Component {
     let fieldError
     let tokenCountField
     let maxReturnField
-    
+
     if (noOutcomeSelected) {
       fieldError = <span className="marketBuyWin__invalidParam">Select an outcome</span>
     } else if (Decimal(percentageWin.toString()).isZero()) {
@@ -225,7 +230,7 @@ class MarketBuySharesForm extends Component {
         </span>
       )
 
-      submitEnabled = true
+      submitEnabled = !Decimal(selectedBuyInvest).isZero()
     }
 
     return (
@@ -266,9 +271,14 @@ class MarketBuySharesForm extends Component {
                   <Field name="confirm" component={Checkbox} className="marketBuyCheckbox" text="Confirm Purchase" />
                 </div>
               </div>
+              {submitFailed && (
+                <div className="row marketBuySharesForm__row">
+                  <div className="col-md-12">Sorry - your investment couldn't be processed. Please ensure you're on the right network.</div>
+                </div>
+              )}
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">
-                  <button className="btn btn-primary col-md-12" disabled={!isConfirmed && submitEnabled}>Buy Shares</button>
+                  <button className={`btn btn-primary col-md-12 ${!isConfirmed || !submitEnabled ? 'disabled' : ''}`} disabled={!isConfirmed || !submitEnabled}>{submitting ? 'Loading...' : 'Buy Shares'}</button>
                 </div>
                 <div className="col-md-6">
                   <button className="btn btn-default col-md-12 marketBuySharesForm__cancel">Cancel</button>
@@ -282,12 +292,13 @@ class MarketBuySharesForm extends Component {
 }
 
 MarketBuySharesForm.propTypes = {
+  ...propTypes,
   market: PropTypes.object,
   buyShares: PropTypes.func,
   selectedCategoricalOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
-  confirm: PropTypes.bool,
+  isConfirmed: PropTypes.bool,
 }
 
 const form = {

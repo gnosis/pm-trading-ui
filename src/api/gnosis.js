@@ -175,6 +175,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount) =>
   await gnosis.etherToken.deposit({ value: outcomeTokenCountWei.toString() })
   await gnosis.etherToken.approve(hexWithPrefix(market.address), outcomeTokenCountWei.toString())
 
+
   return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei })
 }
 
