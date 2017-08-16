@@ -39,8 +39,8 @@ module.exports = {
     rules: [
       { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader?babelrc=false&extends=' + path.join(__dirname, '/.babelrc') },
       {
-        test: /\.(jpe?g|png)$/i,
-        loader: 'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+        test: /\.(jpe?g|png|svg)$/i,
+        loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
       },
       { test: /\.(less|css)$/,
         use: ExtractTextPlugin.extract({
@@ -59,7 +59,7 @@ module.exports = {
         }),
       },
       {
-        test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+        test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]',
       }
     ],

@@ -4,10 +4,19 @@ import { replace } from 'react-router-redux'
 
 import MarketDetail from 'components/MarketDetail'
 
-import { buyMarketShares, sellMarketShares, requestMarketShares, requestMarket, requestMarketParticipantTrades } from 'actions/market'
-import { resolveOracle } from 'actions/oracle'
+import {
+  buyMarketShares,
+  sellMarketShares,
+  requestMarketShares,
+  requestMarket,
+  requestMarketParticipantTrades,
+  resolveMarket,
+  redeemWinnings,
+  withdrawFees,
+} from 'actions/market'
 import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
 import { getDefaultAccount } from 'selectors/blockchain'
+import { getIsModerator } from 'selectors/settings'
 
 const mapStateToProps = (state, ownProps) => {
   const marketBuySelector = formValueSelector('marketBuyShares')
@@ -23,6 +32,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
     defaultAccount: getDefaultAccount(state),
+    isModerator: getIsModerator(state, getDefaultAccount(state)),
     trades: getMarketParticipantsTrades(state)(),
   }
 }
@@ -34,8 +44,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(requestMarketParticipantTrades(marketAddress, accountAddress)),
   buyShares: (market, outcomeIndex, amount) => dispatch(buyMarketShares(market, outcomeIndex, amount)),
   sellShares: (market, outcomeIndex, amount) => dispatch(sellMarketShares(market, outcomeIndex, amount)),
-  resolveOracle: (oracle, outcomeIndex) => dispatch(resolveOracle(oracle, outcomeIndex)),
+  resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),
   changeUrl: url => dispatch(replace(url)),
+  redeemWinnings: market => dispatch(redeemWinnings(market)),
+  withdrawFees: market => dispatch(withdrawFees(market)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)

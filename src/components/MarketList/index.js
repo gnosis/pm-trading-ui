@@ -1,20 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
-import { calcLMSRMarginalPrice } from 'api'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
 
 import CurrencyName from 'components/CurrencyName'
-import DecimalValue from 'components/DecimalValue'
 import Countdown from 'components/Countdown'
+
+import OutcomeCategorical from 'components/OutcomeCategorical'
+import OutcomeScalar from 'components/OutcomeScalar'
 
 import FormSelect from 'components/FormSelect'
 import FormInput from 'components/FormInput'
 
-import { RESOLUTION_TIME, OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
+import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
 
@@ -44,64 +46,9 @@ class MarketList extends Component {
   }
 
   renderCategoricalOutcomes(market) {
-    const renderOutcomes = market.eventDescription.outcomes
-    const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
-      const marginalPrice = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold,
-        funding: market.funding,
-        outcomeTokenIndex: outcomeIndex,
-      })
-
-      return marginalPrice.toFixed()
-    })
-
-    return (<div className="market__outcomes market-outcomes--categorical">
-      {renderOutcomes.map((outcome, outcomeIndex) => (
-        <div key={outcomeIndex} className="outcome">
-          <div className="outcome__bar">
-            <div
-              className="outcome__bar--inner"
-              style={{ width: `${tokenDistribution[outcomeIndex] * 100}%`, backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex] }}
-            >
-              <div className="outcome__bar--label">
-                { renderOutcomes[outcomeIndex] }
-                <div className="outcome__bar--value">{ `${Math.round(tokenDistribution[outcomeIndex] * 100).toFixed(0)}%` }</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>)
   }
 
   renderScalarOutcomes(market) {
-    const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: market.netOutcomeTokensSold,
-      // This is a temporary fix to avoid NaN when there is no funding, which should never occour
-      funding: Decimal(parseInt(market.funding, 10) || 1e18),
-      outcomeTokenIndex: 1, // always calc for long when calculating estimation
-    })
-
-    const decimals = parseInt(market.eventDescription.decimals, 10)
-
-    const upperBound = Decimal(market.event.upperBound).div(10 ** decimals)
-    const lowerBound = Decimal(market.event.lowerBound).div(10 ** decimals)
-
-    const bounds = upperBound.sub(lowerBound)
-    const value = Decimal(marginalPrice.toString()).times(bounds).add(lowerBound)
-
-    return (
-      <div className="market__outcomes market__outcomes--scalar">
-        <div className="outcome outcome--scalar">
-          <div className="outcome__bound outcome__bound--lower"><DecimalValue value={lowerBound} decimals={1} /></div>
-          <div className="outcome__currentPrediction">
-            <div className="outcome__currentPrediction--line" />
-            <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>{value.toString()}</div>
-          </div>
-          <div className="outcome__bound outcome__bound--upper"><DecimalValue value={upperBound} decimals={1} /></div>
-        </div>
-      </div>
-    )
   }
 
   @autobind
@@ -112,9 +59,8 @@ class MarketList extends Component {
     const resolveUrl = `/markets/${market.address}/resolve`
 
     const outcomes = market.event.type === OUTCOME_TYPES.SCALAR ?
-      this.renderScalarOutcomes(market) :
-      this.renderCategoricalOutcomes(market)
-
+      <OutcomeScalar market={market} /> :
+      <OutcomeCategorical market={market} />
 
     return (
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
@@ -281,7 +227,7 @@ class MarketList extends Component {
 }
 
 MarketList.propTypes = {
-  markets: PropTypes.arrayOf(PropTypes.object),
+  markets: PropTypes.arrayOf(marketShape),
   defaultAccount: PropTypes.string,
   fetchMarkets: PropTypes.func,
   changeUrl: PropTypes.func,
