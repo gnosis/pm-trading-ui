@@ -10,7 +10,7 @@ const Checkbox = ({ input, label, text, className }) => (
   <div className={`checkboxField ${bemifyClassName(className)}`}>
     <label htmlFor={`formCheckbox_${input.name}`} className={`checkboxField__label ${bemifyClassName(className, 'label')}`}>{ label }</label>
     <label htmlFor={`formCheckbox_${input.name}`} className={`checkboxField__text ${bemifyClassName(className, 'text')}`}>
-      <input id={`formCheckbox_${input.name}`} className={`checkboxField__input ${bemifyClassName(className, 'input')}`} type="checkbox" {...input} />
+      <input id={`formCheckbox_${input.name}`} className={`checkboxField__input ${bemifyClassName(className, 'input')}`} type="checkbox" checked={input.value} {...input} />
       <span className={`checkboxField__textWrapper ${bemifyClassName(className, 'textWrapper')}`}>{ text }</span>
     </label>
   </div>
