@@ -193,9 +193,10 @@ export const createMarket = options => async (dispatch) => {
 
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.FUNDING))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.FUNDING, e))
-    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
   }
 
   return await dispatch(closeLog(transactionId))
@@ -211,9 +212,10 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
     await api.buyShares(market, outcomeIndex, amount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
-    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
   }
 
   const netOutcomeTokensSold = market.netOutcomeTokensSold
@@ -241,9 +243,10 @@ export const sellMarketShares = (market, outcomeIndex, amount) => async (dispatc
     await api.sellShares(market.address, outcomeIndex, amount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
-    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
   }
 
   // TODO: Calculate new shares
@@ -260,9 +263,10 @@ export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
     await api.resolveEvent(market.event, outcomeIndex)
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
-    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
   }
 
   await dispatch(updateEntity({ entityType: 'oracles', data: { id: market.oracle.address, isOutcomeSet: true, outcome: outcomeIndex } }))
@@ -281,9 +285,10 @@ export const redeemWinnings = market => async (dispatch) => {
     console.log("winnings: ", await api.redeemWinnings(market.event.type, market.event.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
-    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
   }
 
   // TODO: Update market so we can't redeem again
@@ -302,9 +307,10 @@ export const withdrawFees = market => async (dispatch) => {
     console.log("fees: " , await api.withdrawFees(market.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
-    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    
+    throw e
   }
 
   // TODO: Update market so we can't withdraw again
