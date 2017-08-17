@@ -192,7 +192,7 @@ class MarketMySharesForm extends Component {
   render() {
     const { marketShares, market, selectedSellAmount } = this.props
     const { extendedSellIndex } = this.state
-
+        
     if (!marketShares || !marketShares.length) {
       return (
         <div className="marketMyShares">
