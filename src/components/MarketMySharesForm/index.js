@@ -184,7 +184,7 @@ class MarketMySharesForm extends Component {
           {submitFailed && (
           <div className="row">
             <div className="col-md-9 col-md-offset-3 marketMyShares__errorColumn">
-              Sorry - your share sell could not be processed. Please ensure you're on the right network.
+              Sorry - your share sell could not be processed. Please ensure you&quot;re on the right network.
             </div>
           </div>)}
         </form>

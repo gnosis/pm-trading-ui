@@ -108,6 +108,7 @@ class MarketCreateReview extends Component {
             </div>
           </div>
         </div>
+        {/*
         <div className="row">
           <div className="col-md-12">
             <div className="marketReviewDetails__label">Ultimate Oracle</div>
@@ -120,6 +121,7 @@ class MarketCreateReview extends Component {
             </div>
           </div>
         </div>
+        */}
       </div>
     )
   }

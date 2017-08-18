@@ -11,7 +11,8 @@ const FORM = {
   destroyOnUnmount: false,
   initialValues: {
     oracleType: 'CENTRALIZED',
-    fee: '0',
+    fee: '0.5',
+    decimals: '2',
     collateralToken: 'eth',
   },
 }
@@ -21,6 +22,7 @@ const mapStateToProps = (state) => {
   return {
     selectedOracleType: selector(state, 'oracleType'),
     selectedOutcomeType: selector(state, 'outcomeType'),
+    decimals: parseInt(selector(state, 'decimals'), 10),
     defaultAccount: getDefaultAccount(state),
   }
 }

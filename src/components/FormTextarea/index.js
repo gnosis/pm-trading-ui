@@ -5,10 +5,18 @@ import TextareaAutosize from 'react-autosize-textarea'
 
 import './textareaField.less'
 
-const Input = ({ input, label, className }) => (
+const Input = ({ input, label, className, meta: { dirty, error } }) => (
   <div className="textareaField">
     <label htmlFor={input.name} className={`textareaField__label ${className ? `${className}__label` : ''}`}>{ label }</label>
-    <TextareaAutosize className={`textareaField__input ${className ? `${className}__input` : ''}`} {...input} />
+    <TextareaAutosize
+      className={`textareaField__input ${className ? `${className}__input` : ''} ${error && dirty ? `textareaField__input-error ${className ? `${className}__input--error` : ''}` : ''}`}
+      {...input}
+    />
+    {dirty &&
+      error &&
+      <span>
+        {error}
+      </span>}
   </div>
 )
 

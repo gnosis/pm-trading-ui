@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { Field } from 'redux-form'
 
+import * as validators from 'utils/validators'
 import { ORACLE_TYPES } from 'utils/constants'
 
 import MarketSidebar from 'components/MarketSidebar'
@@ -75,7 +76,7 @@ export default class MarketCreateWizard extends Component {
         </div>
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="funding" component={FormInput} step={0.01} type="number" label="Funding" />
+            <Field name="funding" component={FormInput} type="text" validate={validators.all(validators.required, validators.isNumber({ decimals: 4 }))} label="Funding" />
           </div>
         </div>
       </div>
@@ -83,11 +84,9 @@ export default class MarketCreateWizard extends Component {
   }
 
   renderForOracleType() {
-    const { selectedOracleType, selectedOutcomeType } = this.props
+    const { selectedOracleType } = this.props
     const oracleSections = {
-      [ORACLE_TYPES.CENTRALIZED]: (
-        <GroupCentralizedOracle selectedOutcomeType={selectedOutcomeType} />
-      ),
+      [ORACLE_TYPES.CENTRALIZED]: <GroupCentralizedOracle {...this.props} />,
       [ORACLE_TYPES.BLOCK_DIFFICULTY]: <GroupBlockDifficulty />,
     }
 
@@ -136,6 +135,5 @@ export default class MarketCreateWizard extends Component {
 MarketCreateWizard.propTypes = {
   changeUrl: PropTypes.func,
   selectedOracleType: PropTypes.string,
-  selectedOutcomeType: PropTypes.string,
   defaultAccount: PropTypes.string,
 }
