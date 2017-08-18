@@ -7,7 +7,7 @@ import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 
 import DecimalValue from 'components/DecimalValue'
-import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
+import CurrencyName from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
 import FormCheckbox from 'components/FormCheckbox'
@@ -46,6 +46,27 @@ class MarketMySharesForm extends Component {
       .then(() => this.props.reset())
   }
 
+  @autobind
+  validateTokenCount(val, values, props) {
+    let decimalValue
+    try {
+      decimalValue = Decimal(val || 0)
+    } catch (e) {
+      return 'Invalid Number value'
+    }
+
+    if (decimalValue.lt(0)) {
+      return 'Number can\'t be negative.'
+    }
+
+    if (decimalValue.gt(Decimal(props.marketShares[this.state.extendedSellIndex].balance).div(1e18).toString())) {
+      return 'You\'re trying to sell more than you invested.'
+    }
+
+    return undefined
+  }
+
+
   renderSellShareView() {
     const { extendedSellIndex } = this.state
     const {
@@ -53,13 +74,15 @@ class MarketMySharesForm extends Component {
       isConfirmedSell,
       invalid,
       submitting,
+      submitFailed,
       selectedSellAmount,
+      handleSubmit,
       marketShares: {
         [extendedSellIndex]: share,
       },
     } = this.props
 
-    const enteredSellAmount = typeof selectedSellAmount !== 'undefined' || selectedSellAmount === ''
+    const hasEnteredSellAmount = typeof selectedSellAmount !== 'undefined' || selectedSellAmount === ''
     let selectedSellAmountWei
     try {
       selectedSellAmountWei = Decimal(selectedSellAmount || 0).mul(1e18).toString()
@@ -121,93 +144,63 @@ class MarketMySharesForm extends Component {
       newProbability = currentProbability
     }
 
-    /*
-    const currentValue = currentTokenCount.mul(currentProbability.toString())
-    const newValue = newTokenCount.mul(newProbability.toString())
+    const submitDisabled = invalid || submitting || !isConfirmedSell
 
-    console.log('balance', Decimal(share.balance).div(1e18).toString())
-    console.log('currentProb', currentProbability.toString())
-    console.log('currentCount', currentTokenCount.toString())
-    console.log('newProb', newProbability.toString())
-    console.log('newCount', newTokenCount.toString())
-
-    const diffTokenValue = newValue.sub(currentValue.toString())
-
-    */
-
-    return [
-      (<tr key={'sellViewHeading'} className="marketMyShares__sell marketMyShares__sell--heading">
-        <th />
-        <th />
-        <th>Amount to sell</th>
-        <th>New Probability</th>
-        <th />
-      </tr>),
-      (<tr key={'sellView'} className="marketMyShares__sell">
-        <td colSpan={2} />
-        <td>
-          <Field
-            component={FormInput}
-            name="sellAmount"
-            placeholder="Enter Token Amount"
-            className="marketMySharesSellAmount"
-            validate={(val) => {
-              let decimalValue
-              try {
-                decimalValue = Decimal(val || 0)
-              } catch (e) {
-                return 'Invalid Number value'
-              }
-              if (decimalValue < 0) {
-                return 'Number can\'t be negative.'
-              }
-
-              if (decimalValue.gt(Decimal(share.balance).div(1e18).toString())) {
-                return 'You\'re trying to sell more than you invested.'
-              }
-
-              return undefined
-            }}
-          />
-        </td>
-        <td>
-          {enteredSellAmount && <span>
-            <DecimalValue value={newProbability.mul(100)} /> %
-          </span>}
-        </td>
-        <td />
-      </tr>),
-      <tr key={'sellView__actions'} className="marketMyShares__sellActions">
-        <td colSpan={5}>
-          <div className="marketMyShares__actionRow">
-            <Field name="confirm" component={FormCheckbox} className="marketMySharesSellButton" text="Confirm Sell" />
-            <button className={`btn btn-primary ${invalid ? 'disabled' : ''}`} disabled={invalid || submitting || !isConfirmedSell}>{submitting ? 'Loading' : 'Sell Shares'}</button>
-            <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
+    return (
+      <div className="marketMyShares__sellContainer">
+        <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellIndex, selectedSellAmount))}>
+          <div className="row marketMyShares__sellRow">
+            <div className="col-md-3 col-md-offset-3 marketMyShares__sellColumn">
+              <label>Amount to Sell</label>
+              <Field
+                component={FormInput}
+                name="sellAmount"
+                placeholder="Enter Token Amount"
+                className="marketMySharesSellAmount"
+                validate={this.validateTokenCount}
+              />
+            </div>
+            <div className="col-md-3 marketMyShares__sellColumn">
+              <label>New Probability</label>
+              <span>
+                <DecimalValue value={newProbability.mul(100)} /> %
+              </span>
+            </div>
+            <div className="col-md-3">
+              <label>Earnings</label>
+              <span>
+                <DecimalValue value={currentTokenCount.sub(newTokenCount).mul(currentProbability).div(1e18)} />
+                <CurrencyName collateralToken={market.event.collateralToken} />
+              </span>
+            </div>
           </div>
-        </td>
-      </tr>,
-    ]
+          <div className="row">
+            <div className="col-md-6 col-md-offset-6 marketMyShares__sellColumn">
+              <Field name="confirm" component={FormCheckbox} className="marketMySharesSellButton" text="Confirm Sell" />
+              <button className={`btn btn-primary ${submitDisabled ? 'disabled' : ''}`} disabled={submitDisabled}>{submitting ? 'Loading' : 'Sell Shares'}</button>
+              <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
+            </div>
+          </div>
+          {submitFailed && (
+          <div className="row">
+            <div className="col-md-9 col-md-offset-3 marketMyShares__errorColumn">
+              Sorry - your share sell could not be processed. Please ensure you're on the right network.
+            </div>
+          </div>)}
+        </form>
+      </div>
+    )
   }
 
-  render() {
-    const { marketShares, market, selectedSellAmount } = this.props
+  generateTableRows() {
+    const tableRows = []
+
+    const { marketShares, market } = this.props
     const { extendedSellIndex } = this.state
-        
-    if (!marketShares || !marketShares.length) {
-      return (
-        <div className="marketMyShares">
-          <h2 className="marketMyShares__heading">
-            You don&apos;t hold any shares for this market.
-            <br />
-            <small>It may take some time for the blockchain to mine your share purchase.</small>
-          </h2>
-        </div>
-      )
-    }
 
     const resolved = market.oracle.isOutcomeSet || market.event.isWinningOutcomeSet
 
-    const tableRowElements = marketShares.map((share, shareIndex) => {
+    marketShares.forEach((share, shareIndex) => {
       const probability = calcLMSRMarginalPrice({
         netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
         funding: market.funding,
@@ -220,7 +213,7 @@ class MarketMySharesForm extends Component {
         cost: share.balance,
       })
 
-      return (
+      tableRows.push((
         <tr className="marketMyShares__share" key={share.id}>
           <td>
             <div
@@ -243,32 +236,54 @@ class MarketMySharesForm extends Component {
             {/* eslint-enable no-script-url */}
           </td>
         </tr>
-      )
+      ))
+
+      if (shareIndex === extendedSellIndex) {
+        tableRows.push((
+          <tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
+            <td colSpan={5}>
+              {this.renderSellShareView()}
+            </td>
+          </tr>
+        ))
+      }
     })
 
-    if (typeof extendedSellIndex !== 'undefined') {
-      tableRowElements.splice(extendedSellIndex + 1, 0, ...this.renderSellShareView())
+    return tableRows
+  }
+
+  render() {
+    const { marketShares } = this.props
+
+    if (!marketShares || !marketShares.length) {
+      return (
+        <div className="marketMyShares">
+          <h2 className="marketMyShares__heading">
+            You don&apos;t hold any shares for this market.
+            <br />
+            <small>It may take some time for the blockchain to mine your share purchase.</small>
+          </h2>
+        </div>
+      )
     }
 
     return (
       <div className="marketMyShares">
-        <form onSubmit={this.props.handleSubmit(() => this.handleSellShare(extendedSellIndex, selectedSellAmount))}>
-          <h2 className="marketMyShares__heading">My Shares</h2>
-          <table className="table marketMyShares__shareTable">
-            <thead>
-              <tr>
-                <th className="marketMyShares__tableHeading marketMyShares__tableHeading--index" />
-                <th className="marketMyShares__tableHeading">Outcome</th>
-                <th className="marketMyShares__tableHeading">Token Count</th>
-                <th className="marketMyShares__tableHeading">Current Value</th>
-                <th className="marketMyShares__tableHeading" />
-              </tr>
-            </thead>
-            <tbody>
-              {tableRowElements}
-            </tbody>
-          </table>
-        </form>
+        <h2 className="marketMyShares__heading">My Shares</h2>
+        <table className="table marketMyShares__shareTable">
+          <thead>
+            <tr>
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--index" />
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Outcome</th>
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Token Count</th>
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Current Value</th>
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group" />
+            </tr>
+          </thead>
+          <tbody>
+            {this.generateTableRows()}
+          </tbody>
+        </table>
       </div>
     )
   }
