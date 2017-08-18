@@ -57,7 +57,8 @@ export const getMarkets = (state) => {
 export const getMarketSharesByMarket = state => (marketAddress) => {
   const marketEntity = getMarketById(state)(marketAddress)
   const shares = get(marketEntity, 'shares', [])
-  return shares.map(shareAddress => getMarketShareByShareId(state)(shareAddress))
+
+  return shares.map(shareAddress => getMarketShareByShareId(state)(shareAddress)).filter(share => share.balance > 0)
 }
 
 export const filterMarkets = state => (opts) => {
