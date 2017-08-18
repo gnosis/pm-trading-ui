@@ -9,11 +9,17 @@ import MarketCreateWizard from 'components/MarketCreateWizard'
 const FORM = {
   form: 'marketCreateWizard',
   destroyOnUnmount: false,
+  keepDirtyOnReinitialize: true,
+  forceUnregisterOnUnmount: true,
+  onSubmitFail: () => {
+    window.scrollTo(0, 0)
+  },
   initialValues: {
     oracleType: 'CENTRALIZED',
     fee: '0.5',
     decimals: '2',
     collateralToken: 'eth',
+    outcomes: [''],
   },
 }
 

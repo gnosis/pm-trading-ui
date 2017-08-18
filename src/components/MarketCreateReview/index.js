@@ -32,7 +32,9 @@ class MarketCreateReview extends Component {
 
   @autobind
   handleCreateMarket() {
-    this.props.submitForm()
+    const { formValues, submitForm } = this.props
+    
+    submitForm(formValues)
   }
 
   @autobind
@@ -76,7 +78,6 @@ class MarketCreateReview extends Component {
         collateralToken,
         fee,
         funding,
-        ultimateOracle,
       },
     } = this.props
 
@@ -108,20 +109,6 @@ class MarketCreateReview extends Component {
             </div>
           </div>
         </div>
-        {/*
-        <div className="row">
-          <div className="col-md-12">
-            <div className="marketReviewDetails__label">Ultimate Oracle</div>
-            <div className="marketReviewDetails__value">
-              {ultimateOracle ? (
-                <span>This Event will be using an ultimate Oracle.</span>
-              ) : (
-                <span>This Event will <strong>not</strong> be using an ultimate Oracle.</span>
-              )}
-            </div>
-          </div>
-        </div>
-        */}
       </div>
     )
   }
@@ -275,7 +262,6 @@ MarketCreateReview.propTypes = {
     description: PropTypes.string,
     oracleType: PropTypes.string,
     funding: PropTypes.string,
-    ultimateOracle: PropTypes.bool,
     collateralToken: PropTypes.string,
     unit: PropTypes.string,
     upperBound: PropTypes.string,

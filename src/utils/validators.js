@@ -95,8 +95,6 @@ export const all = (...args) => {
   }
 
   return (val, values, props) => {
-    console.log(validators)
-
     // reduce all validators to error messages or lack of such
     const allErrors = validators.reduce((errors, validator) => {
       const valError = validator(val, values, props)

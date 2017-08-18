@@ -7,7 +7,7 @@ import moment from 'moment'
 import 'react-datetime/css/react-datetime.css'
 import './formDateTimePicker.less'
 
-const FormDateTimePicker = ({ label, input, validDateCheck, meta: { dirty, error } }) => {
+const FormDateTimePicker = ({ label, input, validDateCheck, meta: { touched, error } }) => {
   let isValidDate = validDateCheck
   if (typeof validDateCheck !== 'function') {
     const yesterday = moment().subtract(1, 'day').endOf('day')
@@ -17,8 +17,8 @@ const FormDateTimePicker = ({ label, input, validDateCheck, meta: { dirty, error
   return (
     <div className="formDateTimePicker">
       <label>{label}</label>
-      <Datetime className={`formDateTimePicker__datetime ${error && dirty ? 'formDateTimePicker__datetime--error' : ''}`} isValidDate={isValidDate} {...input} />
-      {dirty &&
+      <Datetime className={`formDateTimePicker__datetime ${error && touched ? 'formDateTimePicker__datetime--error' : ''}`} isValidDate={isValidDate} {...input} />
+      {touched &&
         error &&
         <span>
           {error}
