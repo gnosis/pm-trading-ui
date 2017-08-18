@@ -31,6 +31,7 @@
 
   &__sell {
     border-top: 0 !important;
+    border-bottom: 0 !important;
 
     &--heading {
       th {
@@ -67,6 +68,20 @@
       color: @active-highlight-error !important;
     }
   }
+
+  &__actionRow {
+    text-align: right;
+    padding-right: 100px;
+  }
+
+  &__sellActions td {
+    border-top: 0 !important;
+  }
+
+  &__sellButton {
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
 }
 
 .shareOutcome {
@@ -84,5 +99,14 @@
 .marketMySharesSellAmount {
   &__input {
     font-size: 14px;
+    border-bottom-color: darken(@bg-color-muted, 10%) !important;
+  }
+}
+
+.marketMySharesSellButton {
+  display: inline-block;
+  margin-right: 10px;
+  &__input {
+    background-color: darken(@bg-color-muted, 10%) !important;
   }
 }

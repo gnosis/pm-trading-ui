@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, propTypes } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
@@ -10,6 +10,7 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
+import FormCheckbox from 'components/FormCheckbox'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
@@ -28,27 +29,37 @@ class MarketMySharesForm extends Component {
   @autobind
   handleShowSellView(e, shareIndex) {
     e.preventDefault()
+    this.props.reset()
     this.setState({ extendedSellIndex: (shareIndex === this.state.extendedSellIndex ? undefined : shareIndex) })
   }
 
   @autobind
   handleCloseSellView(e) {
     e.preventDefault()
+    this.props.reset()
     this.setState({ extendedSellIndex: undefined })
   }
 
   @autobind
-  handleSellShare(e, shareIndex, shareAmount) {
-    e.preventDefault()
-    if (window.confirm('Are you sure?')) {
-      this.props.sellShares(this.props.market.address, shareIndex, shareAmount)
-    }
+  handleSellShare(shareIndex, shareAmount) {
+    return this.props.sellShares(this.props.market, shareIndex, shareAmount)
+      .then(() => this.props.reset())
   }
 
   renderSellShareView() {
     const { extendedSellIndex } = this.state
-    const { invalid, selectedSellAmount, marketShares: { [extendedSellIndex]: share }, market } = this.props
+    const {
+      market,
+      isConfirmedSell,
+      invalid,
+      submitting,
+      selectedSellAmount,
+      marketShares: {
+        [extendedSellIndex]: share,
+      },
+    } = this.props
 
+    const enteredSellAmount = typeof selectedSellAmount !== 'undefined' || selectedSellAmount === ''
     let selectedSellAmountWei
     try {
       selectedSellAmountWei = Decimal(selectedSellAmount || 0).mul(1e18).toString()
@@ -110,25 +121,26 @@ class MarketMySharesForm extends Component {
       newProbability = currentProbability
     }
 
+    /*
     const currentValue = currentTokenCount.mul(currentProbability.toString())
     const newValue = newTokenCount.mul(newProbability.toString())
 
-    /*
     console.log('balance', Decimal(share.balance).div(1e18).toString())
     console.log('currentProb', currentProbability.toString())
     console.log('currentCount', currentTokenCount.toString())
     console.log('newProb', newProbability.toString())
     console.log('newCount', newTokenCount.toString())
-    */
 
     const diffTokenValue = newValue.sub(currentValue.toString())
+
+    */
 
     return [
       (<tr key={'sellViewHeading'} className="marketMyShares__sell marketMyShares__sell--heading">
         <th />
         <th />
-        <th>Token Count</th>
-        <th>New Value</th>
+        <th>Amount to sell</th>
+        <th>New Probability</th>
         <th />
       </tr>),
       (<tr key={'sellView'} className="marketMyShares__sell">
@@ -137,7 +149,7 @@ class MarketMySharesForm extends Component {
           <Field
             component={FormInput}
             name="sellAmount"
-            placeholder={collateralTokenToText(market.event.collateralToken)}
+            placeholder="Enter Token Amount"
             className="marketMySharesSellAmount"
             validate={(val) => {
               let decimalValue
@@ -159,25 +171,26 @@ class MarketMySharesForm extends Component {
           />
         </td>
         <td>
-          <DecimalValue value={newValue.div(1e18)} />&nbsp;
-          <CurrencyName collateralToken={market.event.collateralToken} />&nbsp;
-          {!diffTokenValue.isZero() && <span>
-            (<span className={`marketMyShares__diff ${diffTokenValue.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffTokenValue.gt(0) ? '+' : ''}<DecimalValue value={diffTokenValue.div(1e18)} />&nbsp;
-              <CurrencyName collateralToken={market.event.collateralToken} />
-            </span>)
+          {enteredSellAmount && <span>
+            <DecimalValue value={newProbability.mul(100)} /> %
           </span>}
         </td>
-        <td>
-          <button type="button" className={`btn btn-primary ${invalid ? 'disabled' : ''}`} disabled={invalid} onClick={e => this.handleSellShare(e, extendedSellIndex, selectedSellAmount)}>Sell Shares</button>
-          <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
-        </td>
+        <td />
       </tr>),
+      <tr key={'sellView__actions'} className="marketMyShares__sellActions">
+        <td colSpan={5}>
+          <div className="marketMyShares__actionRow">
+            <Field name="confirm" component={FormCheckbox} className="marketMySharesSellButton" text="Confirm Sell" />
+            <button className={`btn btn-primary ${invalid ? 'disabled' : ''}`} disabled={invalid || submitting || !isConfirmedSell}>{submitting ? 'Loading' : 'Sell Shares'}</button>
+            <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
+          </div>
+        </td>
+      </tr>,
     ]
   }
 
   render() {
-    const { marketShares, market } = this.props
+    const { marketShares, market, selectedSellAmount } = this.props
     const { extendedSellIndex } = this.state
 
     if (!marketShares || !marketShares.length) {
@@ -226,7 +239,7 @@ class MarketMySharesForm extends Component {
           </td>
           <td>
             {/* eslint-disable no-script-url */}
-            {!resolved && <a href="javascript:void(0);" onClick={e => this.handleShowSellView(e, shareIndex)}>Sell</a>}
+            {!resolved && <a href="javascript:void(0);" className="marketMyShares__sellButton" onClick={e => this.handleShowSellView(e, shareIndex)}>Sell</a>}
             {/* eslint-enable no-script-url */}
           </td>
         </tr>
@@ -239,7 +252,7 @@ class MarketMySharesForm extends Component {
 
     return (
       <div className="marketMyShares">
-        <form>
+        <form onSubmit={this.props.handleSubmit(() => this.handleSellShare(extendedSellIndex, selectedSellAmount))}>
           <h2 className="marketMyShares__heading">My Shares</h2>
           <table className="table marketMyShares__shareTable">
             <thead>
@@ -262,8 +275,9 @@ class MarketMySharesForm extends Component {
 }
 
 MarketMySharesForm.propTypes = {
+  ...propTypes,
   market: marketShape,
-  invalid: PropTypes.bool,
+  isConfirmedSell: PropTypes.bool,
   selectedSellAmount: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,

@@ -238,7 +238,7 @@ export const sellMarketShares = (market, outcomeIndex, amount) => async (dispatc
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
 
   try {
-    await api.sellShares(market, outcomeIndex, amount)
+    await api.sellShares(market.address, outcomeIndex, amount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     console.error(e)

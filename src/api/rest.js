@@ -29,13 +29,13 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
     // unfortunately we need to return the shares as a market entity to be able to index on it
     // so we create an array for the market shares with the entities we receive here.
     .then(response => {
-      if (typeof(response.count) !== 'undefined' && response.count === 0) {
+      if (!response || (typeof(response.count) !== 'undefined' && response.count === 0)) {
         return []
       }
 
       return normalize({
         address: marketAddress,
-        shares: response.map(share => ({
+        shares: response.results.map(share => ({
           id: sha1(`${marketAddress}-${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
           event: share.outcomeToken.event,
           ...share,
