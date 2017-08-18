@@ -1,7 +1,7 @@
 /* globals fetch */
 
 import { mapValues, startsWith, isArray } from 'lodash'
-
+import Decimal from 'decimal.js'
 import { HEX_VALUE_REGEX } from 'utils/constants'
 
 export const hexWithoutPrefix = (value) => {
@@ -40,6 +40,17 @@ export const toEntity = (data, entityType, idKey = 'address') => {
       id,
     ],
   }
+}
+
+/**
+ * Converts a value from WEI to ETH
+ * @param {String|Number} value 
+ */
+export const weiToEth = (value) => {
+  if (Decimal(value).gt(0)) {
+    return Decimal(value).div(1e18).toString()
+  }
+  return "0"
 }
 
 /** 

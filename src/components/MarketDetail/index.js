@@ -4,6 +4,7 @@ import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
+import { weiToEth } from '../../utils/helpers'
 
 import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
@@ -230,7 +231,7 @@ class MarketDetail extends Component {
           <div className="withdrawFees">
             <div className="withdrawFees__icon icon icon--earnedTokens" />
             <div className="withdrawFees__details">
-              <div className="withdrawFees__heading">12 {collateralTokenToText(market.event.collateralToken)}</div>
+              <div className="withdrawFees__heading">{weiToEth(market.collectedFees)} {collateralTokenToText(market.event.collateralToken)}</div>
               <div className="withdrawFees__label">Earnings through market fees</div>
             </div>
             <div className="withdrawFees__action">
