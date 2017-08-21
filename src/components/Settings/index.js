@@ -41,7 +41,9 @@ class Settings extends Component {
         <div className="container settingsSection">
           <div className="row">
             <div className="col-xs-12">
-              <div className="settingsHeading settingsHeading__number">A</div>
+              <div className="settingsHeading settingsHeading__icon">
+                <div className="settingsGeneral__icon icon icon--gear" />
+              </div>
               <h2 className="settingsHeading settingsHeading__title">General</h2>
             </div>
           </div>
@@ -64,7 +66,9 @@ class Settings extends Component {
         <div className="container settingsSection">
           <div className="row">
             <div className="col-xs-12">
-              <div className="settingsHeading settingsHeading__number">A</div>
+              <div className="settingsHeading settingsHeading__icon">
+                <div className="settingsModerators__icon icon icon--user" />
+              </div>
               <h2 className="settingsHeading settingsHeading__title">Moderators</h2>
             </div>
           </div>

@@ -19,6 +19,21 @@
   }
 }
 
+.settingsGeneral, .settingsModerators {
+
+  &__icon {
+    width: 35px;
+    height: 35px;
+    position: relative;
+    margin-top: 7px;
+  }
+
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
 
 .moderatorItem {
   margin-top: 20px;
@@ -32,7 +47,7 @@
 .settingsHeading {
   margin-bottom: 20px;
 
-  &__number {
+  &__icon {
     display: inline-block;
     height: 50px;
     width: 50px;
