@@ -182,6 +182,7 @@ class MarketDetail extends Component {
       Token: collateralTokenToText(market.event.collateralToken),
       Fee: `${decimalToText(market.fee, 4)} %`,
       Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
+      'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
 
     if (this.props.isModerator) {

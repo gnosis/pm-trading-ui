@@ -44,13 +44,14 @@ export const toEntity = (data, entityType, idKey = 'address') => {
 
 /**
  * Converts a value from WEI to ETH
- * @param {String|Number} value 
+ * @param {String|Number} value
  */
 export const weiToEth = (value) => {
-  if (Decimal(value).gt(0)) {
-    return Decimal(value).div(1e18).toString()
+  let ethValue = '0'
+  if (value && Decimal(value).gt(0)) {
+    ethValue = Decimal(value).div(1e18).toString()
   }
-  return "0"
+  return ethValue
 }
 
 /** 
