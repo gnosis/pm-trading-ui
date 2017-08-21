@@ -16,8 +16,8 @@ const FormRadioButton = ({ input, radioValues, label, className, meta: { error, 
           className={`radioButton__input ${bemifyClassName(className, 'input')}`}
           id={`radioButton_${input.name}_${value}`}
           style={highlightColor ? { color: highlightColor } : {}}
-          onChange={() => input.onChange(value)} {/* ensure correct value type for onchange */}
-          checked={input && input.value.toString() === value.toString()} {/* compare as strings for selection highlight */}
+          onChange={() => input.onChange(value)}
+          checked={input && input.value.toString() === value.toString()}
           value={value}
         />
         <label className={`radioButton__text ${bemifyClassName(className, 'text')}`} htmlFor={`radioButton_${input.name}_${value}`}>
