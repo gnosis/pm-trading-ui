@@ -50,6 +50,16 @@ class Settings extends Component {
               <Field name="title" component={FormInput} type="text" label="Title" />
             </div>
           </div>
+          <div className="row">
+            <div className="col-md-offset-1 col-md-7">
+              <Field name="description" component={FormInput} type="text" label="Description" />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-offset-1 col-md-7">
+              <Field name="domain" component={FormInput} type="text" label="Domain" />
+            </div>
+          </div>
         </div>
         <div className="container settingsSection">
           <div className="row">
@@ -59,7 +69,7 @@ class Settings extends Component {
             </div>
           </div>
           <div className="row">
-            <div className="col-xs-12">
+            <div className="col-xs-12 col-xs-offset-1 col-sm-10 col-sm-offset-1">
               <div className="moderatorsList">
                 {this.renderForm()}
               </div>
@@ -74,17 +84,17 @@ class Settings extends Component {
 const renderSettings = ({ fields, meta: { error } }) =>
 
       <div className="row">
-        <div className="col-md-12">
-          <button type="button" onClick={() => fields.push({address: '', name: ''})} className="btn">
+        <div className="col-xs-12">
+          <button type="button" onClick={() => fields.push({address: '', name: ''})} className="btn btn-default">
             {fields.getAll() && fields.getAll().length > 0 ? 'ADD ANOTHER' : 'ADD'}
           </button>
         <div>
       </div>
       {fields.map((item, index) =>
-        <div className="row" key={index}>
-          <div className="col-md-12">
+        <div className="row moderatorItem" key={index}>
+          <div className="col-xs-12 col-sm-8">
             <h4>
-              Setting #{index + 1}
+              Moderator #{index + 1}
             </h4>
             <Field
               name={`${item}.name`}
@@ -102,12 +112,12 @@ const renderSettings = ({ fields, meta: { error } }) =>
               normalize={add0xPrefix}
             />
             <button
-              className="btn btn-primary"
+              className="btn btn-default"
               type="button"
               title="Remove"
               onClick={() => fields.remove(index)}
             >
-              REMOVE
+              Remove
             </button>
           </div>
         </div>
@@ -115,8 +125,8 @@ const renderSettings = ({ fields, meta: { error } }) =>
       {fields.getAll() && fields.getAll().length > 0 ?
         <div className="row">
           <div className="col-md-4">
-            <button type="submit" className="btn">
-              Save settings
+            <button type="submit" className="btn btn-default">
+              Save
             </button>
           </div>
         </div>
