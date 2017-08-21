@@ -6,10 +6,10 @@ import { bemifyClassName } from 'utils/helpers'
 
 import './formRadioButton.less'
 
-const FormRadioButton = ({ input, radioValues, label, className, highlightColor, meta: { error, touched } }) => (
+const FormRadioButton = ({ input, radioValues, label, className, meta: { error, touched } }) => (
   <div className={`formRadioButton ${touched && error ? 'formRadioButton--error' : ''}`}>
-    <label>{label}</label>
-    {radioValues.map(({ label, value }) => (
+    {label && <label>{label}</label>}
+    {radioValues.map(({ label: radioLabel, value, highlightColor }) => (
       <div key={value} className={`radioButton ${bemifyClassName(className)}`}>
         <input
           type="radio"
@@ -21,7 +21,7 @@ const FormRadioButton = ({ input, radioValues, label, className, highlightColor,
           value={value}
         />
         <label className={`radioButton__text ${bemifyClassName(className, 'text')}`} htmlFor={`radioButton_${input.name}_${value}`}>
-          {label}
+          {radioLabel}
         </label>
       </div>
     ))}

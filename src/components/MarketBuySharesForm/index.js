@@ -106,17 +106,16 @@ class MarketBuySharesForm extends Component {
         </div>
         <div className="row">
           <div className="col-md-12">
-            {eventDescription.outcomes.map((label, index) => (
-              <Field
-                key={index}
-                component={FormRadioButton}
-                name="selectedOutcome"
-                highlightColor={COLOR_SCHEME_DEFAULT[index]}
-                className="marketBuyOutcome"
-                radioValue={index}
-                text={label}
-              />
-            ))}
+            <Field
+              component={FormRadioButton}
+              name="selectedOutcome"
+              className="marketBuyOutcome"
+              radioValues={eventDescription.outcomes.map((label, index) => ({
+                value: index,
+                label: eventDescription.outcomes[index],
+                highlightColor: COLOR_SCHEME_DEFAULT[index],
+              }))}
+            />
           </div>
         </div>
       </div>
