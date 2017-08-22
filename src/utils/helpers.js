@@ -14,7 +14,7 @@ export const hexWithoutPrefix = (value) => {
 
 /**
  * Adds the `0x` prefix to the incoming string value
- * @param {String} value 
+ * @param {String} value
  */
 export const add0xPrefix = (value) => {
   return startsWith(value, '0x') ? value : `0x${value}`
@@ -54,9 +54,9 @@ export const weiToEth = (value) => {
   return ethValue
 }
 
-/** 
+/**
  * Adds _id incremental numeric property to each object in the array
- * @param {Array of objects} arrayData 
+ * @param {Array of objects} arrayData
  */
 export const addIdToObjectsInArray = (arrayData) => {
   arrayData.forEach((item, index) => {
@@ -67,8 +67,12 @@ export const addIdToObjectsInArray = (arrayData) => {
 
 export const restFetch = url =>
   fetch(url)
+    .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
     .then(res => res.json())
-    .catch(err => console.warn(`Gnosis DB: ${err}`))
+    .catch(err => new Promise((resolve, reject) => {
+      console.warn(`Gnosis DB: ${err}`)
+      reject(err)
+    }))
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
