@@ -21,8 +21,15 @@
     letter-spacing: 1px;
   }
 
-  &__control {
-    float: right;
+  // &__control {
+  //   float: right;
+  // }
+
+ &__stat {
+    margin-bottom: 20px;
+    @media(min-width: @screen-sm) {
+      margin-bottom: 0;
+    }
   }
 
   .marketStats__icon {
@@ -46,6 +53,10 @@
 
   &__header {
     margin: @page-heading-margins;
+  }
+
+  &__controls {
+    margin-bottom: 40px;
   }
 }
 
