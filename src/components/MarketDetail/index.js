@@ -126,7 +126,6 @@ class MarketDetail extends Component {
     if (!this.props.market || !this.props.market.address) {
       this.props.fetchMarket()
         .catch((err) => {
-          console.log("bla", err)
           this.setState({
             marketFetchError: err,
           })
