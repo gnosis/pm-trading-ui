@@ -115,9 +115,22 @@ const expandableViews = {
 }
 
 class MarketDetail extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      marketFetchError: undefined,
+    }
+  }
   componentWillMount() {
     if (!this.props.market || !this.props.market.address) {
-      this.props.fetchMarket(this.props.params.id)
+      this.props.fetchMarket()
+        .catch((err) => {
+          console.log("bla", err)
+          this.setState({
+            marketFetchError: err,
+          })
+        })
     }
 
     if (this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
@@ -293,6 +306,17 @@ class MarketDetail extends Component {
 
   render() {
     const { market } = this.props
+
+    const { marketFetchError } = this.state
+    if (marketFetchError) {
+      return (
+        <div className="marketDetailPage">
+          <div className="container">
+            This market could not be found.
+          </div>
+        </div>
+      )
+    }
 
     if (!market.address) {
       return this.renderLoading()
