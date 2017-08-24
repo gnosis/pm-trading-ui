@@ -1,6 +1,6 @@
 @import url('../../less/vars.less');
 
-.formEditableList {
+.formOutcomeList {
   display: block;
   line-height: 20px;
   margin-bottom: 8px;
@@ -9,29 +9,12 @@
     &__color {
       vertical-align: middle;
       display: inline-block;
-      float: left;
-      margin-top: 2px;
+      margin-top: 6px;
+      margin-right: 5px;
       width: 20px;
       height: 20px;
 
       border-radius: 4px;
-    }
-
-    &__input[type="text"] {
-      border: none;
-      background: none;
-      border-bottom: 1px solid @bg-color-muted;
-      font-size: 24px;
-
-      &:active, &:focus {
-        outline: 0;
-      }
-
-      margin: 0 8px;
-
-      font-size: 14px;
-      display: inline-block;
-      float: left;
     }
 
     &__delete {
@@ -49,19 +32,18 @@
     }
   }
 
-  &--new {
-    .entry__delete {
-      display: none;
-    }
-
-    .entry__color {
-
-    }
-  }
-
   &::after {
     content: '';
     display: table;
     clear: both;
+  }
+}
+
+.formOutcomeListInput {
+  display: inline-block !important;
+  width: auto !important;
+
+  &__input {
+    font-size: 14px;
   }
 }
