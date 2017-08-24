@@ -217,7 +217,7 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   }
 
   const netOutcomeTokensSold = market.netOutcomeTokensSold
-  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toString()
+  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toNumber()
   netOutcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
 
   await dispatch(updateEntity({
