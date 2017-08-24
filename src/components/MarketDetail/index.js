@@ -192,7 +192,7 @@ class MarketDetail extends Component {
   renderInfos(market) {
     const infos = {
       Token: collateralTokenToText(market.event.collateralToken),
-      Fee: `${decimalToText(market.fee, 4)} %`,
+      Fee: `${decimalToText(market.fee, 4) / 10000} %`,
       Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
       'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
@@ -244,7 +244,7 @@ class MarketDetail extends Component {
           <div className="withdrawFees">
             <div className="withdrawFees__icon icon icon--earnedTokens" />
             <div className="withdrawFees__details">
-              <div className="withdrawFees__heading">{weiToEth(market.collectedFees)} {collateralTokenToText(market.event.collateralToken)}</div>
+              <div className="withdrawFees__heading">{decimalToText(weiToEth(market.collectedFees))} {collateralTokenToText(market.event.collateralToken)}</div>
               <div className="withdrawFees__label">Earnings through market fees</div>
             </div>
             <div className="withdrawFees__action">
