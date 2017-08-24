@@ -201,14 +201,14 @@ export const createMarket = options => async (dispatch) => {
   return await dispatch(closeLog(transactionId))
 }
 
-export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
+export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
   const transactionId = uuid()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
 
   try {
-    await api.buyShares(market, outcomeIndex, amount)
+    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     console.error(e)
@@ -217,7 +217,7 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
   }
 
   const netOutcomeTokensSold = market.netOutcomeTokensSold
-  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + (amount * 1e18)
+  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toString()
   netOutcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
 
   await dispatch(updateEntity({
