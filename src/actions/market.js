@@ -231,14 +231,14 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
-export const sellMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
+export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => async (dispatch) => {
   const transactionId = uuid()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
 
   try {
-    await api.sellShares(market.address, outcomeIndex, amount)
+    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     console.error(e)

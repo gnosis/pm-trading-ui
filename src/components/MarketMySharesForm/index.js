@@ -65,8 +65,7 @@ class MarketMySharesForm extends Component {
       selectedSellAmountWei = Decimal(selectedSellAmount || 0).mul(1e18).toString()
     } catch (e) {
       selectedSellAmountWei = '0'
-    }
-
+    }    
     let currentProbability
     try {
       currentProbability = calcLMSRMarginalPrice({
@@ -78,17 +77,7 @@ class MarketMySharesForm extends Component {
       currentProbability = Decimal('0')
     }
 
-    let currentTokenCount
-    try {
-      currentTokenCount = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        cost: share.balance,
-      })
-    } catch (e) {
-      currentTokenCount = Decimal('0')
-    }
+    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal('0')
 
     let newTokenCount
     try {

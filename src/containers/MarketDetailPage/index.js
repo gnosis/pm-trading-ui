@@ -45,7 +45,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarketParticipantTrades: (marketAddress, accountAddress) =>
     dispatch(requestMarketParticipantTrades(marketAddress, accountAddress)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
-  sellShares: (market, outcomeIndex, amount) => dispatch(sellMarketShares(market, outcomeIndex, amount)),
+  sellShares: (market, outcomeIndex, outcomeTokenCount) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount)),
   resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
