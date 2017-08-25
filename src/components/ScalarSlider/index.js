@@ -20,11 +20,11 @@ const ScalarSlider = ({
   // current value
   const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
 
-  const value = marginalPriceCurrent.mul(bounds.toString()).add(bigLowerBound.div(10 ** decimals).toString())
-  const percentage = marginalPriceCurrent.mul(100)
+  const value = new Decimal(marginalPriceCurrent).mul(bounds.toString()).add(bigLowerBound.div(10 ** decimals).toString())
+  const percentage = new Decimal(marginalPriceCurrent).mul(100)
 
-  const selectedValue = marginalPriceSelected.mul(bounds.toString()).add(bigLowerBound.div(10 ** decimals).toString())
-  const selectedPercentage = marginalPriceSelected.mul(100)
+  const selectedValue = new Decimal(marginalPriceSelected).mul(bounds.toString()).add(bigLowerBound.div(10 ** decimals).toString())
+  const selectedPercentage = new Decimal(marginalPriceSelected).mul(100)
 
   return (
     <div className="scalarSlider">
