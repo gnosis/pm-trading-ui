@@ -5,9 +5,9 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
-
-import CurrencyName from 'components/CurrencyName'
 import Countdown from 'components/Countdown'
+import CurrencyName from 'components/CurrencyName'
+import { decimalToText } from 'components/DecimalValue'
 
 import OutcomeCategorical from 'components/OutcomeCategorical'
 import OutcomeScalar from 'components/OutcomeScalar'
@@ -19,7 +19,6 @@ import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
-
 class MarketList extends Component {
   componentWillMount() {
     this.props.fetchMarkets()
@@ -100,9 +99,9 @@ class MarketList extends Component {
           </div>
           <div className="info__group col-md-3">
             <div className="info__field">
-              <div className="info__field--icon icon icon--oracle" />
+              <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                {market.oracle.address}
+                <CurrencyName collateralToken={market.event.collateralToken} />
               </div>
             </div>
           </div>
@@ -110,6 +109,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
+                {decimalToText(new Decimal(market.tradingVolume).div(1e18))}
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </div>
             </div>
