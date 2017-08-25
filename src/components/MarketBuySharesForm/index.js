@@ -144,7 +144,7 @@ class MarketBuySharesForm extends Component {
       },
     } = this.props
 
-    const outcomeTokenCount = this.getoutcomeTokenCount(selectedBuyInvest, 1)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, 1)
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold,
       funding,
