@@ -12,7 +12,7 @@ import { decimalToText } from 'components/DecimalValue'
 import OutcomeCategorical from 'components/OutcomeCategorical'
 import OutcomeScalar from 'components/OutcomeScalar'
 
-import FormSelect from 'components/FormSelect'
+import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
 
 import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
@@ -143,7 +143,20 @@ class MarketList extends Component {
 
   renderMarketFilter() {
     const { handleSubmit } = this.props
-
+    const resolutionFilters = [
+      {
+        label: 'All',
+        value: '',
+      },
+      {
+        label: 'Resolved',
+        value: 'RESOLVED',
+      },
+      {
+        label: 'Unresolved',
+        value: 'UNRESOLVED',
+      },
+    ]
     return (
       <div className="marketFilter col-md-2">
         <form onSubmit={handleSubmit}>
@@ -158,12 +171,10 @@ class MarketList extends Component {
           </div>
           <div className="marketFilter__group">
             <Field
-              component={FormSelect}
               name="resolved"
-              label="Show Resolved"
-              className="marketFilterField marketFilterResolved"
-              defaultValue={''}
-              values={{ '': 'Both', RESOLVED: 'Show only resolved Markets', UNRESOLVED: 'Show only unresolved Markets' }}
+              label="Resolution Date"
+              component={FormRadioButton}
+              radioValues={resolutionFilters}
             />
           </div>
         </form>
