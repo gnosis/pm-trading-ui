@@ -29,12 +29,12 @@ const OutcomeScalar = ({ market }) => {
   return (
     <div className="outcomes outcomes--scalar">
       <div className="outcome">
-        <div className="outcome__bound outcome__bound--lower"><DecimalValue value={lowerBound} decimals={1} /></div>
+        <div className="outcome__bound outcome__bound--lower"><DecimalValue value={lowerBound} decimals={market.eventDescription.decimals} /></div>
         <div className="outcome__currentPrediction">
           <div className="outcome__currentPrediction--line" />
-          <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>{value.toString()}</div>
+          <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}><DecimalValue value={value} decimals={market.eventDescription.decimals} /></div>
         </div>
-        <div className="outcome__bound outcome__bound--upper"><DecimalValue value={upperBound} decimals={1} /></div>
+        <div className="outcome__bound outcome__bound--upper"><DecimalValue value={upperBound} decimals={market.eventDescription.decimals} /></div>
       </div>
     </div>
   )
