@@ -2,7 +2,7 @@
 
 import { mapValues, startsWith, isArray } from 'lodash'
 import Decimal from 'decimal.js'
-import { HEX_VALUE_REGEX } from 'utils/constants'
+import { HEX_VALUE_REGEX, OUTCOME_TYPES } from 'utils/constants'
 
 export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
@@ -52,6 +52,16 @@ export const weiToEth = (value) => {
     ethValue = Decimal(value).div(1e18).toString()
   }
   return ethValue
+}
+
+export const getOutcomeName = (market, index) => {
+  let outcomeName
+  if (market.event.type === OUTCOME_TYPES.CATEGORICAL) {
+    outcomeName = market.eventDescription.outcomes[index]
+  } else if (market.event.type === OUTCOME_TYPES.SCALAR) {
+    outcomeName = index === 0 ? 'Short' : 'Long'
+  }
+  return outcomeName
 }
 
 /**

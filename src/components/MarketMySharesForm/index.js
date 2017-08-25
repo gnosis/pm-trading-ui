@@ -13,6 +13,7 @@ import FormInput from 'components/FormInput'
 import FormCheckbox from 'components/FormCheckbox'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { getOutcomeName } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
@@ -210,7 +211,7 @@ class MarketMySharesForm extends Component {
             />
           </td>
           <td className="">
-            {market.eventDescription.outcomes[share.outcomeToken.index]}
+            {getOutcomeName(market, share.outcomeToken.index)}
           </td>
           <td>
             <DecimalValue value={Decimal(share.balance).div(1e18)} />
