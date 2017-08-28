@@ -52,7 +52,6 @@ const generateRandomGraph = () => {
 
     graphData.push({ date: curDate.toDate(), outcome1, outcome2: 1 - outcome1 })
   }
-
   return graphData
 }
 
@@ -116,7 +115,15 @@ const expandableViews = {
 class MarketDetail extends Component {
   componentWillMount() {
     if (!this.props.market || !this.props.market.address) {
-      this.props.fetchMarket(this.props.params.id)
+      this.props.fetchMarket()
+        .then(
+          this.props.fetchMarketTrades(),
+        )
+        .catch((err) => {
+          this.setState({
+            marketFetchError: err,
+          })
+        })
     }
 
     if (this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
@@ -331,6 +338,7 @@ MarketDetail.propTypes = {
   changeUrl: PropTypes.func,
   fetchMarket: PropTypes.func,
   fetchMarketShares: PropTypes.func,
+  fetchMarketTrades: PropTypes.func,
   isModerator: PropTypes.bool,
 }
 

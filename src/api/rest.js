@@ -1,4 +1,4 @@
-import { restFetch, hexWithoutPrefix, addIdToObjectsInArray } from 'utils/helpers'
+import { restFetch, hexWithoutPrefix, addIdToObjectsInArray, getOutcomeName } from 'utils/helpers'
 import { normalize } from 'normalizr'
 
 import sha1 from 'sha1'
@@ -6,6 +6,7 @@ import sha1 from 'sha1'
 import {
   marketSchema,
   tradeSchema,
+  graphSchema,
 } from './schema'
 
 const API_URL = process.env.GNOSISDB_HOST
@@ -39,10 +40,28 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
           id: sha1(`${marketAddress}-${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
           event: share.outcomeToken.event,
           ...share,
-        }))
+        })),
       }, marketSchema)
     })
 
 export const requestMarketParticipantTrades = async (marketAddress, accountAddress) =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
     .then(response => normalize(addIdToObjectsInArray(response.results), [tradeSchema]))
+
+export const requestMarketTrades = async market =>
+  restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(market.address)}/trades/`)
+    .then(response => normalize(
+      response.results.map(
+        (result, index) => ({
+          id: index,
+          date: result.date,
+          marginalPrices: result.marginalPrices.reduce((prev, current, outcomeIndex) => {
+            const ret = { ...prev }
+            ret[getOutcomeName(market, outcomeIndex)] = current
+            return ret
+          }, {}),
+        }),
+        [graphSchema],
+      ),
+    ),
+  )
