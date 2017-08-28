@@ -15,6 +15,7 @@ import OutcomeScalar from 'components/OutcomeScalar'
 import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
 import FormSelect from 'components/FormSelect'
+import FormCheckbox from 'components/FormCheckbox'
 
 import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
@@ -193,6 +194,14 @@ class MarketList extends Component {
               label="Resolution Date"
               component={FormRadioButton}
               radioValues={resolutionFilters}
+            />
+          </div>
+          <div className="marketFilter__group">
+            <Field
+              name="myMarkets"
+              label="Show only"
+              text="My markets"
+              component={FormCheckbox}
             />
           </div>
         </form>

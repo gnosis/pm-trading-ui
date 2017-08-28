@@ -11,16 +11,22 @@ import { requestMarkets } from 'actions/market'
 
 const mapStateToProps = (state) => {
   // const markets = getMarkets(state)
-
+  const defaultAccount = getDefaultAccount(state)
   const filterForm = formValueSelector('marketListFilter')
   const filterSearch = filterForm(state, 'search')
   const filterShowResolved = filterForm(state, 'resolved')
   const filterOrderBy = filterForm(state, 'orderBy')
-  const filteredMarktes = filterMarkets(state)({ textSearch: filterSearch, resolved: filterShowResolved })
+  const filterMyMarkets = filterForm(state, 'myMarkets')
+  const filteredMarktes = filterMarkets(state)({
+    textSearch: filterSearch,
+    resolved: filterShowResolved,
+    onlyMyMarkets: filterMyMarkets,
+    defaultAccount,
+  })
 
   return {
     markets: sortMarkets(filteredMarktes, filterOrderBy),
-    defaultAccount: getDefaultAccount(state),
+    defaultAccount,
   }
 }
 

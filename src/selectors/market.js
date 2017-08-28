@@ -64,15 +64,16 @@ export const getMarketSharesByMarket = state => (marketAddress) => {
 export const filterMarkets = state => (opts) => {
   const marketEntities = getMarkets(state)
 
-  const { textSearch, resolved } = opts
+  const { textSearch, resolved, onlyMyMarkets, defaultAccount } = opts
 
   return marketEntities
     .filter(market =>
-    (!textSearch ||
-      market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
-      market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
-    (typeof resolved === 'undefined' || (resolved === 'RESOLVED' && market.oracle.isOutcomeSet) || (resolved === 'UNRESOLVED' && !market.oracle.isOutcomeSet)),
-  )
+      (!textSearch ||
+        market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
+        market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
+      (!onlyMyMarkets || market.creator === defaultAccount.toLowerCase()) &&
+      (typeof resolved === 'undefined' || (resolved === 'RESOLVED' && market.oracle.isOutcomeSet) || (resolved === 'UNRESOLVED' && !market.oracle.isOutcomeSet)),
+    )
 }
 
 /**
