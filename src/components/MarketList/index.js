@@ -14,6 +14,7 @@ import OutcomeScalar from 'components/OutcomeScalar'
 
 import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
+import FormSelect from 'components/FormSelect'
 
 import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
@@ -157,6 +158,14 @@ class MarketList extends Component {
         value: 'UNRESOLVED',
       },
     ]
+    const selectFilter = {
+      DEFAULT: '---',
+      RESOLUTION_DATE_ASC: 'Resolution Date ASC',
+      RESOLUTION_DATE_DESC: 'Resolution Date DESC',
+      TRADING_VOLUME_ASC: 'Trading Volume ASC',
+      TRADING_VOLUME_DESC: 'Trading Volume DESC',
+    }
+
     return (
       <div className="marketFilter col-md-2">
         <form onSubmit={handleSubmit}>
@@ -167,6 +176,15 @@ class MarketList extends Component {
               label="Search"
               placeholder="Title, Description"
               className="marketFilterField marketFilterSearch"
+            />
+          </div>
+          <div className="marketFilter__group">
+            <Field
+              name="orderBy"
+              label="Order by"
+              component={FormSelect}
+              values={selectFilter}
+              defaultValue="DEFAULT"
             />
           </div>
           <div className="marketFilter__group">

@@ -76,6 +76,26 @@ export const filterMarkets = state => (opts) => {
 }
 
 /**
+ * Sorts markets collection
+ * @param {*} markets, array of market objects
+ * @param {*} orderBy, orderBy criteria
+ */
+export const sortMarkets = (markets = [], orderBy = null) => {
+  switch (orderBy) {
+    case 'RESOLUTION_DATE_ASC':
+      return markets.sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
+    case 'RESOLUTION_DATE_DESC':
+      return markets.sort((a, b) => a.eventDescription.resolutionDate < b.eventDescription.resolutionDate)
+    case 'TRADING_VOLUME_ASC':
+      return markets.sort((a, b) => a.tradingVolume > b.tradingVolume)
+    case 'TRADING_VOLUME_DESC':
+      return markets.sort((a, b) => a.tradingVolume < b.tradingVolume)
+    default:
+      return markets
+  }
+}
+
+/**
  * Returns the array of a markets participant's related trades 
  * @param {*} state 
  */
