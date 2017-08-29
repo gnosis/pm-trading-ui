@@ -96,8 +96,15 @@ export const requestFactories = () => async (dispatch) => {
 }
 
 export const requestMarketParticipantTrades = (marketAddress, accountAddress) => async (dispatch) => {
-  const payload = await api.requestMarketParticipantTrades(marketAddress, accountAddress)
-  return await dispatch(receiveEntities(payload))
+  const trades = await api.requestMarketParticipantTrades(marketAddress, accountAddress)
+  console.log(trades)
+  return await dispatch(updateEntity({
+    entityType: 'markets',
+    data: {
+      id: marketAddress,
+      participantTrades: trades,
+    },
+  }))
 }
 
 export const requestMarketTrades = market => async (dispatch) => {

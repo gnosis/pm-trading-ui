@@ -45,10 +45,10 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
 
 export const requestMarketParticipantTrades = async (marketAddress, accountAddress) =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
-    .then(response => normalize(addIdToObjectsInArray(response.results), [tradeSchema]))
+    .then(response => addIdToObjectsInArray(response.results))
 
 
-const transformMarketTrades = (trade, market, index) => (
+const transformMarketTrades = (trade, market) => (
   trade.marginalPrices.reduce((prev, current, outcomeIndex) => {
     const toReturn = { ...prev }
     toReturn[getOutcomeName(market, outcomeIndex)] = current
@@ -62,7 +62,7 @@ export const requestMarketTrades = async market =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(market.address)}/trades/`)
     .then((response) => {
       const trades = response.results.map(
-        (result, index) => transformMarketTrades(result, market, index),
+        result => transformMarketTrades(result, market),
       )
       return trades
     })
