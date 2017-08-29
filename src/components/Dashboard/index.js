@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
+import Outcome from 'components/Outcome'
 
 import './dashboard.less'
 
@@ -112,46 +113,52 @@ class Dashboard extends Component {
     )
   }
 
+  renderNewMarkets(markets) {
+    return markets.map(market =>
+      <div className="dashboardMarket dashboardMarket--new" key={market.address} onClick={() => this.handleViewMarket(market)}>
+        <div className="dashboardMarket__title">{market.eventDescription.title}</div>
+        <div className="outcome">
+          <div className="outcome__bar">
+            <div
+              className="outcome__bar--inner"
+              style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
+            >
+              <div className="outcome__bar--label">{market.eventDescription.resolutionDate}</div>
+              <div className="outcome__bar--value">54%</div>
+            </div>
+          </div>
+        </div>
+      </div>,
+    )
+  }
+
+  renderClosingMarkets(markets) {
+    return markets.map(market =>
+      <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns" key={market.address} onClick={() => this.handleViewMarket(market)}>
+        <div className="dashboardMarket__leftCol">
+          <div className="value">1315</div>
+          <div className="caption">Trading</div>
+        </div>
+        <div className="dashboardMarket__rightCol">
+          <div className="dashboardMarket__title">{market.eventDescription.title}</div>
+          <Outcome market={market} opts={{ showOnlyTrendingOutcome: true }} />
+        </div>
+      </div>,
+    )
+  }
+
 
   renderWidget(marketType) {
-    // const { markets } = this.props
-
+    const { markets } = this.props
+    const oneDayHours = 24 * 60 * 60 * 1000
+    const newMarkets = markets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
+    console.log(markets)
     if (marketType === 'newMarkets') {
       return (
         <div className="dashboardWidget col-md-6">
           <div className="dashboardWidget__title">New Markets</div>
           <div className="dashboardWidget__container">
-
-            <div className="dashboardMarket dashboardMarket--new">
-              <div className="dashboardMarket__title">Something</div>
-              <div className="outcome">
-                <div className="outcome__bar">
-                  <div
-                    className="outcome__bar--inner"
-                    style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
-                  >
-                    <div className="outcome__bar--value">54%</div>
-                    <div className="outcome__bar--label">May 2017</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="dashboardMarket dashboardMarket--new">
-              <div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
-              <div className="outcome">
-                <div className="outcome__bar">
-                  <div
-                    className="outcome__bar--inner"
-                    style={{ width: `${0.91 * 100}%`, backgroundColor: '#e01563' }}
-                  >
-                    <div className="outcome__bar--value">91%</div>
-                    <div className="outcome__bar--label">No</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            {newMarkets.length ? this.renderNewMarkets(newMarkets) : 'There aren\'t new markets'}
           </div>
         </div>
       )
@@ -232,31 +239,12 @@ class Dashboard extends Component {
     }
 
     if (marketType === 'closingMarkets') {
+      const closingMarkets = markets.filter(market => new Date() - new Date(market.eventDescription.resolutionDate) < oneDayHours)
       return (
         <div className="dashboardWidget col-md-6">
           <div className="dashboardWidget__title">Soon-Closing Markets</div>
           <div className="dashboardWidget__container">
-
-            <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
-              <div className="dashboardMarket__leftCol">
-                <div className="value">1315</div>
-                <div className="caption">Trading</div>
-              </div>
-              <div className="dashboardMarket__rightCol">
-                <div className="dashboardMarket__title">Something</div>
-                <div className="outcome">
-                  <div className="outcome__bar">
-                    <div
-                      className="outcome__bar--inner"
-                      style={{ width: `${0.50 * 100}%`, backgroundColor: '#9c8ae3' }}
-                    >
-                      <div className="outcome__bar--value">50%</div>
-                      <div className="outcome__bar--label">Blue Jeans</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {this.renderClosingMarkets(closingMarkets)}
 
             <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
               <div className="dashboardMarket__leftCol">
@@ -420,14 +408,14 @@ class Dashboard extends Component {
   }
 }
 
-// const marketPropType = PropTypes.object
+const marketPropType = PropTypes.object
 
 Dashboard.propTypes = {
 //   selectedCategoricalOutcome: PropTypes.string,
 //   selectedBuyInvest: PropTypes.string,
-//   market: marketPropType,
-//   markets: PropTypes.arrayOf(marketPropType),
 //   buyShares: PropTypes.func,
+//   market: marketPropType,
+  markets: PropTypes.arrayOf(marketPropType),
   requestMarkets: PropTypes.func,
   changeUrl: PropTypes.func,
 }
