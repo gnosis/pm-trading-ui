@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 const DateAxisTick = ({ x, y, payload }) => (
   <g transform={`translate(${x}, ${y})`}>
@@ -42,7 +42,7 @@ const MarketGraph = ({ data }) => {
     <div className="marketGraph">
       <div className="container marketGraph__container">
         <ResponsiveContainer>
-          <AreaChart data={data} margin={{ top: 10, right: 50, left: 50, bottom: 0 }}>
+          <AreaChart type="curveStepAfter" data={data} margin={{ top: 10, right: 50, left: 50, bottom: 0 }}>
             <defs>
               {stacks.map((key, keyIndex) => (
                 <linearGradient key={key} id={`gradient_${key}`} x1="0" y1="0" x2="0" y2="1">
@@ -56,7 +56,7 @@ const MarketGraph = ({ data }) => {
             <CartesianGrid className="grid" vertical />
             <Tooltip className="tooltip" />
             {stacks.map((key, keyIndex) => (
-              <Area className="area" key={key} type="monotone" dataKey={key} stackId="1" fill={`url(#gradient_${key})`} stroke={z(keyIndex)} />
+              <Area className="area" key={key} type="stepAfter" dataKey={key} stackId="1" fill={`url(#gradient_${key})`} stroke={z(keyIndex)} />
             ))}
           </AreaChart>
         </ResponsiveContainer>
