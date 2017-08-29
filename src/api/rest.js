@@ -49,15 +49,13 @@ export const requestMarketParticipantTrades = async (marketAddress, accountAddre
 
 
 const transformMarketTrades = (trade, market, index) => (
-  {
-    id: sha1(`${market.address}-${trade.date}-${index}`), // unique identifier for trades
+  trade.marginalPrices.reduce((prev, current, outcomeIndex) => {
+    const toReturn = { ...prev }
+    toReturn[getOutcomeName(market, outcomeIndex)] = current
+    return toReturn
+  }, {
     date: trade.date,
-    marginalPrices: trade.marginalPrices.reduce((prev, current, outcomeIndex) => {
-      const toReturn = { ...prev }
-      toReturn[getOutcomeName(market, outcomeIndex)] = current
-      return toReturn
-    }, {}),
-  }
+  })
 )
 
 export const requestMarketTrades = async market =>
