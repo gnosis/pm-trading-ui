@@ -100,8 +100,9 @@ export const requestMarketParticipantTrades = (marketAddress, accountAddress) =>
   return await dispatch(receiveEntities(payload))
 }
 
-export const requestMarketTrades = market => async (dispatch) => {
+export const requestMarketTrades = market => async (dispatch) => {  
   const payload = await api.requestMarketTrades(market)
+  console.log(payload)
   return await dispatch(receiveEntities(payload))
 }
 
