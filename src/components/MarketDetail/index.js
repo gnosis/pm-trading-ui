@@ -4,6 +4,7 @@ import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
+import { weiToEth } from '../../utils/helpers'
 
 import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
@@ -113,10 +114,20 @@ const expandableViews = {
 }
 
 class MarketDetail extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      marketFetchError: undefined,
+    }
+  }
   componentWillMount() {
     if (!this.props.market || !this.props.market.address) {
       this.props.fetchMarket()
+<<<<<<< HEAD
         .then(() => this.props.fetchMarketTrades(this.props.market))
+=======
+>>>>>>> task/polish-market-overview-page
         .catch((err) => {
           this.setState({
             marketFetchError: err,
@@ -184,8 +195,9 @@ class MarketDetail extends Component {
   renderInfos(market) {
     const infos = {
       Token: collateralTokenToText(market.event.collateralToken),
-      Fee: `${decimalToText(market.fee, 4)} %`,
+      Fee: `${decimalToText(market.fee, 4) / 10000} %`,
       Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
+      'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
 
     if (this.props.isModerator) {
@@ -235,7 +247,7 @@ class MarketDetail extends Component {
           <div className="withdrawFees">
             <div className="withdrawFees__icon icon icon--earnedTokens" />
             <div className="withdrawFees__details">
-              <div className="withdrawFees__heading">12 {collateralTokenToText(market.event.collateralToken)}</div>
+              <div className="withdrawFees__heading">{decimalToText(weiToEth(market.collectedFees))} {collateralTokenToText(market.event.collateralToken)}</div>
               <div className="withdrawFees__label">Earnings through market fees</div>
             </div>
             <div className="withdrawFees__action">
@@ -296,6 +308,17 @@ class MarketDetail extends Component {
 
   render() {
     const { market } = this.props
+
+    const { marketFetchError } = this.state
+    if (marketFetchError) {
+      return (
+        <div className="marketDetailPage">
+          <div className="container">
+            This market could not be found.
+          </div>
+        </div>
+      )
+    }
 
     if (!market.address) {
       return this.renderLoading()

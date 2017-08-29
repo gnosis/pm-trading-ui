@@ -19,7 +19,7 @@ import Checkbox from 'components/FormCheckbox'
 import './marketBuySharesForm.less'
 
 class MarketBuySharesForm extends Component {
-  getShareCost(investment, outcomeIndex) {
+  getOutcomeTokenCount(investment, outcomeIndex) {
     if (!investment || !(parseFloat(investment) > 0)) {
       return new Decimal(0)
     }
@@ -29,12 +29,14 @@ class MarketBuySharesForm extends Component {
       market: {
         funding,
         netOutcomeTokensSold,
+        fee,
       },
     } = this.props
 
-    let shareCost
+    let outcomeTokenCount
     try {
-      shareCost = calcLMSROutcomeTokenCount({
+      outcomeTokenCount = calcLMSROutcomeTokenCount({
+        feeFactor: fee,
         netOutcomeTokensSold,
         funding,
         outcomeTokenIndex: parseInt(outcomeIndex, 10),
@@ -44,20 +46,30 @@ class MarketBuySharesForm extends Component {
       return new Decimal(0)
     }
 
-    return shareCost
+    return outcomeTokenCount
   }
 
-  getMaximumWin(shareCost) {
-    return shareCost.div(1e18)
+  getOutcomeIndex({ eventType }) {
+    let outcomeIndex
+    if (eventType === OUTCOME_TYPES.CATEGORICAL) {
+      outcomeIndex = this.props.selectedCategoricalOutcome
+    } else if (eventType === OUTCOME_TYPES.SCALAR) {
+      outcomeIndex = 0 // short
+    }
+    return outcomeIndex
   }
 
-  getPercentageWin(shareCost, investment) {
+  getMaximumWin(outcomeTokenCount) {
+    return outcomeTokenCount.div(1e18)
+  }
+
+  getPercentageWin(outcomeTokenCount, investment) {
     if (!investment || !(parseFloat(investment) > 0)) {
       return '0'
     }
 
     const invest = new Decimal(investment).mul(1e18)
-    return shareCost.div(invest.toString()).mul(100).sub(100)
+    return outcomeTokenCount.div(invest.toString()).mul(100).sub(100)
   }
 
   @autobind
@@ -65,12 +77,14 @@ class MarketBuySharesForm extends Component {
     const {
       market,
       buyShares,
-      selectedCategoricalOutcome,
       selectedBuyInvest,
       reset,
     } = this.props
+    // TODO this calculation could be avoided by passing it to the handleSubmit function
+    const outcomeIndex = this.getOutcomeIndex({ eventType: market.event.type })
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, outcomeIndex)
 
-    return buyShares(market, selectedCategoricalOutcome, selectedBuyInvest)
+    return buyShares(market, outcomeIndex, outcomeTokenCount, selectedBuyInvest)
       .then(() => {
         return reset()
       })
@@ -139,7 +153,7 @@ class MarketBuySharesForm extends Component {
       },
     } = this.props
 
-    const shareCost = this.getShareCost(selectedBuyInvest, 1)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, 1)
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold,
       funding,
@@ -157,13 +171,13 @@ class MarketBuySharesForm extends Component {
         <div className="row">
           <div className="col-md-12">
             <ScalarSlider
-              lowerBound={lowerBound}
-              upperBound={upperBound}
+              lowerBound={parseInt(lowerBound, 10)}
+              upperBound={parseInt(upperBound, 10)}
               unit={unit}
               decimals={decimals}
-              marginalPriceCurrent={marginalPrice}
-              marginalPriceSelected={marginalPrice}
-              selectedCost={shareCost}
+              marginalPriceCurrent={marginalPrice.toNumber()}
+              marginalPriceSelected={marginalPrice.toNumber()}
+              selectedCost={outcomeTokenCount}
             />
           </div>
         </div>
@@ -186,20 +200,14 @@ class MarketBuySharesForm extends Component {
       },
     } = this.props
 
-    let outcomeIndex
-
-    if (eventType === OUTCOME_TYPES.CATEGORICAL) {
-      outcomeIndex = this.props.selectedCategoricalOutcome
-    } else if (eventType === OUTCOME_TYPES.SCALAR) {
-      outcomeIndex = 0 // short
-    }
+    const outcomeIndex = this.getOutcomeIndex({ eventType })
 
     const noOutcomeSelected = typeof outcomeIndex === 'undefined'
 
-    const shareCost = this.getShareCost(selectedBuyInvest, outcomeIndex)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, outcomeIndex)
 
-    const maximumWin = this.getMaximumWin(shareCost, selectedBuyInvest)
-    const percentageWin = this.getPercentageWin(shareCost, selectedBuyInvest)
+    const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest)
+    const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
 
     let submitEnabled = false
     let fieldError
@@ -210,7 +218,7 @@ class MarketBuySharesForm extends Component {
       fieldError = <span className="marketBuyWin__invalidParam">Select an outcome</span>
     } else if (Decimal(percentageWin.toString()).isZero()) {
       fieldError = <span className="marketBuyWin__invalidParam">Enter investment</span>
-    } else if (Decimal(shareCost.toString()).isZero()) {
+    } else if (Decimal(outcomeTokenCount.toString()).isZero()) {
       fieldError = <span className="marketBuyWin__invalidParam">Invalid investment</span>
     } else {
       tokenCountField = (

@@ -208,14 +208,14 @@ export const createMarket = options => async (dispatch) => {
   return await dispatch(closeLog(transactionId))
 }
 
-export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
+export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
   const transactionId = uuid()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
 
   try {
-    await api.buyShares(market, outcomeIndex, amount)
+    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
@@ -225,7 +225,7 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
   }
 
   const netOutcomeTokensSold = market.netOutcomeTokensSold
-  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + (amount * 1e18)
+  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toNumber()
   netOutcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
 
   await dispatch(updateEntity({
@@ -239,14 +239,14 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
-export const sellMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
+export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => async (dispatch) => {
   const transactionId = uuid()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
 
   try {
-    await api.sellShares(market.address, outcomeIndex, amount)
+    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))

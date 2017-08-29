@@ -13,6 +13,7 @@ import FormInput from 'components/FormInput'
 import FormCheckbox from 'components/FormCheckbox'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { getOutcomeName } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
@@ -88,8 +89,7 @@ class MarketMySharesForm extends Component {
       selectedSellAmountWei = Decimal(selectedSellAmount || 0).mul(1e18).toString()
     } catch (e) {
       selectedSellAmountWei = '0'
-    }
-
+    }    
     let currentProbability
     try {
       currentProbability = calcLMSRMarginalPrice({
@@ -101,17 +101,7 @@ class MarketMySharesForm extends Component {
       currentProbability = Decimal('0')
     }
 
-    let currentTokenCount
-    try {
-      currentTokenCount = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        cost: share.balance,
-      })
-    } catch (e) {
-      currentTokenCount = Decimal('0')
-    }
+    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal('0')
 
     let newTokenCount
     try {
@@ -221,7 +211,7 @@ class MarketMySharesForm extends Component {
             />
           </td>
           <td className="">
-            {market.eventDescription.outcomes[share.outcomeToken.index]}
+            {getOutcomeName(market, share.outcomeToken.index)}
           </td>
           <td>
             <DecimalValue value={Decimal(share.balance).div(1e18)} />
