@@ -124,10 +124,7 @@ class MarketDetail extends Component {
   componentWillMount() {
     if (!this.props.market || !this.props.market.address) {
       this.props.fetchMarket()
-<<<<<<< HEAD
         .then(() => this.props.fetchMarketTrades(this.props.market))
-=======
->>>>>>> task/polish-market-overview-page
         .catch((err) => {
           this.setState({
             marketFetchError: err,

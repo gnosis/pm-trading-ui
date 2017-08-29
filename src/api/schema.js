@@ -70,6 +70,3 @@ export const tradeSchema = new schema.Entity('trades', {}, {
   idAttribute: '_id',
 })
 
-export const graphSchema = new schema.Entity('trades', {}, {
-  idAttribute: '_id',
-})

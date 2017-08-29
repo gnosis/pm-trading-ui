@@ -45,10 +45,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarketShares: accountAddress => dispatch(requestMarketShares(ownProps.params.id, accountAddress)),
   fetchMarketParticipantTrades: (marketAddress, accountAddress) =>
     dispatch(requestMarketParticipantTrades(marketAddress, accountAddress)),
-<<<<<<< HEAD
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
-=======
->>>>>>> task/polish-market-overview-page
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
   sellShares: (market, outcomeIndex, outcomeTokenCount) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount)),
   resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),

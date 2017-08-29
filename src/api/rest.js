@@ -6,7 +6,6 @@ import sha1 from 'sha1'
 import {
   marketSchema,
   tradeSchema,
-  graphSchema,
 } from './schema'
 
 const API_URL = process.env.GNOSISDB_HOST
@@ -48,36 +47,24 @@ export const requestMarketParticipantTrades = async (marketAddress, accountAddre
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
     .then(response => normalize(addIdToObjectsInArray(response.results), [tradeSchema]))
 
+
+const transformMarketTrades = (trade, market, index) => (
+  {
+    id: sha1(`${market.address}-${trade.date}-${index}`), // unique identifier for trades
+    date: trade.date,
+    marginalPrices: trade.marginalPrices.reduce((prev, current, outcomeIndex) => {
+      const toReturn = { ...prev }
+      toReturn[getOutcomeName(market, outcomeIndex)] = current
+      return toReturn
+    }, {}),
+  }
+)
+
 export const requestMarketTrades = async market =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(market.address)}/trades/`)
     .then((response) => {
-      const transformed = []
-      // response.results.map(
-      response.results.forEach(
-        (result, index) => {
-          result.marginalPrices.reduce((prev, current, outcomeIndex) => {
-            /* const toReturn = { ...prev }
-            toReturn[getOutcomeName(market, outcomeIndex)] = current
-            return toReturn*/
-            console.log('inside')
-            console.log(getOutcomeName(market, outcomeIndex))
-            return prev
-          })
-        },
+      const trades = response.results.map(
+        (result, index) => transformMarketTrades(result, market, index),
       )
-      debugger
-      return normalize(transformed, [graphSchema])
+      return trades
     })
-
-          /* const object = {
-            id: index,
-            date: result.date,
-            marginalPrices: result.marginalPrices.reduce((prev, current, outcomeIndex) => {
-              console.log(getOutcomeName(market, outcomeIndex))
-              const toReturn = { ...prev }
-              toReturn[getOutcomeName(market, outcomeIndex)] = current
-              return toReturn
-            }, {}),
-          }          
-          console.log(object)
-          transformed.push(object)*/    
