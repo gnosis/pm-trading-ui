@@ -152,7 +152,10 @@ class Dashboard extends Component {
     const { markets } = this.props
     const oneDayHours = 24 * 60 * 60 * 1000
     const newMarkets = markets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
-    console.log(markets)
+    const closingMarkets = markets.filter(
+      market => new Date() - new Date(market.eventDescription.resolutionDate) < oneDayHours,
+    )
+
     if (marketType === 'newMarkets') {
       return (
         <div className="dashboardWidget col-md-6">
@@ -239,12 +242,11 @@ class Dashboard extends Component {
     }
 
     if (marketType === 'closingMarkets') {
-      const closingMarkets = markets.filter(market => new Date() - new Date(market.eventDescription.resolutionDate) < oneDayHours)
       return (
         <div className="dashboardWidget col-md-6">
           <div className="dashboardWidget__title">Soon-Closing Markets</div>
           <div className="dashboardWidget__container">
-            {this.renderClosingMarkets(closingMarkets)}
+            {closingMarkets.length ? this.renderClosingMarkets(closingMarkets) : 'There aren\'t closing markets'}
 
             <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
               <div className="dashboardMarket__leftCol">

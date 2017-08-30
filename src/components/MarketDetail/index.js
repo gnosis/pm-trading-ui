@@ -100,6 +100,8 @@ class MarketDetail extends Component {
             marketFetchError: err,
           })
         })
+    } else {
+      this.props.fetchMarketTrades(this.props.market)
     }
 
     if (this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
@@ -193,7 +195,7 @@ class MarketDetail extends Component {
         <div className="marketDescription">
           <p className="marketDescription__text">{ market.eventDescription.description }</p>
         </div>
-        <Outcome market={market} opts={{ showOnlyTrendingOutcome: true }} />
+        <Outcome market={market} />
         <div className="marketTimer">
           <div className="marketTimer__live">
             <Countdown target={market.eventDescription.resolutionDate} />
@@ -302,7 +304,8 @@ class MarketDetail extends Component {
         <div className="expandable">
           { this.renderExpandableContent() }
         </div>
-        {market.trades ? <MarketGraph data={market.trades} /> : ''}
+        <MarketGraph data={market.trades} />
+        {market.trades ? market.trades.length : ''}
       </div>
     )
   }

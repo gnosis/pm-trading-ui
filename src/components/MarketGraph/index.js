@@ -34,6 +34,10 @@ PercentAxisTick.propTypes = {
 }
 
 const MarketGraph = ({ data }) => {
+  if (!data || data.length === 0) {
+    return (<div />)
+  }
+
   const stacks = Object.keys(data[0]).slice(1)
   const z = scaleOrdinal(schemeDark2)
   z.domain(stacks)

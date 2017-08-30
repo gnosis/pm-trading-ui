@@ -86,6 +86,8 @@ class MarketBuySharesForm extends Component {
 
     return buyShares(market, outcomeIndex, outcomeTokenCount, selectedBuyInvest)
       .then(() => {
+        // Retrieve new trades
+        this.props.fetchMarketTrades(market)
         return reset()
       })
   }
