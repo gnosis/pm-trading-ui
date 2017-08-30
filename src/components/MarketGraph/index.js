@@ -35,7 +35,7 @@ const renderCategoricalGraph = (data) => {
     <div className="marketGraph">
       <div className="container marketGraph__container">
         <ResponsiveContainer>
-          <AreaChart type="curveStepAfter" data={data} margin={{ top: 10, right: 50, left: 50, bottom: 0 }}>
+          <LineChart data={data} margin={{ top: 10, right: 50, left: 50, bottom: 0 }}>  
             <defs>
               {stacks.map((key, keyIndex) => (
                 <linearGradient key={key} id={`gradient_${key}`} x1="0" y1="0" x2="0" y2="1">
@@ -50,9 +50,9 @@ const renderCategoricalGraph = (data) => {
             <Tooltip className="tooltip" />
             <Legend />
             {stacks.map((key, keyIndex) => (
-              <Area className="area" key={key} type="stepAfter" dataKey={key} stackId="1" fill={COLOR_SCHEME_DEFAULT[keyIndex]} stroke={COLOR_SCHEME_DEFAULT[keyIndex]} />
+              <Line key={key} type="stepAfter" dataKey={key} stackId="1" fill={COLOR_SCHEME_DEFAULT[keyIndex]} stroke={COLOR_SCHEME_DEFAULT[keyIndex]} />
             ))}
-          </AreaChart>
+          </LineChart>
         </ResponsiveContainer>
       </div>
     </div>
@@ -88,7 +88,6 @@ const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) =
             />
             <CartesianGrid className="grid" vertical />
             <Tooltip className="tooltip" />
-            <Legend />
             <Line type="stepAfter" dataKey="scalarPoint" fill={COLOR_SCHEME_DEFAULT[0]} stroke={COLOR_SCHEME_DEFAULT[0]} />
           </LineChart>
         </ResponsiveContainer>
