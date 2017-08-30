@@ -5,6 +5,7 @@ import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import Decimal from 'decimal.js'
 
 const DateAxisTick = ({ x, y, payload }) => (
   <g transform={`translate(${x}, ${y})`}>
@@ -58,7 +59,7 @@ const renderCategoricalGraph = (data) => {
   )
 }
 
-const renderScalarGraph = (data, eventDescription) => {
+const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) => {
   const stacks = [`Current ${eventDescription.unit}`]
   const z = scaleOrdinal(schemeDark2)
   z.domain(stacks)
@@ -77,7 +78,14 @@ const renderScalarGraph = (data, eventDescription) => {
               ))}
             </defs>
             <XAxis className="axis axis--x" dataKey="date" minTickGap={150} tick={DateAxisTick} />
-            <YAxis className="axis axis--y" />
+            <YAxis
+              className="axis axis--y" domain={
+              [
+                Decimal(lowerBound).div(10 ** eventDescription.decimals).toDP(eventDescription.decimals).toNumber(),
+                Decimal(upperBound).div(10 ** eventDescription.decimals).toDP(eventDescription.decimals).toNumber(),
+              ]
+            }
+            />
             <CartesianGrid className="grid" vertical />
             <Tooltip className="tooltip" />
             <Legend />
@@ -97,12 +105,12 @@ PercentAxisTick.propTypes = {
   }),
 }
 
-const MarketGraph = ({ data = [], type, eventDescription }) => {
+const MarketGraph = ({ data = [], market: { event: { type, lowerBound, upperBound }, eventDescription } }) => {
   if (data.length) {
     if (type === OUTCOME_TYPES.CATEGORICAL) {
       return renderCategoricalGraph(data)
     } else if (type === OUTCOME_TYPES.SCALAR) {
-      return renderScalarGraph(data, eventDescription)
+      return renderScalarGraph(data, { eventDescription, lowerBound, upperBound })
     }
   }
   return <div />
@@ -110,14 +118,24 @@ const MarketGraph = ({ data = [], type, eventDescription }) => {
 
 MarketGraph.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
-  type: PropTypes.string.isRequired,
-  eventDescription: PropTypes.shape(
+  market: PropTypes.shape(
     {
-      resolutionDate: PropTypes.string,
-      outcomes: PropTypes.arrayOf(PropTypes.string),
-      decimals: PropTypes.number,
-      unit: PropTypes.string,
-      title: PropTypes.string,
+      event: PropTypes.shape(
+        {
+          type: PropTypes.string,
+          lowerBound: PropTypes.string,
+          upperBound: PropTypes.string,
+        }
+      ),
+      eventDescription: PropTypes.shape(
+        {
+          resolutionDate: PropTypes.string,
+          outcomes: PropTypes.arrayOf(PropTypes.string),
+          decimals: PropTypes.number,
+          unit: PropTypes.string,
+          title: PropTypes.string,
+        },
+      ),
     },
   ),
 }
