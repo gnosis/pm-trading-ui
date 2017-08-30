@@ -1,5 +1,6 @@
-import { restFetch, hexWithoutPrefix, addIdToObjectsInArray, getOutcomeName } from 'utils/helpers'
+import { restFetch, hexWithoutPrefix, addIdToObjectsInArray, getOutcomeName, normalizeScalarPoint } from 'utils/helpers'
 import { normalize } from 'normalizr'
+import { OUTCOME_TYPES } from 'utils/constants'
 
 import sha1 from 'sha1'
 
@@ -11,7 +12,7 @@ import {
 const API_URL = process.env.GNOSISDB_HOST
 
 export const requestMarket = async marketAddress =>
-  restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}`)
+  restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/`)
     .then(response => normalize(response, marketSchema))
 
 export const requestMarkets = async () =>
@@ -55,6 +56,8 @@ const transformMarketTrades = (trade, market) => (
     return toReturn
   }, {
     date: trade.date,
+    scalarPoint: OUTCOME_TYPES.SCALAR === market.event.type ?
+      normalizeScalarPoint(trade.marginalPrices, market) : undefined,
   })
 )
 

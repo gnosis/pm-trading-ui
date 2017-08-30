@@ -340,7 +340,7 @@ class MarketDetail extends Component {
         <div className="expandable">
           { this.renderExpandableContent() }
         </div>
-        {market.trades ? <MarketGraph data={market.trades} /> : ''}
+        {market.trades ? <MarketGraph data={market.trades} type={market.event.type} eventDescription={market.eventDescription} /> : ''}
       </div>
     )
   }
