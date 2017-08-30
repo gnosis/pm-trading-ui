@@ -46,7 +46,6 @@ const renderCategoricalGraph = (data) => {
             </defs>
             <XAxis className="axis axis--x" dataKey="date" minTickGap={150} tick={DateAxisTick} />
             <YAxis className="axis axis--y" tick={PercentAxisTick} tickCount={5} />
-            <CartesianGrid className="grid" vertical />
             <Tooltip className="tooltip" />
             <Legend />
             {stacks.map((key, keyIndex) => (
