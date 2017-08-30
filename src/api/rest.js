@@ -61,11 +61,41 @@ const transformMarketTrades = (trade, market) => (
   })
 )
 
+const getFirstGraphPoint = (market) => {
+  let firstPoint
+  if (OUTCOME_TYPES.SCALAR === market.event.type) {
+    firstPoint = {
+      date: new Date().toISOString(),
+      scalarPoint: normalizeScalarPoint(['0.5', '0.5'], market),
+    }
+  } else if (OUTCOME_TYPES.CATEGORICAL === market.event.type) {
+    firstPoint = {
+      date: new Date().toISOString(),
+      scalarPoint: undefined,
+      ...market.eventDescription.outcomes.reduce((prev, current) => {
+        const toReturn = {
+          ...prev,
+        }
+        toReturn[current] = (1 / market.eventDescription.outcomes.length)
+        return toReturn
+      }, {}),
+    }
+  }
+  return firstPoint
+}
+
+const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().toISOString() })
+
 export const requestMarketTrades = async market =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(market.address)}/trades/`)
     .then((response) => {
       const trades = response.results.map(
         result => transformMarketTrades(result, market),
       )
-      return trades
+
+      return [
+        getFirstGraphPoint(market),
+        ...trades,
+        getLastGraphPoint(trades),
+      ]
     })
