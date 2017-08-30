@@ -109,6 +109,16 @@ export const getMarketParticipantsTrades = state => () => {
   return tradesArray
 }
 
+/**
+ * Return the shares for the given account address
+ * @param {*} state 
+ * @param {String} account, an address
+ */
+export const getAccountShares = (state, account) => {
+  const accountShares = entitySelector(state, 'accountShares')
+  return accountShares[account] ? accountShares[account].shares : []
+}
+
 export default {
   getMarkets,
 }

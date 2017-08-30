@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import Outcome from 'components/Outcome'
+import { add0xPrefix } from 'utils/helpers'
 
 import './dashboard.less'
 
@@ -34,6 +35,8 @@ class Dashboard extends Component {
 
   componentWillMount() {
     this.props.requestMarkets()
+    this.props.requestAccountShares(this.props.defaultAccount)
+    this.props.requestAccountTrades(this.props.defaultAccount)
   }
 
   @autobind
@@ -147,9 +150,33 @@ class Dashboard extends Component {
     )
   }
 
+  renderMyHoldings(holdings, markets) {
+    return holdings.map((holding, index) => {
+      const eventAddress = add0xPrefix(holding.outcomeToken.event)
+      const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
+      const market = filteredMarkets.length ? filteredMarkets[0] : {}
+      console.log(market)
+      return (
+        <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
+          <div className="dashboardMarket__title">{holding.eventDescription.title}</div>
+          <div className="outcome">
+            <div className="outcome__bar">
+              <div
+                className="outcome__bar--inner"
+                style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
+              >
+                <div className="outcome__bar--value">54%</div>
+                <div className="outcome__bar--label">May 2017</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    })
+  }
 
   renderWidget(marketType) {
-    const { markets } = this.props
+    const { markets, accountShares } = this.props
     const oneDayHours = 24 * 60 * 60 * 1000
     const newMarkets = markets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
     const closingMarkets = markets.filter(
@@ -300,22 +327,7 @@ class Dashboard extends Component {
         <div className="dashboardWidget dashboardWidget--onDark col-md-6">
           <div className="dashboardWidget__title">My Holdings</div>
           <div className="dashboardWidget__container">
-
-            <div className="dashboardMarket dashboardMarket--onDark">
-              <div className="dashboardMarket__title">Something</div>
-              <div className="outcome">
-                <div className="outcome__bar">
-                  <div
-                    className="outcome__bar--inner"
-                    style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
-                  >
-                    <div className="outcome__bar--value">54%</div>
-                    <div className="outcome__bar--label">May 2017</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            {accountShares.length ? this.renderMyHoldings(accountShares, markets) : 'You aren\'t holding any share.'}
             <div className="dashboardMarket dashboardMarket--onDark">
               <div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
               <div className="outcome">
@@ -418,7 +430,11 @@ Dashboard.propTypes = {
 //   buyShares: PropTypes.func,
 //   market: marketPropType,
   markets: PropTypes.arrayOf(marketPropType),
+  defaultAccount: PropTypes.string,
+  accountShares: PropTypes.array,
   requestMarkets: PropTypes.func,
+  requestAccountShares: PropTypes.func,
+  requestAccountTrades: PropTypes.func,
   changeUrl: PropTypes.func,
 }
 

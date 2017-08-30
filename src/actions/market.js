@@ -97,7 +97,6 @@ export const requestFactories = () => async (dispatch) => {
 
 export const requestMarketParticipantTrades = (marketAddress, accountAddress) => async (dispatch) => {
   const trades = await api.requestMarketParticipantTrades(marketAddress, accountAddress)
-  console.log(trades)
   return await dispatch(updateEntity({
     entityType: 'markets',
     data: {
@@ -114,6 +113,37 @@ export const requestMarketTrades = market => async (dispatch) => {
     entityType: 'markets',
     data: {
       id: market.address,
+      trades,
+    },
+  }))
+}
+
+/**
+ * Dispatches the shares for the given account address
+ * @param {String} accountAddress
+ */
+export const requestAccountShares = accountAddress => async (dispatch) => {
+  const shares = await api.requestAccountShares(accountAddress)
+  return await dispatch(updateEntity({
+    entityType: 'accountShares',
+    data: {
+      id: accountAddress,
+      shares,
+    },
+  }))
+}
+
+/**
+ * Dispatches the trades for the given account address
+ * @param {String} accountAddress
+ */
+export const requestAccountTrades = accountAddress => async (dispatch) => {
+  const trades = await api.requestAccountTrades(accountAddress)
+
+  return await dispatch(updateEntity({
+    entityType: 'accountTrades',
+    data: {
+      id: accountAddress,
       trades,
     },
   }))

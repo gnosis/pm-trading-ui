@@ -79,6 +79,7 @@ class MarketBuySharesForm extends Component {
       buyShares,
       selectedBuyInvest,
       reset,
+      defaultAccount,
     } = this.props
     // TODO this calculation could be avoided by passing it to the handleSubmit function
     const outcomeIndex = this.getOutcomeIndex({ eventType: market.event.type })
@@ -86,8 +87,10 @@ class MarketBuySharesForm extends Component {
 
     return buyShares(market, outcomeIndex, outcomeTokenCount, selectedBuyInvest)
       .then(() => {
-        // Retrieve new trades
+        // Fetch new trades
         this.props.fetchMarketTrades(market)
+        // Fetch new market participant trades
+        this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
         return reset()
       })
   }

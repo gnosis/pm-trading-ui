@@ -66,3 +66,12 @@ export const requestMarketTrades = async market =>
       )
       return trades
     })
+
+
+export const requestAccountTrades = async address =>
+  restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/trades/`)
+    .then(response => response.results)
+
+export const requestAccountShares = async address =>
+  restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
+    .then(response => response.results)
