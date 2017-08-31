@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import Outcome from 'components/Outcome'
-import { add0xPrefix } from 'utils/helpers'
+import DecimalValue from 'components/DecimalValue'
+import CurrencyName from 'components/CurrencyName'
+import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
+import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import moment from 'moment'
 
 import './dashboard.less'
@@ -145,19 +148,23 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
-      console.log(market)
+
       return (
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
           <div className="dashboardMarket__title">{holding.eventDescription.title}</div>
-          <div className="outcome">
-            <div className="outcome__bar">
-              <div
-                className="outcome__bar--inner"
-                style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
-              >
-                <div className="outcome__bar--value">54%</div>
-                <div className="outcome__bar--label">May 2017</div>
-              </div>
+          <div className="outcome row">
+            <div className="col-md-1">
+              <div className={'entry__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }} />
+            </div>
+            <div className="col-md-3 text-white">
+              {getOutcomeName(market, holding.outcomeToken.index)}
+            </div>
+            <div className="col-md-2 text-white">
+              {market.marginalPrices ? market.marginalPrices[holding.outcomeToken.index] * 100 : 0}%
+            </div>
+            <div className="col-md-3 text-white">
+              <DecimalValue value={weiToEth(holding.balance)} />&nbsp;
+              {market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
             </div>
           </div>
         </div>
