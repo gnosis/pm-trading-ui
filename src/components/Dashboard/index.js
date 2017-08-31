@@ -170,7 +170,7 @@ class Dashboard extends Component {
     const oneDayHours = 24 * 60 * 60 * 1000
     const newMarkets = markets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
     const closingMarkets = markets.filter(
-      market => new Date() - new Date(market.eventDescription.resolutionDate) < oneDayHours,
+      market => moment.utc(market.eventDescription.resolutionDate).isBefore(moment().add(24, 'hours')),
     )
 
     if (marketType === 'newMarkets') {

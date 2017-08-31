@@ -201,7 +201,7 @@ class MarketDetail extends Component {
             <Countdown target={market.eventDescription.resolutionDate} />
           </div>
           <small className="marketTime__absolute">
-            {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+            {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
           </small>
         </div>
         {showWithdrawFees && (
