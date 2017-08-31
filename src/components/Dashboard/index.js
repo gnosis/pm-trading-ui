@@ -144,11 +144,35 @@ class Dashboard extends Component {
     return holdings.map((holding, index) => {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
-      const market = filteredMarkets.length ? filteredMarkets[0] : {}
-      console.log(market)
+      const market = filteredMarkets.length ? filteredMarkets[0] : {}      
       return (
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
           <div className="dashboardMarket__title">{holding.eventDescription.title}</div>
+          <div className="outcome">
+            <div className="outcome__bar">
+              <div
+                className="outcome__bar--inner"
+                style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
+              >
+                <div className="outcome__bar--value">54%</div>
+                <div className="outcome__bar--label">May 2017</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    })
+  }
+
+  renderMyTrades(trades, markets) {
+    return trades.map((trade, index) => {
+      const eventAddress = add0xPrefix(trade.outcomeToken.event)
+      const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
+      const market = filteredMarkets.length ? filteredMarkets[0] : {}
+      
+      return (
+        <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
+          <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
           <div className="outcome">
             <div className="outcome__bar">
               <div
@@ -201,6 +225,17 @@ class Dashboard extends Component {
           <div className="dashboardWidget__title">My Holdings</div>
           <div className="dashboardWidget__container">
             {accountShares.length ? this.renderMyHoldings(accountShares, markets) : 'You aren\'t holding any share.'}
+          </div>
+        </div>
+      )
+    }
+
+    if (marketType === 'myTrades') {
+      return (
+        <div className="dashboardWidget dashboardWidget--onDark col-md-6">
+          <div className="dashboardWidget__title">My Trades</div>
+          <div className="dashboardWidget__container">
+            {accountShares.length ? this.renderMyTrades(accountShares, markets) : 'You haven\'t done any trade.'}
           </div>
         </div>
       )
