@@ -184,80 +184,6 @@ class Dashboard extends Component {
       )
     }
 
-    if (marketType === 'hotMarkets') {
-      return (
-        <div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__title">Hot Markets</div>
-          <div className="dashboardWidget__container">
-
-            <div className="dashboardMarket dashboardMarket--hot dashboardMarket--twoColumns">
-              <div className="dashboardMarket__leftCol">
-                <div className="value">1315</div>
-                <div className="caption">Trading</div>
-              </div>
-              <div className="dashboardMarket__rightCol">
-                <div className="dashboardMarket__title">Something</div>
-                <div className="outcome">
-                  <div className="outcome__bar">
-                    <div
-                      className="outcome__bar--inner"
-                      style={{ width: `${0.50 * 100}%`, backgroundColor: '#9c8ae3' }}
-                    >
-                      <div className="outcome__bar--value">50%</div>
-                      <div className="outcome__bar--label">Blue Jeans</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="dashboardMarket dashboardMarket--hot dashboardMarket--twoColumns">
-              <div className="dashboardMarket__leftCol">
-                <div className="value">299</div>
-                <div className="caption">Trading</div>
-              </div>
-              <div className="dashboardMarket__rightCol">
-                <div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
-                <div className="outcome">
-                  <div className="outcome__bar">
-                    <div
-                      className="outcome__bar--inner"
-                      style={{ width: `${0.73 * 100}%`, backgroundColor: '#f2cc0a' }}
-                    >
-                      <div className="outcome__bar--value">73%</div>
-                      <div className="outcome__bar--label">Blue Jeans</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="dashboardMarket dashboardMarket--hot dashboardMarket--twoColumns">
-              <div className="dashboardMarket__leftCol">
-                <div className="value">98</div>
-                <div className="caption">Trading</div>
-              </div>
-              <div className="dashboardMarket__rightCol">
-                <div className="dashboardMarket__title">Something else wow looking good</div>
-                <div className="outcome">
-                  <div className="outcome__bar">
-                    <div
-                      className="outcome__bar--inner"
-                      style={{ width: `${1 * 100}%`, backgroundColor: '#0be1b1' }}
-                    >
-                      <div className="outcome__bar--value">100%</div>
-                      <div className="outcome__bar--label">Blue Jeans</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      )
-    }
-
     if (marketType === 'closingMarkets') {
       return (
         <div className="dashboardWidget col-md-6">
@@ -279,14 +205,6 @@ class Dashboard extends Component {
         </div>
       )
     }
-
-    return (
-      <div className="dashboardWidget col-md-6">
-        <div className="dashboardWidget__container">
-          Do not know how to render widget with market type {marketType}
-        </div>
-      </div>
-    )
   }
 
   render() {
@@ -333,11 +251,7 @@ class Dashboard extends Component {
           <div className="container">
             <div className="row">
               { this.renderWidget('newMarkets') }
-              { this.renderWidget('hotMarkets') }
-            </div>
-            <div className="row">
               { this.renderWidget('closingMarkets') }
-              { this.renderWidget('myMarkets') }
             </div>
           </div>
         </div>
