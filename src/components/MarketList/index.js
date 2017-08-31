@@ -9,15 +9,14 @@ import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
 
-import OutcomeCategorical from 'components/OutcomeCategorical'
-import OutcomeScalar from 'components/OutcomeScalar'
+import Outcome from 'components/Outcome'
 
 import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
 import FormSelect from 'components/FormSelect'
 import FormCheckbox from 'components/FormCheckbox'
 
-import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
+import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
@@ -59,9 +58,7 @@ class MarketList extends Component {
 
     const resolveUrl = `/markets/${market.address}/resolve`
 
-    const outcomes = market.event.type === OUTCOME_TYPES.SCALAR ?
-      <OutcomeScalar market={market} /> :
-      <OutcomeCategorical market={market} />
+    const outcomes = (<Outcome market={market} />)
 
     return (
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>

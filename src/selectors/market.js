@@ -97,8 +97,8 @@ export const sortMarkets = (markets = [], orderBy = null) => {
 }
 
 /**
- * Returns the array of a markets participant's related trades 
- * @param {*} state 
+ * Returns the array of a markets participant's related trades
+ * @param {*} state
  */
 export const getMarketParticipantsTrades = state => () => {
   const tradesArray = []
@@ -111,12 +111,17 @@ export const getMarketParticipantsTrades = state => () => {
 
 /**
  * Return the shares for the given account address
- * @param {*} state 
+ * @param {*} state
  * @param {String} account, an address
  */
 export const getAccountShares = (state, account) => {
   const accountShares = entitySelector(state, 'accountShares')
   return accountShares[account] ? accountShares[account].shares : []
+}
+
+export const getAccountTrades = (state, account) => {
+  const accountTrades = entitySelector(state, 'accountTrades')
+  return accountTrades[account] ? accountTrades[account].shares : []
 }
 
 export default {
