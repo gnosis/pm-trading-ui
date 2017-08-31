@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import Outcome from 'components/Outcome'
 import { add0xPrefix } from 'utils/helpers'
+import moment from 'moment'
 
 import './dashboard.less'
 
@@ -129,8 +130,7 @@ class Dashboard extends Component {
     return markets.map(market =>
       <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns" key={market.address} onClick={() => this.handleViewMarket(market)}>
         <div className="dashboardMarket__leftCol">
-          <div className="value">1315</div>
-          <div className="caption">Trading</div>
+          <div className="value">{moment.utc(market.eventDescription.resolutionDate).fromNow()}</div>
         </div>
         <div className="dashboardMarket__rightCol">
           <div className="dashboardMarket__title">{market.eventDescription.title}</div>
