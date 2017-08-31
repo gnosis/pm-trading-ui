@@ -9,7 +9,7 @@ const Outcome = ({ market, opts = {} }) => {
   const { event: { type: eventType } } = market
 
   return (eventType === OUTCOME_TYPES.CATEGORICAL ? <OutcomeCategorical market={market} opts={opts} />
-    : <OutcomeScalar market={market} />)
+    : <OutcomeScalar market={market} opts={opts} />)
 }
 
 
@@ -17,6 +17,8 @@ Outcome.propTypes = {
   market: marketShape,
   opts: PropTypes.shape({
     showOnlyTrendingOutcome: PropTypes.bool,
+    showDate: PropTypes.bool,
+    dateFormat: PropTypes.string,
   }),
 }
 

@@ -2,15 +2,15 @@ import React, { PropTypes } from 'react'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
+import moment from 'moment'
 
 import { calcLMSRMarginalPrice } from 'api'
-import Decimal from 'decimal.js'
 
 import './outcomeCategorical.less'
 
 const OutcomeCategorical = ({ market, opts = {} }) => {
   const renderOutcomes = market.eventDescription.outcomes
-  const { showOnlyTrendingOutcome } = opts
+  const { showOnlyTrendingOutcome, showDate, dateFormat } = opts
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.netOutcomeTokensSold,
@@ -25,9 +25,9 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     const tokenDistributionInt = tokenDistribution.map(outcome => parseInt(parseFloat(outcome) * 10000, 10))
     const trendingOutcomeIndex = tokenDistributionInt.indexOf(Math.max(...tokenDistributionInt))
     return (
-      <div className="outcomes outcomes--categorical">
+      <div className="outcomes outcomes--categorical row">
         <div key={trendingOutcomeIndex} className="outcome">
-          <div className="outcome__bar">
+          <div className="outcome__bar col-md-6">
             <div
               className="outcome__bar--inner"
               style={{ width: `${tokenDistribution[trendingOutcomeIndex] * 100}%`, backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex] }}
@@ -38,6 +38,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
               </div>
             </div>
           </div>
+          <div className="col-md-6">{ showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}</div>
         </div>
       </div>
     )
@@ -70,6 +71,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
 
 OutcomeCategorical.propTypes = {
   market: marketShape,
+  opts: PropTypes.object,
 }
 
 export default OutcomeCategorical

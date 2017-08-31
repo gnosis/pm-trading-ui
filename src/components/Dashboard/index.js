@@ -120,17 +120,7 @@ class Dashboard extends Component {
     return markets.map(market =>
       <div className="dashboardMarket dashboardMarket--new" key={market.address} onClick={() => this.handleViewMarket(market)}>
         <div className="dashboardMarket__title">{market.eventDescription.title}</div>
-        <div className="outcome">
-          <div className="outcome__bar">
-            <div
-              className="outcome__bar--inner"
-              style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
-            >
-              <div className="outcome__bar--label">{market.eventDescription.resolutionDate}</div>
-              <div className="outcome__bar--value">54%</div>
-            </div>
-          </div>
-        </div>
+        <Outcome market={market} opts={{ showOnlyTrendingOutcome: true, showDate: true, dateFormat: 'MMMM Y' }} />
       </div>,
     )
   }
@@ -274,49 +264,6 @@ class Dashboard extends Component {
           <div className="dashboardWidget__title">Soon-Closing Markets</div>
           <div className="dashboardWidget__container">
             {closingMarkets.length ? this.renderClosingMarkets(closingMarkets) : 'There aren\'t closing markets'}
-
-            <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
-              <div className="dashboardMarket__leftCol">
-                <div className="value">299</div>
-                <div className="caption">Trading</div>
-              </div>
-              <div className="dashboardMarket__rightCol">
-                <div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
-                <div className="outcome">
-                  <div className="outcome__bar">
-                    <div
-                      className="outcome__bar--inner"
-                      style={{ width: `${0.73 * 100}%`, backgroundColor: '#f2cc0a' }}
-                    >
-                      <div className="outcome__bar--value">73%</div>
-                      <div className="outcome__bar--label">Blue Jeans</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns">
-              <div className="dashboardMarket__leftCol">
-                <div className="value">98</div>
-                <div className="caption">Trading</div>
-              </div>
-              <div className="dashboardMarket__rightCol">
-                <div className="dashboardMarket__title">Something else wow looking good</div>
-                <div className="outcome">
-                  <div className="outcome__bar">
-                    <div
-                      className="outcome__bar--inner"
-                      style={{ width: `${1 * 100}%`, backgroundColor: '#0be1b1' }}
-                    >
-                      <div className="outcome__bar--value">100%</div>
-                      <div className="outcome__bar--label">Blue Jeans</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       )
@@ -328,21 +275,6 @@ class Dashboard extends Component {
           <div className="dashboardWidget__title">My Holdings</div>
           <div className="dashboardWidget__container">
             {accountShares.length ? this.renderMyHoldings(accountShares, markets) : 'You aren\'t holding any share.'}
-            <div className="dashboardMarket dashboardMarket--onDark">
-              <div className="dashboardMarket__title">Something different with a longer title to break the line for styling review.</div>
-              <div className="outcome">
-                <div className="outcome__bar">
-                  <div
-                    className="outcome__bar--inner"
-                    style={{ width: `${0.91 * 100}%`, backgroundColor: '#e01563' }}
-                  >
-                    <div className="outcome__bar--value">91%</div>
-                    <div className="outcome__bar--label">No</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       )
