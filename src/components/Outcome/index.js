@@ -5,7 +5,7 @@ import { OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import PropTypes from 'prop-types'
 
-const Outcome = ({ market, opts = {} }) => {
+const Outcome = ({ market, opts = { showOnlyTrendingOutcome: false } }) => {
   const { event: { type: eventType } } = market
 
   return (eventType === OUTCOME_TYPES.CATEGORICAL ? <OutcomeCategorical market={market} opts={opts} />
