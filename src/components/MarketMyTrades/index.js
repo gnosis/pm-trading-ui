@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import Decimal from 'decimal.js'
 import { decimalToText, DecimalValue } from 'components/DecimalValue'
 import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
-import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
+import { getOutcomeName } from 'utils/helpers'
 
 import './marketMyTrades.less'
 
@@ -27,7 +28,6 @@ class MarketMyTrades extends Component {
       return undefined
     }
   }
-
   renderTrades() {
     const { market, trades } = this.props
     const tableRowElements = trades.map((trade) => {
@@ -37,12 +37,12 @@ class MarketMyTrades extends Component {
             <div
               className={'shareOutcome__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
             />
-          </td>          
+          </td>
           <td>
             {trade.orderType}
           </td>
           <td>
-            {market.eventDescription.outcomes[trade.outcomeToken.index]}
+            {getOutcomeName(market, trade.outcomeToken.index)}
           </td>
           <td>
             {decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}

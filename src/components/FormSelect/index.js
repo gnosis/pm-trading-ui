@@ -11,12 +11,14 @@ const FormSelect = ({ input, label, values, className, defaultValue, ...props })
   return (
     <div className={`selectField ${bemifyClassName(className)}`}>
       <label htmlFor={input.name} className={`selectField__label ${bemifyClassName(className, 'label')}`}>{label}</label>
-      <select {...input} {...selectProps} className={`selectField__input ${bemifyClassName(className, 'input')}`}>
+      <select
+        {...input} {...selectProps} className={`selectField__input ${bemifyClassName(className, 'input')}`}
+        value={(input.value) ? input.value : defaultValue}
+      >
         {Object.keys(values).map(key => (
           <option
             key={key}
             value={key}
-            defaultValue={defaultValue != null && defaultValue === key}
           >
             {values[key]}
           </option>

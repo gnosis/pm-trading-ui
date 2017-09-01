@@ -49,6 +49,16 @@ class MarketBuySharesForm extends Component {
     return outcomeTokenCount
   }
 
+  getOutcomeIndex({ eventType }) {
+    let outcomeIndex
+    if (eventType === OUTCOME_TYPES.CATEGORICAL) {
+      outcomeIndex = this.props.selectedCategoricalOutcome
+    } else if (eventType === OUTCOME_TYPES.SCALAR) {
+      outcomeIndex = 0 // short
+    }
+    return outcomeIndex
+  }
+
   getMaximumWin(outcomeTokenCount) {
     return outcomeTokenCount.div(1e18)
   }
@@ -67,15 +77,14 @@ class MarketBuySharesForm extends Component {
     const {
       market,
       buyShares,
-      selectedCategoricalOutcome,
       selectedBuyInvest,
       reset,
     } = this.props
-
     // TODO this calculation could be avoided by passing it to the handleSubmit function
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedCategoricalOutcome)
+    const outcomeIndex = this.getOutcomeIndex({ eventType: market.event.type })
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, outcomeIndex)
 
-    return buyShares(market, selectedCategoricalOutcome, outcomeTokenCount, selectedBuyInvest)
+    return buyShares(market, outcomeIndex, outcomeTokenCount, selectedBuyInvest)
       .then(() => {
         return reset()
       })
@@ -144,7 +153,7 @@ class MarketBuySharesForm extends Component {
       },
     } = this.props
 
-    const outcomeTokenCount = this.getoutcomeTokenCount(selectedBuyInvest, 1)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, 1)
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold,
       funding,
@@ -162,12 +171,12 @@ class MarketBuySharesForm extends Component {
         <div className="row">
           <div className="col-md-12">
             <ScalarSlider
-              lowerBound={lowerBound}
-              upperBound={upperBound}
+              lowerBound={parseInt(lowerBound, 10)}
+              upperBound={parseInt(upperBound, 10)}
               unit={unit}
               decimals={decimals}
-              marginalPriceCurrent={marginalPrice}
-              marginalPriceSelected={marginalPrice}
+              marginalPriceCurrent={marginalPrice.toNumber()}
+              marginalPriceSelected={marginalPrice.toNumber()}
               selectedCost={outcomeTokenCount}
             />
           </div>
@@ -191,13 +200,7 @@ class MarketBuySharesForm extends Component {
       },
     } = this.props
 
-    let outcomeIndex
-
-    if (eventType === OUTCOME_TYPES.CATEGORICAL) {
-      outcomeIndex = this.props.selectedCategoricalOutcome
-    } else if (eventType === OUTCOME_TYPES.SCALAR) {
-      outcomeIndex = 0 // short
-    }
+    const outcomeIndex = this.getOutcomeIndex({ eventType })
 
     const noOutcomeSelected = typeof outcomeIndex === 'undefined'
 

@@ -5,21 +5,22 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
-
-import CurrencyName from 'components/CurrencyName'
 import Countdown from 'components/Countdown'
+import CurrencyName from 'components/CurrencyName'
+import { decimalToText } from 'components/DecimalValue'
 
 import OutcomeCategorical from 'components/OutcomeCategorical'
 import OutcomeScalar from 'components/OutcomeScalar'
 
-import FormSelect from 'components/FormSelect'
+import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
+import FormSelect from 'components/FormSelect'
+import FormCheckbox from 'components/FormCheckbox'
 
 import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
-
 class MarketList extends Component {
   componentWillMount() {
     this.props.fetchMarkets()
@@ -100,9 +101,9 @@ class MarketList extends Component {
           </div>
           <div className="info__group col-md-3">
             <div className="info__field">
-              <div className="info__field--icon icon icon--oracle" />
+              <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                {market.oracle.address}
+                <CurrencyName collateralToken={market.event.collateralToken} />
               </div>
             </div>
           </div>
@@ -110,6 +111,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
+                {decimalToText(new Decimal(market.tradingVolume).div(1e18))}
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </div>
             </div>
@@ -143,6 +145,27 @@ class MarketList extends Component {
 
   renderMarketFilter() {
     const { handleSubmit } = this.props
+    const resolutionFilters = [
+      {
+        label: 'All',
+        value: '',
+      },
+      {
+        label: 'Resolved',
+        value: 'RESOLVED',
+      },
+      {
+        label: 'Unresolved',
+        value: 'UNRESOLVED',
+      },
+    ]
+    const selectFilter = {
+      DEFAULT: '---',
+      RESOLUTION_DATE_ASC: 'Resolution Date ASC',
+      RESOLUTION_DATE_DESC: 'Resolution Date DESC',
+      TRADING_VOLUME_ASC: 'Trading Volume ASC',
+      TRADING_VOLUME_DESC: 'Trading Volume DESC',
+    }
 
     return (
       <div className="marketFilter col-md-2">
@@ -158,12 +181,27 @@ class MarketList extends Component {
           </div>
           <div className="marketFilter__group">
             <Field
+              name="orderBy"
+              label="Order by"
               component={FormSelect}
+              values={selectFilter}
+              defaultValue="DEFAULT"
+            />
+          </div>
+          <div className="marketFilter__group">
+            <Field
               name="resolved"
-              label="Show Resolved"
-              className="marketFilterField marketFilterResolved"
-              defaultValue={''}
-              values={{ '': 'Both', RESOLVED: 'Show only resolved Markets', UNRESOLVED: 'Show only unresolved Markets' }}
+              label="Resolution Date"
+              component={FormRadioButton}
+              radioValues={resolutionFilters}
+            />
+          </div>
+          <div className="marketFilter__group">
+            <Field
+              name="myMarkets"
+              label="Show only"
+              text="My markets"
+              component={FormCheckbox}
             />
           </div>
         </form>

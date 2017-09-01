@@ -64,15 +64,36 @@ export const getMarketSharesByMarket = state => (marketAddress) => {
 export const filterMarkets = state => (opts) => {
   const marketEntities = getMarkets(state)
 
-  const { textSearch, resolved } = opts
+  const { textSearch, resolved, onlyMyMarkets, defaultAccount } = opts
 
   return marketEntities
     .filter(market =>
-    (!textSearch ||
-      market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
-      market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
-    (typeof resolved === 'undefined' || (resolved === 'RESOLVED' && market.oracle.isOutcomeSet) || (resolved === 'UNRESOLVED' && !market.oracle.isOutcomeSet)),
-  )
+      (!textSearch ||
+        market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
+        market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
+      (!onlyMyMarkets || market.creator === defaultAccount.toLowerCase()) &&
+      (typeof resolved === 'undefined' || (resolved === 'RESOLVED' && market.oracle.isOutcomeSet) || (resolved === 'UNRESOLVED' && !market.oracle.isOutcomeSet)),
+    )
+}
+
+/**
+ * Sorts markets collection
+ * @param {*} markets, array of market objects
+ * @param {*} orderBy, orderBy criteria
+ */
+export const sortMarkets = (markets = [], orderBy = null) => {
+  switch (orderBy) {
+    case 'RESOLUTION_DATE_ASC':
+      return markets.sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
+    case 'RESOLUTION_DATE_DESC':
+      return markets.sort((a, b) => a.eventDescription.resolutionDate < b.eventDescription.resolutionDate)
+    case 'TRADING_VOLUME_ASC':
+      return markets.sort((a, b) => a.tradingVolume > b.tradingVolume)
+    case 'TRADING_VOLUME_DESC':
+      return markets.sort((a, b) => a.tradingVolume < b.tradingVolume)
+    default:
+      return markets
+  }
 }
 
 /**
