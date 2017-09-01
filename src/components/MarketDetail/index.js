@@ -174,7 +174,7 @@ class MarketDetail extends Component {
     }
 
     return (
-      <div className="marketInfos col-md-3">
+      <div className="marketInfos col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0">
         {Object.keys(infos).map(label => (
           <div className="marketInfo" key={label}>
             <p className="marketInfo__info marketInfo__info--value">{infos[label]}</p>
@@ -191,7 +191,7 @@ class MarketDetail extends Component {
     const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
 
     return (
-      <div className="marketDetails col-md-9">
+      <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
         <div className="marketDescription">
           <p className="marketDescription__text">{ market.eventDescription.description }</p>
         </div>
@@ -289,7 +289,7 @@ class MarketDetail extends Component {
       <div className="marketDetailPage">
         <div className="container">
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-xs-10 col-xs-offset-1 col-sm-7 col-sm-offset-0">
               <h1 className="marketTitle__heading">{ market.eventDescription.title }</h1>
             </div>
           </div>
