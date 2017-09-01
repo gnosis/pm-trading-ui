@@ -183,26 +183,32 @@ class MarketList extends Component {
         <div className="marketListPage__stats">
           <div className="container">
             <div className="row marketStats">
-              <div className="col-md-3 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">Open Markets</div>
               </div>
-              <div className="col-md-3 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market--countdown" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">Closing Soon</div>
               </div>
-              <div className="col-md-3 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--new" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">New Markets</div>
               </div>
-              <div className="col-md-3">
+            </div>
+          </div>
+        </div>
+        <div className="marketListPage__controls">
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
                 <button
                   type="button"
                   onClick={this.handleCreateMarket}
-                  className="marketStats__control btn btn-primary"
+                  className="marketStats__control btn btn-default"
                   disabled={!this.props.defaultAccount}
                   title={this.props.defaultAccount ? '' : 'Please connect to an ethereum network to create a market'}
                 >
