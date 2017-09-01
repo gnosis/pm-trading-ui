@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Decimal from 'decimal.js'
-import DecimalValue from 'components/DecimalValue'
+import { decimalToText, DecimalValue } from 'components/DecimalValue'
 import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
@@ -17,16 +17,13 @@ class MarketMyTrades extends Component {
   }
 
   getAverageCost(order) {
-    if (order.orderType == 'BUY') {
-      return order.cost/1e18
-    }
-    else if (order.orderType == 'SELL') {
-      return order.profit/1e18
-    }
-    else if (order.orderType == 'SHORT SELL') {
-      return order.cost/1e18
-    }
-    else {
+    if (order.orderType === 'BUY') {
+      return new Decimal(order.cost).div(order.outcomeTokenCount).toString()
+    } else if (order.orderType === 'SELL') {
+      return new Decimal(order.profit).div(order.outcomeTokenCount).toString()
+    } else if (order.orderType === 'SHORT SELL') {
+      return new Decimal(order.cost).div(order.outcomeTokenCount).toString()
+    } else {
       return undefined
     }
   }
@@ -48,10 +45,10 @@ class MarketMyTrades extends Component {
             {market.eventDescription.outcomes[trade.outcomeToken.index]}
           </td>
           <td>
-            {trade.outcomeTokenCount}
+            {decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}
           </td>
           <td>
-            {this.getAverageCost(trade)}
+            {decimalToText(this.getAverageCost(trade))}
           </td>
           <td>
             {trade.date}

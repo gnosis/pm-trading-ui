@@ -5,7 +5,9 @@ import Decimal from 'decimal.js'
 
 export const decimalToText = (value, decimals = 4) => {
   if (value && value.toDP) {
-    return value.toDP(decimals).toString()
+    // toDP is a function of Decimal.js, it rounds the Decimal object to decimals places with rounding mode entered
+    // rounding mode = 1 => round down
+    return value.toDP(decimals, 1).toString()
   }
 
   let decimalValue
@@ -16,7 +18,7 @@ export const decimalToText = (value, decimals = 4) => {
     decimalValue = Decimal(0)
   }
 
-  return decimalValue.toDP(decimals).toString()
+  return decimalValue.toDP(decimals, 1).toString()
 }
 
 const DecimalValue = ({ value, decimals = 4 }) => {
