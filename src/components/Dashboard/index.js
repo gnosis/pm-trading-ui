@@ -7,6 +7,7 @@ import CurrencyName from 'components/CurrencyName'
 import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import moment from 'moment'
+import Decimal from 'decimal.js'
 
 import './dashboard.less'
 
@@ -148,21 +149,19 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
-
+      
       return (
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
           <div className="dashboardMarket__title">{holding.eventDescription.title}</div>
           <div className="outcome row">
-            <div className="col-md-1">
-              <div className={'entry__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }} />
+            <div className="col-md-2">
+              <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }} />
+              <div className="text-white pull-left margin-top-6">{getOutcomeName(market, holding.outcomeToken.index)}</div>
             </div>
-            <div className="col-md-3 text-white">
-              {getOutcomeName(market, holding.outcomeToken.index)}
+            <div className="col-md-2 text-white margin-top-6">
+              {market.marginalPrices ? Math.round(market.marginalPrices[holding.outcomeToken.index] * 100).toFixed(0) : 0}%
             </div>
-            <div className="col-md-2 text-white">
-              {market.marginalPrices ? market.marginalPrices[holding.outcomeToken.index] * 100 : 0}%
-            </div>
-            <div className="col-md-3 text-white">
+            <div className="col-md-3 text-white margin-top-6">
               <DecimalValue value={weiToEth(holding.balance)} />&nbsp;
               {market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
             </div>
@@ -177,19 +176,25 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(trade.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
-      
+      const averagePrice = parseInt(trade.cost, 10) / parseInt(trade.outcomeTokenCount, 10)
+
       return (
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
           <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
-          <div className="outcome">
-            <div className="outcome__bar">
-              <div
-                className="outcome__bar--inner"
-                style={{ width: `${0.54 * 100}%`, backgroundColor: '#f2cc0a' }}
-              >
-                <div className="outcome__bar--value">54%</div>
-                <div className="outcome__bar--label">May 2017</div>
-              </div>
+          <div className="outcome row">
+            <div className="col-md-2">
+              <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }} />
+              <div className="text-white pull-left margin-top-6">{getOutcomeName(market, trade.outcomeToken.index)}</div>
+            </div>
+            <div className="col-md-2 text-white margin-top-6">
+              {new Decimal(averagePrice).toFixed(4)}
+              &nbsp;{market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
+            </div>
+            <div className="col-md-3 text-white margin-top-6">
+              {moment.utc(market.creationDate).format('MMMM Y')}
+            </div>
+            <div className="col-md-2 text-white margin-top-6">
+              {trade.orderType}
             </div>
           </div>
         </div>
@@ -198,7 +203,7 @@ class Dashboard extends Component {
   }
 
   renderWidget(marketType) {
-    const { markets, accountShares } = this.props
+    const { markets, accountShares, accountTrades } = this.props
     const oneDayHours = 24 * 60 * 60 * 1000
     const newMarkets = markets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
     const closingMarkets = markets.filter(
@@ -243,7 +248,7 @@ class Dashboard extends Component {
         <div className="dashboardWidget dashboardWidget--onDark col-md-6">
           <div className="dashboardWidget__title">My Trades</div>
           <div className="dashboardWidget__container">
-            {accountShares.length ? this.renderMyTrades(accountShares, markets) : 'You haven\'t done any trade.'}
+            {accountTrades.length ? this.renderMyTrades(accountTrades, markets) : 'You haven\'t done any trade.'}
           </div>
         </div>
       )
@@ -321,6 +326,7 @@ Dashboard.propTypes = {
   markets: PropTypes.arrayOf(marketPropType),
   defaultAccount: PropTypes.string,
   accountShares: PropTypes.array,
+  accountTrades: PropTypes.array,
   requestMarkets: PropTypes.func,
   requestAccountShares: PropTypes.func,
   requestAccountTrades: PropTypes.func,

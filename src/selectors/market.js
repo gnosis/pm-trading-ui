@@ -121,7 +121,7 @@ export const getAccountShares = (state, account) => {
 
 export const getAccountTrades = (state, account) => {
   const accountTrades = entitySelector(state, 'accountTrades')
-  return accountTrades[account] ? accountTrades[account].shares : []
+  return accountTrades[account] ? accountTrades[account].trades : []
 }
 
 export default {
