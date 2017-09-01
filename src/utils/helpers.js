@@ -56,7 +56,7 @@ export const weiToEth = (value) => {
 
 /**
  * Adds _id incremental numeric property to each object in the array
- * @param {Array of objects} arrayData
+ * @param { objects[] } arrayData
  */
 export const addIdToObjectsInArray = (arrayData) => {
   arrayData.forEach((item, index) => {
