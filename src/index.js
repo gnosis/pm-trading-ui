@@ -22,7 +22,7 @@ import DashboardPage from 'containers/DashboardPage'
 import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
 
 import store from './store'
-import { setMomentRelativeTime } from './config'
+import { setMomentRelativeTime } from './setup'
 
 setMomentRelativeTime()
 
