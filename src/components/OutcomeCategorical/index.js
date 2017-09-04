@@ -26,7 +26,22 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     const trendingOutcomeIndex = tokenDistributionInt.indexOf(Math.max(...tokenDistributionInt))
     return (
       <div className="outcomes outcomes--categorical row">
-        <div key={trendingOutcomeIndex} className="outcome">
+        <div className="col-md-6">
+          <div className="row">
+            <div className="col-md-6">
+              <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex] }} />
+              <div className="pull-left margin-top-6">{ renderOutcomes[trendingOutcomeIndex] }</div>
+            </div>
+            <div className="col-md-2 margin-top-6">
+              {market.marginalPrices ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0) : 0}%
+            </div>
+          </div>
+        </div>
+        <div className="col-md-4 margin-top-6">
+          { showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}
+        </div>
+
+        {/* <div key={trendingOutcomeIndex} className="outcome">
           <div className="outcome__bar col-md-6">
             <div
               className="outcome__bar--inner"
@@ -39,7 +54,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
             </div>
           </div>
           <div className="col-md-6">{ showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}</div>
-        </div>
+        </div> */}
       </div>
     )
   }

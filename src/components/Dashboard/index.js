@@ -154,7 +154,7 @@ class Dashboard extends Component {
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
           <div className="dashboardMarket__title">{holding.eventDescription.title}</div>
           <div className="outcome row">
-            <div className="col-md-2">
+            <div className="col-md-3">
               <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }} />
               <div className="text-white pull-left margin-top-6">{getOutcomeName(market, holding.outcomeToken.index)}</div>
             </div>
@@ -182,7 +182,7 @@ class Dashboard extends Component {
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
           <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
           <div className="outcome row">
-            <div className="col-md-2">
+            <div className="col-md-3">
               <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }} />
               <div className="text-white pull-left margin-top-6">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
@@ -256,7 +256,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    // const { markets } = this.props
+    const { accountPredictiveAssets } = this.props
     return (
       <div className="dashboardPage">
         <div className="dashboardPage__header">
@@ -279,7 +279,10 @@ class Dashboard extends Component {
               </div>
               <div className="col-md-3 dashboardStats__stat">
                 <div className="dashboardStats__icon icon icon--incomeForecast" />
-                <span className="dashboardStats__value">Value</span>
+                <span className="dashboardStats__value">
+                  <DecimalValue value={accountPredictiveAssets} />
+                  &nbsp;ETH
+                </span>
                 <div className="dashboardStats__label">Predicted Profits</div>
               </div>
               <div className="col-md-3 dashboardStats__stat">
@@ -327,6 +330,7 @@ Dashboard.propTypes = {
   defaultAccount: PropTypes.string,
   accountShares: PropTypes.array,
   accountTrades: PropTypes.array,
+  accountPredictiveAssets: PropTypes.string,
   requestMarkets: PropTypes.func,
   requestAccountShares: PropTypes.func,
   requestAccountTrades: PropTypes.func,
