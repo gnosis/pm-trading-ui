@@ -146,15 +146,19 @@ class MarketBuySharesForm extends Component {
         },
         netOutcomeTokensSold,
         funding,
+        marginalPrices,
       },
     } = this.props
-
+    const isOutcomeSelected = selectedOutcome !== undefined
+    const currentMarginalPrice = marginalPrices[1]
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
-    const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold,
+    const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
+    if (isOutcomeSelected) newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome]).add(outcomeTokenCount).toString()
+    const selectedMarginalPrice = isOutcomeSelected ? calcLMSRMarginalPrice({
+      netOutcomeTokensSold: newNetOutcomeTokenSold,
       funding,
       outcomeTokenIndex: 1,
-    })
+    }) : new Decimal('0')
 
     const scalarOutcomes = [
       {
@@ -202,8 +206,8 @@ class MarketBuySharesForm extends Component {
                   upperBound={parseInt(upperBound, 10)}
                   unit={unit}
                   decimals={decimals}
-                  marginalPriceCurrent={marginalPrice.toNumber()}
-                  marginalPriceSelected={marginalPrice.toNumber()}
+                  marginalPriceCurrent={currentMarginalPrice}
+                  marginalPriceSelected={selectedMarginalPrice.toNumber()}
                   selectedCost={outcomeTokenCount}
                 />
               </div>

@@ -37,6 +37,9 @@ const mapStateToProps = (state, ownProps) => {
     defaultAccount: getDefaultAccount(state),
     isModerator: getIsModerator(state, getDefaultAccount(state)),
     trades: getMarketParticipantsTrades(state)(),
+    initialValues: {
+      selectedOutcome: 0,
+    },
   }
 }
 
