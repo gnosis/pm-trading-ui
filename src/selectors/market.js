@@ -112,7 +112,7 @@ export const getMarketParticipantsTrades = state => () => {
 }
 
 /**
- * Return the shares for the given account address
+ * Returns the shares for the given account address
  * @param {*} state
  * @param {String} account, an address
  */
@@ -122,7 +122,7 @@ export const getAccountShares = (state, account) => {
 }
 
 /**
- * Return the trades for the given account address
+ * Returns the trades for the given account address
  * @param {*} state
  * @param {String} account, an address
  */
@@ -138,11 +138,29 @@ export const getAccountPredictiveAssets = (state, account) => {
     const shares = getAccountShares(state, account)
     if (shares.length) {
       predictiveAssets = shares.reduce(
-        (assets, share) => assets.add(new Decimal(share.balance).mul(share.marginalPrice)), new Decimal(0)
+        (assets, share) => assets.add(new Decimal(share.balance).mul(share.marginalPrice)), new Decimal(0),
       )
     }
   }
   return predictiveAssets
+}
+
+export const getAccountParticipatingInEvents = (state, account) => {
+  const events = []
+
+  if (account) {
+    const shares = getAccountShares(state, account)
+
+    if (shares.length) {
+      shares.map((share) => {
+        if (events.indexOf(share.outcomeToken.event) === -1) {
+          events.push(share.outcomeToken.event)
+        }
+        return events
+      })
+    }
+  }
+  return events
 }
 
 export default {

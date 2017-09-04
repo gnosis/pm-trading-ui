@@ -256,7 +256,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { accountPredictiveAssets } = this.props
+    const { accountPredictiveAssets, accountParticipatingInEvents } = this.props
     return (
       <div className="dashboardPage">
         <div className="dashboardPage__header">
@@ -279,7 +279,7 @@ class Dashboard extends Component {
               </div>
               <div className="col-md-3 dashboardStats__stat">
                 <div className="dashboardStats__icon icon icon--incomeForecast" />
-                <span className="dashboardStats__value">
+                <span className="dashboardStats__value" style={{ color: 'green' }}>
                   <DecimalValue value={accountPredictiveAssets} />
                   &nbsp;ETH
                 </span>
@@ -287,7 +287,7 @@ class Dashboard extends Component {
               </div>
               <div className="col-md-3 dashboardStats__stat">
                 <div className="dashboardStats__icon icon icon--new" />
-                <span className="dashboardStats__value">Value</span>
+                <span className="dashboardStats__value">{ accountParticipatingInEvents }</span>
                 <div className="dashboardStats__label">Participating in Markets</div>
               </div>
               <div className="col-md-3" />
@@ -331,6 +331,7 @@ Dashboard.propTypes = {
   accountShares: PropTypes.array,
   accountTrades: PropTypes.array,
   accountPredictiveAssets: PropTypes.string,
+  accountParticipatingInEvents: PropTypes.number,
   requestMarkets: PropTypes.func,
   requestAccountShares: PropTypes.func,
   requestAccountTrades: PropTypes.func,
