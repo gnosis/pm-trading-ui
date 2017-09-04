@@ -1,5 +1,9 @@
 {
   "whitelist": {
     
+ },
+ "gnosisdb": {
+   "host": "http://localhost",
+   "port": 8000
  }
 }
