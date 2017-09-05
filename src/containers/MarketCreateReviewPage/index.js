@@ -54,7 +54,7 @@ const submitAction = (formValues) => async (dispatch) => {
       transactionId: transactionLogId,
     }))
 
-    this.props.changeUrl('markets/list')
+    dispatch(push('markets/list'))
   } catch (e) {
     console.error(e)
   }
