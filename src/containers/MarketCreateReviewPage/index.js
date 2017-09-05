@@ -46,13 +46,15 @@ const submitAction = (formValues) => async (dispatch) => {
   await dispatch(openModal({ modalName: 'ModalMarketProgress', transactionId: transactionLogId }))
 
   try {
-    return await dispatch(createMarket({
+    await dispatch(createMarket({
       eventDescription,
       oracle,
       event,
       market,
       transactionId: transactionLogId,
     }))
+
+    this.props.changeUrl('markets/list')
   } catch (e) {
     console.error(e)
   }
