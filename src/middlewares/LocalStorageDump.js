@@ -6,7 +6,7 @@ export default store => next => (action) => {
   if (action.type !== CLEAR_LOCAL_STORAGE) {
     // eslint-disable-next-line no-undef
     localStorage.setItem(`GNOSIS${process.env.VERSION}`, JSON.stringify({
-      authentication: state.authentication,
+      transactions: state.transactions,
     }))
 
     return next(action)

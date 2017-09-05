@@ -6,6 +6,7 @@ import modal from './modal'
 import transactions from './transactions'
 import blockchain from './blockchain'
 import settings from './settings'
+import notifications from './notifications'
 
 const reducers = combineReducers({
   routing: routerReducer,
@@ -14,7 +15,8 @@ const reducers = combineReducers({
   entities,
   transactions,
   blockchain,
-  settings
+  settings,
+  notifications,
 })
 
 /*
