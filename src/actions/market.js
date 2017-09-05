@@ -96,8 +96,57 @@ export const requestFactories = () => async (dispatch) => {
 }
 
 export const requestMarketParticipantTrades = (marketAddress, accountAddress) => async (dispatch) => {
-  const payload = await api.requestMarketParticipantTrades(marketAddress, accountAddress)
-  return await dispatch(receiveEntities(payload))
+  const trades = await api.requestMarketParticipantTrades(marketAddress, accountAddress)
+  return await dispatch(updateEntity({
+    entityType: 'markets',
+    data: {
+      id: marketAddress,
+      participantTrades: trades,
+    },
+  }))
+}
+
+export const requestMarketTrades = market => async (dispatch) => {
+  const trades = await api.requestMarketTrades(market)
+
+  return await dispatch(updateEntity({
+    entityType: 'markets',
+    data: {
+      id: market.address,
+      trades,
+    },
+  }))
+}
+
+/**
+ * Dispatches the shares for the given account address
+ * @param {String} accountAddress
+ */
+export const requestAccountShares = accountAddress => async (dispatch) => {
+  const shares = await api.requestAccountShares(accountAddress)
+  return await dispatch(updateEntity({
+    entityType: 'accountShares',
+    data: {
+      id: accountAddress,
+      shares,
+    },
+  }))
+}
+
+/**
+ * Dispatches the trades for the given account address
+ * @param {String} accountAddress
+ */
+export const requestAccountTrades = accountAddress => async (dispatch) => {
+  const trades = await api.requestAccountTrades(accountAddress)
+
+  return await dispatch(updateEntity({
+    entityType: 'accountTrades',
+    data: {
+      id: accountAddress,
+      trades,
+    },
+  }))
 }
 
 export const createMarket = options => async (dispatch) => {
@@ -202,14 +251,14 @@ export const createMarket = options => async (dispatch) => {
   return await dispatch(closeLog(transactionId))
 }
 
-export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
+export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
   const transactionId = uuid()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
 
   try {
-    await api.buyShares(market, outcomeIndex, amount)
+    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
@@ -219,7 +268,7 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
   }
 
   const netOutcomeTokensSold = market.netOutcomeTokensSold
-  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + (amount * 1e18)
+  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toNumber()
   netOutcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
 
   await dispatch(updateEntity({
@@ -233,14 +282,14 @@ export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
-export const sellMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
+export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => async (dispatch) => {
   const transactionId = uuid()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
 
   try {
-    await api.sellShares(market.address, outcomeIndex, amount)
+    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))

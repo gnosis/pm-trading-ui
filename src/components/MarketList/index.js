@@ -5,21 +5,21 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
-
-import CurrencyName from 'components/CurrencyName'
 import Countdown from 'components/Countdown'
+import CurrencyName from 'components/CurrencyName'
+import { decimalToText } from 'components/DecimalValue'
 
-import OutcomeCategorical from 'components/OutcomeCategorical'
-import OutcomeScalar from 'components/OutcomeScalar'
+import Outcome from 'components/Outcome'
 
-import FormSelect from 'components/FormSelect'
+import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
+import FormSelect from 'components/FormSelect'
+import FormCheckbox from 'components/FormCheckbox'
 
-import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
+import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
-
 class MarketList extends Component {
   componentWillMount() {
     this.props.fetchMarkets()
@@ -58,9 +58,7 @@ class MarketList extends Component {
 
     const resolveUrl = `/markets/${market.address}/resolve`
 
-    const outcomes = market.event.type === OUTCOME_TYPES.SCALAR ?
-      <OutcomeScalar market={market} /> :
-      <OutcomeCategorical market={market} />
+    const outcomes = (<Outcome market={market} />)
 
     return (
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
@@ -100,9 +98,9 @@ class MarketList extends Component {
           </div>
           <div className="info__group col-md-3">
             <div className="info__field">
-              <div className="info__field--icon icon icon--oracle" />
+              <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                {market.oracle.address}
+                <CurrencyName collateralToken={market.event.collateralToken} />
               </div>
             </div>
           </div>
@@ -110,6 +108,7 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
+                {decimalToText(new Decimal(market.tradingVolume).div(1e18))}
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </div>
             </div>
@@ -143,6 +142,27 @@ class MarketList extends Component {
 
   renderMarketFilter() {
     const { handleSubmit } = this.props
+    const resolutionFilters = [
+      {
+        label: 'All',
+        value: '',
+      },
+      {
+        label: 'Resolved',
+        value: 'RESOLVED',
+      },
+      {
+        label: 'Unresolved',
+        value: 'UNRESOLVED',
+      },
+    ]
+    const selectFilter = {
+      DEFAULT: '---',
+      RESOLUTION_DATE_ASC: 'Resolution Date ASC',
+      RESOLUTION_DATE_DESC: 'Resolution Date DESC',
+      TRADING_VOLUME_ASC: 'Trading Volume ASC',
+      TRADING_VOLUME_DESC: 'Trading Volume DESC',
+    }
 
     return (
       <div className="marketFilter col-md-2">
@@ -158,12 +178,27 @@ class MarketList extends Component {
           </div>
           <div className="marketFilter__group">
             <Field
+              name="orderBy"
+              label="Order by"
               component={FormSelect}
+              values={selectFilter}
+              defaultValue="DEFAULT"
+            />
+          </div>
+          <div className="marketFilter__group">
+            <Field
               name="resolved"
-              label="Show Resolved"
-              className="marketFilterField marketFilterResolved"
-              defaultValue={''}
-              values={{ '': 'Both', RESOLVED: 'Show only resolved Markets', UNRESOLVED: 'Show only unresolved Markets' }}
+              label="Resolution Date"
+              component={FormRadioButton}
+              radioValues={resolutionFilters}
+            />
+          </div>
+          <div className="marketFilter__group">
+            <Field
+              name="myMarkets"
+              label="Show only"
+              text="My markets"
+              component={FormCheckbox}
             />
           </div>
         </form>
@@ -183,26 +218,32 @@ class MarketList extends Component {
         <div className="marketListPage__stats">
           <div className="container">
             <div className="row marketStats">
-              <div className="col-md-3 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">Open Markets</div>
               </div>
-              <div className="col-md-3 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market--countdown" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">Closing Soon</div>
               </div>
-              <div className="col-md-3 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--new" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">New Markets</div>
               </div>
-              <div className="col-md-3">
+            </div>
+          </div>
+        </div>
+        <div className="marketListPage__controls">
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
                 <button
                   type="button"
                   onClick={this.handleCreateMarket}
-                  className="marketStats__control btn btn-primary"
+                  className="marketStats__control btn btn-default"
                   disabled={!this.props.defaultAccount}
                   title={this.props.defaultAccount ? '' : 'Please connect to an ethereum network to create a market'}
                 >

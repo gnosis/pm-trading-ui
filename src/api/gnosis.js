@@ -140,6 +140,8 @@ export const createMarket = async (market) => {
     marketMaker: hexWithPrefix(gnosis.lmsrMarketMaker.address),
     marketFactory: hexWithPrefix(gnosis.standardMarketFactory.address),
     address: hexWithPrefix(marketContract.address),
+    tradingVolume: '0',
+    collectedFees: '0',
   }
 }
 
@@ -167,16 +169,20 @@ export const fundMarket = async (market) => {
   return market
 }
 
-export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount) => {
+export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost) => {
   const gnosis = await getGnosisConnection()
 
-  const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18)
+  // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
+  // Outcome tokens have also 18 decimals
+  // The decimal values represent an offset of 18 positions on the integer value
+  const collateralTokenWei = Decimal(cost).mul(1e18)
 
-  await gnosis.etherToken.deposit({ value: outcomeTokenCountWei.toString() })
-  await gnosis.etherToken.approve(hexWithPrefix(market.address), outcomeTokenCountWei.toString())
+  // The user needs to deposit and approve the amount of collateral tokens willing to pay before performing the buy
+  await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
+  await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenWei.toString())
 
 
-  return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCountWei })
+  return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCount.toString() })
 }
 
 export const resolveEvent = async (event, selectedOutcomeIndex) => {

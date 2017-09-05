@@ -2,14 +2,15 @@ import React, { PropTypes } from 'react'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
+import moment from 'moment'
 
 import { calcLMSRMarginalPrice } from 'api'
 
 import './outcomeCategorical.less'
 
-const OutcomeCategorical = ({ market }) => {
+const OutcomeCategorical = ({ market, opts = {} }) => {
   const renderOutcomes = market.eventDescription.outcomes
-
+  const { showOnlyTrendingOutcome, showDate, dateFormat } = opts
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.netOutcomeTokensSold,
@@ -19,6 +20,29 @@ const OutcomeCategorical = ({ market }) => {
 
     return marginalPrice.toFixed()
   })
+
+  if (showOnlyTrendingOutcome && !market.oracle.isOutcomeSet) {
+    const tokenDistributionInt = tokenDistribution.map(outcome => parseInt(parseFloat(outcome) * 10000, 10))
+    const trendingOutcomeIndex = tokenDistributionInt.indexOf(Math.max(...tokenDistributionInt))
+    return (
+      <div className="outcomes outcomes--categorical row">
+        <div className="col-md-6">
+          <div className="row">
+            <div className="col-md-6">
+              <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex] }} />
+              <div className="pull-left outcomes--categorical--top-6">{ renderOutcomes[trendingOutcomeIndex] }</div>
+            </div>
+            <div className="col-md-2 outcomes--top-6">
+              {market.marginalPrices ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0) : 0}%
+            </div>
+          </div>
+        </div>
+        <div className="col-md-4 outcomes--top-6">
+          { showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}
+        </div>
+      </div>
+    )
+  }
 
   return (<div className="outcomes outcomes--categorical">
     {renderOutcomes.map((outcome, outcomeIndex) => {
@@ -47,6 +71,7 @@ const OutcomeCategorical = ({ market }) => {
 
 OutcomeCategorical.propTypes = {
   market: marketShape,
+  opts: PropTypes.object,
 }
 
 export default OutcomeCategorical

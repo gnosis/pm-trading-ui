@@ -1,4 +1,4 @@
-import { restFetch, hexWithoutPrefix, addIdToObjectsInArray } from 'utils/helpers'
+import { restFetch, hexWithoutPrefix, addIdToObjectsInArray, getOutcomeName } from 'utils/helpers'
 import { normalize } from 'normalizr'
 
 import sha1 from 'sha1'
@@ -39,10 +39,39 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
           id: sha1(`${marketAddress}-${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
           event: share.outcomeToken.event,
           ...share,
-        }))
+        })),
       }, marketSchema)
     })
 
 export const requestMarketParticipantTrades = async (marketAddress, accountAddress) =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
-    .then(response => normalize(addIdToObjectsInArray(response.results), [tradeSchema]))
+    .then(response => addIdToObjectsInArray(response.results))
+
+
+const transformMarketTrades = (trade, market) => (
+  trade.marginalPrices.reduce((prev, current, outcomeIndex) => {
+    const toReturn = { ...prev }
+    toReturn[getOutcomeName(market, outcomeIndex)] = current
+    return toReturn
+  }, {
+    date: trade.date,
+  })
+)
+
+export const requestMarketTrades = async market =>
+  restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(market.address)}/trades/`)
+    .then((response) => {
+      const trades = response.results.map(
+        result => transformMarketTrades(result, market),
+      )
+      return trades
+    })
+
+
+export const requestAccountTrades = async address =>
+  restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/trades/`)
+    .then(response => response.results)
+
+export const requestAccountShares = async address =>
+  restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
+    .then(response => response.results)

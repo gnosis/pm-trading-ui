@@ -1,8 +1,8 @@
 /* globals fetch */
 
 import { mapValues, startsWith, isArray } from 'lodash'
-
-import { HEX_VALUE_REGEX } from 'utils/constants'
+import Decimal from 'decimal.js'
+import { HEX_VALUE_REGEX, OUTCOME_TYPES } from 'utils/constants'
 
 export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
@@ -14,7 +14,7 @@ export const hexWithoutPrefix = (value) => {
 
 /**
  * Adds the `0x` prefix to the incoming string value
- * @param {String} value 
+ * @param {String} value
  */
 export const add0xPrefix = (value) => {
   return startsWith(value, '0x') ? value : `0x${value}`
@@ -42,9 +42,34 @@ export const toEntity = (data, entityType, idKey = 'address') => {
   }
 }
 
-/** 
+/**
+ * Converts a value from WEI to ETH
+ * @param {String|Number} value
+ */
+export const weiToEth = (value) => {
+  let ethValue = '0'
+  if (value && Decimal(value).gt(0)) {
+    ethValue = Decimal(value).div(1e18).toString()
+  }
+  return ethValue
+}
+
+export const getOutcomeName = (market, index) => {
+  let outcomeName
+  if (!market.event) {
+    return null
+  }
+  if (market.event.type === OUTCOME_TYPES.CATEGORICAL) {
+    outcomeName = market.eventDescription.outcomes[index]
+  } else if (market.event.type === OUTCOME_TYPES.SCALAR) {
+    outcomeName = index === 0 ? 'Short' : 'Long'
+  }
+  return outcomeName
+}
+
+/**
  * Adds _id incremental numeric property to each object in the array
- * @param {Array of objects} arrayData 
+ * @param { objects[] } arrayData
  */
 export const addIdToObjectsInArray = (arrayData) => {
   arrayData.forEach((item, index) => {
@@ -55,8 +80,12 @@ export const addIdToObjectsInArray = (arrayData) => {
 
 export const restFetch = url =>
   fetch(url)
+    .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
     .then(res => res.json())
-    .catch(err => console.warn(`Gnosis DB: ${err}`))
+    .catch(err => new Promise((resolve, reject) => {
+      console.warn(`Gnosis DB: ${err}`)
+      reject(err)
+    }))
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''

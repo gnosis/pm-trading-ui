@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 import { Field } from 'redux-form'
 
-import { marketShape } from 'utils/shapes'
+import * as validators from 'utils/validators'
 
 import Input from 'components/FormInput'
 
@@ -10,29 +10,37 @@ const OutcomeScalar = () => (
   <div className="outcomeScalar">
     <div className="row">
       <div className="col-md-12">
-        <Field name="upperBound" component={Input} label="Upperbound" type="number" />
+        <Field name="unit" component={Input} label="Unit" validate={validators.required} />
       </div>
     </div>
     <div className="row">
       <div className="col-md-12">
-        <Field name="lowerBound" component={Input} label="Lowerbound" type="number" />
+        <Field name="decimals" component={Input} label="Number of significant decimals" type="number" placeholder="2" validate={validators.all(validators.required, validators.isNumber({ realOnly: true }))} />
       </div>
     </div>
     <div className="row">
       <div className="col-md-12">
-        <Field name="unit" component={Input} label="Unit" />
+        <Field
+          name="upperBound" component={Input} label="Upperbound"
+          validate={validators.all(validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
+          validators.greaterThanProperty({ formProp: 'UpperBound', validateAgainstProp: 'lowerBound' }))}
+        />
       </div>
     </div>
     <div className="row">
       <div className="col-md-12">
-        <Field name="decimals" component={Input} label="Number of significant decimals" placeholder="2" />
+        <Field
+          name="lowerBound" component={Input} label="Lowerbound"
+          validate={validators.all(validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
+          validators.lowerThanProperty({ formProp: 'LowerBound', validateAgainstProp: 'upperBound' }))}
+        />
       </div>
     </div>
   </div>
 )
 
 OutcomeScalar.propTypes = {
-  market: marketShape,
+  decimals: PropTypes.number,
 }
 
 export default OutcomeScalar

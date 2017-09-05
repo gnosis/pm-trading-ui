@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import Decimal from 'decimal.js'
-import DecimalValue from 'components/DecimalValue'
+import { decimalToText, DecimalValue } from 'components/DecimalValue'
 import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
-import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
+import { getOutcomeName } from 'utils/helpers'
 
 import './marketMyTrades.less'
 
@@ -10,48 +11,44 @@ class MarketMyTrades extends Component {
 
   componentWillMount() {
     const { market, defaultAccount } = this.props    
-    if (!this.props.trades || this.props.trades.length == 0) {
+    if (!market.participantTrades || market.participantTrades.length == 0) {
       // Retrieve participant trades to state
       this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
-    }    
+    }
   }
 
   getAverageCost(order) {
-    if (order.orderType == 'BUY') {
-      return order.cost/1e18
-    }
-    else if (order.orderType == 'SELL') {
-      return order.profit/1e18
-    }
-    else if (order.orderType == 'SHORT SELL') {
-      return order.cost/1e18
-    }
-    else {
+    if (order.orderType === 'BUY') {
+      return new Decimal(order.cost).div(order.outcomeTokenCount).toString()
+    } else if (order.orderType === 'SELL') {
+      return new Decimal(order.profit).div(order.outcomeTokenCount).toString()
+    } else if (order.orderType === 'SHORT SELL') {
+      return new Decimal(order.cost).div(order.outcomeTokenCount).toString()
+    } else {
       return undefined
     }
   }
-
   renderTrades() {
-    const { market, trades } = this.props
-    const tableRowElements = trades.map((trade) => {
+    const { market } = this.props
+    const tableRowElements = market.participantTrades.map((trade) => {
       return (
         <tr className="marketMyTrades__share" key={trade['_id']}>
           <td>
             <div
               className={'shareOutcome__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
             />
-          </td>          
+          </td>
           <td>
             {trade.orderType}
           </td>
           <td>
-            {market.eventDescription.outcomes[trade.outcomeToken.index]}
+            {getOutcomeName(market, trade.outcomeToken.index)}
           </td>
           <td>
-            {trade.outcomeTokenCount}
+            {decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}
           </td>
           <td>
-            {this.getAverageCost(trade)}
+            {decimalToText(this.getAverageCost(trade))}
           </td>
           <td>
             {trade.date}
@@ -64,8 +61,8 @@ class MarketMyTrades extends Component {
   }
 
   render() {
-    const { marketShares, market, trades } = this.props
-    if (trades.length > 0) {
+    const { marketShares, market } = this.props
+    if (market.participantTrades && market.participantTrades.length > 0) {
       return (
         <div className="marketMyTrades">
           <h2 className="marketMyTrades__heading">My Trades</h2>

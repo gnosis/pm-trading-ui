@@ -10,7 +10,7 @@ import { calcLMSRMarginalPrice } from 'api'
 
 import './outcomeScalar.less'
 
-const OutcomeScalar = ({ market }) => {
+const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
   const marginalPrice = calcLMSRMarginalPrice({
     netOutcomeTokensSold: market.netOutcomeTokensSold,
     // This is a temporary fix to avoid NaN when there is no funding, which should never occour
@@ -26,15 +26,30 @@ const OutcomeScalar = ({ market }) => {
   const bounds = upperBound.sub(lowerBound)
   const value = Decimal(marginalPrice.toString()).times(bounds).add(lowerBound)
 
+  if (showOnlyTrendingOutcome) {
+    return (
+      <div className="row">
+        <div className="col-md-6">
+          <DecimalValue value={value} decimals={market.eventDescription.decimals} className="outcome__currentPrediction--value" />
+          &nbsp;{market.eventDescription.unit}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="outcomes outcomes--scalar">
       <div className="outcome">
-        <div className="outcome__bound outcome__bound--lower"><DecimalValue value={lowerBound} decimals={1} /></div>
+        <div className="outcome__bound outcome__bound--lower">
+          <DecimalValue value={lowerBound} decimals={market.eventDescription.decimals} />
+        </div>
         <div className="outcome__currentPrediction">
           <div className="outcome__currentPrediction--line" />
-          <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>{value.toString()}</div>
+          <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>
+            <DecimalValue value={value} decimals={market.eventDescription.decimals} />
+          </div>
         </div>
-        <div className="outcome__bound outcome__bound--upper"><DecimalValue value={upperBound} decimals={1} /></div>
+        <div className="outcome__bound outcome__bound--upper"><DecimalValue value={upperBound} decimals={market.eventDescription.decimals} /></div>
       </div>
     </div>
   )
@@ -42,6 +57,7 @@ const OutcomeScalar = ({ market }) => {
 
 OutcomeScalar.propTypes = {
   market: marketShape,
+  opts: PropTypes.object,
 }
 
 export default OutcomeScalar

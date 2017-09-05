@@ -73,9 +73,9 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
   border-radius: 9999px;
   text-transform: uppercase;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 14px;
   letter-spacing: 1px;
-  padding: 12px 26px;
+  padding: 10px 20px;
   background: @btn-gradient;
   border: none;
   position: relative;
@@ -83,6 +83,11 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
   transition: .15s;
   transition: all .15s ease;
   -webkit-transition: all .15s ease;
+
+  @media(min-width: @screen-sm) {
+    font-size: 15px;
+    padding: 12px 26px;
+  }
 
   &:hover {
     //transform: translateY(-1px);
@@ -154,6 +159,11 @@ h1 {
   line-height: 65px;
   letter-spacing: .5px;
   font-weight: 300;
+
+  @media(min-width: @screen-sm-min) {
+    font-size: 42px;
+    line-height: 65px;
+  }
 }
 
 h2 {

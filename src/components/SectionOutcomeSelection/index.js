@@ -1,13 +1,10 @@
 import React from 'react'
 import { Field } from 'redux-form'
 
-// import OutcomeCategorical from 'components/OutcomeCategorical'
-// import OutcomeScalar from 'components/OutcomeScalar'
-
 import { OUTCOME_TYPES } from 'utils/constants'
+import * as validators from 'utils/validators'
 
-
-import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
+import FormRadioButton from 'components/FormRadioButton'
 
 const SectionOutcomeSelection = () => {
   const outcomeTypeLabels = {
@@ -15,17 +12,15 @@ const SectionOutcomeSelection = () => {
     [OUTCOME_TYPES.SCALAR]: 'Scalar Outcome',
   }
 
-  // const outcomeSections = {
-  //   [OUTCOME_TYPES.CATEGORICAL]: <OutcomeCategorical />,
-  //   [OUTCOME_TYPES.SCALAR]: <OutcomeScalar />,
-  // }
-
   return (
     <div className="sectionOutcomeSelection">
-      <FormRadioButtonLabel label="Outcome Type" />
-      {Object.keys(outcomeTypeLabels).map(fieldValue =>
-        <Field key={fieldValue} name="outcomeType" component={FormRadioButton} radioValue={fieldValue} text={outcomeTypeLabels[fieldValue]} />,
-        )}
+      <Field
+        name="outcomeType"
+        label="Outcome Type"
+        component={FormRadioButton}
+        radioValues={Object.keys(outcomeTypeLabels).map(value => ({ value, label: outcomeTypeLabels[value] }))}
+        validate={validators.required}
+      />
     </div>
   )
 }
