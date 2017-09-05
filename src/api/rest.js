@@ -1,5 +1,6 @@
-import { restFetch, hexWithoutPrefix, addIdToObjectsInArray, getOutcomeName } from 'utils/helpers'
+import { restFetch, hexWithoutPrefix, addIdToObjectsInArray, getOutcomeName, normalizeScalarPoint } from 'utils/helpers'
 import { normalize } from 'normalizr'
+import { OUTCOME_TYPES } from 'utils/constants'
 
 import sha1 from 'sha1'
 
@@ -11,7 +12,7 @@ import {
 const API_URL = process.env.GNOSISDB_HOST
 
 export const requestMarket = async marketAddress =>
-  restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}`)
+  restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/`)
     .then(response => normalize(response, marketSchema))
 
 export const requestMarkets = async () =>
@@ -55,8 +56,35 @@ const transformMarketTrades = (trade, market) => (
     return toReturn
   }, {
     date: trade.date,
+    scalarPoint: OUTCOME_TYPES.SCALAR === market.event.type ?
+      normalizeScalarPoint(trade.marginalPrices, market) : undefined,
   })
 )
+
+const getFirstGraphPoint = (market) => {
+  let firstPoint
+  if (OUTCOME_TYPES.SCALAR === market.event.type) {
+    firstPoint = {
+      date: market.creationDate,
+      scalarPoint: normalizeScalarPoint(['0.5', '0.5'], market),
+    }
+  } else if (OUTCOME_TYPES.CATEGORICAL === market.event.type) {
+    firstPoint = {
+      date: market.creationDate,
+      scalarPoint: undefined,
+      ...market.eventDescription.outcomes.reduce((prev, current) => {
+        const toReturn = {
+          ...prev,
+        }
+        toReturn[current] = (1 / market.eventDescription.outcomes.length)
+        return toReturn
+      }, {}),
+    }
+  }
+  return firstPoint
+}
+
+const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().toISOString() })
 
 export const requestMarketTrades = async market =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(market.address)}/trades/`)
@@ -64,7 +92,13 @@ export const requestMarketTrades = async market =>
       const trades = response.results.map(
         result => transformMarketTrades(result, market),
       )
-      return trades
+      const firstPoint = getFirstGraphPoint(market)
+      const lastPoint = trades.length ? getLastGraphPoint(trades) : { ...firstPoint, date: new Date().toISOString() }
+      return [
+        firstPoint,
+        ...trades,
+        lastPoint,
+      ]
     })
 
 
