@@ -21,6 +21,31 @@ import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
+
+
+const resolutionFilters = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Resolved',
+    value: 'RESOLVED',
+  },
+  {
+    label: 'Unresolved',
+    value: 'UNRESOLVED',
+  },
+]
+
+const selectFilter = {
+  DEFAULT: '---',
+  RESOLUTION_DATE_ASC: 'Resolution Date ASC',
+  RESOLUTION_DATE_DESC: 'Resolution Date DESC',
+  TRADING_VOLUME_ASC: 'Trading Volume ASC',
+  TRADING_VOLUME_DESC: 'Trading Volume DESC',
+}
+
 class MarketList extends Component {
   componentWillMount() {
     this.props.fetchMarkets()
@@ -145,27 +170,6 @@ class MarketList extends Component {
 
   renderMarketFilter() {
     const { handleSubmit } = this.props
-    const resolutionFilters = [
-      {
-        label: 'All',
-        value: '',
-      },
-      {
-        label: 'Resolved',
-        value: 'RESOLVED',
-      },
-      {
-        label: 'Unresolved',
-        value: 'UNRESOLVED',
-      },
-    ]
-    const selectFilter = {
-      DEFAULT: '---',
-      RESOLUTION_DATE_ASC: 'Resolution Date ASC',
-      RESOLUTION_DATE_DESC: 'Resolution Date DESC',
-      TRADING_VOLUME_ASC: 'Trading Volume ASC',
-      TRADING_VOLUME_DESC: 'Trading Volume DESC',
-    }
 
     return (
       <div className="marketFilter col-md-2">
