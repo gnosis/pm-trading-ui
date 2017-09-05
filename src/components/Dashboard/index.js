@@ -156,12 +156,12 @@ class Dashboard extends Component {
           <div className="outcome row">
             <div className="col-md-3">
               <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }} />
-              <div className="text-white pull-left margin-top-6">{getOutcomeName(market, holding.outcomeToken.index)}</div>
+              <div className="dashboardMarket--highlight pull-left">{getOutcomeName(market, holding.outcomeToken.index)}</div>
             </div>
-            <div className="col-md-2 text-white margin-top-6">
+            <div className="col-md-2 dashboardMarket--highlight">
               {market.marginalPrices ? Math.round(market.marginalPrices[holding.outcomeToken.index] * 100).toFixed(0) : 0}%
             </div>
-            <div className="col-md-3 text-white margin-top-6">
+            <div className="col-md-3 dashboardMarket--highlight">
               <DecimalValue value={weiToEth(holding.balance)} />&nbsp;
               {market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
             </div>
@@ -184,16 +184,16 @@ class Dashboard extends Component {
           <div className="outcome row">
             <div className="col-md-3">
               <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }} />
-              <div className="text-white pull-left margin-top-6">{getOutcomeName(market, trade.outcomeToken.index)}</div>
+              <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
-            <div className="col-md-2 text-white margin-top-6">
+            <div className="col-md-2 dashboardMarket--highlight">
               {new Decimal(averagePrice).toFixed(4)}
               &nbsp;{market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
             </div>
-            <div className="col-md-3 text-white margin-top-6">
+            <div className="col-md-3 dashboardMarket--highlight">
               {moment.utc(market.creationDate).format('MMMM Y')}
             </div>
-            <div className="col-md-2 text-white margin-top-6">
+            <div className="col-md-2 dashboardMarket--highlight">
               {trade.orderType}
             </div>
           </div>
