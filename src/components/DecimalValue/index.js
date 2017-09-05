@@ -21,9 +21,9 @@ export const decimalToText = (value, decimals = 4) => {
   return decimalValue.toDP(decimals, 1).toString()
 }
 
-const DecimalValue = ({ value, decimals = 4 }) => {
+const DecimalValue = ({ value, decimals = 4, className }) => {
   const text = decimalToText(value, decimals)
-  return <span>{text}</span>
+  return <span className={className}>{text}</span>
 }
 
 // I don't use PropTypes.instanceOf because Decimal can be cloned with different default properties
@@ -40,6 +40,7 @@ const decimalJsTest = (props, propName, componentName) => {
 DecimalValue.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, decimalJsTest]),
   decimals: PropTypes.number,
+  className: PropTypes.string,
 }
 
 export default DecimalValue

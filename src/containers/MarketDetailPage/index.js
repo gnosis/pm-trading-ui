@@ -27,7 +27,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     market: getMarketById(state)(ownProps.params.id),
     marketShares: getMarketSharesByMarket(state)(ownProps.params.id, getDefaultAccount(state)),
-    selectedCategoricalOutcome: marketBuySelector(state, 'selectedOutcome'),
+    selectedOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
@@ -37,6 +37,9 @@ const mapStateToProps = (state, ownProps) => {
     defaultAccount: getDefaultAccount(state),
     isModerator: getIsModerator(state, getDefaultAccount(state)),
     trades: getMarketParticipantsTrades(state)(),
+    initialValues: {
+      selectedOutcome: 0,
+    },
   }
 }
 

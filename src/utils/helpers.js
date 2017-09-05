@@ -56,6 +56,9 @@ export const weiToEth = (value) => {
 
 export const getOutcomeName = (market, index) => {
   let outcomeName
+  if (!market.event) {
+    return null
+  }
   if (market.event.type === OUTCOME_TYPES.CATEGORICAL) {
     outcomeName = market.eventDescription.outcomes[index]
   } else if (market.event.type === OUTCOME_TYPES.SCALAR) {
@@ -84,7 +87,7 @@ export const normalizeScalarPoint = (
 
 /**
  * Adds _id incremental numeric property to each object in the array
- * @param {Array of objects} arrayData
+ * @param { objects[] } arrayData
  */
 export const addIdToObjectsInArray = (arrayData) => {
   arrayData.forEach((item, index) => {

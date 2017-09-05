@@ -3,16 +3,29 @@
 @expandable-arrow-size: 15px;
 @expandable-margin: 40px;
 
+.marketDetails .outcomes {
+  margin-bottom: 40px;
+}
+
 .marketInfos {
-  text-align: right;
+  text-align: left;
+  margin-top: 40px;
   position: relative;
+
+  @media(min-width: @screen-sm) {
+    text-align: right;
+    margin-top: 0;
+  }
 }
 
 .marketInfo__info {
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-left: 100px; //just until we use real names
+  padding-left: 0; //just until we use real names
   margin-bottom: 20px;
+  @media(min-width: @screen-sm) { //just until we use real names
+    padding-left: 100px; //just until we use real names
+  } //just until we use real names
 }
 
 .marketInfo__info--value {
@@ -53,10 +66,13 @@
 }
 
 .marketTimer__live {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 300;
   letter-spacing: 1px;
-  line-height: 1;
+  line-height: 1.2;
+  @media(min-width: @screen-sm) {
+    font-size: 28px;
+  }
 }
 
 .marketTime__absolute {

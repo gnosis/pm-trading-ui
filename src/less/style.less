@@ -33,9 +33,10 @@ label {
   display: block;
   text-transform: uppercase;
   margin: 20px 0 6px 0;
-  font-size: 12px;
-  color: @font-color-muted;
-  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #92979b;
+  font-weight: 400;
 
   &:empty {
     display: none;
@@ -61,6 +62,10 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
   }
 }
 
+.inputField {
+  margin-bottom: 30px;
+}
+
 .btn,
 .btn.btn-primary,
 .btn.btn-default {
@@ -68,9 +73,9 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
   border-radius: 9999px;
   text-transform: uppercase;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 14px;
   letter-spacing: 1px;
-  padding: 12px 26px;
+  padding: 10px 20px;
   background: @btn-gradient;
   border: none;
   position: relative;
@@ -78,6 +83,11 @@ input:not([type=submit]):not([type=file]):not([type=radio]):not([type=checkbox])
   transition: .15s;
   transition: all .15s ease;
   -webkit-transition: all .15s ease;
+
+  @media(min-width: @screen-sm) {
+    font-size: 15px;
+    padding: 12px 26px;
+  }
 
   &:hover {
     //transform: translateY(-1px);
@@ -145,8 +155,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 42px;
+  font-size: 40px;
   line-height: 65px;
   letter-spacing: .5px;
   font-weight: 300;
+
+  @media(min-width: @screen-sm-min) {
+    font-size: 42px;
+    line-height: 65px;
+  }
+}
+
+h2 {
+  font-size: 26px;
 }

@@ -140,6 +140,8 @@ export const createMarket = async (market) => {
     marketMaker: hexWithPrefix(gnosis.lmsrMarketMaker.address),
     marketFactory: hexWithPrefix(gnosis.standardMarketFactory.address),
     address: hexWithPrefix(marketContract.address),
+    tradingVolume: '0',
+    collectedFees: '0',
   }
 }
 

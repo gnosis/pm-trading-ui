@@ -81,6 +81,44 @@ export const isNumber = ({ decimals, realOnly, decimalsProp }) => (val, vals, p
 }
 
 /**
+ * Returns a validator function that check whether or not a property is greater than another.
+ * @function
+ * @param {string} opts.formProp - name of the validating input property
+ * @param {number} opts.validateAgainstProp - the property whose value must be validated against formProp
+ */
+export const greaterThanProperty = ({ formProp, validateAgainstProp }) => (val, props) => {
+  // don't validate if no value is set
+  if (required(val) !== undefined) {
+    return undefined
+  }
+
+  if (props[validateAgainstProp] !== undefined && parseFloat(val) <= parseFloat(props[validateAgainstProp])) {
+    return `${formProp} must be greater than LowerBound`
+  }
+
+  return undefined
+}
+
+/**
+ * Returns a validator function that check whether or not a property is lower than another.
+ * @function
+ * @param {string} opts.formProp - name of the validating input property
+ * @param {number} opts.validateAgainstProp - the property whose value must be validated against formProp
+ */
+export const lowerThanProperty = ({ formProp, validateAgainstProp }) => (val, props) => {
+  // don't validate if no value is set
+  if (required(val) !== undefined) {
+    return undefined
+  }
+
+  if (props[validateAgainstProp] !== undefined && parseFloat(val) >= parseFloat(props[validateAgainstProp])) {
+    return `${formProp} must be lower than LowerBound`
+  }
+
+  return undefined
+}
+
+/**
  * Returns a validator function that combines multiple validators, returning their errors comma seperated
  *
  * @function

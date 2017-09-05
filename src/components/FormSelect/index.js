@@ -6,7 +6,8 @@ import { pick } from 'lodash'
 import { bemifyClassName } from 'utils/helpers'
 
 const FormSelect = ({ input, label, values, className, defaultValue, ...props }) => {
-  const selectProps = pick(props, [])  
+  const selectProps = pick(props, [])
+
   return (
     <div className={`selectField ${bemifyClassName(className)}`}>
       <label htmlFor={input.name} className={`selectField__label ${bemifyClassName(className, 'label')}`}>{label}</label>

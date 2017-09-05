@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import Decimal from 'decimal.js'
 
@@ -35,7 +35,7 @@ const renderCategoricalGraph = (data) => {
     <div className="marketGraph">
       <div className="container marketGraph__container">
         <ResponsiveContainer>
-          <LineChart data={data} margin={{ top: 10, right: 50, left: 50, bottom: 0 }}>  
+          <LineChart data={data} margin={{ top: 10, right: 50, left: 50, bottom: 0 }}>
             <defs>
               {stacks.map((key, keyIndex) => (
                 <linearGradient key={key} id={`gradient_${key}`} x1="0" y1="0" x2="0" y2="1">
@@ -123,7 +123,7 @@ MarketGraph.propTypes = {
           type: PropTypes.string,
           lowerBound: PropTypes.string,
           upperBound: PropTypes.string,
-        }
+        },
       ),
       eventDescription: PropTypes.shape(
         {

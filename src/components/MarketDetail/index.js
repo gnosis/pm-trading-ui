@@ -6,18 +6,15 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import { weiToEth } from '../../utils/helpers'
 
-import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
+import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import { collateralTokenToText } from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
 
 import Countdown from 'components/Countdown'
-
+import Outcome from 'components/Outcome'
 import MarketGraph from 'components/MarketGraph'
-
-import OutcomeCategorical from 'components/OutcomeCategorical'
-import OutcomeScalar from 'components/OutcomeScalar'
 
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
@@ -32,33 +29,6 @@ const EXPAND_BUY_SHARES = 'buy-shares'
 const EXPAND_MY_TRADES = 'my-trades'
 const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
-
-// start debug history
-const generateRandomGraph = () => {
-  const startDate = moment().subtract(4, 'month')
-  const endDate = moment()
-  const curDate = startDate.clone()
-
-  const graphData = []
-
-  let dir = 0
-  const dirChangeForce = 0.0001
-
-  while (endDate.diff(curDate) > 0) {
-    curDate.add(12, 'hour')
-
-    dir += (dirChangeForce * Math.random())
-
-    const outcome1 = Math.min(dir * 50, 1)
-
-    graphData.push({ date: curDate.toDate(), outcome1, outcome2: 1 - outcome1 })
-  }
-  return graphData
-}
-
-const testData = generateRandomGraph()
-// end debug history
-
 
 const expandableViews = {
   [EXPAND_BUY_SHARES]: {
@@ -130,6 +100,8 @@ class MarketDetail extends Component {
             marketFetchError: err,
           })
         })
+    } else {
+      this.props.fetchMarketTrades(this.props.market)
     }
 
     if (this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
@@ -202,7 +174,7 @@ class MarketDetail extends Component {
     }
 
     return (
-      <div className="marketInfos col-md-3">
+      <div className="marketInfos col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0">
         {Object.keys(infos).map(label => (
           <div className="marketInfo" key={label}>
             <p className="marketInfo__info marketInfo__info--value">{infos[label]}</p>
@@ -213,31 +185,23 @@ class MarketDetail extends Component {
     )
   }
 
-  renderOutcome(market) {
-    const { event: { type: eventType } } = market
-
-    return eventType === OUTCOME_TYPES.CATEGORICAL ?
-      <OutcomeCategorical market={market} /> :
-      <OutcomeScalar market={market} />
-  }
-
   renderDetails(market) {
     const showWinning = market.oracle.isOutcomeSet
     const showLost = false // determine if we lost?
     const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
 
     return (
-      <div className="marketDetails col-md-9">
+      <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
         <div className="marketDescription">
           <p className="marketDescription__text">{ market.eventDescription.description }</p>
         </div>
-        {this.renderOutcome(market)}
+        <Outcome market={market} />
         <div className="marketTimer">
           <div className="marketTimer__live">
             <Countdown target={market.eventDescription.resolutionDate} />
           </div>
           <small className="marketTime__absolute">
-            {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+            {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
           </small>
         </div>
         {showWithdrawFees && (
@@ -325,7 +289,7 @@ class MarketDetail extends Component {
       <div className="marketDetailPage">
         <div className="container">
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-xs-10 col-xs-offset-1 col-sm-7 col-sm-offset-0">
               <h1 className="marketTitle__heading">{ market.eventDescription.title }</h1>
             </div>
           </div>
