@@ -114,9 +114,9 @@ class MarketCreateReview extends Component {
   }
 
   renderCheckout() {
-    const { formValues: { funding, collateralToken } } = this.props
+    const { formValues: { funding, collateralToken }, gasCost } = this.props
 
-    const costEstimation = 0
+    const costEstimation = gasCost.market ? gasCost.market : 0
 
     return (
       <div className="checkout">
@@ -270,6 +270,7 @@ MarketCreateReview.propTypes = {
     outcomeType: PropTypes.string,
     outcomes: PropTypes.arrayOf(PropTypes.string),
   }),
+  gasCost: PropTypes.object,
   changeUrl: PropTypes.func,
   submitForm: PropTypes.func,
 }

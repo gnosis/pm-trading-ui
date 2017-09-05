@@ -232,3 +232,13 @@ export const calcLMSRCost = Gnosis.calcLMSRCost
 export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
 export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
 export const calcLMSRProfit = Gnosis.calcLMSRProfit
+
+export const calcMarketGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return await gnosis.createMarket.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const calcBuySharesGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return gnosis.contracts.Market.gasStats.buy.averageGasUsed
+}

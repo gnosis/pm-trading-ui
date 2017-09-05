@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { reduxForm, formValueSelector } from 'redux-form'
 import { push } from 'react-router-redux'
 
+import { requestGasCost } from 'actions/blockchain'
 import { getDefaultAccount } from 'selectors/blockchain'
 
 import MarketCreateWizard from 'components/MarketCreateWizard'
@@ -35,6 +36,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeUrl: url => dispatch(push(url)),
+  requestGasCost: contractType => dispatch(requestGasCost(contractType)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm(FORM)(MarketCreateWizard))

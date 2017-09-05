@@ -79,6 +79,7 @@ const mapStateToProps = (state) => {
       decimals: selector(state, 'decimals'),
       unit: selector(state, 'unit'),
     },
+    gasCost: state.gasCost,
   }
 }
 

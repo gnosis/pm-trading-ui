@@ -43,3 +43,12 @@ export const TRANSACTION_COMPLETE_STATUS = {
   ERROR: 'ERROR',
   TIMEOUT: 'TIMEOUT',
 }
+
+export const GAS_COST = {
+  MARKET_CREATION: 'market',
+  BUY_SHARES: 'buyShares',
+  SELL_SHARES: 'sellShares',
+  RESOLVE_ORACLE: 'resolveOracle',
+  WITHDRAW_FEES: 'withdrawFees',
+  REDEEM_WINNINGS: 'redeemWinnings',
+}
