@@ -7,32 +7,40 @@ import {
 import {
   startTransactionLog,
   closeTransactionLog,
+  showTransactionLog,
+  hideTransactionLog,
   addTransactionLogEntry,
 } from 'actions/transactions'
 
 const reducer = handleActions({
   [startTransactionLog]: (state, action) => ({
     ...state,
-    [action.payload.id]: {
-      ...action.payload,
-      events: action.payload.events.map((event) => {
-        if (!event.status) {
-          return {
-            ...event,
-            status: TRANSACTION_STATUS.RUNNING,
+    log: {
+      ...state.log,
+      [action.payload.id]: {
+        ...action.payload,
+        events: action.payload.events.map((event) => {
+          if (!event.status) {
+            return {
+              ...event,
+              status: TRANSACTION_STATUS.RUNNING,
+            }
           }
-        }
-        return event
-      }),
+          return event
+        }),
+      },
     },
   }),
   [closeTransactionLog]: (state, action) => {
     const { id, ...payload } = action.payload
     return {
       ...state,
-      [id]: {
-        ...state[id],
-        ...payload,
+      log: {
+        ...state.log,
+        [id]: {
+          ...state.log[id],
+          ...payload,
+        },
       },
     }
   },
@@ -41,22 +49,33 @@ const reducer = handleActions({
 
     return {
       ...state,
-      [id]: {
-        ...state[id],
-        events: state[id].events.map((log) => {
-          if (log.event === transactionLog.event) {
-            return {
-              ...log,
-              ...transactionLog,
+      log: {
+        ...state.log,
+        [id]: {
+          ...state.log[id],
+          events: state.log[id].events.map((log) => {
+            if (log.event === transactionLog.event) {
+              return {
+                ...log,
+                ...transactionLog,
+              }
             }
-          }
 
-          return log
-        }),
+            return log
+          }),
+        },
       },
     }
   },
-}, {})
+  [showTransactionLog]: state => ({
+    ...state,
+    visible: true,
+  }),
+  [hideTransactionLog]: state => ({
+    ...state,
+    visible: false,
+  }),
+}, { log: {}, visible: false })
 
 
 export default reducer

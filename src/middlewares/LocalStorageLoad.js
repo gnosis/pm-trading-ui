@@ -1,3 +1,5 @@
+const LOAD_LOCALSTORAGE = 'LOAD_LOCALSTORAGE'
+
 export default store => next => (action) => {
   const { type } = action
 
@@ -6,11 +8,12 @@ export default store => next => (action) => {
   try {
     const storedState = JSON.parse(
       // eslint-disable-next-line
-      window.localStorage.getItem(`AURATIKUM_${__VERSION__}`)
+      window.localStorage.getItem(`GNOSIS_${process.env.VERSION}`)
     )
+
     if (storedState) {
       store.dispatch({
-        type: 'LOAD_LOCALSTORAGE',
+        type: LOAD_LOCALSTORAGE,
         payload: storedState,
       })
     }
