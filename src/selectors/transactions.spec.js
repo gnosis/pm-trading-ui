@@ -6,20 +6,24 @@ describe('transactionsSelector', () => {
   test('it should return a transaction object', () => {
     const state = {
       transactions: {
-        test123: {
-          id: 'test123',
+        log: {
+          test123: {
+            id: 'test123',
+          },
         },
       },
     }
     
-    expect(transactionSelector(state, 'test123')).toMatchObject(state.transactions.test123)
+    expect(transactionSelector(state, 'test123')).toMatchObject(state.transactions.log.test123)
   })
 
   test('it should return an empty object for an invalid transaction id', () => {
     const state = {
       transactions: {
-        test123: {
-          id: 'test123',
+        log: {
+          test123: {
+            id: 'test123',
+          },
         },
       },
     }

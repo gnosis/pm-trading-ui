@@ -19,14 +19,15 @@ const reducers = combineReducers({
   notifications,
 })
 
-/*
 const rootReducer = (state, action) => {
   let resultState = state
-  if (action.type === 'LOGOUT') {
-    resultState = undefined
+  if (action.type === 'LOAD_LOCALSTORAGE') {
+    resultState = {
+      ...state,
+      ...action.payload,
+    }
   }
   return reducers(resultState, action)
 }
-*/
 
-export default reducers
+export default rootReducer
