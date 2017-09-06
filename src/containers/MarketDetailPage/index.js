@@ -9,6 +9,7 @@ import {
   sellMarketShares,
   requestMarketShares,
   requestMarket,
+  requestMarketTrades,
   requestMarketParticipantTrades,
   resolveMarket,
   redeemWinnings,
@@ -26,7 +27,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     market: getMarketById(state)(ownProps.params.id),
     marketShares: getMarketSharesByMarket(state)(ownProps.params.id, getDefaultAccount(state)),
-    selectedCategoricalOutcome: marketBuySelector(state, 'selectedOutcome'),
+    selectedOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
@@ -36,6 +37,9 @@ const mapStateToProps = (state, ownProps) => {
     defaultAccount: getDefaultAccount(state),
     isModerator: getIsModerator(state, getDefaultAccount(state)),
     trades: getMarketParticipantsTrades(state)(),
+    initialValues: {
+      selectedOutcome: 0,
+    },
   }
 }
 
@@ -44,6 +48,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarketShares: accountAddress => dispatch(requestMarketShares(ownProps.params.id, accountAddress)),
   fetchMarketParticipantTrades: (marketAddress, accountAddress) =>
     dispatch(requestMarketParticipantTrades(marketAddress, accountAddress)),
+  fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
   sellShares: (market, outcomeIndex, outcomeTokenCount) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount)),
   resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),

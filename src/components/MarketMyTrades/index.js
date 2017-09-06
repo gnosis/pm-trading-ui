@@ -11,10 +11,10 @@ class MarketMyTrades extends Component {
 
   componentWillMount() {
     const { market, defaultAccount } = this.props    
-    if (!this.props.trades || this.props.trades.length == 0) {
+    if (!market.participantTrades || market.participantTrades.length == 0) {
       // Retrieve participant trades to state
       this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
-    }    
+    }
   }
 
   getAverageCost(order) {
@@ -29,8 +29,8 @@ class MarketMyTrades extends Component {
     }
   }
   renderTrades() {
-    const { market, trades } = this.props
-    const tableRowElements = trades.map((trade) => {
+    const { market } = this.props
+    const tableRowElements = market.participantTrades.map((trade) => {
       return (
         <tr className="marketMyTrades__share" key={trade['_id']}>
           <td>
@@ -61,8 +61,8 @@ class MarketMyTrades extends Component {
   }
 
   render() {
-    const { marketShares, market, trades } = this.props
-    if (trades.length > 0) {
+    const { marketShares, market } = this.props
+    if (market.participantTrades && market.participantTrades.length > 0) {
       return (
         <div className="marketMyTrades">
           <h2 className="marketMyTrades__heading">My Trades</h2>

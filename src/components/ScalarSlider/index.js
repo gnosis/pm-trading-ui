@@ -25,7 +25,6 @@ const ScalarSlider = ({
 
   const selectedValue = new Decimal(marginalPriceSelected).mul(bounds.toString()).add(bigLowerBound.div(10 ** decimals).toString())
   const selectedPercentage = new Decimal(marginalPriceSelected).mul(100)
-
   return (
     <div className="scalarSlider">
       <div className="slider">

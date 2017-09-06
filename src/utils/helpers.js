@@ -56,12 +56,33 @@ export const weiToEth = (value) => {
 
 export const getOutcomeName = (market, index) => {
   let outcomeName
+  if (!market.event) {
+    return null
+  }
   if (market.event.type === OUTCOME_TYPES.CATEGORICAL) {
     outcomeName = market.eventDescription.outcomes[index]
   } else if (market.event.type === OUTCOME_TYPES.SCALAR) {
     outcomeName = index === 0 ? 'Short' : 'Long'
   }
   return outcomeName
+}
+
+export const normalizeScalarPoint = (
+  marginalPrices,
+  { event: {
+    lowerBound, upperBound,
+  },
+  eventDescription: { decimals },
+}) => {
+  const bigDecimals = parseInt(decimals, 10)
+
+  const bigUpperBound = Decimal(upperBound).div(10 ** bigDecimals)
+  const bigLowerBound = Decimal(lowerBound).div(10 ** bigDecimals)
+
+  const bounds = bigUpperBound.sub(bigLowerBound)
+  return Decimal(marginalPrices[1].toString()).times(bounds).add(bigLowerBound)
+          .toDP(decimals)
+          .toNumber()
 }
 
 /**
