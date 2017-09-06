@@ -20,7 +20,6 @@ const Header = ({ version, defaultAccount }) => (
       </div>
       <div className="headerContainer__group headerContainer__group--right">
         {defaultAccount && <Link to="/account" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Account</Link>}
-        {/* <Link to="/settings" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Settings</Link>*/}
       </div>
     </div>
   </div>
