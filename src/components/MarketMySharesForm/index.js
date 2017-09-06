@@ -4,7 +4,7 @@ import { reduxForm, Field, propTypes } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
-import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
+import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount, calcLMSRProfit } from 'api'
 
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -96,36 +96,34 @@ class MarketMySharesForm extends Component {
       gasPrice,
     } = this.props
 
-    const hasEnteredSellAmount = typeof selectedSellAmount !== 'undefined' || selectedSellAmount === ''
     let selectedSellAmountWei
     try {
-      selectedSellAmountWei = Decimal(selectedSellAmount || 0).mul(1e18).toString()
+      selectedSellAmountWei = new Decimal(parseFloat(selectedSellAmount) || 0).mul(1e18).toString()
     } catch (e) {
       selectedSellAmountWei = '0'
-    }    
+    }
     let currentProbability
     try {
       currentProbability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
         funding: market.funding,
         outcomeTokenIndex: share.outcomeToken.index,
       })
     } catch (e) {
-      currentProbability = Decimal('0')
+      currentProbability = new Decimal(0)
     }
 
-    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal('0')
-
-    let newTokenCount
-    try {
-      newTokenCount = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
+    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0))
+    let earnings = new Decimal(0)
+    if (share.balance && selectedSellAmount) {
+      earnings = calcLMSRProfit({
+        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
         funding: market.funding,
         outcomeTokenIndex: share.outcomeToken.index,
-        cost: Decimal(share.balance).sub(selectedSellAmountWei).toString(),
+        outcomeTokenCount: selectedSellAmountWei,
+        feeFactor: market.fee,
       })
-    } catch (e) {
-      newTokenCount = currentTokenCount
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
@@ -146,6 +144,8 @@ class MarketMySharesForm extends Component {
     } catch (e) {
       newProbability = currentProbability
     }
+
+    // const earnings = selectedSellAmount && parseFloat(selectedSellAmount) > 0 ? newTokenCount.mul(currentProbability).div(1e18) : new Decimal(0)
 
     const submitDisabled = invalid || submitting || !isConfirmedSell
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))
@@ -173,7 +173,7 @@ class MarketMySharesForm extends Component {
             <div className="col-md-3">
               <label>Earnings</label>
               <span>
-                <DecimalValue value={currentTokenCount.sub(newTokenCount).mul(currentProbability).div(1e18)} />
+                <DecimalValue value={earnings} />
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </span>
             </div>
