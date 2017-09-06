@@ -21,8 +21,11 @@ export default class MarketCreateWizard extends Component {
       this.props.changeUrl('/markets')
     }
 
-    this.props.requestGasCost(GAS_COST.BUY_SHARES)
     this.props.requestGasCost(GAS_COST.MARKET_CREATION)
+    this.props.requestGasCost(GAS_COST.CENTRALIZED_ORACLE)
+    this.props.requestGasCost(GAS_COST.CATEGORICAL_EVENT)
+    this.props.requestGasCost(GAS_COST.SCALAR_EVENT)
+    this.props.requestGasCost(GAS_COST.FUNDING)
   }
 
   @autobind

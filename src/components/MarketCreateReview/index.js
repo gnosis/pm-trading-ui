@@ -5,6 +5,7 @@ import moment from 'moment'
 import autobind from 'autobind-decorator'
 
 import { OUTCOME_TYPES, RESOLUTION_TIME, COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { weiToEth } from 'utils/helpers'
 
 import CurrencyName from 'components/CurrencyName'
 import Checkbox from 'components/FormCheckbox'
@@ -114,9 +115,9 @@ class MarketCreateReview extends Component {
   }
 
   renderCheckout() {
-    const { formValues: { funding, collateralToken }, gasCost } = this.props
+    const { gasCosts, formValues: { funding, collateralToken } } = this.props
 
-    const costEstimation = gasCost.market ? gasCost.market : 0
+    const gasCostEstimation = gasCosts && gasCosts.market ? gasCosts.market : 0
 
     return (
       <div className="checkout">
@@ -127,13 +128,13 @@ class MarketCreateReview extends Component {
           </li>
           <li className="checkout__listItem">
             <span className="listItem__label">Gas Costs</span>
-            <span className="listItem__value">{Decimal(costEstimation || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} /></span>
+            <span className="listItem__value">{weiToEth(Decimal(gasCostEstimation || 0).toFixed(4))} <CurrencyName collateralToken={collateralToken} /></span>
           </li>
           <li className="checkout__seperator" />
           <li className="checkout__listItem checkout__listItem--total">
             <span className="listItem__label">Total</span>
             <span className="listItem__value">
-              {Decimal(funding || 0).add(Decimal(costEstimation || 0)).toFixed(4)}
+              {Decimal(funding || 0).add(Decimal(gasCostEstimation || 0)).toFixed(4)}
             </span>
           </li>
         </ul>
@@ -270,7 +271,7 @@ MarketCreateReview.propTypes = {
     outcomeType: PropTypes.string,
     outcomes: PropTypes.arrayOf(PropTypes.string),
   }),
-  gasCost: PropTypes.object,
+  gasCosts: PropTypes.object, // TODO choose whether or not use shape
   changeUrl: PropTypes.func,
   submitForm: PropTypes.func,
 }

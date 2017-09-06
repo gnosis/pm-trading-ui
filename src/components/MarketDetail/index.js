@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import { weiToEth } from '../../utils/helpers'
 
-import { RESOLUTION_TIME } from 'utils/constants'
+import { RESOLUTION_TIME, GAS_COST } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import { collateralTokenToText } from 'components/CurrencyName'
@@ -107,6 +107,9 @@ class MarketDetail extends Component {
     if (this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
       this.props.fetchMarketShares(this.props.defaultAccount)
     }
+
+    this.props.requestGasCost(GAS_COST.BUY_SHARES)
+    this.props.requestGasCost(GAS_COST.SELL_SHARES)
   }
 
   @autobind
@@ -321,6 +324,7 @@ MarketDetail.propTypes = {
   fetchMarket: PropTypes.func,
   fetchMarketShares: PropTypes.func,
   fetchMarketTrades: PropTypes.func,
+  requestGasCost: PropTypes.func,
   isModerator: PropTypes.bool,
 }
 

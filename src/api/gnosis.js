@@ -233,6 +233,29 @@ export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
 export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
 export const calcLMSRProfit = Gnosis.calcLMSRProfit
 
+/*
+* Gas Calculation functions
+*/
+export const calcFundingGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return gnosis.contracts.Market.gasStats.fund.averageGasUsed
+}
+
+export const calcCategoricalEventGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return await gnosis.createCategoricalEvent.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const calcScalarEventGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return await gnosis.createScalarEvent.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const calcCentralizedOracleGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return await gnosis.createCentralizedOracle.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
 export const calcMarketGasCost = async () => {
   const gnosis = await getGnosisConnection()
   return await gnosis.createMarket.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
@@ -240,5 +263,12 @@ export const calcMarketGasCost = async () => {
 
 export const calcBuySharesGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  return gnosis.contracts.Market.gasStats.buy.averageGasUsed
+  // return gnosis.contracts.Market.gasStats.buy.averageGasUsed
+  return await gnosis.buyOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const calcSellSharesGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  // return gnosis.contracts.Market.gasStats.sell.averageGasUsed
+  return await gnosis.sellOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
 }

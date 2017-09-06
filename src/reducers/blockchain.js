@@ -21,6 +21,7 @@ const reducer = handleActions({
   [setGasCost]: (state, action) => ({
     ...state,
     [action.payload.entityType]: {
+      ...state[action.payload.entityType],
       [action.payload.contractType]: action.payload.gasCost,
     },
   }),

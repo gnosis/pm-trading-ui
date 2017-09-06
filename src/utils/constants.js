@@ -51,4 +51,8 @@ export const GAS_COST = {
   RESOLVE_ORACLE: 'resolveOracle',
   WITHDRAW_FEES: 'withdrawFees',
   REDEEM_WINNINGS: 'redeemWinnings',
+  CATEGORICAL_EVENT: 'categoricalEvent',
+  SCALAR_EVENT: 'scalarEvent',
+  CENTRALIZED_ORACLE: 'centralizedOracle',
+  FUNDING: 'funding',
 }

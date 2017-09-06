@@ -13,7 +13,7 @@ import FormInput from 'components/FormInput'
 import FormCheckbox from 'components/FormCheckbox'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-import { getOutcomeName } from 'utils/helpers'
+import { getOutcomeName, weiToEth } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
@@ -81,6 +81,7 @@ class MarketMySharesForm extends Component {
       marketShares: {
         [extendedSellIndex]: share,
       },
+      gasCosts,
     } = this.props
 
     const hasEnteredSellAmount = typeof selectedSellAmount !== 'undefined' || selectedSellAmount === ''
@@ -135,6 +136,8 @@ class MarketMySharesForm extends Component {
     }
 
     const submitDisabled = invalid || submitting || !isConfirmedSell
+    // TODO multiply for gasPrice
+    const gasCostEstimation = gasCosts && gasCosts.sellShares ? gasCosts.sellShares : 0
 
     return (
       <div className="marketMyShares__sellContainer">
@@ -160,6 +163,15 @@ class MarketMySharesForm extends Component {
               <label>Earnings</label>
               <span>
                 <DecimalValue value={currentTokenCount.sub(newTokenCount).mul(currentProbability).div(1e18)} />
+                <CurrencyName collateralToken={market.event.collateralToken} />
+              </span>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3 col-md-offset-3">
+              <label>Gas costs</label>
+              <span>
+                {weiToEth(gasCostEstimation)}
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </span>
             </div>

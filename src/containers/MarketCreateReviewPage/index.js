@@ -5,7 +5,7 @@ import moment from 'moment'
 import uuid from 'uuid/v4'
 
 import MarketCreateReview from 'components/MarketCreateReview'
-
+import { getGasCosts } from 'selectors/blockchain'
 import { createMarket } from 'actions/market'
 import { openModal } from 'actions/modal'
 
@@ -79,7 +79,7 @@ const mapStateToProps = (state) => {
       decimals: selector(state, 'decimals'),
       unit: selector(state, 'unit'),
     },
-    gasCost: state.gasCost,
+    gasCosts: getGasCosts(state),
   }
 }
 

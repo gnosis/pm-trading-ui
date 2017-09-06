@@ -5,6 +5,7 @@ import autobind from 'autobind-decorator'
 
 import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
+import { weiToEth } from 'utils/helpers'
 import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
@@ -233,6 +234,7 @@ class MarketBuySharesForm extends Component {
         },
       },
       selectedOutcome,
+      gasCosts,
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
@@ -241,6 +243,7 @@ class MarketBuySharesForm extends Component {
 
     const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest)
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
+    const gasCostEstimation = gasCosts && gasCosts.buyShares ? gasCosts.buyShares : 0
 
     let submitEnabled = false
     let fieldError
@@ -305,6 +308,12 @@ class MarketBuySharesForm extends Component {
                     Maximum return in %
                   </div>
                 <div className="col-md-6">{fieldError || maxReturnField}</div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-6">
+                    Gas Costs
+                  </div>
+                <div className="col-md-6">{weiToEth(Decimal(gasCostEstimation || 0).toFixed(4))} <CurrencyName collateralToken={collateralToken} /></div>
               </div>
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-12">
