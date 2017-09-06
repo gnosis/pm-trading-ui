@@ -67,6 +67,24 @@ export const getOutcomeName = (market, index) => {
   return outcomeName
 }
 
+export const normalizeScalarPoint = (
+  marginalPrices,
+  { event: {
+    lowerBound, upperBound,
+  },
+  eventDescription: { decimals },
+}) => {
+  const bigDecimals = parseInt(decimals, 10)
+
+  const bigUpperBound = Decimal(upperBound).div(10 ** bigDecimals)
+  const bigLowerBound = Decimal(lowerBound).div(10 ** bigDecimals)
+
+  const bounds = bigUpperBound.sub(bigLowerBound)
+  return Decimal(marginalPrices[1].toString()).times(bounds).add(bigLowerBound)
+          .toDP(decimals)
+          .toNumber()
+}
+
 /**
  * Adds _id incremental numeric property to each object in the array
  * @param { objects[] } arrayData

@@ -156,14 +156,14 @@ class Dashboard extends Component {
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
           <div className="dashboardMarket__title">{holding.eventDescription.title}</div>
           <div className="outcome row">
-            <div className="col-md-2">
+            <div className="col-md-3">
               <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }} />
-              <div className="text-white pull-left margin-top-6">{getOutcomeName(market, holding.outcomeToken.index)}</div>
+              <div className="dashboardMarket--highlight pull-left">{getOutcomeName(market, holding.outcomeToken.index)}</div>
             </div>
-            <div className="col-md-2 text-white margin-top-6">
+            <div className="col-md-2 dashboardMarket--highlight">
               {market.marginalPrices ? Math.round(market.marginalPrices[holding.outcomeToken.index] * 100).toFixed(0) : 0}%
             </div>
-            <div className="col-md-3 text-white margin-top-6">
+            <div className="col-md-3 dashboardMarket--highlight">
               <DecimalValue value={weiToEth(holding.balance)} />&nbsp;
               {market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
             </div>
@@ -184,18 +184,18 @@ class Dashboard extends Component {
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
           <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
           <div className="outcome row">
-            <div className="col-md-2">
+            <div className="col-md-3">
               <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }} />
-              <div className="text-white pull-left margin-top-6">{getOutcomeName(market, trade.outcomeToken.index)}</div>
+              <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
-            <div className="col-md-2 text-white margin-top-6">
+            <div className="col-md-2 dashboardMarket--highlight">
               {new Decimal(averagePrice).toFixed(4)}
               &nbsp;{market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
             </div>
-            <div className="col-md-3 text-white margin-top-6">
+            <div className="col-md-3 dashboardMarket--highlight">
               {moment.utc(market.creationDate).format('MMMM Y')}
             </div>
-            <div className="col-md-2 text-white margin-top-6">
+            <div className="col-md-2 dashboardMarket--highlight">
               {trade.orderType}
             </div>
           </div>
@@ -258,7 +258,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    // const { markets } = this.props
+    const { accountPredictiveAssets, accountParticipatingInEvents } = this.props
     return (
       <div className="dashboardPage">
         <div className="dashboardPage__header">
@@ -281,12 +281,15 @@ class Dashboard extends Component {
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
                 <div className="dashboardStats__icon icon icon--incomeForecast" />
-                <span className="dashboardStats__value">Value</span>
+                <span className="dashboardStats__value" style={{ color: 'green' }}>
+                  <DecimalValue value={accountPredictiveAssets} />
+                  &nbsp;ETH
+                </span>
                 <div className="dashboardStats__label">Predicted Profits</div>
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
                 <div className="dashboardStats__icon icon icon--new" />
-                <span className="dashboardStats__value">Value</span>
+                <span className="dashboardStats__value">{ accountParticipatingInEvents }</span>
                 <div className="dashboardStats__label">Participating in Markets</div>
               </div>
             </div>
@@ -328,6 +331,8 @@ Dashboard.propTypes = {
   defaultAccount: PropTypes.string,
   accountShares: PropTypes.array,
   accountTrades: PropTypes.array,
+  accountPredictiveAssets: PropTypes.string,
+  accountParticipatingInEvents: PropTypes.number,
   requestMarkets: PropTypes.func,
   requestAccountShares: PropTypes.func,
   requestAccountTrades: PropTypes.func,

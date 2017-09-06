@@ -3,9 +3,11 @@ import { push } from 'react-router-redux'
 
 
 import DashboardPage from 'components/Dashboard'
-import { getMarkets, getAccountShares, getAccountTrades } from 'selectors/market'
+import { getMarkets, getAccountShares, getAccountTrades, 
+  getAccountPredictiveAssets, getAccountParticipatingInEvents } from 'selectors/market'
 import { getDefaultAccount } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares } from 'actions/market'
+import { weiToEth } from 'utils/helpers'
 
 
 const mapStateToProps = (state) => {
@@ -13,12 +15,16 @@ const mapStateToProps = (state) => {
   const defaultAccount = getDefaultAccount(state)
   const accountShares = getAccountShares(state, defaultAccount)
   const accountTrades = getAccountTrades(state, defaultAccount)
+  const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
+  const accountParticipatingInEvents = getAccountParticipatingInEvents(state, defaultAccount).length
 
   return {
     defaultAccount,
     markets,
     accountShares,
     accountTrades,
+    accountPredictiveAssets,
+    accountParticipatingInEvents,
   }
 }
 
