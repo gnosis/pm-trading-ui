@@ -37,13 +37,30 @@ export const getCurrentAccount = async () => {
   return gnosis.web3.eth.accounts[0]
 }
 
+const normalizeEventDescription = (eventDescription, eventType) => {
+  const eventDescriptionNormalized = {
+    title: eventDescription.title,
+    resolutionDate: eventDescription.resolutionDate,
+    description: eventDescription.description,
+  }
+  if (eventType === OUTCOME_TYPES.CATEGORICAL) {
+    eventDescriptionNormalized.outcomes = eventDescription.outcomes
+  } else if (eventType === OUTCOME_TYPES.SCALAR) {
+    eventDescriptionNormalized.decimals = parseInt(eventDescription.decimals, 10)
+    eventDescriptionNormalized.unit = eventDescription.unit
+  } else if (eventType === undefined) {
+    throw new Error('Must pass eventType')
+  }
+  return eventDescriptionNormalized
+}
 
-export const createEventDescription = async (eventDescription) => {
+export const createEventDescription = async (eventDescription, eventType) => {
   console.log('eventDescription', eventDescription)
+  const eventDescriptionNormalized = normalizeEventDescription(eventDescription, eventType)
   const gnosis = await getGnosisConnection()
   // console.log(description)
 
-  const ipfsHash = await gnosis.publishEventDescription(eventDescription)
+  const ipfsHash = await gnosis.publishEventDescription(eventDescriptionNormalized)
 
   if (process.env.NODE_ENV !== 'production') {
     await delay(5000)
@@ -52,7 +69,7 @@ export const createEventDescription = async (eventDescription) => {
   return {
     ipfsHash,
     local: true,
-    ...eventDescription,
+    ...eventDescriptionNormalized,
   }
 }
 
