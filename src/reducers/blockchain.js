@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions'
 
 import { setDefaultAccount, setConnectionStatus, setGasCost, setGasPrice } from 'actions/blockchain'
+import { GAS_COST } from 'utils/constants'
 
 const reducer = handleActions({
   [setDefaultAccount]: (state, action) => {
@@ -30,6 +31,8 @@ const reducer = handleActions({
     [action.payload.entityType]: action.payload.gasPrice,
   }),
 }, {
+  gasCosts: Object.keys(GAS_COST).reduce((acc, item) => ({ ...acc, [GAS_COST[item]]: 0 }), {}),
+  gasPrice: 0,
   defaultAccount: undefined,
   connection: undefined,
   connectionTried: false,

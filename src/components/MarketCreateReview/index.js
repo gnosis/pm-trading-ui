@@ -116,6 +116,7 @@ class MarketCreateReview extends Component {
 
   renderCheckout() {
     const { createMarketCost, formValues: { funding, collateralToken } } = this.props
+
     return (
       <div className="checkout">
         <ul className="checkout__list">
@@ -126,14 +127,14 @@ class MarketCreateReview extends Component {
           <li className="checkout__listItem">
             <span className="listItem__label">Gas Costs</span>
             <span className="listItem__value">
-              <DecimalValue decimal={Decimal(createMarketCost)} /> <CurrencyName collateralToken={collateralToken} />
+              <DecimalValue value={createMarketCost} /> <CurrencyName collateralToken={collateralToken} />
             </span>
           </li>
           <li className="checkout__seperator" />
           <li className="checkout__listItem checkout__listItem--total">
             <span className="listItem__label">Total</span>
             <span className="listItem__value">
-              <DecimalValue decimal={Decimal(funding || 0).add(Decimal(createMarketCost))} />
+              <DecimalValue value={Decimal(funding || 0).add(Decimal(createMarketCost)).toFixed(4)} />
             </span>
           </li>
         </ul>

@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator'
 import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { weiToEth } from 'utils/helpers'
-import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import DecimalValue from 'components/DecimalValue'
@@ -20,6 +20,17 @@ import Checkbox from 'components/FormCheckbox'
 import './marketBuySharesForm.less'
 
 class MarketBuySharesForm extends Component {
+
+  componentWillMount() {
+    const { gasCosts, gasPrice, requestGasCost, requestGasPrice } = this.props
+    if (gasCosts.buyShares === 0) {
+      requestGasCost(GAS_COST.BUY_SHARES)
+    }
+    if (gasPrice.eq(0)) {
+      requestGasPrice()
+    }
+  }
+
   getOutcomeTokenCount(investment, outcomeIndex) {
     if (!investment || !(parseFloat(investment) > 0)) {
       return new Decimal(0)
@@ -235,6 +246,7 @@ class MarketBuySharesForm extends Component {
       },
       selectedOutcome,
       gasCosts,
+      gasPrice,
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
@@ -243,7 +255,7 @@ class MarketBuySharesForm extends Component {
 
     const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest)
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
-    const gasCostEstimation = gasCosts && gasCosts.buyShares ? gasCosts.buyShares : 0
+    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
 
     let submitEnabled = false
     let fieldError
@@ -313,7 +325,8 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">
                     Gas Costs
                   </div>
-                <div className="col-md-6">{weiToEth(Decimal(gasCostEstimation || 0).toFixed(4))} <CurrencyName collateralToken={collateralToken} /></div>
+                <div className="col-md-6">
+                  <DecimalValue value={gasCostEstimation} /> <CurrencyName collateralToken={collateralToken} /></div>
               </div>
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-12">

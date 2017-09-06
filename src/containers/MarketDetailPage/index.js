@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
 import { replace } from 'react-router-redux'
-import { requestGasCost } from 'actions/blockchain'
+import { requestGasCost, requestGasPrice } from 'actions/blockchain'
 import MarketDetail from 'components/MarketDetail'
 
 import {
@@ -16,7 +16,7 @@ import {
   withdrawFees,
 } from 'actions/market'
 import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
-import { getDefaultAccount, getGasCosts } from 'selectors/blockchain'
+import { getDefaultAccount, getGasCosts, getGasPrice } from 'selectors/blockchain'
 import { getIsModerator } from 'selectors/settings'
 
 const mapStateToProps = (state, ownProps) => {
@@ -41,6 +41,7 @@ const mapStateToProps = (state, ownProps) => {
       selectedOutcome: 0,
     },
     gasCosts: getGasCosts(state),
+    gasPrice: getGasPrice(state),
   }
 }
 
@@ -57,6 +58,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   withdrawFees: market => dispatch(withdrawFees(market)),
   requestGasCost: contractType => dispatch(requestGasCost(contractType)),
+  requestGasPrice: () => dispatch(requestGasPrice()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)

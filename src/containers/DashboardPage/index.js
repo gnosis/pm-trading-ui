@@ -3,10 +3,11 @@ import { push } from 'react-router-redux'
 
 
 import DashboardPage from 'components/Dashboard'
-import { getMarkets, getAccountShares, getAccountTrades, 
+import { getMarkets, getAccountShares, getAccountTrades,
   getAccountPredictiveAssets, getAccountParticipatingInEvents } from 'selectors/market'
 import { getDefaultAccount } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares } from 'actions/market'
+import { requestGasPrice } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
 
 
@@ -33,6 +34,7 @@ const mapDispatchToProps = dispatch => ({
   requestAccountTrades: address => dispatch(requestAccountTrades(address)),
   requestAccountShares: address => dispatch(requestAccountShares(address)),
   changeUrl: url => dispatch(push(url)),
+  requestGasPrice: () => dispatch(requestGasPrice()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage)
