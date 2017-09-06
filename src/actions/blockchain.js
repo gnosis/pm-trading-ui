@@ -39,37 +39,30 @@ export const requestGasPrice = () => async (dispatch) => {
 export const requestGasCost = contractType => async (dispatch) => {
   if (contractType === GAS_COST.MARKET_CREATION) {
     calcMarketGasCost().then((gasCost) => {
-      console.log('GasCost:', gasCost)
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   } else if (contractType === GAS_COST.BUY_SHARES) {
     calcBuySharesGasCost().then((gasCost) => {
-      console.log('GasCost:', gasCost)
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   } else if (contractType === GAS_COST.SELL_SHARES) {
     calcSellSharesGasCost().then((gasCost) => {
-      console.log('GasCost:', gasCost)
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   } else if (contractType === GAS_COST.CATEGORICAL_EVENT) {
     calcCategoricalEventGasCost().then((gasCost) => {
-      console.log('GasCost:', gasCost)
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   } else if (contractType === GAS_COST.SCALAR_EVENT) {
     calcScalarEventGasCost().then((gasCost) => {
-      console.log('GasCost:', gasCost)
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   } else if (contractType === GAS_COST.CENTRALIZED_ORACLE) {
     calcCentralizedOracleGasCost().then((gasCost) => {
-      console.log('GasCost:', gasCost)
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   } else if (contractType === GAS_COST.FUNDING) {
     calcFundingGasCost().then((gasCost) => {
-      console.log('GasCost:', gasCost)
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   }

@@ -48,8 +48,12 @@ export const toEntity = (data, entityType, idKey = 'address') => {
  */
 export const weiToEth = (value) => {
   let ethValue = '0'
-  if (value && Decimal(value).gt(0)) {
-    ethValue = Decimal(value).div(1e18).toString()
+  if (value) {
+    if (value.gt && value.gt(0)) {
+      ethValue = value.div(1e18).toString()
+    } else if (new Decimal(value).gt(0)) {
+      ethValue = new Decimal(value).div(1e18).toString()
+    }
   }
   return ethValue
 }
