@@ -26,6 +26,7 @@ export default class MarketCreateWizard extends Component {
     this.props.requestGasCost(GAS_COST.CATEGORICAL_EVENT)
     this.props.requestGasCost(GAS_COST.SCALAR_EVENT)
     this.props.requestGasCost(GAS_COST.FUNDING)
+    this.props.requestGasPrice()
   }
 
   @autobind

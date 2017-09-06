@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions'
 
-import { setDefaultAccount, setConnectionStatus, setGasCost } from 'actions/blockchain'
+import { setDefaultAccount, setConnectionStatus, setGasCost, setGasPrice } from 'actions/blockchain'
 
 const reducer = handleActions({
   [setDefaultAccount]: (state, action) => {
@@ -24,6 +24,10 @@ const reducer = handleActions({
       ...state[action.payload.entityType],
       [action.payload.contractType]: action.payload.gasCost,
     },
+  }),
+  [setGasPrice]: (state, action) => ({
+    ...state,
+    [action.payload.entityType]: action.payload.gasPrice,
   }),
 }, {
   defaultAccount: undefined,

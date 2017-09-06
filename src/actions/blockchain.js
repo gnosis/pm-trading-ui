@@ -1,7 +1,7 @@
 import {
   getCurrentAccount, calcMarketGasCost, calcBuySharesGasCost,
   calcSellSharesGasCost, calcCategoricalEventGasCost, calcScalarEventGasCost,
-  calcCentralizedOracleGasCost, calcFundingGasCost,
+  calcCentralizedOracleGasCost, calcFundingGasCost, getGasPrice,
 } from 'api'
 
 import { hexWithPrefix, timeoutCondition } from 'utils/helpers'
@@ -11,6 +11,7 @@ import { createAction } from 'redux-actions'
 export const setDefaultAccount = createAction('SET_DEFAULT_ACCOUNT')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setGasCost = createAction('SET_GAS_COST')
+export const setGasPrice = createAction('SET_GAS_PRICE')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
@@ -28,6 +29,11 @@ export const connectBlockchain = () => async (dispatch) => {
     console.warn(`Blockchain connection Error: ${e}`)
     return await dispatch(setConnectionStatus({ connected: false }))
   }
+}
+
+export const requestGasPrice = () => async (dispatch) => {
+  const gasPrice = await getGasPrice()
+  dispatch(setGasPrice({ entityType: 'gasPrice', gasPrice }))
 }
 
 export const requestGasCost = contractType => async (dispatch) => {

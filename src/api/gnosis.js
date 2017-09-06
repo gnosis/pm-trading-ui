@@ -272,3 +272,12 @@ export const calcSellSharesGasCost = async () => {
   // return gnosis.contracts.Market.gasStats.sell.averageGasUsed
   return await gnosis.sellOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
 }
+
+export const getGasPrice = async () => {
+  const gnosis = await getGnosisConnection()
+  return await new Promise(
+    (resolve, reject) => gnosis.web3.eth.getGasPrice(
+      (e, r) => (e ? reject(e) : resolve(r)),
+    ),
+  )
+}
