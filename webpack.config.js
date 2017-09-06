@@ -10,10 +10,10 @@ const nodeEnv = process.env.NODE_ENV || 'development'
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
-//const ethereumHost = process.env.ETHEREUM_HOST
-const gnosisDbUrl = process.env.GNOSISDB_HOST || 'http://localhost:8000'
+const config = require('./src/config.json')
 
-console.log(JSON.stringify(gnosisDbUrl))
+// const ethereumHost = process.env.ETHEREUM_HOST
+const gnosisDbUrl = process.env.GNOSISDB_HOST || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -72,7 +72,7 @@ module.exports = {
       '/api': {
         target: gnosisDbUrl,
         secure: false,
-      }
+      },
     },
   },
   plugins: [
@@ -104,7 +104,7 @@ module.exports = {
         // ETHEREUM_HOST: nodeEnv === 'production' ? null : JSON.stringify(ethereumHost),
         NODE_ENV: JSON.stringify(nodeEnv),
         GNOSISDB_HOST: JSON.stringify(gnosisDbUrl),
-      }
+      },
     }),
   ],
 }

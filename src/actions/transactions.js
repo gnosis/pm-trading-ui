@@ -40,3 +40,6 @@ export const closeEntryError = (id, event, error) => addTransactionLogEntry({
   status: TRANSACTION_STATUS.ERROR,
   error,
 })
+
+export const showTransactionLog = createAction('SHOW_TRANSACTION_LOG')
+export const hideTransactionLog = createAction('HIDE_TRANSACTION_LOG')
