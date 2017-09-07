@@ -117,13 +117,13 @@ class MarketMySharesForm extends Component {
     const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0))
     let earnings = new Decimal(0)
     if (share.balance && selectedSellAmount) {
-      earnings = calcLMSRProfit({
+      earnings = weiToEth(calcLMSRProfit({
         netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
         funding: market.funding,
         outcomeTokenIndex: share.outcomeToken.index,
         outcomeTokenCount: selectedSellAmountWei,
         feeFactor: market.fee,
-      })
+      }))
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
