@@ -16,7 +16,13 @@ import {
   withdrawFees,
 } from 'actions/market'
 import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
-import { getDefaultAccount, getGasCosts, getGasPrice } from 'selectors/blockchain'
+import {
+  getDefaultAccount,
+  getGasCosts,
+  getGasPrice,
+  isGasCostFetched,
+  isGasPriceFetched,
+} from 'selectors/blockchain'
 import { getIsModerator } from 'selectors/settings'
 
 const mapStateToProps = (state, ownProps) => {
@@ -40,6 +46,8 @@ const mapStateToProps = (state, ownProps) => {
     initialValues: {
       selectedOutcome: 0,
     },
+    isGasCostFetched: property => isGasCostFetched(state, property),
+    isGasPriceFetched: isGasPriceFetched(state),
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
   }

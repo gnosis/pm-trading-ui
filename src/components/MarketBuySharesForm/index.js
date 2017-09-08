@@ -22,11 +22,11 @@ import './marketBuySharesForm.less'
 class MarketBuySharesForm extends Component {
 
   componentWillMount() {
-    const { gasCosts, gasPrice, requestGasCost, requestGasPrice } = this.props
-    if (gasCosts.buyShares === 0) {
+    const { requestGasCost, requestGasPrice, isGasCostFetched, isGasPriceFetched } = this.props
+    if (!isGasCostFetched(GAS_COST.BUY_SHARES)) {
       requestGasCost(GAS_COST.BUY_SHARES)
     }
-    if (gasPrice.eq(0)) {
+    if (!isGasPriceFetched) {
       requestGasPrice()
     }
   }

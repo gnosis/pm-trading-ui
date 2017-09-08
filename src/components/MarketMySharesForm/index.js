@@ -30,10 +30,10 @@ class MarketMySharesForm extends Component {
   componentWillMount() {
     const { gasCosts, gasPrice, requestGasCost, requestGasPrice } = this.props
 
-    if (gasCosts.sellShares === 0) {
+    if (gasCosts.sellShares === undefined) {
       requestGasCost(GAS_COST.SELL_SHARES)
     }
-    if (gasPrice.eq(0)) {
+    if (gasPrice === undefined) {
       requestGasPrice()
     }
   }

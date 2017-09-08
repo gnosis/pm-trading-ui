@@ -31,8 +31,8 @@ const reducer = handleActions({
     [action.payload.entityType]: action.payload.gasPrice,
   }),
 }, {
-  gasCosts: Object.keys(GAS_COST).reduce((acc, item) => ({ ...acc, [GAS_COST[item]]: 0 }), {}),
-  gasPrice: 0,
+  gasCosts: Object.keys(GAS_COST).reduce((acc, item) => ({ ...acc, [GAS_COST[item]]: undefined }), {}),
+  gasPrice: undefined,
   defaultAccount: undefined,
   connection: undefined,
   connectionTried: false,
