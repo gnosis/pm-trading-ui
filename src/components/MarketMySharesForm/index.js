@@ -13,7 +13,7 @@ import FormInput from 'components/FormInput'
 import FormCheckbox from 'components/FormCheckbox'
 
 import { COLOR_SCHEME_DEFAULT, GAS_COST } from 'utils/constants'
-import { getOutcomeName, weiToEth } from 'utils/helpers'
+import { getOutcomeName, weiToEth, add0xPrefix } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
@@ -37,6 +37,21 @@ class MarketMySharesForm extends Component {
       requestGasPrice()
     }
   }
+
+  /* TODO find out how to trigger element onClick
+   componentDidUpdate() {
+    if (this.props.params.shareId) {
+      const shareId = add0xPrefix(this.props.params.shareId)
+      let shareIndex = 0
+      this.props.marketShares.every((share, index) => {
+        if (share.id === shareId) {
+          shareIndex = index
+          return false
+        }
+      })
+      this.handleShowSellView({ preventDefault: () => {} }, shareIndex)
+    }
+  }*/
 
   @autobind
   handleShowSellView(e, shareIndex) {
@@ -144,8 +159,6 @@ class MarketMySharesForm extends Component {
     } catch (e) {
       newProbability = currentProbability
     }
-
-    // const earnings = selectedSellAmount && parseFloat(selectedSellAmount) > 0 ? newTokenCount.mul(currentProbability).div(1e18) : new Decimal(0)
 
     const submitDisabled = invalid || submitting || !isConfirmedSell
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))

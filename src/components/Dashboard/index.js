@@ -8,6 +8,7 @@ import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
+import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 
 import './dashboard.less'
 
@@ -49,6 +50,11 @@ class Dashboard extends Component {
   @autobind
   handleViewMarket(market) {
     this.props.changeUrl(`/markets/${market.address}`)
+  }
+
+  @autobind
+  handleShowSellView(market, share) {
+    this.props.changeUrl(`/markets/${market.address}/my-shares/${share.id}`)
   }
 
   @autobind
@@ -153,21 +159,40 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
+      let probability = new Decimal(0)
+      let maximumWin = new Decimal(0)
+      // Check market is not empty
+      if (market.event) {
+        probability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+          funding: market.funding,
+          outcomeTokenIndex: holding.outcomeToken.index,
+        })
+        maximumWin = calcLMSROutcomeTokenCount({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+          funding: market.funding,
+          outcomeTokenIndex: holding.outcomeToken.index,
+          cost: holding.balance,
+        })
+      }
       
       return (
-        <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
-          <div className="dashboardMarket__title">{holding.eventDescription.title}</div>
+        <div className="dashboardMarket dashboardMarket--onDark" key={index}>
+          <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>{holding.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
               <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }} />
               <div className="dashboardMarket--highlight pull-left">{getOutcomeName(market, holding.outcomeToken.index)}</div>
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
-              {market.marginalPrices ? Math.round(market.marginalPrices[holding.outcomeToken.index] * 100).toFixed(0) : 0}%
+              <DecimalValue value={weiToEth(holding.balance)} />
             </div>
-            <div className="col-md-3 dashboardMarket--highlight">
-              <DecimalValue value={weiToEth(holding.balance)} />&nbsp;
+            <div className="col-md-2 dashboardMarket--highlight">
+              <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
               {market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
+            </div>
+            <div className="col-md-2 dashboardMarket--highlight">
+              <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>Sell</a>
             </div>
           </div>
         </div>

@@ -6,7 +6,6 @@ import sha1 from 'sha1'
 
 import {
   marketSchema,
-  tradeSchema,
 } from './schema'
 
 const API_URL = process.env.GNOSISDB_HOST
@@ -36,8 +35,8 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
 
       return normalize({
         address: marketAddress,
-        shares: response.results.map(share => ({
-          id: sha1(`${marketAddress}-${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
+        shares: response.results.map((share, index) => ({
+          id: sha1(`${index}-${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
           event: share.outcomeToken.event,
           ...share,
         })),
@@ -107,5 +106,12 @@ export const requestAccountTrades = async address =>
     .then(response => response.results)
 
 export const requestAccountShares = async address =>
+  // restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
+  //   .then(response => response.results)
   restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
-    .then(response => response.results)
+  .then(response => response.results.map(
+    (share, index) => {
+      share.id = sha1(`${index}-${address}-${share.outcomeToken.address}`)
+      return share
+    },
+  ))
