@@ -5,9 +5,9 @@ import { push } from 'react-router-redux'
 import DashboardPage from 'components/Dashboard'
 import { getMarkets, getAccountShares, getAccountTrades,
   getAccountPredictiveAssets, getAccountParticipatingInEvents } from 'selectors/market'
-import { getDefaultAccount } from 'selectors/blockchain'
+import { getDefaultAccount, getEtherTokensAmount } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares } from 'actions/market'
-import { requestGasPrice } from 'actions/blockchain'
+import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
 
 
@@ -18,10 +18,18 @@ const mapStateToProps = (state) => {
   const accountTrades = getAccountTrades(state, defaultAccount)
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
   const accountParticipatingInEvents = getAccountParticipatingInEvents(state, defaultAccount).length
+  let etherTokens = getEtherTokensAmount(state, defaultAccount)
+
+  if (etherTokens !== undefined) {
+    etherTokens = weiToEth(etherTokens.toString())
+  } else {
+    etherTokens = 0
+  }
 
   return {
     defaultAccount,
     markets,
+    etherTokens,
     accountShares,
     accountTrades,
     accountPredictiveAssets,
@@ -35,6 +43,7 @@ const mapDispatchToProps = dispatch => ({
   requestAccountShares: address => dispatch(requestAccountShares(address)),
   changeUrl: url => dispatch(push(url)),
   requestGasPrice: () => dispatch(requestGasPrice()),
+  requestEtherTokens: account => dispatch(requestEtherTokens(account)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage)

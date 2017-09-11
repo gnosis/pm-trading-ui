@@ -43,6 +43,7 @@ class Dashboard extends Component {
     this.props.requestAccountShares(this.props.defaultAccount)
     this.props.requestAccountTrades(this.props.defaultAccount)
     this.props.requestGasPrice()
+    this.props.requestEtherTokens(this.props.defaultAccount)
   }
 
   @autobind
@@ -259,7 +260,34 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { accountPredictiveAssets, accountParticipatingInEvents } = this.props
+    const { accountPredictiveAssets, accountParticipatingInEvents, etherTokens } = this.props
+    let metrics = <div />
+    if (this.props.defaultAccount) {
+      metrics = (<div className="dashboardPage__stats">
+        <div className="container">
+          <div className="row dashboardStats">
+            <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+              <div className="dashboardStats__icon icon icon--etherTokens" />
+              <span className="dashboardStats__value">{ etherTokens }</span>
+              <div className="dashboardStats__label">Ether Tokens</div>
+            </div>
+            <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+              <div className="dashboardStats__icon icon icon--incomeForecast" />
+              <span className="dashboardStats__value" style={{ color: 'green' }}>
+                <DecimalValue value={accountPredictiveAssets} />
+                &nbsp;ETH
+              </span>
+              <div className="dashboardStats__label">Predicted Profits</div>
+            </div>
+            <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+              <div className="dashboardStats__icon icon icon--new" />
+              <span className="dashboardStats__value">{ accountParticipatingInEvents }</span>
+              <div className="dashboardStats__label">Participating in Markets</div>
+            </div>
+          </div>
+        </div>
+      </div>)
+    }
     return (
       <div className="dashboardPage">
         <div className="dashboardPage__header">
@@ -272,30 +300,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        <div className="dashboardPage__stats">
-          <div className="container">
-            <div className="row dashboardStats">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-                <div className="dashboardStats__icon icon icon--etherTokens" />
-                <span className="dashboardStats__value">235</span>
-                <div className="dashboardStats__label">Ether Tokens</div>
-              </div>
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-                <div className="dashboardStats__icon icon icon--incomeForecast" />
-                <span className="dashboardStats__value" style={{ color: 'green' }}>
-                  <DecimalValue value={accountPredictiveAssets} />
-                  &nbsp;ETH
-                </span>
-                <div className="dashboardStats__label">Predicted Profits</div>
-              </div>
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-                <div className="dashboardStats__icon icon icon--new" />
-                <span className="dashboardStats__value">{ accountParticipatingInEvents }</span>
-                <div className="dashboardStats__label">Participating in Markets</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        { metrics }
         { this.renderControls() }
         <div className="expandable">
           { this.renderExpandableContent() }
@@ -339,6 +344,7 @@ Dashboard.propTypes = {
   requestAccountShares: PropTypes.func,
   requestAccountTrades: PropTypes.func,
   changeUrl: PropTypes.func,
+  requestEtherTokens: PropTypes.func,
 }
 
 export default Dashboard
