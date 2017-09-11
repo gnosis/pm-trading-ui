@@ -210,9 +210,10 @@ class Dashboard extends Component {
     const { markets, accountShares, accountTrades } = this.props
     const oneDayHours = 24 * 60 * 60 * 1000
     const newMarkets = markets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
-    const closingMarkets = markets.filter(
+    /* const closingMarkets = markets.filter(
       market => moment.utc(market.eventDescription.resolutionDate).isBetween(moment(), moment().add(24, 'hours')),
-    )
+    )*/
+    let closingMarkets = markets.sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
 
     if (marketType === 'newMarkets') {
       return (
@@ -226,6 +227,9 @@ class Dashboard extends Component {
     }
 
     if (marketType === 'closingMarkets') {
+      if (closingMarkets.length > 4) {
+        closingMarkets = closingMarkets.slice(0, 4)
+      }
       return (
         <div className="dashboardWidget col-md-6">
           <div className="dashboardWidget__title">Soon-Closing Markets</div>
@@ -239,7 +243,7 @@ class Dashboard extends Component {
     if (marketType === 'myHoldings') {
       return (
         <div className="dashboardWidget dashboardWidget--onDark col-md-6">
-          <div className="dashboardWidget__title">My Holdings</div>
+          <div className="dashboardWidget__title">My Tokens</div>
           <div className="dashboardWidget__container">
             {accountShares.length ? this.renderMyHoldings(accountShares, markets) : 'You aren\'t holding any share.'}
           </div>
@@ -260,15 +264,16 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { accountPredictiveAssets, accountParticipatingInEvents, etherTokens } = this.props
-    let metrics = <div />
-    if (this.props.defaultAccount) {
-      metrics = (<div className="dashboardPage__stats">
+    const { accountPredictiveAssets, etherTokens, defaultAccount } = this.props
+    let metricsSection = <div />
+    let tradesHoldingsSection = <div />
+    if (defaultAccount) {
+      metricsSection = (<div className="dashboardPage__stats">
         <div className="container">
           <div className="row dashboardStats">
             <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
               <div className="dashboardStats__icon icon icon--etherTokens" />
-              <span className="dashboardStats__value">{ etherTokens }</span>
+              <span className="dashboardStats__value"><DecimalValue value={etherTokens} /></span>
               <div className="dashboardStats__label">Ether Tokens</div>
             </div>
             <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
@@ -277,30 +282,34 @@ class Dashboard extends Component {
                 <DecimalValue value={accountPredictiveAssets} />
                 &nbsp;ETH
               </span>
-              <div className="dashboardStats__label">Predicted Profits</div>
-            </div>
-            <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-              <div className="dashboardStats__icon icon icon--new" />
-              <span className="dashboardStats__value">{ accountParticipatingInEvents }</span>
-              <div className="dashboardStats__label">Participating in Markets</div>
+              <div className="dashboardStats__label">Outstanding predictions</div>
             </div>
           </div>
         </div>
       </div>)
+
+      tradesHoldingsSection = (<div className="dashboardWidgets dashboardWidgets--financial">
+        <div className="container">
+          <div className="row">
+            { this.renderWidget('myHoldings') }
+            { this.renderWidget('myTrades') }
+          </div>
+        </div>
+      </div>)
     }
+
     return (
       <div className="dashboardPage">
         <div className="dashboardPage__header">
           <div className="container">
             <div className="row">
               <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                <h1>Welcome!</h1>
-                <p className="marketDescription__text">Here is what happened since your last visit.</p>
+                <h1>Dashboard</h1>
               </div>
             </div>
           </div>
         </div>
-        { metrics }
+        { metricsSection }
         { this.renderControls() }
         <div className="expandable">
           { this.renderExpandableContent() }
@@ -313,14 +322,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        <div className="dashboardWidgets dashboardWidgets--financial">
-          <div className="container">
-            <div className="row">
-              { this.renderWidget('myHoldings') }
-              { this.renderWidget('myTrades') }
-            </div>
-          </div>
-        </div>
+        { tradesHoldingsSection }
       </div>
     )
   }
@@ -338,7 +340,7 @@ Dashboard.propTypes = {
   accountShares: PropTypes.array,
   accountTrades: PropTypes.array,
   accountPredictiveAssets: PropTypes.string,
-  accountParticipatingInEvents: PropTypes.number,
+  etherTokens: PropTypes.string,
   requestMarkets: PropTypes.func,
   requestGasPrice: PropTypes.func,
   requestAccountShares: PropTypes.func,

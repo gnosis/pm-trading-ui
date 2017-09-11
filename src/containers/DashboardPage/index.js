@@ -4,7 +4,7 @@ import { push } from 'react-router-redux'
 
 import DashboardPage from 'components/Dashboard'
 import { getMarkets, getAccountShares, getAccountTrades,
-  getAccountPredictiveAssets, getAccountParticipatingInEvents } from 'selectors/market'
+  getAccountPredictiveAssets } from 'selectors/market'
 import { getDefaultAccount, getEtherTokensAmount } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares } from 'actions/market'
 import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
@@ -17,7 +17,8 @@ const mapStateToProps = (state) => {
   const accountShares = getAccountShares(state, defaultAccount)
   const accountTrades = getAccountTrades(state, defaultAccount)
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
-  const accountParticipatingInEvents = getAccountParticipatingInEvents(state, defaultAccount).length
+  // Not displayed anymore
+  // const accountParticipatingInEvents = getAccountParticipatingInEvents(state, defaultAccount).length
   let etherTokens = getEtherTokensAmount(state, defaultAccount)
 
   if (etherTokens !== undefined) {
@@ -33,7 +34,6 @@ const mapStateToProps = (state) => {
     accountShares,
     accountTrades,
     accountPredictiveAssets,
-    accountParticipatingInEvents,
   }
 }
 
