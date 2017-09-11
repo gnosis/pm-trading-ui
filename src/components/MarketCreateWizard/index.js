@@ -82,11 +82,6 @@ export default class MarketCreateWizard extends Component {
       <div className="marketDetails">
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="collateralToken" label="Currency" component={FormRadioButton} radioValues={[{ label: 'Ether Token', value: 'eth' }]} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-offset-2 col-md-10">
             <Field name="fee" component={FormSlider} min={0} max={10} label="Fee" unit="%" />
           </div>
         </div>
