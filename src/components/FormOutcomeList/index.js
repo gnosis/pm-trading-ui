@@ -8,7 +8,7 @@ import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
 import './formOutcomeList.less'
 
-const FormOutcomeList = ({ fields, label, meta: { error, invalid } }) => (
+const FormOutcomeList = ({ fields, label, meta: { error, invalid }, opts: { hideDeleteOption } }) => (
   <div className="formOutcomeList">
     <label className="formOutcomeList__label">{label}</label>
     {fields.map((field, index) => (
@@ -27,7 +27,7 @@ const FormOutcomeList = ({ fields, label, meta: { error, invalid } }) => (
           className="formOutcomeListInput"
           placeholder="Add another..."
         />
-        {fields.length > 1 && (
+        {!hideDeleteOption && fields.length > 1 && (
           <a
             className="entry__delete"
             href=""
@@ -57,6 +57,11 @@ FormOutcomeList.propTypes = {
     error: PropTypes.string,
   }),
   label: PropTypes.string,
+  opts: PropTypes.shape(
+    {
+      hideDeleteOption: PropTypes.bool,
+    },
+  ),
 }
 
 export default FormOutcomeList
