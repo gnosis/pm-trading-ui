@@ -113,7 +113,6 @@ export default class MarketCreateWizard extends Component {
     return (
       <div className="marketCreate__form">
         {this.renderHeading(1, 'Event Details')}
-        {this.renderOracleTypes()}
         {this.renderForOracleType()}
         {this.renderHeading(2, 'Market Details')}
         {this.renderMarketDetails()}
