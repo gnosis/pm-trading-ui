@@ -14,6 +14,11 @@ export const required = (val) => {
 }
 
 /**
+ * Returns an error if value is zero both string or number
+ */
+export const greaterThanZero = val => (val && parseFloat(val) > 0 ? undefined : 'Field must be greater than 0')
+
+/**
  * Returns a validator function that returns an Error for every string that does not repesent a valid date
  *
  * @param {string|moment} opts.minDate - Min required date, anything before but not exactly at this date will be considered illegal

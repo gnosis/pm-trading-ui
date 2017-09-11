@@ -21,6 +21,7 @@ const FORM = {
     decimals: '2',
     collateralToken: 'eth',
     outcomes: [''],
+    funding: '0',
   },
 }
 
