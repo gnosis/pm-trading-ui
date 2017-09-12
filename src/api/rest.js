@@ -36,7 +36,7 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
       return normalize({
         address: marketAddress,
         shares: response.results.map(share => ({
-          id: sha1(`${marketAddress}-${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
+          id: sha1(`${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
           event: share.outcomeToken.event,
           ...share,
         })),
@@ -106,12 +106,13 @@ export const requestAccountTrades = async address =>
     .then(response => response.results)
 
 export const requestAccountShares = async address =>
-  restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
-    .then(response => response.results)
   // restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
-  // .then(response => response.results.map(
-  //   (share, index) => {
-  //     share.id = sha1(`${index}-${address}-${share.outcomeToken.address}`)
-  //     return share
-  //   },
-  // ))
+  //   .then(response => response.results)
+  restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
+  .then(response => response.results.map(
+    (share) => {
+      const s = { ...share }
+      s.id = sha1(`${address}-${share.outcomeToken.address}`)
+      return s
+    },
+  ))

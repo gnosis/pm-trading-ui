@@ -36,28 +36,13 @@ class MarketMySharesForm extends Component {
     if (gasPrice === undefined) {
       requestGasPrice()
     }
-    console.log(this.props.marketShares)
+
     if (this.props.params.shareId) {
       this.state = {
         extendedSellId: this.props.params.shareId,
       }
     }
   }
-
-  /* TODO find out how to trigger element onClick
-   componentDidUpdate() {
-    if (this.props.params.shareId) {
-      const shareId = add0xPrefix(this.props.params.shareId)
-      let shareIndex = 0
-      this.props.marketShares.every((share, index) => {
-        if (share.id === shareId) {
-          shareIndex = index
-          return false
-        }
-      })
-      this.handleShowSellView({ preventDefault: () => {} }, shareIndex)
-    }
-  }*/
 
   @autobind
   handleShowSellView(e, shareId) {

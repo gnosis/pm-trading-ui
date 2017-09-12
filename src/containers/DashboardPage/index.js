@@ -29,18 +29,6 @@ const mapStateToProps = (state) => {
     etherTokens = 0
   }
 
-  // In the absence of the market address inside the share object,
-  // we need to get it by looking for the event address
-  // TODO add 0x to addresses in Gnosisdb outcomeToken object
-  if (markets.length) {
-    accountShares = accountShares.map((s) => {
-      const market = markets.filter(m => m.event.address === add0xPrefix(s.outcomeToken.event))[0]
-      const share = { ...s }
-      share.id = sha1(`${market.address}-${defaultAccount}-${s.outcomeToken.address}`)
-      return share
-    })
-  }
-
   return {
     defaultAccount,
     markets,
