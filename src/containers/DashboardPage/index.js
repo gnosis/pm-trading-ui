@@ -8,15 +8,17 @@ import { getMarkets, getAccountShares, getAccountTrades,
 import { getDefaultAccount, getEtherTokensAmount } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares } from 'actions/market'
 import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
-import { weiToEth } from 'utils/helpers'
+import { weiToEth, add0xPrefix } from 'utils/helpers'
+
+import sha1 from 'sha1'
 
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
   const defaultAccount = getDefaultAccount(state)
-  const accountShares = getAccountShares(state, defaultAccount)
   const accountTrades = getAccountTrades(state, defaultAccount)
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
+  let accountShares = getAccountShares(state, defaultAccount)
   // Not displayed anymore
   // const accountParticipatingInEvents = getAccountParticipatingInEvents(state, defaultAccount).length
   let etherTokens = getEtherTokensAmount(state, defaultAccount)
@@ -25,6 +27,18 @@ const mapStateToProps = (state) => {
     etherTokens = weiToEth(etherTokens.toString())
   } else {
     etherTokens = 0
+  }
+
+  // In the absence of the market address inside the share object,
+  // we need to get it by looking for the event address
+  // TODO add 0x to addresses in Gnosisdb outcomeToken object
+  if (markets.length) {
+    accountShares = accountShares.map((s) => {
+      const market = markets.filter(m => m.event.address === add0xPrefix(s.outcomeToken.event))[0]
+      const share = { ...s }
+      share.id = sha1(`${market.address}-${defaultAccount}-${s.outcomeToken.address}`)
+      return share
+    })
   }
 
   return {

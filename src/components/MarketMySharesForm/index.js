@@ -13,7 +13,7 @@ import FormInput from 'components/FormInput'
 import FormCheckbox from 'components/FormCheckbox'
 
 import { COLOR_SCHEME_DEFAULT, GAS_COST } from 'utils/constants'
-import { getOutcomeName, weiToEth, add0xPrefix } from 'utils/helpers'
+import { getOutcomeName, weiToEth } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
@@ -23,7 +23,7 @@ class MarketMySharesForm extends Component {
     super(props)
 
     this.state = {
-      extendedSellIndex: undefined,
+      extendedSellId: undefined,
     }
   }
 
@@ -35,6 +35,12 @@ class MarketMySharesForm extends Component {
     }
     if (gasPrice === undefined) {
       requestGasPrice()
+    }
+    console.log(this.props.marketShares)
+    if (this.props.params.shareId) {
+      this.state = {
+        extendedSellId: this.props.params.shareId,
+      }
     }
   }
 
@@ -54,21 +60,22 @@ class MarketMySharesForm extends Component {
   }*/
 
   @autobind
-  handleShowSellView(e, shareIndex) {
+  handleShowSellView(e, shareId) {
     e.preventDefault()
     this.props.reset()
-    this.setState({ extendedSellIndex: (shareIndex === this.state.extendedSellIndex ? undefined : shareIndex) })
+    this.setState({ extendedSellId: (shareId === this.state.extendedSellId ? undefined : shareId) })
   }
 
   @autobind
   handleCloseSellView(e) {
     e.preventDefault()
     this.props.reset()
-    this.setState({ extendedSellIndex: undefined })
+    this.setState({ extendedSellId: undefined })
   }
 
   @autobind
-  handleSellShare(shareIndex, shareAmount) {
+  handleSellShare(shareId, shareAmount) {
+    const shareIndex = this.props.marketShares.map(share => share.id).indexOf(shareId)
     return this.props.sellShares(this.props.market, shareIndex, shareAmount)
       .then(() => this.props.reset())
   }
@@ -86,7 +93,9 @@ class MarketMySharesForm extends Component {
       return 'Number can\'t be negative.'
     }
 
-    if (decimalValue.gt(Decimal(props.marketShares[this.state.extendedSellIndex].balance).div(1e18).toString())) {
+    if (decimalValue.gt(Decimal(props.marketShares.filter(
+      share => share.id === this.state.extendedSellId)[0].balance,
+    ).div(1e18).toString())) {
       return 'You\'re trying to sell more than you invested.'
     }
 
@@ -95,7 +104,7 @@ class MarketMySharesForm extends Component {
 
 
   renderSellShareView() {
-    const { extendedSellIndex } = this.state
+    const { extendedSellId } = this.state
     const {
       market,
       isConfirmedSell,
@@ -104,12 +113,12 @@ class MarketMySharesForm extends Component {
       submitFailed,
       selectedSellAmount,
       handleSubmit,
-      marketShares: {
-        [extendedSellIndex]: share,
-      },
+      marketShares,
       gasCosts,
       gasPrice,
     } = this.props
+
+    const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
 
     let selectedSellAmountWei
     try {
@@ -165,7 +174,7 @@ class MarketMySharesForm extends Component {
 
     return (
       <div className="marketMyShares__sellContainer">
-        <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellIndex, selectedSellAmount))}>
+        <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellId, selectedSellAmount))}>
           <div className="row marketMyShares__sellRow">
             <div className="col-md-3 col-md-offset-3 marketMyShares__sellColumn">
               <label>Amount to Sell</label>
@@ -222,7 +231,7 @@ class MarketMySharesForm extends Component {
     const tableRows = []
 
     const { marketShares, market } = this.props
-    const { extendedSellIndex } = this.state
+    const { extendedSellId } = this.state
 
     const resolved = market.oracle.isOutcomeSet || market.event.isWinningOutcomeSet
 
@@ -258,13 +267,13 @@ class MarketMySharesForm extends Component {
           </td>
           <td>
             {/* eslint-disable no-script-url */}
-            {!resolved && <a href="javascript:void(0);" className="marketMyShares__sellButton" onClick={e => this.handleShowSellView(e, shareIndex)}>Sell</a>}
+            {!resolved && <a href="javascript:void(0);" className="marketMyShares__sellButton" onClick={e => this.handleShowSellView(e, share.id)}>Sell</a>}
             {/* eslint-enable no-script-url */}
           </td>
         </tr>
       ))
 
-      if (shareIndex === extendedSellIndex) {
+      if (share.id === extendedSellId) {
         tableRows.push((
           <tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
             <td colSpan={5}>

@@ -54,7 +54,7 @@ class Dashboard extends Component {
 
   @autobind
   handleShowSellView(market, share) {
-    this.props.changeUrl(`/markets/${market.address}/my-shares/${share.id}`)
+    this.props.changeUrl(`/markets/${market.address}/my-shares/${add0xPrefix(share.id)}`)
   }
 
   @autobind
@@ -208,7 +208,12 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(trade.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
-      const averagePrice = parseInt(trade.cost, 10) / parseInt(trade.outcomeTokenCount, 10)
+      let averagePrice
+      if (trade.orderType === 'BUY') {
+        averagePrice = parseInt(trade.cost, 10) / parseInt(trade.outcomeTokenCount, 10)
+      } else {
+        averagePrice = parseInt(trade.profit, 10) / parseInt(trade.outcomeTokenCount, 10)
+      }
 
       return (
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>

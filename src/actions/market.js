@@ -1,4 +1,3 @@
-import moment from 'moment'
 import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
@@ -124,6 +123,7 @@ export const requestMarketTrades = market => async (dispatch) => {
  */
 export const requestAccountShares = accountAddress => async (dispatch) => {
   const shares = await api.requestAccountShares(accountAddress)
+  // share.id = sha1(`${index}-${address}-${share.outcomeToken.address}`)
   return await dispatch(updateEntity({
     entityType: 'accountShares',
     data: {
