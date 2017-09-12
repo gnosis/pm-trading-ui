@@ -280,16 +280,17 @@ export const calcMarketGasCost = async () => {
 
 export const calcBuySharesGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  // return gnosis.contracts.Market.gasStats.buy.averageGasUsed
   return await gnosis.buyOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
 }
 
 export const calcSellSharesGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  // return gnosis.contracts.Market.gasStats.sell.averageGasUsed
   return await gnosis.sellOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
 }
 
+/**
+ * Returns the current gas price
+ */
 export const getGasPrice = async () => {
   const gnosis = await getGnosisConnection()
   return await new Promise(
@@ -297,4 +298,14 @@ export const getGasPrice = async () => {
       (e, r) => (e ? reject(e) : resolve(r)),
     ),
   )
+}
+
+/**
+ * Returns the amount of the ether tokens
+ * @param {*string} account address
+ */
+export const getEtherTokens = async (account) => {
+  const gnosis = await getGnosisConnection()
+  const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
+  return new Decimal(balance.toFixed(0))
 }

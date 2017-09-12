@@ -1,4 +1,3 @@
-import moment from 'moment'
 import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
