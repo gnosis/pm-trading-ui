@@ -199,7 +199,7 @@ class MarketCreateReview extends Component {
           </div>
           <div className="outcomeScalar__row">
             <label>Values between</label>
-            <span>{Decimal(upperBound).toFixed(0)} and {Decimal(lowerBound).toFixed(0)}</span>
+            <span>{Decimal(lowerBound).toFixed(0)} and {Decimal(upperBound).toFixed(0)}</span>
           </div>
           <div className="outcomeScalar__row">
             <label>Outcome Precision</label>
