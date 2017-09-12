@@ -21,7 +21,7 @@ const OutcomeScalar = () => (
     <div className="row">
       <div className="col-md-12">
         <Field
-          name="lowerBound" component={Input} label="Lowerbound"
+          name="lowerBound" component={Input} label="Lower Bound"
           validate={validators.all(validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
           validators.lowerThanProperty({ formProp: 'LowerBound', validateAgainstProp: 'upperBound' }))}
         />
@@ -30,7 +30,7 @@ const OutcomeScalar = () => (
     <div className="row">
       <div className="col-md-12">
         <Field
-          name="upperBound" component={Input} label="Upperbound"
+          name="upperBound" component={Input} label="Upper Bound"
           validate={validators.all(validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
           validators.greaterThanProperty({ formProp: 'UpperBound', validateAgainstProp: 'lowerBound' }))}
         />
