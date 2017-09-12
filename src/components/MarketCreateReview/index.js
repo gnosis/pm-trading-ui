@@ -17,7 +17,7 @@ class MarketCreateReview extends Component {
     super(props)
 
     this.state = {
-      confirmed: false,
+      confirmed: true, // @TODO: Change to false when we have final terms
     }
   }
   componentDidMount() {
@@ -138,6 +138,7 @@ class MarketCreateReview extends Component {
             </span>
           </li>
         </ul>
+        {/*
         <div className="checkout__payment">
           <Checkbox
             input={{
@@ -153,6 +154,7 @@ class MarketCreateReview extends Component {
           }
           />
         </div>
+        */}
         <div className="checkout__paymentSubmit">
           <button
             className={`btn btn-primary ${!this.state.confirmed ? 'btn-primary--disabled' : ''}`}

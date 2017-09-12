@@ -33,11 +33,9 @@ export default class MarketCreateWizard extends Component {
   handleShowReview(values) {
     // clear empty outcomes
     if (values.outcomes) {
-      this.props.change('outcomes', values.outcomes.filter(s => s.length > 0))
+      this.props.change('outcomes', values.outcomes.filter(s => s && s.length > 0))
     }
-
     window.scrollTo(0, 0)
-
     return this.props.changeUrl('markets/review')
   }
 
