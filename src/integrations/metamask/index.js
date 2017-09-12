@@ -74,16 +74,15 @@ class Metamask {
   }
 
   async getAccount() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const accounts = _.get(this, 'web3.eth.accounts', [])
-        if (accounts.length > 0) {
-          resolve(accounts[0])
-        } else {
-          console.warn('No Accounts available for metamask')
-          resolve(null)
-        }
-      }, 0)
+    return new Promise((resolve, reject) => {
+      this.web3.getAccounts(
+        (e, accounts) => {
+          if (e) {
+            reject(e)
+          }
+          resolve(accounts && accounts.length ? accounts[0] : null)
+        },
+      )
     })
   }
 }
