@@ -106,6 +106,9 @@ class Dashboard extends Component {
 
 
   renderControls() {
+    const { defaultAccount } = this.props
+    const config = require('config.json')
+    const canCreateMarket = config.whitelist[defaultAccount] !== undefined
     return (
       <div className="dashboardControls container">
         <div className="row">
@@ -124,7 +127,7 @@ class Dashboard extends Component {
                 {controlButtons[type].label}
               </button>
             ))}
-            <button type="button" onClick={this.handleCreateMarket} className="dashboardControls__button btn btn-default">Create Market</button>
+            { canCreateMarket ? <button type="button" onClick={this.handleCreateMarket} className="dashboardControls__button btn btn-default">Create Market</button> : <div /> }
           </div>
         </div>
       </div>
