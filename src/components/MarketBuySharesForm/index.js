@@ -122,25 +122,16 @@ class MarketBuySharesForm extends Component {
 
     return (
       <div className="col-md-6">
-        <div className="row">
-          <div className="col-md-12">
-            <h2 className="marketBuyHeading">Preview & Setting</h2>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-            <Field
-              component={FormRadioButton}
-              name="selectedOutcome"
-              className="marketBuyOutcome"
-              radioValues={eventDescription.outcomes.map((label, index) => ({
-                value: index,
-                label: eventDescription.outcomes[index],
-                highlightColor: COLOR_SCHEME_DEFAULT[index],
-              }))}
-            />
-          </div>
-        </div>
+        <Field
+          component={FormRadioButton}
+          name="selectedOutcome"
+          className="marketBuyOutcome"
+          radioValues={eventDescription.outcomes.map((label, index) => ({
+            value: index,
+            label: eventDescription.outcomes[index],
+            highlightColor: COLOR_SCHEME_DEFAULT[index],
+          }))}
+        />
       </div>
     )
   }
@@ -208,11 +199,6 @@ class MarketBuySharesForm extends Component {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="row">
-              <div className="col-md-12">
-                <h2 className="marketBuyHeading">Preview Outcome</h2>
-              </div>
-            </div>
             <div className="row">
               <div className="col-md-12">
                 <ScalarSlider
@@ -294,11 +280,11 @@ class MarketBuySharesForm extends Component {
           <div className="row">
             {this.renderOutcomes()}
             <div className="col-md-6">
-              <div className="row">
+              {/* <div className="row">
                 <div className="col-md-12">
                   <h2 className="marketBuyHeading">Bet Amount & Checkout</h2>
                 </div>
-              </div>
+              </div>*/}
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-8">
                   <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
@@ -340,7 +326,7 @@ class MarketBuySharesForm extends Component {
               )}
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">
-                  <button className={`btn btn-primary col-md-12 ${!isConfirmed || !submitEnabled ? 'disabled' : ''}`} disabled={!isConfirmed || !submitEnabled}>{submitting ? 'Loading...' : 'Buy Shares'}</button>
+                  <button className={`btn btn-primary col-md-12 ${!isConfirmed || !submitEnabled ? 'disabled' : ''}`} disabled={!isConfirmed || !submitEnabled}>{submitting ? 'Loading...' : 'Buy Tokens'}</button>
                 </div>
                 <div className="col-md-6">
                   <button className="btn btn-default col-md-12 marketBuySharesForm__cancel">Cancel</button>

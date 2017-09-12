@@ -30,9 +30,11 @@ const EXPAND_MY_TRADES = 'my-trades'
 const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
 
+const DEFAULT_VIEW = EXPAND_BUY_SHARES
+
 const expandableViews = {
   [EXPAND_BUY_SHARES]: {
-    label: 'Buy Shares',
+    label: 'Buy Tokens',
     className: 'btn btn-primary',
     component: MarketBuySharesForm,
     showCondition: props =>
@@ -54,7 +56,7 @@ const expandableViews = {
       props.market.eventDescription.outcomes.length > 2,
   },*/
   [EXPAND_MY_SHARES]: {
-    label: 'My Holdings',
+    label: 'My Tokens',
     className: 'btn btn-default',
     component: MarketMySharesForm,
     showCondition: props =>
@@ -116,7 +118,7 @@ class MarketDetail extends Component {
   handleExpand(view) {
     const currentView = this.props.params.view
 
-    if (currentView === view) {
+    if (currentView === view || (currentView === undefined && view === DEFAULT_VIEW)) {
       this.props.changeUrl(`markets/${this.props.params.id}`)
     } else {
       this.props.changeUrl(`markets/${this.props.params.id}/${view}`)
@@ -142,7 +144,7 @@ class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
-    const currentView = this.props.params.view
+    const currentView = this.props.params.view || DEFAULT_VIEW
 
     if (currentView && expandableViews[currentView] && expandableViews[currentView].component) {
       const view = expandableViews[currentView]
@@ -258,7 +260,7 @@ class MarketDetail extends Component {
               className={`
                 marketControls__button
                 ${expandableViews[view].className}
-                ${view === this.props.params.view ? 'marketControls__button--active' : ''}`
+                ${(view !== DEFAULT_VIEW && view === this.props.params.view) || (view === DEFAULT_VIEW && view === this.props.params.view) || (this.props.params.view === undefined && view === DEFAULT_VIEW) ? 'marketControls__button--active' : ''}`
               }
               onClick={() => this.handleExpand(view)}
             >
