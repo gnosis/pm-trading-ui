@@ -35,7 +35,7 @@ const DEFAULT_VIEW = EXPAND_BUY_SHARES
 const expandableViews = {
   [EXPAND_BUY_SHARES]: {
     label: 'Buy Tokens',
-    className: 'btn btn-primary',
+    className: 'btn btn-default',
     component: MarketBuySharesForm,
     showCondition: props =>
       props.market &&
@@ -270,8 +270,10 @@ class MarketDetail extends Component {
               type="button"
               className={`
                 marketControls__button
-                ${expandableViews[view].className}
-                ${(view !== DEFAULT_VIEW && view === this.props.params.view) || (view === DEFAULT_VIEW && view === this.props.params.view) || (this.props.params.view === undefined && view === DEFAULT_VIEW) ? 'marketControls__button--active' : ''}`
+                ${(view !== DEFAULT_VIEW && view === this.props.params.view)
+                || (view === DEFAULT_VIEW && view === this.props.params.view)
+                || (this.props.params.view === undefined && view === DEFAULT_VIEW) ? 'marketControls__button--active btn btn-primary'
+                : expandableViews[view].className}`
               }
               onClick={() => this.handleExpand(view)}
             >
