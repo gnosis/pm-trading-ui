@@ -23,7 +23,7 @@ const FormBarChartRadioButton = ({ input, radioValues, label, className, meta: {
 
 
   return (
-    <div className={`outcome formRadioButton ${touched && error ? 'formRadioButton--error' : ''}`}>
+    <div className={`outcome formBarRadioButton ${touched && error ? 'formBarRadioButton--error' : ''}`}>
       {label && <label>{label}</label>}
       {radioValues.map(({ label: radioLabel, value, highlightColor }) => {
         const probability = tokenDistribution[value] * 100
@@ -31,16 +31,16 @@ const FormBarChartRadioButton = ({ input, radioValues, label, className, meta: {
         return (<div key={value} className={`outcome__bar ${value > 0 ? 'outcome__bar--not-first' : ''}`}>
           <input
             type="radio"
-            className={`outcome__bar--inner pull-left radioButton__input ${bemifyClassName(className, 'input')}`}
-            id={`radioButton_${input.name}_${value}`}
+            className={`outcome__bar--inner pull-left barRadioButton__input ${bemifyClassName(className, 'input')}`}
+            id={`barRadioButton_${input.name}_${value}`}
             style={highlightColor ? { ...style, color: highlightColor } : style}
             onChange={() => input.onChange(value)}
             checked={input && input.value.toString() === value.toString()}
             value={value}
           />
-          <label className={`radioButton__text ${bemifyClassName(className, 'text')}`} htmlFor={`radioButton_${input.name}_${value}`}>
+          <label className={`barRadioButton__text ${bemifyClassName(className, 'text')}`} htmlFor={`barRadioButton_${input.name}_${value}`}>
             {radioLabel}&nbsp;
-            <DecimalValue value={probability} />%
+            <DecimalValue value={probability} decimals={2} />%
           </label>
         </div>)
       })}

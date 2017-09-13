@@ -174,8 +174,12 @@ class MarketDetail extends Component {
       'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
 
-    if (this.props.isModerator) {
-      infos.Creator = market.creator
+    if (this.props.creatorIsModerator) {
+      // Show creator String
+      infos.creator = this.props.moderators[market.creator]
+    } else {
+      // Show address
+      infos.creator = market.creator
     }
 
     return (
@@ -194,21 +198,28 @@ class MarketDetail extends Component {
     const showWinning = market.oracle.isOutcomeSet
     const showLost = false // determine if we lost?
     const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
-
+    const timeToResolution = moment.utc(market.eventDescription.resolutionDate).local().diff(moment(), 'hours')
+    const oneWeekHours = 168
     return (
       <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
         <div className="marketDescription">
           <p className="marketDescription__text">{ market.eventDescription.description }</p>
         </div>
         <Outcome market={market} />
-        <div className="marketTimer">
-          <div className="marketTimer__live">
-            <Countdown target={market.eventDescription.resolutionDate} />
-          </div>
-          <small className="marketTime__absolute">
-            {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-          </small>
-        </div>
+        {timeToResolution < oneWeekHours ?
+          <div className="marketTimer">
+            <div className="marketTimer__live">
+              <Countdown target={market.eventDescription.resolutionDate} />
+            </div>
+            <small className="marketTime__absolute">
+              {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+            </small>
+          </div> :
+          <div className="marketTimer">
+            <div className="marketTimer__live">
+              {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+            </div>
+          </div>}
         {showWithdrawFees && (
           <div className="withdrawFees">
             <div className="withdrawFees__icon icon icon--earnedTokens" />
@@ -327,7 +338,10 @@ MarketDetail.propTypes = {
   fetchMarketShares: PropTypes.func,
   fetchMarketTrades: PropTypes.func,
   requestGasCost: PropTypes.func,
-  isModerator: PropTypes.bool,
+  creatorIsModerator: PropTypes.bool,
+  moderators: PropTypes.shape({
+    address: PropTypes.string,
+  }),
 }
 
 export default MarketDetail

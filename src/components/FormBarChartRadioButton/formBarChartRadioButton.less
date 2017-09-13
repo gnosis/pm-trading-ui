@@ -8,14 +8,14 @@
   }  
 }
 
-.formRadioButton {
+.formBarRadioButton {
   &--error {
-    .radioButton__text {
+    .barRadioButton__text {
       color: @active-highlight-error !important;
     }
   }
 
-  .radioButton {
+  .barRadioButton {
 
     &__text {
       text-transform: none;
@@ -31,15 +31,13 @@
     
     &__input[type="radio"] {
       margin: 0;
-      display: block;
-      position: relative;
+      appearance: none;
+      display: table-cell;
       height: @outcome-bar-height;
-      border-top-left-radius: 5px;
-      border-bottom-left-radius: 5px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;      
       background-color: @bg-color-muted;
-      border: 0px solid @bg-color-muted;
+      border: 0px solid @bg-color-muted;      
 
       // for use with currentColor:
       color: @active-highlight;
@@ -52,7 +50,7 @@
         border-width: 4px;
       }
 
-      &:checked+.radioButton__text {
+      &:checked+.barRadioButton__text {
         font-weight: 800;
       }
 
