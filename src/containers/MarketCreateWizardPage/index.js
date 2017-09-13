@@ -31,6 +31,7 @@ const mapStateToProps = (state) => {
     selectedOracleType: selector(state, 'oracleType'),
     selectedOutcomeType: selector(state, 'outcomeType'),
     decimals: parseInt(selector(state, 'decimals'), 10),
+    unit: selector(state, 'unit'),
     defaultAccount: getDefaultAccount(state),
   }
 }

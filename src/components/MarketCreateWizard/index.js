@@ -85,7 +85,7 @@ export default class MarketCreateWizard extends Component {
         </div>
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="funding" component={FormInput} type="text" validate={validators.all(validators.required, validators.isNumber({ decimals: 4 }), validators.greaterThanZero)} label="Funding" />            
+            <Field name="funding" continuousPlaceholder="ETH" component={FormInput} type="text" validate={validators.all(validators.required, validators.isNumber({ decimals: 4 }), validators.greaterThanZero)} label="Funding" />            
           </div>
         </div>
       </div>
