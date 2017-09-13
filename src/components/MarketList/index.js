@@ -121,14 +121,6 @@ class MarketList extends Component {
               </div>
             </div>
           </div>
-          {/* <div className="info__group col-md-3">
-            <div className="info__field">
-              <div className="info__field--icon icon icon--currency" />
-              <div className="info__field--label">
-                <CurrencyName collateralToken={market.event.collateralToken} />
-              </div>
-            </div>
-          </div>*/}
           <div className="info__group col-md-3">
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
