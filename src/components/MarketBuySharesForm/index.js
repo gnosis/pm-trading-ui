@@ -16,7 +16,6 @@ import ScalarSlider from 'components/ScalarSlider'
 import FormRadioButton from 'components/FormRadioButton'
 import FormBarChartRadioButton from 'components/FormBarChartRadioButton'
 import Input from 'components/FormInput'
-import Checkbox from 'components/FormCheckbox'
 
 import './marketBuySharesForm.less'
 
@@ -62,8 +61,8 @@ class MarketBuySharesForm extends Component {
     return outcomeTokenCount
   }
 
-  getMaximumWin(outcomeTokenCount) {
-    return outcomeTokenCount.div(1e18)
+  getMaximumWin(outcomeTokenCount, investment) {
+    return outcomeTokenCount.sub(new Decimal(investment).mul(1e18)).div(1e18)
   }
 
   getPercentageWin(outcomeTokenCount, investment) {
@@ -158,6 +157,7 @@ class MarketBuySharesForm extends Component {
     } = this.props
     const isOutcomeSelected = selectedOutcome !== undefined
     const currentMarginalPrice = marginalPrices[1]
+    // Get the amount of tokens to buy
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
     if (isOutcomeSelected) newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome]).add(outcomeTokenCount).toString()
@@ -224,13 +224,13 @@ class MarketBuySharesForm extends Component {
     const {
       handleSubmit,
       selectedBuyInvest,
-      isConfirmed,
       submitFailed,
       submitting,
       market: {
         event: {
           collateralToken,
         },
+        marginalPrices,
       },
       selectedOutcome,
       gasCosts,
@@ -238,10 +238,10 @@ class MarketBuySharesForm extends Component {
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
-
+    // Get the amount of tokens to buy
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
 
-    const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest)
+    const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest !== undefined ? selectedBuyInvest : 0)
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
 
@@ -259,7 +259,7 @@ class MarketBuySharesForm extends Component {
     } else {
       tokenCountField = (
         <span className="marketBuyWin__row marketBuyWin__max">
-          <DecimalValue value={maximumWin} />&nbsp;
+          <DecimalValue value={weiToEth(outcomeTokenCount)} />&nbsp;
           <div
             className={'marketBuyWin__outcomeColor'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[selectedOutcome] }}
           />&nbsp;
@@ -269,7 +269,8 @@ class MarketBuySharesForm extends Component {
       maxReturnField = (
         <span className="marketBuyWin__row marketBuyWin__max">
           +<DecimalValue value={percentageWin} /> %&nbsp;
-          <CurrencyName collateralToken={collateralToken} />
+          (<DecimalValue value={maximumWin} />&nbsp;
+          <CurrencyName collateralToken={collateralToken} />)
         </span>
       )
 
@@ -311,11 +312,6 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">
                   <DecimalValue value={gasCostEstimation} /> <CurrencyName collateralToken={collateralToken} /></div>
               </div>
-              <div className="row marketBuySharesForm__row">
-                <div className="col-md-12">
-                  <Field name="confirm" component={Checkbox} className="marketBuyCheckbox" text="Confirm Purchase" />
-                </div>
-              </div>
               {submitFailed && (
                 <div className="row marketBuySharesForm__row">
                   <div className="col-md-12">Sorry - your investment couldn't be processed. Please ensure you're on the right network.</div>
@@ -323,7 +319,7 @@ class MarketBuySharesForm extends Component {
               )}
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">
-                  <button className={`btn btn-primary col-md-12 ${!isConfirmed || !submitEnabled ? 'disabled' : ''}`} disabled={!isConfirmed || !submitEnabled}>{submitting ? 'Loading...' : 'Buy Tokens'}</button>
+                  <button className={`btn btn-primary col-md-12 ${!submitEnabled ? 'disabled' : ''}`} disabled={!submitEnabled}>{submitting ? 'Loading...' : 'Buy Tokens'}</button>
                 </div>
                 <div className="col-md-6">
                   <button className="btn btn-default col-md-12 marketBuySharesForm__cancel">Cancel</button>
@@ -343,7 +339,6 @@ MarketBuySharesForm.propTypes = {
   selectedOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
-  isConfirmed: PropTypes.bool,
 }
 
 const form = {
