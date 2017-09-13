@@ -47,11 +47,18 @@ export const toEntity = (data, entityType, idKey = 'address') => {
  * @param {String|Number} value
  */
 export const weiToEth = (value) => {
-  let ethValue = '0'
-  if (value && Decimal(value).gt(0)) {
-    ethValue = Decimal(value).div(1e18).toString()
+  let ethValue = new Decimal(0)
+  if (typeof value === 'string') {
+    ethValue = new Decimal(value)
+    if (ethValue.gt(0)) {
+      return ethValue.div(1e18).toString()
+    }
+    return new Decimal(0).div(1e18).toString()
   }
-  return ethValue
+  if (value instanceof Decimal && value.gt(0)) {
+    return value.div(1e18).toString()
+  }
+  return ethValue.toString()
 }
 
 export const getOutcomeName = (market, index) => {

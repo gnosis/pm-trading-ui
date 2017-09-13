@@ -58,28 +58,18 @@
 .svgIcon("achievementBadge");
 .svgIcon("incomeForecast");
 .svgIcon("earnedTokens");
+.svgIcon("cross");
 .svgIcon("user");
 .svgIcon("gear");
 
-// add svg later
-.icon.icon--cross {
-  font-style: normal;
+.icon--checkbox {
+  background: @active-highlight-success;
+}
 
-  .closeButton(64px, 2px);
-  position: relative;
-  display: inline-block;
-  content: '\00a0';
-
-  &::before, &::after {
-    background-color: @active-highlight-error;
-    top: 50%;
-  }
-  cursor: default;
-
-  &:hover {
-    cursor: default;
-    &::before, &::after {
-      background-color: @active-highlight-error;
-    }
-  }
+.icon--error {
+  @url: "../assets/img/icons/icon_cross.svg";
+  background-image: url("@{url}");
+  mask-image: url("@{url}");
+  
+  background: @active-highlight-error;
 }

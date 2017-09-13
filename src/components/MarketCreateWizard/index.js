@@ -4,7 +4,7 @@ import autobind from 'autobind-decorator'
 import { Field, propTypes } from 'redux-form'
 
 import * as validators from 'utils/validators'
-import { ORACLE_TYPES } from 'utils/constants'
+import { ORACLE_TYPES, GAS_COST } from 'utils/constants'
 
 import GroupCentralizedOracle from 'components/GroupCentralizedOracle'
 import GroupBlockDifficulty from 'components/GroupBlockDifficulty'
@@ -24,6 +24,13 @@ export default class MarketCreateWizard extends Component {
     if (!this.props.outcomes) {
       this.props.change('outcomes', [''])
     }
+
+    this.props.requestGasCost(GAS_COST.MARKET_CREATION)
+    this.props.requestGasCost(GAS_COST.CENTRALIZED_ORACLE)
+    this.props.requestGasCost(GAS_COST.CATEGORICAL_EVENT)
+    this.props.requestGasCost(GAS_COST.SCALAR_EVENT)
+    this.props.requestGasCost(GAS_COST.FUNDING)
+    this.props.requestGasPrice()
   }
 
   @autobind

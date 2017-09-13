@@ -4,7 +4,7 @@ import { reduxForm, Field, propTypes } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
-import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
+import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount, calcLMSRProfit } from 'api'
 
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -12,8 +12,8 @@ import CurrencyName from 'components/CurrencyName'
 import FormInput from 'components/FormInput'
 import FormCheckbox from 'components/FormCheckbox'
 
-import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-import { getOutcomeName } from 'utils/helpers'
+import { COLOR_SCHEME_DEFAULT, GAS_COST } from 'utils/constants'
+import { getOutcomeName, weiToEth } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
@@ -24,6 +24,17 @@ class MarketMySharesForm extends Component {
 
     this.state = {
       extendedSellIndex: undefined,
+    }
+  }
+
+  componentWillMount() {
+    const { gasCosts, gasPrice, requestGasCost, requestGasPrice } = this.props
+
+    if (gasCosts.sellShares === undefined) {
+      requestGasCost(GAS_COST.SELL_SHARES)
+    }
+    if (gasPrice === undefined) {
+      requestGasPrice()
     }
   }
 
@@ -81,38 +92,38 @@ class MarketMySharesForm extends Component {
       marketShares: {
         [extendedSellIndex]: share,
       },
+      gasCosts,
+      gasPrice,
     } = this.props
 
-    const hasEnteredSellAmount = typeof selectedSellAmount !== 'undefined' || selectedSellAmount === ''
     let selectedSellAmountWei
     try {
-      selectedSellAmountWei = Decimal(selectedSellAmount || 0).mul(1e18).toString()
+      selectedSellAmountWei = new Decimal(parseFloat(selectedSellAmount) || 0).mul(1e18).toString()
     } catch (e) {
       selectedSellAmountWei = '0'
-    }    
+    }
     let currentProbability
     try {
       currentProbability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
         funding: market.funding,
         outcomeTokenIndex: share.outcomeToken.index,
       })
     } catch (e) {
-      currentProbability = Decimal('0')
+      currentProbability = new Decimal(0)
     }
 
-    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal('0')
-
-    let newTokenCount
-    try {
-      newTokenCount = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
+    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0))
+    let earnings = new Decimal(0)
+    if (share.balance && selectedSellAmount) {
+      earnings = weiToEth(calcLMSRProfit({
+        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
         funding: market.funding,
         outcomeTokenIndex: share.outcomeToken.index,
-        cost: Decimal(share.balance).sub(selectedSellAmountWei).toString(),
-      })
-    } catch (e) {
-      newTokenCount = currentTokenCount
+        outcomeTokenCount: selectedSellAmountWei,
+        feeFactor: market.fee,
+      }))
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
@@ -134,7 +145,10 @@ class MarketMySharesForm extends Component {
       newProbability = currentProbability
     }
 
+    // const earnings = selectedSellAmount && parseFloat(selectedSellAmount) > 0 ? newTokenCount.mul(currentProbability).div(1e18) : new Decimal(0)
+
     const submitDisabled = invalid || submitting || !isConfirmedSell
+    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))
 
     return (
       <div className="marketMyShares__sellContainer">
@@ -159,7 +173,16 @@ class MarketMySharesForm extends Component {
             <div className="col-md-3">
               <label>Earnings</label>
               <span>
-                <DecimalValue value={currentTokenCount.sub(newTokenCount).mul(currentProbability).div(1e18)} />
+                <DecimalValue value={earnings} />
+                <CurrencyName collateralToken={market.event.collateralToken} />
+              </span>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3 col-md-offset-3">
+              <label>Gas costs</label>
+              <span>
+                <DecimalValue value={gasCostEstimation} />&nbsp;
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </span>
             </div>

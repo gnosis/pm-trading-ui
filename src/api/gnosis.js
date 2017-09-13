@@ -37,13 +37,30 @@ export const getCurrentAccount = async () => {
   return gnosis.web3.eth.accounts[0]
 }
 
+const normalizeEventDescription = (eventDescription, eventType) => {
+  const eventDescriptionNormalized = {
+    title: eventDescription.title,
+    resolutionDate: eventDescription.resolutionDate,
+    description: eventDescription.description,
+  }
+  if (eventType === OUTCOME_TYPES.CATEGORICAL) {
+    eventDescriptionNormalized.outcomes = eventDescription.outcomes
+  } else if (eventType === OUTCOME_TYPES.SCALAR) {
+    eventDescriptionNormalized.decimals = parseInt(eventDescription.decimals, 10)
+    eventDescriptionNormalized.unit = eventDescription.unit
+  } else if (eventType === undefined) {
+    throw new Error('Must pass eventType')
+  }
+  return eventDescriptionNormalized
+}
 
-export const createEventDescription = async (eventDescription) => {
+export const createEventDescription = async (eventDescription, eventType) => {
   console.log('eventDescription', eventDescription)
+  const eventDescriptionNormalized = normalizeEventDescription(eventDescription, eventType)
   const gnosis = await getGnosisConnection()
   // console.log(description)
 
-  const ipfsHash = await gnosis.publishEventDescription(eventDescription)
+  const ipfsHash = await gnosis.publishEventDescription(eventDescriptionNormalized)
 
   if (process.env.NODE_ENV !== 'production') {
     await delay(5000)
@@ -52,7 +69,7 @@ export const createEventDescription = async (eventDescription) => {
   return {
     ipfsHash,
     local: true,
-    ...eventDescription,
+    ...eventDescriptionNormalized,
   }
 }
 
@@ -232,3 +249,52 @@ export const calcLMSRCost = Gnosis.calcLMSRCost
 export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
 export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
 export const calcLMSRProfit = Gnosis.calcLMSRProfit
+
+/*
+* Gas Calculation functions
+*/
+export const calcFundingGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return gnosis.contracts.Market.gasStats.fund.averageGasUsed
+}
+
+export const calcCategoricalEventGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return await gnosis.createCategoricalEvent.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const calcScalarEventGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return await gnosis.createScalarEvent.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const calcCentralizedOracleGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return await gnosis.createCentralizedOracle.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const calcMarketGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  return await gnosis.createMarket.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const calcBuySharesGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  // return gnosis.contracts.Market.gasStats.buy.averageGasUsed
+  return await gnosis.buyOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const calcSellSharesGasCost = async () => {
+  const gnosis = await getGnosisConnection()
+  // return gnosis.contracts.Market.gasStats.sell.averageGasUsed
+  return await gnosis.sellOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+}
+
+export const getGasPrice = async () => {
+  const gnosis = await getGnosisConnection()
+  return await new Promise(
+    (resolve, reject) => gnosis.web3.eth.getGasPrice(
+      (e, r) => (e ? reject(e) : resolve(r)),
+    ),
+  )
+}

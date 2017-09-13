@@ -42,6 +42,7 @@ class Dashboard extends Component {
     this.props.requestMarkets()
     this.props.requestAccountShares(this.props.defaultAccount)
     this.props.requestAccountTrades(this.props.defaultAccount)
+    this.props.requestGasPrice()
   }
 
   @autobind
@@ -334,6 +335,7 @@ Dashboard.propTypes = {
   accountPredictiveAssets: PropTypes.string,
   accountParticipatingInEvents: PropTypes.number,
   requestMarkets: PropTypes.func,
+  requestGasPrice: PropTypes.func,
   requestAccountShares: PropTypes.func,
   requestAccountTrades: PropTypes.func,
   changeUrl: PropTypes.func,

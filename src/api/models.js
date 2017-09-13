@@ -12,6 +12,7 @@ const Market = {
   funding: '0',
   fee: '0',
   stage: 1,
+  tradingVolume: '0',
   marketMaker: undefined,
   marketFactory: undefined,
 }

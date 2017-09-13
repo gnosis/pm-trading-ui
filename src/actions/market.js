@@ -164,7 +164,7 @@ export const createMarket = options => async (dispatch) => {
   // Create Event Description
   let eventDescriptionContractData
   try {
-    eventDescriptionContractData = await api.createEventDescription(eventDescription)
+    eventDescriptionContractData = await api.createEventDescription(eventDescription, event.type)
 
     await dispatch(receiveEntities(normalize(createEventDescriptionModel(eventDescriptionContractData), eventDescriptionSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.EVENT_DESCRIPTION))

@@ -8,6 +8,7 @@ import { OUTCOME_TYPES, RESOLUTION_TIME, COLOR_SCHEME_DEFAULT } from 'utils/cons
 
 import CurrencyName from 'components/CurrencyName'
 import Checkbox from 'components/FormCheckbox'
+import DecimalValue from 'components/DecimalValue'
 
 import './marketCreateReview.less'
 
@@ -114,9 +115,7 @@ class MarketCreateReview extends Component {
   }
 
   renderCheckout() {
-    const { formValues: { funding, collateralToken } } = this.props
-
-    const costEstimation = 0
+    const { createMarketCost, formValues: { funding, collateralToken } } = this.props
 
     return (
       <div className="checkout">
@@ -127,13 +126,15 @@ class MarketCreateReview extends Component {
           </li>
           <li className="checkout__listItem">
             <span className="listItem__label">Gas Costs</span>
-            <span className="listItem__value">{Decimal(costEstimation || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} /></span>
+            <span className="listItem__value">
+              <DecimalValue value={createMarketCost} /> <CurrencyName collateralToken={collateralToken} />
+            </span>
           </li>
           <li className="checkout__seperator" />
           <li className="checkout__listItem checkout__listItem--total">
             <span className="listItem__label">Total</span>
             <span className="listItem__value">
-              {Decimal(funding || 0).add(Decimal(costEstimation || 0)).toFixed(4)}
+              <DecimalValue value={Decimal(funding || 0).add(Decimal(createMarketCost)).toFixed(4)} />
             </span>
           </li>
         </ul>
@@ -270,6 +271,7 @@ MarketCreateReview.propTypes = {
     outcomeType: PropTypes.string,
     outcomes: PropTypes.arrayOf(PropTypes.string),
   }),
+  createMarketCost: PropTypes.string,
   changeUrl: PropTypes.func,
   submitForm: PropTypes.func,
 }
