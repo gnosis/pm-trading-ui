@@ -84,7 +84,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   changeUrl: url => dispatch(push(url)),
-  submitForm: (formvalues) => dispatch(submitAction(formvalues)),
+  submitForm: formvalues => dispatch(submitAction(formvalues)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketCreateReview)

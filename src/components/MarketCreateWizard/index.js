@@ -20,6 +20,10 @@ export default class MarketCreateWizard extends Component {
     if (!this.props.defaultAccount) {
       this.props.changeUrl('/markets')
     }
+    // fill outcomes in case of not filled (coming from review)
+    if (!this.props.outcomes) {
+      this.props.change('outcomes', [''])
+    }
   }
 
   @autobind
