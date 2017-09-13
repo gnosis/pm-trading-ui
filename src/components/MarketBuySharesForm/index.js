@@ -14,6 +14,7 @@ import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
 
 import FormRadioButton from 'components/FormRadioButton'
+import FormBarChartRadioButton from 'components/FormBarChartRadioButton'
 import Input from 'components/FormInput'
 import Checkbox from 'components/FormCheckbox'
 
@@ -118,14 +119,15 @@ class MarketBuySharesForm extends Component {
   }
 
   renderCategorical() {
-    const { market: { eventDescription } } = this.props
+    const { market, market: { eventDescription } } = this.props
 
     return (
       <div className="col-md-6">
         <Field
-          component={FormRadioButton}
+          component={FormBarChartRadioButton}
           name="selectedOutcome"
           className="marketBuyOutcome"
+          market={market}
           radioValues={eventDescription.outcomes.map((label, index) => ({
             value: index,
             label: eventDescription.outcomes[index],
@@ -280,11 +282,6 @@ class MarketBuySharesForm extends Component {
           <div className="row">
             {this.renderOutcomes()}
             <div className="col-md-6">
-              {/* <div className="row">
-                <div className="col-md-12">
-                  <h2 className="marketBuyHeading">Bet Amount & Checkout</h2>
-                </div>
-              </div>*/}
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-8">
                   <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
