@@ -12,11 +12,14 @@ export const setDefaultAccount = createAction('SET_DEFAULT_ACCOUNT')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
+export const registerProvider = createAction('REGISTER_PROVIDER')
+export const updateProvider = createAction('UPDATE_PROVIDER')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
 export const connectBlockchain = () => async (dispatch) => {
   try {
+    // Initialize web3 providers
     let account
     const getConnection = async () => {
       account = await getCurrentAccount()

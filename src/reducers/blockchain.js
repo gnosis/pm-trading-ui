@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions'
 
-import { setDefaultAccount, setConnectionStatus, setGasCost, setGasPrice } from 'actions/blockchain'
+import { setDefaultAccount, setConnectionStatus, setGasCost, setGasPrice, registerProvider, updateProvider } from 'actions/blockchain'
 import { GAS_COST } from 'utils/constants'
 
 const reducer = handleActions({
@@ -30,12 +30,44 @@ const reducer = handleActions({
     ...state,
     [action.payload.entityType]: action.payload.gasPrice,
   }),
+  [registerProvider]: (state, action) => {
+    const { provider: name, ...provider } = action.payload
+    return {
+      ...state,
+      providers: {
+        ...state.providers,
+        [name]: {
+          name,
+          loaded: false,
+          ...provider,
+        },
+      },
+    }
+  },
+  [updateProvider]: (state, action) => {
+    const { provider: name, ...provider } = action.payload
+    return {
+      ...state,
+      providers: {
+        ...state.providers,
+        [name]: {
+          ...state.providers[name],
+          loaded: true,
+          ...provider,
+        },
+      },
+      activeProvider: !state.activeProvider && provider.available ? name : state.activeProvider,
+      providersLoaded: true,
+    }
+  },
 }, {
   gasCosts: Object.keys(GAS_COST).reduce((acc, item) => ({ ...acc, [GAS_COST[item]]: undefined }), {}),
   gasPrice: undefined,
   defaultAccount: undefined,
   connection: undefined,
   connectionTried: false,
+  providers: {},
+  activeProvider: null,
 })
 
 export default reducer

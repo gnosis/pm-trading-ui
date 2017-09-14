@@ -1,4 +1,4 @@
-export const ETHERIUM_NETWORKS = {
+export const ETHEREUM_NETWORKS = {
   MAIN: 'MAIN',
   MORDEN: 'MORDEN',
   ROPSTEN: 'ROPSTEN',

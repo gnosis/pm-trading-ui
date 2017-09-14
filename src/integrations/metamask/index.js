@@ -1,12 +1,12 @@
 import _ from 'lodash'
 
-import { ETHERIUM_NETWORKS, WALLET_PROVIDER } from 'integrations/constants'
-import { registerWallet, updateWallet } from 'actions/wallet'
+import { ETHEREUM_NETWORKS, WALLET_PROVIDER } from 'integrations/constants'
+import { registerProvider, updateProvider } from 'actions/blockchain'
 
 class Metamask {
   async initialize(store) {
     this.store = store
-    this.store.dispatch(registerWallet({ provider: WALLET_PROVIDER.METAMASK }))
+    this.store.dispatch(registerProvider({ provider: WALLET_PROVIDER.METAMASK }))
 
     const walletEnabled = await new Promise((resolve) => {
       /* global Web3, window */
@@ -28,7 +28,7 @@ class Metamask {
       account = await this.getAccount()
     }
 
-    this.store.dispatch(updateWallet({
+    this.store.dispatch(updateProvider({
       provider: WALLET_PROVIDER.METAMASK,
       available: walletEnabled && account,
       network,
@@ -44,27 +44,27 @@ class Metamask {
         } else {
           switch (netId) {
             case '1': {
-              resolve(ETHERIUM_NETWORKS.MAIN)
+              resolve(ETHEREUM_NETWORKS.MAIN)
               break
             }
             case '2': {
-              resolve(ETHERIUM_NETWORKS.MORDEN)
+              resolve(ETHEREUM_NETWORKS.MORDEN)
               break
             }
             case '3': {
-              resolve(ETHERIUM_NETWORKS.ROPSTEN)
+              resolve(ETHEREUM_NETWORKS.ROPSTEN)
               break
             }
             case '4': {
-              resolve(ETHERIUM_NETWORKS.RINKEBY)
+              resolve(ETHEREUM_NETWORKS.RINKEBY)
               break
             }
             case '42': {
-              resolve(ETHERIUM_NETWORKS.KOVAN)
+              resolve(ETHEREUM_NETWORKS.KOVAN)
               break
             }
             default: {
-              resolve(ETHERIUM_NETWORKS.UNKNOWN)
+              resolve(ETHEREUM_NETWORKS.UNKNOWN)
               break
             }
           }
@@ -75,7 +75,7 @@ class Metamask {
 
   async getAccount() {
     return new Promise((resolve, reject) => {
-      this.web3.getAccounts(
+      this.web3.eth.getAccounts(
         (e, accounts) => {
           if (e) {
             reject(e)

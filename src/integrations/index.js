@@ -1,3 +1,3 @@
-import { Metamask } from './metamask'
+import Metamask from './metamask'
 
-export default Metamask
+export { Metamask }
