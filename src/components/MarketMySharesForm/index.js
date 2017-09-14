@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm, Field, propTypes, reset } from 'redux-form'
+import { reduxForm, Field, propTypes } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
@@ -10,7 +10,6 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
-import FormCheckbox from 'components/FormCheckbox'
 
 import { COLOR_SCHEME_DEFAULT, GAS_COST } from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
@@ -110,7 +109,6 @@ class MarketMySharesForm extends Component {
     const { extendedSellId } = this.state
     const {
       market,
-      isConfirmedSell,
       invalid,
       submitting,
       submitFailed,
@@ -176,7 +174,7 @@ class MarketMySharesForm extends Component {
       newScalarPredictedValue = normalizeScalarPoint(market.marginalPrices, market)
     }
 
-    const submitDisabled = invalid || submitting || !isConfirmedSell
+    const submitDisabled = invalid || submitting
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))
 
     return (
@@ -227,7 +225,6 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-6 col-md-offset-6 marketMyShares__sellColumn">
-              <Field name="confirm" component={FormCheckbox} className="marketMySharesSellButton" text="Confirm Sell" />
               <button className={`btn btn-primary ${submitDisabled ? 'disabled' : ''}`} disabled={submitDisabled}>{submitting ? 'Loading' : 'Sell Shares'}</button>
               <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
             </div>
@@ -343,7 +340,6 @@ class MarketMySharesForm extends Component {
 MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
-  isConfirmedSell: PropTypes.bool,
   selectedSellAmount: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,
