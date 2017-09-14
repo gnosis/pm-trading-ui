@@ -128,18 +128,31 @@ class MarketMySharesForm extends Component {
       selectedSellAmountWei = '0'
     }
     let currentProbability
-    try {
-      currentProbability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-    } catch (e) {
-      currentProbability = new Decimal(0)
+    if (market.event.type === 'CATEGORICAL') {
+      try {
+        currentProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+        })
+      } catch (e) {
+        currentProbability = new Decimal(0)
+      }
+    } else {
+      // Scalar
+      try {
+        currentProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: 1,
+        })
+      } catch (e) {
+        currentProbability = new Decimal(0)
+      }
     }
 
     const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
-    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0))
+    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0).mul(1e18))
     let earnings = new Decimal(0)
     if (share.balance && selectedSellAmount) {
       earnings = weiToEth(calcLMSRProfit({
@@ -153,25 +166,39 @@ class MarketMySharesForm extends Component {
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
       if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
-        return Decimal(outcomeTokenAmount).sub(currentTokenCount.sub(newTokenCount.toString()).toString()).toString()
+        return Decimal(outcomeTokenAmount).sub(currentTokenCount.sub(newTokenCount.toString()).toString()).floor().toString()
       }
 
       return Decimal(outcomeTokenAmount).toString()
     })
 
     let newProbability
-    try {
-      newProbability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: newNetOutcomeTokensSold,
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-    } catch (e) {
-      newProbability = currentProbability
-    }
-
     if (market.event.type === 'SCALAR') {
-      newScalarPredictedValue = normalizeScalarPoint(market.marginalPrices, market)
+      try {
+        newProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: newNetOutcomeTokensSold,
+          funding: market.funding,
+          outcomeTokenIndex: 1, // long
+        })
+      } catch (e) {
+        newProbability = currentProbability
+      }
+      const newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
+      newScalarPredictedValue = normalizeScalarPoint(
+        newMarginalPrices,
+        market,
+      )
+    } else {
+      // Categorical events
+      try {
+        newProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: newNetOutcomeTokensSold,
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+        })
+      } catch (e) {
+        newProbability = currentProbability
+      }
     }
 
     const submitDisabled = invalid || submitting
@@ -302,7 +329,6 @@ class MarketMySharesForm extends Component {
 
   render() {
     const { marketShares } = this.props
-
     if (!marketShares || !marketShares.length) {
       return (
         <div className="marketMyShares">

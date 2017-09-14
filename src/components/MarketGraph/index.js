@@ -28,7 +28,7 @@ const renderCategoricalGraph = (data) => {
   const stacks = Object.keys(data[0]).slice(2)
   const z = scaleOrdinal(schemeDark2)
   z.domain(stacks)
-  const tooltipContent = (<div>{moment.utc(data).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}</div>)
+
   return (
     <div className="marketGraph">
       <div className="container marketGraph__container">
@@ -84,7 +84,7 @@ const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) =
             }
             />
             <CartesianGrid className="grid" vertical />
-            <Tooltip className="tooltip" />
+            <Tooltip className="tooltip" content={<CustomTooltip />} />
             <Line type="stepAfter" dataKey="scalarPoint" fill={COLOR_SCHEME_DEFAULT[0]} stroke={COLOR_SCHEME_DEFAULT[0]} />
           </LineChart>
         </ResponsiveContainer>
