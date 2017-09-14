@@ -104,9 +104,7 @@ const MarketGraph = ({ data = [], market: { event: { type, lowerBound, upperBoun
   return <div />
 }
 
-const CustomTooltip = ({ payload = [], label, active, separator, 
-  formatter, defaultFormatter, itemStyle, itemSorter,
-  labelStyle, wrapperStyle }) => {
+const CustomTooltip = ({ payload = [], label, active, separator, itemStyle, itemSorter, labelStyle, wrapperStyle }) => {
   const isNumOrStr = value => (_.isNumber(value) && !_.isNaN(value)) || _.isString(value)
 
   const renderContent = () => {
@@ -124,7 +122,7 @@ const CustomTooltip = ({ payload = [], label, active, separator,
           ...itemStyle,
         }
         const hasName = isNumOrStr(entry.name)
-        const finalFormatter = entry.formatter || formatter || defaultFormatter
+
         return (
           <li className="recharts-tooltip-item" key={`tooltip-item-${i}`} style={finalItemStyle}>
             {hasName ? <span className="recharts-tooltip-item-name">{entry.name}</span> : null}
@@ -134,9 +132,9 @@ const CustomTooltip = ({ payload = [], label, active, separator,
                 null
             }
             <span className="recharts-tooltip-item-value">
-              {finalFormatter ? finalFormatter(entry.value, entry.name, entry, i) : entry.value}
+              {Decimal(entry.value).mul(100).toDP(4, 1).toString()}
             </span>
-            <span className="recharts-tooltip-item-unit">{entry.unit || ''}</span>
+            <span className="recharts-tooltip-item-unit">{entry.unit || '%'}</span>
           </li>
         )
       })
@@ -219,8 +217,6 @@ CustomTooltip.propTypes = {
   label: PropTypes.string,
   active: PropTypes.bool,
   separator: PropTypes.string,
-  formatter: PropTypes.func,
-  defaultFormatter: PropTypes.func,
   itemStyle: PropTypes.object,
   itemSorter: PropTypes.func,
   labelStyle: PropTypes.object,

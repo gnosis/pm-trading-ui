@@ -19,6 +19,7 @@ import MarketGraph from 'components/MarketGraph'
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
 import MarketMySharesForm from 'components/MarketMySharesForm'
+import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 // import MarketShortSellForm from 'components/MarketShortSellForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 
@@ -29,6 +30,7 @@ const EXPAND_BUY_SHARES = 'buy-shares'
 const EXPAND_MY_TRADES = 'my-trades'
 const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
+const EXPAND_WITHDRAW_FEES = 'withdraw-fees'
 
 const expandableViews = {
   [EXPAND_BUY_SHARES]: {
@@ -80,6 +82,14 @@ const expandableViews = {
       props.defaultAccount &&
       props.defaultAccount === props.market.oracle.owner &&
       !props.market.oracle.isOutcomeSet,
+  },
+  [EXPAND_WITHDRAW_FEES]: {
+    label: 'Withdraw fees',
+    className: 'btn btn-default',
+    component: MarketWithdrawFeesForm,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount && props.market.oracle.owner === props.defaultAccount,
   },
 }
 
@@ -207,7 +217,8 @@ class MarketDetail extends Component {
             {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
           </small>
         </div>
-        {showWithdrawFees && (
+        {/*
+        showWithdrawFees && (
           <div className="withdrawFees">
             <div className="withdrawFees__icon icon icon--earnedTokens" />
             <div className="withdrawFees__details">
@@ -218,7 +229,7 @@ class MarketDetail extends Component {
               <button className="btn btn-link" type="button" onClick={this.handleWithdrawFees}>Withdraw fees</button>
             </div>
           </div>
-        )}
+        )*/}
         {showWinning && (
           <div className="redeemWinning">
             <div className="redeemWinning__icon icon icon--achievementBadge" />
