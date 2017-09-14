@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm, Field, propTypes } from 'redux-form'
+import { reduxForm, Field, propTypes, reset } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
@@ -13,7 +13,7 @@ import FormInput from 'components/FormInput'
 import FormCheckbox from 'components/FormCheckbox'
 
 import { COLOR_SCHEME_DEFAULT, GAS_COST } from 'utils/constants'
-import { getOutcomeName, weiToEth } from 'utils/helpers'
+import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
@@ -44,10 +44,29 @@ class MarketMySharesForm extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const { extendedSellId } = this.state
+    const {
+      selectedSellAmount,
+      marketShares,
+      initialize,
+    } = this.props
+
+    if (selectedSellAmount === undefined && extendedSellId !== undefined) {
+      // By default form is filled up with fill amount
+      const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
+      const fullAmount = Decimal(share.balance).div(1e18).toDP(4, 1).toString()
+      initialize({ sellAmount: fullAmount })
+    }
+  }
+
   @autobind
   handleShowSellView(e, shareId) {
+    const { initialize } = this.props
     e.preventDefault()
     this.props.reset()
+    // Form reset / reinitialization when switching among shares
+    initialize({})
     this.setState({ extendedSellId: (shareId === this.state.extendedSellId ? undefined : shareId) })
   }
 
@@ -87,7 +106,6 @@ class MarketMySharesForm extends Component {
     return undefined
   }
 
-
   renderSellShareView() {
     const { extendedSellId } = this.state
     const {
@@ -104,7 +122,7 @@ class MarketMySharesForm extends Component {
     } = this.props
 
     const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
-
+    let newScalarPredictedValue // calculated only for scalar events
     let selectedSellAmountWei
     try {
       selectedSellAmountWei = new Decimal(parseFloat(selectedSellAmount) || 0).mul(1e18).toString()
@@ -154,6 +172,10 @@ class MarketMySharesForm extends Component {
       newProbability = currentProbability
     }
 
+    if (market.event.type === 'SCALAR') {
+      newScalarPredictedValue = normalizeScalarPoint(market.marginalPrices, market)
+    }
+
     const submitDisabled = invalid || submitting || !isConfirmedSell
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))
 
@@ -171,16 +193,25 @@ class MarketMySharesForm extends Component {
                 validate={this.validateTokenCount}
               />
             </div>
-            <div className="col-md-3 marketMyShares__sellColumn">
-              <label>New Probability</label>
-              <span>
-                <DecimalValue value={newProbability.mul(100)} /> %
-              </span>
-            </div>
+            { market.event.type === 'SCALAR' ?
+              <div className="col-md-3 marketMyShares__sellColumn">
+                <label>New predicted value</label>
+                <span>
+                  <DecimalValue value={newScalarPredictedValue} />&nbsp;
+                  <CurrencyName collateralToken={market.event.collateralToken} />
+                </span>
+              </div> :
+              <div className="col-md-3 marketMyShares__sellColumn">
+                <label>New Probability</label>
+                <span>
+                  <DecimalValue value={newProbability.mul(100)} /> %
+                </span>
+              </div>
+            }
             <div className="col-md-3">
               <label>Earnings</label>
               <span>
-                <DecimalValue value={earnings} />
+                <DecimalValue value={earnings} />&nbsp;
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </span>
             </div>
