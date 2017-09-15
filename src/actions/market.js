@@ -365,3 +365,23 @@ export const withdrawFees = market => async (dispatch) => {
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
+
+export const closeMarket = market => async (dispatch) => {
+  const transactionId = uuid()
+  
+  // Start a new transaction log
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Closing market "${market.eventDescription.title}"`))
+
+  try {
+    await api.closeMarket(market)
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
+  } catch (e) {
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
+  }
+  // await dispatch(updateEntity({ entityType: 'events', data: { id: market.event.address, isWiningOutcomeSet: true } }))
+
+  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+}
