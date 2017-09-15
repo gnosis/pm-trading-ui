@@ -192,7 +192,6 @@ export const fundMarket = async (market) => {
  * @param {*object} market
  */
 export const closeMarket = async (market) => {
-  console.log('closing', market)
   const gnosis = await getGnosisConnection()
   const marketContract = gnosis.contracts.Market.at(hexWithPrefix(market.address))
   requireEventFromTXResult(await marketContract.close(), 'MarketClosing')

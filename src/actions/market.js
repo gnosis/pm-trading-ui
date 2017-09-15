@@ -32,6 +32,7 @@ import {
 import {
   OUTCOME_TYPES,
   TRANSACTION_COMPLETE_STATUS,
+  MARKET_STAGES,
 } from 'utils/constants'
 
 const TRANSACTION_STAGES = {
@@ -368,7 +369,7 @@ export const withdrawFees = market => async (dispatch) => {
 
 export const closeMarket = market => async (dispatch) => {
   const transactionId = uuid()
-  
+
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Closing market "${market.eventDescription.title}"`))
 
@@ -381,7 +382,15 @@ export const closeMarket = market => async (dispatch) => {
 
     throw e
   }
-  // await dispatch(updateEntity({ entityType: 'events', data: { id: market.event.address, isWiningOutcomeSet: true } }))
+
+  const stage = MARKET_STAGES.MARKET_CLOSED
+  await dispatch(updateEntity({
+    entityType: 'markets',
+    data: {
+      id: market.address,
+      stage,
+    },
+  }))
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
