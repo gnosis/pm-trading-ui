@@ -138,11 +138,6 @@ class MarketDetail extends Component {
     this.props.redeemWinnings(this.props.market)
   }
 
-  @autobind
-  handleWithdrawFees() {
-    this.props.withdrawFees(this.props.market)
-  }
-
   renderLoading() {
     return (
       <div className="marketDetailPage">
