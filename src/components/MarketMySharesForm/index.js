@@ -10,10 +10,9 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
-import FormCheckbox from 'components/FormCheckbox'
 
 import { COLOR_SCHEME_DEFAULT, GAS_COST } from 'utils/constants'
-import { getOutcomeName, weiToEth } from 'utils/helpers'
+import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
@@ -44,10 +43,29 @@ class MarketMySharesForm extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const { extendedSellId } = this.state
+    const {
+      selectedSellAmount,
+      marketShares,
+      initialize,
+    } = this.props
+
+    if (selectedSellAmount === undefined && extendedSellId !== undefined) {
+      // By default form is filled up with fill amount
+      const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
+      const fullAmount = Decimal(share.balance).div(1e18).toDP(4, 1).toString()
+      initialize({ sellAmount: fullAmount })
+    }
+  }
+
   @autobind
   handleShowSellView(e, shareId) {
+    const { initialize } = this.props
     e.preventDefault()
     this.props.reset()
+    // Form reset / reinitialization when switching among shares
+    initialize({})
     this.setState({ extendedSellId: (shareId === this.state.extendedSellId ? undefined : shareId) })
   }
 
@@ -87,12 +105,10 @@ class MarketMySharesForm extends Component {
     return undefined
   }
 
-
   renderSellShareView() {
     const { extendedSellId } = this.state
     const {
       market,
-      isConfirmedSell,
       invalid,
       submitting,
       submitFailed,
@@ -104,7 +120,7 @@ class MarketMySharesForm extends Component {
     } = this.props
 
     const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
-
+    let newScalarPredictedValue // calculated only for scalar events
     let selectedSellAmountWei
     try {
       selectedSellAmountWei = new Decimal(parseFloat(selectedSellAmount) || 0).mul(1e18).toString()
@@ -112,18 +128,31 @@ class MarketMySharesForm extends Component {
       selectedSellAmountWei = '0'
     }
     let currentProbability
-    try {
-      currentProbability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-    } catch (e) {
-      currentProbability = new Decimal(0)
+    if (market.event.type === 'CATEGORICAL') {
+      try {
+        currentProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+        })
+      } catch (e) {
+        currentProbability = new Decimal(0)
+      }
+    } else {
+      // Scalar
+      try {
+        currentProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: 1,
+        })
+      } catch (e) {
+        currentProbability = new Decimal(0)
+      }
     }
 
     const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
-    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0))
+    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0).mul(1e18))
     let earnings = new Decimal(0)
     if (share.balance && selectedSellAmount) {
       earnings = weiToEth(calcLMSRProfit({
@@ -137,24 +166,42 @@ class MarketMySharesForm extends Component {
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
       if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
-        return Decimal(outcomeTokenAmount).sub(currentTokenCount.sub(newTokenCount.toString()).toString()).toString()
+        return Decimal(outcomeTokenAmount).sub(currentTokenCount.sub(newTokenCount.toString()).toString()).floor().toString()
       }
 
       return Decimal(outcomeTokenAmount).toString()
     })
 
     let newProbability
-    try {
-      newProbability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: newNetOutcomeTokensSold,
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-    } catch (e) {
-      newProbability = currentProbability
+    if (market.event.type === 'SCALAR') {
+      try {
+        newProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: newNetOutcomeTokensSold,
+          funding: market.funding,
+          outcomeTokenIndex: 1, // long
+        })
+      } catch (e) {
+        newProbability = currentProbability
+      }
+      const newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
+      newScalarPredictedValue = normalizeScalarPoint(
+        newMarginalPrices,
+        market,
+      )
+    } else {
+      // Categorical events
+      try {
+        newProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: newNetOutcomeTokensSold,
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+        })
+      } catch (e) {
+        newProbability = currentProbability
+      }
     }
 
-    const submitDisabled = invalid || submitting || !isConfirmedSell
+    const submitDisabled = invalid || submitting
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))
 
     return (
@@ -171,16 +218,25 @@ class MarketMySharesForm extends Component {
                 validate={this.validateTokenCount}
               />
             </div>
-            <div className="col-md-3 marketMyShares__sellColumn">
-              <label>New Probability</label>
-              <span>
-                <DecimalValue value={newProbability.mul(100)} /> %
-              </span>
-            </div>
+            { market.event.type === 'SCALAR' ?
+              <div className="col-md-3 marketMyShares__sellColumn">
+                <label>New predicted value</label>
+                <span>
+                  <DecimalValue value={newScalarPredictedValue} />&nbsp;
+                  <CurrencyName collateralToken={market.event.collateralToken} />
+                </span>
+              </div> :
+              <div className="col-md-3 marketMyShares__sellColumn">
+                <label>New Probability</label>
+                <span>
+                  <DecimalValue value={newProbability.mul(100)} /> %
+                </span>
+              </div>
+            }
             <div className="col-md-3">
               <label>Earnings</label>
               <span>
-                <DecimalValue value={earnings} />
+                <DecimalValue value={earnings} />&nbsp;
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </span>
             </div>
@@ -196,7 +252,6 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-6 col-md-offset-6 marketMyShares__sellColumn">
-              <Field name="confirm" component={FormCheckbox} className="marketMySharesSellButton" text="Confirm Sell" />
               <button className={`btn btn-primary ${submitDisabled ? 'disabled' : ''}`} disabled={submitDisabled}>{submitting ? 'Loading' : 'Sell Shares'}</button>
               <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
             </div>
@@ -274,7 +329,6 @@ class MarketMySharesForm extends Component {
 
   render() {
     const { marketShares } = this.props
-
     if (!marketShares || !marketShares.length) {
       return (
         <div className="marketMyShares">
@@ -312,7 +366,6 @@ class MarketMySharesForm extends Component {
 MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
-  isConfirmedSell: PropTypes.bool,
   selectedSellAmount: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,

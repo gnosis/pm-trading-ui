@@ -9,6 +9,7 @@ import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
+import config from 'config.json'
 
 import './dashboard.less'
 
@@ -107,7 +108,6 @@ class Dashboard extends Component {
 
   renderControls() {
     const { defaultAccount } = this.props
-    const config = require('config.json')
     const canCreateMarket = config.whitelist[defaultAccount] !== undefined
     return (
       <div className="dashboardControls container">

@@ -19,6 +19,7 @@ import MarketGraph from 'components/MarketGraph'
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
 import MarketMySharesForm from 'components/MarketMySharesForm'
+import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 // import MarketShortSellForm from 'components/MarketShortSellForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 
@@ -29,6 +30,7 @@ const EXPAND_BUY_SHARES = 'buy-shares'
 const EXPAND_MY_TRADES = 'my-trades'
 const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
+const EXPAND_WITHDRAW_FEES = 'withdraw-fees'
 
 const expandableViews = {
   [EXPAND_BUY_SHARES]: {
@@ -81,6 +83,14 @@ const expandableViews = {
       props.defaultAccount === props.market.oracle.owner &&
       !props.market.oracle.isOutcomeSet,
   },
+  [EXPAND_WITHDRAW_FEES]: {
+    label: 'Withdraw fees',
+    className: 'btn btn-default',
+    component: MarketWithdrawFeesForm,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount && props.market.oracle.owner === props.defaultAccount,
+  },
 }
 
 class MarketDetail extends Component {
@@ -128,11 +138,6 @@ class MarketDetail extends Component {
     this.props.redeemWinnings(this.props.market)
   }
 
-  @autobind
-  handleWithdrawFees() {
-    this.props.withdrawFees(this.props.market)
-  }
-
   renderLoading() {
     return (
       <div className="marketDetailPage">
@@ -172,8 +177,13 @@ class MarketDetail extends Component {
       'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
 
+    const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
+
     if (this.props.isModerator) {
       infos.Creator = market.creator
+    }
+    if (showWithdrawFees) {
+      infos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenToText(market.event.collateralToken)}`
     }
 
     return (
@@ -191,7 +201,6 @@ class MarketDetail extends Component {
   renderDetails(market) {
     const showWinning = market.oracle.isOutcomeSet
     const showLost = false // determine if we lost?
-    const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
 
     return (
       <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
@@ -207,18 +216,6 @@ class MarketDetail extends Component {
             {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
           </small>
         </div>
-        {showWithdrawFees && (
-          <div className="withdrawFees">
-            <div className="withdrawFees__icon icon icon--earnedTokens" />
-            <div className="withdrawFees__details">
-              <div className="withdrawFees__heading">{decimalToText(weiToEth(market.collectedFees))} {collateralTokenToText(market.event.collateralToken)}</div>
-              <div className="withdrawFees__label">Earnings through market fees</div>
-            </div>
-            <div className="withdrawFees__action">
-              <button className="btn btn-link" type="button" onClick={this.handleWithdrawFees}>Withdraw fees</button>
-            </div>
-          </div>
-        )}
         {showWinning && (
           <div className="redeemWinning">
             <div className="redeemWinning__icon icon icon--achievementBadge" />
