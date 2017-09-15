@@ -78,7 +78,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
-      logo: 'assets/favicon.ico',
+      logo: 'assets/img/gnosis_logo_favicon.png',
     // Generate a cache file with control hashes and
     // don't rebuild the favicons until those hashes change
       persistentCache: true,
