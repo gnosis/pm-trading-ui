@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator'
 import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { weiToEth } from 'utils/helpers'
-import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST, SCALAR_SHORT_COLOR, SCALAR_LONG_COLOR } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import DecimalValue from 'components/DecimalValue'
@@ -84,7 +84,7 @@ class MarketBuySharesForm extends Component {
       defaultAccount,
       selectedOutcome,
     } = this.props
-    // TODO this calculation could be avoided by passing it to the handleSubmit function
+
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
 
     return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
@@ -160,7 +160,9 @@ class MarketBuySharesForm extends Component {
     // Get the amount of tokens to buy
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
-    if (isOutcomeSelected) newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome]).add(outcomeTokenCount).toString()
+    if (isOutcomeSelected) {
+      newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome]).add(outcomeTokenCount).toString()
+    }
     const selectedMarginalPrice = isOutcomeSelected ? calcLMSRMarginalPrice({
       netOutcomeTokensSold: newNetOutcomeTokenSold,
       funding,
@@ -171,12 +173,12 @@ class MarketBuySharesForm extends Component {
       {
         value: 0,
         label: 'Short',
-        highlightColor: COLOR_SCHEME_DEFAULT[0],
+        highlightColor: SCALAR_SHORT_COLOR,
       },
       {
         value: 1,
         label: 'Long',
-        highlightColor: COLOR_SCHEME_DEFAULT[1],
+        highlightColor: SCALAR_LONG_COLOR,
       },
     ]
 
@@ -230,7 +232,6 @@ class MarketBuySharesForm extends Component {
         event: {
           collateralToken,
         },
-        marginalPrices,
       },
       selectedOutcome,
       gasCosts,
@@ -339,6 +340,7 @@ MarketBuySharesForm.propTypes = {
   selectedOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
+  submitEnabled: PropTypes.bool,
 }
 
 const form = {

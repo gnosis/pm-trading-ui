@@ -21,8 +21,8 @@ export const HEX_VALUE_REGEX = /(0x)?[0-9A-Fa-f]{40}/
 
 export const COLOR_SCHEME_DEFAULT = [
   '#0be1b1', // green
-  '#f2cc0a', // yellow
   '#e01563', // red
+  '#f2cc0a', // yellow
   '#9c8ae3', // lilac
   '#6f6f6f', // gray
   '#0abcf2', // blue
@@ -30,6 +30,9 @@ export const COLOR_SCHEME_DEFAULT = [
   '#e4f20a', // orange
   '#73472c', // brown
 ]
+
+export const SCALAR_SHORT_COLOR = COLOR_SCHEME_DEFAULT[0]
+export const SCALAR_LONG_COLOR = COLOR_SCHEME_DEFAULT[2]
 
 export const TRANSACTION_STATUS = {
   RUNNING: 'RUNNING',

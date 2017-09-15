@@ -50,37 +50,6 @@ const FormBarChartRadioButton = ({ input, radioValues, label, className, meta: {
         </span>}
     </div>
   )
-
-
-  // return (
-  //   <div className={`formRadioButton ${touched && error ? 'formRadioButton--error' : ''}`}>
-  //     {label && <label>{label}</label>}
-  //     {renderOutcomes.map((outcome, outcomeIndex) => {
-  //       const style = { width: `${tokenDistribution[outcomeIndex] * 100}%`, backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex] }
-  //       { radioValues.map(({ label: radioLabel, value, highlightColor }) => (
-  //         <div key={value} className={`radioButton ${bemifyClassName(className)}`}>
-  //           <input
-  //             type="radio"
-  //             className={`radioButton__input ${bemifyClassName(className, 'input')}`}
-  //             id={`radioButton_${input.name}_${value}`}
-  //             style={highlightColor ? { ...style, color: highlightColor } : style}
-  //             onChange={() => input.onChange(value)}
-  //             checked={input && input.value.toString() === value.toString()}
-  //             value={value}
-  //           />
-  //           <label className={`radioButton__text ${bemifyClassName(className, 'text')}`} htmlFor={`radioButton_${input.name}_${value}`}>
-  //             {radioLabel}
-  //           </label>
-  //         </div>
-  //       )) }
-  //       {touched && error &&
-  //         <span>
-  //           {error}
-  //         </span>}
-
-  //     })}
-  //   </div>
-  // )
 }
 
 FormBarChartRadioButton.propTypes = {

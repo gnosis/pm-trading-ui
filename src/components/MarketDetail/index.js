@@ -24,6 +24,7 @@ import MarketMyTrades from 'components/MarketMyTrades'
 
 import './marketDetail.less'
 
+const ONE_WEEK_IN_HOURS = 168
 const EXPAND_BUY_SHARES = 'buy-shares'
 // const EXPAND_SHORT_SELL = 'short-sell'
 const EXPAND_MY_TRADES = 'my-trades'
@@ -199,14 +200,14 @@ class MarketDetail extends Component {
     const showLost = false // determine if we lost?
     const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
     const timeToResolution = moment.utc(market.eventDescription.resolutionDate).local().diff(moment(), 'hours')
-    const oneWeekHours = 168
+
     return (
       <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
         <div className="marketDescription">
           <p className="marketDescription__text">{ market.eventDescription.description }</p>
         </div>
         <Outcome market={market} />
-        {timeToResolution < oneWeekHours ?
+        {timeToResolution < ONE_WEEK_IN_HOURS ?
           <div className="marketTimer">
             <div className="marketTimer__live">
               <Countdown target={market.eventDescription.resolutionDate} />
