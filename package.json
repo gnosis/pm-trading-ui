@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "git+https://github.com/gnosis/gnosis.js.git",
+    "@gnosis.pm/gnosisjs": "^0.5.2",
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",

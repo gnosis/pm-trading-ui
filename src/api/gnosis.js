@@ -21,6 +21,7 @@ export const getGnosisConnection = async () => {
   }
 
   try {
+    await new Promise(resolve => window.addEventListener('load', resolve))
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
   } catch (err) {
@@ -119,14 +120,14 @@ export const createMarket = async (market) => {
   console.log('market', market)
   const gnosis = await getGnosisConnection()
   const fee = Decimal(market.fee).mul(10000).trunc().toString() // fee times 10000 as uint24
-  
+
   const marketContract = await gnosis.createMarket({
     ...market,
     fee,
     marketMaker: gnosis.lmsrMarketMaker,
     marketFactory: gnosis.standardMarketFactory,
   })
-  
+
   if (process.env.NODE_ENV !== 'production') {
     await delay(5000)
   }
