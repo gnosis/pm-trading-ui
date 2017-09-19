@@ -1,4 +1,9 @@
 {
   "presets": ["react", "es2016", "es2015", "stage-0"],
-  "plugins": ["transform-decorators-legacy", "transform-async-to-generator"]
+  "plugins": ["transform-decorators-legacy", "transform-async-to-generator"],
+  "env": {
+    "development": {
+      "plugins": ["react-hot-loader/babel"]
+    }
+  }
 }

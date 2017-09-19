@@ -7,6 +7,7 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { Router, Route, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
+import { AppContainer } from 'react-hot-loader'
 
 import 'less/style.less'
 
@@ -38,27 +39,62 @@ const history = syncHistoryWithStore(hashHistory, store)
 // history.listen(location => store.dispatch(changeLocation(location)))
 
 render(
-  <Provider store={store}>
-    <BackdropProvider>
-      <Router history={history}>
-        <Route path="/" component={App}>
-          <IndexRedirect to="dashboard" />
-          <Route path="dashboard" component={DashboardPage} />
-          <Route path="transactions" component={TransactionsPage} />
-          <Route path="account" component={AccountPage} />
-          <Route path="settings" component={SettingsPage} />
-          <Route path="markets">
-            <IndexRedirect to="list" />
-            <Route path="new" component={MarketCreateWizardPage} />
-            <Route path="review" component={MarketCreateReviewPage} />
-            <Route path="list" component={MarketListPage} />
-            <Route path=":id" component={MarketDetailPage}>
-              <Route path=":view" />
+  <AppContainer>
+    <Provider store={store}>
+      <BackdropProvider>
+        <Router history={history}>
+          <Route path="/" component={App}>
+            <IndexRedirect to="dashboard" />
+            <Route path="dashboard" component={DashboardPage} />
+            <Route path="transactions" component={TransactionsPage} />
+            <Route path="account" component={AccountPage} />
+            <Route path="settings" component={SettingsPage} />
+            <Route path="markets">
+              <IndexRedirect to="list" />
+              <Route path="new" component={MarketCreateWizardPage} />
+              <Route path="review" component={MarketCreateReviewPage} />
+              <Route path="list" component={MarketListPage} />
+              <Route path=":id" component={MarketDetailPage}>
+                <Route path=":view" />
+              </Route>
             </Route>
           </Route>
-        </Route>
-      </Router>
-    </BackdropProvider>
-  </Provider>,
+        </Router>
+      </BackdropProvider>
+    </Provider>
+  </AppContainer>,
   rootElement,
 )
+
+// TODO: App routes needs to be a separated file for react-hot-loader
+// if (module.hot) {
+//   module.hot.accept('./containers/App', () => {
+//     render(
+//       <AppContainer>
+//         <Provider store={store}>
+//           <BackdropProvider>
+//             <Router history={history}>
+//               <Route path="/" component={App}>
+//                 <IndexRedirect to="dashboard" />
+//                 <Route path="dashboard" component={DashboardPage} />
+//                 <Route path="transactions" component={TransactionsPage} />
+//                 <Route path="account" component={AccountPage} />
+//                 <Route path="settings" component={SettingsPage} />
+//                 <Route path="markets">
+//                   <IndexRedirect to="list" />
+//                   <Route path="new" component={MarketCreateWizardPage} />
+//                   <Route path="review" component={MarketCreateReviewPage} />
+//                   <Route path="list" component={MarketListPage} />
+//                   <Route path=":id" component={MarketDetailPage}>
+//                     <Route path=":view" />
+//                   </Route>
+//                 </Route>
+//               </Route>
+//             </Router>
+//           </BackdropProvider>
+//         </Provider>
+//       </AppContainer>,
+//       rootElement,
+//     )
+//   })
+// }
