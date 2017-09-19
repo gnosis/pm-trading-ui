@@ -47,7 +47,6 @@ class MarketCreateReview extends Component {
   @autobind
   handleCreateMarket() {
     const { formValues, submitForm } = this.props
-    
     submitForm(formValues)
   }
 

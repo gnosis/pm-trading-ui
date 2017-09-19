@@ -248,7 +248,8 @@ export const createMarket = options => async (dispatch) => {
     throw e
   }
 
-  return await dispatch(closeLog(transactionId))
+  await dispatch(closeLog(transactionId))
+  return marketContractData
 }
 
 export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
