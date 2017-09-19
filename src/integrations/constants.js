@@ -9,6 +9,7 @@ export const ETHEREUM_NETWORKS = {
 
 export const WALLET_PROVIDER = {
   METAMASK: 'METAMASK',
+  PARITY: 'PARITY',
 }
 
 export const EVENT_TYPES = {

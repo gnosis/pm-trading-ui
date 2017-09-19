@@ -16,28 +16,26 @@ const config = require('./src/config.json')
 const gnosisDbUrl = process.env.GNOSISDB_HOST || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
 
 module.exports = {
-  context: path.join(__dirname, 'src'),
+  context: path.join(__dirname, 'src'),  
   entry: [
     'bootstrap-loader/extractStyles',
-    'index.js',
+    'index.js',    
   ],
   devtool: 'source-map',
   output: {
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
-  },
+  },  
   resolve: {
     symlinks: false,
     modules: [
       `${__dirname}/src`,
       `${__dirname}/package.json`,
-      'node_modules',
-      `${__dirname}/../gnosis.js`,
-      `${__dirname}/../gnosis.js/node_modules`,
+      'node_modules'
     ] },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader?babelrc=false&extends=' + path.join(__dirname, '/.babelrc') },
+      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader'},
       {
         test: /\.(jpe?g|png|svg)$/i,
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
