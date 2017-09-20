@@ -1,6 +1,7 @@
 /* globals __ETHEREUM_HOST__ */
 
 import Gnosis from '@gnosis.pm/gnosisjs'
+import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/src/utils'
 
 import { hexWithPrefix } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
@@ -182,6 +183,22 @@ export const fundMarket = async (market) => {
   }
 
   await marketContract.fund(marketFundingWei.toString())
+
+  return market
+}
+
+/**
+ * Closes a market
+ * @param {*object} market
+ */
+export const closeMarket = async (market) => {
+  const gnosis = await getGnosisConnection()
+  const marketContract = gnosis.contracts.Market.at(hexWithPrefix(market.address))
+  requireEventFromTXResult(await marketContract.close(), 'MarketClosing')
+
+  if (process.env.NODE_ENV !== 'production') {
+    await delay(5000)
+  }
 
   return market
 }

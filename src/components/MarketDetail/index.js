@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import { weiToEth } from '../../utils/helpers'
 
-import { RESOLUTION_TIME, GAS_COST } from 'utils/constants'
+import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import { collateralTokenToText } from 'components/CurrencyName'
@@ -19,6 +19,7 @@ import MarketGraph from 'components/MarketGraph'
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
 import MarketMySharesForm from 'components/MarketMySharesForm'
+import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 // import MarketShortSellForm from 'components/MarketShortSellForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 
@@ -30,6 +31,7 @@ const EXPAND_BUY_SHARES = 'buy-shares'
 const EXPAND_MY_TRADES = 'my-trades'
 const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
+const EXPAND_WITHDRAW_FEES = 'withdraw-fees'
 
 const DEFAULT_VIEW = EXPAND_BUY_SHARES
 
@@ -84,6 +86,14 @@ const expandableViews = {
       props.defaultAccount === props.market.oracle.owner &&
       !props.market.oracle.isOutcomeSet,
   },
+  [EXPAND_WITHDRAW_FEES]: {
+    label: 'Withdraw fees',
+    className: 'btn btn-default',
+    component: MarketWithdrawFeesForm,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount && props.market.oracle.owner === props.defaultAccount,
+  },
 }
 
 class MarketDetail extends Component {
@@ -129,11 +139,6 @@ class MarketDetail extends Component {
   @autobind
   handleRedeemWinnings() {
     this.props.redeemWinnings(this.props.market)
-  }
-
-  @autobind
-  handleWithdrawFees() {
-    this.props.withdrawFees(this.props.market)
   }
 
   renderLoading() {
@@ -259,6 +264,7 @@ class MarketDetail extends Component {
   }
 
   renderControls() {
+    const { market, closeMarket } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
@@ -281,6 +287,15 @@ class MarketDetail extends Component {
               {expandableViews[view].label}
             </button>
           ))}
+          {market.stage !== MARKET_STAGES.MARKET_CLOSED ?
+            <button
+              key="close-market"
+              type="button"
+              className="marketControls__button btn btn-default"
+              onClick={() => closeMarket(market)}
+            >
+              Close Market
+            </button> : <div />}
         </div>
       </div>
     )
@@ -345,6 +360,7 @@ MarketDetail.propTypes = {
   moderators: PropTypes.shape({
     address: PropTypes.string,
   }),
+  closeMarket: PropTypes.func,
 }
 
 export default MarketDetail
