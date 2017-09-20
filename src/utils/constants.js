@@ -31,6 +31,9 @@ export const COLOR_SCHEME_DEFAULT = [
   '#73472c', // brown
 ]
 
+export const SCALAR_SHORT_COLOR = COLOR_SCHEME_DEFAULT[0]
+export const SCALAR_LONG_COLOR = COLOR_SCHEME_DEFAULT[2]
+
 export const TRANSACTION_STATUS = {
   RUNNING: 'RUNNING',
   ERROR: 'ERROR',

@@ -24,7 +24,7 @@ import {
   isGasCostFetched,
   isGasPriceFetched,
 } from 'selectors/blockchain'
-import { getIsModerator } from 'selectors/settings'
+import { isModerator, getModerators } from 'utils/helpers'
 
 const mapStateToProps = (state, ownProps) => {
   const marketBuySelector = formValueSelector('marketBuyShares')
@@ -39,10 +39,10 @@ const mapStateToProps = (state, ownProps) => {
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
-    isConfirmed: marketBuySelector(state, 'confirm'),
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
     defaultAccount: getDefaultAccount(state),
-    isModerator: getIsModerator(state, getDefaultAccount(state)),
+    creatorIsModerator: isModerator(getDefaultAccount(state)),
+    moderators: getModerators(),
     trades: getMarketParticipantsTrades(state)(),
     initialValues: {
       selectedOutcome: 0,
