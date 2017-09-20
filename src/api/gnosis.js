@@ -10,16 +10,11 @@ import delay from 'await-delay'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
-const GNOSIS_OPTIONS = {
-//  ethereum: __ETHEREUM_HOST__,
-}
+// const GNOSIS_OPTIONS = {}
 
 let gnosisInstance
-export const getGnosisConnection = async () => {
-  if (gnosisInstance) {
-    return gnosisInstance
-  }
 
+export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
@@ -27,14 +22,17 @@ export const getGnosisConnection = async () => {
     console.error('Gnosis Integration: connection failed') // eslint-disable-line no-console
     console.error(err) // eslint-disable-line no-console
   }
+}
 
+export const getGnosisConnection = async () => {
   return gnosisInstance
 }
 
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
-
-  return gnosis.web3.eth.accounts[0]
+  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts(
+    (e, accounts) => (e ? reject(e) : resolve(accounts[0]))),
+  )
 }
 
 const normalizeEventDescription = (eventDescription, eventType) => {

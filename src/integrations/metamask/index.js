@@ -4,11 +4,10 @@ import { ETHEREUM_NETWORKS, WALLET_PROVIDER } from 'integrations/constants'
 import { registerProvider, updateProvider } from 'actions/blockchain'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 
-class Metamask extends InjectedWeb3{
+class Metamask extends InjectedWeb3 {
   async initialize(store) {
     this.store = store
     this.store.dispatch(registerProvider({ provider: WALLET_PROVIDER.METAMASK }))
-
     const walletEnabled = await new Promise((resolve) => {
       /* global Web3, window */
       window.addEventListener('load', () => {
@@ -28,15 +27,16 @@ class Metamask extends InjectedWeb3{
       network = await this.getNetwork()
       account = await this.getAccount()
     }
-    this.store.dispatch(updateProvider({
+
+    await this.store.dispatch(updateProvider({
       provider: WALLET_PROVIDER.METAMASK,
-      available: walletEnabled && account,
+      available: (walletEnabled && account),
       network,
       account,
     }))
   }
 
-  
+
 }
 
 export default new Metamask()

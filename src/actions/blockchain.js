@@ -1,4 +1,5 @@
 import {
+  initGnosisConnection,
   getCurrentAccount, calcMarketGasCost, calcBuySharesGasCost,
   calcSellSharesGasCost, calcCategoricalEventGasCost, calcScalarEventGasCost,
   calcCentralizedOracleGasCost, calcFundingGasCost, getGasPrice,
@@ -8,6 +9,7 @@ import { hexWithPrefix, timeoutCondition } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
 
+export const setGnosisStatus = createAction('SET_GNOSIS_CONNECTION')
 export const setDefaultAccount = createAction('SET_DEFAULT_ACCOUNT')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setGasCost = createAction('SET_GAS_COST')
@@ -17,14 +19,21 @@ export const updateProvider = createAction('UPDATE_PROVIDER')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
+export const initGnosis = opts => async (dispatch) => {
+  try {
+    await initGnosisConnection(opts)
+    await dispatch(setGnosisStatus({ connected: true }))
+  } catch (error) {
+    dispatch(setGnosisStatus({ connected: false, error }))
+  }
+}
+
 export const connectBlockchain = () => async (dispatch) => {
   try {
-    // Initialize web3 providers
     let account
     const getConnection = async () => {
       account = await getCurrentAccount()
     }
-
     await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
     await dispatch(setDefaultAccount(hexWithPrefix(account)))
     return await dispatch(setConnectionStatus({ connected: true }))

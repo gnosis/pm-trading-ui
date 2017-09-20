@@ -2,6 +2,10 @@ import Decimal from 'decimal.js'
 
 export const selector = state => state.blockchain
 
+export const getSelectedProvider = state => (
+  selector(state).providers !== undefined ? selector(state).providers[selector(state).activeProvider] : null
+)
+
 export const getDefaultAccount = state => selector(state).defaultAccount
 
 export const getGasCosts = (state) => {

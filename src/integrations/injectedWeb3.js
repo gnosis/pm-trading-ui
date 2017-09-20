@@ -37,7 +37,7 @@ class InjectedWeb3 {
           })
         })
       }
-    
+
       async getAccount() {
         return new Promise((resolve, reject) => {
           this.web3.eth.getAccounts(

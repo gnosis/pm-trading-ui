@@ -1,9 +1,15 @@
 import { handleActions } from 'redux-actions'
 
-import { setDefaultAccount, setConnectionStatus, setGasCost, setGasPrice, registerProvider, updateProvider } from 'actions/blockchain'
+import { setGnosisStatus, setDefaultAccount, setConnectionStatus, setGasCost, setGasPrice, registerProvider, updateProvider } from 'actions/blockchain'
 import { GAS_COST } from 'utils/constants'
 
 const reducer = handleActions({
+  [setGnosisStatus]: (state, action) => {
+    
+    return {
+      ...state,
+    }
+  },
   [setDefaultAccount]: (state, action) => {
     const account = action.payload
     return {

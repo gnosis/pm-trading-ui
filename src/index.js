@@ -20,7 +20,7 @@ import AccountPage from 'containers/AccountPage'
 import SettingsPage from 'containers/SettingsPage'
 import DashboardPage from 'containers/DashboardPage'
 import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
-import WalletIntegrationProvider from 'containers/WalletIntegrationProvider'
+import WalletIntegrationProvider from 'components/WalletIntegrationProvider'
 import * as walletIntegrations from 'integrations'
 
 import store from './store'
