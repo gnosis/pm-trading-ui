@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm, Field, propTypes } from 'redux-form'
+import { reduxForm, Field, propTypes, reset } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
@@ -201,7 +201,11 @@ class MarketMySharesForm extends Component {
       }
     }
 
-    const submitDisabled = invalid || submitting
+    if (market.event.type === 'SCALAR') {
+      newScalarPredictedValue = normalizeScalarPoint(market.marginalPrices, market)
+    }
+
+    const submitDisabled = invalid || submitting || !isConfirmedSell
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))
 
     return (

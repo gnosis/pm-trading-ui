@@ -10,7 +10,7 @@ import './outcomeCategorical.less'
 
 const OutcomeCategorical = ({ market, opts = {} }) => {
   const renderOutcomes = market.eventDescription.outcomes
-  const { showOnlyTrendingOutcome, showDate, dateFormat } = opts
+  const { showOnlyTrendingOutcome, showDate, dateFormat, className } = opts
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.netOutcomeTokensSold,
@@ -44,7 +44,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     )
   }
 
-  return (<div className="outcomes outcomes--categorical">
+  return (<div className={`${className} outcomes outcomes--categorical`}>
     {renderOutcomes.map((outcome, outcomeIndex) => {
       if (market.oracle.isOutcomeSet && market.oracle.outcome !== outcomeIndex) {
         return <div key={outcomeIndex} className="outcome" />
