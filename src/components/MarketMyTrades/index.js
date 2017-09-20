@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import Decimal from 'decimal.js'
+import moment from 'moment'
 import { decimalToText, DecimalValue } from 'components/DecimalValue'
 import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
-import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, RESOLUTION_TIME } from 'utils/constants'
 import { getOutcomeName } from 'utils/helpers'
 
 import './marketMyTrades.less'
@@ -30,6 +31,7 @@ class MarketMyTrades extends Component {
   }
   renderTrades() {
     const { market } = this.props
+
     const tableRowElements = market.participantTrades.map((trade) => {
       return (
         <tr className="marketMyTrades__share" key={trade['_id']}>
@@ -49,9 +51,10 @@ class MarketMyTrades extends Component {
           </td>
           <td>
             {decimalToText(this.getAverageCost(trade))}
+            &nbsp;<CurrencyName collateralToken={market.event.collateralToken} />
           </td>
           <td>
-            {trade.date}
+            {moment.utc(trade.date).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
           </td>
         </tr>
       )
@@ -70,11 +73,11 @@ class MarketMyTrades extends Component {
             <thead>
               <tr>
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--index" />
-                <th className="marketMyTrades__tableHeading">Order Type</th>
-                <th className="marketMyTrades__tableHeading">Outcome</th>
-                <th className="marketMyTrades__tableHeading">Outcome token count</th>
-                <th className="marketMyTrades__tableHeading">Avg. Price</th>
-                <th className="marketMyTrades__tableHeading">Date</th>
+                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Order Type</th>
+                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Outcome</th>
+                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Outcome token count</th>
+                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Avg. Price</th>
+                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Date</th>
               </tr>
             </thead>
             <tbody>

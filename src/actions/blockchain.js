@@ -2,6 +2,7 @@ import {
   getCurrentAccount, calcMarketGasCost, calcBuySharesGasCost,
   calcSellSharesGasCost, calcCategoricalEventGasCost, calcScalarEventGasCost,
   calcCentralizedOracleGasCost, calcFundingGasCost, getGasPrice,
+  getEtherTokens,
 } from 'api'
 
 import { hexWithPrefix, timeoutCondition } from 'utils/helpers'
@@ -12,6 +13,7 @@ export const setDefaultAccount = createAction('SET_DEFAULT_ACCOUNT')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
+export const setEtherTokens = createAction('SET_ETHER_TOKENS')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
@@ -66,4 +68,9 @@ export const requestGasCost = contractType => async (dispatch) => {
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   }
+}
+
+export const requestEtherTokens = account => async (dispatch) => {
+  const etherTokens = await getEtherTokens(account)
+  dispatch(setEtherTokens({ entityType: 'etherTokens', account, etherTokens }))
 }
