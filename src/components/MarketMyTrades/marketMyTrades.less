@@ -1,5 +1,8 @@
 @import url('../../less/vars.less');
 
+@indexWidth: 36px;
+@groupWidth: 20%;
+
 .marketMyTrades {
   &__shareTable {
     margin-top: 20px;
@@ -11,19 +14,10 @@
 
     td {      
       vertical-align: middle !important;
-      font-weight: 800;
       border-top: 1px solid #ddd;
 
       &:first-of-type {
         border-top: 0;
-      }
-    }
-
-    &:first-of-type {
-      border-top: 0 !important;
-
-      td {
-        border-top: 0 !important;
       }
     }
   }
@@ -50,12 +44,16 @@
     color: @font-color-muted;
     border-bottom: none !important;
 
+    &--group {
+      width: @groupWidth;
+    }
+
     &--index {
-      width: 36px;
+      width: @indexWidth;
 
       border-bottom: 0 !important;
     }
-  }
+  }  
 
   &__diff {
     &--positive {

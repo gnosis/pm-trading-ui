@@ -55,7 +55,11 @@ render(
               <Route path="review" component={MarketCreateReviewPage} />
               <Route path="list" component={MarketListPage} />
               <Route path=":id" component={MarketDetailPage}>
-                <Route path=":view" />
+                <Route path=":view">
+                  <Route path=":shareId">
+                    <Route path="sell" component={MarketDetailPage} />
+                  </Route>
+                </Route>
               </Route>
             </Route>
           </Route>

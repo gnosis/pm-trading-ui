@@ -59,7 +59,6 @@
     "redux-thunk": "^2.2.0",
     "reselect": "^2.5.4",
     "sha1": "^1.1.1",
-    "truffle-contract": "^3.0.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
