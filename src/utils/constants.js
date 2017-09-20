@@ -57,3 +57,9 @@ export const GAS_COST = {
   FUNDING: 'funding',
 }
 export const DEFAULT_NOTIFICATION_FADEOUT = 60000
+
+export const MARKET_STAGES = {
+  MARKET_CREATED: 0,
+  MARKET_FUNDED: 1,
+  MARKET_CLOSED: 2,
+}

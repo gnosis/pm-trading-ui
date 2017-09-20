@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import { weiToEth } from '../../utils/helpers'
 
-import { RESOLUTION_TIME, GAS_COST } from 'utils/constants'
+import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import { collateralTokenToText } from 'components/CurrencyName'
@@ -242,6 +242,7 @@ class MarketDetail extends Component {
   }
 
   renderControls() {
+    const { market, closeMarket } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
@@ -262,6 +263,15 @@ class MarketDetail extends Component {
               {expandableViews[view].label}
             </button>
           ))}
+          {market.stage !== MARKET_STAGES.MARKET_CLOSED ?
+            <button
+              key="close-market"
+              type="button"
+              className="marketControls__button btn btn-default"
+              onClick={() => closeMarket(market)}
+            >
+              Close Market
+            </button> : <div />}
         </div>
       </div>
     )
@@ -323,6 +333,7 @@ MarketDetail.propTypes = {
   fetchMarketTrades: PropTypes.func,
   requestGasCost: PropTypes.func,
   isModerator: PropTypes.bool,
+  closeMarket: PropTypes.func,
 }
 
 export default MarketDetail
