@@ -205,7 +205,7 @@ class MarketMySharesForm extends Component {
       newScalarPredictedValue = normalizeScalarPoint(market.marginalPrices, market)
     }
 
-    const submitDisabled = invalid || submitting || !isConfirmedSell
+    const submitDisabled = invalid || submitting
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))
 
     return (
