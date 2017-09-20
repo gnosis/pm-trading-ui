@@ -49,19 +49,21 @@ const submitAction = formValues => async (dispatch) => {
   const transactionLogId = uuid()
   await dispatch(openModal({ modalName: 'ModalMarketProgress', transactionId: transactionLogId }))
 
+  let marketContractData
   try {
-    await dispatch(createMarket({
+    marketContractData = await dispatch(createMarket({
       eventDescription,
       oracle,
       event,
       market,
       transactionId: transactionLogId,
     }))
-
   } catch (e) {
     console.error(e)
   }
   dispatch(stopSubmit(FORM_NAME))
+  // redirect to market detail
+  dispatch(push(`markets/${marketContractData.address}`))
 }
 
 const mapStateToProps = (state) => {
