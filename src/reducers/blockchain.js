@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions'
 
 import { 
-  setDefaultAccount, setCurrentBalance, setConnectionStatus, setGasCost,
-  setGasPrice, registerProvider, updateProvider, setEtherTokens,
+  setDefaultAccount, setCurrentBalance, setConnectionStatus, setGnosisInitialized,
+  setGasCost, setGasPrice, registerProvider, updateProvider, setEtherTokens,
 } from 'actions/blockchain'
 import { GAS_COST } from 'utils/constants'
 
@@ -27,6 +27,13 @@ const reducer = handleActions({
       ...state,
       connection,
       connectionTried: true,
+    }
+  },
+  [setGnosisInitialized]: (state, action) => {
+    const { initialized } = action.payload
+    return {
+      ...state,
+      gnosisInitialized: initialized,
     }
   },
   [setGasCost]: (state, action) => ({

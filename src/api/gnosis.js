@@ -333,7 +333,7 @@ export const getGasPrice = async () => {
 }
 
 /**
- * Returns the amount of the ether tokens
+ * Returns the amount of ether tokens
  * @param {*string} account address
  */
 export const getEtherTokens = async (account) => {

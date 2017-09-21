@@ -11,7 +11,7 @@ import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
 
 // TODO define reducer for GnosisStatus
-export const setGnosisStatus = createAction('SET_GNOSIS_CONNECTION')
+export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setDefaultAccount = createAction('SET_DEFAULT_ACCOUNT')
 export const setCurrentBalance = createAction('SET_CURRENT_BALANCE')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
@@ -30,9 +30,9 @@ const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 export const initGnosis = opts => async (dispatch) => {
   try {
     await initGnosisConnection(opts)
-    await dispatch(setGnosisStatus({ connected: true }))
+    await dispatch(setGnosisInitialized({ initialized: true }))
   } catch (error) {
-    dispatch(setGnosisStatus({ connected: false, error }))
+    dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 }
 
