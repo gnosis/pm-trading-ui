@@ -28,6 +28,7 @@
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
+    "blockies": "0.0.2",
     "cross-env": "^5.0.5",
     "d3": "^4.9.1",
     "d3-scale-chromatic": "^1.1.1",

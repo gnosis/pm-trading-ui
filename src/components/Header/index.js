@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import DecimalValue from 'components/DecimalValue'
+import Identicon from 'components/Identicon'
 
 import './header.less'
 
@@ -21,9 +22,10 @@ const Header = ({ version, defaultAccount, currentBalance, currentProvider, getP
       </div>
       <div className="headerContainer__group headerContainer__group--right">
         {(defaultAccount && currentProvider) && getProviderIcon(currentProvider)}
-        {defaultAccount}
-        <DecimalValue value={currentBalance} />
-        {defaultAccount && <Link to="/account" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">Account</Link>}
+        <div className="headerContainer__account">
+          <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
+          <Identicon className="" />
+        </div>
       </div>
     </div>
   </div>

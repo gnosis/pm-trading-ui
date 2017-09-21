@@ -4,20 +4,17 @@ import moment from 'moment'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import CustomTooltip from 'components/CustomTooltip'
 import { OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import Decimal from 'decimal.js'
 
 const DateAxisTick = ({ x, y, payload }) => (
   <g transform={`translate(${x}, ${y})`}>
-    <text x={0} y={0} dy={16} fill="white" textAnchor="middle">{moment(payload).format('L')}</text>
+    <text x={0} y={0} dy={16} fill="white" textAnchor="middle">
+      {moment(payload).format('L')}
+    </text>
   </g>
 )
-
-DateAxisTick.propTypes = {
-  x: PropTypes.number,
-  y: PropTypes.number,
-  payload: PropTypes.string,
-}
 
 const PercentAxisTick = ({ x, y, payload: { value } }) => (
   <g transform={`translate(${x}, ${y})`}>
@@ -31,6 +28,7 @@ const renderCategoricalGraph = (data) => {
   const stacks = Object.keys(data[0]).slice(2)
   const z = scaleOrdinal(schemeDark2)
   z.domain(stacks)
+
   return (
     <div className="marketGraph">
       <div className="container marketGraph__container">
@@ -46,7 +44,7 @@ const renderCategoricalGraph = (data) => {
             </defs>
             <XAxis className="axis axis--x" dataKey="date" minTickGap={150} tick={DateAxisTick} />
             <YAxis className="axis axis--y" tick={PercentAxisTick} tickCount={5} />
-            <Tooltip className="tooltip" />
+            <Tooltip className="tooltip" content={<CustomTooltip />} />
             <Legend />
             {stacks.map((key, keyIndex) => (
               <Line key={key} type="stepAfter" dataKey={key} stackId="1" fill={COLOR_SCHEME_DEFAULT[keyIndex]} stroke={COLOR_SCHEME_DEFAULT[keyIndex]} />
@@ -86,21 +84,13 @@ const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) =
             }
             />
             <CartesianGrid className="grid" vertical />
-            <Tooltip className="tooltip" />
+            <Tooltip className="tooltip" content={<CustomTooltip />} />
             <Line type="stepAfter" dataKey="scalarPoint" fill={COLOR_SCHEME_DEFAULT[0]} stroke={COLOR_SCHEME_DEFAULT[0]} />
           </LineChart>
         </ResponsiveContainer>
       </div>
     </div>
   )
-}
-
-PercentAxisTick.propTypes = {
-  x: PropTypes.number,
-  y: PropTypes.number,
-  payload: PropTypes.shape({
-    value: PropTypes.number,
-  }),
 }
 
 const MarketGraph = ({ data = [], market: { event: { type, lowerBound, upperBound }, eventDescription } }) => {
@@ -112,6 +102,20 @@ const MarketGraph = ({ data = [], market: { event: { type, lowerBound, upperBoun
     }
   }
   return <div />
+}
+
+DateAxisTick.propTypes = {
+  x: PropTypes.number,
+  y: PropTypes.number,
+  payload: PropTypes.string,
+}
+
+PercentAxisTick.propTypes = {
+  x: PropTypes.number,
+  y: PropTypes.number,
+  payload: PropTypes.shape({
+    value: PropTypes.number,
+  }),
 }
 
 MarketGraph.propTypes = {

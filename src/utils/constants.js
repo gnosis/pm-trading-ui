@@ -31,6 +31,9 @@ export const COLOR_SCHEME_DEFAULT = [
   '#73472c', // brown
 ]
 
+export const SCALAR_SHORT_COLOR = COLOR_SCHEME_DEFAULT[0]
+export const SCALAR_LONG_COLOR = COLOR_SCHEME_DEFAULT[2]
+
 export const TRANSACTION_STATUS = {
   RUNNING: 'RUNNING',
   ERROR: 'ERROR',
@@ -57,3 +60,9 @@ export const GAS_COST = {
   FUNDING: 'funding',
 }
 export const DEFAULT_NOTIFICATION_FADEOUT = 60000
+
+export const MARKET_STAGES = {
+  MARKET_CREATED: 0,
+  MARKET_FUNDED: 1,
+  MARKET_CLOSED: 2,
+}

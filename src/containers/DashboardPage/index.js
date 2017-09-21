@@ -4,28 +4,38 @@ import { push } from 'react-router-redux'
 
 import DashboardPage from 'components/Dashboard'
 import { getMarkets, getAccountShares, getAccountTrades,
-  getAccountPredictiveAssets, getAccountParticipatingInEvents } from 'selectors/market'
-import { getDefaultAccount } from 'selectors/blockchain'
+  getAccountPredictiveAssets } from 'selectors/market'
+import { getDefaultAccount, getEtherTokensAmount } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares } from 'actions/market'
-import { requestGasPrice } from 'actions/blockchain'
-import { weiToEth } from 'utils/helpers'
+import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
+import { weiToEth, add0xPrefix } from 'utils/helpers'
+
+import sha1 from 'sha1'
 
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
   const defaultAccount = getDefaultAccount(state)
-  const accountShares = getAccountShares(state, defaultAccount)
   const accountTrades = getAccountTrades(state, defaultAccount)
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
-  const accountParticipatingInEvents = getAccountParticipatingInEvents(state, defaultAccount).length
+  let accountShares = getAccountShares(state, defaultAccount)
+  // Not displayed anymore
+  // const accountParticipatingInEvents = getAccountParticipatingInEvents(state, defaultAccount).length
+  let etherTokens = getEtherTokensAmount(state, defaultAccount)
+
+  if (etherTokens !== undefined) {
+    etherTokens = weiToEth(etherTokens.toString())
+  } else {
+    etherTokens = 0
+  }
 
   return {
     defaultAccount,
     markets,
+    etherTokens,
     accountShares,
     accountTrades,
     accountPredictiveAssets,
-    accountParticipatingInEvents,
   }
 }
 
@@ -35,6 +45,7 @@ const mapDispatchToProps = dispatch => ({
   requestAccountShares: address => dispatch(requestAccountShares(address)),
   changeUrl: url => dispatch(push(url)),
   requestGasPrice: () => dispatch(requestGasPrice()),
+  requestEtherTokens: account => dispatch(requestEtherTokens(account)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage)

@@ -1,6 +1,7 @@
 /* globals __ETHEREUM_HOST__ */
 
 import Gnosis from '@gnosis.pm/gnosisjs'
+import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/src/utils'
 
 import { hexWithPrefix, weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
@@ -201,6 +202,22 @@ export const fundMarket = async (market) => {
   return market
 }
 
+/**
+ * Closes a market
+ * @param {*object} market
+ */
+export const closeMarket = async (market) => {
+  const gnosis = await getGnosisConnection()
+  const marketContract = gnosis.contracts.Market.at(hexWithPrefix(market.address))
+  requireEventFromTXResult(await marketContract.close(), 'MarketClosing')
+
+  if (process.env.NODE_ENV !== 'production') {
+    await delay(5000)
+  }
+
+  return market
+}
+
 export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost) => {
   const gnosis = await getGnosisConnection()
 
@@ -295,16 +312,17 @@ export const calcMarketGasCost = async () => {
 
 export const calcBuySharesGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  // return gnosis.contracts.Market.gasStats.buy.averageGasUsed
   return await gnosis.buyOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
 }
 
 export const calcSellSharesGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  // return gnosis.contracts.Market.gasStats.sell.averageGasUsed
   return await gnosis.sellOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
 }
 
+/**
+ * Returns the current gas price
+ */
 export const getGasPrice = async () => {
   const gnosis = await getGnosisConnection()
   return await new Promise(
@@ -312,4 +330,14 @@ export const getGasPrice = async () => {
       (e, r) => (e ? reject(e) : resolve(r)),
     ),
   )
+}
+
+/**
+ * Returns the amount of the ether tokens
+ * @param {*string} account address
+ */
+export const getEtherTokens = async (account) => {
+  const gnosis = await getGnosisConnection()
+  const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
+  return new Decimal(balance.toFixed(0))
 }

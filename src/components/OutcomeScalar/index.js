@@ -42,14 +42,19 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
       <div className="outcome">
         <div className="outcome__bound outcome__bound--lower">
           <DecimalValue value={lowerBound} decimals={market.eventDescription.decimals} />
+          &nbsp;{market.eventDescription.unit}
         </div>
         <div className="outcome__currentPrediction">
           <div className="outcome__currentPrediction--line" />
           <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>
             <DecimalValue value={value} decimals={market.eventDescription.decimals} />
+            &nbsp;{market.eventDescription.unit}
           </div>
         </div>
-        <div className="outcome__bound outcome__bound--upper"><DecimalValue value={upperBound} decimals={market.eventDescription.decimals} /></div>
+        <div className="outcome__bound outcome__bound--upper">
+          <DecimalValue value={upperBound} decimals={market.eventDescription.decimals} />
+          &nbsp;{market.eventDescription.unit}
+        </div>
       </div>
     </div>
   )

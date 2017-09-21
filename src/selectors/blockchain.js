@@ -25,6 +25,10 @@ export const getGasPrice = state => (
 
 export const isGasPriceFetched = state => selector(state).gasPrice !== undefined
 
+export const getEtherTokensAmount = (state, account) => (
+  selector(state).etherTokens !== undefined ? selector(state).etherTokens[account] : new Decimal(0)
+)
+
 export default {
   getDefaultAccount,
 }
