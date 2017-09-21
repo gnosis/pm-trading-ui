@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
-import { Field } from 'redux-form'
+import { Field, propTypes } from 'redux-form'
 
-import { ORACLE_TYPES } from 'utils/constants'
-
-import MarketSidebar from 'components/MarketSidebar'
+import * as validators from 'utils/validators'
+import { ORACLE_TYPES, GAS_COST } from 'utils/constants'
 
 import GroupCentralizedOracle from 'components/GroupCentralizedOracle'
 import GroupBlockDifficulty from 'components/GroupBlockDifficulty'
 
-import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
+import FormRadioButton from 'components/FormRadioButton'
 import FormSlider from 'components/FormSlider'
 import FormInput from 'components/FormInput'
 
@@ -21,10 +20,28 @@ export default class MarketCreateWizard extends Component {
     if (!this.props.defaultAccount) {
       this.props.changeUrl('/markets')
     }
+    // fill outcomes in case of not filled (coming from review)
+    if (!this.props.outcomes) {
+      this.props.change('outcomes', [''])
+    }
+
+    this.props.requestGasCost(GAS_COST.MARKET_CREATION)
+    this.props.requestGasCost(GAS_COST.CENTRALIZED_ORACLE)
+    this.props.requestGasCost(GAS_COST.CATEGORICAL_EVENT)
+    this.props.requestGasCost(GAS_COST.SCALAR_EVENT)
+    this.props.requestGasCost(GAS_COST.FUNDING)
+    this.props.requestGasPrice()
   }
 
   @autobind
-  handleShowReview() {
+  handleShowReview(values) {
+    // clear empty outcomes
+    if (values.outcomes) {
+      this.props.change('outcomes', values.outcomes.filter(s => s.length > 0))
+    }
+
+    window.scrollTo(0, 0)
+
     return this.props.changeUrl('markets/review')
   }
 
@@ -49,10 +66,15 @@ export default class MarketCreateWizard extends Component {
       <div className="marketOracle">
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <FormRadioButtonLabel label="Oracle Type" />
-            {Object.keys(oracleValueLabels).map(fieldValue =>
-              <Field key={fieldValue} name="oracleType" component={FormRadioButton} radioValue={fieldValue} text={oracleValueLabels[fieldValue]} />,
-            )}
+            <Field
+              name="oracleType"
+              label="Oracle Type"
+              component={FormRadioButton}
+              radioValues={Object.keys(oracleValueLabels).map(value => ({
+                label: oracleValueLabels[value],
+                value,
+              }))}
+            />
           </div>
         </div>
       </div>
@@ -64,8 +86,7 @@ export default class MarketCreateWizard extends Component {
       <div className="marketDetails">
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <FormRadioButtonLabel label="Currency" />
-            <Field name="collateralToken" component={FormRadioButton} radioValue={'eth'} text={'Ether Token'} />
+            <Field name="collateralToken" label="Currency" component={FormRadioButton} radioValues={[{ label: 'Ether Token', value: 'eth' }]} />
           </div>
         </div>
         <div className="row">
@@ -75,7 +96,7 @@ export default class MarketCreateWizard extends Component {
         </div>
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="funding" component={FormInput} step={0.01} type="number" label="Funding" />
+            <Field name="funding" component={FormInput} type="text" validate={validators.all(validators.required, validators.isNumber({ decimals: 4 }))} label="Funding" />
           </div>
         </div>
       </div>
@@ -83,11 +104,9 @@ export default class MarketCreateWizard extends Component {
   }
 
   renderForOracleType() {
-    const { selectedOracleType, selectedOutcomeType } = this.props
+    const { selectedOracleType } = this.props
     const oracleSections = {
-      [ORACLE_TYPES.CENTRALIZED]: (
-        <GroupCentralizedOracle selectedOutcomeType={selectedOutcomeType} />
-      ),
+      [ORACLE_TYPES.CENTRALIZED]: <GroupCentralizedOracle {...this.props} />,
       [ORACLE_TYPES.BLOCK_DIFFICULTY]: <GroupBlockDifficulty />,
     }
 
@@ -114,15 +133,12 @@ export default class MarketCreateWizard extends Component {
             <h1>Create Market</h1>
           </div>
         </div>
-        <form>
+        <form onSubmit={this.props.handleSubmit(this.handleShowReview)}>
           <div className="container">
             <div className="row">
               <div className="col-md-8">
                 {this.renderForm()}
-              </div>
-              <div className="col-md-4">
-                <MarketSidebar fields={{ }} />
-                <button className="marketCreateButton btn btn-primary" type="button" onClick={() => this.handleShowReview()}>Review <i className="arrow" /></button>
+                <button className="marketCreateButton btn btn-primary" type="submit">Review <i className="arrow" /></button>
               </div>
             </div>
           </div>
@@ -134,8 +150,8 @@ export default class MarketCreateWizard extends Component {
 }
 
 MarketCreateWizard.propTypes = {
+  ...propTypes,
   changeUrl: PropTypes.func,
   selectedOracleType: PropTypes.string,
-  selectedOutcomeType: PropTypes.string,
   defaultAccount: PropTypes.string,
 }

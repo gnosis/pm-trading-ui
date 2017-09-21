@@ -2,7 +2,6 @@
 
 @market-border-radius: 12px;
 @market-highlight-stripe-width: 5px;
-@outcome-bar-height: 15px;
 @info-row-height: 25px;
 @expandable-arrow-size: 7px;
 @expandable-margin: 40px;
@@ -22,8 +21,15 @@
     letter-spacing: 1px;
   }
 
-  &__control {
-    float: right;
+  // &__control {
+  //   float: right;
+  // }
+
+ &__stat {
+    margin-bottom: 20px;
+    @media(min-width: @screen-sm) {
+      margin-bottom: 0;
+    }
   }
 
   .marketStats__icon {
@@ -47,6 +53,10 @@
 
   &__header {
     margin: @page-heading-margins;
+  }
+
+  &__controls {
+    margin-bottom: 40px;
   }
 }
 
@@ -178,106 +188,6 @@
   &__outcomes {
     margin: 20px 0;
   }
-
-  .outcome {
-    &__bar {
-      display: inline-block;
-      position: relative;
-      width: 30%;
-      margin: 5px 0;
-
-      &--inner {
-        height: @outcome-bar-height;
-        position: relative;
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      &--value {
-        line-height: @outcome-bar-height;
-        vertical-align: middle;
-        padding-left: 5px;
-        display: inline;
-        min-width: 30px;
-        color: @font-color-muted;
-        font-size: 10px;
-        letter-spacing: .5px;
-        text-transform: uppercase;
-      }
-
-      &--label {
-        margin-left: 100%;
-        padding-left: 5px;
-        line-height: @outcome-bar-height;
-        text-transform: uppercase;
-        font-size: 10px;
-        letter-spacing: .5px;
-      }
-    }
-
-    &__label {
-      display: inline-block;
-    }
-
-    &--scalar {
-      margin-top: 40px;
-      width: 50%;
-      display: table;
-      .outcome__bound {
-        display: table-cell;
-        width: 15%;
-        height: 30px;
-        vertical-align: middle;
-        font-size: 10px;
-        font-weight: 500;
-        letter-spacing: .5px;
-        &--lower {
-          text-align: left;
-        }
-        &--upper {
-          text-align: right;
-        }
-      }
-      .outcome__currentPrediction {
-        position: relative;
-        height: 30px;
-        width: 100%;
-        .outcome__currentPrediction--line {
-          position: absolute;
-          background-color: @bg-color-muted;
-          height: 2px;
-          width: 100%;
-          top: 50%;
-          transform: translateY(-1px);
-        }
-        .outcome__currentPrediction--value {
-          position: absolute;
-          background-color: @link-color;
-          padding: 5px;
-          border-radius: 5px;
-          color: white;
-          top: 50%;
-          transform: translate(-50%, -38px);
-          left: 0;
-          &:after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            margin-left: -@expandable-arrow-size;
-            width: 0;
-            height: 0;
-            border-left: @expandable-arrow-size solid transparent;
-            border-right: @expandable-arrow-size solid transparent;
-            border-top: @expandable-arrow-size solid @link-color;
-          }
-        }
-      }
-    }
-  }
-
 }
 
 .info {

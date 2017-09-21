@@ -8,6 +8,7 @@ import { OUTCOME_TYPES, RESOLUTION_TIME, COLOR_SCHEME_DEFAULT } from 'utils/cons
 
 import CurrencyName from 'components/CurrencyName'
 import Checkbox from 'components/FormCheckbox'
+import DecimalValue from 'components/DecimalValue'
 
 import './marketCreateReview.less'
 
@@ -17,11 +18,24 @@ class MarketCreateReview extends Component {
 
     this.state = {
       confirmed: false,
+      keepValues: false,
     }
   }
+
+  componentWillMount() {
+    this.setState({ keepValues: false })
+  }
+
   componentDidMount() {
-    if (!this.props.formValues.oracleType) {
+    if (!this.props.hasValues) {
       this.props.changeUrl('markets/new')
+    }
+  }
+
+  componentWillUnmount() {
+    // keepValues will be set before changing to a site where we keep the form
+    if (this.props.hasValues && !this.state.keepValues) {
+      this.props.reset()
     }
   }
 
@@ -32,12 +46,15 @@ class MarketCreateReview extends Component {
 
   @autobind
   handleCreateMarket() {
-    this.props.submitForm()
+    const { formValues, submitForm } = this.props
+    submitForm(formValues)
   }
 
   @autobind
-  handleEdit() {
-    this.props.changeUrl('markets/new')
+  async handleEdit() {
+    await this.setState({ keepValues: true })
+
+    return this.props.changeUrl('markets/new')
   }
 
   renderMarketSummary() {
@@ -76,7 +93,6 @@ class MarketCreateReview extends Component {
         collateralToken,
         fee,
         funding,
-        ultimateOracle,
       },
     } = this.props
 
@@ -108,26 +124,12 @@ class MarketCreateReview extends Component {
             </div>
           </div>
         </div>
-        <div className="row">
-          <div className="col-md-12">
-            <div className="marketReviewDetails__label">Ultimate Oracle</div>
-            <div className="marketReviewDetails__value">
-              {ultimateOracle ? (
-                <span>This Event will be using an ultimate Oracle.</span>
-              ) : (
-                <span>This Event will <strong>not</strong> be using an ultimate Oracle.</span>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
     )
   }
 
   renderCheckout() {
-    const { formValues: { funding, collateralToken } } = this.props
-
-    const costEstimation = 0
+    const { createMarketCost, formValues: { funding, collateralToken } } = this.props
 
     return (
       <div className="checkout">
@@ -138,13 +140,15 @@ class MarketCreateReview extends Component {
           </li>
           <li className="checkout__listItem">
             <span className="listItem__label">Gas Costs</span>
-            <span className="listItem__value">{Decimal(costEstimation || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} /></span>
+            <span className="listItem__value">
+              <DecimalValue value={createMarketCost} /> <CurrencyName collateralToken={collateralToken} />
+            </span>
           </li>
           <li className="checkout__seperator" />
           <li className="checkout__listItem checkout__listItem--total">
             <span className="listItem__label">Total</span>
             <span className="listItem__value">
-              {Decimal(funding || 0).add(Decimal(costEstimation || 0)).toFixed(4)}
+              <DecimalValue value={Decimal(funding || 0).add(Decimal(createMarketCost)).toFixed(4)} />
             </span>
           </li>
         </ul>
@@ -247,13 +251,24 @@ class MarketCreateReview extends Component {
             <div className="row">
               <div className="col-md-6">
                 <p className="checkout__disclaimer">Please review the entered market details carefully. Once the market is created you will not be able to change any of its details and settings anymore. After you double-checked the details you may approve the market creation.</p>
-                <button
-                  className="btn btn-default btn-default--muted"
-                  type="button"
-                  onClick={this.handleEdit}
-                >
-                  <i className="arrow arrow--right" /> Edit
-                </button>
+                {this.props.submitting ? (
+                  <button
+                    className="btn btn-default btn-default--muted disabled"
+                    type="button"
+                    disabled
+                    title="Marketcreation already in Progress"
+                  >
+                    <i className="arrow arrow--right" /> Edit
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-default btn-default--muted"
+                    type="button"
+                    onClick={this.handleEdit}
+                  >
+                    <i className="arrow arrow--right" /> Edit
+                  </button>
+                )}
               </div>
               <div className="col-md-6">
                 <h2 className="checkout__header">Checkout</h2>
@@ -273,7 +288,6 @@ MarketCreateReview.propTypes = {
     description: PropTypes.string,
     oracleType: PropTypes.string,
     funding: PropTypes.string,
-    ultimateOracle: PropTypes.bool,
     collateralToken: PropTypes.string,
     unit: PropTypes.string,
     upperBound: PropTypes.string,
@@ -282,8 +296,12 @@ MarketCreateReview.propTypes = {
     outcomeType: PropTypes.string,
     outcomes: PropTypes.arrayOf(PropTypes.string),
   }),
+  createMarketCost: PropTypes.string,
+  hasValues: PropTypes.bool,
   changeUrl: PropTypes.func,
   submitForm: PropTypes.func,
+  reset: PropTypes.func,
+  submitting: PropTypes.bool,
 }
 
 export default MarketCreateReview

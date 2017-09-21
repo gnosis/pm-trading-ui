@@ -66,3 +66,7 @@ export const marketSchema = new schema.Entity('markets', {
   ...NORMALIZE_OPTIONS_DEFAULT,
 })
 
+export const tradeSchema = new schema.Entity('trades', {}, {
+  idAttribute: '_id',
+})
+

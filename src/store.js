@@ -6,6 +6,7 @@ import { routerMiddleware } from 'react-router-redux'
 import CrashReporter from 'middlewares/CrashReporter'
 import LocalStorageDump from 'middlewares/LocalStorageDump'
 import LocalStorageLoad from 'middlewares/LocalStorageLoad'
+import Notifications from 'middlewares/Notifications'
 
 import reducer from 'reducers'
 
@@ -13,6 +14,7 @@ const enhancers = [
   applyMiddleware(
     thunk,
     routerMiddleware(hashHistory),
+    Notifications,
     LocalStorageLoad,
     LocalStorageDump,
     CrashReporter,

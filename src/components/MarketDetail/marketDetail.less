@@ -3,16 +3,29 @@
 @expandable-arrow-size: 15px;
 @expandable-margin: 40px;
 
+.marketDetails .outcomes {
+  margin-bottom: 40px;
+}
+
 .marketInfos {
-  text-align: right;
+  text-align: left;
+  margin-top: 40px;
   position: relative;
+
+  @media(min-width: @screen-sm) {
+    text-align: right;
+    margin-top: 0;
+  }
 }
 
 .marketInfo__info {
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-left: 100px; //just until we use real names
+  padding-left: 0; //just until we use real names
   margin-bottom: 20px;
+  @media(min-width: @screen-sm) { //just until we use real names
+    padding-left: 100px; //just until we use real names
+  } //just until we use real names
 }
 
 .marketInfo__info--value {
@@ -53,10 +66,13 @@
 }
 
 .marketTimer__live {
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 300;
   letter-spacing: 1px;
-  line-height: 1;
+  line-height: 1.2;
+  @media(min-width: @screen-sm) {
+    font-size: 28px;
+  }
 }
 
 .marketTime__absolute {
@@ -119,5 +135,56 @@
       position: absolute;
       margin-bottom: 50px;
     }
+  }
+}
+
+@detailBadgesSize: 64px;
+
+.redeemWinning, .withdrawFees {
+  margin: 12px 0;
+
+  &__icon {
+    width: @detailBadgesSize;
+    height: @detailBadgesSize;
+
+    position: relative;
+    float: left;
+  }
+
+  &__details {
+    float: left;
+    padding-left: 10px;
+    height: @detailBadgesSize;
+  }
+
+  &__heading {
+    font-size: 30px;
+  }
+
+  &__label {
+    text-transform: uppercase;
+    color: @font-color-muted;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .5px;
+  }
+
+  &__action {
+    display: inline-block;
+    float: right;
+    padding-right: 50px;
+    height: @detailBadgesSize;
+
+    .btn {
+      height: 100%;
+      text-align: right;
+      float: right;
+    }
+  }
+
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
   }
 }

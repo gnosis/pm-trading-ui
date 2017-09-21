@@ -1,6 +1,7 @@
-import moment from 'moment'
 import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
+import uuid from 'uuid/v4'
+import * as api from 'api'
 
 import {
   receiveEntities,
@@ -31,6 +32,7 @@ import {
 import {
   OUTCOME_TYPES,
   TRANSACTION_COMPLETE_STATUS,
+  MARKET_STAGES,
 } from 'utils/constants'
 
 const TRANSACTION_STAGES = {
@@ -39,6 +41,8 @@ const TRANSACTION_STAGES = {
   EVENT: 'event',
   MARKET: 'market',
   FUNDING: 'funding',
+  // Others
+  GENERIC: 'generic',
 }
 
 const TRANSACTION_EVENTS = [
@@ -64,7 +68,12 @@ const TRANSACTION_EVENTS = [
   },
 ]
 
-import * as api from 'api'
+const TRANSACTION_EVENTS_GENERIC = [
+  {
+    event: TRANSACTION_STAGES.GENERIC,
+    label: 'Sending Transaction',
+  },
+]
 
 export const requestMarket = marketAddress => async (dispatch) => {
   const payload = await api.requestMarket(marketAddress)
@@ -86,6 +95,60 @@ export const requestFactories = () => async (dispatch) => {
   return await dispatch(receiveEntities(payload))
 }
 
+export const requestMarketParticipantTrades = (marketAddress, accountAddress) => async (dispatch) => {
+  const trades = await api.requestMarketParticipantTrades(marketAddress, accountAddress)
+  return await dispatch(updateEntity({
+    entityType: 'markets',
+    data: {
+      id: marketAddress,
+      participantTrades: trades,
+    },
+  }))
+}
+
+export const requestMarketTrades = market => async (dispatch) => {
+  const trades = await api.requestMarketTrades(market)
+
+  return await dispatch(updateEntity({
+    entityType: 'markets',
+    data: {
+      id: market.address,
+      trades,
+    },
+  }))
+}
+
+/**
+ * Dispatches the shares for the given account address
+ * @param {String} accountAddress
+ */
+export const requestAccountShares = accountAddress => async (dispatch) => {
+  const shares = await api.requestAccountShares(accountAddress)
+  return await dispatch(updateEntity({
+    entityType: 'accountShares',
+    data: {
+      id: accountAddress,
+      shares,
+    },
+  }))
+}
+
+/**
+ * Dispatches the trades for the given account address
+ * @param {String} accountAddress
+ */
+export const requestAccountTrades = accountAddress => async (dispatch) => {
+  const trades = await api.requestAccountTrades(accountAddress)
+
+  return await dispatch(updateEntity({
+    entityType: 'accountTrades',
+    data: {
+      id: accountAddress,
+      trades,
+    },
+  }))
+}
+
 export const createMarket = options => async (dispatch) => {
   const {
     eventDescription,
@@ -96,12 +159,12 @@ export const createMarket = options => async (dispatch) => {
   } = options
 
   // Start a new transaction log
-  await dispatch(startLog(transactionId, TRANSACTION_EVENTS))
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS, `Creating Market "${eventDescription.title}"`))
 
   // Create Event Description
   let eventDescriptionContractData
   try {
-    eventDescriptionContractData = await api.createEventDescription(eventDescription)
+    eventDescriptionContractData = await api.createEventDescription(eventDescription, event.type)
 
     await dispatch(receiveEntities(normalize(createEventDescriptionModel(eventDescriptionContractData), eventDescriptionSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.EVENT_DESCRIPTION))
@@ -179,32 +242,156 @@ export const createMarket = options => async (dispatch) => {
 
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.FUNDING))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.FUNDING, e))
-    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
   }
 
-  return await dispatch(closeLog(transactionId))
+  await dispatch(closeLog(transactionId))
+  return marketContractData
 }
 
-export const buyMarketShares = (market, outcomeIndex, amount) => async (dispatch) => {
-  await api.buyShares(market, outcomeIndex, amount)
+export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
+  const transactionId = uuid()
+
+  // Start a new transaction log
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
+
+  try {
+    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
+    await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
+  } catch (e) {
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
+  }
 
   const netOutcomeTokensSold = market.netOutcomeTokensSold
-  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + (amount * 1e18)
+  const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toNumber()
   netOutcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
 
-  return dispatch(updateEntity({
+  await dispatch(updateEntity({
     entityType: 'markets',
     data: {
       id: market.address,
       netOutcomeTokensSold,
     },
   }))
+
+  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
-export const sellMarketShares = (market, outcomeIndex, amount) =>
-  async () => await api.sellShares(market, outcomeIndex, amount)
+export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => async (dispatch) => {
+  const transactionId = uuid()
 
-  // calculate new values
+  // Start a new transaction log
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
 
+  try {
+    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
+    await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
+  } catch (e) {
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
+  }
+
+  // TODO: Calculate new shares
+  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+}
+
+export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
+  const transactionId = uuid()
+
+  // Start a new transaction log
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Resolving Oracle for "${market.eventDescription.title}"`))
+
+  try {
+    await api.resolveEvent(market.event, outcomeIndex)
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
+  } catch (e) {
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
+  }
+
+  await dispatch(updateEntity({ entityType: 'oracles', data: { id: market.oracle.address, isOutcomeSet: true, outcome: outcomeIndex } }))
+  await dispatch(updateEntity({ entityType: 'events', data: { id: market.event.address, isWiningOutcomeSet: true } }))
+
+  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+}
+
+export const redeemWinnings = market => async (dispatch) => {
+  const transactionId = uuid()
+
+  // Start a new transaction log
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Redeeming Winnings for  "${market.eventDescription.title}"`))
+
+  try {
+    console.log("winnings: ", await api.redeemWinnings(market.event.type, market.event.address))
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
+  } catch (e) {
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
+  }
+
+  // TODO: Update market so we can't redeem again
+  
+  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+}
+
+
+export const withdrawFees = market => async (dispatch) => {
+  const transactionId = uuid()
+
+  // Start a new transaction log
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Withdrawing Fees for "${market.eventDescription.title}"`))
+
+  try {
+    console.log("fees: " , await api.withdrawFees(market.address))
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
+  } catch (e) {
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    
+    throw e
+  }
+
+  // TODO: Update market so we can't withdraw again
+
+  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+}
+
+export const closeMarket = market => async (dispatch) => {
+  const transactionId = uuid()
+
+  // Start a new transaction log
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Closing market "${market.eventDescription.title}"`))
+
+  try {
+    await api.closeMarket(market)
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
+  } catch (e) {
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
+  }
+
+  const stage = MARKET_STAGES.MARKET_CLOSED
+  await dispatch(updateEntity({
+    entityType: 'markets',
+    data: {
+      id: market.address,
+      stage,
+    },
+  }))
+
+  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+}

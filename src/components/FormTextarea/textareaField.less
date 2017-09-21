@@ -1,23 +1,17 @@
 @import url('../../less/vars.less');
 
-.textareaField .textareaField__label {
-  font-weight: 600;
-}
-
-.textareaField__label {
-  display: block;
-  text-transform: uppercase;
-  margin: 20px 0 6px 0;
-  font-size: 12px;
-  color: @font-color-muted;
-}
-
 .textareaField__input {
   border: none;
   background: none;
   border-bottom: 1px solid @bg-color-muted;
-  font-size: 24px;
   overflow: auto;
+
+  .inputStyles();
+
+  &--error {
+    color: @active-highlight-error;
+    border-bottom-color: @active-highlight-error !important;
+  }
 
   &:active, &:focus {
     outline: 0;

@@ -4,6 +4,8 @@ import moment from 'moment'
 
 import './marketProgress.less'
 
+import ProgressSpinner from 'components/ProgressSpinner'
+
 const MarketProgress = ({
   progress,
   logs,
@@ -51,20 +53,7 @@ const MarketProgress = ({
         <div className="marketProgress__disclaimer">{disclaimerText}</div>
         <div className="row">
           <div className="col-md-6">
-            <div className={`radialProgressBar radialProgressBar--${progressBarClass}`}>
-              <svg id="marketProgress__svg" width="400" height="400">
-                <defs>
-                  <linearGradient id="gnosisGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#00a6c4" />
-                    <stop offset="46%" stopColor="#05bdc4" />
-                    <stop offset="100%" stopColor="#0adcc4" />
-                  </linearGradient>
-                </defs>
-                <circle id="inner" r="190" cx="200" cy="200" fill="transparent" strokeDasharray="1193.8052" strokeDashoffset="0" />
-                <circle id="bar" r="190" cx="200" cy="200" fill="transparent" strokeDasharray="1193.8052" strokeDashoffset={strokeDasharray} stroke="url(#gnosisGradient)" />
-              </svg>
-              <div className="radialProgressBar__label">{!failed && Math.ceil(progress * 100)}</div>
-            </div>
+            <ProgressSpinner width={400} height={400} progress={progress} label={Math.ceil(progress * 100)} showLabel={!failed} modifier={progressBarClass} />
           </div>
           <div className="col-md-6">
             <div className="marketProgress__logs">

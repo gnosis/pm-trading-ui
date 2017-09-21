@@ -26,7 +26,7 @@ class Countdown extends Component {
   updateDuration() {
     const { til = moment(), target, format = RESOLUTION_TIME.RELATIVE_LONG_FORMAT } = this.props
 
-    const duration = moment.duration(moment(target).diff(til))
+    const duration = moment.duration(moment.utc(target).diff(til))
     this.setState({ output: duration.format(format) })
   }
 

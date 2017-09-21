@@ -1,6 +1,6 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-// const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -10,8 +10,10 @@ const nodeEnv = process.env.NODE_ENV || 'development'
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
-//const ethereumHost = process.env.ETHEREUM_HOST
-const gnosisDbUrl = process.env.GNOSISDB_HOST || 'http://localhost:8000'
+const config = require('./src/config.json')
+
+// const ethereumHost = process.env.ETHEREUM_HOST
+const gnosisDbUrl = process.env.GNOSISDB_HOST || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -37,8 +39,8 @@ module.exports = {
     rules: [
       { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader?babelrc=false&extends=' + path.join(__dirname, '/.babelrc') },
       {
-        test: /\.(jpe?g|png)$/i,
-        loader: 'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+        test: /\.(jpe?g|png|svg)$/i,
+        loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
       },
       { test: /\.(less|css)$/,
         use: ExtractTextPlugin.extract({
@@ -57,7 +59,7 @@ module.exports = {
         }),
       },
       {
-        test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+        test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]',
       }
     ],
@@ -70,13 +72,13 @@ module.exports = {
       '/api': {
         target: gnosisDbUrl,
         secure: false,
-      }
+      },
     },
   },
   plugins: [
     new ExtractTextPlugin('styles.css'),
-    /* new FaviconsWebpackPlugin({
-      logo: 'assets/Logo.png',
+    new FaviconsWebpackPlugin({
+      logo: 'assets/img/gnosis_logo_favicon.png',
     // Generate a cache file with control hashes and
     // don't rebuild the favicons until those hashes change
       persistentCache: true,
@@ -92,7 +94,7 @@ module.exports = {
         yandex: false,
         windows: false,
       },
-    }), */
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),
     }),
@@ -102,7 +104,7 @@ module.exports = {
         // ETHEREUM_HOST: nodeEnv === 'production' ? null : JSON.stringify(ethereumHost),
         NODE_ENV: JSON.stringify(nodeEnv),
         GNOSISDB_HOST: JSON.stringify(gnosisDbUrl),
-      }
+      },
     }),
   ],
 }

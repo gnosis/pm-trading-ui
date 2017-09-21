@@ -17,35 +17,9 @@
   }
 
   &__close {
-    position: absolute;
+    .closeButton(32px, 5px);
     top: 20px;
-    right: 20px;
-    width: 32px;
-    height: 32px;
-    
-    &::after, &::before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 5px;
-      transition: background-color .4s ease-in;
-      background-color: black;
-      transform-origin: 50% 50%;
-    } 
-
-    &::after {
-      transform: rotate(45deg);
-    }
-    &::before {
-      transform: rotate(-45deg);  
-    }
-
-    &:hover {
-      &::after, &::before {
-        background-color: @active-highlight;
-        background-color: @active-highlight;
-      }
-    }
+    right: 10px;
   }
 
   &__logs {
@@ -100,49 +74,3 @@
   }
 }
 
-
-.radialProgressBar {
-  position: relative;
-  width: 400px;
-  height: 400px;
-
-  &--success {
-    #bar {
-      stroke: @active-highlight-success;
-    }
-  }
-
-  &--error {
-    #bar {
-      stroke: @active-highlight-error;
-    }
-  }
-
-  #inner {
-    fill: transparent;
-    stroke-width: 10px;
-    stroke: @bg-color-muted;
-  } 
-
-  #bar {
-    transform: rotate(-90deg);
-    transform-origin: 50%;
-    fill: transparent;
-    stroke-width: 10px;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 3s ease, stroke 5s ease;
-    transition-delay: stroke 3s;
-  }
-
-  &__label {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    text-align: center;
-    line-height: 400px;
-    font-size: 42px;
-  }
-}

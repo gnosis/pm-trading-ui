@@ -1,8 +1,10 @@
 /* globals fetch */
 
 import { mapValues, startsWith, isArray } from 'lodash'
+import Decimal from 'decimal.js'
+import { HEX_VALUE_REGEX, OUTCOME_TYPES } from 'utils/constants'
 
-import { HEX_VALUE_REGEX } from 'utils/constants'
+const config = require('config.json')
 
 export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
@@ -14,7 +16,7 @@ export const hexWithoutPrefix = (value) => {
 
 /**
  * Adds the `0x` prefix to the incoming string value
- * @param {String} value 
+ * @param {String} value
  */
 export const add0xPrefix = (value) => {
   return startsWith(value, '0x') ? value : `0x${value}`
@@ -42,10 +44,75 @@ export const toEntity = (data, entityType, idKey = 'address') => {
   }
 }
 
+/**
+ * Converts a value from WEI to ETH
+ * @param {String|Number} value
+ */
+export const weiToEth = (value) => {
+  let ethValue = new Decimal(0)
+  if (typeof value === 'string') {
+    ethValue = new Decimal(value)
+    if (ethValue.gt(0)) {
+      return ethValue.div(1e18).toString()
+    }
+    return new Decimal(0).div(1e18).toString()
+  }
+  if (value instanceof Decimal && value.gt(0)) {
+    return value.div(1e18).toString()
+  }
+  return ethValue.toString()
+}
+
+export const getOutcomeName = (market, index) => {
+  let outcomeName
+  if (!market.event) {
+    return null
+  }
+  if (market.event.type === OUTCOME_TYPES.CATEGORICAL) {
+    outcomeName = market.eventDescription.outcomes[index]
+  } else if (market.event.type === OUTCOME_TYPES.SCALAR) {
+    outcomeName = index === 0 ? 'Short' : 'Long'
+  }
+  return outcomeName
+}
+
+export const normalizeScalarPoint = (
+  marginalPrices,
+  { event: {
+    lowerBound, upperBound,
+  },
+  eventDescription: { decimals },
+}) => {
+  const bigDecimals = parseInt(decimals, 10)
+
+  const bigUpperBound = Decimal(upperBound).div(10 ** bigDecimals)
+  const bigLowerBound = Decimal(lowerBound).div(10 ** bigDecimals)
+
+  const bounds = bigUpperBound.sub(bigLowerBound)
+  return Decimal(marginalPrices[1].toString()).times(bounds).add(bigLowerBound)
+          .toDP(decimals)
+          .toNumber()
+}
+
+/**
+ * Adds _id incremental numeric property to each object in the array
+ * @param { objects[] } arrayData
+ */
+export const addIdToObjectsInArray = (arrayData) => {
+  arrayData.forEach((item, index) => {
+    item['_id'] = index
+  })
+  return arrayData
+}
+
 export const restFetch = url =>
   fetch(url)
+    .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
     .then(res => res.json())
-    .catch(err => console.warn(`Gnosis DB: ${err}`))
+    .catch(err => new Promise((resolve, reject) => {
+      console.warn(`Gnosis DB: ${err}`)
+      reject(err)
+    }))
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
@@ -72,3 +139,13 @@ export const timeoutCondition = (timeout, rejectReason) => new Promise((_, rejec
     reject(rejectReason)
   }, timeout)
 })
+
+/**
+ * Determines if an account is a Moderator
+ * @param {*string} accountAddress
+ */
+export const isModerator = accountAddress => (
+  Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false
+)
+
+export const getModerators = () => config.whitelist

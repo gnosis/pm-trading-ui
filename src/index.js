@@ -22,6 +22,9 @@ import DashboardPage from 'containers/DashboardPage'
 import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
 
 import store from './store'
+import { setMomentRelativeTime } from './setup'
+
+setMomentRelativeTime()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
@@ -50,7 +53,11 @@ render(
             <Route path="review" component={MarketCreateReviewPage} />
             <Route path="list" component={MarketListPage} />
             <Route path=":id" component={MarketDetailPage}>
-              <Route path=":view" />
+              <Route path=":view">
+                <Route path=":shareId">
+                  <Route path="sell" component={MarketDetailPage} />
+                </Route>
+              </Route>
             </Route>
           </Route>
         </Route>

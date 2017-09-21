@@ -1,5 +1,14 @@
+.svgIcon(@iconName) {
+  @iconClass: ~"icon--@{iconName}";
+  .icon.@{iconClass} {
+    @url: "../assets/img/icons/icon_@{iconName}.svg";
+    background-image: url("@{url}");
+    mask-image: url("@{url}");
+  }
+}
 
-// Icon Definitions
+
+// Icon Definition
 .icon {
   display: inline-block;
   position: relative;
@@ -11,49 +20,6 @@
   background-position: center center;
   background-repeat: no-repeat;
 
-  &--countdown {
-    background-image: url('../assets/img/icons/icon_countdown.svg');
-    mask-image: url('../assets/img/icons/icon_countdown.svg');
-  }
-
-  &--enddate {
-    background-image: url('../assets/img/icons/icon_enddate.svg');
-    mask-image: url('../assets/img/icons/icon_enddate.svg');
-  }
-
-  &--oracle {
-    background-image: url('../assets/img/icons/icon_oracle.svg');
-    mask-image: url('../assets/img/icons/icon_oracle.svg');
-  }
-
-  &--currency {
-    background-image: url('../assets/img/icons/icon_currency.svg');
-    mask-image: url('../assets/img/icons/icon_currency.svg');
-  }
-
-  &--checkmark {
-    background-image: url('../assets/img/icons/icon_checkmark.svg');
-    mask-image: url('../assets/img/icons/icon_checkmark.svg');
-  }
-
-  &--market {
-    background-image: url('../assets/img/icons/icon_market.svg');
-    mask-image: url('../assets/img/icons/icon_market.svg');
-  }
-
-  &--market--countdown {
-    background-image: url('../assets/img/icons/icon_market--countdown.svg');
-    mask-image: url('../assets/img/icons/icon_market--countdown.svg');
-  }
-
-  &--new {
-    background-image: url('../assets/img/icons/icon_new.svg');
-    mask-image: url('../assets/img/icons/icon_new.svg');
-  }
-}
-
-// Glyphs Definitions
-i {
   font-style: normal;
 
   // Right/Left Arrow
@@ -77,16 +43,33 @@ i {
       }
     }
   }
+}
 
-  &--etherTokens {
-    background-image: url('../assets/img/icons/icon_etherTokens.svg');
-  }
+// Add Icons here from /assets/img/icons/icon_<name>.svg
+.svgIcon("countdown");
+.svgIcon("enddate");
+.svgIcon("oracle");
+.svgIcon("currency");
+.svgIcon("checkmark");
+.svgIcon("market");
+.svgIcon("market--countdown");
+.svgIcon("new");
+.svgIcon("etherTokens");
+.svgIcon("achievementBadge");
+.svgIcon("incomeForecast");
+.svgIcon("earnedTokens");
+.svgIcon("cross");
+.svgIcon("user");
+.svgIcon("gear");
 
-  &--incomeForecast {
-    background-image: url('../assets/img/icons/icon_incomeForecast.svg');
-  }
+.icon--checkbox {
+  background: @active-highlight-success;
+}
 
-  &--incomeForecast {
-    background-image: url('../assets/img/icons/icon_incomeForecast.svg');
-  }
+.icon--error {
+  @url: "../assets/img/icons/icon_cross.svg";
+  background-image: url("@{url}");
+  mask-image: url("@{url}");
+  
+  background: @active-highlight-error;
 }

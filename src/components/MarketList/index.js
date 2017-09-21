@@ -1,22 +1,49 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
-import { calcLMSRMarginalPrice } from 'api'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
-
-import CurrencyName from 'components/CurrencyName'
-import DecimalValue from 'components/DecimalValue'
 import Countdown from 'components/Countdown'
+import CurrencyName from 'components/CurrencyName'
+import { decimalToText } from 'components/DecimalValue'
 
-import FormSelect from 'components/FormSelect'
+import Outcome from 'components/Outcome'
+
+import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
+import FormSelect from 'components/FormSelect'
+import FormCheckbox from 'components/FormCheckbox'
 
-import { RESOLUTION_TIME, OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { RESOLUTION_TIME } from 'utils/constants'
+import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
+
+
+const resolutionFilters = [
+  {
+    label: 'All',
+    value: '',
+  },
+  {
+    label: 'Resolved',
+    value: 'RESOLVED',
+  },
+  {
+    label: 'Unresolved',
+    value: 'UNRESOLVED',
+  },
+]
+
+const selectFilter = {
+  DEFAULT: '---',
+  RESOLUTION_DATE_ASC: 'Resolution Date ASC',
+  RESOLUTION_DATE_DESC: 'Resolution Date DESC',
+  TRADING_VOLUME_ASC: 'Trading Volume ASC',
+  TRADING_VOLUME_DESC: 'Trading Volume DESC',
+}
 
 class MarketList extends Component {
   componentWillMount() {
@@ -44,64 +71,9 @@ class MarketList extends Component {
   }
 
   renderCategoricalOutcomes(market) {
-    const renderOutcomes = market.eventDescription.outcomes
-    const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
-      const marginalPrice = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold,
-        funding: market.funding,
-        outcomeTokenIndex: outcomeIndex,
-      })
-
-      return marginalPrice.toFixed()
-    })
-
-    return (<div className="market__outcomes market-outcomes--categorical">
-      {renderOutcomes.map((outcome, outcomeIndex) => (
-        <div key={outcomeIndex} className="outcome">
-          <div className="outcome__bar">
-            <div
-              className="outcome__bar--inner"
-              style={{ width: `${tokenDistribution[outcomeIndex] * 100}%`, backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex] }}
-            >
-              <div className="outcome__bar--label">
-                { renderOutcomes[outcomeIndex] }
-                <div className="outcome__bar--value">{ `${Math.round(tokenDistribution[outcomeIndex] * 100).toFixed(0)}%` }</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>)
   }
 
   renderScalarOutcomes(market) {
-    const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: market.netOutcomeTokensSold,
-      // This is a temporary fix to avoid NaN when there is no funding, which should never occour
-      funding: Decimal(parseInt(market.funding, 10) || 1e18),
-      outcomeTokenIndex: 1, // always calc for long when calculating estimation
-    })
-
-    const decimals = parseInt(market.eventDescription.decimals, 10)
-
-    const upperBound = Decimal(market.event.upperBound).div(10 ** decimals)
-    const lowerBound = Decimal(market.event.lowerBound).div(10 ** decimals)
-
-    const bounds = upperBound.sub(lowerBound)
-    const value = Decimal(marginalPrice.toString()).times(bounds).add(lowerBound)
-
-    return (
-      <div className="market__outcomes market__outcomes--scalar">
-        <div className="outcome outcome--scalar">
-          <div className="outcome__bound outcome__bound--lower"><DecimalValue value={lowerBound} decimals={1} /></div>
-          <div className="outcome__currentPrediction">
-            <div className="outcome__currentPrediction--line" />
-            <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>{value.toString()}</div>
-          </div>
-          <div className="outcome__bound outcome__bound--upper"><DecimalValue value={upperBound} decimals={1} /></div>
-        </div>
-      </div>
-    )
   }
 
   @autobind
@@ -111,10 +83,7 @@ class MarketList extends Component {
 
     const resolveUrl = `/markets/${market.address}/resolve`
 
-    const outcomes = market.event.type === OUTCOME_TYPES.SCALAR ?
-      this.renderScalarOutcomes(market) :
-      this.renderCategoricalOutcomes(market)
-
+    const outcomes = (<Outcome market={market} />)
 
     return (
       <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
@@ -154,17 +123,11 @@ class MarketList extends Component {
           </div>
           <div className="info__group col-md-3">
             <div className="info__field">
-              <div className="info__field--icon icon icon--oracle" />
-              <div className="info__field--label">
-                {market.oracle.address}
-              </div>
-            </div>
-          </div>
-          <div className="info__group col-md-3">
-            <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                <CurrencyName collateralToken={market.event.collateralToken} />
+                {decimalToText(new Decimal(market.tradingVolume).div(1e18))}&nbsp;
+                <CurrencyName collateralToken={market.event.collateralToken} />&nbsp;
+                Volume
               </div>
             </div>
           </div>
@@ -196,7 +159,7 @@ class MarketList extends Component {
   }
 
   renderMarketFilter() {
-    const { handleSubmit } = this.props
+    const { handleSubmit, isModerator } = this.props
 
     return (
       <div className="marketFilter col-md-2">
@@ -212,14 +175,29 @@ class MarketList extends Component {
           </div>
           <div className="marketFilter__group">
             <Field
+              name="orderBy"
+              label="Order by"
               component={FormSelect}
-              name="resolved"
-              label="Show Resolved"
-              className="marketFilterField marketFilterResolved"
-              defaultValue={''}
-              values={{ '': 'Both', RESOLVED: 'Show only resolved Markets', UNRESOLVED: 'Show only unresolved Markets' }}
+              values={selectFilter}
+              defaultValue="DEFAULT"
             />
           </div>
+          <div className="marketFilter__group">
+            <Field
+              name="resolved"
+              label="Resolution Date"
+              component={FormRadioButton}
+              radioValues={resolutionFilters}
+            />
+          </div>
+          { isModerator ? <div className="marketFilter__group">
+            <Field
+              name="myMarkets"
+              label="Show only"
+              text="My markets"
+              component={FormCheckbox}
+            />
+          </div> : <div />}
         </form>
       </div>
     )
@@ -227,36 +205,43 @@ class MarketList extends Component {
 
   render() {
     const { markets } = this.props
+    
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
           <div className="container">
-            <h1>Marketoverview</h1>
+            <h1>Market overview</h1>
           </div>
         </div>
         <div className="marketListPage__stats">
           <div className="container">
             <div className="row marketStats">
-              <div className="col-md-3 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">Open Markets</div>
               </div>
-              <div className="col-md-3 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market--countdown" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">Closing Soon</div>
               </div>
-              <div className="col-md-3 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--new" />
                 <span className="marketStats__value">{ markets.length }</span>
                 <div className="marketStats__label">New Markets</div>
               </div>
-              <div className="col-md-3">
+            </div>
+          </div>
+        </div>
+        <div className="marketListPage__controls">
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
                 <button
                   type="button"
                   onClick={this.handleCreateMarket}
-                  className="marketStats__control btn btn-primary"
+                  className="marketStats__control btn btn-default"
                   disabled={!this.props.defaultAccount}
                   title={this.props.defaultAccount ? '' : 'Please connect to an ethereum network to create a market'}
                 >
@@ -281,11 +266,12 @@ class MarketList extends Component {
 }
 
 MarketList.propTypes = {
-  markets: PropTypes.arrayOf(PropTypes.object),
+  markets: PropTypes.arrayOf(marketShape),
   defaultAccount: PropTypes.string,
   fetchMarkets: PropTypes.func,
   changeUrl: PropTypes.func,
   handleSubmit: PropTypes.func,
+  isModerator: PropTypes.bool,
 }
 
 export default reduxForm({

@@ -5,6 +5,7 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
 import { OUTCOME_TYPES } from 'utils/constants'
+import { marketShape } from 'utils/shapes'
 
 import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
@@ -18,17 +19,16 @@ class MarketResolveForm extends Component {
       market: {
         event: { type },
         eventDescription: { decimals },
-        oracle: { address },
       },
     } = this.props
 
     const { selectedOutcome, selectedValue } = values
 
     if (type === OUTCOME_TYPES.CATEGORICAL) {
-      return this.props.resolveOracle(address, selectedOutcome)
+      return this.props.resolveMarket(this.props.market, selectedOutcome)
     } else if (type === OUTCOME_TYPES.SCALAR) {
       const outcome = Decimal(selectedValue).times(10 ** decimals)
-      return this.props.resolveOracle(address, outcome.trunc())
+      return this.props.resolveMarket(this.props.market, outcome.trunc())
     }
 
     throw new Error(`got unexpected type ${type}`)
@@ -84,9 +84,9 @@ class MarketResolveForm extends Component {
 }
 
 MarketResolveForm.propTypes = {
-  market: PropTypes.object,
+  market: marketShape,
   submitting: PropTypes.bool,
-  resolveOracle: PropTypes.func,
+  resolveMarket: PropTypes.func,
   handleSubmit: PropTypes.func,
 }
 

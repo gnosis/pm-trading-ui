@@ -6,40 +6,40 @@ import { bemifyClassName } from 'utils/helpers'
 
 import './formRadioButton.less'
 
-const FormRadioButton = ({ input, radioValue, text, className, highlightColor }) => (
-  <div className={`radioButton ${bemifyClassName(className)}`}>
-    <input
-      type="radio"
-      className={`radioButton__input ${bemifyClassName(className, 'input')}`}
-      id={`radioButton_${input.name}_${radioValue}`}
-      style={highlightColor ? { color: highlightColor } : {}}
-      onChange={input.onChange}
-      checked={input && input.value === radioValue.toString()}
-      value={radioValue}
-    />
-    <label className={`radioButton__text ${bemifyClassName(className, 'text')}`} htmlFor={`radioButton_${input.name}_${radioValue}`}>
-      {text}
-    </label>
+const FormRadioButton = ({ input, radioValues, label, className, meta: { error, touched } }) => (
+  <div className={`formRadioButton ${touched && error ? 'formRadioButton--error' : ''}`}>
+    {label && <label>{label}</label>}
+    {radioValues.map(({ label: radioLabel, value, highlightColor }) => (
+      <div key={value} className={`radioButton ${bemifyClassName(className)}`}>
+        <input
+          type="radio"
+          className={`radioButton__input ${bemifyClassName(className, 'input')}`}
+          id={`radioButton_${input.name}_${value}`}
+          style={highlightColor ? { color: highlightColor } : {}}
+          onChange={() => input.onChange(value)}
+          checked={input && input.value.toString() === value.toString()}
+          value={value}
+        />
+        <label className={`radioButton__text ${bemifyClassName(className, 'text')}`} htmlFor={`radioButton_${input.name}_${value}`}>
+          {radioLabel}
+        </label>
+      </div>
+    ))}
+    {touched && error &&
+      <span>
+        {error}
+      </span>}
   </div>
 )
 
 FormRadioButton.propTypes = {
   ...fieldPropTypes,
-  radioValue: PropTypes.string,
-  text: PropTypes.string,
+  radioValues: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.any,
+  })),
   className: PropTypes.string,
   highlightColor: PropTypes.string,
 }
 
 export default FormRadioButton
-
-export const FormRadioButtonLabel = ({ label, className }) => (
-  <label className={`radioButton__label ${bemifyClassName(className, 'label')}`}>
-    {label}
-  </label>
-)
-
-FormRadioButtonLabel.propTypes = {
-  label: PropTypes.string,
-  className: PropTypes.string,
-}

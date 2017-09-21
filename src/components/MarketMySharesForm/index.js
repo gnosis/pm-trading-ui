@@ -1,17 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, propTypes, reset } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
-import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
+import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount, calcLMSRProfit } from 'api'
 
 import DecimalValue from 'components/DecimalValue'
-import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
+import CurrencyName from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
 
-import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, GAS_COST } from 'utils/constants'
+import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
+import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
 
@@ -20,178 +22,264 @@ class MarketMySharesForm extends Component {
     super(props)
 
     this.state = {
-      extendedSellIndex: undefined,
+      extendedSellId: undefined,
+    }
+  }
+
+  componentWillMount() {
+    const { gasCosts, gasPrice, requestGasCost, requestGasPrice } = this.props
+
+    if (gasCosts.sellShares === undefined) {
+      requestGasCost(GAS_COST.SELL_SHARES)
+    }
+    if (gasPrice === undefined) {
+      requestGasPrice()
+    }
+
+    if (this.props.params.shareId) {
+      this.state = {
+        extendedSellId: this.props.params.shareId,
+      }
+    }
+  }
+
+  componentDidUpdate() {
+    const { extendedSellId } = this.state
+    const {
+      selectedSellAmount,
+      marketShares,
+      initialize,
+    } = this.props
+
+    if (selectedSellAmount === undefined && extendedSellId !== undefined) {
+      // By default form is filled up with fill amount
+      const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
+      const fullAmount = Decimal(share.balance).div(1e18).toDP(4, 1).toString()
+      initialize({ sellAmount: fullAmount })
     }
   }
 
   @autobind
-  handleShowSellView(e, shareIndex) {
+  handleShowSellView(e, shareId) {
+    const { initialize } = this.props
     e.preventDefault()
-    this.setState({ extendedSellIndex: (shareIndex === this.state.extendedSellIndex ? undefined : shareIndex) })
+    this.props.reset()
+    // Form reset / reinitialization when switching among shares
+    initialize({})
+    this.setState({ extendedSellId: (shareId === this.state.extendedSellId ? undefined : shareId) })
   }
 
   @autobind
   handleCloseSellView(e) {
     e.preventDefault()
-    this.setState({ extendedSellIndex: undefined })
+    this.props.reset()
+    this.setState({ extendedSellId: undefined })
   }
 
   @autobind
-  handleSellShare(e, shareIndex, shareAmount) {
-    e.preventDefault()
-    if (window.confirm('Are you sure?')) {
-      this.props.sellShares(this.props.market.address, shareIndex, shareAmount)
+  handleSellShare(shareId, shareAmount) {
+    const shareIndex = this.props.marketShares.map(share => share.id).indexOf(shareId)
+    return this.props.sellShares(this.props.market, shareIndex, shareAmount)
+      .then(() => this.props.reset())
+  }
+
+  @autobind
+  validateTokenCount(val, values, props) {
+    let decimalValue
+    try {
+      decimalValue = Decimal(val || 0)
+    } catch (e) {
+      return 'Invalid Number value'
     }
+
+    if (decimalValue.lt(0)) {
+      return 'Number can\'t be negative.'
+    }
+
+    if (decimalValue.gt(Decimal(props.marketShares.filter(
+      share => share.id === this.state.extendedSellId)[0].balance,
+    ).div(1e18).toString())) {
+      return 'You\'re trying to sell more than you invested.'
+    }
+
+    return undefined
   }
 
   renderSellShareView() {
-    const { extendedSellIndex } = this.state
-    const { invalid, selectedSellAmount, marketShares: { [extendedSellIndex]: share }, market } = this.props
+    const { extendedSellId } = this.state
+    const {
+      market,
+      invalid,
+      submitting,
+      submitFailed,
+      selectedSellAmount,
+      handleSubmit,
+      marketShares,
+      gasCosts,
+      gasPrice,
+    } = this.props
 
+    const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
+    let newScalarPredictedValue // calculated only for scalar events
     let selectedSellAmountWei
     try {
-      selectedSellAmountWei = Decimal(selectedSellAmount || 0).mul(1e18).toString()
+      selectedSellAmountWei = new Decimal(parseFloat(selectedSellAmount) || 0).mul(1e18).toString()
     } catch (e) {
       selectedSellAmountWei = '0'
     }
-
     let currentProbability
-    try {
-      currentProbability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-    } catch (e) {
-      currentProbability = Decimal('0')
+    if (market.event.type === 'CATEGORICAL') {
+      try {
+        currentProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+        })
+      } catch (e) {
+        currentProbability = new Decimal(0)
+      }
+    } else {
+      // Scalar
+      try {
+        currentProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: 1,
+        })
+      } catch (e) {
+        currentProbability = new Decimal(0)
+      }
     }
 
-    let currentTokenValue
-    try {
-      currentTokenValue = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
+    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0).mul(1e18))
+    let earnings = new Decimal(0)
+    if (share.balance && selectedSellAmount) {
+      earnings = weiToEth(calcLMSRProfit({
+        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
         funding: market.funding,
         outcomeTokenIndex: share.outcomeToken.index,
-        cost: share.balance,
-      })
-    } catch (e) {
-      currentTokenValue = Decimal('0')
+        outcomeTokenCount: selectedSellAmountWei,
+        feeFactor: market.fee,
+      }))
     }
-
-    let newTokenValue
-    try {
-      newTokenValue = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        cost: Decimal(share.balance).sub(selectedSellAmountWei).toString(),
-      })
-    } catch (e) {
-      newTokenValue = currentTokenValue
-    }
-
-    const diffTokenValue = currentTokenValue.sub(newTokenValue.toString())
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (outcomeTokenIndex === share.outcomeToken.index && !diffTokenValue.isZero()) {
-        return Decimal(outcomeTokenAmount).sub(diffTokenValue.toString())
+      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
+        return Decimal(outcomeTokenAmount).sub(currentTokenCount.sub(newTokenCount.toString()).toString()).floor().toString()
       }
 
       return Decimal(outcomeTokenAmount).toString()
     })
 
     let newProbability
-    try {
-      newProbability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: newNetOutcomeTokensSold,
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-    } catch (e) {
-      newProbability = currentProbability
+    if (market.event.type === 'SCALAR') {
+      try {
+        newProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: newNetOutcomeTokensSold,
+          funding: market.funding,
+          outcomeTokenIndex: 1, // long
+        })
+      } catch (e) {
+        newProbability = currentProbability
+      }
+      const newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
+      newScalarPredictedValue = normalizeScalarPoint(
+        newMarginalPrices,
+        market,
+      )
+    } else {
+      // Categorical events
+      try {
+        newProbability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: newNetOutcomeTokensSold,
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+        })
+      } catch (e) {
+        newProbability = currentProbability
+      }
     }
 
-    const diffProbability = currentProbability.sub(newProbability.toString())
+    if (market.event.type === 'SCALAR') {
+      newScalarPredictedValue = normalizeScalarPoint(market.marginalPrices, market)
+    }
 
-    return [
-      (<tr key={'sellViewHeading'} className="marketMyShares__sell marketMyShares__sell--heading">
-        <th />
-        <th />
-        <th>Amount</th>
-        <th>New Value</th>
-        <th>Probability after Sale</th>
-        <th />
-      </tr>),
-      (<tr key={'sellView'} className="marketMyShares__sell">
-        <td colSpan={2} />
-        <td>
-          <Field
-            component={FormInput}
-            name="sellAmount"
-            placeholder={collateralTokenToText(market.event.collateralToken)}
-            className="marketMySharesSellAmount"
-            validate={(val) => {
-              let decimalValue
-              try {
-                decimalValue = Decimal(val || 0)
-              } catch (e) {
-                return 'Invalid Number value'
-              }
-              if (decimalValue < 0) {
-                return 'Number can\'t be negative.'
-              }
+    const submitDisabled = invalid || submitting
+    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))
 
-              if (decimalValue.gt(Decimal(share.balance).div(1e18).toString())) {
-                return 'You\'re trying to sell more than you invested.'
-              }
-
-              return undefined
-            }}
-          />
-        </td>
-        <td>
-          <DecimalValue value={newTokenValue.div(1e18)} />
-          <CurrencyName collateralToken={market.event.collateralToken} />
-          {!diffTokenValue.isZero() && <span>
-            (<span className={`marketMyShares__diff ${diffTokenValue.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffTokenValue.gt(0) ? '+' : ''}<DecimalValue value={diffTokenValue.div(1e18)} />
-              <CurrencyName collateralToken={market.event.collateralToken} />
-            </span>)
-          </span>}
-        </td>
-        <td>
-          <DecimalValue value={newProbability.mul(100)} /> %
-          {!diffProbability.isZero() && <span>
-            (<span className={`marketMyShares__diff ${diffProbability.gt(0) ? 'marketMyShares__diff--positive' : 'marketMyShares__diff--negative'}`}>
-              {diffProbability.gt(0) ? ' +' : ' '}<DecimalValue value={diffProbability.mul(100)} /> %
-            </span>)
-          </span>}
-        </td>
-        <td>
-          <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
-          <button type="button" className={`btn btn-primary ${invalid ? 'disabled' : ''}`} disabled={invalid} onClick={e => this.handleSellShare(e, extendedSellIndex, selectedSellAmount)}>Sell Shares</button>
-        </td>
-      </tr>),
-    ]
+    return (
+      <div className="marketMyShares__sellContainer">
+        <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellId, selectedSellAmount))}>
+          <div className="row marketMyShares__sellRow">
+            <div className="col-md-3 col-md-offset-3 marketMyShares__sellColumn">
+              <label>Amount to Sell</label>
+              <Field
+                component={FormInput}
+                name="sellAmount"
+                placeholder="Enter Token Amount"
+                className="marketMySharesSellAmount"
+                validate={this.validateTokenCount}
+              />
+            </div>
+            { market.event.type === 'SCALAR' ?
+              <div className="col-md-3 marketMyShares__sellColumn">
+                <label>New predicted value</label>
+                <span>
+                  <DecimalValue value={newScalarPredictedValue} />&nbsp;
+                  <CurrencyName collateralToken={market.event.collateralToken} />
+                </span>
+              </div> :
+              <div className="col-md-3 marketMyShares__sellColumn">
+                <label>New Probability</label>
+                <span>
+                  <DecimalValue value={newProbability.mul(100)} /> %
+                </span>
+              </div>
+            }
+            <div className="col-md-3">
+              <label>Earnings</label>
+              <span>
+                <DecimalValue value={earnings} />&nbsp;
+                <CurrencyName collateralToken={market.event.collateralToken} />
+              </span>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3 col-md-offset-3">
+              <label>Gas costs</label>
+              <span>
+                <DecimalValue value={gasCostEstimation} />&nbsp;
+                <CurrencyName collateralToken={market.event.collateralToken} />
+              </span>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-6 col-md-offset-6 marketMyShares__sellColumn">
+              <button className={`btn btn-primary ${submitDisabled ? 'disabled' : ''}`} disabled={submitDisabled}>{submitting ? 'Loading' : 'Sell Shares'}</button>
+              <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
+            </div>
+          </div>
+          {submitFailed && (
+          <div className="row">
+            <div className="col-md-9 col-md-offset-3 marketMyShares__errorColumn">
+              Sorry - your share sell could not be processed. Please ensure you&quot;re on the right network.
+            </div>
+          </div>)}
+        </form>
+      </div>
+    )
   }
 
-  render() {
+  generateTableRows() {
+    const tableRows = []
+
     const { marketShares, market } = this.props
-    const { extendedSellIndex } = this.state
+    const { extendedSellId } = this.state
 
-    if (!marketShares || !marketShares.length) {
-      return (
-        <div className="marketMyShares">
-          <h2 className="marketMyShares__heading">
-            You don&apos;t hold any shares for this market.
-            <br />
-            <small>It may take some time for the blockchain to mine your share purchase.</small>
-          </h2>
-        </div>
-      )
-    }
+    const resolved = market.oracle.isOutcomeSet || market.event.isWinningOutcomeSet
 
-    const tableRowElements = marketShares.map((share, shareIndex) => {
+    marketShares.forEach((share, shareIndex) => {
       const probability = calcLMSRMarginalPrice({
         netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
         funding: market.funding,
@@ -204,70 +292,84 @@ class MarketMySharesForm extends Component {
         cost: share.balance,
       })
 
-      return (
-        <tr className="marketMyShares__share" key={share.address}>
+      tableRows.push((
+        <tr className="marketMyShares__share" key={share.id}>
           <td>
             <div
               className={'shareOutcome__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
             />
           </td>
           <td className="">
-            {market.eventDescription.outcomes[share.outcomeToken.index]}
+            {getOutcomeName(market, share.outcomeToken.index)}
           </td>
           <td>
             <DecimalValue value={Decimal(share.balance).div(1e18)} />
-            <CurrencyName collateralToken={market.event.collateralToken} />
           </td>
           <td>
-            <DecimalValue value={maximumWin.div(1e18)} />
+            <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
             <CurrencyName collateralToken={market.event.collateralToken} />
-          </td>
-          <td>
-            <DecimalValue value={probability.mul(100)} /> %
           </td>
           <td>
             {/* eslint-disable no-script-url */}
-            <a href="javascript:void(0);" onClick={e => this.handleShowSellView(e, shareIndex)}>Sell</a>
+            {!resolved && <a href="javascript:void(0);" className="marketMyShares__sellButton" onClick={e => this.handleShowSellView(e, share.id)}>Sell</a>}
             {/* eslint-enable no-script-url */}
           </td>
         </tr>
-      )
+      ))
+
+      if (share.id === extendedSellId) {
+        tableRows.push((
+          <tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
+            <td colSpan={5}>
+              {this.renderSellShareView()}
+            </td>
+          </tr>
+        ))
+      }
     })
 
-    if (typeof extendedSellIndex !== 'undefined') {
-      tableRowElements.splice(extendedSellIndex + 1, 0, ...this.renderSellShareView())
+    return tableRows
+  }
+
+  render() {
+    const { marketShares } = this.props
+    if (!marketShares || !marketShares.length) {
+      return (
+        <div className="marketMyShares">
+          <h2 className="marketMyShares__heading">
+            You don&apos;t hold any shares for this market.
+            <br />
+            <small>It may take some time for the blockchain to mine your share purchase.</small>
+          </h2>
+        </div>
+      )
     }
 
     return (
       <div className="marketMyShares">
-        <form>
-          <h2 className="marketMyShares__heading">My Shares</h2>
-          <table className="table marketMyShares__shareTable">
-            <thead>
-              <tr>
-                <th className="marketMyShares__tableHeading marketMyShares__tableHeading--index" />
-                <th className="marketMyShares__tableHeading">Outcome</th>
-                <th className="marketMyShares__tableHeading">Investment</th>
-                <th className="marketMyShares__tableHeading">Current Value</th>
-                <th className="marketMyShares__tableHeading">Current Probability</th>
-                <th className="marketMyShares__tableHeading" />
-              </tr>
-            </thead>
-            <tbody>
-              {tableRowElements}
-            </tbody>
-          </table>
-        </form>
+        <h2 className="marketMyShares__heading">My Shares</h2>
+        <table className="table marketMyShares__shareTable">
+          <thead>
+            <tr>
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--index" />
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Outcome</th>
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Token Count</th>
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Current Value</th>
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group" />
+            </tr>
+          </thead>
+          <tbody>
+            {this.generateTableRows()}
+          </tbody>
+        </table>
       </div>
     )
   }
 }
 
 MarketMySharesForm.propTypes = {
-  market: PropTypes.shape({
-    address: PropTypes.string,
-  }),
-  invalid: PropTypes.bool,
+  ...propTypes,
+  market: marketShape,
   selectedSellAmount: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,
