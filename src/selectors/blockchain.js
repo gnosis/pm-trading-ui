@@ -8,6 +8,9 @@ export const getSelectedProvider = state => (
 
 export const getDefaultAccount = state => selector(state).defaultAccount
 
+// Default account balance
+export const getCurrentBalance = state => selector(state).currentBalance
+
 export const getGasCosts = (state) => {
   const gasCosts = selector(state).gasCosts
   return Object.keys(gasCosts).reduce((acc, item) =>

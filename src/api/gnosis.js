@@ -2,7 +2,7 @@
 
 import Gnosis from '@gnosis.pm/gnosisjs'
 
-import { hexWithPrefix } from 'utils/helpers'
+import { hexWithPrefix, weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 // import { normalize } from 'normalizr'
 
@@ -10,10 +10,12 @@ import delay from 'await-delay'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
-// const GNOSIS_OPTIONS = {}
-
 let gnosisInstance
 
+/**
+ * Initializes connection to GnosisJS
+ * @param {*dictionary} GNOSIS_OPTIONS
+ */
 export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
@@ -24,15 +26,30 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
   }
 }
 
-export const getGnosisConnection = async () => {
-  return gnosisInstance
-}
+/**
+ * Returns an instance of the connection to GnosisJS
+ */
+export const getGnosisConnection = async () => gnosisInstance
 
+/**
+ * Returns the default node account
+ */
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
   return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts(
     (e, accounts) => (e ? reject(e) : resolve(accounts[0]))),
   )
+}
+
+/**
+ * Returns the account balance
+ */
+export const getCurrentBalance = async (account) => {
+  const gnosis = await getGnosisConnection()
+  return await new Promise((resolve, reject) => gnosis.web3.eth.getBalance(
+    account,
+    (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))),
+  ))
 }
 
 const normalizeEventDescription = (eventDescription, eventType) => {
