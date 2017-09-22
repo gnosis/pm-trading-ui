@@ -11,7 +11,6 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
 const config = require('./src/config.json')
 
-// const ethereumHost = process.env.ETHEREUM_HOST
 const gnosisDbUrl =
   process.env.GNOSISDB_HOST || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
 
@@ -107,7 +106,6 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         VERSION: JSON.stringify(`${version}#${build}`),
-        // ETHEREUM_HOST: nodeEnv === 'production' ? null : JSON.stringify(ethereumHost),
         NODE_ENV: JSON.stringify(nodeEnv),
         GNOSISDB_HOST: JSON.stringify(gnosisDbUrl),
       },
