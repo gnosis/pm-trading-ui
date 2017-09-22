@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
+import cn from 'classnames'
 import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -251,9 +252,18 @@ class Dashboard extends Component {
     if (marketType === 'newMarkets') {
       return (
         <div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__title">New Markets</div>
-          <div className="dashboardWidget__container">
-            {newMarkets.length ? this.renderNewMarkets(newMarkets) : 'There aren\'t new markets'}
+          <div className="dashboardWidget__market-title">New Markets</div>
+          <div
+            className={cn({
+              dashboardWidget__container: true,
+              'no-markets': !newMarkets.length,
+            })}
+          >
+            {newMarkets.length ? (
+              this.renderNewMarkets(newMarkets)
+            ) : (
+              "There aren't new markets"
+            )}
           </div>
         </div>
       )
@@ -265,7 +275,7 @@ class Dashboard extends Component {
       }
       return (
         <div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__title">Soon-Closing Markets</div>
+          <div className="dashboardWidget__market-title">Soon-Closing Markets</div>
           <div className="dashboardWidget__container">
             {closingMarkets.length ? this.renderClosingMarkets(closingMarkets) : 'There aren\'t closing markets'}
           </div>
@@ -276,7 +286,7 @@ class Dashboard extends Component {
     if (marketType === 'myHoldings') {
       return (
         <div className="dashboardWidget dashboardWidget--onDark col-md-6">
-          <div className="dashboardWidget__title">My Tokens</div>
+          <div className="dashboardWidget__market-title">My Tokens</div>
           <div className="dashboardWidget__container">
             {accountShares.length ? this.renderMyHoldings(accountShares, markets) : 'You aren\'t holding any share.'}
           </div>
@@ -287,7 +297,7 @@ class Dashboard extends Component {
     if (marketType === 'myTrades') {
       return (
         <div className="dashboardWidget dashboardWidget--onDark col-md-6">
-          <div className="dashboardWidget__title">My Trades</div>
+          <div className="dashboardWidget__market-title">My Trades</div>
           <div className="dashboardWidget__container">
             {accountTrades.length ? this.renderMyTrades(accountTrades, markets) : 'You haven\'t done any trade.'}
           </div>

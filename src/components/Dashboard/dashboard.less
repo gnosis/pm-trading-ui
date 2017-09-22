@@ -98,7 +98,7 @@
 
 .dashboardWidget {
   margin-bottom: 40px;
-  &__title {
+  &__title, &__market-title {
     margin: 0 0 12px 0;
     font-size: 12px;
     //opacity: .6;
@@ -108,14 +108,23 @@
     letter-spacing: .5px;
   }
 
+  &__market-title {
+    color: @font-color-dark;
+  }
+
   &__container {
     background-color: white;
     border-radius: @market-border-radius;
+    
+    &.no-markets {
+      padding: 10px;
+    }
   }
 
   &--onDark {
     .dashboardWidget__container {
       background-color: transparent;
+      color: #fff;
     }
   }
 }
@@ -125,6 +134,7 @@
   padding: 10px;
   position: relative;
   border-bottom: 1px solid @bg-color-muted;
+  transition: all .2s ease;
 
   &__title {
     font-size: 15px;
@@ -141,7 +151,6 @@
     color: inherit !important;
     cursor: pointer;
     padding-left: 13px;
-    transition: all .5s ease;
 
     // .market__title {
     //   color: @link-color;
@@ -169,7 +178,15 @@
     border-bottom: 0;
   }
 
+  .outcomes {
+    &--categorical {
+      display: flex;
+      align-items: center;
+    }
+  }
+
   .outcome {
+    margin-right: 10px;
     &__bar {
       display: inline-block;
       position: relative;
@@ -358,12 +375,10 @@
 
 .entry {
   &__color {
-    vertical-align: middle;
     display: inline-block;
-    margin-top: 6px;
-    margin-right: 5px;
     width: 20px;
     height: 20px;
+    margin-right: 5px;
 
     border-radius: 4px;
   }
