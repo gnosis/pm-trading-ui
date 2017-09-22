@@ -6,8 +6,21 @@ import moment from 'moment'
  * @param {*} val - The value to test
  */
 export const required = (val) => {
-  if (val == null || val === '' || val.length === 0) {
+  if (val === undefined || val === null || val === '' || val.length === 0 || val.trim() === '') {
     return 'Field is required'
+  }
+
+  return undefined
+}
+
+/**
+ * Returns if input value has less than a minimum length value
+ *
+ * @param {*int} val - The value to test
+ */
+export const minLength = length => (val) => {
+  if (val == null || val === '' || val.length < length) {
+    return `Minimum ${length} chars`
   }
 
   return undefined

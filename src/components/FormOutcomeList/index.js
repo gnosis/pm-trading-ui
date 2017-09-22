@@ -3,9 +3,7 @@ import PropTypes from 'prop-types'
 import { Field } from 'redux-form'
 
 import FormInput from 'components/FormInput'
-
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-import { required } from 'utils/validators'
 
 import './formOutcomeList.less'
 
@@ -27,7 +25,6 @@ const FormOutcomeList = ({ fields, label, meta: { error, invalid } }) => (
           }}
           className="formOutcomeListInput"
           placeholder="Add another..."
-          validate={required}
         />
         {fields.length > 1 && (
           <a
