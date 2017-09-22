@@ -11,9 +11,6 @@ const OutcomeCategorical = () => (
           name="outcomes"
           component={OutcomeList}
           label="Outcomes"
-          validate={(val) => {
-            return val && val.filter(v => v.length > 0).length > 0 ? undefined : 'Field is required'
-          }}
         />
       </div>
     </div>
