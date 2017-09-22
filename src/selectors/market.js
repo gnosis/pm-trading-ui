@@ -1,3 +1,4 @@
+import config from 'config.json'
 import { get } from 'lodash'
 import Decimal from 'decimal.js'
 
@@ -67,7 +68,6 @@ export const filterMarkets = state => (opts) => {
   const marketEntities = getMarkets(state)
 
   const { textSearch, resolved, onlyMyMarkets, onlyModeratorsMarkets, defaultAccount } = opts
-  const config = require('config.json')
 
   return marketEntities
     .filter(market =>
