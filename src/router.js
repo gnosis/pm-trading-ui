@@ -23,9 +23,9 @@ class AppRouter extends Component {
 
   render() {
     const { history } = this.props
-    
+
     return (
-      <Router history={history}>
+      <Router key={Math.random()} history={history}>
         <Route path="/" component={App}>
           <IndexRedirect to="dashboard" />
           <Route path="dashboard" component={DashboardPage} />
