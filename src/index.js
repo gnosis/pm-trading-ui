@@ -3,27 +3,16 @@ import 'whatwg-fetch'
 
 import React from 'react'
 
-import { render } from 'react-dom'
+import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { Router, Route, IndexRedirect, hashHistory } from 'react-router'
+import { hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
-
+import { AppContainer } from 'react-hot-loader'
 import 'less/style.less'
 
-import App from 'containers/App'
+import AppRouter from 'router'
 import BackdropProvider from 'containers/BackdropProvider'
-import MarketListPage from 'containers/MarketListPage'
-import MarketCreateWizardPage from 'containers/MarketCreateWizardPage'
-import MarketDetailPage from 'containers/MarketDetailPage'
-import TransactionsPage from 'containers/TransactionsPage'
-import AccountPage from 'containers/AccountPage'
-import SettingsPage from 'containers/SettingsPage'
-import DashboardPage from 'containers/DashboardPage'
-import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
-import WalletIntegrationProvider from 'components/WalletIntegrationProvider'
-import * as walletIntegrations from 'integrations'
-
-import store from './store'
+import store from 'store'
 import { setMomentRelativeTime } from './setup'
 
 setMomentRelativeTime()
@@ -36,37 +25,23 @@ const rootElement = document.getElementById('root')
 
 const history = syncHistoryWithStore(hashHistory, store)
 
-// TODO: refactor: https://github.com/reactjs/redux/issues/227
-// history.listen(location => store.dispatch(changeLocation(location)))
+const render = (App) => {
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={store}>
+        <BackdropProvider>
+          <App history={history} />
+        </BackdropProvider>
+      </Provider>
+    </AppContainer>,
+    rootElement,
+  )
+}
 
-render(
-  <Provider store={store}>
-    <WalletIntegrationProvider store={store} integrations={walletIntegrations}>
-      <BackdropProvider>
-        <Router history={history}>
-          <Route path="/" component={App}>
-            <IndexRedirect to="dashboard" />
-            <Route path="dashboard" component={DashboardPage} />
-            <Route path="transactions" component={TransactionsPage} />
-            <Route path="account" component={AccountPage} />
-            <Route path="settings" component={SettingsPage} />
-            <Route path="markets">
-              <IndexRedirect to="list" />
-              <Route path="new" component={MarketCreateWizardPage} />
-              <Route path="review" component={MarketCreateReviewPage} />
-              <Route path="list" component={MarketListPage} />
-              <Route path=":id" component={MarketDetailPage}>
-                <Route path=":view">
-                  <Route path=":shareId">
-                    <Route path="sell" component={MarketDetailPage} />
-                  </Route>
-                </Route>
-              </Route>
-            </Route>
-          </Route>
-        </Router>
-      </BackdropProvider>
-    </WalletIntegrationProvider>
-  </Provider>,
-  rootElement,
-)
+render(AppRouter)
+
+if (module.hot) {
+  module.hot.accept('./router', () => 
+    render(require('./router').default)
+  )
+}
