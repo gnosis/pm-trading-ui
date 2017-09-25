@@ -35,7 +35,7 @@ module.exports = {
     ] },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader'},
+      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader?babelrc=false&extends=' + path.join(__dirname, '/.babelrc') },
       {
         test: /\.(jpe?g|png|svg)$/i,
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',

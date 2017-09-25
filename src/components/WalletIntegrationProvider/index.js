@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connectBlockchain, initGnosis } from 'actions/blockchain'
-// import { getCurrentAccount } from 'api'
 import { getSelectedProvider } from 'selectors/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
@@ -17,19 +16,19 @@ export default class WalletIntegrationProvider extends Component {
 
 
     // Execute providers inizialization sequentially
-    const init = (funcs, _store) => {
+    const init = (funcs, react_store) => {
       if (funcs.length > 0) {
-        return funcs[0].initialize(_store).then(
-          () => init(funcs.slice(1), _store),
+        return funcs[0].initialize(react_store).then(
+          () => init(funcs.slice(1), react_store),
         )
       }
       // Gnosis initialization needed after providers init
       // Get selected provider
-      const selectedProvider = getSelectedProvider(_store.getState())
+      const selectedProvider = getSelectedProvider(react_store.getState())
       // get Gnosis options
       const opts = this.getGnosisOptions(selectedProvider)
       // init Gnosis connection
-      _store.dispatch(initGnosis(opts)).then(() => _store.dispatch(connectBlockchain()))
+      react_store.dispatch(initGnosis(opts)).then(() => react_store.dispatch(connectBlockchain()))
       return null
     }
 
