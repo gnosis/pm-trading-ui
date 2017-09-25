@@ -63,7 +63,7 @@ export const isDate = ({ minDate, maxDate }) => (val) => {
  * @param {string} opts.decimalsProp - Allowed Decimalplaces (get from props with this key)
  * @param {bool} opts.realOnly - Disallows floats
  */
-export const isNumber = ({ decimals, realOnly, decimalsProp }) => (val, vals, props) => {
+export const isNumber = ({ decimals, realOnly, decimalsProp }) => (val, vals, props) => {
   // don't validate if no value is set
   if (required(val) !== undefined) {
     return undefined
@@ -129,6 +129,17 @@ export const lowerThanProperty = ({ formProp, validateAgainstProp }) => (val, pr
   }
 
   return undefined
+}
+
+/**
+ * Validates an ArrayField component, by requiring each element length to be greater than the input param.
+ * @param {*int} selectMinLength
+ */
+export const multiSelectMinLength = selectMinLength => (val) => {
+  if (val && val.filter(v => v !== undefined && v.length >= selectMinLength).length === val.length) {
+    return undefined
+  }
+  return 'Field is required'
 }
 
 /**
