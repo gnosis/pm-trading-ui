@@ -8,7 +8,7 @@ import {
   marketSchema,
 } from './schema'
 
-const API_URL = process.env.GNOSISDB_HOST
+const API_URL = 'http://localhost:8000'
 
 export const requestMarket = async marketAddress =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/`)

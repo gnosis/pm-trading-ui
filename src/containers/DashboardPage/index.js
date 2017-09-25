@@ -5,12 +5,10 @@ import { push } from 'react-router-redux'
 import DashboardPage from 'components/Dashboard'
 import { getMarkets, getAccountShares, getAccountTrades,
   getAccountPredictiveAssets } from 'selectors/market'
-import { getDefaultAccount, getEtherTokensAmount } from 'selectors/blockchain'
+import { getDefaultAccount, getEtherTokensAmount, isGnosisInitialized } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares } from 'actions/market'
 import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
-import { weiToEth, add0xPrefix } from 'utils/helpers'
-
-import sha1 from 'sha1'
+import { weiToEth } from 'utils/helpers'
 
 
 const mapStateToProps = (state) => {
@@ -18,9 +16,8 @@ const mapStateToProps = (state) => {
   const defaultAccount = getDefaultAccount(state)
   const accountTrades = getAccountTrades(state, defaultAccount)
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
-  let accountShares = getAccountShares(state, defaultAccount)
-  // Not displayed anymore
-  // const accountParticipatingInEvents = getAccountParticipatingInEvents(state, defaultAccount).length
+  const accountShares = getAccountShares(state, defaultAccount)
+  const gnosisInitialized = isGnosisInitialized(state)
   let etherTokens = getEtherTokensAmount(state, defaultAccount)
 
   if (etherTokens !== undefined) {
@@ -36,6 +33,7 @@ const mapStateToProps = (state) => {
     accountShares,
     accountTrades,
     accountPredictiveAssets,
+    gnosisInitialized,
   }
 }
 

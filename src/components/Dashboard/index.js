@@ -41,11 +41,13 @@ class Dashboard extends Component {
   }
 
   componentWillMount() {
-    this.props.requestMarkets()
-    this.props.requestAccountShares(this.props.defaultAccount)
-    this.props.requestAccountTrades(this.props.defaultAccount)
-    this.props.requestGasPrice()
-    this.props.requestEtherTokens(this.props.defaultAccount)
+    if (this.props.gnosisInitialized) {
+      this.props.requestMarkets()
+      this.props.requestAccountShares(this.props.defaultAccount)
+      this.props.requestAccountTrades(this.props.defaultAccount)
+      this.props.requestGasPrice()
+      this.props.requestEtherTokens(this.props.defaultAccount)
+    }
   }
 
   @autobind
@@ -380,6 +382,7 @@ Dashboard.propTypes = {
   requestAccountTrades: PropTypes.func,
   changeUrl: PropTypes.func,
   requestEtherTokens: PropTypes.func,
+  gnosisInitialized: PropTypes.bool,
 }
 
 export default Dashboard
