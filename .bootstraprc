@@ -7,5 +7,9 @@
 
   "scripts": false,
   "bootstrapVersion": 3,
-  "extractStyles": true
+  "env": {
+    "production": {
+      "extractStyles": true
+    }
+  }
 }

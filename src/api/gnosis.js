@@ -1,9 +1,9 @@
 /* globals __ETHEREUM_HOST__ */
 
 import Gnosis from '@gnosis.pm/gnosisjs'
-import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/src/utils'
+import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
-import { hexWithPrefix } from 'utils/helpers'
+import { hexWithPrefix, weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
 // import { normalize } from 'normalizr'
 
@@ -11,16 +11,13 @@ import delay from 'await-delay'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
-const GNOSIS_OPTIONS = {
-//  ethereum: __ETHEREUM_HOST__,
-}
-
 let gnosisInstance
-export const getGnosisConnection = async () => {
-  if (gnosisInstance) {
-    return gnosisInstance
-  }
 
+/**
+ * Initializes connection to GnosisJS
+ * @param {*dictionary} GNOSIS_OPTIONS
+ */
+export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
@@ -28,14 +25,32 @@ export const getGnosisConnection = async () => {
     console.error('Gnosis Integration: connection failed') // eslint-disable-line no-console
     console.error(err) // eslint-disable-line no-console
   }
-
-  return gnosisInstance
 }
 
+/**
+ * Returns an instance of the connection to GnosisJS
+ */
+export const getGnosisConnection = async () => gnosisInstance
+
+/**
+ * Returns the default node account
+ */
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
+  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts(
+    (e, accounts) => (e ? reject(e) : resolve(accounts[0]))),
+  )
+}
 
-  return gnosis.web3.eth.accounts[0]
+/**
+ * Returns the account balance
+ */
+export const getCurrentBalance = async (account) => {
+  const gnosis = await getGnosisConnection()
+  return await new Promise((resolve, reject) => gnosis.web3.eth.getBalance(
+    account,
+    (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))),
+  ))
 }
 
 const normalizeEventDescription = (eventDescription, eventType) => {
@@ -318,7 +333,7 @@ export const getGasPrice = async () => {
 }
 
 /**
- * Returns the amount of the ether tokens
+ * Returns the amount of ether tokens
  * @param {*string} account address
  */
 export const getEtherTokens = async (account) => {

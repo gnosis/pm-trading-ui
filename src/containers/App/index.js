@@ -13,7 +13,7 @@ import './app.less'
 
 class App extends Component {
   componentDidMount() {
-    this.props.connectBlockchain()
+    // this.props.connectBlockchain()
   }
 
   render() {
