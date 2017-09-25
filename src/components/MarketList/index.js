@@ -125,16 +125,9 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                <CurrencyName collateralToken={market.event.collateralToken} />
-              </div>
-            </div>
-          </div>
-          <div className="info__group col-md-3">
-            <div className="info__field">
-              <div className="info__field--icon icon icon--currency" />
-              <div className="info__field--label">
-                {decimalToText(new Decimal(market.tradingVolume).div(1e18))}
-                <CurrencyName collateralToken={market.event.collateralToken} />
+                {decimalToText(new Decimal(market.tradingVolume).div(1e18))}&nbsp;
+                <CurrencyName collateralToken={market.event.collateralToken} />&nbsp;
+                Volume
               </div>
             </div>
           </div>
@@ -166,7 +159,7 @@ class MarketList extends Component {
   }
 
   renderMarketFilter() {
-    const { handleSubmit } = this.props
+    const { handleSubmit, isModerator } = this.props
 
     return (
       <div className="marketFilter col-md-2">
@@ -197,14 +190,14 @@ class MarketList extends Component {
               radioValues={resolutionFilters}
             />
           </div>
-          <div className="marketFilter__group">
+          { isModerator ? <div className="marketFilter__group">
             <Field
               name="myMarkets"
               label="Show only"
               text="My markets"
               component={FormCheckbox}
             />
-          </div>
+          </div> : <div />}
         </form>
       </div>
     )
@@ -212,11 +205,12 @@ class MarketList extends Component {
 
   render() {
     const { markets } = this.props
+    
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
           <div className="container">
-            <h1>Marketoverview</h1>
+            <h1>Market overview</h1>
           </div>
         </div>
         <div className="marketListPage__stats">
@@ -277,6 +271,7 @@ MarketList.propTypes = {
   fetchMarkets: PropTypes.func,
   changeUrl: PropTypes.func,
   handleSubmit: PropTypes.func,
+  isModerator: PropTypes.bool,
 }
 
 export default reduxForm({

@@ -8,6 +8,8 @@ import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
+import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
+import config from 'config.json'
 
 import './dashboard.less'
 
@@ -39,15 +41,23 @@ class Dashboard extends Component {
   }
 
   componentWillMount() {
-    this.props.requestMarkets()
-    this.props.requestAccountShares(this.props.defaultAccount)
-    this.props.requestAccountTrades(this.props.defaultAccount)
-    this.props.requestGasPrice()
+    if (this.props.gnosisInitialized) {
+      this.props.requestMarkets()
+      this.props.requestAccountShares(this.props.defaultAccount)
+      this.props.requestAccountTrades(this.props.defaultAccount)
+      this.props.requestGasPrice()
+      this.props.requestEtherTokens(this.props.defaultAccount)
+    }
   }
 
   @autobind
   handleViewMarket(market) {
     this.props.changeUrl(`/markets/${market.address}`)
+  }
+
+  @autobind
+  handleShowSellView(market, share) {
+    this.props.changeUrl(`/markets/${market.address}/my-shares/${add0xPrefix(share.id)}`)
   }
 
   @autobind
@@ -99,6 +109,8 @@ class Dashboard extends Component {
 
 
   renderControls() {
+    const { defaultAccount } = this.props
+    const canCreateMarket = config.whitelist[defaultAccount] !== undefined
     return (
       <div className="dashboardControls container">
         <div className="row">
@@ -117,7 +129,7 @@ class Dashboard extends Component {
                 {controlButtons[type].label}
               </button>
             ))}
-            <button type="button" onClick={this.handleCreateMarket} className="dashboardControls__button btn btn-default">Create Market</button>
+            { canCreateMarket ? <button type="button" onClick={this.handleCreateMarket} className="dashboardControls__button btn btn-default">Create Market</button> : <div /> }
           </div>
         </div>
       </div>
@@ -152,21 +164,40 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
+      let probability = new Decimal(0)
+      let maximumWin = new Decimal(0)
+      // Check market is not empty
+      if (market.event) {
+        probability = calcLMSRMarginalPrice({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+          funding: market.funding,
+          outcomeTokenIndex: holding.outcomeToken.index,
+        })
+        maximumWin = calcLMSROutcomeTokenCount({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+          funding: market.funding,
+          outcomeTokenIndex: holding.outcomeToken.index,
+          cost: holding.balance,
+        })
+      }
       
       return (
-        <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
-          <div className="dashboardMarket__title">{holding.eventDescription.title}</div>
+        <div className="dashboardMarket dashboardMarket--onDark" key={index}>
+          <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>{holding.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
               <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }} />
               <div className="dashboardMarket--highlight pull-left">{getOutcomeName(market, holding.outcomeToken.index)}</div>
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
-              {market.marginalPrices ? Math.round(market.marginalPrices[holding.outcomeToken.index] * 100).toFixed(0) : 0}%
+              <DecimalValue value={weiToEth(holding.balance)} />
             </div>
-            <div className="col-md-3 dashboardMarket--highlight">
-              <DecimalValue value={weiToEth(holding.balance)} />&nbsp;
+            <div className="col-md-2 dashboardMarket--highlight">
+              <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
               {market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
+            </div>
+            <div className="col-md-2 dashboardMarket--highlight">
+              <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>Sell</a>
             </div>
           </div>
         </div>
@@ -179,7 +210,12 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(trade.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
-      const averagePrice = parseInt(trade.cost, 10) / parseInt(trade.outcomeTokenCount, 10)
+      let averagePrice
+      if (trade.orderType === 'BUY') {
+        averagePrice = parseInt(trade.cost, 10) / parseInt(trade.outcomeTokenCount, 10)
+      } else {
+        averagePrice = parseInt(trade.profit, 10) / parseInt(trade.outcomeTokenCount, 10)
+      }
 
       return (
         <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
@@ -209,9 +245,10 @@ class Dashboard extends Component {
     const { markets, accountShares, accountTrades } = this.props
     const oneDayHours = 24 * 60 * 60 * 1000
     const newMarkets = markets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
-    const closingMarkets = markets.filter(
+    /* const closingMarkets = markets.filter(
       market => moment.utc(market.eventDescription.resolutionDate).isBetween(moment(), moment().add(24, 'hours')),
-    )
+    )*/
+    let closingMarkets = markets.sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
 
     if (marketType === 'newMarkets') {
       return (
@@ -225,6 +262,9 @@ class Dashboard extends Component {
     }
 
     if (marketType === 'closingMarkets') {
+      if (closingMarkets.length > 4) {
+        closingMarkets = closingMarkets.slice(0, 4)
+      }
       return (
         <div className="dashboardWidget col-md-6">
           <div className="dashboardWidget__title">Soon-Closing Markets</div>
@@ -238,7 +278,7 @@ class Dashboard extends Component {
     if (marketType === 'myHoldings') {
       return (
         <div className="dashboardWidget dashboardWidget--onDark col-md-6">
-          <div className="dashboardWidget__title">My Holdings</div>
+          <div className="dashboardWidget__title">My Tokens</div>
           <div className="dashboardWidget__container">
             {accountShares.length ? this.renderMyHoldings(accountShares, markets) : 'You aren\'t holding any share.'}
           </div>
@@ -259,43 +299,52 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { accountPredictiveAssets, accountParticipatingInEvents } = this.props
+    const { accountPredictiveAssets, etherTokens, defaultAccount } = this.props
+    let metricsSection = <div />
+    let tradesHoldingsSection = <div />
+    if (defaultAccount) {
+      metricsSection = (<div className="dashboardPage__stats">
+        <div className="container">
+          <div className="row dashboardStats">
+            <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+              <div className="dashboardStats__icon icon icon--etherTokens" />
+              <span className="dashboardStats__value"><DecimalValue value={etherTokens} /></span>
+              <div className="dashboardStats__label">Ether Tokens</div>
+            </div>
+            <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+              <div className="dashboardStats__icon icon icon--incomeForecast" />
+              <span className="dashboardStats__value" style={{ color: 'green' }}>
+                <DecimalValue value={accountPredictiveAssets} />
+                &nbsp;ETH
+              </span>
+              <div className="dashboardStats__label">Outstanding predictions</div>
+            </div>
+          </div>
+        </div>
+      </div>)
+
+      tradesHoldingsSection = (<div className="dashboardWidgets dashboardWidgets--financial">
+        <div className="container">
+          <div className="row">
+            { this.renderWidget('myHoldings') }
+            { this.renderWidget('myTrades') }
+          </div>
+        </div>
+      </div>)
+    }
+
     return (
       <div className="dashboardPage">
         <div className="dashboardPage__header">
           <div className="container">
             <div className="row">
               <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                <h1>Welcome!</h1>
-                <p className="marketDescription__text">Here is what happened since your last visit.</p>
+                <h1>Dashboard</h1>
               </div>
             </div>
           </div>
         </div>
-        <div className="dashboardPage__stats">
-          <div className="container">
-            <div className="row dashboardStats">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-                <div className="dashboardStats__icon icon icon--etherTokens" />
-                <span className="dashboardStats__value">235</span>
-                <div className="dashboardStats__label">Ether Tokens</div>
-              </div>
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-                <div className="dashboardStats__icon icon icon--incomeForecast" />
-                <span className="dashboardStats__value" style={{ color: 'green' }}>
-                  <DecimalValue value={accountPredictiveAssets} />
-                  &nbsp;ETH
-                </span>
-                <div className="dashboardStats__label">Predicted Profits</div>
-              </div>
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-                <div className="dashboardStats__icon icon icon--new" />
-                <span className="dashboardStats__value">{ accountParticipatingInEvents }</span>
-                <div className="dashboardStats__label">Participating in Markets</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        { metricsSection }
         { this.renderControls() }
         <div className="expandable">
           { this.renderExpandableContent() }
@@ -308,14 +357,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        <div className="dashboardWidgets dashboardWidgets--financial">
-          <div className="container">
-            <div className="row">
-              { this.renderWidget('myHoldings') }
-              { this.renderWidget('myTrades') }
-            </div>
-          </div>
-        </div>
+        { tradesHoldingsSection }
       </div>
     )
   }
@@ -333,12 +375,14 @@ Dashboard.propTypes = {
   accountShares: PropTypes.array,
   accountTrades: PropTypes.array,
   accountPredictiveAssets: PropTypes.string,
-  accountParticipatingInEvents: PropTypes.number,
+  etherTokens: PropTypes.string,
   requestMarkets: PropTypes.func,
   requestGasPrice: PropTypes.func,
   requestAccountShares: PropTypes.func,
   requestAccountTrades: PropTypes.func,
   changeUrl: PropTypes.func,
+  requestEtherTokens: PropTypes.func,
+  gnosisInitialized: PropTypes.bool,
 }
 
 export default Dashboard
