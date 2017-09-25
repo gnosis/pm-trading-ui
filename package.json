@@ -4,7 +4,7 @@
   "description": "GnosisInc Admin Interface",
   "main": "src/index.js",
   "scripts": {
-    "build": "./node_modules/.bin/webpack -p --config webpack.dev.config.js",
+    "build": "./node_modules/.bin/webpack -p --config webpack.prod.config.js",
     "clean": "rm -rf dist",
     "start": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js",
     "start:standalone": "cross-env GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' npm start",
