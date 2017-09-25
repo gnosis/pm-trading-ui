@@ -82,3 +82,40 @@
     background-image: url('../../assets/img/gnosis_logo.svg');
   }
 }
+
+.headerIcon {
+  display: inline-block;
+  height: 60px;
+  width: 70px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
+
+  &--metamask {
+    background-image: url('../../assets/img/icons/icon_metamask.svg');
+  }
+
+  &--parity {
+    background-image: url('../../assets/img/icons/icon_parity.svg');
+  }
+
+  &--default {
+    background-image: url('../../assets/img/icons/icon_etherTokens.svg');
+  }
+}
+
+.headerContainer__account {
+  display: inline-block;
+
+  &--text {
+    line-height: 40px;
+    font-weight: 500;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    letter-spacing: .5px;
+  }
+}

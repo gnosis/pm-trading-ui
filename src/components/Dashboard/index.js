@@ -6,7 +6,7 @@ import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
-import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, LOWEST_DISPLAYED_VALUE } from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
@@ -42,11 +42,13 @@ class Dashboard extends Component {
   }
 
   componentWillMount() {
-    this.props.requestMarkets()
-    this.props.requestAccountShares(this.props.defaultAccount)
-    this.props.requestAccountTrades(this.props.defaultAccount)
-    this.props.requestGasPrice()
-    this.props.requestEtherTokens(this.props.defaultAccount)
+    if (this.props.gnosisInitialized) {
+      this.props.requestMarkets()
+      this.props.requestAccountShares(this.props.defaultAccount)
+      this.props.requestAccountTrades(this.props.defaultAccount)
+      this.props.requestGasPrice()
+      this.props.requestEtherTokens(this.props.defaultAccount)
+    }
   }
 
   @autobind
@@ -189,7 +191,8 @@ class Dashboard extends Component {
               <div className="dashboardMarket--highlight pull-left">{getOutcomeName(market, holding.outcomeToken.index)}</div>
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
-              <DecimalValue value={weiToEth(holding.balance)} />
+              {Decimal(holding.balance).div(1e18).gte(LOWEST_DISPLAYED_VALUE) ?
+                <DecimalValue value={weiToEth(holding.balance)} /> : `< ${LOWEST_DISPLAYED_VALUE}`}
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
               <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
@@ -390,6 +393,7 @@ Dashboard.propTypes = {
   requestAccountTrades: PropTypes.func,
   changeUrl: PropTypes.func,
   requestEtherTokens: PropTypes.func,
+  gnosisInitialized: PropTypes.bool,
 }
 
 export default Dashboard
