@@ -1,7 +1,7 @@
 /* globals __ETHEREUM_HOST__ */
 
 import Gnosis from '@gnosis.pm/gnosisjs'
-import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/src/utils'
+import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
 import { hexWithPrefix, weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
