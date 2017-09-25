@@ -16,19 +16,19 @@ export default class WalletIntegrationProvider extends Component {
 
 
     // Execute providers inizialization sequentially
-    const init = (funcs, react_store) => {
+    const init = (funcs, reactStore) => {
       if (funcs.length > 0) {
-        return funcs[0].initialize(react_store).then(
-          () => init(funcs.slice(1), react_store),
+        return funcs[0].initialize(reactStore).then(
+          () => init(funcs.slice(1), reactStore),
         )
       }
       // Gnosis initialization needed after providers init
       // Get selected provider
-      const selectedProvider = getSelectedProvider(react_store.getState())
+      const selectedProvider = getSelectedProvider(reactStore.getState())
       // get Gnosis options
       const opts = this.getGnosisOptions(selectedProvider)
       // init Gnosis connection
-      react_store.dispatch(initGnosis(opts)).then(() => react_store.dispatch(connectBlockchain()))
+      reactStore.dispatch(initGnosis(opts)).then(() => reactStore.dispatch(connectBlockchain()))
       return null
     }
 
