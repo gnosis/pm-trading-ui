@@ -4,7 +4,7 @@
   "description": "GnosisInc Admin Interface",
   "main": "src/index.js",
   "scripts": {
-    "build": "./node_modules/.bin/webpack -p --config webpack.prod.config.js",
+    "build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.prod.config.js",
     "clean": "rm -rf dist",
     "start": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js",
     "start:standalone": "cross-env GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' npm start",
@@ -60,6 +60,7 @@
     "redux-thunk": "^2.2.0",
     "reselect": "^2.5.4",
     "sha1": "^1.1.1",
+    "truffle-contract": "^3.0.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
@@ -74,6 +75,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.8",
     "babel-preset-es2015": "6.14.0",
     "babel-preset-es2016": "^6.22.0",
+    "babel-preset-minify": "^0.2.0",
     "babel-preset-react": "6.11.1",
     "babel-preset-stage-0": "6.5.0",
     "bootstrap-loader": "^2.1.0",

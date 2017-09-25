@@ -6,7 +6,10 @@
       "plugins": ["react-hot-loader/babel"]
     },
     "production": {
-      "plugins": ["transform-react-remove-prop-types"]
+      "plugins": ["transform-react-remove-prop-types"],
+      "presets": [
+        "minify"
+      ]
     }
   }
 }

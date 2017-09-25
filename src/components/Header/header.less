@@ -9,6 +9,10 @@
   &__inner {
     position: relative;
   }
+
+  .container {
+    display: flex;
+  }
 }
 
 .headerContainer__navLink {
@@ -38,29 +42,20 @@
   display: inline-block;
 
   &--version {
-    position: absolute;
-    float: none;
-    left: 5px;
-    top: 5px;
     line-height: @navbarHeight;
     color: white !important;
     font-size: 12px;
+    display: none;
     letter-spacing: .5px;
   }
 
-  &--left {
-    float: left;
-  }
-
-  &--right {
-    float: right;
+  &&--right {
+    margin-left: auto;
   }
 
   &--logo {
-    float: left;
     width: 70px;
     padding-right: 0;
-    position: relative;
     height: @navbarHeight;
 
     @media(min-width: @screen-sm) {
@@ -76,11 +71,6 @@
   display: inline-block;
   height: 25px;
   width: 70px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
   background-image: url('../../assets/img/gnosis_logo_icon.svg');
   background-size: contain;
   background-repeat: no-repeat;
