@@ -66,3 +66,5 @@ export const MARKET_STAGES = {
   MARKET_FUNDED: 1,
   MARKET_CLOSED: 2,
 }
+
+export const LOWEST_DISPLAYED_VALUE = 0.001

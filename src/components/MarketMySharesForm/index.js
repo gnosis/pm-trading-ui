@@ -11,7 +11,7 @@ import CurrencyName from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
 
-import { COLOR_SCHEME_DEFAULT, GAS_COST } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, GAS_COST, LOWEST_DISPLAYED_VALUE } from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
@@ -303,7 +303,8 @@ class MarketMySharesForm extends Component {
             {getOutcomeName(market, share.outcomeToken.index)}
           </td>
           <td>
-            <DecimalValue value={Decimal(share.balance).div(1e18)} />
+            {Decimal(share.balance).div(1e18).gte(LOWEST_DISPLAYED_VALUE) ?
+              <DecimalValue value={Decimal(share.balance).div(1e18)} /> : `< ${LOWEST_DISPLAYED_VALUE}`}
           </td>
           <td>
             <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
