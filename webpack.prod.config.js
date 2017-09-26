@@ -22,7 +22,7 @@ module.exports = {
   output: {
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
-  },  
+  },
   resolve: {
     symlinks: false,
     modules: [

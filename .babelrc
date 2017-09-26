@@ -1,15 +1,12 @@
 {
   "presets": ["react", "es2016", "es2015", "stage-0"],
-  "plugins": ["transform-decorators-legacy", "transform-async-to-generator"],
+  "plugins": ["transform-decorators-legacy", "transform-async-to-generator", "lodash"],
   "env": {
     "development": {
       "plugins": ["react-hot-loader/babel"]
     },
     "production": {
-      "plugins": ["transform-react-remove-prop-types"],
-      "presets": [
-        "minify"
-      ]
+      "plugins": ["transform-react-remove-prop-types"]
     }
   }
 }
