@@ -6,7 +6,7 @@ import moment from 'moment'
  * @param {*} val - The value to test
  */
 export const required = (val) => {
-  if (val === undefined || val === null || val === '' || val.length === 0 || val.trim() === '') {
+  if (val === undefined || val === null || val === '' || val.length === 0 || (typeof val === 'string' && val.trim() === '')) {
     return 'Field is required'
   }
 
