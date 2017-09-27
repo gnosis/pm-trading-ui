@@ -5,7 +5,7 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { hashHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { AppContainer } from 'react-hot-loader'
 import 'less/style.less'
@@ -25,7 +25,9 @@ store.dispatch({ type: 'INIT' })
 /* global document */
 const rootElement = document.getElementById('root')
 
-const history = syncHistoryWithStore(hashHistory, store)
+// changed to browserHistory because for some reason with hashHistory render() of App
+// component is triggered twice and this breaks page transition animations
+const history = syncHistoryWithStore(browserHistory, store)
 
 const render = (App) => {
   ReactDOM.render(

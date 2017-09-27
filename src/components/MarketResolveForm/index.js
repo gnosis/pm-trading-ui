@@ -15,12 +15,7 @@ import './marketResolveForm.less'
 class MarketResolveForm extends Component {
   @autobind
   handleResolve(values) {
-    const {
-      market: {
-        event: { type },
-        eventDescription: { decimals },
-      },
-    } = this.props
+    const { market: { event: { type }, eventDescription: { decimals } } } = this.props
 
     const { selectedOutcome, selectedValue } = values
 
@@ -41,23 +36,34 @@ class MarketResolveForm extends Component {
         <div className="marketResolveScalar">
           <Field name="selectedValue" component={FormInput} label={'Enter outcome'} />
         </div>
-        <button type="submit" className="btn btn-primary">Resolve Oracle</button>
+        <button type="submit" className="btn btn-primary">
+          Resolve Oracle
+        </button>
       </form>
     )
   }
 
   renderResolveCategorical() {
     const { handleSubmit, market: { eventDescription: { outcomes } } } = this.props
-
+    console.log(this.props);
     return (
       <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
         <div className="marketResolveCategorical">
           <FormRadioButtonLabel label="Choose outcome" />
           {outcomes.map((outcome, outcomeIndex) => (
-            <Field key={outcomeIndex} className="marketResolveFormRadio" name="selectedOutcome" component={FormRadioButton} text={outcome} radioValue={outcomeIndex} />
-            ))}
+            <Field
+              key={outcomeIndex}
+              className="marketResolveFormRadio"
+              name="selectedOutcome"
+              component={FormRadioButton}
+              text={outcome}
+              radioValue={outcomeIndex}
+            />
+          ))}
         </div>
-        <button type="submit" className="btn btn-primary">Resolve Oracle</button>
+        <button type="submit" className="btn btn-primary">
+          Resolve Oracle
+        </button>
       </form>
     )
   }
@@ -66,16 +72,21 @@ class MarketResolveForm extends Component {
     const { submitting, market: { event: { type }, oracle: { isOutcomeSet } } } = this.props
 
     if (submitting) {
+      console.log('SUBMITTING')
       return <span>Resolving Oracle...</span>
     }
 
     if (isOutcomeSet) {
+      console.log('isOutComeSet')
       return <span>Oracle already resolved</span>
     }
 
     if (type === OUTCOME_TYPES.SCALAR) {
+      console.log('SCALAR')
       return this.renderResolveScalar()
     } else if (type === OUTCOME_TYPES.CATEGORICAL) {
+      console.log('Categorical')
+      console.log(this.renderResolveCategorical())
       return this.renderResolveCategorical()
     }
 

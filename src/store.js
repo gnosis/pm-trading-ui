@@ -1,7 +1,6 @@
-import { hashHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
-import logger from 'redux-logger'
 import { routerMiddleware } from 'react-router-redux'
 
 import CrashReporter from 'middlewares/CrashReporter'
@@ -13,16 +12,12 @@ import reducer from 'reducers'
 
 const middlewares = [
   thunk,
-  routerMiddleware(hashHistory),
+  routerMiddleware(browserHistory),
   Notifications,
   LocalStorageLoad,
   LocalStorageDump,
   CrashReporter,
 ]
-
-if (process.env.NODE_ENV === 'development') {
-  middlewares.push(logger)
-}
 
 const enhancers = [
   applyMiddleware(

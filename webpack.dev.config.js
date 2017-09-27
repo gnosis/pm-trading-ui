@@ -19,6 +19,7 @@ module.exports = {
   entry: ['react-hot-loader/patch', 'bootstrap-loader', 'index.js'],
   devtool: 'cheap-eval-source-map',
   output: {
+    publicPath: '/',
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
   },
@@ -69,7 +70,7 @@ module.exports = {
   },
   devServer: {
     disableHostCheck: true,
-    contentBase: false,
+    historyApiFallback: true,
     port: 5000,
     proxy: {
       '/api': {
