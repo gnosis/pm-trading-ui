@@ -29,7 +29,7 @@ class App extends Component {
       )
     }
 
-    const currentKey = this.props.location.pathname.split('/')[1] || '/'
+    const currentKey = this.props.location.pathname.split('/')[2] || this.props.location.pathname.split('/')[1] || '/'
     const timeout = { enter: 200, exit: 200 }
 
     return (
