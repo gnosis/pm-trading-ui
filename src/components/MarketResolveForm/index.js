@@ -45,7 +45,6 @@ class MarketResolveForm extends Component {
 
   renderResolveCategorical() {
     const { handleSubmit, market: { eventDescription: { outcomes } } } = this.props
-    console.log(this.props);
     return (
       <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
         <div className="marketResolveCategorical">
@@ -72,21 +71,16 @@ class MarketResolveForm extends Component {
     const { submitting, market: { event: { type }, oracle: { isOutcomeSet } } } = this.props
 
     if (submitting) {
-      console.log('SUBMITTING')
       return <span>Resolving Oracle...</span>
     }
 
     if (isOutcomeSet) {
-      console.log('isOutComeSet')
       return <span>Oracle already resolved</span>
     }
 
     if (type === OUTCOME_TYPES.SCALAR) {
-      console.log('SCALAR')
       return this.renderResolveScalar()
     } else if (type === OUTCOME_TYPES.CATEGORICAL) {
-      console.log('Categorical')
-      console.log(this.renderResolveCategorical())
       return this.renderResolveCategorical()
     }
 
