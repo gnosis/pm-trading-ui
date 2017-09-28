@@ -40,9 +40,6 @@ class App extends Component {
       <div className="appContainer">
         <HeaderContainer version={process.env.VERSION} />
         {this.props.hasWallet && <TransactionFloaterContainer />}
-<<<<<<< HEAD
-        {this.props.children}
-=======
         <TransitionGroup>
           <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
             {this.props.children}
@@ -58,18 +55,14 @@ class App extends Component {
             <p>We couldn't detect your account. Please check your wallet provider and reload the page</p>
           </div>
         </Modal>
->>>>>>> 240cc0c... Add modal which warns user about undefined account, changed loader
       </div>
     )
   }
 }
 
 App.propTypes = {
-<<<<<<< HEAD
-=======
   account: PropTypes.string,
   blockchainConnection: PropTypes.bool,
->>>>>>> 240cc0c... Add modal which warns user about undefined account, changed loader
   children: PropTypes.node,
   connectBlockchain: PropTypes.func,
   blockchainConnection: PropTypes.bool,

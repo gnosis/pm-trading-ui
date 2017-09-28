@@ -14,20 +14,12 @@ const MarketProgress = ({
   transaction: { startTime, endTime },
   closeModal,
 }) => {
-<<<<<<< HEAD
-  let strokeDasharray = Math.abs((progress) - 1) * Math.PI * (190 * 2)
-  
-  if (failed) {
-    strokeDasharray = 0
-  }
-=======
   // its not used
   // let strokeDasharray = Math.abs((progress) - 1) * Math.PI * (190 * 2)
 
   // if (failed) {
   //   strokeDasharray = 0
   // }
->>>>>>> 240cc0c... Add modal which warns user about undefined account, changed loader
 
   const timeDiff = (startTime && endTime) ? moment(startTime).to(moment(endTime), true) : undefined
 
