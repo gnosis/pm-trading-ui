@@ -1,4 +1,22 @@
 {
-  "presets": ["react", "env", "stage-0"],
-  "plugins": ["transform-decorators-legacy"]
+  "presets": [
+    "react",
+    "env",
+    "stage-0"
+  ],
+  "plugins": [
+    "transform-decorators-legacy"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "react-hot-loader/babel"
+      ]
+    },
+    "production": {
+      "plugins": [
+        "transform-react-remove-prop-types"
+      ]
+    }
+  }
 }

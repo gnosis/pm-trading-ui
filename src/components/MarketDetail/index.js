@@ -42,6 +42,7 @@ const expandableViews = {
     component: MarketBuySharesForm,
     showCondition: props =>
       props.market &&
+      !props.market.local &&
       props.defaultAccount &&
       props.defaultAccount !== props.market.owner &&
       !props.market.oracle.isOutcomeSet,

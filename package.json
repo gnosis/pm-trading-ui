@@ -7,6 +7,7 @@
     "build": "./node_modules/.bin/webpack -p --config webpack.prod.config.js",
     "clean": "rm -rf dist",
     "start": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js",
+    "start-server": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info --config webpack.prod.config.js",
     "start:standalone": "cross-env GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' npm start",
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix",
@@ -61,7 +62,8 @@
     "reselect": "^2.5.4",
     "sha1": "^1.1.1",
     "uuid": "^3.1.0",
-    "web3": "0.18.4"
+    "web3": "0.18.4",
+    "truffle-contract": "3.0.0"
   },
   "devDependencies": {
     "autoprefixer": "7.1.4",

@@ -22,7 +22,7 @@ module.exports = {
   output: {
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
-  },  
+  },
   resolve: {
     symlinks: false,
     modules: [
@@ -58,6 +58,20 @@ module.exports = {
         loader: 'file-loader?name=fonts/[name].[ext]',
       },
     ],
+  },
+  devServer: {
+    disableHostCheck: true,
+    contentBase: false,
+    port: 5000,
+    proxy: {
+      '/api': {
+        target: gnosisDbUrl,
+        secure: false,
+      },
+    },
+    watchOptions: {
+      ignored: /node_modules/,
+    },
   },
   plugins: [
     new ExtractTextPlugin('styles.css'),
