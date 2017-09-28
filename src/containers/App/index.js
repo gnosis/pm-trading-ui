@@ -3,12 +3,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-<<<<<<< HEAD
-=======
 import Modal from 'react-modal'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
->>>>>>> 240cc0c... Add modal which warns user about undefined account, changed loader
 
 import { connectBlockchain } from 'actions/blockchain'
 
