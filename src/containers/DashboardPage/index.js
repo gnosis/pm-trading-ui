@@ -23,7 +23,7 @@ const mapStateToProps = (state) => {
   if (etherTokens !== undefined) {
     etherTokens = weiToEth(etherTokens.toString())
   } else {
-    etherTokens = 0
+    etherTokens = '0'
   }
 
   return {
