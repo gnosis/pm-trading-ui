@@ -9,7 +9,7 @@ const nodeEnv = process.env.NODE_ENV || 'development'
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
-const config = require('./src/config.json')
+const config = require('config.json')
 
 const gnosisDbUrl =
   process.env.GNOSISDB_HOST || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`

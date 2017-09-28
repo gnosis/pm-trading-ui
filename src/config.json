@@ -10,7 +10,8 @@
  },
  "ethereum": {
    "protocol": "https",
-   "host": "kovan.infura.io",
-   "port": 8545
- }
+   "host": "kovan.infura.io/8dl59MouC5GQCX84qcIa",
+   "port": 8000
+ },
+ "apiUrl": "https://gnosisdb-kovan.gnosis.pm/api"
 }
