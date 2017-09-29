@@ -4,9 +4,8 @@ import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
-import { weiToEth } from '../../utils/helpers'
 
-import { RESOLUTION_TIME, GAS_COST } from 'utils/constants'
+import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import { collateralTokenToText } from 'components/CurrencyName'
@@ -19,24 +18,31 @@ import MarketGraph from 'components/MarketGraph'
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
 import MarketMySharesForm from 'components/MarketMySharesForm'
+import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 // import MarketShortSellForm from 'components/MarketShortSellForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 
 import './marketDetail.less'
+import { weiToEth } from '../../utils/helpers'
 
+const ONE_WEEK_IN_HOURS = 168
 const EXPAND_BUY_SHARES = 'buy-shares'
 // const EXPAND_SHORT_SELL = 'short-sell'
 const EXPAND_MY_TRADES = 'my-trades'
 const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
+const EXPAND_WITHDRAW_FEES = 'withdraw-fees'
+
+const DEFAULT_VIEW = EXPAND_BUY_SHARES
 
 const expandableViews = {
   [EXPAND_BUY_SHARES]: {
-    label: 'Buy Shares',
-    className: 'btn btn-primary',
+    label: 'Buy Tokens',
+    className: 'btn btn-default',
     component: MarketBuySharesForm,
     showCondition: props =>
       props.market &&
+      !props.market.local &&
       props.defaultAccount &&
       props.defaultAccount !== props.market.owner &&
       !props.market.oracle.isOutcomeSet,
@@ -54,7 +60,7 @@ const expandableViews = {
       props.market.eventDescription.outcomes.length > 2,
   },*/
   [EXPAND_MY_SHARES]: {
-    label: 'My Holdings',
+    label: 'My Tokens',
     className: 'btn btn-default',
     component: MarketMySharesForm,
     showCondition: props =>
@@ -80,6 +86,15 @@ const expandableViews = {
       props.defaultAccount &&
       props.defaultAccount === props.market.oracle.owner &&
       !props.market.oracle.isOutcomeSet,
+  },
+  [EXPAND_WITHDRAW_FEES]: {
+    label: 'Withdraw fees',
+    className: 'btn btn-default',
+    component: MarketWithdrawFeesForm,
+    showCondition: props =>
+      props.market &&
+      props.defaultAccount && props.market.oracle.owner === props.defaultAccount
+      && new Decimal(props.market.collectedFees).gt(0),
   },
 }
 
@@ -116,21 +131,16 @@ class MarketDetail extends Component {
   handleExpand(view) {
     const currentView = this.props.params.view
 
-    if (currentView === view) {
-      this.props.changeUrl(`markets/${this.props.params.id}`)
+    if (currentView === view || (currentView === undefined && view === DEFAULT_VIEW)) {
+      this.props.changeUrl(`/markets/${this.props.params.id}`)
     } else {
-      this.props.changeUrl(`markets/${this.props.params.id}/${view}`)
+      this.props.changeUrl(`/markets/${this.props.params.id}/${view}`)
     }
   }
 
   @autobind
   handleRedeemWinnings() {
     this.props.redeemWinnings(this.props.market)
-  }
-
-  @autobind
-  handleWithdrawFees() {
-    this.props.withdrawFees(this.props.market)
   }
 
   renderLoading() {
@@ -142,7 +152,7 @@ class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
-    const currentView = this.props.params.view
+    const currentView = this.props.params.view || DEFAULT_VIEW
 
     if (currentView && expandableViews[currentView] && expandableViews[currentView].component) {
       const view = expandableViews[currentView]
@@ -171,9 +181,17 @@ class MarketDetail extends Component {
       Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
       'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
+    const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount && new Decimal(market.collectedFees).gt(0)
 
-    if (this.props.isModerator) {
-      infos.Creator = market.creator
+    if (this.props.creatorIsModerator) {
+      // Show creator String
+      infos.creator = this.props.moderators[market.creator]
+    } else {
+      // Show address
+      infos.creator = market.creator
+    }
+    if (showWithdrawFees) {
+      infos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenToText(market.event.collateralToken)}`
     }
 
     return (
@@ -191,7 +209,7 @@ class MarketDetail extends Component {
   renderDetails(market) {
     const showWinning = market.oracle.isOutcomeSet
     const showLost = false // determine if we lost?
-    const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
+    const timeToResolution = moment.utc(market.eventDescription.resolutionDate).local().diff(moment(), 'hours')
 
     return (
       <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
@@ -199,26 +217,20 @@ class MarketDetail extends Component {
           <p className="marketDescription__text">{ market.eventDescription.description }</p>
         </div>
         <Outcome market={market} />
-        <div className="marketTimer">
-          <div className="marketTimer__live">
-            <Countdown target={market.eventDescription.resolutionDate} />
-          </div>
-          <small className="marketTime__absolute">
-            {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-          </small>
-        </div>
-        {showWithdrawFees && (
-          <div className="withdrawFees">
-            <div className="withdrawFees__icon icon icon--earnedTokens" />
-            <div className="withdrawFees__details">
-              <div className="withdrawFees__heading">{decimalToText(weiToEth(market.collectedFees))} {collateralTokenToText(market.event.collateralToken)}</div>
-              <div className="withdrawFees__label">Earnings through market fees</div>
+        {timeToResolution < ONE_WEEK_IN_HOURS ?
+          <div className="marketTimer">
+            <div className="marketTimer__live">
+              <Countdown target={market.eventDescription.resolutionDate} />
             </div>
-            <div className="withdrawFees__action">
-              <button className="btn btn-link" type="button" onClick={this.handleWithdrawFees}>Withdraw fees</button>
+            <small className="marketTime__absolute">
+              {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+            </small>
+          </div> :
+          <div className="marketTimer">
+            <div className="marketTimer__live">
+              {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
-          </div>
-        )}
+          </div>}
         {showWinning && (
           <div className="redeemWinning">
             <div className="redeemWinning__icon icon icon--achievementBadge" />
@@ -245,6 +257,7 @@ class MarketDetail extends Component {
   }
 
   renderControls() {
+    const { market, closeMarket } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
@@ -257,14 +270,25 @@ class MarketDetail extends Component {
               type="button"
               className={`
                 marketControls__button
-                ${expandableViews[view].className}
-                ${view === this.props.params.view ? 'marketControls__button--active' : ''}`
+                ${(view !== DEFAULT_VIEW && view === this.props.params.view)
+                || (view === DEFAULT_VIEW && view === this.props.params.view)
+                || (this.props.params.view === undefined && view === DEFAULT_VIEW) ? 'marketControls__button--active btn btn-primary'
+                : expandableViews[view].className}`
               }
               onClick={() => this.handleExpand(view)}
             >
               {expandableViews[view].label}
             </button>
           ))}
+          {market.stage !== MARKET_STAGES.MARKET_CLOSED ?
+            <button
+              key="close-market"
+              type="button"
+              className="marketControls__button btn btn-default"
+              onClick={() => closeMarket(market)}
+            >
+              Close Market
+            </button> : <div />}
         </div>
       </div>
     )
@@ -325,7 +349,11 @@ MarketDetail.propTypes = {
   fetchMarketShares: PropTypes.func,
   fetchMarketTrades: PropTypes.func,
   requestGasCost: PropTypes.func,
-  isModerator: PropTypes.bool,
+  creatorIsModerator: PropTypes.bool,
+  moderators: PropTypes.shape({
+    address: PropTypes.string,
+  }),
+  closeMarket: PropTypes.func,
 }
 
 export default MarketDetail

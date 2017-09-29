@@ -17,12 +17,25 @@ class MarketCreateReview extends Component {
     super(props)
 
     this.state = {
-      confirmed: true, // @TODO: Change to false when we have final terms
+      confirmed: false,
+      keepValues: false,
     }
   }
+
+  componentWillMount() {
+    this.setState({ keepValues: false })
+  }
+
   componentDidMount() {
-    if (!this.props.formValues.oracleType) {
+    if (!this.props.hasValues) {
       this.props.changeUrl('markets/new')
+    }
+  }
+
+  componentWillUnmount() {
+    // keepValues will be set before changing to a site where we keep the form
+    if (this.props.hasValues && !this.state.keepValues) {
+      this.props.reset()
     }
   }
 
@@ -34,13 +47,14 @@ class MarketCreateReview extends Component {
   @autobind
   handleCreateMarket() {
     const { formValues, submitForm } = this.props
-    
     submitForm(formValues)
   }
 
   @autobind
-  handleEdit() {
-    this.props.changeUrl('markets/new')
+  async handleEdit() {
+    await this.setState({ keepValues: true })
+
+    return this.props.changeUrl('markets/new')
   }
 
   renderMarketSummary() {
@@ -239,13 +253,24 @@ class MarketCreateReview extends Component {
             <div className="row">
               <div className="col-md-6">
                 <p className="checkout__disclaimer">Please review the entered market details carefully. Once the market is created you will not be able to change any of its details and settings anymore. After you double-checked the details you may approve the market creation.</p>
-                <button
-                  className="btn btn-default btn-default--muted"
-                  type="button"
-                  onClick={this.handleEdit}
-                >
-                  <i className="arrow arrow--right" /> Edit
-                </button>
+                {this.props.submitting ? (
+                  <button
+                    className="btn btn-default btn-default--muted disabled"
+                    type="button"
+                    disabled
+                    title="Marketcreation already in Progress"
+                  >
+                    <i className="arrow arrow--right" /> Edit
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-default btn-default--muted"
+                    type="button"
+                    onClick={this.handleEdit}
+                  >
+                    <i className="arrow arrow--right" /> Edit
+                  </button>
+                )}
               </div>
               <div className="col-md-6">
                 <h2 className="checkout__header">Checkout</h2>
@@ -274,8 +299,11 @@ MarketCreateReview.propTypes = {
     outcomes: PropTypes.arrayOf(PropTypes.string),
   }),
   createMarketCost: PropTypes.string,
+  hasValues: PropTypes.bool,
   changeUrl: PropTypes.func,
   submitForm: PropTypes.func,
+  reset: PropTypes.func,
+  submitting: PropTypes.bool,
 }
 
 export default MarketCreateReview

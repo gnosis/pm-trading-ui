@@ -3,6 +3,7 @@
 import { mapValues, startsWith, isArray } from 'lodash'
 import Decimal from 'decimal.js'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES } from 'utils/constants'
+import config from 'config.json'
 
 export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
@@ -137,3 +138,13 @@ export const timeoutCondition = (timeout, rejectReason) => new Promise((_, rejec
     reject(rejectReason)
   }, timeout)
 })
+
+/**
+ * Determines if an account is a Moderator
+ * @param {*string} accountAddress
+ */
+export const isModerator = accountAddress => (
+  Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false
+)
+
+export const getModerators = () => config.whitelist

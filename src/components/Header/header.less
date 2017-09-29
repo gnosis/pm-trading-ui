@@ -3,12 +3,16 @@
 @navbarHeight: 40px;
 
 .headerContainer {
-  height: @navbarHeight;
   vertical-align: middle;
-  padding: 40px 0 40px;
+  padding: 30px 0 40px;
 
   &__inner {
     position: relative;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -30,38 +34,26 @@
 
   &:hover,
   &--active {
-    color: black !important;
     border-color: @link-color;
   }
 }
 
 .headerContainer__group {
-  display: inline-block;
-
   &--version {
-    position: absolute;
-    float: none;
-    left: 5px;
-    top: 5px;
     line-height: @navbarHeight;
     color: white !important;
     font-size: 12px;
+    display: none;
     letter-spacing: .5px;
   }
 
-  &--left {
-    float: left;
-  }
-
-  &--right {
-    float: right;
+  &&--right {
+    margin-left: auto;
   }
 
   &--logo {
-    float: left;
     width: 70px;
     padding-right: 0;
-    position: relative;
     height: @navbarHeight;
 
     @media(min-width: @screen-sm) {
@@ -71,17 +63,17 @@
       height: @navbarHeight;
     }
   }
+
+  &.account {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .headerLogo {
   display: inline-block;
   height: 25px;
   width: 70px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
   background-image: url('../../assets/img/gnosis_logo_icon.svg');
   background-size: contain;
   background-repeat: no-repeat;
@@ -91,5 +83,42 @@
     height: 40px;
     width: 130px;
     background-image: url('../../assets/img/gnosis_logo.svg');
+  }
+}
+
+.headerIcon {
+  height: 60px;
+  width: 70px;
+  margin: auto;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
+
+  &--metamask {
+    background-image: url('../../assets/img/icons/icon_metamask.svg');
+  }
+
+  &--parity {
+    background-image: url('../../assets/img/icons/icon_parity.svg');
+  }
+
+  &--default {
+    background-image: url('../../assets/img/icons/icon_etherTokens.svg');
+  }
+}
+
+.headerContainer__account {
+  display: inline-block;
+
+  &--text {
+    line-height: 40px;
+    font-weight: 500;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    letter-spacing: .5px;
+  }
+
+  img {
+    margin-left: 10px;
   }
 }

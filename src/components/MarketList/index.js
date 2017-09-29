@@ -5,6 +5,7 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
+import cn from 'classnames'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
@@ -21,7 +22,6 @@ import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
 
-
 const resolutionFilters = [
   {
     label: 'All',
@@ -37,13 +37,13 @@ const resolutionFilters = [
   },
 ]
 
-const selectFilter = {
-  DEFAULT: '---',
-  RESOLUTION_DATE_ASC: 'Resolution Date ASC',
-  RESOLUTION_DATE_DESC: 'Resolution Date DESC',
-  TRADING_VOLUME_ASC: 'Trading Volume ASC',
-  TRADING_VOLUME_DESC: 'Trading Volume DESC',
-}
+const selectFilter = [
+  { value: '---', label: '---' },
+  { value: 'RESOLUTION_DATE_ASC', label: 'RESOLUTION_DATE_ASC' },
+  { value: 'RESOLUTION_DATE_DESC', label: 'RESOLUTION_DATE_DESC' },
+  { value: 'TRADING_VOLUME_ASC', label: 'TRADING_VOLUME_ASC' },
+  { value: 'TRADING_VOLUME_DESC', label: 'TRADING_VOLUME_DESC' },
+]
 
 class MarketList extends Component {
   componentWillMount() {
@@ -70,11 +70,9 @@ class MarketList extends Component {
     }
   }
 
-  renderCategoricalOutcomes(market) {
-  }
+  renderCategoricalOutcomes(market) {}
 
-  renderScalarOutcomes(market) {
-  }
+  renderScalarOutcomes(market) {}
 
   @autobind
   renderMarket(market) {
@@ -83,16 +81,25 @@ class MarketList extends Component {
 
     const resolveUrl = `/markets/${market.address}/resolve`
 
-    const outcomes = (<Outcome market={market} />)
+    const outcomes = <Outcome market={market} />
 
     return (
-      <button type="button" className={`market ${isResolved ? 'market--resolved' : ''}`} key={market.address} onClick={() => this.handleViewMarket(market)}>
+      <button
+        type="button"
+        className={`market ${isResolved ? 'market--resolved' : ''}`}
+        key={market.address}
+        onClick={() => this.handleViewMarket(market)}
+      >
         <div className="market__header">
-          <h2 className="market__title">{ market.eventDescription.title }</h2>
-          {isOwner && !isResolved &&
+          <h2 className="market__title">{market.eventDescription.title}</h2>
+          {isOwner &&
+          !isResolved && (
             <div className="market__control">
-              <a href={`/#${resolveUrl}`} onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>Resolve</a>
-            </div>}
+              <a href={`/#${resolveUrl}`} onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>
+                Resolve
+              </a>
+            </div>
+          )}
         </div>
         {outcomes}
         <div className="market__info row">
@@ -125,16 +132,8 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
-                <CurrencyName collateralToken={market.event.collateralToken} />
-              </div>
-            </div>
-          </div>
-          <div className="info__group col-md-3">
-            <div className="info__field">
-              <div className="info__field--icon icon icon--currency" />
-              <div className="info__field--label">
-                {decimalToText(new Decimal(market.tradingVolume).div(1e18))}
-                <CurrencyName collateralToken={market.event.collateralToken} />
+                {decimalToText(new Decimal(market.tradingVolume).div(1e18))}&nbsp;
+                <CurrencyName collateralToken={market.event.collateralToken} />&nbsp; Volume
               </div>
             </div>
           </div>
@@ -146,30 +145,29 @@ class MarketList extends Component {
   renderMarkets() {
     const { markets } = this.props
 
-    if (markets.length > 0) {
-      return (
-        <div className="marketList col-md-10">
-          <div className="marketList__title">Showing {markets.length} of {markets.length}</div>
-          <div className="marketListContainer">
-            {markets.map(this.renderMarket)}
-          </div>
-        </div>
-      )
-    }
     return (
-      <div className="marketList col-md-10">
-        <div className="marketListContainer">
-          <div className="market">No Markets available</div>
-        </div>
+      <div className="marketList col-md-9">
+        {markets.length > 0 ? (
+          <div>
+            <div className="marketList__title">
+              Showing {markets.length} of {markets.length}
+            </div>
+            <div className="marketListContainer">{markets.map(this.renderMarket)}</div>
+          </div>
+        ) : (
+          <div className="marketListContainer">
+            <div className="market no-markets">No Markets available</div>
+          </div>
+        )}
       </div>
     )
   }
 
   renderMarketFilter() {
-    const { handleSubmit } = this.props
+    const { handleSubmit, isModerator } = this.props
 
     return (
-      <div className="marketFilter col-md-2">
+      <div className="marketFilter col-md-3">
         <form onSubmit={handleSubmit}>
           <div className="marketFilter__group">
             <Field
@@ -181,13 +179,7 @@ class MarketList extends Component {
             />
           </div>
           <div className="marketFilter__group">
-            <Field
-              name="orderBy"
-              label="Order by"
-              component={FormSelect}
-              values={selectFilter}
-              defaultValue="DEFAULT"
-            />
+            <Field name="orderBy" label="Order by" component={FormSelect} values={selectFilter} defaultValue="---" />
           </div>
           <div className="marketFilter__group">
             <Field
@@ -197,14 +189,13 @@ class MarketList extends Component {
               radioValues={resolutionFilters}
             />
           </div>
-          <div className="marketFilter__group">
-            <Field
-              name="myMarkets"
-              label="Show only"
-              text="My markets"
-              component={FormCheckbox}
-            />
-          </div>
+          {isModerator ? (
+            <div className="marketFilter__group">
+              <Field name="myMarkets" label="Show only" text="My markets" component={FormCheckbox} />
+            </div>
+          ) : (
+            <div />
+          )}
         </form>
       </div>
     )
@@ -212,29 +203,30 @@ class MarketList extends Component {
 
   render() {
     const { markets } = this.props
+
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
           <div className="container">
-            <h1>Marketoverview</h1>
+            <h1>Market overview</h1>
           </div>
         </div>
         <div className="marketListPage__stats">
           <div className="container">
             <div className="row marketStats">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market" />
-                <span className="marketStats__value">{ markets.length }</span>
+                <span className="marketStats__value">{markets.length}</span>
                 <div className="marketStats__label">Open Markets</div>
               </div>
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market--countdown" />
-                <span className="marketStats__value">{ markets.length }</span>
+                <span className="marketStats__value">{markets.length}</span>
                 <div className="marketStats__label">Closing Soon</div>
               </div>
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 marketStats__stat">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--new" />
-                <span className="marketStats__value">{ markets.length }</span>
+                <span className="marketStats__value">{markets.length}</span>
                 <div className="marketStats__label">New Markets</div>
               </div>
             </div>
@@ -260,11 +252,10 @@ class MarketList extends Component {
         <div className="marketListPage__markets">
           <div className="container">
             <div className="row">
-              { this.renderMarkets() }
-              { this.renderMarketFilter() }
+              {this.renderMarkets()}
+              {this.renderMarketFilter()}
             </div>
           </div>
-
         </div>
       </div>
     )
@@ -277,6 +268,7 @@ MarketList.propTypes = {
   fetchMarkets: PropTypes.func,
   changeUrl: PropTypes.func,
   handleSubmit: PropTypes.func,
+  isModerator: PropTypes.bool,
 }
 
 export default reduxForm({

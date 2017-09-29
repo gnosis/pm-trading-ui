@@ -1,10 +1,16 @@
 {
   "whitelist": {
-    
+    "0xb2e87b8ce41184e0688027f370a972a436abe77e": "Giacomo",
+    "0xcf9428b6257a19eb4f6640ab9ead9a5bb5bae3c1": "Giacomo2"
  },
  "gnosisdb": {
    "protocol": "http",
    "host": "localhost",
    "port": 8000
+ },
+ "ethereum": {
+   "protocol": "http",
+   "host": "localhost",
+   "port": 8545
  }
 }
