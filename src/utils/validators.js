@@ -6,7 +6,13 @@ import moment from 'moment'
  * @param {*} val - The value to test
  */
 export const required = (val) => {
-  if (val === undefined || val === null || val === '' || val.length === 0 || (typeof val === 'string' && val.trim() === '')) {
+  if (
+    val === undefined ||
+    val === null ||
+    val === '' ||
+    val.length === 0 ||
+    (typeof val === 'string' && val.trim() === '')
+  ) {
     return 'Field is required'
   }
 
@@ -74,13 +80,13 @@ export const isNumber = ({ decimals, realOnly, decimalsProp }) => (val, vals, pr
     return 'Invalid Number'
   }
 
-  if (decimals || decimalsProp) {
+  if (decimals || decimalsProp) {
     const decimalNumbersAllowed = decimals || props[decimalsProp]
 
     if (required(decimalNumbersAllowed) === undefined) {
       const decimalNumbers = val.split('.')[1]
 
-      if (decimalNumbers && decimalNumbers.length > decimalNumbersAllowed) {
+      if (decimalNumbers && decimalNumbers.length > decimalNumbersAllowed) {
         return `Too many decimals, only ${decimalNumbersAllowed} numbers after decimalpoint are legal`
       }
     }

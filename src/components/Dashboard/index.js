@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
+import cn from 'classnames'
 import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -31,7 +32,6 @@ const controlButtons = {
 }
 
 class Dashboard extends Component {
-
   constructor(props) {
     super(props)
 
@@ -62,7 +62,7 @@ class Dashboard extends Component {
 
   @autobind
   handleCreateMarket() {
-  /*
+    /*
     const options = {
       title: 'Test Market',
       description: 'Test123',
@@ -81,7 +81,7 @@ class Dashboard extends Component {
   @autobind
   handleExpand(type) {
     // Toggle
-    this.setState({ visibleControl: (this.state.visibleControl === type ? null : type) })
+    this.setState({ visibleControl: this.state.visibleControl === type ? null : type })
   }
 
   renderExpandableContent() {
@@ -107,7 +107,6 @@ class Dashboard extends Component {
     return <div />
   }
 
-
   renderControls() {
     const { defaultAccount } = this.props
     const canCreateMarket = config.whitelist[defaultAccount] !== undefined
@@ -122,14 +121,23 @@ class Dashboard extends Component {
                 className={`
                   dashboardControls__button
                   ${controlButtons[type].className}
-                  ${type === this.state.visibleControl ? 'dashboardControls__button--active' : ''}`
-                }
+                  ${type === this.state.visibleControl ? 'dashboardControls__button--active' : ''}`}
                 onClick={() => this.handleExpand(type)}
               >
                 {controlButtons[type].label}
               </button>
             ))}
-            { canCreateMarket ? <button type="button" onClick={this.handleCreateMarket} className="dashboardControls__button btn btn-default">Create Market</button> : <div /> }
+            {canCreateMarket ? (
+              <button
+                type="button"
+                onClick={this.handleCreateMarket}
+                className="dashboardControls__button btn btn-default"
+              >
+                Create Market
+              </button>
+            ) : (
+              <div />
+            )}
           </div>
         </div>
       </div>
@@ -137,17 +145,25 @@ class Dashboard extends Component {
   }
 
   renderNewMarkets(markets) {
-    return markets.map(market =>
-      <div className="dashboardMarket dashboardMarket--new" key={market.address} onClick={() => this.handleViewMarket(market)}>
+    return markets.map(market => (
+      <div
+        className="dashboardMarket dashboardMarket--new"
+        key={market.address}
+        onClick={() => this.handleViewMarket(market)}
+      >
         <div className="dashboardMarket__title">{market.eventDescription.title}</div>
         <Outcome market={market} opts={{ showOnlyTrendingOutcome: true, showDate: true, dateFormat: 'MMMM Y' }} />
-      </div>,
-    )
+      </div>
+    ))
   }
 
   renderClosingMarkets(markets) {
-    return markets.map(market =>
-      <div className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns" key={market.address} onClick={() => this.handleViewMarket(market)}>
+    return markets.map(market => (
+      <div
+        className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns"
+        key={market.address}
+        onClick={() => this.handleViewMarket(market)}
+      >
         <div className="dashboardMarket__leftCol">
           <div className="value">{moment.utc(market.eventDescription.resolutionDate).fromNow()}</div>
         </div>
@@ -155,8 +171,8 @@ class Dashboard extends Component {
           <div className="dashboardMarket__title">{market.eventDescription.title}</div>
           <Outcome market={market} opts={{ showOnlyTrendingOutcome: true }} />
         </div>
-      </div>,
-    )
+      </div>
+    ))
   }
 
   renderMyHoldings(holdings, markets) {
@@ -180,25 +196,39 @@ class Dashboard extends Component {
           cost: holding.balance,
         })
       }
-      
+
       return (
         <div className="dashboardMarket dashboardMarket--onDark" key={index}>
-          <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>{holding.eventDescription.title}</div>
+          <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>
+            {holding.eventDescription.title}
+          </div>
           <div className="outcome row">
             <div className="col-md-3">
-              <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }} />
-              <div className="dashboardMarket--highlight pull-left">{getOutcomeName(market, holding.outcomeToken.index)}</div>
+              <div
+                className={'entry__color pull-left'}
+                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }}
+              />
+              <div className="dashboardMarket--highlight pull-left">
+                {getOutcomeName(market, holding.outcomeToken.index)}
+              </div>
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
-              {Decimal(holding.balance).div(1e18).gte(LOWEST_DISPLAYED_VALUE) ?
-                <DecimalValue value={weiToEth(holding.balance)} /> : `< ${LOWEST_DISPLAYED_VALUE}`}
+              {Decimal(holding.balance)
+                .div(1e18)
+                .gte(LOWEST_DISPLAYED_VALUE) ? (
+                  <DecimalValue value={weiToEth(holding.balance)} />
+              ) : (
+                `< ${LOWEST_DISPLAYED_VALUE}`
+              )}
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
               <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
-              {market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
+              {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
-              <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>Sell</a>
+              <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
+                Sell
+              </a>
             </div>
           </div>
         </div>
@@ -219,23 +249,28 @@ class Dashboard extends Component {
       }
 
       return (
-        <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={() => this.handleViewMarket(market)}>
+        <div
+          className="dashboardMarket dashboardMarket--onDark"
+          key={index}
+          onClick={() => this.handleViewMarket(market)}
+        >
           <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
-              <div className={'entry__color pull-left'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }} />
+              <div
+                className={'entry__color pull-left'}
+                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
+              />
               <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
               {new Decimal(averagePrice).toFixed(4)}
-              &nbsp;{market.event ? (<CurrencyName collateralToken={market.event.collateralToken} />) : <div />}
+              &nbsp;{market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               {moment.utc(market.creationDate).format('MMMM Y')}
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">
-              {trade.orderType}
-            </div>
+            <div className="col-md-2 dashboardMarket--highlight">{trade.orderType}</div>
           </div>
         </div>
       )
@@ -254,9 +289,14 @@ class Dashboard extends Component {
     if (marketType === 'newMarkets') {
       return (
         <div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__title">New Markets</div>
-          <div className="dashboardWidget__container">
-            {newMarkets.length ? this.renderNewMarkets(newMarkets) : 'There aren\'t new markets'}
+          <div className="dashboardWidget__market-title">New Markets</div>
+          <div
+            className={cn({
+              dashboardWidget__container: true,
+              'no-markets': !newMarkets.length,
+            })}
+          >
+            {newMarkets.length ? this.renderNewMarkets(newMarkets) : "There aren't new markets"}
           </div>
         </div>
       )
@@ -268,9 +308,14 @@ class Dashboard extends Component {
       }
       return (
         <div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__title">Soon-Closing Markets</div>
-          <div className="dashboardWidget__container">
-            {closingMarkets.length ? this.renderClosingMarkets(closingMarkets) : 'There aren\'t closing markets'}
+          <div className="dashboardWidget__market-title">Soon-Closing Markets</div>
+          <div
+            className={cn({
+              dashboardWidget__container: true,
+              'no-markets': !closingMarkets.length,
+            })}
+          >
+            {closingMarkets.length ? this.renderClosingMarkets(closingMarkets) : "There aren't closing markets"}
           </div>
         </div>
       )
@@ -279,9 +324,9 @@ class Dashboard extends Component {
     if (marketType === 'myHoldings') {
       return (
         <div className="dashboardWidget dashboardWidget--onDark col-md-6">
-          <div className="dashboardWidget__title">My Tokens</div>
+          <div className="dashboardWidget__market-title">My Tokens</div>
           <div className="dashboardWidget__container">
-            {accountShares.length ? this.renderMyHoldings(accountShares, markets) : 'You aren\'t holding any share.'}
+            {accountShares.length ? this.renderMyHoldings(accountShares, markets) : "You aren't holding any share."}
           </div>
         </div>
       )
@@ -290,9 +335,9 @@ class Dashboard extends Component {
     if (marketType === 'myTrades') {
       return (
         <div className="dashboardWidget dashboardWidget--onDark col-md-6">
-          <div className="dashboardWidget__title">My Trades</div>
+          <div className="dashboardWidget__market-title">My Trades</div>
           <div className="dashboardWidget__container">
-            {accountTrades.length ? this.renderMyTrades(accountTrades, markets) : 'You haven\'t done any trade.'}
+            {accountTrades.length ? this.renderMyTrades(accountTrades, markets) : "You haven't done any trade."}
           </div>
         </div>
       )
@@ -304,34 +349,40 @@ class Dashboard extends Component {
     let metricsSection = <div />
     let tradesHoldingsSection = <div />
     if (defaultAccount) {
-      metricsSection = (<div className="dashboardPage__stats">
-        <div className="container">
-          <div className="row dashboardStats">
-            <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-              <div className="dashboardStats__icon icon icon--etherTokens" />
-              <span className="dashboardStats__value"><DecimalValue value={etherTokens} /></span>
-              <div className="dashboardStats__label">Ether Tokens</div>
-            </div>
-            <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-              <div className="dashboardStats__icon icon icon--incomeForecast" />
-              <span className="dashboardStats__value" style={{ color: 'green' }}>
-                <DecimalValue value={accountPredictiveAssets} />
-                &nbsp;ETH
-              </span>
-              <div className="dashboardStats__label">Outstanding predictions</div>
+      metricsSection = (
+        <div className="dashboardPage__stats">
+          <div className="container">
+            <div className="row dashboardStats">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+                <div className="dashboardStats__icon icon icon--etherTokens" />
+                <span className="dashboardStats__value">
+                  <DecimalValue value={etherTokens} />
+                </span>
+                <div className="dashboardStats__label">Ether Tokens</div>
+              </div>
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+                <div className="dashboardStats__icon icon icon--incomeForecast" />
+                <span className="dashboardStats__value" style={{ color: 'green' }}>
+                  <DecimalValue value={accountPredictiveAssets} />
+                  &nbsp;ETH
+                </span>
+                <div className="dashboardStats__label">Outstanding predictions</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>)
+      )
 
-      tradesHoldingsSection = (<div className="dashboardWidgets dashboardWidgets--financial">
-        <div className="container">
-          <div className="row">
-            { this.renderWidget('myHoldings') }
-            { this.renderWidget('myTrades') }
+      tradesHoldingsSection = (
+        <div className="dashboardWidgets dashboardWidgets--financial">
+          <div className="container">
+            <div className="row">
+              {this.renderWidget('myHoldings')}
+              {this.renderWidget('myTrades')}
+            </div>
           </div>
         </div>
-      </div>)
+      )
     }
 
     return (
@@ -345,20 +396,18 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        { metricsSection }
-        { this.renderControls() }
-        <div className="expandable">
-          { this.renderExpandableContent() }
-        </div>
+        {metricsSection}
+        {this.renderControls()}
+        <div className="expandable">{this.renderExpandableContent()}</div>
         <div className="dashboardWidgets dashboardWidgets--markets">
           <div className="container">
             <div className="row">
-              { this.renderWidget('newMarkets') }
-              { this.renderWidget('closingMarkets') }
+              {this.renderWidget('newMarkets')}
+              {this.renderWidget('closingMarkets')}
             </div>
           </div>
         </div>
-        { tradesHoldingsSection }
+        {tradesHoldingsSection}
       </div>
     )
   }
@@ -367,10 +416,10 @@ class Dashboard extends Component {
 const marketPropType = PropTypes.object
 
 Dashboard.propTypes = {
-//   selectedCategoricalOutcome: PropTypes.string,
-//   selectedBuyInvest: PropTypes.string,
-//   buyShares: PropTypes.func,
-//   market: marketPropType,
+  //   selectedCategoricalOutcome: PropTypes.string,
+  //   selectedBuyInvest: PropTypes.string,
+  //   buyShares: PropTypes.func,
+  //   market: marketPropType,
   markets: PropTypes.arrayOf(marketPropType),
   defaultAccount: PropTypes.string,
   accountShares: PropTypes.array,

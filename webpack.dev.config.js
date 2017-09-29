@@ -14,11 +14,15 @@ const config = require('./src/config.json')
 const gnosisDbUrl =
   process.env.GNOSISDB_HOST || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
 
+const ethereumUrl =
+  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.host}:${config.ethereum.port}`
+
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: ['react-hot-loader/patch', 'bootstrap-loader', 'index.js'],
   devtool: 'cheap-eval-source-map',
   output: {
+    publicPath: '/',
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
   },
@@ -69,7 +73,7 @@ module.exports = {
   },
   devServer: {
     disableHostCheck: true,
-    contentBase: false,
+    historyApiFallback: true,
     port: 5000,
     proxy: {
       '/api': {
@@ -107,7 +111,8 @@ module.exports = {
       'process.env': {
         VERSION: JSON.stringify(`${version}#${build}`),
         NODE_ENV: JSON.stringify(nodeEnv),
-        GNOSISDB_HOST: JSON.stringify(gnosisDbUrl),
+        GNOSISDB_URL: JSON.stringify(gnosisDbUrl),
+        ETHEREUM_URL: JSON.stringify(ethereumUrl),
       },
     }),
   ],

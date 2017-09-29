@@ -12,9 +12,11 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
 const config = require('./src/config.json')
 
-// const ethereumHost = process.env.ETHEREUM_HOST
 const gnosisDbUrl =
-  process.env.GNOSISDB_HOST || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
+  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
+
+const ethereumUrl =
+  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.host}:${config.ethereum.port}`
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -63,12 +65,6 @@ module.exports = {
     disableHostCheck: true,
     contentBase: false,
     port: 5000,
-    proxy: {
-      '/api': {
-        target: gnosisDbUrl,
-        secure: false,
-      },
-    },
     watchOptions: {
       ignored: /node_modules/,
     },
@@ -99,9 +95,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         VERSION: JSON.stringify(`${version}#${build}`),
-        // ETHEREUM_HOST: nodeEnv === 'production' ? null : JSON.stringify(ethereumHost),
         NODE_ENV: JSON.stringify(nodeEnv),
-        GNOSISDB_HOST: JSON.stringify(gnosisDbUrl),
+        GNOSISDB_URL: JSON.stringify(gnosisDbUrl),
+        ETHEREUM_URL: JSON.stringify(ethereumUrl),
       },
     }),
   ],
