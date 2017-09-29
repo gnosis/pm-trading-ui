@@ -29,7 +29,7 @@ const mapStateToProps = (state) => {
   const isModerator = config.whitelist[defaultAccount] !== undefined
 
   return {
-    markets: sortMarkets(filteredMarktes, filterOrderBy),
+    markets: sortMarkets(filteredMarktes, filterOrderBy && filterOrderBy.value),
     defaultAccount,
     isModerator,
   }

@@ -6,7 +6,8 @@
   ],
   "plugins": [
     "react-hot-loader/babel",
-    "transform-decorators-legacy"
+    "transform-decorators-legacy",
+    "lodash"
   ],
   "env": {
     "production": {
