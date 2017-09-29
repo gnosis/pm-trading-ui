@@ -8,6 +8,7 @@ import { filterMarkets, sortMarkets } from 'selectors/market'
 import { getDefaultAccount } from 'selectors/blockchain'
 
 import { requestMarkets } from 'actions/market'
+import config from 'config.json'
 
 const mapStateToProps = (state) => {
   // const markets = getMarkets(state)
@@ -21,12 +22,16 @@ const mapStateToProps = (state) => {
     textSearch: filterSearch,
     resolved: filterShowResolved,
     onlyMyMarkets: filterMyMarkets,
+    onlyModeratorsMarkets: Object.keys(config.whitelist).length > 0, // Show only markets created by moderators if they're declared in config
     defaultAccount,
   })
+
+  const isModerator = config.whitelist[defaultAccount] !== undefined
 
   return {
     markets: sortMarkets(filteredMarktes, filterOrderBy),
     defaultAccount,
+    isModerator,
   }
 }
 

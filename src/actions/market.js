@@ -1,4 +1,3 @@
-import moment from 'moment'
 import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
@@ -33,6 +32,7 @@ import {
 import {
   OUTCOME_TYPES,
   TRANSACTION_COMPLETE_STATUS,
+  MARKET_STAGES,
 } from 'utils/constants'
 
 const TRANSACTION_STAGES = {
@@ -164,7 +164,7 @@ export const createMarket = options => async (dispatch) => {
   // Create Event Description
   let eventDescriptionContractData
   try {
-    eventDescriptionContractData = await api.createEventDescription(eventDescription)
+    eventDescriptionContractData = await api.createEventDescription(eventDescription, event.type)
 
     await dispatch(receiveEntities(normalize(createEventDescriptionModel(eventDescriptionContractData), eventDescriptionSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.EVENT_DESCRIPTION))
@@ -248,7 +248,8 @@ export const createMarket = options => async (dispatch) => {
     throw e
   }
 
-  return await dispatch(closeLog(transactionId))
+  await dispatch(closeLog(transactionId))
+  return marketContractData
 }
 
 export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
@@ -363,6 +364,34 @@ export const withdrawFees = market => async (dispatch) => {
   }
 
   // TODO: Update market so we can't withdraw again
+
+  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+}
+
+export const closeMarket = market => async (dispatch) => {
+  const transactionId = uuid()
+
+  // Start a new transaction log
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Closing market "${market.eventDescription.title}"`))
+
+  try {
+    await api.closeMarket(market)
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
+  } catch (e) {
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
+  }
+
+  const stage = MARKET_STAGES.MARKET_CLOSED
+  await dispatch(updateEntity({
+    entityType: 'markets',
+    data: {
+      id: market.address,
+      stage,
+    },
+  }))
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }

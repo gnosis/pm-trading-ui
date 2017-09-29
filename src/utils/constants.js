@@ -31,6 +31,9 @@ export const COLOR_SCHEME_DEFAULT = [
   '#73472c', // brown
 ]
 
+export const SCALAR_SHORT_COLOR = COLOR_SCHEME_DEFAULT[0]
+export const SCALAR_LONG_COLOR = COLOR_SCHEME_DEFAULT[2]
+
 export const TRANSACTION_STATUS = {
   RUNNING: 'RUNNING',
   ERROR: 'ERROR',
@@ -43,3 +46,25 @@ export const TRANSACTION_COMPLETE_STATUS = {
   ERROR: 'ERROR',
   TIMEOUT: 'TIMEOUT',
 }
+
+export const GAS_COST = {
+  MARKET_CREATION: 'market',
+  BUY_SHARES: 'buyShares',
+  SELL_SHARES: 'sellShares',
+  RESOLVE_ORACLE: 'resolveOracle',
+  WITHDRAW_FEES: 'withdrawFees',
+  REDEEM_WINNINGS: 'redeemWinnings',
+  CATEGORICAL_EVENT: 'categoricalEvent',
+  SCALAR_EVENT: 'scalarEvent',
+  CENTRALIZED_ORACLE: 'centralizedOracle',
+  FUNDING: 'funding',
+}
+export const DEFAULT_NOTIFICATION_FADEOUT = 60000
+
+export const MARKET_STAGES = {
+  MARKET_CREATED: 0,
+  MARKET_FUNDED: 1,
+  MARKET_CLOSED: 2,
+}
+
+export const LOWEST_DISPLAYED_VALUE = 0.001

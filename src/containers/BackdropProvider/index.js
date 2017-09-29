@@ -36,7 +36,7 @@ class BackdropProvider extends Component {
     return (
       <div className="backdrop">
         <div className={`backdrop__filter ${isOpen ? 'backdrop__filter--visible' : ''}`}>
-          {children}
+          {isOpen ? <div style={{ position: 'fixed' }}>{children}</div> : children}
         </div>
         <div className="backdrop__above">
           {this.renderBackdropContent()}

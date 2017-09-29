@@ -4,6 +4,8 @@ import { mapValues, startsWith, isArray } from 'lodash'
 import Decimal from 'decimal.js'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES } from 'utils/constants'
 
+const config = require('config.json')
+
 export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
     return startsWith(value, '0x') ? value.substring(2) : value
@@ -47,11 +49,18 @@ export const toEntity = (data, entityType, idKey = 'address') => {
  * @param {String|Number} value
  */
 export const weiToEth = (value) => {
-  let ethValue = '0'
-  if (value && Decimal(value).gt(0)) {
-    ethValue = Decimal(value).div(1e18).toString()
+  let ethValue = new Decimal(0)
+  if (typeof value === 'string') {
+    ethValue = new Decimal(value)
+    if (ethValue.gt(0)) {
+      return ethValue.div(1e18).toString()
+    }
+    return new Decimal(0).div(1e18).toString()
   }
-  return ethValue
+  if (value instanceof Decimal && value.gt(0)) {
+    return value.div(1e18).toString()
+  }
+  return ethValue.toString()
 }
 
 export const getOutcomeName = (market, index) => {
@@ -130,3 +139,13 @@ export const timeoutCondition = (timeout, rejectReason) => new Promise((_, rejec
     reject(rejectReason)
   }, timeout)
 })
+
+/**
+ * Determines if an account is a Moderator
+ * @param {*string} accountAddress
+ */
+export const isModerator = accountAddress => (
+  Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false
+)
+
+export const getModerators = () => config.whitelist

@@ -2,15 +2,14 @@
 
 .formOutcomeList {
   display: block;
-  line-height: 20px;
   margin-bottom: 8px;
 
   .entry {
     &__color {
       vertical-align: middle;
       display: inline-block;
-      margin-top: 6px;
       margin-right: 5px;
+      margin-top: 0;
       width: 20px;
       height: 20px;
 
@@ -42,8 +41,9 @@
 .formOutcomeListInput {
   display: inline-block !important;
   width: auto !important;
+  margin-bottom: 8px;
 
   &__input {
-    font-size: 14px;
+    .inputStyles();
   }
 }
