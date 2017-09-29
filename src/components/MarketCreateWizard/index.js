@@ -20,10 +20,15 @@ export default class MarketCreateWizard extends Component {
     if (!this.props.defaultAccount) {
       this.props.changeUrl('/markets')
     }
+
+
+    // i commented this out because we dont have such property 'outcomes'
+    // maybe we did before, but now this check will always overwrite our outcomes
+
     // fill outcomes in case of not filled (coming from review)
-    if (!this.props.outcomes) {
-      this.props.change('outcomes', [''])
-    }
+    // if (!this.props.outcomes) {
+    //   this.props.change('outcomes', ['', ''])
+    // }
 
     this.props.requestGasCost(GAS_COST.MARKET_CREATION)
     this.props.requestGasCost(GAS_COST.CENTRALIZED_ORACLE)
@@ -52,7 +57,8 @@ export default class MarketCreateWizard extends Component {
         <div className="col-md-10">
           <h2 className="marketWizardHeading marketWizardHeading__title">{title}</h2>
         </div>
-      </div>)
+      </div>
+    )
   }
 
   renderOracleTypes() {
@@ -89,7 +95,18 @@ export default class MarketCreateWizard extends Component {
         </div>
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="funding" continuousPlaceholder="ETH" component={FormInput} type="text" validate={validators.all(validators.required, validators.isNumber({ decimals: 4 }), validators.greaterThanZero)} label="Funding" />            
+            <Field
+              name="funding"
+              continuousPlaceholder="ETH"
+              component={FormInput}
+              type="text"
+              validate={validators.all(
+                validators.required,
+                validators.isNumber({ decimals: 4 }),
+                validators.greaterThanZero,
+              )}
+              label="Funding"
+            />
           </div>
         </div>
       </div>
@@ -130,7 +147,9 @@ export default class MarketCreateWizard extends Component {
             <div className="row">
               <div className="col-md-8">
                 {this.renderForm()}
-                <button className="marketCreateButton btn btn-primary" type="submit">Review <i className="arrow" /></button>
+                <button className="marketCreateButton btn btn-primary" type="submit">
+                  Review <i className="arrow" />
+                </button>
               </div>
             </div>
           </div>
@@ -138,7 +157,6 @@ export default class MarketCreateWizard extends Component {
       </div>
     )
   }
-
 }
 
 MarketCreateWizard.propTypes = {

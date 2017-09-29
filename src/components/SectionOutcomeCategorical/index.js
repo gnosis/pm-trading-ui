@@ -12,8 +12,6 @@ const OutcomeCategorical = () => (
           name="outcomes"
           component={OutcomeList}
           label="Outcomes"
-          opts={{ hideDeleteOption: true }}
-          validate={multiSelectMinLength(2)}
         />
       </div>
     </div>

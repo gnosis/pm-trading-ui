@@ -113,15 +113,23 @@
   width: 90%;
 }
 
-.outcomeCategorical {
+.outcomeCategorical, .resolutionDate {
   &__header {
     text-transform: uppercase;
     color: @font-color-muted;
     font-size: 16px;
-    margin-top: 50px !important;
+    margin-top: 50px;
   }
+}
+
+.resolutionDate {
+  &__header + .marketReviewDetails__value {
+    margin-top: 5px;
+  }
+}
+
+.outcomeCategorical {
   &__color {
-    display: inline-block;
     height: 16px;
     width: 16px;
     float: left;

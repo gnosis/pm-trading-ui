@@ -20,7 +20,7 @@ const FORM = {
     fee: '0.5',
     decimals: '2',
     collateralToken: 'eth',
-    outcomes: [''],
+    outcomes: ['', ''],
     funding: '0',
   },
 }
