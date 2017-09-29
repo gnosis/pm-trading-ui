@@ -3,12 +3,13 @@ import { normalize } from 'normalizr'
 import { OUTCOME_TYPES } from 'utils/constants'
 
 import sha1 from 'sha1'
+import config from 'config.json'
 
 import {
   marketSchema,
 } from './schema'
 
-const API_URL = 'http://localhost:8000'
+const API_URL = `${config.gnosisdb.protocol}://${config.gnosisdb.host}` // 'http://localhost:8000'
 
 export const requestMarket = async marketAddress =>
   restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/`)

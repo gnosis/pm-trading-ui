@@ -4,8 +4,8 @@
     "0xcf9428b6257a19eb4f6640ab9ead9a5bb5bae3c1": "Giacomo2"
  },
  "gnosisdb": {
-   "protocol": "http",
-   "host": "localhost",
+   "protocol": "https",
+   "host": "gnosisdb-kovan.gnosis.pm",
    "port": 8000
  },
  "ethereum": {

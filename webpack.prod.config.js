@@ -59,6 +59,20 @@ module.exports = {
       },
     ],
   },
+  devServer: {
+    disableHostCheck: true,
+    contentBase: false,
+    port: 5000,
+    proxy: {
+      '/api': {
+        target: gnosisDbUrl,
+        secure: false,
+      },
+    },
+    watchOptions: {
+      ignored: /node_modules/,
+    },
+  },
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
