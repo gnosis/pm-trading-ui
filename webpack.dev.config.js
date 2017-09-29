@@ -12,7 +12,7 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 const config = require('./src/config.json')
 
 const gnosisDbUrl =
-  process.env.GNOSISDB_HOST || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
+  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
 
 const ethereumUrl =
   process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.host}:${config.ethereum.port}`
