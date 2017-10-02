@@ -46,6 +46,7 @@
     "react": "15.6.1",
     "react-autosize-textarea": "^0.4.7",
     "react-autosuggest": "^9.0.0",
+    "react-modal": "^2.3.2",
     "react-custom-scroll": "2.0.1",
     "react-datetime": "^2.10.1",
     "react-dnd": "2.5.1",

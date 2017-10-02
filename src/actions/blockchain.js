@@ -1,8 +1,15 @@
 import {
-  initGnosisConnection, getCurrentBalance,
-  getCurrentAccount, calcMarketGasCost, calcBuySharesGasCost,
-  calcSellSharesGasCost, calcCategoricalEventGasCost, calcScalarEventGasCost,
-  calcCentralizedOracleGasCost, calcFundingGasCost, getGasPrice,
+  initGnosisConnection,
+  getCurrentBalance,
+  getCurrentAccount,
+  calcMarketGasCost,
+  calcBuySharesGasCost,
+  calcSellSharesGasCost,
+  calcCategoricalEventGasCost,
+  calcScalarEventGasCost,
+  calcCentralizedOracleGasCost,
+  calcFundingGasCost,
+  getGasPrice,
   getEtherTokens,
 } from 'api'
 

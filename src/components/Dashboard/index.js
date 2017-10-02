@@ -43,10 +43,13 @@ class Dashboard extends Component {
   componentWillMount() {
     if (this.props.gnosisInitialized) {
       this.props.requestMarkets()
-      this.props.requestAccountShares(this.props.defaultAccount)
-      this.props.requestAccountTrades(this.props.defaultAccount)
       this.props.requestGasPrice()
-      this.props.requestEtherTokens(this.props.defaultAccount)
+
+      if (this.props.defaultAccount) {
+        this.props.requestAccountShares(this.props.defaultAccount)
+        this.props.requestAccountTrades(this.props.defaultAccount)
+        this.props.requestEtherTokens(this.props.defaultAccount)
+      }
     }
   }
 
@@ -347,7 +350,7 @@ class Dashboard extends Component {
   render() {
     const { accountPredictiveAssets, etherTokens, defaultAccount } = this.props
     let metricsSection = <div />
-    let tradesHoldingsSection = <div />
+    let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     if (defaultAccount) {
       metricsSection = (
         <div className="dashboardPage__stats">

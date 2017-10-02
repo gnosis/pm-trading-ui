@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import './marketProgress.less'
-
 import ProgressSpinner from 'components/ProgressSpinner'
+
+import './marketProgress.less'
 
 const MarketProgress = ({
   progress,
@@ -14,11 +14,6 @@ const MarketProgress = ({
   transaction: { startTime, endTime },
   closeModal,
 }) => {
-  let strokeDasharray = Math.abs((progress) - 1) * Math.PI * (190 * 2)
-  
-  if (failed) {
-    strokeDasharray = 0
-  }
 
   const timeDiff = (startTime && endTime) ? moment(startTime).to(moment(endTime), true) : undefined
 
