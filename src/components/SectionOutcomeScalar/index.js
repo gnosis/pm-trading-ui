@@ -42,7 +42,7 @@ const OutcomeScalar = ({ unit }) => (
 )
 
 OutcomeScalar.propTypes = {
-  decimals: PropTypes.number,
+  unit: PropTypes.string,
 }
 
 export default OutcomeScalar

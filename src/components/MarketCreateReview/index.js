@@ -108,14 +108,17 @@ class MarketCreateReview extends Component {
         <div className="row">
           <div className="col-md-12">
             <div className="marketReviewDetails__label">Fee</div>
-            <div className="marketReviewDetails__value">{Decimal(fee || 0).toFixed(2)}%</div>
+            <div className="marketReviewDetails__value">
+              <DecimalValue value={fee} />%
+            </div>
           </div>
         </div>
         <div className="row">
           <div className="col-md-12">
             <div className="marketReviewDetails__label">Funding</div>
             <div className="marketReviewDetails__value">
-              {Decimal(funding || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} />
+              <DecimalValue value={funding} />{' '}
+              <CurrencyName collateralToken={collateralToken} />
             </div>
           </div>
         </div>
@@ -132,7 +135,7 @@ class MarketCreateReview extends Component {
           <li className="checkout__listItem">
             <span className="listItem__label">Market Funding</span>
             <div className="listItem__value">
-              {Decimal(funding || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} />
+              <DecimalValue value={funding} /> <CurrencyName collateralToken={collateralToken} />
             </div>
           </li>
           <li className="checkout__listItem">
@@ -145,11 +148,7 @@ class MarketCreateReview extends Component {
           <li className="checkout__listItem checkout__listItem--total">
             <span className="listItem__label">Total</span>
             <span className="listItem__value">
-              <DecimalValue
-                value={Decimal(funding || 0)
-                  .add(Decimal(createMarketCost))
-                  .toFixed(4)}
-              />
+              <DecimalValue value={Decimal(funding || 0).add(Decimal(createMarketCost || 0))} />
             </span>
           </li>
         </ul>
@@ -171,12 +170,7 @@ class MarketCreateReview extends Component {
         </div>
         */}
         <div className="checkout__paymentSubmit">
-          <button
-            className={`btn btn-primary ${!this.state.confirmed ? 'btn-primary--disabled' : ''}`}
-            disabled={!this.state.confirmed}
-            type="button"
-            onClick={this.handleCreateMarket}
-          >
+          <button className="btn btn-primary" type="button" onClick={this.handleCreateMarket}>
             Pay & Create Market
           </button>
         </div>
