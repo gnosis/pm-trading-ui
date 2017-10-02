@@ -14,12 +14,6 @@ const MarketProgress = ({
   transaction: { startTime, endTime },
   closeModal,
 }) => {
-  // its not used
-  // let strokeDasharray = Math.abs((progress) - 1) * Math.PI * (190 * 2)
-
-  // if (failed) {
-  //   strokeDasharray = 0
-  // }
 
   const timeDiff = (startTime && endTime) ? moment(startTime).to(moment(endTime), true) : undefined
 
