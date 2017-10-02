@@ -25,7 +25,7 @@ export const requestFactories = async () =>
   restFetch(`${API_URL}/factories`)
 
 export const requestMarketShares = async (marketAddress, accountAddress) =>
-  restFetch(`${API_URL}/api/markets/${hexWithoutPrefix(marketAddress)}/shares/${hexWithoutPrefix(accountAddress)}/`)
+  restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/shares/${hexWithoutPrefix(accountAddress)}/`)
     // unfortunately we need to return the shares as a market entity to be able to index on it
     // so we create an array for the market shares with the entities we receive here.
     .then((response) => {

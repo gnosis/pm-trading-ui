@@ -177,7 +177,7 @@ class MarketDetail extends Component {
   renderInfos(market) {
     const infos = {
       Token: collateralTokenToText(market.event.collateralToken),
-      Fee: `${decimalToText(market.fee, 4) / 10000} %`,
+      Fee: `${decimalToText(market.fee, 2) / 10000} %`,
       Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
       'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }

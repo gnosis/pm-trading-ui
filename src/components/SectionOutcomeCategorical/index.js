@@ -12,7 +12,7 @@ const OutcomeCategorical = () => (
           name="outcomes"
           component={OutcomeList}
           label="Outcomes"
-          validate={multiSelectMinLength(2)}
+          validate={multiSelectMinLength(2, 2)}
         />
       </div>
     </div>

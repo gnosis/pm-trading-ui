@@ -20,6 +20,11 @@ export const required = (val) => {
 }
 
 /**
+ * Returns an error if value is zero both string or number
+ */
+export const greaterThanZero = val => (val && parseFloat(val) > 0 ? undefined : 'Field length must be greater than 0')
+
+/**
  * Returns if input value has less than a minimum length value
  *
  * @param {*int} val - The value to test
@@ -141,8 +146,8 @@ export const lowerThanProperty = ({ formProp, validateAgainstProp }) => (val, pr
  * Validates an ArrayField component, by requiring each element length to be greater than the input param.
  * @param {*int} selectMinLength
  */
-export const multiSelectMinLength = selectMinLength => (val) => {
-  if (val && val.filter(v => v !== undefined && v.length >= selectMinLength).length === val.length) {
+export const multiSelectMinLength = (selectMinLength, minArrLength) => (val) => {
+  if (val && val.filter(v => v !== undefined && v.length >= selectMinLength).length >= minArrLength) {
     return undefined
   }
   return 'Field is required'
