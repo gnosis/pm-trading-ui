@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connectBlockchain, initGnosis } from 'actions/blockchain'
 import { getSelectedProvider } from 'selectors/blockchain'
@@ -46,7 +46,7 @@ export default class WalletIntegrationProvider extends Component {
       opts.ethereum = window.web3.currentProvider
     } else {
       // Default remote node
-      opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${config.ethereum.protocol}://${config.ethereum.host}:${config.ethereum.port}`)).currentProvider
+      opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
     }
 
     return opts

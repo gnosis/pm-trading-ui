@@ -4,7 +4,6 @@ import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
-import { weiToEth } from '../../utils/helpers'
 
 import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
@@ -24,6 +23,7 @@ import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 
 import './marketDetail.less'
+import { weiToEth } from '../../utils/helpers'
 
 const ONE_WEEK_IN_HOURS = 168
 const EXPAND_BUY_SHARES = 'buy-shares'
@@ -132,9 +132,9 @@ class MarketDetail extends Component {
     const currentView = this.props.params.view
 
     if (currentView === view || (currentView === undefined && view === DEFAULT_VIEW)) {
-      this.props.changeUrl(`markets/${this.props.params.id}`)
+      this.props.changeUrl(`/markets/${this.props.params.id}`)
     } else {
-      this.props.changeUrl(`markets/${this.props.params.id}/${view}`)
+      this.props.changeUrl(`/markets/${this.props.params.id}/${view}`)
     }
   }
 

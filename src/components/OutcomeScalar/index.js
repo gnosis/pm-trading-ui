@@ -3,7 +3,6 @@ import Decimal from 'decimal.js'
 
 import DecimalValue from 'components/DecimalValue'
 
-import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import { calcLMSRMarginalPrice } from 'api'

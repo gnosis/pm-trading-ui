@@ -1,13 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-const LoadingIcon = () => (
+const LoadingIndicator = ({ width = 40, height = 40 }) => (
   <svg
     version="1.1"
     id="loader-1"
     x="0px"
     y="0px"
-    width="40px"
-    height="40px"
+    width={`${width}px`}
+    height={`${height}px`}
     viewBox="0 0 40 40"
     enableBackground="new 0 0 40 40"
   >
@@ -33,4 +34,9 @@ const LoadingIcon = () => (
   </svg>
 )
 
-export default LoadingIcon
+LoadingIndicator.propTypes = {
+  height: PropTypes.number,
+  width: PropTypes.number,
+}
+
+export default LoadingIndicator

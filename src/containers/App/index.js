@@ -14,7 +14,7 @@ import HeaderContainer from 'containers/HeaderContainer'
 
 import './app.less'
 import modalStyles from './modalStyles'
-import LoadingIcon from '../../components/Icons/loading'
+import LoadingIndicator from '../../components/LoadingIndicator'
 
 class App extends Component {
   componentDidMount() {
@@ -26,12 +26,15 @@ class App extends Component {
       return (
         <div className="appContainer">
           <div className="loader-container">
-            <LoadingIcon />
+            <LoadingIndicator width={100} height={100} />
             <h1>Connecting</h1>
           </div>
         </div>
       )
     }
+
+    const currentKey = this.props.location.pathname.split('/')[2] || this.props.location.pathname.split('/')[1] || '/'
+    const timeout = { enter: 200, exit: 200 }
 
     return (
       <div className="appContainer">
@@ -49,7 +52,7 @@ class App extends Component {
         >
           <h1 id="heading">Oops!</h1>
           <div id="description">
-            <p>We couldn't detect your account. Please check your wallet provider and reload the page</p>
+            <p>We couldn&apos;t detect your account. Please check your wallet provider and reload the page</p>
           </div>
         </Modal>
       </div>
@@ -62,7 +65,7 @@ App.propTypes = {
   blockchainConnection: PropTypes.bool,
   children: PropTypes.node,
   connectBlockchain: PropTypes.func,
-  blockchainConnection: PropTypes.bool,
+  location: PropTypes.object,
   hasWallet: PropTypes.bool,
 }
 
