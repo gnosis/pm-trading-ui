@@ -9,7 +9,7 @@ class Remote extends InjectedWeb3 {
   async initialize(store) {
     this.store = store
     this.store.dispatch(registerProvider({ provider: WALLET_PROVIDER.REMOTE }))
-    this.web3 = new Web3(new Web3.providers.HttpProvider(`${config.ethereum.protocol}://${config.ethereum.host}:${config.ethereum.port}`))
+    this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
     const canSubscribe = !(store.getState().blockchain && store.getState().blockchain.activeProvider)
     let account
     let network

@@ -152,14 +152,14 @@ export const createMarket = async (market) => {
   console.log('market', market)
   const gnosis = await getGnosisConnection()
   const fee = Decimal(market.fee).mul(10000).trunc().toString() // fee times 10000 as uint24
-  
+
   const marketContract = await gnosis.createMarket({
     ...market,
     fee,
     marketMaker: gnosis.lmsrMarketMaker,
     marketFactory: gnosis.standardMarketFactory,
   })
-  
+
   if (process.env.NODE_ENV !== 'production') {
     await delay(5000)
   }
