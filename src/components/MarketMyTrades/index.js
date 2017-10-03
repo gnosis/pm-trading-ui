@@ -9,7 +9,6 @@ import { getOutcomeName } from 'utils/helpers'
 import './marketMyTrades.less'
 
 class MarketMyTrades extends Component {
-
   componentWillMount() {
     const { market, defaultAccount } = this.props
     if (!market.participantTrades || market.participantTrades.length == 0) {
@@ -36,27 +35,25 @@ class MarketMyTrades extends Component {
       <tr className="marketMyTrades__share" key={trade._id}>
         <td>
           <div
-            className={'shareOutcome__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
+            className={'shareOutcome__color'}
+            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
           />
         </td>
-        <td>
-          {trade.orderType}
-        </td>
-        <td>
-          {getOutcomeName(market, trade.outcomeToken.index)}
-        </td>
-        <td>
-          {decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}
-        </td>
+        <td>{trade.orderType}</td>
+        <td>{getOutcomeName(market, trade.outcomeToken.index)}</td>
+        <td>{decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}</td>
         <td>
           {decimalToText(this.getAverageCost(trade))}
           <CurrencyName collateralToken={market.event.collateralToken} />
         </td>
         <td>
-          {moment.utc(trade.date).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+          {moment
+            .utc(trade.date)
+            .local()
+            .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
         </td>
       </tr>
-      ))
+    ))
 
     return tableRowElements
   }
@@ -73,21 +70,21 @@ class MarketMyTrades extends Component {
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--index" />
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Order Type</th>
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Outcome</th>
-                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Outcome token count</th>
+                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">
+                  Outcome token count
+                </th>
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Avg. Price</th>
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Date</th>
               </tr>
             </thead>
-            <tbody>
-              {this.renderTrades()}
-            </tbody>
+            <tbody>{this.renderTrades()}</tbody>
           </table>
         </div>
       )
     } else {
       return (
         <div className="marketMyTrades">
-          <h2 className="marketMyTrades__heading">You haven't interacted with this market yet.</h2>
+          <h2 className="marketMyTrades__heading">You haven&apos;t interacted with this market yet.</h2>
           <h3>Every transaction that happens on this market will be shown here.</h3>
         </div>
       )
