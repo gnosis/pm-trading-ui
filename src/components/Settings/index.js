@@ -9,7 +9,6 @@ import FormInput from 'components/FormInput'
 import './settings.less'
 
 
-
 class Settings extends Component {
 
   renderForm() {
@@ -87,13 +86,12 @@ class Settings extends Component {
 
 const renderSettings = ({ fields, meta: { error } }) =>
 
-      <div className="row">
-        <div className="col-xs-12">
-          <button type="button" onClick={() => fields.push({address: '', name: ''})} className="btn btn-default">
-            {fields.getAll() && fields.getAll().length > 0 ? 'ADD ANOTHER' : 'ADD'}
-          </button>
-        <div>
-      </div>
+  <div className="row">
+    <div className="col-xs-12">
+      <button type="button" onClick={() => fields.push({ address: '', name: '' })} className="btn btn-default">
+        {fields.getAll() && fields.getAll().length > 0 ? 'ADD ANOTHER' : 'ADD'}
+      </button>
+      <div />
       {fields.map((item, index) =>
         <div className="row moderatorItem" key={index}>
           <div className="col-xs-12 col-sm-8">
@@ -124,7 +122,7 @@ const renderSettings = ({ fields, meta: { error } }) =>
               Remove
             </button>
           </div>
-        </div>
+        </div>,
       )}
       {fields.getAll() && fields.getAll().length > 0 ?
         <div className="row">
@@ -136,10 +134,10 @@ const renderSettings = ({ fields, meta: { error } }) =>
         </div>
         : <div />
       }
-      </div>
     </div>
+  </div>
 
-const validate = values => {
+const validate = (values) => {
   const errors = {}
   const settingsErrors = []
   values.settings.forEach((item, index) => {
@@ -149,17 +147,15 @@ const validate = values => {
       error.name = 'Required'
       settingsErrors[index] = error
     }
-    const occurrences = values.settings.filter((other) => item.address == other.address)
+    const occurrences = values.settings.filter(other => item.address == other.address)
     // Value Errors
     if (occurrences.length > 1) {
       error.address = 'Duplicated Address'
       settingsErrors[index] = error
-    }
-    else if (!item.address) {
+    } else if (!item.address) {
       error.address = 'Required'
       settingsErrors[index] = error
-    }
-    else if (item.address.length != 42) {
+    } else if (item.address.length != 42) {
       error.address = 'Invalid Ethereum address'
       settingsErrors[index] = error
     }
@@ -175,7 +171,7 @@ const validate = values => {
 const form = {
   form: 'settingsForm',
   asyncBlurFields: [],
-  validate
+  validate,
 }
 
 export default reduxForm(form)(Settings)

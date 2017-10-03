@@ -11,7 +11,7 @@ import './marketMyTrades.less'
 class MarketMyTrades extends Component {
 
   componentWillMount() {
-    const { market, defaultAccount } = this.props    
+    const { market, defaultAccount } = this.props
     if (!market.participantTrades || market.participantTrades.length == 0) {
       // Retrieve participant trades to state
       this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
@@ -32,33 +32,31 @@ class MarketMyTrades extends Component {
   renderTrades() {
     const { market } = this.props
 
-    const tableRowElements = market.participantTrades.map((trade) => {
-      return (
-        <tr className="marketMyTrades__share" key={trade['_id']}>
-          <td>
-            <div
-              className={'shareOutcome__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
-            />
-          </td>
-          <td>
-            {trade.orderType}
-          </td>
-          <td>
-            {getOutcomeName(market, trade.outcomeToken.index)}
-          </td>
-          <td>
-            {decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}
-          </td>
-          <td>
-            {decimalToText(this.getAverageCost(trade))}
-            &nbsp;<CurrencyName collateralToken={market.event.collateralToken} />
-          </td>
-          <td>
-            {moment.utc(trade.date).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-          </td>
-        </tr>
-      )
-    })
+    const tableRowElements = market.participantTrades.map(trade => (
+      <tr className="marketMyTrades__share" key={trade._id}>
+        <td>
+          <div
+            className={'shareOutcome__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
+          />
+        </td>
+        <td>
+          {trade.orderType}
+        </td>
+        <td>
+          {getOutcomeName(market, trade.outcomeToken.index)}
+        </td>
+        <td>
+          {decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}
+        </td>
+        <td>
+          {decimalToText(this.getAverageCost(trade))}
+          <CurrencyName collateralToken={market.event.collateralToken} />
+        </td>
+        <td>
+          {moment.utc(trade.date).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+        </td>
+      </tr>
+      ))
 
     return tableRowElements
   }
@@ -86,8 +84,7 @@ class MarketMyTrades extends Component {
           </table>
         </div>
       )
-    }
-    else {
+    } else {
       return (
         <div className="marketMyTrades">
           <h2 className="marketMyTrades__heading">You haven't interacted with this market yet.</h2>

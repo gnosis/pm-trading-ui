@@ -26,7 +26,7 @@ const reducer = handleActions({
       id => id !== action.payload.id,
     ),
   }),
-  [hideAllNotifications]: (state) => ({
+  [hideAllNotifications]: state => ({
     ...state,
     currentVisible: [],
   }),

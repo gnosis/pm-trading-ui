@@ -23,15 +23,15 @@ export default store => next => (action) => {
       // intercept close log messages, fire notification handler
       store.dispatch(createNotificationFromTransaction(payload.id, 'CLOSE'))
     }
-  
+
     if (type === 'START_TRANSACTION_LOG') {
       store.dispatch(createNotificationFromTransaction(payload.id, 'START'))
     }
-  
+
     // disable/hide all notifications while menu is open
     if (type === 'SHOW_TRANSACTION_LOG' || type === 'HIDE_TRANSACTION_LOG') {
       store.dispatch(hideAllNotifications())
-    }  
+    }
   }
 
   return handledAction

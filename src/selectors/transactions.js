@@ -65,10 +65,10 @@ export const getAllTransactions = state => Object.keys(_.get(state, 'transaction
   .map(transactionId => ({ ...state.transactions.log[transactionId], id: transactionId }))
   .map(transaction => ({ ...transaction, progress: getTransactionProgress(state, transaction.id) }))
 
-export const getRunningTransactions = (state) =>
+export const getRunningTransactions = state =>
   getAllTransactions(state).filter(transaction => !transaction.completed)
 
-export const getCompletedTransactions = (state) =>
+export const getCompletedTransactions = state =>
   getAllTransactions(state).filter(transaction => transaction.completed)
 
 export const getRunningTransactionsProgress = (state) => {
@@ -80,4 +80,4 @@ export const getRunningTransactionsProgress = (state) => {
   return doneEvents / totalEvents
 }
 
-export const areLogsVisible = (state) => state.transactions.visible
+export const areLogsVisible = state => state.transactions.visible

@@ -17,13 +17,9 @@ export const hexWithoutPrefix = (value) => {
  * Adds the `0x` prefix to the incoming string value
  * @param {String} value
  */
-export const add0xPrefix = (value) => {
-  return startsWith(value, '0x') ? value : `0x${value}`
-}
+export const add0xPrefix = value => startsWith(value, '0x') ? value : `0x${value}`
 
-export const hexWithPrefix = (value) => {
-  return HEX_VALUE_REGEX.test(value) ? add0xPrefix(value) : value
-}
+export const hexWithPrefix = value => HEX_VALUE_REGEX.test(value) ? add0xPrefix(value) : value
 
 export const toEntity = (data, entityType, idKey = 'address') => {
   const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
@@ -99,7 +95,7 @@ export const normalizeScalarPoint = (
  */
 export const addIdToObjectsInArray = (arrayData) => {
   arrayData.forEach((item, index) => {
-    item['_id'] = index
+    item._id = index
   })
   return arrayData
 }

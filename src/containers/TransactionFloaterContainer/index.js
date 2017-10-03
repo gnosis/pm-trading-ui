@@ -26,7 +26,7 @@ const mapStateToProps = state => ({
   runningTransactions: takeRight(getRunningTransactions(state, 2), LIMIT_COUNT_RUNNING_TRANSACTIONS),
   completedTransactions: takeRight(getCompletedTransactions(state, 2), LIMIT_COUNT_COMPLETED_TRANSACTIONS),
   progress: getRunningTransactionsProgress(state),
-  notifications: getVisibleNotifications(state), 
+  notifications: getVisibleNotifications(state),
   showLogs: areLogsVisible(state),
 })
 

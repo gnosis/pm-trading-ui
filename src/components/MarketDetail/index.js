@@ -159,7 +159,7 @@ class MarketDetail extends Component {
 
       if (typeof view.showCondition !== 'function' || view.showCondition(this.props)) {
         const ViewComponent = view.component
-
+        
         // Not sure if this is a good idea; If I need to optimize, here's a good place to start
         return (
           <div className="expandable__inner">

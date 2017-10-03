@@ -332,7 +332,7 @@ export const redeemWinnings = market => async (dispatch) => {
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Redeeming Winnings for  "${market.eventDescription.title}"`))
 
   try {
-    console.log("winnings: ", await api.redeemWinnings(market.event.type, market.event.address))
+    console.log('winnings: ', await api.redeemWinnings(market.event.type, market.event.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
   } catch (e) {
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
@@ -342,7 +342,7 @@ export const redeemWinnings = market => async (dispatch) => {
   }
 
   // TODO: Update market so we can't redeem again
-  
+
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
@@ -354,12 +354,12 @@ export const withdrawFees = market => async (dispatch) => {
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Withdrawing Fees for "${market.eventDescription.title}"`))
 
   try {
-    console.log("fees: " , await api.withdrawFees(market.address))
+    console.log('fees: ', await api.withdrawFees(market.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
   } catch (e) {
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
-    
+
     throw e
   }
 
