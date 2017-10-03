@@ -9,26 +9,26 @@ const FORM = {
   onSubmit: async (values, dispatch, props) => {
     const { formValues, syncErrors, pristine, dirty } = props
     return await dispatch(updateSettings(formValues.settings))
-  }
+  },
 }
 
 const mapStateToProps = (state, ownProps) => {
   const selector = formValueSelector('settingsForm')
   const settings = Object.keys(state.settings.mapping).map(
     (address) => {
-      if (state.settings.mapping[address]){
-        return {address, name: state.settings.mapping[address]}
+      if (state.settings.mapping[address]) {
+        return { address, name: state.settings.mapping[address] }
       }
-    }
+    },
   )
 
   return {
     formValues: {
-      settings: selector(state, 'settings')
+      settings: selector(state, 'settings'),
     },
     initialValues: {
-      settings
-    }
+      settings,
+    },
   }
 }
 

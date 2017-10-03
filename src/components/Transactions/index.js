@@ -61,8 +61,8 @@ const renderTransaction = type => ({
       <div className="transaction__heading">{label}</div>
       <div className="transaction__details">
         <div className="transaction__detail">
-            <div className="icon icon--new" />
-            <div className="transaction__detailLabel">Created at</div>
+          <div className="icon icon--new" />
+          <div className="transaction__detailLabel">Created at</div>
           {moment(startTime).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
         </div>
         {endTime && (

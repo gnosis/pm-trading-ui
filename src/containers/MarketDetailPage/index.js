@@ -17,13 +17,7 @@ import {
   closeMarket,
 } from 'actions/market'
 import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
-import {
-  getDefaultAccount,
-  getGasCosts,
-  getGasPrice,
-  isGasCostFetched,
-  isGasPriceFetched,
-} from 'selectors/blockchain'
+import { getDefaultAccount, getGasCosts, getGasPrice, isGasCostFetched, isGasPriceFetched } from 'selectors/blockchain'
 import { isModerator, getModerators } from 'utils/helpers'
 
 const mapStateToProps = (state, ownProps) => {
@@ -60,15 +54,17 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarketParticipantTrades: (marketAddress, accountAddress) =>
     dispatch(requestMarketParticipantTrades(marketAddress, accountAddress)),
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
-  buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
-  sellShares: (market, outcomeIndex, outcomeTokenCount) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount)),
+  buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
+    dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
+  sellShares: (market, outcomeIndex, outcomeTokenCount) =>
+    dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount)),
   resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   withdrawFees: market => dispatch(withdrawFees(market)),
   requestGasCost: contractType => dispatch(requestGasCost(contractType)),
   requestGasPrice: () => dispatch(requestGasPrice()),
-  closeMarket: (market) => dispatch(closeMarket(market)),
+  closeMarket: market => dispatch(closeMarket(market)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)

@@ -34,7 +34,6 @@ class MarketShortSellForm extends Component {
     // Ratio outcomeTokenCount : collateralTokenCount is always 1:1
     if (outcomeTokenIndex !== undefined && collateralTokenCount !== undefined
         && new Decimal(outcomeTokenIndex).gte(0) && new Decimal(collateralTokenCount).gt(0)) {
-
       const args = {
         outcomeTokenIndex,
         netOutcomeTokensSold: market.netOutcomeTokensSold,
@@ -142,10 +141,10 @@ class MarketShortSellForm extends Component {
           type: eventType,
           collateralToken,
         },
-        ...market,
+        ...market
       },
     } = this.props
-        
+
     const minProfit = this.getMinProfit(market, selectedShortSellOutcome, selectedShortSellAmount)
     const maximumReturn = this.getMaximumReturn(selectedShortSellAmount, minProfit)
 
@@ -179,8 +178,8 @@ class MarketShortSellForm extends Component {
                     Maximum return
                   </div>
                 <div className="col-md-6">
-                  <span className="marketBuyWin__row marketBuyWin__max">                    
-                    <DecimalValue value={maximumReturn} /> %                    
+                  <span className="marketBuyWin__row marketBuyWin__max">
+                    <DecimalValue value={maximumReturn} /> %
                   </span>
                 </div>
               </div>

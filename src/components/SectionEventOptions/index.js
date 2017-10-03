@@ -5,7 +5,7 @@ import Checkbox from 'components/FormCheckbox'
 
 const SectionEventOptions = () => (
   <div className="sectionEventOptions">
-    {/*<Field component={Checkbox} name="ultimateOracle" label="Ultimate Oracle" text="This Event should use an ultimate Oracle." />*/}
+    {/* <Field component={Checkbox} name="ultimateOracle" label="Ultimate Oracle" text="This Event should use an ultimate Oracle." />*/}
   </div>
 )
 
