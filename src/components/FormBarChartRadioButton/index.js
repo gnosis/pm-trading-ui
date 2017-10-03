@@ -9,7 +9,6 @@ import DecimalValue from 'components/DecimalValue'
 import './formBarChartRadioButton.less'
 
 const FormBarChartRadioButton = ({ input, radioValues, label, className, meta: { error, touched }, market }) => {
-
   const renderOutcomes = market.eventDescription.outcomes
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({

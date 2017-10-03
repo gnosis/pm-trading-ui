@@ -78,7 +78,7 @@ const mapStateToProps = (state) => {
     const gasPrice = getGasPrice(state)
     let createMarketGas = 0
     let createMarketCost = '0'
-  
+
     if (oracleType === ORACLE_TYPES.CENTRALIZED) {
       createMarketGas += gasCosts.centralizedOracle
     }
@@ -87,7 +87,7 @@ const mapStateToProps = (state) => {
     } else if (outcomeType === OUTCOME_TYPES.SCALAR) {
       createMarketGas += gasCosts.scalarEvent
     }
-  
+
     createMarketGas += gasCosts.funding
     createMarketGas += gasCosts.market
     createMarketCost = weiToEth(gasPrice.mul(Math.floor(createMarketGas)))
@@ -113,7 +113,7 @@ const mapStateToProps = (state) => {
       submitting,
     }
   }
-  
+
   return {
     formValues: {},
     createMarketCost: '0',

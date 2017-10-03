@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions'
 
-import { 
+import {
   setDefaultAccount, setCurrentBalance, setConnectionStatus, setGnosisInitialized,
   setGasCost, setGasPrice, registerProvider, updateProvider, setEtherTokens,
 } from 'actions/blockchain'

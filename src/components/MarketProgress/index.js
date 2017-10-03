@@ -14,7 +14,6 @@ const MarketProgress = ({
   transaction: { startTime, endTime },
   closeModal,
 }) => {
-
   const timeDiff = (startTime && endTime) ? moment(startTime).to(moment(endTime), true) : undefined
 
   let headerText = 'Market Creation in Progress'
