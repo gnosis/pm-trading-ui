@@ -26,11 +26,11 @@
       background-image: none;
     }
   }
-
 }
 
 .marketReviewDetails {
-  padding-top: 67px; // magic number :( amount of pixels before the description part starts
+  // magic number :( amount of pixels before the description part starts
+  // padding-top: 67px;
 
   &__label {
     text-transform: uppercase;
@@ -88,7 +88,6 @@
 
 .listItem {
   &__label {
-    display: inline-block;
     float: left;
   }
 
@@ -112,21 +111,38 @@
   width: 90%;
 }
 
-.outcomeCategorical {
+.outcomeCategorical,
+.resolutionDate {
   &__header {
     text-transform: uppercase;
     color: @font-color-muted;
     font-size: 16px;
-    margin-top: 50px !important;
+    margin-top: 50px;
   }
+}
+
+.resolutionDate {
+  &__header + .marketReviewDetails__value {
+    margin-top: 5px;
+  }
+}
+
+.outcomes__categorical,
+.outcomes__scalar {
+  margin-top: 50px;
+
+  & > h3 {
+    text-transform: uppercase;
+  }
+}
+
+.outcomeCategorical {
   &__color {
-    display: inline-block;
     height: 16px;
     width: 16px;
     float: left;
     border-radius: 4px;
     margin: 10px 5px 10px 0;
-
   }
 
   &__label {

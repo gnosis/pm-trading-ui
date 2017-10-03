@@ -6,7 +6,7 @@ import { bemifyClassName } from 'utils/helpers'
 
 import './formInput.less'
 
-const Input = ({ input, label, type, className, placeholder, meta: { touched, error } }) => (
+const Input = ({ input, label, type, className, placeholder, continuousPlaceholder, meta: { touched, error } }) => (
   <div className={`inputField ${bemifyClassName(className)}`}>
     <label htmlFor={input.name} className={`inputField__label ${bemifyClassName(className, 'label')}`}>{ label }</label>
     <input
@@ -15,6 +15,13 @@ const Input = ({ input, label, type, className, placeholder, meta: { touched, er
       type={`${type || 'text'}`}
       {...input}
     />
+    {continuousPlaceholder &&
+      <input
+        className={`inputField__continuousPlaceholder ${bemifyClassName(className, 'continuousPlaceholder')}`}
+        type="text"
+        value={continuousPlaceholder}
+        disabled
+      />}
     {touched &&
       error &&
       <span>

@@ -1,4 +1,4 @@
-export const ETHERIUM_NETWORKS = {
+export const ETHEREUM_NETWORKS = {
   MAIN: 'MAIN',
   MORDEN: 'MORDEN',
   ROPSTEN: 'ROPSTEN',
@@ -9,6 +9,8 @@ export const ETHERIUM_NETWORKS = {
 
 export const WALLET_PROVIDER = {
   METAMASK: 'METAMASK',
+  PARITY: 'PARITY',
+  REMOTE: 'REMOTE',
 }
 
 export const EVENT_TYPES = {

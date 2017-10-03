@@ -6,8 +6,32 @@ import moment from 'moment'
  * @param {*} val - The value to test
  */
 export const required = (val) => {
-  if (val == null || val === '' || val.length === 0) {
+  if (
+    val === undefined ||
+    val === null ||
+    val === '' ||
+    val.length === 0 ||
+    (typeof val === 'string' && val.trim() === '')
+  ) {
     return 'Field is required'
+  }
+
+  return undefined
+}
+
+/**
+ * Returns an error if value is zero both string or number
+ */
+export const greaterThanZero = val => (val && parseFloat(val) > 0 ? undefined : 'Field length must be greater than 0')
+
+/**
+ * Returns if input value has less than a minimum length value
+ *
+ * @param {*int} val - The value to test
+ */
+export const minLength = length => (val) => {
+  if (val == null || val === '' || val.length < length) {
+    return `Minimum ${length} chars`
   }
 
   return undefined
@@ -50,7 +74,7 @@ export const isDate = ({ minDate, maxDate }) => (val) => {
  * @param {string} opts.decimalsProp - Allowed Decimalplaces (get from props with this key)
  * @param {bool} opts.realOnly - Disallows floats
  */
-export const isNumber = ({ decimals, realOnly, decimalsProp }) => (val, vals, props) => {
+export const isNumber = ({ decimals, realOnly, decimalsProp }) => (val, vals, props) => {
   // don't validate if no value is set
   if (required(val) !== undefined) {
     return undefined
@@ -61,13 +85,13 @@ export const isNumber = ({ decimals, realOnly, decimalsProp }) => (val, vals, p
     return 'Invalid Number'
   }
 
-  if (decimals || decimalsProp) {
+  if (decimals || decimalsProp) {
     const decimalNumbersAllowed = decimals || props[decimalsProp]
 
     if (required(decimalNumbersAllowed) === undefined) {
       const decimalNumbers = val.split('.')[1]
 
-      if (decimalNumbers && decimalNumbers.length > decimalNumbersAllowed) {
+      if (decimalNumbers && decimalNumbers.length > decimalNumbersAllowed) {
         return `Too many decimals, only ${decimalNumbersAllowed} numbers after decimalpoint are legal`
       }
     }
@@ -116,6 +140,17 @@ export const lowerThanProperty = ({ formProp, validateAgainstProp }) => (val, pr
   }
 
   return undefined
+}
+
+/**
+ * Validates an ArrayField component, by requiring each element length to be greater than the input param.
+ * @param {*int} selectMinLength
+ */
+export const multiSelectMinLength = (selectMinLength, minArrLength) => (val) => {
+  if (val && val.filter(v => v !== undefined && v.length >= selectMinLength).length >= minArrLength) {
+    return undefined
+  }
+  return 'Field is required'
 }
 
 /**

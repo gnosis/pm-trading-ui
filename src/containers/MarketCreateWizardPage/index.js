@@ -20,7 +20,8 @@ const FORM = {
     fee: '0.5',
     decimals: '2',
     collateralToken: 'eth',
-    outcomes: [''],
+    outcomes: ['', ''],
+    funding: '0',
   },
 }
 
@@ -30,6 +31,7 @@ const mapStateToProps = (state) => {
     selectedOracleType: selector(state, 'oracleType'),
     selectedOutcomeType: selector(state, 'outcomeType'),
     decimals: parseInt(selector(state, 'decimals'), 10),
+    unit: selector(state, 'unit'),
     defaultAccount: getDefaultAccount(state),
   }
 }

@@ -3,19 +3,18 @@ import PropTypes from 'prop-types'
 import { Field } from 'redux-form'
 
 import FormInput from 'components/FormInput'
-
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
 import './formOutcomeList.less'
 
 const FormOutcomeList = ({ fields, label, meta: { error, invalid } }) => (
   <div className="formOutcomeList">
-    <label className="formOutcomeList__label">{label}</label>
+    <label htmlFor="outcomes" className="formOutcomeList__label">
+      {label}
+    </label>
     {fields.map((field, index) => (
       <div key={index} className={'formOutcomeList__entry'}>
-        <div
-          className={'entry__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }}
-        />
+        <div className={'entry__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }} />
         <Field
           component={FormInput}
           name={`${field}`}
@@ -27,7 +26,7 @@ const FormOutcomeList = ({ fields, label, meta: { error, invalid } }) => (
           className="formOutcomeListInput"
           placeholder="Add another..."
         />
-        {fields.length > 1 && (
+        {fields.length > 2 && (
           <a
             className="entry__delete"
             href=""
@@ -36,14 +35,13 @@ const FormOutcomeList = ({ fields, label, meta: { error, invalid } }) => (
               e.preventDefault()
               fields.remove(index)
             }}
-          >Delete</a>
-            )}
+          >
+            Delete
+          </a>
+        )}
       </div>
-        ))}
-    {invalid && error &&
-      <span>
-        {error}
-      </span>}
+    ))}
+    {invalid && error && <span>{error}</span>}
   </div>
 )
 

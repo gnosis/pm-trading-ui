@@ -2,6 +2,7 @@ import React from 'react'
 
 import { FieldArray } from 'redux-form'
 import OutcomeList from 'components/FormOutcomeList'
+import { multiSelectMinLength } from 'utils/validators'
 
 const OutcomeCategorical = () => (
   <div className="outcomeCategorical">
@@ -11,9 +12,7 @@ const OutcomeCategorical = () => (
           name="outcomes"
           component={OutcomeList}
           label="Outcomes"
-          validate={(val) => {
-            return val && val.filter(v => v.length > 0).length > 0 ? undefined : 'Field is required'
-          }}
+          validate={multiSelectMinLength(2, 2)}
         />
       </div>
     </div>

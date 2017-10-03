@@ -6,7 +6,7 @@ import * as validators from 'utils/validators'
 
 import Input from 'components/FormInput'
 
-const OutcomeScalar = () => (
+const OutcomeScalar = ({ unit }) => (
   <div className="outcomeScalar">
     <div className="row">
       <div className="col-md-12">
@@ -21,18 +21,20 @@ const OutcomeScalar = () => (
     <div className="row">
       <div className="col-md-12">
         <Field
-          name="upperBound" component={Input} label="Upperbound"
+          continuousPlaceholder={unit}
+          name="lowerBound" component={Input} label="Lower Bound"
           validate={validators.all(validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
-          validators.greaterThanProperty({ formProp: 'UpperBound', validateAgainstProp: 'lowerBound' }))}
+          validators.lowerThanProperty({ formProp: 'LowerBound', validateAgainstProp: 'upperBound' }))}
         />
       </div>
     </div>
     <div className="row">
       <div className="col-md-12">
         <Field
-          name="lowerBound" component={Input} label="Lowerbound"
+          continuousPlaceholder={unit}
+          name="upperBound" component={Input} label="Upper Bound"
           validate={validators.all(validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
-          validators.lowerThanProperty({ formProp: 'LowerBound', validateAgainstProp: 'upperBound' }))}
+          validators.greaterThanProperty({ formProp: 'UpperBound', validateAgainstProp: 'lowerBound' }))}
         />
       </div>
     </div>
@@ -40,7 +42,7 @@ const OutcomeScalar = () => (
 )
 
 OutcomeScalar.propTypes = {
-  decimals: PropTypes.number,
+  unit: PropTypes.string,
 }
 
 export default OutcomeScalar

@@ -4,7 +4,6 @@ import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
-import { weiToEth } from '../../utils/helpers'
 
 import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
@@ -24,6 +23,7 @@ import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 
 import './marketDetail.less'
+import { weiToEth } from '../../utils/helpers'
 
 const ONE_WEEK_IN_HOURS = 168
 const EXPAND_BUY_SHARES = 'buy-shares'
@@ -42,6 +42,7 @@ const expandableViews = {
     component: MarketBuySharesForm,
     showCondition: props =>
       props.market &&
+      !props.market.local &&
       props.defaultAccount &&
       props.defaultAccount !== props.market.owner &&
       !props.market.oracle.isOutcomeSet,
@@ -92,7 +93,8 @@ const expandableViews = {
     component: MarketWithdrawFeesForm,
     showCondition: props =>
       props.market &&
-      props.defaultAccount && props.market.oracle.owner === props.defaultAccount,
+      props.defaultAccount && props.market.oracle.owner === props.defaultAccount
+      && new Decimal(props.market.collectedFees).gt(0),
   },
 }
 
@@ -130,9 +132,9 @@ class MarketDetail extends Component {
     const currentView = this.props.params.view
 
     if (currentView === view || (currentView === undefined && view === DEFAULT_VIEW)) {
-      this.props.changeUrl(`markets/${this.props.params.id}`)
+      this.props.changeUrl(`/markets/${this.props.params.id}`)
     } else {
-      this.props.changeUrl(`markets/${this.props.params.id}/${view}`)
+      this.props.changeUrl(`/markets/${this.props.params.id}/${view}`)
     }
   }
 
@@ -175,11 +177,11 @@ class MarketDetail extends Component {
   renderInfos(market) {
     const infos = {
       Token: collateralTokenToText(market.event.collateralToken),
-      Fee: `${decimalToText(market.fee, 4) / 10000} %`,
+      Fee: `${decimalToText(market.fee, 2) / 10000} %`,
       Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
       'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
-    const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
+    const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount && new Decimal(market.collectedFees).gt(0)
 
     if (this.props.creatorIsModerator) {
       // Show creator String
@@ -207,7 +209,6 @@ class MarketDetail extends Component {
   renderDetails(market) {
     const showWinning = market.oracle.isOutcomeSet
     const showLost = false // determine if we lost?
-    const showWithdrawFees = this.props.defaultAccount && market.oracle.owner === this.props.defaultAccount
     const timeToResolution = moment.utc(market.eventDescription.resolutionDate).local().diff(moment(), 'hours')
 
     return (
@@ -230,18 +231,6 @@ class MarketDetail extends Component {
               {moment.utc(market.eventDescription.resolutionDate).local().format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
           </div>}
-        {showWithdrawFees && (
-          <div className="withdrawFees">
-            <div className="withdrawFees__icon icon icon--earnedTokens" />
-            <div className="withdrawFees__details">
-              <div className="withdrawFees__heading">{decimalToText(weiToEth(market.collectedFees))} {collateralTokenToText(market.event.collateralToken)}</div>
-              <div className="withdrawFees__label">Earnings through market fees</div>
-            </div>
-            <div className="withdrawFees__action">
-              <button className="btn btn-link" type="button" onClick={this.handleWithdrawFees}>Withdraw fees</button>
-            </div>
-          </div>
-        )}
         {showWinning && (
           <div className="redeemWinning">
             <div className="redeemWinning__icon icon icon--achievementBadge" />
@@ -364,6 +353,7 @@ MarketDetail.propTypes = {
   moderators: PropTypes.shape({
     address: PropTypes.string,
   }),
+  closeMarket: PropTypes.func,
 }
 
 export default MarketDetail

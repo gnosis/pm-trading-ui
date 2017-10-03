@@ -2,14 +2,33 @@ import React, { PropTypes } from 'react'
 
 import './progressSpinner.less'
 
-const ProgressSpinner = ({ width, height, progress, modifier, showLabel, label, strokeWidthPx = 10, fontSizePx = 42, showBar = true, minBarSize = 0 }) => {
+const ProgressSpinner = ({
+  width,
+  height,
+  progress,
+  modifier,
+  showLabel,
+  label,
+  strokeWidthPx = 10,
+  fontSizePx = 42,
+  showBar = true,
+  minBarSize = 0,
+}) => {
   const size = Math.min(width, height)
   const r = (size / 2) - strokeWidthPx
   const d = r * 2
-  const strokeDashoffset = Math.abs((Math.max(progress, minBarSize / 100)) - 1) * Math.PI * d
+  const strokeDashoffset = Math.abs(Math.max(progress, minBarSize / 100) - 1) * Math.PI * d
 
   return (
-    <div className={`progressSpinner ${modifier ? modifier.split(' ').map(mod => `progressSpinner--${mod}`).join(' ') : ''}`} style={{width: `${width}px`, height: `${height}px`}}>
+    <div
+      className={`progressSpinner ${modifier
+        ? modifier
+            .split(' ')
+            .map(mod => `progressSpinner--${mod}`)
+            .join(' ')
+        : ''}`}
+      style={{ width: `${width}px`, height: `${height}px` }}
+    >
       <svg className="progressSpinner__svg" width={width} height={width}>
         <defs>
           <linearGradient id="ProgressSpinnerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -42,7 +61,13 @@ const ProgressSpinner = ({ width, height, progress, modifier, showLabel, label, 
           />
         )}
       </svg>
-      <div className="progressSpinner__label">{showLabel && (<span className="progressSpinner__labelInner" style={{ fontSize: `${fontSizePx}px` }}>{label}</span>)}</div>
+      <div className="progressSpinner__label">
+        {showLabel && (
+          <span className="progressSpinner__labelInner" style={{ fontSize: `${fontSizePx}px` }}>
+            {label}
+          </span>
+        )}
+      </div>
     </div>
   )
 }

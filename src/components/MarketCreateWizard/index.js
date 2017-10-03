@@ -20,10 +20,15 @@ export default class MarketCreateWizard extends Component {
     if (!this.props.defaultAccount) {
       this.props.changeUrl('/markets')
     }
+
+
+    // i commented this out because we dont have such property 'outcomes'
+    // maybe we did before, but now this check will always overwrite our outcomes
+
     // fill outcomes in case of not filled (coming from review)
-    if (!this.props.outcomes) {
-      this.props.change('outcomes', [''])
-    }
+    // if (!this.props.outcomes) {
+    //   this.props.change('outcomes', ['', ''])
+    // }
 
     this.props.requestGasCost(GAS_COST.MARKET_CREATION)
     this.props.requestGasCost(GAS_COST.CENTRALIZED_ORACLE)
@@ -37,11 +42,9 @@ export default class MarketCreateWizard extends Component {
   handleShowReview(values) {
     // clear empty outcomes
     if (values.outcomes) {
-      this.props.change('outcomes', values.outcomes.filter(s => s.length > 0))
+      this.props.change('outcomes', values.outcomes.filter(s => s && s.length > 0))
     }
-
     window.scrollTo(0, 0)
-
     return this.props.changeUrl('markets/review')
   }
 
@@ -54,7 +57,8 @@ export default class MarketCreateWizard extends Component {
         <div className="col-md-10">
           <h2 className="marketWizardHeading marketWizardHeading__title">{title}</h2>
         </div>
-      </div>)
+      </div>
+    )
   }
 
   renderOracleTypes() {
@@ -86,17 +90,23 @@ export default class MarketCreateWizard extends Component {
       <div className="marketDetails">
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="collateralToken" label="Currency" component={FormRadioButton} radioValues={[{ label: 'Ether Token', value: 'eth' }]} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-offset-2 col-md-10">
             <Field name="fee" component={FormSlider} min={0} max={10} label="Fee" unit="%" />
           </div>
         </div>
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="funding" component={FormInput} type="text" validate={validators.all(validators.required, validators.isNumber({ decimals: 4 }))} label="Funding" />
+            <Field
+              name="funding"
+              continuousPlaceholder="ETH"
+              component={FormInput}
+              type="text"
+              validate={validators.all(
+                validators.required,
+                validators.isNumber({ decimals: 4 }),
+                validators.greaterThanZero,
+              )}
+              label="Funding"
+            />
           </div>
         </div>
       </div>
@@ -117,7 +127,6 @@ export default class MarketCreateWizard extends Component {
     return (
       <div className="marketCreate__form">
         {this.renderHeading(1, 'Event Details')}
-        {this.renderOracleTypes()}
         {this.renderForOracleType()}
         {this.renderHeading(2, 'Market Details')}
         {this.renderMarketDetails()}
@@ -138,7 +147,9 @@ export default class MarketCreateWizard extends Component {
             <div className="row">
               <div className="col-md-8">
                 {this.renderForm()}
-                <button className="marketCreateButton btn btn-primary" type="submit">Review <i className="arrow" /></button>
+                <button className="marketCreateButton btn btn-primary" type="submit">
+                  Review <i className="arrow" />
+                </button>
               </div>
             </div>
           </div>
@@ -146,7 +157,6 @@ export default class MarketCreateWizard extends Component {
       </div>
     )
   }
-
 }
 
 MarketCreateWizard.propTypes = {

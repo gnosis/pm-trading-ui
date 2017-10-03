@@ -58,7 +58,7 @@ class MarketCreateReview extends Component {
   }
 
   renderMarketSummary() {
-    const { formValues: { title, description } } = this.props
+    const { formValues: { resolutionDate, title, description } } = this.props
 
     return (
       <div className="marketSummary">
@@ -76,8 +76,14 @@ class MarketCreateReview extends Component {
               </div>
             </div>
             <div className="row">
+              <div className="col-md-12">{this.renderOutcomes()}</div>
+            </div>
+            <div className="row">
               <div className="col-md-12">
-                {this.renderOutcomes()}
+                <h3 className="resolutionDate__header">Resolution Date</h3>
+                <div className="marketReviewDetails__value">
+                  {moment(resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+                </div>
               </div>
             </div>
           </div>
@@ -87,40 +93,32 @@ class MarketCreateReview extends Component {
   }
 
   rendermarketReviewDetails() {
-    const {
-      formValues: {
-        resolutionDate,
-        collateralToken,
-        fee,
-        funding,
-      },
-    } = this.props
+    const { formValues: { collateralToken, fee, funding } } = this.props
 
     return (
       <div className="marketReviewDetails">
         <div className="row">
           <div className="col-md-12">
-            <div className="marketReviewDetails__label">Resolution Date</div>
-            <div className="marketReviewDetails__value">{moment(resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
             <div className="marketReviewDetails__label">Currency</div>
-            <div className="marketReviewDetails__value"><CurrencyName collateralToken={collateralToken} /></div>
+            <div className="marketReviewDetails__value">
+              <CurrencyName collateralToken={collateralToken} />
+            </div>
           </div>
         </div>
         <div className="row">
           <div className="col-md-12">
             <div className="marketReviewDetails__label">Fee</div>
-            <div className="marketReviewDetails__value">{Decimal(fee || 0).toFixed(2)}%</div>
+            <div className="marketReviewDetails__value">
+              <DecimalValue value={fee} />%
+            </div>
           </div>
         </div>
         <div className="row">
           <div className="col-md-12">
             <div className="marketReviewDetails__label">Funding</div>
             <div className="marketReviewDetails__value">
-              {Decimal(funding || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} />
+              <DecimalValue value={funding} />{' '}
+              <CurrencyName collateralToken={collateralToken} />
             </div>
           </div>
         </div>
@@ -136,7 +134,9 @@ class MarketCreateReview extends Component {
         <ul className="checkout__list">
           <li className="checkout__listItem">
             <span className="listItem__label">Market Funding</span>
-            <div className="listItem__value">{Decimal(funding || 0).toFixed(4)} <CurrencyName collateralToken={collateralToken} /></div>
+            <div className="listItem__value">
+              <DecimalValue value={funding} /> <CurrencyName collateralToken={collateralToken} />
+            </div>
           </li>
           <li className="checkout__listItem">
             <span className="listItem__label">Gas Costs</span>
@@ -148,10 +148,11 @@ class MarketCreateReview extends Component {
           <li className="checkout__listItem checkout__listItem--total">
             <span className="listItem__label">Total</span>
             <span className="listItem__value">
-              <DecimalValue value={Decimal(funding || 0).add(Decimal(createMarketCost)).toFixed(4)} />
+              <DecimalValue value={Decimal(funding || 0).add(Decimal(createMarketCost || 0))} />
             </span>
           </li>
         </ul>
+        {/*
         <div className="checkout__payment">
           <Checkbox
             input={{
@@ -167,13 +168,9 @@ class MarketCreateReview extends Component {
           }
           />
         </div>
+        */}
         <div className="checkout__paymentSubmit">
-          <button
-            className={`btn btn-primary ${!this.state.confirmed ? 'btn-primary--disabled' : ''}`}
-            disabled={!this.state.confirmed}
-            type="button"
-            onClick={this.handleCreateMarket}
-          >
+          <button className="btn btn-primary" type="button" onClick={this.handleCreateMarket}>
             Pay & Create Market
           </button>
         </div>
@@ -191,13 +188,10 @@ class MarketCreateReview extends Component {
           <h3 className="outcomeCategorical__header">Outcome Options</h3>
           {outcomes.map((outcome, index) => (
             <div className="outcomeCategorical" key={index}>
-              <div
-                className="outcomeCategorical__color"
-                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }}
-              />
+              <div className="outcomeCategorical__color" style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }} />
               <div className="outcomeCategorical__label">{outcome}</div>
             </div>
-            ))}
+          ))}
         </div>
       )
     }
@@ -213,7 +207,9 @@ class MarketCreateReview extends Component {
           </div>
           <div className="outcomeScalar__row">
             <label>Values between</label>
-            <span>{Decimal(upperBound).toFixed(0)} and {Decimal(lowerBound).toFixed(0)}</span>
+            <span>
+              {Decimal(lowerBound).toFixed(0)} and {Decimal(upperBound).toFixed(0)}
+            </span>
           </div>
           <div className="outcomeScalar__row">
             <label>Outcome Precision</label>
@@ -223,12 +219,12 @@ class MarketCreateReview extends Component {
       )
     }
 
-    return (
-      <div>Something went wrong... Please try again</div>
-    )
+    return <div>Something went wrong... Please try again</div>
   }
 
   render() {
+    const { submitting } = this.props
+
     return (
       <div className="marketCreateReviewPage">
         <div className="marketCreateReviewPage__header">
@@ -238,37 +234,27 @@ class MarketCreateReview extends Component {
         </div>
         <div className="container">
           <div className="row">
-            <div className="col-md-8">
-              {this.renderMarketSummary()}
-            </div>
-            <div className="col-md-4">
-              {this.rendermarketReviewDetails()}
-            </div>
+            <div className="col-md-8">{this.renderMarketSummary()}</div>
+            <div className="col-md-4">{this.rendermarketReviewDetails()}</div>
           </div>
         </div>
         <div className="marketCreateCheckout">
           <div className="container">
             <div className="row">
               <div className="col-md-6">
-                <p className="checkout__disclaimer">Please review the entered market details carefully. Once the market is created you will not be able to change any of its details and settings anymore. After you double-checked the details you may approve the market creation.</p>
-                {this.props.submitting ? (
-                  <button
-                    className="btn btn-default btn-default--muted disabled"
-                    type="button"
-                    disabled
-                    title="Marketcreation already in Progress"
-                  >
-                    <i className="arrow arrow--right" /> Edit
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-default btn-default--muted"
-                    type="button"
-                    onClick={this.handleEdit}
-                  >
-                    <i className="arrow arrow--right" /> Edit
-                  </button>
-                )}
+                <p className="checkout__disclaimer">
+                  Please review the entered market details carefully. Once the market is created you will not be able to
+                  change any of its details and settings anymore. After you double-checked the details you may approve
+                  the market creation.
+                </p>
+                <button
+                  className="btn btn-default btn-default--muted"
+                  type="button"
+                  onClick={this.handleEdit}
+                  disabled={submitting}
+                >
+                  <i className="arrow arrow--right" /> Edit
+                </button>
               </div>
               <div className="col-md-6">
                 <h2 className="checkout__header">Checkout</h2>

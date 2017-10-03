@@ -15,12 +15,7 @@ import './marketResolveForm.less'
 class MarketResolveForm extends Component {
   @autobind
   handleResolve(values) {
-    const {
-      market: {
-        event: { type },
-        eventDescription: { decimals },
-      },
-    } = this.props
+    const { market: { event: { type }, eventDescription: { decimals } } } = this.props
 
     const { selectedOutcome, selectedValue } = values
 
@@ -41,23 +36,33 @@ class MarketResolveForm extends Component {
         <div className="marketResolveScalar">
           <Field name="selectedValue" component={FormInput} label={'Enter outcome'} />
         </div>
-        <button type="submit" className="btn btn-primary">Resolve Oracle</button>
+        <button type="submit" className="btn btn-primary">
+          Resolve Oracle
+        </button>
       </form>
     )
   }
 
   renderResolveCategorical() {
     const { handleSubmit, market: { eventDescription: { outcomes } } } = this.props
-
     return (
       <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
         <div className="marketResolveCategorical">
           <FormRadioButtonLabel label="Choose outcome" />
           {outcomes.map((outcome, outcomeIndex) => (
-            <Field key={outcomeIndex} className="marketResolveFormRadio" name="selectedOutcome" component={FormRadioButton} text={outcome} radioValue={outcomeIndex} />
-            ))}
+            <Field
+              key={outcomeIndex}
+              className="marketResolveFormRadio"
+              name="selectedOutcome"
+              component={FormRadioButton}
+              text={outcome}
+              radioValue={outcomeIndex}
+            />
+          ))}
         </div>
-        <button type="submit" className="btn btn-primary">Resolve Oracle</button>
+        <button type="submit" className="btn btn-primary">
+          Resolve Oracle
+        </button>
       </form>
     )
   }
