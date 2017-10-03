@@ -112,7 +112,7 @@ class Dashboard extends Component {
 
   renderControls() {
     const { defaultAccount } = this.props
-    const canCreateMarket = config.whitelist[defaultAccount] !== undefined
+    const canCreateMarket = process.env.WHITELIST[defaultAccount] !== undefined
     return (
       <div className="dashboardControls container">
         <div className="row">

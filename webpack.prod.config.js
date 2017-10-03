@@ -12,6 +12,15 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
 const config = require('./src/config.json')
 
+let whitelist
+
+if (nodeEnv === 'development') {
+  whitelist = config.developmentWhitelist
+} else {
+  whitelist = config.productionWhitelist
+}
+
+
 const gnosisDbUrl =
   process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
 
@@ -98,6 +107,7 @@ module.exports = {
         NODE_ENV: JSON.stringify(nodeEnv),
         GNOSISDB_URL: JSON.stringify(gnosisDbUrl),
         ETHEREUM_URL: JSON.stringify(ethereumUrl),
+        WHITELIST: whitelist,
       },
     }),
   ],
