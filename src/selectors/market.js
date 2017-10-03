@@ -1,4 +1,3 @@
-import config from 'config.json'
 import { get } from 'lodash'
 import Decimal from 'decimal.js'
 
@@ -75,7 +74,7 @@ export const filterMarkets = state => (opts) => {
         market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
         market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
       (!onlyMyMarkets || market.creator === defaultAccount.toLowerCase()) &&
-      (!onlyModeratorsMarkets || config.whitelist[market.creator] !== undefined) &&
+      (!onlyModeratorsMarkets || process.env.WHITELIST[market.creator] !== undefined) &&
       (typeof resolved === 'undefined' || (resolved === 'RESOLVED' && market.oracle.isOutcomeSet) || (resolved === 'UNRESOLVED' && !market.oracle.isOutcomeSet)),
     )
 }
