@@ -28,7 +28,7 @@ class MarketCreateReview extends Component {
 
   componentDidMount() {
     if (!this.props.hasValues) {
-      this.props.changeUrl('markets/new')
+      this.props.changeUrl('/markets/new')
     }
   }
 
@@ -54,7 +54,7 @@ class MarketCreateReview extends Component {
   async handleEdit() {
     await this.setState({ keepValues: true })
 
-    return this.props.changeUrl('markets/new')
+    return this.props.changeUrl('/markets/new')
   }
 
   renderMarketSummary() {
