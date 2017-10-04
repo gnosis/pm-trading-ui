@@ -4,7 +4,6 @@ import { connectBlockchain, initGnosis } from 'actions/blockchain'
 import { getSelectedProvider } from 'selectors/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
-import config from 'config'
 
 
 export default class WalletIntegrationProvider extends Component {
@@ -60,6 +59,7 @@ export default class WalletIntegrationProvider extends Component {
 }
 
 WalletIntegrationProvider.propTypes = {
+  children: PropTypes.element,
   integrations: PropTypes.object,
   store: PropTypes.object,
 }
