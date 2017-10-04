@@ -87,7 +87,7 @@ const TRANSACTION_EVENTS_GENERIC = [
 ]
 
 /**
- * This function is asynchronous. Requests details about a single market from GnosisDB.
+ * Requests details about a single market from GnosisDB.
  * @param {string} marketAddress - Markets Address
  */
 export const requestMarket = marketAddress => async (dispatch) => {
@@ -96,7 +96,7 @@ export const requestMarket = marketAddress => async (dispatch) => {
 }
 
 /**
- * This function is asynchronous. Requests all markets from GnosisDB.
+ * Requests all markets from GnosisDB.
  */
 export const requestMarkets = () => async (dispatch) => {
   const payload = await api.requestMarkets()
@@ -104,7 +104,7 @@ export const requestMarkets = () => async (dispatch) => {
 }
 
 /**
- * This function is asynchronous. Requests shares for a specific account on a market from GnosisDB.
+ * Requests shares for a specific account on a market from GnosisDB.
  * @param {string} marketAddress - Market Address
  * @param {string} accountAddress - Shareowner Address
  */
@@ -114,7 +114,7 @@ export const requestMarketShares = (marketAddress, accountAddress) => async (dis
 }
 
 /**
- * This function is asynchronous. Requests factores (MarketFactory, EventFactory, etc) from GnosisDB.
+ * Requests factores (MarketFactory, EventFactory, etc) from GnosisDB.
  * @deprecated - Unused currently
  */
 export const requestFactories = () => async (dispatch) => {
@@ -123,7 +123,7 @@ export const requestFactories = () => async (dispatch) => {
 }
 
 /**
- * This function is asynchronous. Requests participating traders trades (tradehistory) for a specific account on a market from GnosisDB.
+ * Requests participating traders trades (tradehistory) for a specific account on a market from GnosisDB.
  * @param {string} marketAddress - Market Address
  * @param {string} accountAddress - Tradeowner Address
  */
@@ -139,7 +139,7 @@ export const requestMarketParticipantTrades = (marketAddress, accountAddress) =>
 }
 
 /**
- * This function is asynchronous. Requests all trades (tradehistory) on a market from GnosisDB.
+ * Requests all trades (tradehistory) on a market from GnosisDB.
  * @param {Market} market
  */
 export const requestMarketTrades = market => async (dispatch) => {
@@ -186,7 +186,7 @@ export const requestAccountTrades = accountAddress => async (dispatch) => {
 }
 
 /**
- * This function is asynchronous. This function also has a sideeffect of adding to the TransactionLog.
+ * This function also has a sideeffect of adding to the TransactionLog.
  * Creates a market by running transaction in order for:
  *  - eventDescription
  *  - oracle
@@ -311,7 +311,7 @@ export const createMarket = options => async (dispatch) => {
 }
 
 /**
- * This function is asynchronous. Buy shares on specific market
+ * Buy shares on specific market
  * @param {Market} market - Market to buy shares on
  * @param {number} outcomeIndex - Index of outcome to buy shares for
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to buy
@@ -349,7 +349,7 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
 }
 
 /**
- * This function is asynchronous. Sell shares on a specific market
+ * Sell shares on a specific market
  * @param {Market} market - Market to sell shares on
  * @param {number} outcomeIndex - Index of outcome to sell shares of
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to sell
@@ -375,7 +375,7 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
 }
 
 /**
- * This function is asynchronous. Resolve a markets oracle
+ * Resolve a markets oracle
  * @param {Market} market - Market to resolve the oracle of
  * @param {number|string} outcomeIndex - Winning Outcomes Index
  */
