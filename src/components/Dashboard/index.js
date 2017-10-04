@@ -288,9 +288,9 @@ class Dashboard extends Component {
     /* const closingMarkets = markets.filter(
       market => moment.utc(market.eventDescription.resolutionDate).isBetween(moment(), moment().add(24, 'hours')),
     )*/
-    let closingMarkets = whitelistedMarkets.sort(
-      (a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate,
-    )
+    let closingMarkets = whitelistedMarkets
+      .filter(market => new Date() - new Date(market.eventDescription.resolutionDate) < 0)
+      .sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
 
     if (marketType === 'newMarkets') {
       return (
