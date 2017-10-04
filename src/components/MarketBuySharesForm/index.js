@@ -20,7 +20,6 @@ import Input from 'components/FormInput'
 import './marketBuySharesForm.less'
 
 class MarketBuySharesForm extends Component {
-
   componentWillMount() {
     const { requestGasCost, requestGasPrice, isGasCostFetched, isGasPriceFetched } = this.props
     if (!isGasCostFetched(GAS_COST.BUY_SHARES)) {
@@ -37,13 +36,7 @@ class MarketBuySharesForm extends Component {
     }
 
     const invest = new Decimal(investment).mul(1e18)
-    const {
-      market: {
-        funding,
-        netOutcomeTokensSold,
-        fee,
-      },
-    } = this.props
+    const { market: { funding, netOutcomeTokensSold, fee } } = this.props
 
     let outcomeTokenCount
     try {
@@ -71,32 +64,27 @@ class MarketBuySharesForm extends Component {
     }
 
     const invest = new Decimal(investment).mul(1e18)
-    return outcomeTokenCount.div(invest.toString()).mul(100).sub(100)
+    return outcomeTokenCount
+      .div(invest.toString())
+      .mul(100)
+      .sub(100)
   }
 
   @autobind
   handleBuyShares() {
-    const {
-      market,
-      buyShares,
-      selectedBuyInvest,
-      reset,
-      defaultAccount,
-      selectedOutcome,
-    } = this.props
+    const { market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome } = this.props
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
 
-    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
-      .then(() => {
-        // Fetch new trades
-        this.props.fetchMarketTrades(market)
-        // Fetch new market participant trades
-        this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
-        // Fetch new shares
-        this.props.fetchMarketShares(defaultAccount)
-        return reset()
-      })
+    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest).then(() => {
+      // Fetch new trades
+      this.props.fetchMarketTrades(market)
+      // Fetch new market participant trades
+      this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
+      // Fetch new shares
+      this.props.fetchMarketShares(defaultAccount)
+      return reset()
+    })
   }
 
   renderOutcomes() {
@@ -142,14 +130,8 @@ class MarketBuySharesForm extends Component {
       selectedBuyInvest,
       selectedOutcome,
       market: {
-        event: {
-          lowerBound,
-          upperBound,
-        },
-        eventDescription: {
-          decimals,
-          unit,
-        },
+        event: { lowerBound, upperBound },
+        eventDescription: { decimals, unit },
         netOutcomeTokensSold,
         funding,
         marginalPrices,
@@ -161,13 +143,17 @@ class MarketBuySharesForm extends Component {
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
     if (isOutcomeSelected) {
-      newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome]).add(outcomeTokenCount).toString()
+      newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome])
+        .add(outcomeTokenCount)
+        .toString()
     }
-    const selectedMarginalPrice = isOutcomeSelected ? calcLMSRMarginalPrice({
-      netOutcomeTokensSold: newNetOutcomeTokenSold,
-      funding,
-      outcomeTokenIndex: 1,
-    }) : new Decimal('0')
+    const selectedMarginalPrice = isOutcomeSelected
+      ? calcLMSRMarginalPrice({
+        netOutcomeTokensSold: newNetOutcomeTokenSold,
+        funding,
+        outcomeTokenIndex: 1,
+      })
+      : new Decimal('0')
 
     const scalarOutcomes = [
       {
@@ -228,16 +214,14 @@ class MarketBuySharesForm extends Component {
       selectedBuyInvest,
       submitFailed,
       submitting,
-      market: {
-        event: {
-          collateralToken,
-        },
-      },
+      market: { event: { collateralToken } },
       selectedOutcome,
       gasCosts,
       gasPrice,
+      changeUrl,
+      market: { address },
     } = this.props
-
+    console.log(address, changeUrl)
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
     // Get the amount of tokens to buy
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
@@ -262,15 +246,15 @@ class MarketBuySharesForm extends Component {
         <span className="marketBuyWin__row marketBuyWin__max">
           <DecimalValue value={weiToEth(outcomeTokenCount)} />&nbsp;
           <div
-            className={'marketBuyWin__outcomeColor'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[selectedOutcome] }}
+            className={'marketBuyWin__outcomeColor'}
+            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[selectedOutcome] }}
           />&nbsp;
         </span>
       )
 
       maxReturnField = (
         <span className="marketBuyWin__row marketBuyWin__max">
-          +<DecimalValue value={percentageWin} /> %&nbsp;
-          (<DecimalValue value={maximumWin} />&nbsp;
+          +<DecimalValue value={percentageWin} /> %&nbsp; (<DecimalValue value={maximumWin} />&nbsp;
           <CurrencyName collateralToken={collateralToken} />)
         </span>
       )
@@ -295,41 +279,52 @@ class MarketBuySharesForm extends Component {
                 </div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">
-                    Token Count
-                </div>
+                <div className="col-md-6">Token Count</div>
                 <div className="col-md-6">{fieldError || tokenCountField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">
-                    Maximum return in %
-                  </div>
+                <div className="col-md-6">Maximum return in %</div>
                 <div className="col-md-6">{fieldError || maxReturnField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
+                <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                    Gas Costs
-                  </div>
-                <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} /> <CurrencyName collateralToken={collateralToken} /></div>
+                  <DecimalValue value={gasCostEstimation} /> <CurrencyName collateralToken={collateralToken} />
+                </div>
               </div>
               {submitFailed && (
                 <div className="row marketBuySharesForm__row">
-                  <div className="col-md-12">Sorry - your investment couldn't be processed. Please ensure you're on the right network.</div>
+                  <div className="col-md-12">
+                    Sorry - your investment couldn&apos;t be processed. Please ensure you're on the right network.
+                  </div>
                 </div>
               )}
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">
-                  <button className={`btn btn-primary col-md-12 ${!submitEnabled ? 'disabled' : ''}`} disabled={!submitEnabled}>{submitting ? 'Loading...' : 'Buy Tokens'}</button>
+                  <button
+                    className={`btn btn-primary col-md-12 ${!submitEnabled ? 'disabled' : ''}`}
+                    disabled={!submitEnabled}
+                  >
+                    {submitting ? 'Loading...' : 'Buy Tokens'}
+                  </button>
                 </div>
                 <div className="col-md-6">
-                  <button className="btn btn-default col-md-12 marketBuySharesForm__cancel">Cancel</button>
+                  <button
+                    className="btn btn-default col-md-12 marketBuySharesForm__cancel"
+                    type="button"
+                    onClick={() => {
+                      changeUrl(`/markets/${address}/`)
+                    }}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </form>
-      </div>)
+      </div>
+    )
   }
 }
 

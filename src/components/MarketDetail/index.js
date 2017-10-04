@@ -119,6 +119,10 @@ class MarketDetail extends Component {
       this.props.fetchMarketShares(this.props.defaultAccount)
     }
 
+    if (!this.props.params.view) {
+      this.props.changeUrl(`/markets/${this.props.params.id}/${DEFAULT_VIEW}`)
+    }
+
     this.props.requestGasCost(GAS_COST.BUY_SHARES)
     this.props.requestGasCost(GAS_COST.SELL_SHARES)
   }
@@ -148,8 +152,7 @@ class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
-    const currentView = this.props.params.view || DEFAULT_VIEW
-
+    const currentView = this.props.params.view || false
     if (currentView && expandableViews[currentView] && expandableViews[currentView].component) {
       const view = expandableViews[currentView]
 
