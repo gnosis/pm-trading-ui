@@ -45,7 +45,7 @@ export default class MarketCreateWizard extends Component {
       this.props.change('outcomes', values.outcomes.filter(s => s && s.length > 0))
     }
     window.scrollTo(0, 0)
-    return this.props.changeUrl('markets/review')
+    return this.props.changeUrl('/markets/review')
   }
 
   renderHeading(index, title) {
