@@ -35,6 +35,11 @@ import {
   MARKET_STAGES,
 } from 'utils/constants'
 
+/**
+ * Constant names for marketcreation stages
+ * @readonly
+ * @enum {string}
+ */
 const TRANSACTION_STAGES = {
   EVENT_DESCRIPTION: 'eventDescription',
   ORACLE: 'oracle',
@@ -45,6 +50,9 @@ const TRANSACTION_STAGES = {
   GENERIC: 'generic',
 }
 
+/**
+ * Stages for marketcreation
+ */
 const TRANSACTION_EVENTS = [
   {
     event: TRANSACTION_STAGES.EVENT_DESCRIPTION,
@@ -68,6 +76,9 @@ const TRANSACTION_EVENTS = [
   },
 ]
 
+/**
+ * Generic Stage for single-event transactions
+ */
 const TRANSACTION_EVENTS_GENERIC = [
   {
     event: TRANSACTION_STAGES.GENERIC,
@@ -75,26 +86,47 @@ const TRANSACTION_EVENTS_GENERIC = [
   },
 ]
 
+/**
+ * This function is asynchronous. Requests details about a single market from GnosisDB.
+ * @param {string} marketAddress - Markets Address
+ */
 export const requestMarket = marketAddress => async (dispatch) => {
   const payload = await api.requestMarket(marketAddress)
   return await dispatch(receiveEntities(payload))
 }
 
+/**
+ * This function is asynchronous. Requests all markets from GnosisDB.
+ */
 export const requestMarkets = () => async (dispatch) => {
   const payload = await api.requestMarkets()
   return await dispatch(receiveEntities(payload))
 }
 
+/**
+ * This function is asynchronous. Requests shares for a specific account on a market from GnosisDB.
+ * @param {string} marketAddress - Market Address
+ * @param {string} accountAddress - Shareowner Address
+ */
 export const requestMarketShares = (marketAddress, accountAddress) => async (dispatch) => {
   const payload = await api.requestMarketShares(marketAddress, accountAddress)
   return await dispatch(receiveEntities(payload))
 }
 
+/**
+ * This function is asynchronous. Requests factores (MarketFactory, EventFactory, etc) from GnosisDB.
+ * @deprecated - Unused currently
+ */
 export const requestFactories = () => async (dispatch) => {
   const payload = await api.requestFactories()
   return await dispatch(receiveEntities(payload))
 }
 
+/**
+ * This function is asynchronous. Requests participating traders trades (tradehistory) for a specific account on a market from GnosisDB.
+ * @param {string} marketAddress - Market Address
+ * @param {string} accountAddress - Tradeowner Address
+ */
 export const requestMarketParticipantTrades = (marketAddress, accountAddress) => async (dispatch) => {
   const trades = await api.requestMarketParticipantTrades(marketAddress, accountAddress)
   return await dispatch(updateEntity({
@@ -106,6 +138,10 @@ export const requestMarketParticipantTrades = (marketAddress, accountAddress) =>
   }))
 }
 
+/**
+ * This function is asynchronous. Requests all trades (tradehistory) on a market from GnosisDB.
+ * @param {Market} market
+ */
 export const requestMarketTrades = market => async (dispatch) => {
   const trades = await api.requestMarketTrades(market)
 
@@ -149,6 +185,28 @@ export const requestAccountTrades = accountAddress => async (dispatch) => {
   }))
 }
 
+/**
+ * This function is asynchronous. This function also has a sideeffect of adding to the TransactionLog.
+ * Creates a market by running transaction in order for:
+ *  - eventDescription
+ *  - oracle
+ *  - event
+ *  - market
+ * @param {object} options
+ * @param {string} options.transactionId - ID to be used for transaction log
+ * @param {object} options.eventDescription
+ * @param {string} options.eventDescription.title - Markettitle
+ * @param {string} options.eventDescription.description - Marketdescription Text
+ * @param {object} options.oracle
+ * @param {string} options.oracle.type - Type of Oracle to be used @see src/utils/constants ORACLE_TYPES
+ * @param {object} options.event
+ * @param {string} options.event.type - Type of Outcomes to be used @see src/utils/constants OUTCOME_TYPES
+ * @param {number|string|BigNumber} options.event.lowerBound - Lower bound for OUTCOME_TYPES.SCALAR_OUTCOME
+ * @param {number|string|BigNumber} options.event.upperBound - Upper bound for OUTCOME_TYPES.SCALAR_OUTCOME
+ * @param {object} options.market
+ * @param {number|string|BigNumber} options.market.funding - Initial funding for market in Ether
+ * @param {number|string|BigNumber} options.market.fee - Marketfee in percentage (0 - 100, max 10 allowed in UI)
+ */
 export const createMarket = options => async (dispatch) => {
   const {
     eventDescription,
@@ -252,6 +310,13 @@ export const createMarket = options => async (dispatch) => {
   return marketContractData
 }
 
+/**
+ * This function is asynchronous. Buy shares on specific market
+ * @param {Market} market - Market to buy shares on
+ * @param {number} outcomeIndex - Index of outcome to buy shares for
+ * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to buy
+ * @param {number|string|BigNumber} cost - Max transaction cost allowed in Ether
+ */
 export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
   const transactionId = uuid()
 
@@ -283,6 +348,12 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
+/**
+ * This function is asynchronous. Sell shares on a specific market
+ * @param {Market} market - Market to sell shares on
+ * @param {number} outcomeIndex - Index of outcome to sell shares of
+ * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to sell
+ */
 export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => async (dispatch) => {
   const transactionId = uuid()
 
@@ -303,6 +374,11 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
+/**
+ * This function is asynchronous. Resolve a markets oracle
+ * @param {Market} market - Market to resolve the oracle of
+ * @param {number|string} outcomeIndex - Winning Outcomes Index
+ */
 export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
   const transactionId = uuid()
 
@@ -325,6 +401,10 @@ export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
+/**
+ * Redeem winnings of a market
+ * @param {Market} market - Market to redeem winnings of
+ */
 export const redeemWinnings = market => async (dispatch) => {
   const transactionId = uuid()
 
@@ -346,7 +426,10 @@ export const redeemWinnings = market => async (dispatch) => {
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
-
+/**
+ * Withdraw fees of a market
+ * @param {Market} market - Market to withdraw fees of
+ */
 export const withdrawFees = market => async (dispatch) => {
   const transactionId = uuid()
 
@@ -368,6 +451,10 @@ export const withdrawFees = market => async (dispatch) => {
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
+/**
+ * Close a market
+ * @param {Market} market - Market to close
+ */
 export const closeMarket = market => async (dispatch) => {
   const transactionId = uuid()
 
