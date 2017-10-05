@@ -15,6 +15,5 @@
         "transform-react-remove-prop-types"
       ]
     }
-  },
-  "sourceMaps": true
+  }
 }
