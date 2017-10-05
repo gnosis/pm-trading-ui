@@ -20,7 +20,6 @@ if (nodeEnv === 'development') {
   whitelist = config.productionWhitelist
 }
 
-
 const gnosisDbUrl =
   process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
 
@@ -73,6 +72,7 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
     contentBase: false,
+    historyApiFallback: true,
     port: 5000,
     watchOptions: {
       ignored: /node_modules/,
