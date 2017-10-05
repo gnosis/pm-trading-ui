@@ -109,7 +109,7 @@ class MarketBuySharesForm extends Component {
     const { market, market: { eventDescription } } = this.props
 
     return (
-      <div className="col-md-6">
+      <div className="col-md-7">
         <Field
           component={FormBarChartRadioButton}
           name="selectedOutcome"
@@ -221,7 +221,7 @@ class MarketBuySharesForm extends Component {
       changeUrl,
       market: { address },
     } = this.props
-    console.log(address, changeUrl)
+
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
     // Get the amount of tokens to buy
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
@@ -267,7 +267,7 @@ class MarketBuySharesForm extends Component {
         <form onSubmit={handleSubmit(this.handleBuyShares)}>
           <div className="row">
             {this.renderOutcomes()}
-            <div className="col-md-6">
+            <div className="col-md-5">
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-8">
                   <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
@@ -295,7 +295,7 @@ class MarketBuySharesForm extends Component {
               {submitFailed && (
                 <div className="row marketBuySharesForm__row">
                   <div className="col-md-12">
-                    Sorry - your investment couldn&apos;t be processed. Please ensure you're on the right network.
+                    Sorry - your investment couldn&apos;t be processed. Please ensure you&apos;re on the right network.
                   </div>
                 </div>
               )}
