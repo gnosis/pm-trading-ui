@@ -269,7 +269,7 @@ class MarketDetail extends Component {
             <div className="redeemWinning__icon icon icon--achievementBadge" />
             <div className="redeemWinning__details">
               <div className="redeemWinning__heading">
-                <DecimalValue value={winnings} />
+                <DecimalValue value={winnings} />{' '}
                 {collateralTokenToText(market.event.collateralToken)}
               </div>
               <div className="redeemWinning__label">Your Winnings</div>
