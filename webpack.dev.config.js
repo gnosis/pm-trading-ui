@@ -28,7 +28,7 @@ const ethereumUrl =
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: ['react-hot-loader/patch', 'bootstrap-loader', 'index.js'],
-  devtool: 'eval-source-map',
+  devtool: 'eval',
   output: {
     publicPath: '/',
     path: `${__dirname}/dist`,
