@@ -13,7 +13,6 @@ import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
 import './app.less'
-import modalStyles from './modalStyles'
 import LoadingIndicator from '../../components/LoadingIndicator'
 
 class App extends Component {
@@ -45,23 +44,12 @@ class App extends Component {
             {this.props.children}
           </CSSTransition>
         </TransitionGroup>
-        <Modal
-          isOpen={this.props.blockchainConnection && !this.props.account}
-          contentLabel="no-account-modal"
-          style={modalStyles}
-        >
-          <h1 id="heading">Oops!</h1>
-          <div id="description">
-            <p>We couldn&apos;t detect your account. Please check your wallet provider and reload the page</p>
-          </div>
-        </Modal>
       </div>
     )
   }
 }
 
 App.propTypes = {
-  account: PropTypes.string,
   blockchainConnection: PropTypes.bool,
   children: PropTypes.node,
   connectBlockchain: PropTypes.func,
@@ -70,7 +58,6 @@ App.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  account: state.blockchain.defaultAccount,
   blockchainConnection: state.blockchain.connectionTried,
   hasWallet: state.blockchain.defaultAccount != null,
 })
