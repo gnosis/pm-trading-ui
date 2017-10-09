@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 
-
 export const eventDescriptionShape = PropTypes.shape({
   description: PropTypes.string,
   ipfsHash: PropTypes.string,
@@ -16,17 +15,15 @@ export const outcomeTokenShape = PropTypes.shape({
   totalSupply: PropTypes.string,
 })
 
-export const marketSharesShape = PropTypes.arrayOf(
-  PropTypes.shape({
-    balance: PropTypes.string,
-    event: PropTypes.string,
-    eventDescription: eventDescriptionShape,
-    id: PropTypes.string,
-    marginalPrice: PropTypes.number,
-    outcomeToken: outcomeTokenShape,
-    owner: PropTypes.string,
-  }),
-)
+export const marketShareShape = PropTypes.shape({
+  balance: PropTypes.string,
+  event: PropTypes.string,
+  eventDescription: eventDescriptionShape,
+  id: PropTypes.string,
+  marginalPrice: PropTypes.number,
+  outcomeToken: outcomeTokenShape,
+  owner: PropTypes.string,
+})
 
 export const marketShape = PropTypes.shape({
   event: PropTypes.object,

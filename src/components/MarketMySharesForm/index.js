@@ -133,6 +133,7 @@ class MarketMySharesForm extends Component {
     } catch (e) {
       selectedSellAmountWei = '0'
     }
+
     let currentProbability
     if (market.event.type === 'CATEGORICAL') {
       try {
@@ -171,6 +172,7 @@ class MarketMySharesForm extends Component {
         }),
       )
     }
+    console.log(earnings)
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
       if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {

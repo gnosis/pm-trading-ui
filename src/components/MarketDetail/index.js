@@ -10,7 +10,7 @@ import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import { collateralTokenToText } from 'components/CurrencyName'
-import { decimalToText } from 'components/DecimalValue'
+import DecimalValue, { decimalToText } from 'components/DecimalValue'
 
 import Countdown from 'components/Countdown'
 import Outcome from 'components/Outcome'
@@ -25,6 +25,7 @@ import MarketMyTrades from 'components/MarketMyTrades'
 
 import './marketDetail.less'
 import { weiToEth } from '../../utils/helpers'
+import { marketShareShape } from '../../utils/shapes'
 
 const ONE_WEEK_IN_HOURS = 168
 const EXPAND_BUY_SHARES = 'buy-shares'
@@ -221,22 +222,19 @@ class MarketDetail extends Component {
       .local()
       .diff(moment(), 'hours')
     const { marketShares } = this.props
-    console.log(marketShares)
 
-    // const earnings = weiToEth(
-    //   calcLMSRProfit({
-    //     netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
-    //     funding: market.funding,
-    //     outcomeTokenIndex: share.outcomeToken.index,
-    //     outcomeTokenCount: selectedSellAmountWei,
-    //     feeFactor: market.fee,
-    //   }),
-    // )
-
-    const winningsAmount =
-      market && market.participantTrades
-        ? market.participantTrades.reduce((sum, trade) => sum + Decimal(trade.outcomeTokenCount).div(1e18), 0)
-        : 0
+    const winnings = marketShares.reduce((sum, share) => {
+      const shareWinnings = weiToEth(
+        calcLMSRProfit({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+          outcomeTokenCount: share.balance,
+          feeFactor: market.fee,
+        }),
+      )
+      return sum.plus(new Decimal(shareWinnings))
+    }, new Decimal(0))
 
     return (
       <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
@@ -271,7 +269,8 @@ class MarketDetail extends Component {
             <div className="redeemWinning__icon icon icon--achievementBadge" />
             <div className="redeemWinning__details">
               <div className="redeemWinning__heading">
-                {200} {collateralTokenToText(market.event.collateralToken)}
+                <DecimalValue value={winnings} />
+                {collateralTokenToText(market.event.collateralToken)}
               </div>
               <div className="redeemWinning__label">Your Winnings</div>
             </div>
@@ -386,6 +385,7 @@ MarketDetail.propTypes = {
     id: PropTypes.string,
     view: PropTypes.string,
   }),
+  marketShares: PropTypes.arrayOf(marketShareShape),
   defaultAccount: PropTypes.string,
   market: marketShape,
   changeUrl: PropTypes.func,
