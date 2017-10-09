@@ -172,7 +172,6 @@ class MarketMySharesForm extends Component {
         }),
       )
     }
-    console.log(earnings)
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
       if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
