@@ -2,12 +2,17 @@ import autobind from 'autobind-decorator'
 import { ETHEREUM_NETWORKS } from 'integrations/constants'
 
 import {
-  getCurrentBalance
+  getCurrentBalance,
 } from 'api'
 
 import {
   updateProvider,
+  setActiveProvider,
 } from 'actions/blockchain'
+
+import {
+  findDefaultProvider,
+} from 'selectors/blockchain'
 
 class InjectedWeb3 {
   constructor() {
@@ -72,14 +77,22 @@ class InjectedWeb3 {
     this.walletEnabled = false
     console.log(`WalletProvider ${this.constructor.providerName}: Has lost connection (${err})`)
 
-    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: false }))
+    await this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: false }))
+
+    // determine new provider
+    const newProvider = findDefaultProvider(this.store.getState())
+    await this.store.dispatch(setActiveProvider(newProvider.name))
   }
 
   async handleConnect() {
     this.walletEnabled = true
     console.log(`WalletProvider ${this.constructor.providerName}: Connected`)
 
-    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: true }))
+    await this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: true }))
+
+    // determine new provider
+    const newProvider = findDefaultProvider(this.store.getState())
+    await this.store.dispatch(setActiveProvider(newProvider.name))
   }
 
   async handleNetworkChange(newNetwork) {
