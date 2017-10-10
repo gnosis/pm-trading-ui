@@ -4,7 +4,7 @@ import Gnosis from '@gnosis.pm/gnosisjs'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
 import { hexWithPrefix, weiToEth } from 'utils/helpers'
-import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
+import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
 // import { normalize } from 'normalizr'
 
 import delay from 'await-delay'
@@ -191,7 +191,8 @@ export const fundMarket = async (market) => {
   const marketFundingWei = marketFunding.times(1e18)
 
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
-  await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), marketFundingWei.toString())
+
+  await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
 
   if (process.env.NODE_ENV !== 'production') {
     await delay(5000)
@@ -228,7 +229,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
 
   // The user needs to deposit and approve the amount of collateral tokens willing to pay before performing the buy
   await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
-  await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenWei.toString())
+  await gnosis.etherToken.approve(hexWithPrefix(market.address), MAX_ALLOWANCE_WEI)
 
 
   return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCount.toString() })
