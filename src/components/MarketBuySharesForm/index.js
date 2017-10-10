@@ -289,8 +289,10 @@ class MarketBuySharesForm extends Component {
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} /> <CurrencyName collateralToken={collateralToken} />
-                </div>
+                    Gas Costs
+                  </div>
+                <div className="col-md-6">
+                  <DecimalValue value={gasCostEstimation} decimals={5} /> <CurrencyName collateralToken={collateralToken} /></div>
               </div>
               {submitFailed && (
                 <div className="row marketBuySharesForm__row">
