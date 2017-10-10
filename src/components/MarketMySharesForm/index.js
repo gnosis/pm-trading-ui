@@ -32,10 +32,6 @@ class MarketMySharesForm extends Component {
       gasPrice,
       requestGasCost,
       requestGasPrice,
-      marketShares,
-      fetchMarketShares,
-      defaultAccount,
-      market: { address },
     } = this.props
 
     if (gasCosts.sellShares === undefined) {
@@ -302,7 +298,7 @@ class MarketMySharesForm extends Component {
         <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellId, selectedSellAmount))}>
           <div className="row marketMyShares__sellRow">
             <div className="col-md-3 col-md-offset-3 marketMyShares__sellColumn">
-              <label>Amount to Sell</label>
+              <label htmlFor="sellAmount">Amount to Sell</label>
               <Field
                 component={FormInput}
                 name="sellAmount"
