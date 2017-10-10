@@ -2,8 +2,7 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connectBlockchain, initGnosis, setActiveProvider } from 'actions/blockchain'
 import { findDefaultProvider } from 'selectors/blockchain'
-import { WALLET_PROVIDER } from 'integrations/constants'
-import Web3 from 'web3'
+import { getGnosisJsOptions } from 'utils/helpers'
 
 
 export default class WalletIntegrationProvider extends Component {
@@ -31,7 +30,7 @@ export default class WalletIntegrationProvider extends Component {
       const defaultProvider = findDefaultProvider(reactStore.getState())
       await reactStore.dispatch(setActiveProvider(defaultProvider.name))
       // get Gnosis options
-      const opts = this.getGnosisOptions(defaultProvider)
+      const opts = getGnosisJsOptions(defaultProvider)
       // init Gnosis connection
       await reactStore.dispatch(initGnosis(opts))
 
@@ -39,23 +38,6 @@ export default class WalletIntegrationProvider extends Component {
     }
 
     window.addEventListener('load', () => init(Object.keys(integrations), store))
-  }
-
-  getGnosisOptions(provider) {
-    const opts = {}
-
-    if (provider && provider.name === WALLET_PROVIDER.METAMASK) {
-      // Inject window.web3
-      opts.ethereum = window.web3.currentProvider
-    } else if (provider && provider === WALLET_PROVIDER.PARITY) {
-      // Inject window.web3
-      opts.ethereum = window.web3.currentProvider
-    } else {
-      // Default remote node
-      opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
-    }
-
-    return opts
   }
 
   render() {

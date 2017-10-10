@@ -2,10 +2,15 @@ import autobind from 'autobind-decorator'
 import { ETHEREUM_NETWORKS } from 'integrations/constants'
 
 import {
+  getGnosisJsOptions
+} from 'utils/helpers'
+
+import {
   getCurrentBalance,
 } from 'api'
 
 import {
+  initGnosis,
   updateProvider,
   setActiveProvider,
 } from 'actions/blockchain'
@@ -73,15 +78,23 @@ class InjectedWeb3 {
     return getCurrentBalance(this.account)
   }
 
+  async updateActiveProvider() {
+    // determine new provider
+    const newProvider = findDefaultProvider(this.store.getState())
+    await this.store.dispatch(setActiveProvider(newProvider.name))
+
+    // get Gnosis options
+    const opts = getGnosisJsOptions(newProvider.name)   
+    // init Gnosis connection
+    await this.store.dispatch(initGnosis(opts))
+  }
+
   async handleDisconnect(err) {
     this.walletEnabled = false
     console.log(`WalletProvider ${this.constructor.providerName}: Has lost connection (${err})`)
 
     await this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: false }))
-
-    // determine new provider
-    const newProvider = findDefaultProvider(this.store.getState())
-    await this.store.dispatch(setActiveProvider(newProvider.name))
+    return this.updateActiveProvider()
   }
 
   async handleConnect() {
@@ -89,10 +102,8 @@ class InjectedWeb3 {
     console.log(`WalletProvider ${this.constructor.providerName}: Connected`)
 
     await this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: true }))
+    return this.updateActiveProvider()
 
-    // determine new provider
-    const newProvider = findDefaultProvider(this.store.getState())
-    await this.store.dispatch(setActiveProvider(newProvider.name))
   }
 
   async handleNetworkChange(newNetwork) {
@@ -100,6 +111,7 @@ class InjectedWeb3 {
     console.log(`WalletProvider ${this.constructor.providerName}: Changed Network`)
 
     this.store.dispatch(updateProvider({ provider: this.constructor.providerName, network: newNetwork }))
+    return this.updateActiveProvider()
   }
 
   async handleBalanceChange(newBalance) {
@@ -138,7 +150,7 @@ class InjectedWeb3 {
       }
     } catch (err) {
       if (this.walletEnabled) {
-        await this.handleDisconnect()
+        await this.handleDisconnect(err)
       }
     }
   }
