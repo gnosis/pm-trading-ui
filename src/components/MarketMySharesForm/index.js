@@ -41,20 +41,23 @@ class MarketMySharesForm extends Component {
         extendedSellId: this.props.params.shareId,
       }
     }
+
+    if (this.props.defaultAccount) {
+      this.props.fetchMarketShares(this.props.defaultAccount)
+    }
   }
 
   componentDidUpdate() {
     const { extendedSellId } = this.state
-    const {
-      selectedSellAmount,
-      marketShares,
-      initialize,
-    } = this.props
+    const { selectedSellAmount, marketShares, initialize } = this.props
 
     if (selectedSellAmount === undefined && extendedSellId !== undefined) {
       // By default form is filled up with fill amount
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
-      const fullAmount = Decimal(share.balance).div(1e18).toDP(4, 1).toString()
+      const fullAmount = Decimal(share.balance)
+        .div(1e18)
+        .toDP(4, 1)
+        .toString()
       initialize({ sellAmount: fullAmount })
     }
   }
@@ -66,7 +69,7 @@ class MarketMySharesForm extends Component {
     this.props.reset()
     // Form reset / reinitialization when switching among shares
     initialize({})
-    this.setState({ extendedSellId: (shareId === this.state.extendedSellId ? undefined : shareId) })
+    this.setState({ extendedSellId: shareId === this.state.extendedSellId ? undefined : shareId })
   }
 
   @autobind
@@ -79,8 +82,7 @@ class MarketMySharesForm extends Component {
   @autobind
   handleSellShare(shareId, shareAmount) {
     const shareIndex = this.props.marketShares.map(share => share.id).indexOf(shareId)
-    return this.props.sellShares(this.props.market, shareIndex, shareAmount)
-      .then(() => this.props.reset())
+    return this.props.sellShares(this.props.market, shareIndex, shareAmount).then(() => this.props.reset())
   }
 
   @autobind
@@ -93,13 +95,17 @@ class MarketMySharesForm extends Component {
     }
 
     if (decimalValue.lt(0)) {
-      return 'Number can\'t be negative.'
+      return "Number can't be negative."
     }
 
-    if (decimalValue.gt(Decimal(props.marketShares.filter(
-      share => share.id === this.state.extendedSellId)[0].balance,
-    ).div(1e18).toString())) {
-      return 'You\'re trying to sell more than you invested.'
+    if (
+      decimalValue.gt(
+        Decimal(props.marketShares.filter(share => share.id === this.state.extendedSellId)[0].balance)
+          .div(1e18)
+          .toString(),
+      )
+    ) {
+      return "You're trying to sell more than you invested."
     }
 
     return undefined
@@ -127,6 +133,7 @@ class MarketMySharesForm extends Component {
     } catch (e) {
       selectedSellAmountWei = '0'
     }
+
     let currentProbability
     if (market.event.type === 'CATEGORICAL') {
       try {
@@ -155,18 +162,23 @@ class MarketMySharesForm extends Component {
     const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0).mul(1e18))
     let earnings = new Decimal(0)
     if (share.balance && selectedSellAmount) {
-      earnings = weiToEth(calcLMSRProfit({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        outcomeTokenCount: selectedSellAmountWei,
-        feeFactor: market.fee,
-      }))
+      earnings = weiToEth(
+        calcLMSRProfit({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+          outcomeTokenCount: selectedSellAmountWei,
+          feeFactor: market.fee,
+        }),
+      )
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
       if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
-        return Decimal(outcomeTokenAmount).sub(currentTokenCount.sub(newTokenCount.toString()).toString()).floor().toString()
+        return Decimal(outcomeTokenAmount)
+          .sub(currentTokenCount.sub(newTokenCount.toString()).toString())
+          .floor()
+          .toString()
       }
 
       return Decimal(outcomeTokenAmount).toString()
@@ -184,10 +196,7 @@ class MarketMySharesForm extends Component {
         newProbability = currentProbability
       }
       const newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
-      newScalarPredictedValue = normalizeScalarPoint(
-        newMarginalPrices,
-        market,
-      )
+      newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
     } else {
       // Categorical events
       try {
@@ -222,21 +231,22 @@ class MarketMySharesForm extends Component {
                 validate={this.validateTokenCount}
               />
             </div>
-            { market.event.type === 'SCALAR' ?
+            {market.event.type === 'SCALAR' ? (
               <div className="col-md-3 marketMyShares__sellColumn">
                 <label>New predicted value</label>
                 <span>
                   <DecimalValue value={newScalarPredictedValue} />&nbsp;
                   <CurrencyName collateralToken={market.event.collateralToken} />
                 </span>
-              </div> :
+              </div>
+            ) : (
               <div className="col-md-3 marketMyShares__sellColumn">
                 <label>New Probability</label>
                 <span>
                   <DecimalValue value={newProbability.mul(100)} /> %
                 </span>
               </div>
-            }
+            )}
             <div className="col-md-3">
               <label>Earnings</label>
               <span>
@@ -256,16 +266,21 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-6 col-md-offset-6 marketMyShares__sellColumn">
-              <button className={`btn btn-primary ${submitDisabled ? 'disabled' : ''}`} disabled={submitDisabled}>{submitting ? 'Loading' : 'Sell Shares'}</button>
-              <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>Cancel</button>
+              <button className={`btn btn-primary ${submitDisabled ? 'disabled' : ''}`} disabled={submitDisabled}>
+                {submitting ? 'Loading' : 'Sell Shares'}
+              </button>
+              <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>
+                Cancel
+              </button>
             </div>
           </div>
           {submitFailed && (
-          <div className="row">
-            <div className="col-md-9 col-md-offset-3 marketMyShares__errorColumn">
-              Sorry - your share sell could not be processed. Please ensure you&quot;re on the right network.
+            <div className="row">
+              <div className="col-md-9 col-md-offset-3 marketMyShares__errorColumn">
+                Sorry - your share sell could not be processed. Please ensure you&quot;re on the right network.
+              </div>
             </div>
-          </div>)}
+          )}
         </form>
       </div>
     )
@@ -292,19 +307,23 @@ class MarketMySharesForm extends Component {
         cost: share.balance,
       })
 
-      tableRows.push((
+      tableRows.push(
         <tr className="marketMyShares__share" key={share.id}>
           <td>
             <div
-              className={'shareOutcome__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
+              className={'shareOutcome__color'}
+              style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
             />
           </td>
-          <td className="">
-            {getOutcomeName(market, share.outcomeToken.index)}
-          </td>
+          <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
           <td>
-            {Decimal(share.balance).div(1e18).gte(LOWEST_DISPLAYED_VALUE) ?
-              <DecimalValue value={Decimal(share.balance).div(1e18)} /> : `< ${LOWEST_DISPLAYED_VALUE}`}
+            {Decimal(share.balance)
+              .div(1e18)
+              .gte(LOWEST_DISPLAYED_VALUE) ? (
+                <DecimalValue value={Decimal(share.balance).div(1e18)} />
+            ) : (
+              `< ${LOWEST_DISPLAYED_VALUE}`
+            )}
           </td>
           <td>
             <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
@@ -312,20 +331,26 @@ class MarketMySharesForm extends Component {
           </td>
           <td>
             {/* eslint-disable no-script-url */}
-            {!resolved && <a href="javascript:void(0);" className="marketMyShares__sellButton" onClick={e => this.handleShowSellView(e, share.id)}>Sell</a>}
+            {!resolved && (
+              <a
+                href="javascript:void(0);"
+                className="marketMyShares__sellButton"
+                onClick={e => this.handleShowSellView(e, share.id)}
+              >
+                Sell
+              </a>
+            )}
             {/* eslint-enable no-script-url */}
           </td>
-        </tr>
-      ))
+        </tr>,
+      )
 
       if (share.id === extendedSellId) {
-        tableRows.push((
+        tableRows.push(
           <tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
-            <td colSpan={5}>
-              {this.renderSellShareView()}
-            </td>
-          </tr>
-        ))
+            <td colSpan={5}>{this.renderSellShareView()}</td>
+          </tr>,
+        )
       }
     })
 
@@ -359,9 +384,7 @@ class MarketMySharesForm extends Component {
               <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group" />
             </tr>
           </thead>
-          <tbody>
-            {this.generateTableRows()}
-          </tbody>
+          <tbody>{this.generateTableRows()}</tbody>
         </table>
       </div>
     )
