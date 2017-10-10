@@ -4,12 +4,13 @@ import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
+import { calcLMSRProfit } from 'api'
 
 import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import { collateralTokenToText } from 'components/CurrencyName'
-import { decimalToText } from 'components/DecimalValue'
+import DecimalValue, { decimalToText } from 'components/DecimalValue'
 
 import Countdown from 'components/Countdown'
 import Outcome from 'components/Outcome'
@@ -24,6 +25,7 @@ import MarketMyTrades from 'components/MarketMyTrades'
 
 import './marketDetail.less'
 import { weiToEth } from '../../utils/helpers'
+import { marketShareShape } from '../../utils/shapes'
 
 const ONE_WEEK_IN_HOURS = 168
 const EXPAND_BUY_SHARES = 'buy-shares'
@@ -102,25 +104,26 @@ class MarketDetail extends Component {
     }
   }
   componentWillMount() {
-    if (!this.props.market || !this.props.market.address) {
-      this.props
-        .fetchMarket()
-        .then(() => this.props.fetchMarketTrades(this.props.market))
-        .catch((err) => {
-          this.setState({
-            marketFetchError: err,
-          })
+    this.props
+      .fetchMarket()
+      .then(() => {
+        if (this.props.defaultAccount) {
+          this.props.fetchMarketTrades(this.props.market)
+          this.props.fetchMarketShares(this.props.defaultAccount)
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          marketFetchError: err,
         })
-    } else {
-      this.props.fetchMarketTrades(this.props.market)
-    }
-
-    if (this.props.defaultAccount && (!this.props.market || !this.props.market.shares)) {
-      this.props.fetchMarketShares(this.props.defaultAccount)
-    }
+      })
 
     this.props.requestGasCost(GAS_COST.BUY_SHARES)
     this.props.requestGasCost(GAS_COST.SELL_SHARES)
+
+    if (this.props.defaultAccount && this.props.params.id) {
+      this.props.fetchMarketParticipantTrades(this.props.params.id, this.props.defaultAccount)
+    }
   }
 
   @autobind
@@ -155,7 +158,7 @@ class MarketDetail extends Component {
 
       if (typeof view.showCondition !== 'function' || view.showCondition(this.props)) {
         const ViewComponent = view.component
-        
+
         // Not sure if this is a good idea; If I need to optimize, here's a good place to start
         return (
           <div className="expandable__inner">
@@ -218,6 +221,20 @@ class MarketDetail extends Component {
       .utc(market.eventDescription.resolutionDate)
       .local()
       .diff(moment(), 'hours')
+    const { marketShares } = this.props
+
+    const winnings = marketShares.reduce((sum, share) => {
+      const shareWinnings = weiToEth(
+        calcLMSRProfit({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+          outcomeTokenCount: share.balance,
+          feeFactor: market.fee,
+        }),
+      )
+      return sum.plus(new Decimal(shareWinnings))
+    }, new Decimal(0))
 
     return (
       <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
@@ -251,7 +268,10 @@ class MarketDetail extends Component {
           <div className="redeemWinning">
             <div className="redeemWinning__icon icon icon--achievementBadge" />
             <div className="redeemWinning__details">
-              <div className="redeemWinning__heading">200 {collateralTokenToText(market.event.collateralToken)}</div>
+              <div className="redeemWinning__heading">
+                <DecimalValue value={winnings} />{' '}
+                {collateralTokenToText(market.event.collateralToken)}
+              </div>
               <div className="redeemWinning__label">Your Winnings</div>
             </div>
             <div className="redeemWinning__action">
@@ -360,10 +380,12 @@ class MarketDetail extends Component {
 }
 
 MarketDetail.propTypes = {
+  fetchMarketParticipantTrades: PropTypes.func,
   params: PropTypes.shape({
     id: PropTypes.string,
     view: PropTypes.string,
   }),
+  marketShares: PropTypes.arrayOf(marketShareShape),
   defaultAccount: PropTypes.string,
   market: marketShape,
   changeUrl: PropTypes.func,
