@@ -51,8 +51,8 @@ class MarketMySharesForm extends Component {
       }
     }
 
-    if (!marketShares || !marketShares.length) {
-      fetchMarketShares(address, defaultAccount)
+    if (this.props.defaultAccount) {
+      this.props.fetchMarketShares(this.props.defaultAccount)
     }
   }
 
@@ -213,6 +213,7 @@ class MarketMySharesForm extends Component {
     } catch (e) {
       selectedSellAmountWei = '0'
     }
+
     let currentProbability
     if (market.event.type === 'CATEGORICAL') {
       try {
