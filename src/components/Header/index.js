@@ -38,13 +38,16 @@ const Header = ({ version, defaultAccount, currentBalance, currentProvider, getP
           </Link>
         )}
       </div>
-      <div className="headerContainer__group headerContainer__group--right account">
-        {defaultAccount && currentProvider && getProviderIcon(currentProvider)}
-        <div className="headerContainer__account">
-          <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
-          <Identicon className="" />
-        </div>
-      </div>
+      {defaultAccount &&
+        currentProvider && (
+          <div className="headerContainer__group headerContainer__group--right account">
+            {defaultAccount && currentProvider && getProviderIcon(currentProvider)}
+            <div className="headerContainer__account">
+              <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
+              <Identicon className="" />
+            </div>
+          </div>
+        )}
     </div>
   </div>
 )
