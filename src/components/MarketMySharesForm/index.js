@@ -335,7 +335,7 @@ class MarketMySharesForm extends Component {
             <div className="col-md-3 col-md-offset-3">
               <label>Gas costs</label>
               <span>
-                <DecimalValue value={gasCostEstimation} />&nbsp;
+                <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </span>
             </div>
