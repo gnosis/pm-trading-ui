@@ -104,7 +104,24 @@ class MarketDetail extends Component {
       marketFetchError: undefined,
     }
   }
+
   componentWillMount() {
+    if (!this.props.params.view) {
+      this.props.changeUrl(`/markets/${this.props.params.id}/${DEFAULT_VIEW}`)
+    }
+
+    this.fetchEssentialData()
+    this.props.requestGasCost(GAS_COST.BUY_SHARES)
+    this.props.requestGasCost(GAS_COST.SELL_SHARES)
+
+    this._fetchDataTimer = setInterval(this.fetchEssentialData, 15000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._fetchDataTimer)
+  }
+
+  fetchEssentialData() {
     this.props
       .fetchMarket()
       .then(() => {
@@ -269,8 +286,7 @@ class MarketDetail extends Component {
             <div className="redeemWinning__icon icon icon--achievementBadge" />
             <div className="redeemWinning__details">
               <div className="redeemWinning__heading">
-                <DecimalValue value={winnings} />{' '}
-                {collateralTokenToText(market.event.collateralToken)}
+                <DecimalValue value={winnings} /> {collateralTokenToText(market.event.collateralToken)}
               </div>
               <div className="redeemWinning__label">Your Winnings</div>
             </div>
