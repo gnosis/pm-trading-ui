@@ -11,14 +11,7 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
 const config = require('./src/config.json')
 
-let whitelist
-
-if (nodeEnv === 'development') {
-  whitelist = config.developmentWhitelist
-} else {
-  whitelist = config.productionWhitelist
-}
-
+const whitelist = config.developmentWhitelist
 
 const gnosisDbUrl =
   process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
@@ -29,7 +22,7 @@ const ethereumUrl =
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: ['react-hot-loader/patch', 'bootstrap-loader', 'index.js'],
-  devtool: 'eval',
+  devtool: 'eval-source-map',
   output: {
     publicPath: '/',
     path: `${__dirname}/dist`,
