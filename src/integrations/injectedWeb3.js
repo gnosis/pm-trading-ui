@@ -1,6 +1,19 @@
-import { ETHEREUM_NETWORKS, WALLET_PROVIDER } from 'integrations/constants'
+import autobind from 'autobind-decorator'
+import { ETHEREUM_NETWORKS } from 'integrations/constants'
+
+import {
+  getCurrentBalance
+} from 'api'
+
+import {
+  updateProvider,
+} from 'actions/blockchain'
 
 class InjectedWeb3 {
+  constructor() {
+    this.watcherInterval = setInterval(this.watcher, 1000)
+  }
+
   async getNetwork() {
     return new Promise((resolve, reject) => {
       this.web3.version.getNetwork((err, netId) => {
@@ -49,6 +62,72 @@ class InjectedWeb3 {
         },
       )
     })
+  }
+
+  async getBalance() {
+    return getCurrentBalance(this.account)
+  }
+
+  async handleDisconnect(err) {
+    this.walletEnabled = false
+    console.log(`WalletProvider ${this.constructor.providerName}: Has lost connection (${err})`)
+
+    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: false }))
+  }
+
+  async handleConnect() {
+    this.walletEnabled = true
+    console.log(`WalletProvider ${this.constructor.providerName}: Connected`)
+
+    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: true }))
+  }
+
+  async handleNetworkChange(newNetwork) {
+    this.network = newNetwork
+    console.log(`WalletProvider ${this.constructor.providerName}: Changed Network`)
+
+    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, network: newNetwork }))
+  }
+
+  async handleBalanceChange(newBalance) {
+    this.balance = newBalance
+
+    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, balance: newBalance }))
+  }
+
+  async handleAccountChange(newAccount) {
+    this.account = newAccount
+    console.log(`WalletProvider ${this.constructor.providerName}: Changed Account`)
+
+    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, account: newAccount }))
+  }
+
+  @autobind
+  async watcher() {
+    try {
+      const currentAccount = await this.getAccount()
+      if (this.account !== currentAccount) {
+        await this.handleAccountChange(currentAccount)
+      }
+
+      const currentNetwork = await this.getNetwork()
+      if (this.network !== currentNetwork) {
+        await this.handleNetworkChange(currentNetwork)
+      }
+
+      const currentBalance = await this.getBalance()
+      if (this.balance !== currentBalance) {
+        await this.handleBalanceChange(currentBalance)
+      }
+
+      if (!this.walletEnabled && currentAccount) {
+        await this.handleConnect()
+      }
+    } catch (err) {
+      if (this.walletEnabled) {
+        await this.handleDisconnect()
+      }
+    }
   }
 
 }

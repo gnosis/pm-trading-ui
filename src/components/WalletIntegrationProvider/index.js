@@ -1,37 +1,44 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connectBlockchain, initGnosis } from 'actions/blockchain'
-import { getSelectedProvider } from 'selectors/blockchain'
+import { connectBlockchain, initGnosis, setActiveProvider } from 'actions/blockchain'
+import { findDefaultProvider } from 'selectors/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
 
 
 export default class WalletIntegrationProvider extends Component {
-
   constructor(props) {
     super(props)
     const { integrations, store } = props
-    const initializers = Object.keys(integrations).map(integrationName => integrations[integrationName])
-
 
     // Execute providers inizialization sequentially
-    const init = (funcs, reactStore) => {
-      if (funcs.length > 0) {
-        return funcs[0].initialize(reactStore).then(
-          () => init(funcs.slice(1), reactStore),
-        )
+    const init = async (integrationNames, reactStore) => {
+      const integrationName = integrationNames.pop()
+
+      if (integrationName) {
+        const integration = integrations[integrationName]
+        const success = await integration.initialize(store)
+        if (success) {
+          console.log(`Integration available: ${integrationName}`)
+        }
+
+        return init(integrationNames, reactStore)
       }
+      
       // Gnosis initialization needed after providers init
+      
       // Get selected provider
-      const selectedProvider = getSelectedProvider(reactStore.getState())
+      const defaultProvider = findDefaultProvider(reactStore.getState())
+      await reactStore.dispatch(setActiveProvider(defaultProvider.name))
       // get Gnosis options
-      const opts = this.getGnosisOptions(selectedProvider)
+      const opts = this.getGnosisOptions(defaultProvider)
       // init Gnosis connection
-      reactStore.dispatch(initGnosis(opts)).then(() => reactStore.dispatch(connectBlockchain()))
-      return null
+      await reactStore.dispatch(initGnosis(opts))
+
+      await reactStore.dispatch(connectBlockchain())
     }
 
-    window.addEventListener('load', () => init(initializers, store))
+    window.addEventListener('load', () => init(Object.keys(integrations), store))
   }
 
   getGnosisOptions(provider) {

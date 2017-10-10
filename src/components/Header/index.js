@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import DecimalValue from 'components/DecimalValue'
 import Identicon from 'components/Identicon'
+import ProviderIcon from 'components/ProviderIcon'
 
 import './header.less'
 
-const Header = ({ version, defaultAccount, currentBalance, currentProvider, getProviderIcon }) => (
+const Header = ({ version, currentAccount, currentBalance, currentProvider }) => (
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
@@ -28,7 +29,7 @@ const Header = ({ version, defaultAccount, currentBalance, currentProvider, getP
         >
           Markets
         </Link>
-        {defaultAccount && (
+        {currentAccount && (
           <Link
             to="/transactions"
             activeClassName="headerContainer__navLink--active"
@@ -39,11 +40,15 @@ const Header = ({ version, defaultAccount, currentBalance, currentProvider, getP
         )}
       </div>
       <div className="headerContainer__group headerContainer__group--right account">
-        {defaultAccount && currentProvider && getProviderIcon(currentProvider)}
-        <div className="headerContainer__account">
-          <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
-          <Identicon className="" />
-        </div>
+        {currentAccount && currentProvider && (
+          <ProviderIcon provider={currentProvider} />
+        )}
+        {currentAccount && currentProvider && (
+          <div className="headerContainer__account">
+            <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
+            <Identicon account={currentAccount} />
+          </div>
+        )}
       </div>
     </div>
   </div>
@@ -51,10 +56,9 @@ const Header = ({ version, defaultAccount, currentBalance, currentProvider, getP
 
 Header.propTypes = {
   version: PropTypes.string,
-  defaultAccount: PropTypes.string,
+  currentAccount: PropTypes.string,
   currentBalance: PropTypes.string,
-  currentProvider: PropTypes.string,
-  getProviderIcon: PropTypes.func,
+  currentProvider: PropTypes.shape({}),
 }
 
 export default Header

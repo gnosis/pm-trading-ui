@@ -13,15 +13,14 @@ import {
   getEtherTokens,
 } from 'api'
 
-import { hexWithPrefix, timeoutCondition } from 'utils/helpers'
+import { timeoutCondition } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
-export const setDefaultAccount = createAction('SET_DEFAULT_ACCOUNT')
-export const setCurrentBalance = createAction('SET_CURRENT_BALANCE')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
+export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const registerProvider = createAction('REGISTER_PROVIDER')
@@ -52,9 +51,7 @@ export const connectBlockchain = () => async (dispatch) => {
       balance = await getCurrentBalance(account)
     }
     await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
-    await dispatch(setDefaultAccount(hexWithPrefix(account)))
-    // update current balance
-    dispatch(setCurrentBalance(balance))
+    
     return await dispatch(setConnectionStatus({ connected: true }))
   } catch (e) {
     console.warn(`Blockchain connection Error: ${e}`)
