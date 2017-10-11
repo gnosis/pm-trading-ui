@@ -287,10 +287,9 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">{fieldError || maxReturnField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
                     Gas Costs
-                  </div>
+                </div>
                 <div className="col-md-6">
                   <DecimalValue value={gasCostEstimation} decimals={5} /> <CurrencyName collateralToken={collateralToken} /></div>
               </div>
