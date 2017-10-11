@@ -48,6 +48,7 @@ class MarketBuySharesForm extends Component {
         cost: invest.toString(),
       })
     } catch (e) {
+      console.error(e)
       return new Decimal(0)
     }
 

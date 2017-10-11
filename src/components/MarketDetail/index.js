@@ -133,6 +133,7 @@ class MarketDetail extends Component {
         }
       })
       .catch((err) => {
+        console.error(e)
         this.setState({
           marketFetchError: err,
         })
