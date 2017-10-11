@@ -121,6 +121,7 @@ class MarketDetail extends Component {
     clearInterval(this._fetchDataTimer)
   }
 
+  @autobind
   fetchEssentialData() {
     this.props
       .fetchMarket()
