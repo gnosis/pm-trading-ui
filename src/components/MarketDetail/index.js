@@ -23,6 +23,7 @@ import MarketMySharesForm from 'components/MarketMySharesForm'
 import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 // import MarketShortSellForm from 'components/MarketShortSellForm'
 import MarketMyTrades from 'components/MarketMyTrades'
+import config from 'config.json'
 
 import './marketDetail.less'
 import { weiToEth } from '../../utils/helpers'
@@ -114,7 +115,7 @@ class MarketDetail extends Component {
     this.props.requestGasCost(GAS_COST.BUY_SHARES)
     this.props.requestGasCost(GAS_COST.SELL_SHARES)
 
-    this._fetchDataTimer = setInterval(this.fetchEssentialData, 15000)
+    this._fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
   }
 
   componentWillUnmount() {
