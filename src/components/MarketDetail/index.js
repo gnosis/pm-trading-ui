@@ -118,7 +118,7 @@ class MarketDetail extends Component {
 
   @autobind
   getAvailableView() {
-    return Object.keys(expandableViews).filter(view => expandableViews[view].showCondition(this.props))[0]
+    return Object.keys(expandableViews).find(view => expandableViews[view].showCondition(this.props))
   }
 
   // Check available views on first fetch
