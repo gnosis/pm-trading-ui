@@ -56,7 +56,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getMaximumWin(outcomeTokenCount, investment) {
-    return outcomeTokenCount.sub(new Decimal(investment).mul(1e18)).div(1e18)
+    return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
   }
 
   getPercentageWin(outcomeTokenCount, investment) {
