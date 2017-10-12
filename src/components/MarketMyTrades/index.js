@@ -1,17 +1,25 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import moment from 'moment'
-import { decimalToText, DecimalValue } from 'components/DecimalValue'
-import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
+import { decimalToText } from 'components/DecimalValue'
+import CurrencyName from 'components/CurrencyName'
 import { COLOR_SCHEME_DEFAULT, RESOLUTION_TIME } from 'utils/constants'
 import { getOutcomeName } from 'utils/helpers'
+import { marketShape } from 'utils/shapes'
 
 import './marketMyTrades.less'
 
 class MarketMyTrades extends Component {
+  static propTypes = {
+    market: marketShape,
+    defaultAccount: PropTypes.string,
+    fetchMarketParticipantTrades: PropTypes.func,
+  }
+
   componentWillMount() {
     const { market, defaultAccount } = this.props
-    if (!market.participantTrades || market.participantTrades.length == 0) {
+    if (!market.participantTrades || market.participantTrades.length === 0) {
       // Retrieve participant trades to state
       this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
     }
@@ -59,7 +67,7 @@ class MarketMyTrades extends Component {
   }
 
   render() {
-    const { marketShares, market } = this.props
+    const { market } = this.props
     if (market.participantTrades && market.participantTrades.length > 0) {
       return (
         <div className="marketMyTrades">

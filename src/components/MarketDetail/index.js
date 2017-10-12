@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
+import cn from 'classnames'
 import Decimal from 'decimal.js'
 import { calcLMSRProfit } from 'api'
 
@@ -113,10 +114,15 @@ class MarketDetail extends Component {
         }
       })
       .catch((err) => {
+        console.error(e)
         this.setState({
           marketFetchError: err,
         })
       })
+
+    if (!this.props.params.view) {
+      this.props.changeUrl(`/markets/${this.props.params.id}/${DEFAULT_VIEW}`)
+    }
 
     this.props.requestGasCost(GAS_COST.BUY_SHARES)
     this.props.requestGasCost(GAS_COST.SELL_SHARES)
@@ -128,12 +134,10 @@ class MarketDetail extends Component {
 
   @autobind
   handleExpand(view) {
-    const currentView = this.props.params.view
-
-    if (currentView === view || (currentView === undefined && view === DEFAULT_VIEW)) {
-      this.props.changeUrl(`/markets/${this.props.params.id}`)
-    } else {
+    if (this.props.params.view !== view) {
       this.props.changeUrl(`/markets/${this.props.params.id}/${view}`)
+    } else {
+      this.props.changeUrl(`/markets/${this.props.params.id}/`)
     }
   }
 
@@ -151,15 +155,12 @@ class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
-    const currentView = this.props.params.view || DEFAULT_VIEW
-
+    const currentView = this.props.params.view || false
     if (currentView && expandableViews[currentView] && expandableViews[currentView].component) {
       const view = expandableViews[currentView]
 
       if (typeof view.showCondition !== 'function' || view.showCondition(this.props)) {
         const ViewComponent = view.component
-
-        // Not sure if this is a good idea; If I need to optimize, here's a good place to start
         return (
           <div className="expandable__inner">
             <div className="container">
@@ -309,13 +310,11 @@ class MarketDetail extends Component {
               <button
                 key={view}
                 type="button"
-                className={`
-                marketControls__button
-                ${(view !== DEFAULT_VIEW && view === this.props.params.view) ||
-                (view === DEFAULT_VIEW && view === this.props.params.view) ||
-                (this.props.params.view === undefined && view === DEFAULT_VIEW)
-                  ? 'marketControls__button--active btn btn-primary'
-                  : expandableViews[view].className}`}
+                className={cn({
+                  marketControls__button: true,
+                  'marketControls__button--active btn btn-primary': view === this.props.params.view,
+                  [expandableViews[view].className]: view !== this.props.params.view,
+                })}
                 onClick={() => this.handleExpand(view)}
               >
                 {expandableViews[view].label}
