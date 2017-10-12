@@ -10,7 +10,7 @@ const Header = ({ version, defaultAccount, currentBalance, currentProvider, getP
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
-        <Link to="/">
+        <Link to={defaultAccount ? '/' : '/markets/list'}>
           <div className="headerLogo" />
         </Link>
       </div>
@@ -18,9 +18,11 @@ const Header = ({ version, defaultAccount, currentBalance, currentProvider, getP
         {version}
       </div>
       <div className="headerContainer__group headerContainer__group--left">
-        <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
-          Dashboard
-        </Link>
+        {defaultAccount && (
+          <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+            Dashboard
+          </Link>
+        )}
         <Link
           to="/markets/list"
           activeClassName="headerContainer__navLink--active"

@@ -41,6 +41,11 @@ class Dashboard extends Component {
   }
 
   componentWillMount() {
+    if (!this.props.defaultAccount) {
+      this.props.changeUrl('/markets/list')
+      return
+    }
+
     if (this.props.gnosisInitialized) {
       this.props.requestMarkets()
       this.props.requestGasPrice()

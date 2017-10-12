@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
-import cn from 'classnames'
 import Decimal from 'decimal.js'
 import { calcLMSRProfit } from 'api'
 
@@ -23,7 +22,6 @@ import MarketMySharesForm from 'components/MarketMySharesForm'
 import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 // import MarketShortSellForm from 'components/MarketShortSellForm'
 import MarketMyTrades from 'components/MarketMyTrades'
-import config from 'config.json'
 
 import './marketDetail.less'
 import { weiToEth } from '../../utils/helpers'
@@ -36,6 +34,8 @@ const EXPAND_MY_TRADES = 'my-trades'
 const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
 const EXPAND_WITHDRAW_FEES = 'withdraw-fees'
+
+const DEFAULT_VIEW = EXPAND_BUY_SHARES
 
 const expandableViews = {
   [EXPAND_BUY_SHARES]: {
@@ -103,27 +103,7 @@ class MarketDetail extends Component {
       marketFetchError: undefined,
     }
   }
-
   componentWillMount() {
-    this.fetchEssentialData(!this.props.params.view)
-    this.props.requestGasCost(GAS_COST.BUY_SHARES)
-    this.props.requestGasCost(GAS_COST.SELL_SHARES)
-
-    this.fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.fetchDataTimer)
-  }
-
-  @autobind
-  getAvailableView() {
-    return Object.keys(expandableViews).find(view => expandableViews[view].showCondition(this.props))
-  }
-
-  // Check available views on first fetch
-  @autobind
-  fetchEssentialData(firstFetch = false) {
     this.props
       .fetchMarket()
       .then(() => {
@@ -131,15 +111,8 @@ class MarketDetail extends Component {
           this.props.fetchMarketTrades(this.props.market)
           this.props.fetchMarketShares(this.props.defaultAccount)
         }
-        if (firstFetch) {
-          const availableView = this.getAvailableView()
-          if (availableView) {
-            this.props.changeUrl(`/markets/${this.props.params.id}/${availableView}`)
-          }
-        }
       })
       .catch((err) => {
-        console.error(e)
         this.setState({
           marketFetchError: err,
         })
@@ -155,10 +128,12 @@ class MarketDetail extends Component {
 
   @autobind
   handleExpand(view) {
-    if (this.props.params.view !== view) {
-      this.props.changeUrl(`/markets/${this.props.params.id}/${view}`)
+    const currentView = this.props.params.view
+
+    if (currentView === view || (currentView === undefined && view === DEFAULT_VIEW)) {
+      this.props.changeUrl(`/markets/${this.props.params.id}`)
     } else {
-      this.props.changeUrl(`/markets/${this.props.params.id}/`)
+      this.props.changeUrl(`/markets/${this.props.params.id}/${view}`)
     }
   }
 
@@ -176,12 +151,15 @@ class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
-    const currentView = this.props.params.view || false
+    const currentView = this.props.params.view || DEFAULT_VIEW
+
     if (currentView && expandableViews[currentView] && expandableViews[currentView].component) {
       const view = expandableViews[currentView]
 
       if (typeof view.showCondition !== 'function' || view.showCondition(this.props)) {
         const ViewComponent = view.component
+
+        // Not sure if this is a good idea; If I need to optimize, here's a good place to start
         return (
           <div className="expandable__inner">
             <div className="container">
@@ -291,7 +269,8 @@ class MarketDetail extends Component {
             <div className="redeemWinning__icon icon icon--achievementBadge" />
             <div className="redeemWinning__details">
               <div className="redeemWinning__heading">
-                <DecimalValue value={winnings} /> {collateralTokenToText(market.event.collateralToken)}
+                <DecimalValue value={winnings} />{' '}
+                {collateralTokenToText(market.event.collateralToken)}
               </div>
               <div className="redeemWinning__label">Your Winnings</div>
             </div>
@@ -330,11 +309,13 @@ class MarketDetail extends Component {
               <button
                 key={view}
                 type="button"
-                className={cn({
-                  marketControls__button: true,
-                  'marketControls__button--active btn btn-primary': view === this.props.params.view,
-                  [expandableViews[view].className]: view !== this.props.params.view,
-                })}
+                className={`
+                marketControls__button
+                ${(view !== DEFAULT_VIEW && view === this.props.params.view) ||
+                (view === DEFAULT_VIEW && view === this.props.params.view) ||
+                (this.props.params.view === undefined && view === DEFAULT_VIEW)
+                  ? 'marketControls__button--active btn btn-primary'
+                  : expandableViews[view].className}`}
                 onClick={() => this.handleExpand(view)}
               >
                 {expandableViews[view].label}
