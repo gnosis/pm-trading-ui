@@ -37,8 +37,6 @@ const EXPAND_MY_SHARES = 'my-shares'
 const EXPAND_RESOLVE = 'resolve'
 const EXPAND_WITHDRAW_FEES = 'withdraw-fees'
 
-const DEFAULT_VIEW = EXPAND_BUY_SHARES
-
 const expandableViews = {
   [EXPAND_BUY_SHARES]: {
     label: 'Buy Tokens',
@@ -107,29 +105,37 @@ class MarketDetail extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.params.view) {
-      this.props.changeUrl(`/markets/${this.props.params.id}/${DEFAULT_VIEW}`)
-    }
-
-    this.fetchEssentialData()
+    this.fetchEssentialData(!this.props.params.view)
     this.props.requestGasCost(GAS_COST.BUY_SHARES)
     this.props.requestGasCost(GAS_COST.SELL_SHARES)
 
-    this._fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
+    this.fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
   }
 
   componentWillUnmount() {
-    clearInterval(this._fetchDataTimer)
+    clearInterval(this.fetchDataTimer)
   }
 
   @autobind
-  fetchEssentialData() {
+  getAvailableView() {
+    return Object.keys(expandableViews).filter(view => expandableViews[view].showCondition(this.props))[0]
+  }
+
+  // Check available views on first fetch
+  @autobind
+  fetchEssentialData(firstFetch = false) {
     this.props
       .fetchMarket()
       .then(() => {
         if (this.props.defaultAccount) {
           this.props.fetchMarketTrades(this.props.market)
           this.props.fetchMarketShares(this.props.defaultAccount)
+        }
+        if (firstFetch) {
+          const availableView = this.getAvailableView()
+          if (availableView) {
+            this.props.changeUrl(`/markets/${this.props.params.id}/${availableView}`)
+          }
         }
       })
       .catch((err) => {
@@ -138,10 +144,6 @@ class MarketDetail extends Component {
           marketFetchError: err,
         })
       })
-
-    if (!this.props.params.view) {
-      this.props.changeUrl(`/markets/${this.props.params.id}/${DEFAULT_VIEW}`)
-    }
 
     this.props.requestGasCost(GAS_COST.BUY_SHARES)
     this.props.requestGasCost(GAS_COST.SELL_SHARES)
