@@ -37,7 +37,7 @@ const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 export const initGnosis = opts => async (dispatch) => {
   try {
     await initGnosisConnection(opts)
-    await dispatch(setGnosisInitialized({ initialized: true }))
+    await dispatch(setGnosisInitialized({ initialized:true }))
   } catch (error) {
     console.warn(`Gnosis connection Error: ${error}`)
     dispatch(setGnosisInitialized({ initialized: false, error }))

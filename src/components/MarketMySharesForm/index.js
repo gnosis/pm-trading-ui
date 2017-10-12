@@ -81,7 +81,7 @@ class MarketMySharesForm extends Component {
   handleCloseSellView(e) {
     e.preventDefault()
     this.props.reset()
-    this.setState({ extendedSellId: undefined })
+    this.setState({ extendedSellId:undefined })
   }
 
   @autobind
