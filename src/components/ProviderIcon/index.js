@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import cn from 'classnames'
 
 import { WALLET_PROVIDER } from 'integrations/constants'
+import { upperFirst } from 'lodash'
 
 const providerIconClasses = {
   [WALLET_PROVIDER.METAMASK]: 'metamask',
@@ -15,7 +16,7 @@ const ProviderIcon = ({ provider = {} }) => (
       `headerIcon--${providerIconClasses[provider.name] || 'default'}`,
       'pull-left',
     ])}
-    title={`You are on Network: ${provider.network}`}
+    title={`You are using ${upperFirst(provider.name.toLowerCase())} to connect to Gnosis`}
   />
 )
 
