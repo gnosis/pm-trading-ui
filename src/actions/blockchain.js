@@ -39,6 +39,7 @@ export const initGnosis = opts => async (dispatch) => {
     await initGnosisConnection(opts)
     await dispatch(setGnosisInitialized({ initialized: true }))
   } catch (error) {
+    console.warn(`Gnosis connection Error: ${error}`)
     dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 }
