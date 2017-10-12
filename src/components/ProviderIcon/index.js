@@ -15,6 +15,7 @@ const ProviderIcon = ({ provider = {} }) => (
       `headerIcon--${providerIconClasses[provider.name] || 'default'}`,
       'pull-left',
     ])}
+    title={`You are on Network: ${provider.network}`}
   />
 )
 

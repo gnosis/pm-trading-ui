@@ -13,29 +13,31 @@ class Remote extends InjectedWeb3 {
 
   /**
    * Tries to initialize and enable the current provider
-   * @param {*} store - Redux Store
-   * @see src/components/WalletIntegration/Provider - See for call signature
+   * @param {object} opts - Integration Options
+   * @param {function} opts.runProviderUpdate - Function to run when this provider updates
+   * @param {function} opts.runProviderRegister - Function to run when this provider registers
    */
-  async initialize(store) {
-    this.store = store
-
-    this.store.dispatch(registerProvider({ provider: Remote.providerName }))
-    this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
-
+  async initialize(opts) {
+    super.initialize(opts)
+    this.runProviderRegister(this, { proriority: Remote.providerPriority })
+    try {
+      this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))  
+    } catch (err) {
+      return
+    }
+    
     this.network = await this.getNetwork()
     this.account = await this.getAccount()
+    this.balance = await this.getBalance()
 
-    await this.store.dispatch(updateProvider({
-      provider: WALLET_PROVIDER.REMOTE,
-      available: this.account !== undefined,
-      network: this.network,
-      account: this.account,
-    }))
-
-    // Remote connection is always available as long as there is a connection and web3 implemented
     this.walletEnabled = true
 
-    return this.walletEnabled
+    return this.runProviderUpdate(this, {
+      available: this.walletEnabled && this.account != null,
+      network: this.network,
+      account: this.account,
+      balance: this.balance,
+    })
   }
 }
 export default new Remote()

@@ -1,5 +1,4 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { registerProvider, updateProvider } from 'actions/blockchain'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import Web3 from 'web3'
 
@@ -14,19 +13,24 @@ class Metamask extends InjectedWeb3 {
 
   /**
    * Tries to initialize and enable the current provider
-   * @param {*} store - Redux Store
-   * @see src/components/WalletIntegration/Provider - See for call signature
+   * @param {object} opts - Integration Options
+   * @param {function} opts.runProviderUpdate - Function to run when this provider updates
+   * @param {function} opts.runProviderRegister - Function to run when this provider registers
    */
-  async initialize(store) {
-    this.store = store
-    this.store.dispatch(registerProvider({ provider: Metamask.providerName, priority: Metamask.providerPriority }))
+  async initialize(opts) {
+    super.initialize(opts)
+    this.runProviderRegister(this, { proriority: Metamask.providerPriority })
 
     this.walletEnabled = false
-    
-    if (typeof window.web3 !== 'undefined' && window.web3.currentProvider.constructor.name === 'MetamaskInpageProvider') {
-      this.web3 = new Web3(window.web3.currentProvider)
-      this.walletEnabled = true
-    } else {
+
+    try {
+      if (typeof window.web3 !== 'undefined' && window.web3.currentProvider.constructor.name === 'MetamaskInpageProvider') {
+        this.web3 = new Web3(window.web3.currentProvider)
+        this.walletEnabled = true
+      } else {
+        this.walletEnabled = false
+      }
+    } catch (err) {
       this.walletEnabled = false
     }
 
@@ -35,14 +39,12 @@ class Metamask extends InjectedWeb3 {
       this.account = await this.getAccount()
     }
 
-    await this.store.dispatch(updateProvider({
-      provider: Metamask.providerName,
-      available: this.walletEnabled && this.account !== undefined,
+    return this.runProviderUpdate(this, {
+      available: this.walletEnabled && this.account != null,
       network: this.network,
       account: this.account,
-    }))
-    
-    return this.walletEnabled
+      balance: this.balance,
+    })
   }
 }
 

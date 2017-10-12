@@ -12,6 +12,14 @@ import {
 } from 'actions/blockchain'
 import { GAS_COST } from 'utils/constants'
 
+const INITIAL_PROVIDER_STATE = {
+  loaded: false,
+  available: false,
+  network: undefined,
+  account: undefined,
+  balance: undefined,
+}
+
 const reducer = handleActions({
   [setConnectionStatus]: (state, action) => {
     const { connection } = action.payload
@@ -51,7 +59,7 @@ const reducer = handleActions({
         ...state.providers,
         [name]: {
           name,
-          loaded: false,
+          ...INITIAL_PROVIDER_STATE,
           ...provider,
         },
       },
@@ -70,7 +78,6 @@ const reducer = handleActions({
           ...provider,
         },
       },
-      providersLoaded: true,
     }
   },
   [setEtherTokens]: (state, action) => ({

@@ -1,5 +1,4 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { registerProvider, updateProvider } from 'actions/blockchain'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import Web3 from 'web3'
 
@@ -14,12 +13,13 @@ class Parity extends InjectedWeb3 {
 
   /**
    * Tries to initialize and enable the current provider
-   * @param {*} store - Redux Store
-   * @see src/components/WalletIntegration/Provider - See for call signature
+   * @param {object} opts - Integration Options
+   * @param {function} opts.runProviderUpdate - Function to run when this provider updates
+   * @param {function} opts.runProviderRegister - Function to run when this provider registers
    */
-  async initialize(store) {
-    this.store = store
-    this.store.dispatch(registerProvider({ provider: Parity.providerName, priority: Parity.providerPriority }))
+  async initialize(opts) {
+    super.initialize(opts)
+    this.runProviderRegister(this, { proriority: Parity.providerPriority })
 
     this.walletEnabled = false
 
@@ -33,16 +33,15 @@ class Parity extends InjectedWeb3 {
     if (this.walletEnabled) {
       this.network = await this.getNetwork()
       this.account = await this.getAccount()
+      this.balance = await this.getBalance()
     }
 
-    await this.store.dispatch(updateProvider({
-      provider: Parity.providerName,
-      available: this.walletEnabled && this.account !== undefined,
+    return this.runProviderUpdate(this, {
+      available: this.walletEnabled && this.account != null,
       network: this.network,
       account: this.account,
-    }))
-
-    return this.walletEnabled
+      balance: this.balance,
+    })
   }
 }
 export default new Parity()

@@ -1,29 +1,33 @@
 import autobind from 'autobind-decorator'
 import { ETHEREUM_NETWORKS } from 'integrations/constants'
 
-import {
-  getGnosisJsOptions
-} from 'utils/helpers'
-
-import {
-  getCurrentBalance,
-} from 'api'
-
-import {
-  initGnosis,
-  updateProvider,
-  setActiveProvider,
-} from 'actions/blockchain'
-
-import {
-  findDefaultProvider,
-} from 'selectors/blockchain'
+import { weiToEth } from 'utils/helpers'
 
 class InjectedWeb3 {
+  runProviderUpdate() {}
+  runProviderRegister() {}
+
   constructor() {
     this.watcherInterval = setInterval(this.watcher, 1000)
   }
 
+  /**
+   * Initializes the Integration
+   * @param {object} opts - Integration Options
+   * @param {function} opts.runProviderUpdate - Function to run when this provider updates
+   * @param {function} opts.runProviderRegister - Function to run when this provider registers
+   */
+  async initialize(opts) {
+    this.runProviderUpdate = typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
+    this.runProviderRegister = typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
+  }
+
+  /**
+   * Returns the current Networks Name
+   * @async
+   * @see src/integrations/constants ETHEREUM_NETWORK constants
+   * @returns {Promise<string>} - Network Identifier
+   */
   async getNetwork() {
     return new Promise((resolve, reject) => {
       this.web3.version.getNetwork((err, netId) => {
@@ -61,6 +65,11 @@ class InjectedWeb3 {
     })
   }
 
+  /**
+   * Returns the current Accounts Address
+   * @async
+   * @returns {Promise<string>} - Accountaddress
+   */
   async getAccount() {
     return new Promise((resolve, reject) => {
       this.web3.eth.getAccounts(
@@ -74,83 +83,53 @@ class InjectedWeb3 {
     })
   }
 
+  /**
+   * Returns the balance for the current default account in Wei
+   * @async
+   * @returns {Promise<string>} - Accountbalance in WEI for current account
+   */
   async getBalance() {
-    return getCurrentBalance(this.account)
+    return new Promise((resolve, reject) => {
+      this.web3.eth.getBalance(
+        this.account,
+        (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))),
+      )
+    })
   }
 
-  async updateActiveProvider() {
-    // determine new provider
-    const newProvider = findDefaultProvider(this.store.getState())
-    await this.store.dispatch(setActiveProvider(newProvider.name))
-
-    // get Gnosis options
-    const opts = getGnosisJsOptions(newProvider.name)   
-    // init Gnosis connection
-    await this.store.dispatch(initGnosis(opts))
-  }
-
-  async handleDisconnect(err) {
-    this.walletEnabled = false
-    console.log(`WalletProvider ${this.constructor.providerName}: Has lost connection (${err})`)
-
-    await this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: false }))
-    return this.updateActiveProvider()
-  }
-
-  async handleConnect() {
-    this.walletEnabled = true
-    console.log(`WalletProvider ${this.constructor.providerName}: Connected`)
-
-    await this.store.dispatch(updateProvider({ provider: this.constructor.providerName, available: true }))
-    return this.updateActiveProvider()
-
-  }
-
-  async handleNetworkChange(newNetwork) {
-    this.network = newNetwork
-    console.log(`WalletProvider ${this.constructor.providerName}: Changed Network`)
-
-    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, network: newNetwork }))
-    return this.updateActiveProvider()
-  }
-
-  async handleBalanceChange(newBalance) {
-    this.balance = newBalance
-
-    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, balance: newBalance }))
-  }
-
-  async handleAccountChange(newAccount) {
-    this.account = newAccount
-    console.log(`WalletProvider ${this.constructor.providerName}: Changed Account`)
-
-    this.store.dispatch(updateProvider({ provider: this.constructor.providerName, account: newAccount }))
-  }
-
+  /**
+   * Periodic updater to get all relevant information from this provider
+   * @async
+   */
   @autobind
   async watcher() {
     try {
       const currentAccount = await this.getAccount()
       if (this.account !== currentAccount) {
-        await this.handleAccountChange(currentAccount)
+        this.account = currentAccount
+        await this.runProviderUpdate(this, { account: this.account })
       }
 
       const currentNetwork = await this.getNetwork()
       if (this.network !== currentNetwork) {
-        await this.handleNetworkChange(currentNetwork)
+        this.network = currentNetwork
+        await this.runProviderUpdate(this, { network: this.network })
       }
 
       const currentBalance = await this.getBalance()
       if (this.balance !== currentBalance) {
-        await this.handleBalanceChange(currentBalance)
+        this.balance = currentBalance
+        await this.runProviderUpdate(this, { balance: this.balance })
       }
 
       if (!this.walletEnabled && currentAccount) {
-        await this.handleConnect()
+        this.walletEnabled = true
+        await this.runProviderUpdate(this, { available: true })
       }
     } catch (err) {
       if (this.walletEnabled) {
-        await this.handleDisconnect(err)
+        this.walletEnabled = false
+        await this.runProviderUpdate(this, { available: false })
       }
     }
   }

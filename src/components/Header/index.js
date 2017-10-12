@@ -4,10 +4,11 @@ import { Link } from 'react-router'
 import DecimalValue from 'components/DecimalValue'
 import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
+import { upperFirst } from 'lodash'
 
 import './header.less'
 
-const Header = ({ version, currentAccount, currentBalance, currentProvider }) => (
+const Header = ({ version, currentAccount, currentBalance, currentNetwork, currentProvider }) => (
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
@@ -41,13 +42,14 @@ const Header = ({ version, currentAccount, currentBalance, currentProvider }) =>
       </div>
       <div className="headerContainer__group headerContainer__group--right account">
         {currentAccount && currentProvider && (
-          <ProviderIcon provider={currentProvider} />
-        )}
-        {currentAccount && currentProvider && (
           <div className="headerContainer__account">
+            {currentNetwork && currentNetwork !== 'MAIN' && <span className="headerContainer__network--text">Network: {upperFirst(currentNetwork.toLowerCase())}</span>}
             <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
             <Identicon account={currentAccount} />
           </div>
+        )}
+        {currentAccount && currentProvider && (
+          <ProviderIcon provider={currentProvider} />
         )}
       </div>
     </div>
@@ -56,6 +58,7 @@ const Header = ({ version, currentAccount, currentBalance, currentProvider }) =>
 
 Header.propTypes = {
   version: PropTypes.string,
+  currentNetwork: PropTypes.string,
   currentAccount: PropTypes.string,
   currentBalance: PropTypes.string,
   currentProvider: PropTypes.shape({}),

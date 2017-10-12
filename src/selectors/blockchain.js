@@ -40,6 +40,17 @@ export const getCurrentBalance = (state) => {
 }
 
 /**
+ * Returns the current network the selected provider is connected to
+ * @param {*} state - redux state
+ */
+export const getCurrentNetwork = (state) => {
+  const provider = getSelectedProvider(state)
+
+  if (provider) {
+    return provider.network
+  }
+}
+/**
  * Returns if gnosis.js is initialized or not
  * @param {*} state - redux state
  */
@@ -60,8 +71,5 @@ export const getGasPrice = state => (
 export const isGasPriceFetched = state => state.blockchain.gasPrice !== undefined
 
 export const getEtherTokensAmount = (state, account) => {
-  if (isGnosisInitialized(state)) {
-    return new Decimal(state, `state.blockchain.etherTokens['${account}']`, 0)
-  }
-  return new Decimal(0)
+  return new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))
 }

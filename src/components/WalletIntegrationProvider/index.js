@@ -1,43 +1,59 @@
 import { Component } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { connectBlockchain, initGnosis, setActiveProvider } from 'actions/blockchain'
-import { findDefaultProvider } from 'selectors/blockchain'
-import { getGnosisJsOptions } from 'utils/helpers'
+import autobind from 'autobind-decorator'
+import { map } from 'lodash'
+import {
+  registerProvider,
+  updateProvider,
+  initGnosis,
+  setActiveProvider,
+} from 'actions/blockchain'
+import { isGnosisInitialized } from 'selectors/blockchain'
 
+const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
-export default class WalletIntegrationProvider extends Component {
+class WalletIntegrationProvider extends Component {
   constructor(props) {
     super(props)
-    const { integrations, store } = props
+    const { integrations } = props
 
-    // Execute providers inizialization sequentially
-    const init = async (integrationNames, reactStore) => {
-      const integrationName = integrationNames.pop()
-
-      if (integrationName) {
-        const integration = integrations[integrationName]
-        const success = await integration.initialize(store)
-        if (success) {
-          console.log(`Integration available: ${integrationName}`)
-        }
-
-        return init(integrationNames, reactStore)
-      }
-      
-      // Gnosis initialization needed after providers init
-      
-      // Get selected provider
-      const defaultProvider = findDefaultProvider(reactStore.getState())
-      await reactStore.dispatch(setActiveProvider(defaultProvider.name))
-      // get Gnosis options
-      const opts = getGnosisJsOptions(defaultProvider)
-      // init Gnosis connection
-      await reactStore.dispatch(initGnosis(opts))
-
-      await reactStore.dispatch(connectBlockchain())
+    const providerOptions = {
+      runProviderUpdate: this.handleProviderUpdate,
+      runProviderRegister: this.handleProviderRegister,
     }
 
-    window.addEventListener('load', () => init(Object.keys(integrations), store))
+    Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
+      .then(this.props.initGnosis)
+  }
+
+  @autobind
+  async handleProviderUpdate(provider, data) {
+    await this.props.updateProvider({
+      provider: provider.constructor.providerName,
+      ...data,
+    })
+
+    if (this.props.gnosisInitialized) {
+      let requireGnosisReinit = false
+      GNOSIS_REINIT_KEYS.forEach((searchKey) => {
+        if (Object.keys(data).indexOf(searchKey) > -1) {
+          requireGnosisReinit = true
+        }
+      })
+
+      if (requireGnosisReinit) {
+        await this.props.initGnosis()
+      }
+    }
+  }
+
+  @autobind
+  async handleProviderRegister(provider, data) {
+    await this.props.registerProvider({
+      provider: provider.constructor.providerName,
+      ...data,
+    })
   }
 
   render() {
@@ -49,6 +65,19 @@ export default class WalletIntegrationProvider extends Component {
 
 WalletIntegrationProvider.propTypes = {
   children: PropTypes.element,
-  integrations: PropTypes.object,
-  store: PropTypes.object,
+  integrations: PropTypes.objectOf(PropTypes.object),
+  gnosisInitialized: PropTypes.bool,
+  registerProvider: PropTypes.func.isRequired,
+  updateProvider: PropTypes.func.isRequired,
+  initGnosis: PropTypes.func.isRequired,
 }
+
+const mapStateToProps = state => ({
+  gnosisInitialized: isGnosisInitialized(state),
+})
+
+export default connect(mapStateToProps, {
+  registerProvider,
+  updateProvider,
+  initGnosis,
+})(WalletIntegrationProvider)
