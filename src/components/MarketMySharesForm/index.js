@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm, Field, propTypes, reset } from 'redux-form'
+import { reduxForm, Field, propTypes } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
@@ -27,7 +27,12 @@ class MarketMySharesForm extends Component {
   }
 
   componentWillMount() {
-    const { gasCosts, gasPrice, requestGasCost, requestGasPrice } = this.props
+    const {
+      gasCosts,
+      gasPrice,
+      requestGasCost,
+      requestGasPrice,
+    } = this.props
 
     if (gasCosts.sellShares === undefined) {
       requestGasCost(GAS_COST.SELL_SHARES)
@@ -109,6 +114,77 @@ class MarketMySharesForm extends Component {
     }
 
     return undefined
+  }
+
+  generateTableRows() {
+    const tableRows = []
+
+    const { marketShares, market } = this.props
+    const { extendedSellId } = this.state
+
+    const resolved = market.oracle.isOutcomeSet || market.event.isWinningOutcomeSet
+
+    marketShares.forEach((share) => {
+      const probability = calcLMSRMarginalPrice({
+        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+        funding: market.funding,
+        outcomeTokenIndex: share.outcomeToken.index,
+      })
+      const maximumWin = calcLMSROutcomeTokenCount({
+        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+        funding: market.funding,
+        outcomeTokenIndex: share.outcomeToken.index,
+        cost: share.balance,
+      })
+
+      tableRows.push(
+        <tr className="marketMyShares__share" key={share.id}>
+          <td>
+            <div
+              className={'shareOutcome__color'}
+              style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
+            />
+          </td>
+          <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
+          <td>
+            {Decimal(share.balance)
+              .div(1e18)
+              .gte(LOWEST_DISPLAYED_VALUE) ? (
+                <DecimalValue value={Decimal(share.balance).div(1e18)} />
+            ) : (
+              `< ${LOWEST_DISPLAYED_VALUE}`
+            )}
+          </td>
+          <td>
+            <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
+            <CurrencyName collateralToken={market.event.collateralToken} />
+          </td>
+          <td>
+            {/* eslint-disable no-script-url */}
+            {!resolved && (
+              <a
+                href="javascript:void(0);"
+                className="marketMyShares__sellButton"
+                onClick={e => this.handleShowSellView(e, share.id)}
+              >
+                Sell
+              </a>
+            )}
+            {/* eslint-enable no-script-url */}
+          </td>
+        </tr>,
+      )
+
+      if (share.id === extendedSellId) {
+        tableRows.push(
+          <tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
+            <td colSpan={5}>{this.renderSellShareView()}</td>
+          </tr>,
+        )
+      }
+    })
+
+    return tableRows
   }
 
   renderSellShareView() {
@@ -222,7 +298,7 @@ class MarketMySharesForm extends Component {
         <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellId, selectedSellAmount))}>
           <div className="row marketMyShares__sellRow">
             <div className="col-md-3 col-md-offset-3 marketMyShares__sellColumn">
-              <label>Amount to Sell</label>
+              <label htmlFor="sellAmount">Amount to Sell</label>
               <Field
                 component={FormInput}
                 name="sellAmount"
@@ -259,7 +335,7 @@ class MarketMySharesForm extends Component {
             <div className="col-md-3 col-md-offset-3">
               <label>Gas costs</label>
               <span>
-                <DecimalValue value={gasCostEstimation} />&nbsp;
+                <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
                 <CurrencyName collateralToken={market.event.collateralToken} />
               </span>
             </div>
@@ -284,77 +360,6 @@ class MarketMySharesForm extends Component {
         </form>
       </div>
     )
-  }
-
-  generateTableRows() {
-    const tableRows = []
-
-    const { marketShares, market } = this.props
-    const { extendedSellId } = this.state
-
-    const resolved = market.oracle.isOutcomeSet || market.event.isWinningOutcomeSet
-
-    marketShares.forEach((share, shareIndex) => {
-      const probability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-      const maximumWin = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        cost: share.balance,
-      })
-
-      tableRows.push(
-        <tr className="marketMyShares__share" key={share.id}>
-          <td>
-            <div
-              className={'shareOutcome__color'}
-              style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
-            />
-          </td>
-          <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
-          <td>
-            {Decimal(share.balance)
-              .div(1e18)
-              .gte(LOWEST_DISPLAYED_VALUE) ? (
-                <DecimalValue value={Decimal(share.balance).div(1e18)} />
-            ) : (
-              `< ${LOWEST_DISPLAYED_VALUE}`
-            )}
-          </td>
-          <td>
-            <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
-            <CurrencyName collateralToken={market.event.collateralToken} />
-          </td>
-          <td>
-            {/* eslint-disable no-script-url */}
-            {!resolved && (
-              <a
-                href="javascript:void(0);"
-                className="marketMyShares__sellButton"
-                onClick={e => this.handleShowSellView(e, share.id)}
-              >
-                Sell
-              </a>
-            )}
-            {/* eslint-enable no-script-url */}
-          </td>
-        </tr>,
-      )
-
-      if (share.id === extendedSellId) {
-        tableRows.push(
-          <tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
-            <td colSpan={5}>{this.renderSellShareView()}</td>
-          </tr>,
-        )
-      }
-    })
-
-    return tableRows
   }
 
   render() {
