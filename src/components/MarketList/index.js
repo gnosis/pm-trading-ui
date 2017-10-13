@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import moment from 'moment'
+import cn from 'classnames'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import Tooltip from 'rc-tooltip'
@@ -231,8 +232,16 @@ class MarketList extends Component {
           <div className="container">
             <div className="row">
               <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                <Tooltip overlay="Please connect your account">
-                  <div>
+                <Tooltip
+                  overlay="You need a wallet connected in order to create a market"
+                  trigger={this.props.defaultAccount ? [] : ['hover']}
+                >
+                  <div
+                    className={cn({
+                      'marketStats__control--container': true,
+                      disabled: !this.props.defaultAccount,
+                    })}
+                  >
                     <button
                       type="button"
                       onClick={this.props.defaultAccount ? this.handleCreateMarket : false}

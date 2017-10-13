@@ -28,6 +28,21 @@
     }
   }
 
+  &__control {
+    &--container {
+      display: inline-block;
+
+      &.disabled {
+        cursor: not-allowed;
+      }
+    }
+
+    &.btn[disabled] {
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+  }
+
   .marketStats__icon {
     float: left;
     width: 50px;
@@ -40,6 +55,10 @@
   &__markets {
     background-color: @bg-color-muted;
     padding: 40px 0;
+
+    .container {
+      min-height: 400px;
+    }
   }
 
   &__stats {
