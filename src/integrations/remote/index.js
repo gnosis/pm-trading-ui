@@ -1,31 +1,43 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { registerProvider, updateProvider } from 'actions/blockchain'
 import InjectedWeb3 from 'integrations/injectedWeb3'
-import config from 'config'
 import Web3 from 'web3'
 
 class Remote extends InjectedWeb3 {
+  static providerName = WALLET_PROVIDER.REMOTE
+  /**
+   * Provider with highest priority starts off as active, if other providers are also available.
+   * This allows "fallback providers" like a remote etherium host to be used as a last resort.
+   */
+  static providerPriority = 1
 
-  async initialize(store) {
-    this.store = store
-    this.store.dispatch(registerProvider({ provider: WALLET_PROVIDER.REMOTE }))
-    this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
-    const canSubscribe = !(store.getState().blockchain && store.getState().blockchain.activeProvider)
-    let account
-    let network
-
-    if (canSubscribe) {
-      console.log('remote node available')
-      network = await this.getNetwork()
-      account = await this.getAccount()
+  /**
+   * Tries to initialize and enable the current provider
+   * @param {object} opts - Integration Options
+   * @param {function} opts.runProviderUpdate - Function to run when this provider updates
+   * @param {function} opts.runProviderRegister - Function to run when this provider registers
+   */
+  async initialize(opts) {
+    super.initialize(opts)
+    this.runProviderRegister(this, { proriority: Remote.providerPriority })
+    try {
+      this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))  
+    } catch (err) {
+      return
     }
+    
+    this.network = await this.getNetwork()
+    this.account = await this.getAccount()
+    this.balance = await this.getBalance()
 
-    return await this.store.dispatch(updateProvider({
-      provider: WALLET_PROVIDER.REMOTE,
-      available: account !== undefined,
-      network,
-      account,
-    }))
+    this.walletEnabled = true
+
+    return this.runProviderUpdate(this, {
+      available: this.walletEnabled && this.account != null,
+      network: this.network,
+      account: this.account,
+      balance: this.balance,
+    })
   }
 }
 export default new Remote()

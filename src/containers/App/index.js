@@ -9,12 +9,15 @@ import CSSTransition from 'react-transition-group/CSSTransition'
 
 import { connectBlockchain } from 'actions/blockchain'
 
+import LoadingIndicator from 'components/LoadingIndicator'
+
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
+import { getSelectedProviderName } from 'selectors/blockchain'
+
 import './app.less'
 import modalStyles from './modalStyles'
-import LoadingIndicator from '../../components/LoadingIndicator'
 
 class App extends Component {
   componentDidMount() {
@@ -46,7 +49,7 @@ class App extends Component {
           </CSSTransition>
         </TransitionGroup>
         <Modal
-          isOpen={this.props.blockchainConnection && !this.props.account}
+          isOpen={this.props.blockchainConnection && !this.props.activeProvider}
           contentLabel="no-account-modal"
           style={modalStyles}
         >
@@ -61,16 +64,15 @@ class App extends Component {
 }
 
 App.propTypes = {
-  account: PropTypes.string,
+  activeProvider: PropTypes.string,
   blockchainConnection: PropTypes.bool,
   children: PropTypes.node,
-  connectBlockchain: PropTypes.func,
   location: PropTypes.object,
   hasWallet: PropTypes.bool,
 }
 
 const mapStateToProps = state => ({
-  account: state.blockchain.defaultAccount,
+  activeProvider: getSelectedProviderName(state),
   blockchainConnection: state.blockchain.connectionTried,
   hasWallet: state.blockchain.defaultAccount != null,
 })
