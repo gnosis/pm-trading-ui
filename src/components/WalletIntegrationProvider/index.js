@@ -7,7 +7,6 @@ import {
   registerProvider,
   updateProvider,
   initGnosis,
-  setActiveProvider,
 } from 'actions/blockchain'
 import { isGnosisInitialized } from 'selectors/blockchain'
 

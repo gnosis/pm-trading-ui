@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import DecimalValue from 'components/DecimalValue'
 import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
+import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
 
 import './header.less'
@@ -61,7 +62,7 @@ Header.propTypes = {
   currentNetwork: PropTypes.string,
   currentAccount: PropTypes.string,
   currentBalance: PropTypes.string,
-  currentProvider: PropTypes.shape({}),
+  currentProvider: providerPropType,
 }
 
 export default Header

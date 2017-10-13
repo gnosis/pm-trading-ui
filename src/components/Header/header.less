@@ -14,6 +14,31 @@
     display: flex;
     align-items: center;
   }
+
+  &__network--text {
+    line-height: 40px;
+    font-weight: 300;
+    margin-right: 5px;
+    margin-bottom: 2px;
+    letter-spacing: .5px;
+  }
+
+  &__account {
+    display: inline-block;
+
+    &--text {
+      line-height: 40px;
+      font-weight: 500;
+      margin-right: 5px;
+      margin-bottom: 2px;
+      letter-spacing: .5px;
+    }
+
+    img {
+      margin-left: 10px;
+    }
+  }
+
 }
 
 .headerContainer__navLink {
@@ -105,37 +130,5 @@
 
   &--default {
     background-image: url('../../assets/img/icons/icon_etherTokens.svg');
-  }
-}
-
-.headerContainer {
-
-  &__network {
-    display: inline-block;
-
-    &--text {
-      line-height: 40px;
-      font-weight: 300;
-      padding-right: 5px;
-      padding-bottom: 2px;
-      letter-spacing: .5px;
-    }
-
-  }
-
-  &__account {
-    display: inline-block;
-
-    &--text {
-      line-height: 40px;
-      font-weight: 500;
-      padding-right: 5px;
-      padding-bottom: 2px;
-      letter-spacing: .5px;
-    }
-
-    img {
-      margin-left: 10px;
-    }
   }
 }

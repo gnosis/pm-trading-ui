@@ -14,7 +14,6 @@ const ProviderIcon = ({ provider = {} }) => (
     className={cn([
       'headerIcon',
       `headerIcon--${providerIconClasses[provider.name] || 'default'}`,
-      'pull-left',
     ])}
     title={`You are using ${upperFirst(provider.name.toLowerCase())} to connect to Gnosis`}
   />

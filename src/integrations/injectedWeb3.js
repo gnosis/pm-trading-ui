@@ -1,5 +1,5 @@
 import autobind from 'autobind-decorator'
-import { ETHEREUM_NETWORKS } from 'integrations/constants'
+import { ETHEREUM_NETWORK } from 'integrations/constants'
 
 import { weiToEth } from 'utils/helpers'
 
@@ -36,27 +36,27 @@ class InjectedWeb3 {
         } else {
           switch (netId) {
             case '1': {
-              resolve(ETHEREUM_NETWORKS.MAIN)
+              resolve(ETHEREUM_NETWORK.MAIN)
               break
             }
             case '2': {
-              resolve(ETHEREUM_NETWORKS.MORDEN)
+              resolve(ETHEREUM_NETWORK.MORDEN)
               break
             }
             case '3': {
-              resolve(ETHEREUM_NETWORKS.ROPSTEN)
+              resolve(ETHEREUM_NETWORK.ROPSTEN)
               break
             }
             case '4': {
-              resolve(ETHEREUM_NETWORKS.RINKEBY)
+              resolve(ETHEREUM_NETWORK.RINKEBY)
               break
             }
             case '42': {
-              resolve(ETHEREUM_NETWORKS.KOVAN)
+              resolve(ETHEREUM_NETWORK.KOVAN)
               break
             }
             default: {
-              resolve(ETHEREUM_NETWORKS.UNKNOWN)
+              resolve(ETHEREUM_NETWORK.UNKNOWN)
               break
             }
           }

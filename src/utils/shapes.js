@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { ETHEREUM_NETWORK, WALLET_PROVIDER } from 'integrations/constants'
 
 export const eventDescriptionShape = PropTypes.shape({
   description: PropTypes.string,
@@ -31,4 +32,13 @@ export const marketShape = PropTypes.shape({
   oracle: PropTypes.object,
   netOutcomeTokensSold: PropTypes.arrayOf(PropTypes.string),
   address: PropTypes.string,
+})
+
+export const providerPropType = PropTypes.shape({
+  name: PropTypes.oneOf(Object.values(WALLET_PROVIDER)),
+  loaded: PropTypes.bool,
+  available: PropTypes.bool,
+  priority: PropTypes.number,
+  network: PropTypes.oneOf(Object.values(ETHEREUM_NETWORK)),
+  balance: PropTypes.string,
 })

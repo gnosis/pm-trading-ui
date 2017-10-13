@@ -15,6 +15,8 @@ export const findDefaultProvider = (state) => {
 
 export const getSelectedProvider = state => get(state, `blockchain.providers['${state.blockchain.activeProvider}']`)
 
+export const getSelectedProviderName = state => get(state, 'blockchain.activeProvider')
+
 /**
  * Returns the currently selected account for the current provider
  * @param {*} state - redux state
