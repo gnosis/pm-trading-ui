@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { openModal } from 'actions/modal'
 
 import Header from 'components/Header'
 import { getDefaultAccount, getCurrentBalance, getSelectedProvider } from 'selectors/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 
-const getProviderIcon = (name) => {
+export const getProviderIcon = (name) => {
   let icon
 
   if (name === WALLET_PROVIDER.METAMASK) {
@@ -29,4 +30,8 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(Header)
+const mapDispatchToProps = dispatch => ({
+  openConnectWalletModal: () => dispatch(openModal({ modalName: 'ModalConnectWallet' })),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

@@ -6,7 +6,14 @@ import Identicon from 'components/Identicon'
 
 import './header.less'
 
-const Header = ({ version, defaultAccount, currentBalance, currentProvider, getProviderIcon }) => (
+const Header = ({
+  version,
+  defaultAccount,
+  currentBalance,
+  currentProvider,
+  getProviderIcon,
+  openConnectWalletModal,
+}) => (
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
@@ -40,16 +47,22 @@ const Header = ({ version, defaultAccount, currentBalance, currentProvider, getP
           </Link>
         )}
       </div>
-      {defaultAccount &&
-        currentProvider && (
-          <div className="headerContainer__group headerContainer__group--right account">
-            {defaultAccount && currentProvider && getProviderIcon(currentProvider)}
+
+      <div className="headerContainer__group headerContainer__group--right account">
+        {defaultAccount && currentProvider && getProviderIcon(currentProvider)}
+        {defaultAccount &&
+          currentProvider && (
             <div className="headerContainer__account">
               <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
               <Identicon className="" />
             </div>
-          </div>
+          )}
+        {!defaultAccount && (
+          <a className="headerContainer__connect-wallet" onClick={() => openConnectWalletModal()}>
+            Connect a wallet
+          </a>
         )}
+      </div>
     </div>
   </div>
 )
@@ -60,6 +73,7 @@ Header.propTypes = {
   currentBalance: PropTypes.string,
   currentProvider: PropTypes.string,
   getProviderIcon: PropTypes.func,
+  openConnectWalletModal: PropTypes.func,
 }
 
 export default Header
