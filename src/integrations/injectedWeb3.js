@@ -102,7 +102,6 @@ class InjectedWeb3 {
   async watcher() {
     try {
       const currentAccount = await this.getAccount()
-      console.log(this.account)
       if (this.account !== currentAccount) {
         this.account = currentAccount
         await this.runProviderUpdate(this, { account: this.account })
