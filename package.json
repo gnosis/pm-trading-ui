@@ -8,7 +8,7 @@
     "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack -p --config webpack.prod.config.js",
     "build": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
     "clean": "rm -rf dist",
-    "start-dev": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js",
+    "start-dev": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
     "start-prod": "NODE_ENV=production node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info --config webpack.prod.config.js",
     "start": "if test \"$NODE_ENV\" = \"production\" ; then npm run start-prod; else npm run start-dev; fi ",
     "start:standalone": "cross-env GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' npm start",
