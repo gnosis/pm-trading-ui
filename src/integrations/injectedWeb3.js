@@ -18,8 +18,10 @@ class InjectedWeb3 {
    * @param {function} opts.runProviderRegister - Function to run when this provider registers
    */
   async initialize(opts) {
-    this.runProviderUpdate = typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
-    this.runProviderRegister = typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
+    this.runProviderUpdate =
+      typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
+    this.runProviderRegister =
+      typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
   }
 
   /**
@@ -30,38 +32,41 @@ class InjectedWeb3 {
    */
   async getNetwork() {
     return new Promise((resolve, reject) => {
-      this.web3.version.getNetwork((err, netId) => {
-        if (err) {
-          reject(err)
-        } else {
-          switch (netId) {
-            case '1': {
-              resolve(ETHEREUM_NETWORK.MAIN)
-              break
-            }
-            case '2': {
-              resolve(ETHEREUM_NETWORK.MORDEN)
-              break
-            }
-            case '3': {
-              resolve(ETHEREUM_NETWORK.ROPSTEN)
-              break
-            }
-            case '4': {
-              resolve(ETHEREUM_NETWORK.RINKEBY)
-              break
-            }
-            case '42': {
-              resolve(ETHEREUM_NETWORK.KOVAN)
-              break
-            }
-            default: {
-              resolve(ETHEREUM_NETWORK.UNKNOWN)
-              break
+      if (this.web3 && this.web3.version) {
+        this.web3.version.getNetwork((err, netId) => {
+          if (err) {
+            reject(err)
+          } else {
+            switch (netId) {
+              case '1': {
+                resolve(ETHEREUM_NETWORK.MAIN)
+                break
+              }
+              case '2': {
+                resolve(ETHEREUM_NETWORK.MORDEN)
+                break
+              }
+              case '3': {
+                resolve(ETHEREUM_NETWORK.ROPSTEN)
+                break
+              }
+              case '4': {
+                resolve(ETHEREUM_NETWORK.RINKEBY)
+                break
+              }
+              case '42': {
+                resolve(ETHEREUM_NETWORK.KOVAN)
+                break
+              }
+              default: {
+                resolve(ETHEREUM_NETWORK.UNKNOWN)
+                break
+              }
             }
           }
-        }
-      })
+        })
+      }
+      reject(new Error('Web3 is not injected'))
     })
   }
 
@@ -72,14 +77,15 @@ class InjectedWeb3 {
    */
   async getAccount() {
     return new Promise((resolve, reject) => {
-      this.web3.eth.getAccounts(
-        (e, accounts) => {
+      if (this.web3 && this.web3.eth) {
+        this.web3.eth.getAccounts((e, accounts) => {
           if (e) {
             reject(e)
           }
           resolve(accounts && accounts.length ? accounts[0] : null)
-        },
-      )
+        })
+      }
+      reject(new Error('Web3 is not injected'))
     })
   }
 
@@ -90,10 +96,10 @@ class InjectedWeb3 {
    */
   async getBalance() {
     return new Promise((resolve, reject) => {
-      this.web3.eth.getBalance(
-        this.account,
-        (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))),
-      )
+      if (this.web3 && this.web3.eth) {
+        this.web3.eth.getBalance(this.account, (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))))
+      }
+      reject(new Error('Web3 is not injected'))
     })
   }
 
@@ -133,7 +139,6 @@ class InjectedWeb3 {
       }
     }
   }
-
 }
 
 export default InjectedWeb3
