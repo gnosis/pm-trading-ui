@@ -18,7 +18,7 @@ class Remote extends InjectedWeb3 {
    */
   async initialize(opts) {
     super.initialize(opts)
-    this.runProviderRegister(this, { proriority: Remote.providerPriority })
+    this.runProviderRegister(this, { priority: Remote.providerPriority })
     try {
       this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
 

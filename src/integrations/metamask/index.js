@@ -19,7 +19,7 @@ class Metamask extends InjectedWeb3 {
    */
   async initialize(opts) {
     super.initialize(opts)
-    this.runProviderRegister(this, { proriority: Metamask.providerPriority })
+    this.runProviderRegister(this, { priority: Metamask.providerPriority })
 
     this.walletEnabled = false
 

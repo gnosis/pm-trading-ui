@@ -90,7 +90,14 @@ class InjectedWeb3 {
    */
   async getBalance() {
     return new Promise((resolve, reject) => {
-      this.web3.eth.getBalance(this.account, (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))))
+      if (this.account) {
+        this.web3.eth.getBalance(
+          this.account,
+          (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))),
+        )
+      } else {
+        return reject(new Error('No Account available'))
+      }
     })
   }
 
