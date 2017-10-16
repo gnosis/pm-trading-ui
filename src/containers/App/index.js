@@ -7,7 +7,6 @@ import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
 
 import { connectBlockchain } from 'actions/blockchain'
-import { providerPropType } from 'utils/shapes'
 
 import LoadingIndicator from 'components/LoadingIndicator'
 

@@ -82,10 +82,10 @@ export const initGnosis = () => async (dispatch, getState) => {
 
     // determine new provider
     const newProvider = findDefaultProvider(state)
-    
+
     if (newProvider) {
       await dispatch(setActiveProvider(newProvider.name))
-  
+
       // init Gnosis connection
       const opts = getGnosisJsOptions(newProvider.name)
       await initGnosisConnection(opts)
