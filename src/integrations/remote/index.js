@@ -21,17 +21,17 @@ class Remote extends InjectedWeb3 {
     super.initialize(opts)
     this.runProviderRegister(this, { proriority: Remote.providerPriority })
     try {
-      this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))  
+      this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
+
+      this.network = await this.getNetwork()
+      this.account = await this.getAccount()
+      this.balance = await this.getBalance()
+
+      this.walletEnabled = true
     } catch (err) {
-      return
+      // remote not available
     }
     
-    this.network = await this.getNetwork()
-    this.account = await this.getAccount()
-    this.balance = await this.getBalance()
-
-    this.walletEnabled = true
-
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,
       network: this.network,
