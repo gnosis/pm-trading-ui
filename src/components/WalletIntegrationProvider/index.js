@@ -22,8 +22,10 @@ class WalletIntegrationProvider extends Component {
       runProviderRegister: this.handleProviderRegister,
     }
 
-    Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
-      .then(this.props.initGnosis)
+    window.addEventListener('load', () => {
+      Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
+        .then(this.props.initGnosis)
+    })
   }
 
   @autobind
