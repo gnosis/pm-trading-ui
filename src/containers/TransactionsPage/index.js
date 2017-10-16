@@ -6,12 +6,12 @@ import {
   getCompletedTransactions,
 } from 'selectors/transactions'
 
-import { getDefaultAccount } from 'selectors/blockchain'
+import { getCurrentAccount } from 'selectors/blockchain'
 
 import Transactions from 'components/Transactions'
 
 const mapStateToProps = state => ({
-  defaultAccount: getDefaultAccount(state),
+  currentAccount: getCurrentAccount(state),
   runningTransactions: getRunningTransactions(state),
   completedTransactions: getCompletedTransactions(state),
 })

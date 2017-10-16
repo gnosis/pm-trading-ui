@@ -3,7 +3,7 @@ import { reduxForm, formValueSelector } from 'redux-form'
 import { push } from 'react-router-redux'
 
 import { requestGasCost, requestGasPrice } from 'actions/blockchain'
-import { getDefaultAccount } from 'selectors/blockchain'
+import { getCurrentAccount } from 'selectors/blockchain'
 
 import MarketCreateWizard from 'components/MarketCreateWizard'
 
@@ -32,7 +32,7 @@ const mapStateToProps = (state) => {
     selectedOutcomeType: selector(state, 'outcomeType'),
     decimals: parseInt(selector(state, 'decimals'), 10),
     unit: selector(state, 'unit'),
-    defaultAccount: getDefaultAccount(state),
+    defaultAccount: getCurrentAccount(state),
   }
 }
 

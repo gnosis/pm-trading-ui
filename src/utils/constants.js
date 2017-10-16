@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js'
 
 export const RESOLUTION_TIME = {
   RELATIVE_FORMAT: 'y[Y] M[M] D[D] h[hrs] m[mins]',
@@ -68,3 +69,5 @@ export const MARKET_STAGES = {
 }
 
 export const LOWEST_DISPLAYED_VALUE = 0.001
+
+export const MAX_ALLOWANCE_WEI = Decimal(2).pow(256).sub(1).toString()

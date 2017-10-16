@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import { reduxForm, formValueSelector, submit } from 'redux-form'
 
 import Settings from 'components/Settings'
-import { updateSettings } from 'actions/settings'
 
 const FORM = {
   form: 'settingsForm',

@@ -5,13 +5,13 @@ import { formValueSelector } from 'redux-form'
 import MarketList from 'components/MarketList'
 
 import { filterMarkets, sortMarkets } from 'selectors/market'
-import { getDefaultAccount } from 'selectors/blockchain'
+import { getCurrentAccount } from 'selectors/blockchain'
 
 import { requestMarkets } from 'actions/market'
 
 const mapStateToProps = (state) => {
   // const markets = getMarkets(state)
-  const defaultAccount = getDefaultAccount(state)
+  const defaultAccount = getCurrentAccount(state)
   const filterForm = formValueSelector('marketListFilter')
   const filterSearch = filterForm(state, 'search')
   const filterShowResolved = filterForm(state, 'resolved')

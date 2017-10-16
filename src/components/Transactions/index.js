@@ -84,7 +84,7 @@ const renderTransaction = type => ({
 
 class Transactions extends Component {
   componentWillMount() {
-    if (!this.props.defaultAccount) {
+    if (!this.props.currentAccount) {
       this.props.changeUrl('/markets/list')
     }
   }
@@ -127,7 +127,7 @@ class Transactions extends Component {
 Transactions.propTypes = {
   changeUrl: PropTypes.func,
   completedTransactions: PropTypes.arrayOf(PropTypes.object),
-  defaultAccount: PropTypes.string,
+  currentAccount: PropTypes.string,
   runningTransactions: PropTypes.arrayOf(PropTypes.object),
 }
 
