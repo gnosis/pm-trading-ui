@@ -30,6 +30,7 @@ class Remote extends InjectedWeb3 {
       this.walletEnabled = true
     } catch (err) {
       // remote not available
+      this.walletEnabled = false
     }
     
     return this.runProviderUpdate(this, {
