@@ -37,6 +37,7 @@ class Metamask extends InjectedWeb3 {
     if (this.walletEnabled) {
       this.network = await this.getNetwork()
       this.account = await this.getAccount()
+      this.balance = await this.getBalance()
     }
 
     return this.runProviderUpdate(this, {
