@@ -25,6 +25,7 @@ class WalletIntegrationProvider extends Component {
     window.addEventListener('load', () => {
       Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
         .then(this.props.initGnosis)
+        .catch(this.props.initGnosis)
     })
   }
 

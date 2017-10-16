@@ -82,14 +82,16 @@ export const initGnosis = () => async (dispatch, getState) => {
 
     // determine new provider
     const newProvider = findDefaultProvider(state)
-
-    await dispatch(setActiveProvider(newProvider.name))
-
-    // init Gnosis connection
-    const opts = getGnosisJsOptions(newProvider.name)
-    await initGnosisConnection(opts)
-    await dispatch(setGnosisInitialized({ initialized: true }))
-    await requestEtherTokens()
+    
+    if (newProvider) {
+      await dispatch(setActiveProvider(newProvider.name))
+  
+      // init Gnosis connection
+      const opts = getGnosisJsOptions(newProvider.name)
+      await initGnosisConnection(opts)
+      await dispatch(setGnosisInitialized({ initialized: true }))
+      await requestEtherTokens()
+    }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)
     return await dispatch(setGnosisInitialized({ initialized: false, error }))

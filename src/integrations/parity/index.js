@@ -19,7 +19,7 @@ class Parity extends InjectedWeb3 {
    */
   async initialize(opts) {
     super.initialize(opts)
-    this.runProviderRegister(this, { proriority: Parity.providerPriority })
+    this.runProviderRegister(this, { priority: Parity.providerPriority })
 
     this.walletEnabled = false
 

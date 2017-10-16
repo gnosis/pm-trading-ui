@@ -18,6 +18,7 @@ const INITIAL_PROVIDER_STATE = {
   network: undefined,
   account: undefined,
   balance: undefined,
+  priority: 1,
 }
 
 const reducer = handleActions({
