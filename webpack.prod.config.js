@@ -74,6 +74,7 @@ module.exports = {
     disableHostCheck: true,
     contentBase: false,
     historyApiFallback: true,
+    hot: false,
     port: 5000,
     watchOptions: {
       ignored: /node_modules/,
