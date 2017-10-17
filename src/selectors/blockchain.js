@@ -1,4 +1,4 @@
-import { get, find, sortBy } from 'lodash'
+import { get, find, orderBy } from 'lodash'
 import Decimal from 'decimal.js'
 
 /**
@@ -6,7 +6,7 @@ import Decimal from 'decimal.js'
  * @param {*} state - redux state
  */
 export const findDefaultProvider = (state) => {
-  const providers = sortBy(state.blockchain.providers, ['priority'])
+  const providers = orderBy(state.blockchain.providers, ['priority'], ['desc'])
 
   return find(providers, {
     loaded: true, available: true,
