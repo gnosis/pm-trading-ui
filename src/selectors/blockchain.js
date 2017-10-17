@@ -72,6 +72,4 @@ export const getGasPrice = state => (
 
 export const isGasPriceFetched = state => state.blockchain.gasPrice !== undefined
 
-export const getEtherTokensAmount = (state, account) => {
-  return new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))
-}
+export const getEtherTokensAmount = (state, account) => new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))
