@@ -18,8 +18,10 @@ class InjectedWeb3 {
    * @param {function} opts.runProviderRegister - Function to run when this provider registers
    */
   async initialize(opts) {
-    this.runProviderUpdate = typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
-    this.runProviderRegister = typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
+    this.runProviderUpdate =
+      typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
+    this.runProviderRegister =
+      typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
   }
 
   /**
@@ -72,14 +74,12 @@ class InjectedWeb3 {
    */
   async getAccount() {
     return new Promise((resolve, reject) => {
-      this.web3.eth.getAccounts(
-        (e, accounts) => {
-          if (e) {
-            reject(e)
-          }
-          resolve(accounts && accounts.length ? accounts[0] : null)
-        },
-      )
+      this.web3.eth.getAccounts((e, accounts) => {
+        if (e) {
+          reject(e)
+        }
+        resolve(accounts && accounts.length ? accounts[0] : null)
+      })
     })
   }
 
@@ -137,7 +137,6 @@ class InjectedWeb3 {
       }
     }
   }
-
 }
 
 export default InjectedWeb3
