@@ -87,7 +87,7 @@ export const initGnosis = () => async (dispatch, getState) => {
       await dispatch(setActiveProvider(newProvider.name))
 
       // init Gnosis connection
-      const opts = getGnosisJsOptions(newProvider.name)
+      const opts = getGnosisJsOptions(newProvider)
       await initGnosisConnection(opts)
       await dispatch(setGnosisInitialized({ initialized: true }))
       await requestEtherTokens()
