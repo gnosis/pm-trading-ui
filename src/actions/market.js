@@ -300,7 +300,6 @@ export const createMarket = options => async (dispatch) => {
 
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.FUNDING))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.FUNDING, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
 
@@ -328,7 +327,6 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
 
@@ -366,7 +364,6 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
 
@@ -392,7 +389,6 @@ export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
     await api.resolveEvent(market.event, outcomeIndex)
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
 
@@ -419,7 +415,6 @@ export const redeemWinnings = market => async (dispatch) => {
     console.log('winnings: ', await api.redeemWinnings(market.event.type, market.event.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
 
@@ -445,7 +440,6 @@ export const withdrawFees = market => async (dispatch) => {
     console.log('fees: ', await api.withdrawFees(market.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
 
@@ -471,7 +465,6 @@ export const closeMarket = market => async (dispatch) => {
     await api.closeMarket(market)
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
   } catch (e) {
-    console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
 

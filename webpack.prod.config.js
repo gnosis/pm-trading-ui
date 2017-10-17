@@ -42,14 +42,21 @@ module.exports = {
       { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader' },
       {
         test: /\.(jpe?g|png|svg)$/i,
-        loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
+        use: {
+          loader: 'file-loader',
+          options: {
+            hash: 'sha512',
+            digest: 'hex',
+            name: 'img/[hash].[ext]',
+          },
+        },
       },
       {
         test: /\.(less|css)$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            'css-loader',
+            { loader: 'css-loader', options: { minimize: true } },
             {
               loader: 'postcss-loader',
             },

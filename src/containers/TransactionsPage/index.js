@@ -1,15 +1,23 @@
 import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
 
 import {
   getRunningTransactions,
   getCompletedTransactions,
 } from 'selectors/transactions'
 
+import { getCurrentAccount } from 'selectors/blockchain'
+
 import Transactions from 'components/Transactions'
 
 const mapStateToProps = state => ({
+  currentAccount: getCurrentAccount(state),
   runningTransactions: getRunningTransactions(state),
   completedTransactions: getCompletedTransactions(state),
 })
 
-export default connect(mapStateToProps)(Transactions)
+const mapDispatchToProps = {
+  changeUrl: push,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transactions)

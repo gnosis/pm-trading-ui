@@ -25,6 +25,5 @@
    "protocol": "http",
    "host": "localhost",
    "port": 8545
- },
- "fetchMarketTimeInterval": 15000
+ }
 }
