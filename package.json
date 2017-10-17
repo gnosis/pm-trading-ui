@@ -28,7 +28,9 @@
       "<rootDir>/src/"
     ]
   },
-  "pre-commit": ["precommit"],
+  "pre-commit": [
+    "precommit"
+  ],
   "dependencies": {
     "@gnosis.pm/gnosisjs": "^0.5.2",
     "autobind-decorator": "^1.4.1",
