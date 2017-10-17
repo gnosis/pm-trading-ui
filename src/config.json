@@ -12,18 +12,17 @@
     "0x28a8746e75304c0780e011bed21c72cd78cd535e": "Account 8",
     "0xaca94ef8bd5ffee41947b4585a84bda5a3d3da6e": "Account 9",
     "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Account 10"
- },
-  "productionWhitelist": {
-
- },
- "gnosisdb": {
-   "protocol": "http",
-   "host": "localhost",
-   "port": 8000
- },
- "ethereum": {
-   "protocol": "http",
-   "host": "localhost",
-   "port": 8545
- }
+  },
+  "productionWhitelist": {},
+  "gnosisdb": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 8000
+  },
+  "ethereum": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 8545
+  },
+  "fetchMarketTimeInterval": 15000
 }
