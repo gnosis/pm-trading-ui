@@ -87,7 +87,7 @@ class MarketBuySharesForm extends Component {
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
 
-    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
+    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest, defaultAccount)
       .then(() => {
         // Fetch new trades
         this.props.fetchMarketTrades(market)
@@ -315,7 +315,7 @@ class MarketBuySharesForm extends Component {
               </div>
               {submitFailed && (
                 <div className="row marketBuySharesForm__row">
-                  <div className="col-md-12">Sorry - your investment couldn't be processed. Please ensure you're on the right network.</div>
+                  <div className="col-md-12">Sorry - your investment couldn&apos;t be processed. Please ensure you&apos;re on the right network.</div>
                 </div>
               )}
               <div className="row marketBuySharesForm__row">

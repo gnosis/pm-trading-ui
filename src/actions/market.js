@@ -35,6 +35,8 @@ import {
   MARKET_STAGES,
 } from 'utils/constants'
 
+import { calculateAllowance } from 'utils/transactions'
+
 /**
  * Constant names for marketcreation stages
  * @readonly
@@ -224,7 +226,11 @@ export const createMarket = options => async (dispatch) => {
   try {
     eventDescriptionContractData = await api.createEventDescription(eventDescription, event.type)
 
-    await dispatch(receiveEntities(normalize(createEventDescriptionModel(eventDescriptionContractData), eventDescriptionSchema)))
+    await dispatch(
+      receiveEntities(
+        normalize(createEventDescriptionModel(eventDescriptionContractData), eventDescriptionSchema),
+      ),
+    )
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.EVENT_DESCRIPTION))
   } catch (e) {
     console.error(e)
@@ -317,11 +323,13 @@ export const createMarket = options => async (dispatch) => {
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to buy
  * @param {number|string|BigNumber} cost - Max transaction cost allowed in Ether
  */
-export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
+export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost, accountAddress) => async (dispatch) => {
   const transactionId = uuid()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
+
+  const allowance = await calculateAllowance(accountAddress, market.address)
 
   try {
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
