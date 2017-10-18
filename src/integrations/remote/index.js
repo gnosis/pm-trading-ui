@@ -1,5 +1,4 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { registerProvider, updateProvider } from 'actions/blockchain'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import Web3 from 'web3'
 
@@ -32,7 +31,7 @@ class Remote extends InjectedWeb3 {
       // remote not available
       this.walletEnabled = false
     }
-    
+
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,
       network: this.network,

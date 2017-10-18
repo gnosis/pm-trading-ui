@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
 import { fieldPropTypes } from 'redux-form'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { bemifyClassName } from 'utils/helpers'
