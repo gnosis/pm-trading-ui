@@ -223,7 +223,7 @@ export const closeMarket = async (market) => {
   return market
 }
 
-export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost) => {
+export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost, approvalAmount) => {
   const gnosis = await getGnosisConnection()
 
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
@@ -235,7 +235,12 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
 
   // buyOutComeTokens handles approving
-  return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCount.toString() })
+  return await gnosis.buyOutcomeTokens({
+    market,
+    outcomeTokenIndex,
+    outcomeTokenCount: outcomeTokenCount.toString(),
+    approvalAmount,
+  })
 }
 
 export const resolveEvent = async (event, selectedOutcomeIndex) => {

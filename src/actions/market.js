@@ -317,15 +317,16 @@ export const createMarket = options => async (dispatch) => {
  * @param {number} outcomeIndex - Index of outcome to buy shares for
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to buy
  * @param {number|string|BigNumber} cost - Max transaction cost allowed in Ether
+ * @param {number|string} [approvalAmount] - Amount of collateral to allow market to spend
  */
-export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
+export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost, approvalAmount = null) => async (dispatch) => {
   const transactionId = uuid()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
 
   try {
-    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
+    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     console.error(e)
