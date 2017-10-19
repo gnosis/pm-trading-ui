@@ -1,11 +1,8 @@
 #!/bin/bash
 
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
-ESLINT="$(git rev-parse --show-toplevel)/node_modules/.bin/eslint"
+ESLINT="$(git rev-parse --show-toplevel)/node_modules/.bin/eslint --fix"
 ADD_FILES_TO_COMMIT="git add ."
-ESLINT_FIX="eslint src --fix --quiet"
-
-eval $ESLINT_FIX
 
 if [[ "$STAGED_FILES" = "" ]]; then
   exit 0
