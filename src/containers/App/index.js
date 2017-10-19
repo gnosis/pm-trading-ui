@@ -20,7 +20,7 @@ import { getSelectedProvider } from 'selectors/blockchain'
 import './app.less'
 
 const App = (props) => {
-  if (props.blockchainConnection) {
+  if (!props.blockchainConnection) {
     return (
       <div className="appContainer">
         <div className="loader-container">

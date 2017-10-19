@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import { RESOLUTION_TIME, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
+import { transactionShape } from 'utils/shapes'
 
 import ProgressSpinner from 'components/ProgressSpinner'
 
@@ -126,9 +127,9 @@ class Transactions extends Component {
 
 Transactions.propTypes = {
   changeUrl: PropTypes.func,
-  completedTransactions: PropTypes.arrayOf(PropTypes.object),
+  completedTransactions: PropTypes.arrayOf(transactionShape),
   currentAccount: PropTypes.string,
-  runningTransactions: PropTypes.arrayOf(PropTypes.object),
+  runningTransactions: PropTypes.arrayOf(transactionShape),
 }
 
 export default Transactions
