@@ -190,7 +190,7 @@ export const fundMarket = async (market) => {
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
 
-  
+
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
 
   const marketAllowance = await gnosis.etherToken.allowance(hexWithPrefix(market.creator), hexWithPrefix(marketContract.address))

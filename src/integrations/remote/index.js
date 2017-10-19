@@ -32,7 +32,7 @@ class Remote extends InjectedWeb3 {
       // remote not available
       this.walletEnabled = false
     }
-    
+
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,
       network: this.network,
