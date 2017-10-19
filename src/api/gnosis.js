@@ -199,9 +199,9 @@ export const fundMarket = async (market) => {
   await collateralToken.deposit({ value: marketFundingWei.toString() })
 
   const marketAllowance = await collateralToken.allowance(
-    hexWithPrefix(market.creator), hexWithPrefix(marketContract.address)
+    hexWithPrefix(market.creator), hexWithPrefix(marketContract.address),
   )
-  
+
   if (marketAllowance.lt(marketFundingWei)) {
     await collateralToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
   }
@@ -248,7 +248,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
     market: market.address,
     outcomeTokenIndex,
     outcomeTokenCount:
-    outcomeTokenCount.toString()
+    outcomeTokenCount.toString(),
   })
 }
 
