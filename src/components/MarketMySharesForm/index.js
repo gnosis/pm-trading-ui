@@ -11,7 +11,7 @@ import CurrencyName from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
 
-import { COLOR_SCHEME_DEFAULT, GAS_COST, LOWEST_DISPLAYED_VALUE } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, GAS_COST, LOWEST_DISPLAYED_VALUE, MIN_CONSIDER_VALUE } from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
@@ -61,7 +61,7 @@ class MarketMySharesForm extends Component {
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
       const fullAmount = Decimal(share.balance)
         .div(1e18)
-        .toDP(4, 1)
+        .toDP(2, 1)
         .toString()
       initialize({ sellAmount: fullAmount })
     }
@@ -87,7 +87,15 @@ class MarketMySharesForm extends Component {
   @autobind
   handleSellShare(shareId, shareAmount) {
     const shareIndex = this.props.marketShares.map(share => share.id).indexOf(shareId)
-    return this.props.sellShares(this.props.market, shareIndex, shareAmount).then(() => this.props.reset())
+    const shareBalance = new Decimal(this.props.marketShares[shareIndex].balance).div(1e18)
+    const selectedSellAmount = new Decimal(shareAmount)
+    const sellAmount = new Decimal(shareBalance)
+      .div(1e18)
+      .sub(selectedSellAmount)
+      .lt(MIN_CONSIDER_VALUE)
+      ? shareBalance
+      : shareAmount
+    return this.props.sellShares(this.props.market, shareIndex, sellAmount).then(() => this.props.reset())
   }
 
   @autobind
@@ -353,7 +361,7 @@ class MarketMySharesForm extends Component {
           {submitFailed && (
             <div className="row">
               <div className="col-md-9 col-md-offset-3 marketMyShares__errorColumn">
-                Sorry - your share sell could not be processed. Please ensure you&quot;re on the right network.
+                Sorry - your share sell could not be processed. Please ensure you&apos;re on the right network.
               </div>
             </div>
           )}

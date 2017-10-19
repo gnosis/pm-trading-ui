@@ -70,4 +70,6 @@ export const MARKET_STAGES = {
 
 export const LOWEST_DISPLAYED_VALUE = 0.001
 
+export const MIN_CONSIDER_VALUE = 0.001
+
 export const MAX_ALLOWANCE_WEI = Decimal(2).pow(256).sub(1).toString()
