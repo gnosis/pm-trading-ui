@@ -5,8 +5,6 @@ ESLINT="$(git rev-parse --show-toplevel)/node_modules/.bin/eslint"
 ADD_FILES_TO_COMMIT="git add ."
 ESLINT_FIX="eslint src --fix --quiet"
 
-#test
-
 eval $ESLINT_FIX
 
 if [[ "$STAGED_FILES" = "" ]]; then
