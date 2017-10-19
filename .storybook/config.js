@@ -17,11 +17,11 @@ addDecorator((story) => (
 ));
 
 const components = require.context('../src/components', true, /\.stories\.((js|ts)x?)$/)
-//const routes = require.context('../src/routes', true, /\.stories\.((js|ts)x?)$/)
+const routes = require.context('../src/routes', true, /\.stories\.((js|ts)x?)$/)
 
 function loadStories() {
     components.keys().forEach((filename) => components(filename));
-    //routes.keys().forEach((filename) => routes(filename))
+    routes.keys().forEach((filename) => routes(filename))
 }
 
 configure(loadStories, module);
