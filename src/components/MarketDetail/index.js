@@ -106,9 +106,6 @@ class MarketDetail extends Component {
 
   componentWillMount() {
     this.fetchEssentialData(!this.props.params.view)
-    this.props.requestGasCost(GAS_COST.BUY_SHARES)
-    this.props.requestGasCost(GAS_COST.SELL_SHARES)
-
     this.fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
   }
 
@@ -145,8 +142,10 @@ class MarketDetail extends Component {
         })
       })
 
-    this.props.requestGasCost(GAS_COST.BUY_SHARES)
-    this.props.requestGasCost(GAS_COST.SELL_SHARES)
+    if (this.props.defaultAccount) {
+      this.props.requestGasCost(GAS_COST.BUY_SHARES)
+      this.props.requestGasCost(GAS_COST.SELL_SHARES)
+    }
 
     if (this.props.defaultAccount && this.props.params.id) {
       this.props.fetchMarketParticipantTrades(this.props.params.id, this.props.defaultAccount)
