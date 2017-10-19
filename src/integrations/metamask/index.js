@@ -1,6 +1,9 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
+import { timeoutCondition } from 'utils/helpers'
 import Web3 from 'web3'
+
+const NETWORK_TIMEOUT = 10000
 
 class Metamask extends InjectedWeb3 {
   static providerName = WALLET_PROVIDER.METAMASK
@@ -35,9 +38,19 @@ class Metamask extends InjectedWeb3 {
     }
 
     if (this.walletEnabled) {
-      this.network = await this.getNetwork()
-      this.account = await this.getAccount()
-      this.balance = await this.getBalance()
+      const checks = async () => {
+        this.network = await this.getNetwork()
+        this.account = await this.getAccount()
+        this.balance = await this.getBalance()
+      }
+
+      // allow metamask timeout
+      try {
+        await Promise.race([checks(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
+      } catch (err) {
+        console.warn(err)
+        this.walletEnabled = false
+      }
     }
 
     return this.runProviderUpdate(this, {

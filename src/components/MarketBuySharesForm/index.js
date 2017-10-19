@@ -145,7 +145,7 @@ class MarketBuySharesForm extends Component {
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
     if (isOutcomeSelected) {
       newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome])
-        .add(outcomeTokenCount)
+        .add(outcomeTokenCount.toString())
         .toString()
     }
     const selectedMarginalPrice = isOutcomeSelected

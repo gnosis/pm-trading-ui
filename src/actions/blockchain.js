@@ -76,13 +76,11 @@ export const requestEtherTokens = account => async (dispatch) => {
  * (Re)-Initializes Gnosis.js connection according to current providers settings
  */
 export const initGnosis = () => async (dispatch, getState) => {
-  // initialize
   try {
     const state = getState()
 
     // determine new provider
     const newProvider = findDefaultProvider(state)
-
     if (newProvider) {
       await dispatch(setActiveProvider(newProvider.name))
 
@@ -94,6 +92,7 @@ export const initGnosis = () => async (dispatch, getState) => {
     }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)
+    await dispatch(setConnectionStatus({ connected: false }))
     return await dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 

@@ -53,6 +53,11 @@ export const getCurrentBalance = async (account) => {
   ))
 }
 
+export const getCollateralToken = async () => {
+  const gnosis = await getGnosisConnection()
+  return gnosis.etherToken
+}
+
 const normalizeEventDescription = (eventDescription, eventType) => {
   const eventDescriptionNormalized = {
     title: eventDescription.title,
@@ -190,12 +195,12 @@ export const fundMarket = async (market) => {
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
 
-  
-  await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
+  const collateralToken = await getCollateralToken()
+  await collateralToken.deposit({ value: marketFundingWei.toString() })
 
-  const marketAllowance = await gnosis.etherToken.allowance(hexWithPrefix(market.creator), hexWithPrefix(marketContract.address))
+  const marketAllowance = await collateralToken.allowance(hexWithPrefix(market.creator), hexWithPrefix(marketContract.address))
   if (marketAllowance.lt(marketFundingWei)) {
-    await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
+    await collateralToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
   }
 
   if (process.env.NODE_ENV !== 'production') {
@@ -230,12 +235,13 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
   const collateralTokenWei = Decimal(cost).mul(1e18)
+  const collateralToken = await getCollateralToken()
 
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
-  await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
+  await collateralToken.deposit({ value: collateralTokenWei.toString() })
 
   // buyOutComeTokens handles approving
-  return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCount.toString() })
+  return await gnosis.buyOutcomeTokens({ market: market.address, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCount.toString() })
 }
 
 export const resolveEvent = async (event, selectedOutcomeIndex) => {
@@ -342,6 +348,10 @@ export const getGasPrice = async () => {
  */
 export const getEtherTokens = async (account) => {
   const gnosis = await getGnosisConnection()
-  const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
-  return new Decimal(balance.toFixed(0))
+
+  if (gnosis && gnosis.etherToken) {
+    const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
+    return new Decimal(balance.toFixed(0))
+  }
+  return undefined
 }
