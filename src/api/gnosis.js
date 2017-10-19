@@ -198,7 +198,10 @@ export const fundMarket = async (market) => {
   const collateralToken = await getCollateralToken()
   await collateralToken.deposit({ value: marketFundingWei.toString() })
 
-  const marketAllowance = await collateralToken.allowance(hexWithPrefix(market.creator), hexWithPrefix(marketContract.address))
+  const marketAllowance = await collateralToken.allowance(
+    hexWithPrefix(market.creator), hexWithPrefix(marketContract.address)
+  )
+  
   if (marketAllowance.lt(marketFundingWei)) {
     await collateralToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
   }
@@ -241,7 +244,12 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   await collateralToken.deposit({ value: collateralTokenWei.toString() })
 
   // buyOutComeTokens handles approving
-  return await gnosis.buyOutcomeTokens({ market: market.address, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCount.toString() })
+  return await gnosis.buyOutcomeTokens({
+    market: market.address,
+    outcomeTokenIndex,
+    outcomeTokenCount:
+    outcomeTokenCount.toString()
+  })
 }
 
 export const resolveEvent = async (event, selectedOutcomeIndex) => {
