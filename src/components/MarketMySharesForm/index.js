@@ -84,9 +84,7 @@ class MarketMySharesForm extends Component {
     const shareIndex = this.props.marketShares.map(share => share.id).indexOf(shareId)
     const shareBalance = new Decimal(this.props.marketShares[shareIndex].balance).div(1e18).toDP(2, 1)
     const selectedSellAmount = new Decimal(shareAmount)
-    const sellAmount = new Decimal(shareBalance).sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE)
-      ? shareBalance
-      : shareAmount
+    const sellAmount = shareBalance.sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE) ? shareBalance : shareAmount
     return this.props.sellShares(this.props.market, shareIndex, sellAmount).then(() => this.props.reset())
   }
 
