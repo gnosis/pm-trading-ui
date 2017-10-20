@@ -87,14 +87,14 @@ const columns = [{
     width: 160,
 }]
 
-const ScoreBoard = ({ tableData, myWallet }) =>
+const ScoreBoard = ({ tableData, myAccount }) =>
         <ReactTable
             data={ tableData }
             columns={ columns }
             showPagination={ false }
-            defaultPageSize={ tableData.length > 10 ? 10 : tableData.length  }
+            defaultPageSize={ tableData.length > 11 ? 11 : tableData.length  }
             style={ tableStyle }
-            getTrProps={ ownTrCallback(myWallet) }
+            getTrProps={ ownTrCallback(myAccount) }
             getTheadProps={ ownTheadCallback }
             sortable={ false }
         />
