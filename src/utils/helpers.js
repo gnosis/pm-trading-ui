@@ -3,6 +3,8 @@
 import { mapValues, startsWith, isArray } from 'lodash'
 import Decimal from 'decimal.js'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES } from 'utils/constants'
+import { WALLET_PROVIDER } from 'integrations/constants'
+import Web3 from 'web3'
 
 export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
@@ -16,13 +18,9 @@ export const hexWithoutPrefix = (value) => {
  * Adds the `0x` prefix to the incoming string value
  * @param {String} value
  */
-export const add0xPrefix = (value) => {
-  return startsWith(value, '0x') ? value : `0x${value}`
-}
+export const add0xPrefix = value => startsWith(value, '0x') ? value : `0x${value}`
 
-export const hexWithPrefix = (value) => {
-  return HEX_VALUE_REGEX.test(value) ? add0xPrefix(value) : value
-}
+export const hexWithPrefix = value => HEX_VALUE_REGEX.test(value) ? add0xPrefix(value) : value
 
 export const toEntity = (data, entityType, idKey = 'address') => {
   const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
@@ -98,7 +96,7 @@ export const normalizeScalarPoint = (
  */
 export const addIdToObjectsInArray = (arrayData) => {
   arrayData.forEach((item, index) => {
-    item['_id'] = index
+    item._id = index
   })
   return arrayData
 }
@@ -147,3 +145,20 @@ export const isModerator = accountAddress => (
 )
 
 export const getModerators = () => process.env.WHITELIST
+
+export const getGnosisJsOptions = (provider) => {
+  const opts = {}
+
+  if (provider && provider.name === WALLET_PROVIDER.METAMASK) {
+    // Inject window.web3
+    opts.ethereum = window.web3.currentProvider
+  } else if (provider && provider === WALLET_PROVIDER.PARITY) {
+    // Inject window.web3
+    opts.ethereum = window.web3.currentProvider
+  } else {
+    // Default remote node
+    opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
+  }
+
+  return opts
+}

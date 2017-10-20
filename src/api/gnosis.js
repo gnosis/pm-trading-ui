@@ -4,7 +4,7 @@ import Gnosis from '@gnosis.pm/gnosisjs'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
 import { hexWithPrefix, weiToEth } from 'utils/helpers'
-import { OUTCOME_TYPES, ORACLE_TYPES } from 'utils/constants'
+import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
 // import { normalize } from 'normalizr'
 
 import delay from 'await-delay'
@@ -12,6 +12,11 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 
 let gnosisInstance
+
+export const calcLMSRCost = Gnosis.calcLMSRCost
+export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
+export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
+export const calcLMSRProfit = Gnosis.calcLMSRProfit
 
 /**
  * Initializes connection to GnosisJS
@@ -191,7 +196,11 @@ export const fundMarket = async (market) => {
   const marketFundingWei = marketFunding.times(1e18)
 
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
-  await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), marketFundingWei.toString())
+
+  const marketAllowance = await gnosis.etherToken.allowance(hexWithPrefix(market.creator), hexWithPrefix(marketContract.address))
+  if (marketAllowance.lt(marketFundingWei)) {
+    await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
+  }
 
   if (process.env.NODE_ENV !== 'production') {
     await delay(5000)
@@ -218,7 +227,7 @@ export const closeMarket = async (market) => {
   return market
 }
 
-export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost) => {
+export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
 
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
@@ -226,12 +235,16 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   // The decimal values represent an offset of 18 positions on the integer value
   const collateralTokenWei = Decimal(cost).mul(1e18)
 
-  // The user needs to deposit and approve the amount of collateral tokens willing to pay before performing the buy
+  // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
   await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
-  await gnosis.etherToken.approve(hexWithPrefix(market.address), collateralTokenWei.toString())
 
-
-  return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCount.toString() })
+  // buyOutComeTokens handles approving
+  return await gnosis.buyOutcomeTokens({
+    market,
+    outcomeTokenIndex,
+    outcomeTokenCount: outcomeTokenCount.toString(),
+    approvalResetAmount,
+  })
 }
 
 export const resolveEvent = async (event, selectedOutcomeIndex) => {
@@ -277,10 +290,6 @@ export const withdrawFees = async (marketAddress) => {
   throw new Error('Invalid Market - can\'t find the specified Market')
 }
 
-export const calcLMSRCost = Gnosis.calcLMSRCost
-export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
-export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
-export const calcLMSRProfit = Gnosis.calcLMSRProfit
 
 /*
 * Gas Calculation functions

@@ -1,35 +1,47 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { registerProvider, updateProvider } from 'actions/blockchain'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import Web3 from 'web3'
 
 class Parity extends InjectedWeb3 {
+  static providerName = WALLET_PROVIDER.PARITY
 
-  async initialize(store) {
-    this.store = store
-    this.store.dispatch(registerProvider({ provider: WALLET_PROVIDER.PARITY }))
-    let walletEnabled
-    let network
-    let account
+  /**
+   * Provider with highest priority starts off as active, if other providers are also available.
+   * This allows "fallback providers" like a remote etherium host to be used as a last resort.
+   */
+  static providerPriority = 100
+
+  /**
+   * Tries to initialize and enable the current provider
+   * @param {object} opts - Integration Options
+   * @param {function} opts.runProviderUpdate - Function to run when this provider updates
+   * @param {function} opts.runProviderRegister - Function to run when this provider registers
+   */
+  async initialize(opts) {
+    super.initialize(opts)
+    this.runProviderRegister(this, { priority: Parity.providerPriority })
+
+    this.walletEnabled = false
 
     if (typeof window.web3 !== 'undefined' && window.web3.parity) {
       this.web3 = new Web3(window.web3.currentProvider)
-      walletEnabled = true
+      this.walletEnabled = true
     } else {
-      walletEnabled = false
+      this.walletEnabled = false
     }
 
-    if (walletEnabled) {
-      console.log('parity available')
-      network = await this.getNetwork()
-      account = await this.getAccount()
+    if (this.walletEnabled) {
+      this.network = await this.getNetwork()
+      this.account = await this.getAccount()
+      this.balance = await this.getBalance()
     }
-    return await this.store.dispatch(updateProvider({
-      provider: WALLET_PROVIDER.PARITY,
-      available: walletEnabled && account !== undefined,
-      network,
-      account,
-    }))
+
+    return this.runProviderUpdate(this, {
+      available: this.walletEnabled && this.account != null,
+      network: this.network,
+      account: this.account,
+      balance: this.balance,
+    })
   }
 }
 export default new Parity()

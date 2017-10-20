@@ -1,4 +1,4 @@
-@import "../../less/vars.less";
+@import '../../less/vars.less';
 
 @expandable-arrow-size: 15px;
 @expandable-margin: 40px;
@@ -12,7 +12,7 @@
   margin-top: 40px;
   position: relative;
 
-  @media(min-width: @screen-sm) {
+  @media (min-width: @screen-sm) {
     text-align: right;
     margin-top: 0;
   }
@@ -23,7 +23,8 @@
   text-overflow: ellipsis;
   padding-left: 0; //just until we use real names
   margin-bottom: 20px;
-  @media(min-width: @screen-sm) { //just until we use real names
+  @media (min-width: @screen-sm) {
+    //just until we use real names
     padding-left: 100px; //just until we use real names
   } //just until we use real names
 }
@@ -41,8 +42,8 @@
   text-transform: uppercase;
   color: @font-color-dark;
   font-size: 10px;
-  opacity: .6;
-  letter-spacing: .5px;
+  opacity: 0.6;
+  letter-spacing: 0.5px;
 }
 
 .marketTitle__heading {
@@ -56,7 +57,7 @@
 .marketDescription__text {
   font-size: 18px;
   line-height: 30px;
-  letter-spacing: .25px;
+  letter-spacing: 0.25px;
   font-weight: 300;
 }
 
@@ -70,17 +71,17 @@
   font-weight: 300;
   letter-spacing: 1px;
   line-height: 1.2;
-  @media(min-width: @screen-sm) {
+  @media (min-width: @screen-sm) {
     font-size: 28px;
   }
 }
 
 .marketTime__absolute {
   color: @font-color-dark;
-  opacity: .6;
+  opacity: 0.6;
   font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
 }
 
 .marketControls.container {
@@ -90,7 +91,6 @@
 .marketControls__button {
   margin-right: 20px;
 }
-
 
 .marketControls__button--active {
   &:after {
@@ -106,7 +106,6 @@
     border-bottom: @expandable-arrow-size solid @bg-color-muted;
   }
 }
-
 
 .marketGraph__container {
   width: 100%;
@@ -140,7 +139,8 @@
 
 @detailBadgesSize: 64px;
 
-.redeemWinning, .withdrawFees {
+.redeemWinning,
+.withdrawFees {
   margin: 12px 0;
 
   &__icon {
@@ -166,7 +166,7 @@
     color: @font-color-muted;
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
   }
 
   &__action {

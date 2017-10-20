@@ -47,7 +47,7 @@ const render = (App) => {
 render(AppRouter)
 
 if (module.hot) {
-  module.hot.accept('./router', () => 
-    render(require('./router').default)
+  module.hot.accept('./router', () =>
+    render(require('./router').default),
   )
 }

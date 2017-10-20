@@ -12,14 +12,7 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
 const config = require('./src/config.json')
 
-let whitelist
-
-if (nodeEnv === 'development') {
-  whitelist = config.developmentWhitelist
-} else {
-  whitelist = config.productionWhitelist
-}
-
+const whitelist = config.productionWhitelist
 
 const gnosisDbUrl =
   process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
@@ -73,6 +66,8 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
     contentBase: false,
+    historyApiFallback: true,
+    hot: false,
     port: 5000,
     watchOptions: {
       ignored: /node_modules/,

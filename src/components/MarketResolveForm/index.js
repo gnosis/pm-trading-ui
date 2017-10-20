@@ -45,20 +45,20 @@ class MarketResolveForm extends Component {
 
   renderResolveCategorical() {
     const { handleSubmit, market: { eventDescription: { outcomes } } } = this.props
+    const outcomesFormatted = []
+    outcomes.forEach((outcome) => {
+      outcomesFormatted.push({ label: outcome, value: outcome })
+    })
+
     return (
       <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
         <div className="marketResolveCategorical">
-          <FormRadioButtonLabel label="Choose outcome" />
-          {outcomes.map((outcome, outcomeIndex) => (
-            <Field
-              key={outcomeIndex}
-              className="marketResolveFormRadio"
-              name="selectedOutcome"
-              component={FormRadioButton}
-              text={outcome}
-              radioValue={outcomeIndex}
-            />
-          ))}
+          <Field
+            className="marketResolveFormRadio"
+            name="selectedOutcome"
+            component={FormRadioButton}
+            radioValues={outcomesFormatted}
+          />
         </div>
         <button type="submit" className="btn btn-primary">
           Resolve Oracle

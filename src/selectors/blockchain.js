@@ -1,40 +1,75 @@
+import { get, find, orderBy } from 'lodash'
 import Decimal from 'decimal.js'
 
-export const selector = state => state.blockchain
+/**
+ * Finds a default provider from all currently available providers. Determined by provider integrations `priority`
+ * @param {*} state - redux state
+ */
+export const findDefaultProvider = (state) => {
+  const providers = orderBy(state.blockchain.providers, ['priority'], ['desc'])
 
-export const getSelectedProvider = state => (
-  selector(state).providers !== undefined ? selector(state).providers[selector(state).activeProvider] : null
-)
+  return find(providers, {
+    loaded: true, available: true,
+  })
+}
 
-export const getDefaultAccount = state => selector(state).defaultAccount
+export const getSelectedProvider = state => get(state, `blockchain.providers['${state.blockchain.activeProvider}']`)
 
-// Default account balance
-export const getCurrentBalance = state => selector(state).currentBalance
+export const getSelectedProviderName = state => get(state, 'blockchain.activeProvider')
 
-// Checks GnosisJS initialization
-export const isGnosisInitialized = state => selector(state).gnosisInitialized
+/**
+ * Returns the currently selected account for the current provider
+ * @param {*} state - redux state
+ */
+export const getCurrentAccount = (state) => {
+  const provider = getSelectedProvider(state)
+
+  if (provider) {
+    return provider.account
+  }
+}
+
+/**
+ * Returns the balance of the currently selected provider, network and account
+ * @param {*} state - redux state
+ */
+export const getCurrentBalance = (state) => {
+  const provider = getSelectedProvider(state)
+
+  if (provider) {
+    return provider.balance
+  }
+}
+
+/**
+ * Returns the current network the selected provider is connected to
+ * @param {*} state - redux state
+ */
+export const getCurrentNetwork = (state) => {
+  const provider = getSelectedProvider(state)
+
+  if (provider) {
+    return provider.network
+  }
+}
+/**
+ * Returns if gnosis.js is initialized or not
+ * @param {*} state - redux state
+ */
+export const isGnosisInitialized = state => state.blockchain.gnosisInitialized
 
 export const getGasCosts = (state) => {
-  const gasCosts = selector(state).gasCosts
+  const gasCosts = get(state, 'blockchain.gasCosts', {})
   return Object.keys(gasCosts).reduce((acc, item) =>
     ({ ...acc, [item]: gasCosts[item] ? gasCosts[item] : new Decimal(0) }), {})
 }
 
-export const isGasCostFetched = (state, property) => selector(state).gasCosts[property] !== undefined
+export const isGasCostFetched = (state, property) => get(state, `blockchain.gasCosts['${property}']`) !== undefined
 
 export const getGasPrice = state => (
-  selector(state).gasPrice ? new Decimal(parseInt(selector(state).gasPrice, 10)) : new Decimal(0)
+  state.blockchain.gasPrice ? new Decimal(parseInt(state.blockchain.gasPrice, 10)) : new Decimal(0)
 )
 
-export const isGasPriceFetched = state => selector(state).gasPrice !== undefined
+export const isGasPriceFetched = state => state.blockchain.gasPrice !== undefined
 
-export const getEtherTokensAmount = (state, account) => {
-  if (isGnosisInitialized(state)) {
-    return selector(state).etherTokens !== undefined ? selector(state).etherTokens[account] : new Decimal(0)
-  }
-  return new Decimal(0)
-}
-
-export default {
-  getDefaultAccount,
-}
+export const getEtherTokensAmount = (state, account) => new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))

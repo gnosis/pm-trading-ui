@@ -283,11 +283,17 @@ class Dashboard extends Component {
   renderWidget(marketType) {
     const { markets, accountShares, accountTrades } = this.props
     const oneDayHours = 24 * 60 * 60 * 1000
-    const newMarkets = markets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
+    const whitelistedMarkets = markets.filter(
+      market =>
+        process.env.WHITELIST[market.creator] && !market.oracle.isOutcomeSet && !market.event.isWinningOutcomeSet,
+    )
+    const newMarkets = whitelistedMarkets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
     /* const closingMarkets = markets.filter(
       market => moment.utc(market.eventDescription.resolutionDate).isBetween(moment(), moment().add(24, 'hours')),
     )*/
-    let closingMarkets = markets.sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
+    let closingMarkets = whitelistedMarkets
+      .filter(market => new Date() - new Date(market.eventDescription.resolutionDate) < 0)
+      .sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
 
     if (marketType === 'newMarkets') {
       return (

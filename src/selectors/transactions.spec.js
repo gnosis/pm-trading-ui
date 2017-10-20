@@ -13,7 +13,7 @@ describe('transactionsSelector', () => {
         },
       },
     }
-    
+
     expect(transactionSelector(state, 'test123')).toMatchObject(state.transactions.log.test123)
   })
 
@@ -27,7 +27,7 @@ describe('transactionsSelector', () => {
         },
       },
     }
-    
+
     expect(transactionSelector(state, 'test123')).toMatchObject({})
   })
 })

@@ -1,26 +1,27 @@
 import { handleActions } from 'redux-actions'
 
-import { 
-  setDefaultAccount, setCurrentBalance, setConnectionStatus, setGnosisInitialized,
-  setGasCost, setGasPrice, registerProvider, updateProvider, setEtherTokens,
+import {
+  setConnectionStatus,
+  setGnosisInitialized,
+  setGasCost,
+  setGasPrice,
+  setActiveProvider,
+  registerProvider,
+  updateProvider,
+  setEtherTokens,
 } from 'actions/blockchain'
 import { GAS_COST } from 'utils/constants'
 
+const INITIAL_PROVIDER_STATE = {
+  loaded: false,
+  available: false,
+  network: undefined,
+  account: undefined,
+  balance: undefined,
+  priority: 1,
+}
+
 const reducer = handleActions({
-  [setDefaultAccount]: (state, action) => {
-    const account = action.payload
-    return {
-      ...state,
-      defaultAccount: account,
-    }
-  },
-  [setCurrentBalance]: (state, action) => {
-    const balance = action.payload
-    return {
-      ...state,
-      currentBalance: balance,
-    }
-  },
   [setConnectionStatus]: (state, action) => {
     const { connection } = action.payload
     return {
@@ -47,6 +48,10 @@ const reducer = handleActions({
     ...state,
     [action.payload.entityType]: action.payload.gasPrice,
   }),
+  [setActiveProvider]: (state, action) => ({
+    ...state,
+    activeProvider: action.payload,
+  }),
   [registerProvider]: (state, action) => {
     const { provider: name, ...provider } = action.payload
     return {
@@ -55,7 +60,7 @@ const reducer = handleActions({
         ...state.providers,
         [name]: {
           name,
-          loaded: false,
+          ...INITIAL_PROVIDER_STATE,
           ...provider,
         },
       },
@@ -74,8 +79,6 @@ const reducer = handleActions({
           ...provider,
         },
       },
-      activeProvider: !state.activeProvider && provider.available ? name : state.activeProvider,
-      providersLoaded: true,
     }
   },
   [setEtherTokens]: (state, action) => ({
@@ -88,8 +91,6 @@ const reducer = handleActions({
 }, {
   gasCosts: Object.keys(GAS_COST).reduce((acc, item) => ({ ...acc, [GAS_COST[item]]: undefined }), {}),
   gasPrice: undefined,
-  defaultAccount: undefined,
-  currentBalance: undefined,
   connection: undefined,
   connectionTried: false,
   providers: {},

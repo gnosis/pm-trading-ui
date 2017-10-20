@@ -11,8 +11,9 @@ import {
 const API_URL = `${process.env.GNOSISDB_URL}/api`
 
 export const requestMarket = async marketAddress =>
-  restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/`)
-    .then(response => normalize(response, marketSchema))
+  restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/`).then(response =>
+    normalize({ ...response, local: false }, marketSchema),
+  )
 
 export const requestMarkets = async () =>
   restFetch(`${API_URL}/markets/`)
