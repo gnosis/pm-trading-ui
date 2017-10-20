@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import moment from 'moment'
+import cn from 'classnames'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
+import Tooltip from 'rc-tooltip'
+import 'rc-tooltip/assets/bootstrap.css'
 import { reduxForm, Field } from 'redux-form'
-import cn from 'classnames'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
@@ -70,10 +72,6 @@ class MarketList extends Component {
     }
   }
 
-  renderCategoricalOutcomes(market) {}
-
-  renderScalarOutcomes(market) {}
-
   @autobind
   renderMarket(market) {
     const isResolved = market.oracle && market.oracle.isOutcomeSet
@@ -86,20 +84,23 @@ class MarketList extends Component {
     return (
       <button
         type="button"
-        className={`market ${isResolved ? 'market--resolved' : ''}`}
+        className={cn({
+          market,
+          'market--resolved': isResolved,
+        })}
         key={market.address}
         onClick={() => this.handleViewMarket(market)}
       >
         <div className="market__header">
           <h2 className="market__title">{market.eventDescription.title}</h2>
           {isOwner &&
-          !isResolved && (
-            <div className="market__control">
-              <a href={`/#${resolveUrl}`} onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>
-                Resolve
-              </a>
-            </div>
-          )}
+            !isResolved && (
+              <div className="market__control">
+                <a href="javascript:void(0)" onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>
+                  Resolve
+                </a>
+              </div>
+            )}
         </div>
         {outcomes}
         <div className="market__info row">
@@ -204,6 +205,30 @@ class MarketList extends Component {
   render() {
     const { markets } = this.props
 
+    let createMarketButton = (
+      <div
+        className={cn({
+          'marketStats__control--container': true,
+          disabled: !this.props.hasWallet,
+        })}
+      >
+        <button
+          type="button"
+          onClick={this.props.hasWallet ? this.handleCreateMarket : false}
+          className="marketStats__control btn btn-default"
+          disabled={!this.props.defaultAccount}
+        >
+          Create Market
+        </button>
+      </div>
+    )
+
+    if (!this.props.hasWallet) {
+      createMarketButton = (
+        <Tooltip overlay="You need a wallet connected in order to create a market">{createMarketButton}</Tooltip>
+      )
+    }
+
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
@@ -235,17 +260,7 @@ class MarketList extends Component {
         <div className="marketListPage__controls">
           <div className="container">
             <div className="row">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                <button
-                  type="button"
-                  onClick={this.handleCreateMarket}
-                  className="marketStats__control btn btn-default"
-                  disabled={!this.props.defaultAccount}
-                  title={this.props.defaultAccount ? '' : 'Please connect to an ethereum network to create a market'}
-                >
-                  Create Market
-                </button>
-              </div>
+              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">{createMarketButton}</div>
             </div>
           </div>
         </div>
@@ -269,6 +284,7 @@ MarketList.propTypes = {
   changeUrl: PropTypes.func,
   handleSubmit: PropTypes.func,
   isModerator: PropTypes.bool,
+  hasWallet: PropTypes.bool,
 }
 
 export default reduxForm({

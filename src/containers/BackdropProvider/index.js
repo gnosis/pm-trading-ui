@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames'
 import { connect } from 'react-redux'
 
 import { closeModal } from 'actions/modal'
@@ -22,10 +23,7 @@ class BackdropProvider extends Component {
         throw Error('Invalid Modal Type', currentModal)
       }
 
-      return (<Modal
-        {...data}
-        closeModal={closeModalProp}
-      />)
+      return <Modal {...data} closeModal={closeModalProp} />
     }
 
     return undefined
@@ -35,12 +33,15 @@ class BackdropProvider extends Component {
     const { children, modal: { isOpen } } = this.props
     return (
       <div className="backdrop">
-        <div className={`backdrop__filter ${isOpen ? 'backdrop__filter--visible' : ''}`}>
-          {isOpen ? <div style={{ position: 'fixed' }}>{children}</div> : children}
+        <div
+          className={cn({
+            backdrop__filter: true,
+            'backdrop__filter--visible': isOpen,
+          })}
+        >
+          {isOpen ? <div style={{ position: 'fixed', minWidth: '100vw' }}>{children}</div> : children}
         </div>
-        <div className="backdrop__above">
-          {this.renderBackdropContent()}
-        </div>
+        <div className="backdrop__above">{this.renderBackdropContent()}</div>
       </div>
     )
   }

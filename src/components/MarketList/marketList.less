@@ -1,4 +1,4 @@
-@import "../../less/vars.less";
+@import '../../less/vars.less';
 
 @market-border-radius: 12px;
 @market-highlight-stripe-width: 5px;
@@ -9,10 +9,10 @@
 .marketStats {
   &__label {
     color: @font-color-dark;
-    opacity: .6;
+    opacity: 0.6;
     text-transform: uppercase;
     font-size: 10px;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
   }
 
   &__value {
@@ -21,14 +21,25 @@
     letter-spacing: 1px;
   }
 
-  // &__control {
-  //   float: right;
-  // }
-
- &__stat {
+  &__stat {
     margin-bottom: 20px;
-    @media(min-width: @screen-sm) {
+    @media (min-width: @screen-sm) {
       margin-bottom: 0;
+    }
+  }
+
+  &__control {
+    &--container {
+      display: inline-block;
+
+      &.disabled {
+        cursor: not-allowed;
+      }
+    }
+
+    &.btn[disabled] {
+      pointer-events: none;
+      cursor: not-allowed;
     }
   }
 
@@ -38,13 +49,16 @@
     height: 50px;
     margin-right: 20px;
   }
-
 }
 
 .marketListPage {
   &__markets {
     background-color: @bg-color-muted;
     padding: 40px 0;
+
+    .container {
+      min-height: 420px;
+    }
   }
 
   &__stats {
@@ -136,7 +150,7 @@
     width: @market-highlight-stripe-width;
     background-color: @link-color;
     opacity: 0;
-    transition: opacity .2s;
+    transition: opacity 0.2s;
   }
 
   &.no-markets {
@@ -146,17 +160,19 @@
   &--resolved {
     .market__title {
       color: @font-color-dark;
-      opacity: .6;
+      opacity: 0.6;
       font-weight: 300;
     }
   }
 
-  &:active,&:focus {
+  &:active,
+  &:focus {
     outline: 0;
     box-shadow: none;
   }
 
-  &:hover,&:focus {
+  &:hover,
+  &:focus {
     outline: 0;
     color: inherit !important;
     cursor: pointer;
@@ -214,8 +230,8 @@
   &__group {
     padding-right: @info-row-height;
     color: @font-color-dark;
-    opacity: .6;
-    letter-spacing: .5px;
+    opacity: 0.6;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     font-size: 10px;
     vertical-align: middle;
@@ -225,7 +241,7 @@
       width: @info-row-height;
       height: @info-row-height;
       float: left;
-      opacity: .6;
+      opacity: 0.6;
     }
   }
 
@@ -238,5 +254,4 @@
     overflow: hidden;
     vertical-align: middle;
   }
-
 }

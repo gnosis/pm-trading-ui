@@ -1,0 +1,49 @@
+@import url('../../less/vars.less');
+
+.connectWallet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+
+  h3 {
+    text-align: center;
+  }
+
+  &__close {
+    .closeButton(32px, 5px);
+    top: 20px;
+    right: 10px;
+  }
+
+  &__provider-list {
+    margin-top: 30px;
+    font-size: 18px;
+    list-style: none;
+
+    display: flex;
+
+    li {
+      transition: transform 0.2s ease-in-out;
+
+      a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .headerIcon--default {
+          width: 60px;
+        }
+      }
+
+      & + li {
+        margin-left: 50px;
+      }
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
