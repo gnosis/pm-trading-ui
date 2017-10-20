@@ -33,6 +33,7 @@ import {
   OUTCOME_TYPES,
   TRANSACTION_COMPLETE_STATUS,
   MARKET_STAGES,
+  MAX_ALLOWANCE_WEI,
 } from 'utils/constants'
 
 /**
@@ -319,14 +320,35 @@ export const createMarket = options => async (dispatch) => {
  * @param {number|string|BigNumber} cost - Max transaction cost allowed in Ether
  * @param {number|string} [approvalAmount] - Amount of collateral to allow market to spend
  */
-export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost, approvalAmount = null) => async (dispatch) => {
+export const buyMarketShares = (
+  market,
+  outcomeIndex,
+  outcomeTokenCount,
+  cost,
+) => async (dispatch) => {
   const transactionId = uuid()
+  const gnosis = await api.getGnosisConnection()
+
+  // Reset the allowance if the cost of current transaction is greater than the current allowance
+  const transactionCost = api.calcLMSRCost(
+    market.netOutcomeTokensSold,
+    market.funding,
+    outcomeIndex,
+    outcomeTokenCount,
+    market.fee,
+  )
+  const currentAccount = await api.getCurrentAccount()
+
+  const marketAllowance = await gnosis.etherToken.allowance(
+    currentAccount,
+    market.address,
+  )
+  const approvalResetAmount = marketAllowance.lt(transactionCost.toString()) ? MAX_ALLOWANCE_WEI : null
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
-
   try {
-    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalAmount)
+    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     console.error(e)

@@ -12,7 +12,6 @@ import {
   GAS_COST,
   SCALAR_SHORT_COLOR,
   SCALAR_LONG_COLOR,
-  MAX_ALLOWANCE_WEI,
 } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 
@@ -80,12 +79,11 @@ class MarketBuySharesForm extends Component {
 
   @autobind
   handleBuyShares() {
-    const { market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome, marketShares } = this.props
+    const { market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome } = this.props
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
-    const approvalAmount = marketShares.length ? null : MAX_ALLOWANCE_WEI
 
-    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest, approvalAmount).then(() => {
+    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest).then(() => {
       // Fetch new trades
       this.props.fetchMarketTrades(market)
       // Fetch new market participant trades
