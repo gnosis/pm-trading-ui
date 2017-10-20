@@ -27,12 +27,7 @@ class MarketMySharesForm extends Component {
   }
 
   componentWillMount() {
-    const {
-      gasCosts,
-      gasPrice,
-      requestGasCost,
-      requestGasPrice,
-    } = this.props
+    const { gasCosts, gasPrice, requestGasCost, requestGasPrice } = this.props
 
     if (gasCosts.sellShares === undefined) {
       requestGasCost(GAS_COST.SELL_SHARES)
@@ -87,12 +82,9 @@ class MarketMySharesForm extends Component {
   @autobind
   handleSellShare(shareId, shareAmount) {
     const shareIndex = this.props.marketShares.map(share => share.id).indexOf(shareId)
-    const shareBalance = new Decimal(this.props.marketShares[shareIndex].balance).div(1e18)
+    const shareBalance = new Decimal(this.props.marketShares[shareIndex].balance).div(1e18).toDP(2, 1)
     const selectedSellAmount = new Decimal(shareAmount)
-    const sellAmount = new Decimal(shareBalance)
-      .div(1e18)
-      .sub(selectedSellAmount)
-      .lt(MIN_CONSIDER_VALUE)
+    const sellAmount = new Decimal(shareBalance).sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE)
       ? shareBalance
       : shareAmount
     return this.props.sellShares(this.props.market, shareIndex, sellAmount).then(() => this.props.reset())
