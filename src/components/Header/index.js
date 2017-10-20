@@ -11,7 +11,7 @@ import './header.less'
 
 const Header = ({
   version,
-  currentAccount,
+  hasWallet,
   currentNetwork,
   currentBalance,
   currentProvider,
@@ -21,7 +21,7 @@ const Header = ({
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
-        <Link to={currentAccount ? '/' : '/markets/list'}>
+        <Link to={hasWallet ? '/' : '/markets/list'}>
           <div className="headerLogo" />
         </Link>
       </div>
@@ -29,7 +29,7 @@ const Header = ({
         {version}
       </div>
       <div className="headerContainer__group headerContainer__group--left">
-        {currentAccount && (
+        {hasWallet && (
           <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
             Dashboard
           </Link>
@@ -41,7 +41,7 @@ const Header = ({
         >
           Markets
         </Link>
-        {currentAccount && (
+        {hasWallet && (
           <Link
             to="/transactions"
             activeClassName="headerContainer__navLink--active"
@@ -53,8 +53,8 @@ const Header = ({
       </div>
 
       <div className="headerContainer__group headerContainer__group--right account">
-        {currentAccount && currentProvider && getProviderIcon(currentProvider)}
-        {currentAccount &&
+        {hasWallet && currentProvider && getProviderIcon(currentProvider)}
+        {hasWallet &&
           currentProvider && (
             <div className="headerContainer__account">
               {currentNetwork &&
@@ -67,9 +67,13 @@ const Header = ({
               <Identicon className="" />
             </div>
           )}
-        {currentAccount && currentProvider && <ProviderIcon provider={currentProvider} />}
-        {!currentAccount && (
-          <a className="headerContainer__connect-wallet" onClick={() => openConnectWalletModal()}>
+        {hasWallet && currentProvider && <ProviderIcon provider={currentProvider} />}
+        {!hasWallet && (
+          <a
+            href="javascript:void(0)"
+            className="headerContainer__connect-wallet"
+            onClick={() => openConnectWalletModal()}
+          >
             Connect a wallet
           </a>
         )}
@@ -81,7 +85,7 @@ const Header = ({
 Header.propTypes = {
   version: PropTypes.string,
   currentNetwork: PropTypes.string,
-  currentAccount: PropTypes.string,
+  hasWallet: PropTypes.bool,
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
   getProviderIcon: PropTypes.func,

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { openModal } from 'actions/modal'
 
 import Header from 'components/Header'
-import { getCurrentAccount, getCurrentBalance, getCurrentNetwork, getSelectedProvider } from 'selectors/blockchain'
+import { checkWalletConnection, getCurrentBalance, getCurrentNetwork, getSelectedProvider } from 'selectors/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 
 export const getProviderIcon = (name) => {
@@ -21,7 +21,7 @@ export const getProviderIcon = (name) => {
 }
 
 const mapStateToProps = state => ({
-  currentAccount: getCurrentAccount(state),
+  hasWallet: checkWalletConnection(state),
   currentBalance: getCurrentBalance(state),
   currentNetwork: getCurrentNetwork(state),
   currentProvider: getSelectedProvider(state),

@@ -216,7 +216,7 @@ class MarketList extends Component {
           type="button"
           onClick={this.props.hasWallet ? this.handleCreateMarket : false}
           className="marketStats__control btn btn-default"
-          disabled={!this.props.defaultAccount}
+          disabled={!this.props.hasWallet}
         >
           Create Market
         </button>
