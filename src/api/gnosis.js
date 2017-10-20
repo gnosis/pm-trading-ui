@@ -1,9 +1,10 @@
-/* globals __ETHEREUM_HOST__ */
+/* globals process.env */
+import Web3 from 'web3'
 
 import Gnosis from '@gnosis.pm/gnosisjs'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
-import { hexWithPrefix, weiToEth } from 'utils/helpers'
+import { hexWithPrefix, weiToEth, promisify } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
 // import { normalize } from 'normalizr'
 
@@ -362,4 +363,51 @@ export const getEtherTokens = async (account) => {
     return new Decimal(balance.toFixed(0))
   }
   return undefined
+}
+
+export const getHostedNetwork = async () => {
+  const web3FromHostedUrl = new Web3(new Web3.providers.HttpProvider(process.env.ETHEREUM_URL))
+  console.log(web3FromHostedUrl)
+  let version
+  try {
+    version = await promisify(web3FromHostedUrl.version.getNetwork)
+  } catch (e) {
+    version = undefined
+  }
+  return version ? parseInt(version, 10) : undefined
+}
+
+export const getGnosisNetwork = async () => {
+  const gnosis = await getGnosisConnection()
+
+  let version
+  try {
+    version = await promisify(gnosis.web3.version.getNetwork)
+  } catch (e) {
+    version = undefined
+  }
+  return version ? parseInt(version, 10) : undefined
+}
+
+/**
+ * Validates the current network used by gnosis.js against the that is running on the Ethereum URL for this enviroment
+ * @throws {error} - If invalid/wrong network
+ */
+export const doNetworkTest = async () => {
+  const networkIds = await Promise.all([
+    getGnosisNetwork(),
+    getHostedNetwork(),
+  ])
+
+  const [currentId, shouldBeId] = networkIds
+
+  if (!currentId || !shouldBeId) {
+    throw new Error('no network')
+  }
+
+  if (parseInt(currentId, 10) !== parseInt(shouldBeId, 10)) {
+    throw new Error('networks dont match')
+  }
+
+  return true
 }

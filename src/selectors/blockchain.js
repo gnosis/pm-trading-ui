@@ -73,3 +73,9 @@ export const getGasPrice = state => (
 export const isGasPriceFetched = state => state.blockchain.gasPrice !== undefined
 
 export const getEtherTokensAmount = (state, account) => new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))
+
+export const isConnectedToCorrectNetwork = (state) => {
+  const { currentNetwork, targetNetwork } = state.blockchain
+
+  return currentNetwork !== targetNetwork
+}

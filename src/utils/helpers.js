@@ -162,3 +162,12 @@ export const getGnosisJsOptions = (provider) => {
 
   return opts
 }
+
+export const promisify = func => new Promise((resolve, reject) =>
+  func((err, res) => {
+    if (err) {
+      return reject(err)
+    }
+    return resolve(res)
+  }),
+)

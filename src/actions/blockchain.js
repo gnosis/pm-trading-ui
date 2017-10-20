@@ -11,6 +11,8 @@ import {
   calcFundingGasCost,
   getGasPrice,
   getEtherTokens,
+  getHostedNetwork,
+  getGnosisNetwork,
 } from 'api'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
@@ -22,11 +24,13 @@ import { findDefaultProvider } from 'selectors/blockchain'
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
+export const setActiveNetworks = createAction('SET_ACTIVE_NETWORKS')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
+export const setEtherTokens = createAction('SET_ETHER_TOKENS')
+
 export const registerProvider = createAction('REGISTER_PROVIDER')
 export const updateProvider = createAction('UPDATE_PROVIDER')
-export const setEtherTokens = createAction('SET_ETHER_TOKENS')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
@@ -96,6 +100,11 @@ export const initGnosis = () => async (dispatch, getState) => {
     return await dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 
+  // check if we're on the right network
+  const gnosisNetworkId = await getGnosisNetwork()
+  const hostedNetworkId = await getHostedNetwork()
+  await dispatch(setActiveNetworks({ currentNetwork: gnosisNetworkId, targetNetwork: hostedNetworkId }))
+
   // connect
   try {
     // runs test executions on gnosisjs
@@ -104,7 +113,7 @@ export const initGnosis = () => async (dispatch, getState) => {
       await getCurrentBalance(account)
     }
     await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
-    return await dispatch(setConnectionStatus({ connected: true }))
+    await dispatch(setConnectionStatus({ connected: true }))
   } catch (error) {
     console.warn(`Gnosis.js connection Error: ${error}`)
     return await dispatch(setConnectionStatus({ connected: false }))

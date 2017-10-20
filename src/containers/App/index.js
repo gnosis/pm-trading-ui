@@ -15,14 +15,19 @@ import LoadingIndicator from 'components/LoadingIndicator'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
-import { getSelectedProvider } from 'selectors/blockchain'
+import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
 
 import './app.less'
 import modalStyles from './modalStyles'
 
 class App extends Component {
-  componentDidMount() {
-    // this.props.connectBlockchain()
+  componentWillReceiveProps(props) {
+    if (
+      (this.props.isConnectedToCorrectNetwork !== props.isConnectedToCorrectNetwork) &&
+      (!props.isConnectedToCorrectNetwork)
+    ) {
+      console.log("network changed to wrong network")
+    }
   }
 
   render() {
@@ -75,6 +80,7 @@ App.propTypes = {
 const mapStateToProps = state => ({
   provider: getSelectedProvider(state),
   blockchainConnection: state.blockchain.connectionTried,
+  isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 
 export default connect(mapStateToProps, {
