@@ -53,7 +53,6 @@ const Header = ({
       </div>
 
       <div className="headerContainer__group headerContainer__group--right account">
-        {hasWallet && currentProvider && getProviderIcon(currentProvider)}
         {hasWallet &&
           currentProvider && (
             <div className="headerContainer__account">
