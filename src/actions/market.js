@@ -318,7 +318,6 @@ export const createMarket = options => async (dispatch) => {
  * @param {number} outcomeIndex - Index of outcome to buy shares for
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to buy
  * @param {number|string|BigNumber} cost - Max transaction cost allowed in Ether
- * @param {number|string} [approvalAmount] - Amount of collateral to allow market to spend
  */
 export const buyMarketShares = (
   market,
