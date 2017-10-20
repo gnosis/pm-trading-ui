@@ -71,7 +71,7 @@ storiesOf('Route ScoreBoard components', module)
             currentRank: 8,
             diffRank: -7,
             pastRank: 10,
-            account: '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca007',
+            account: '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca008',
             score: '55400000000000000',
             balance: '200000000000000000',
             predictedProfits: '354000000000000000',
@@ -79,7 +79,7 @@ storiesOf('Route ScoreBoard components', module)
             currentRank: 9,
             diffRank: 44,
             pastRank: 10,
-            account: '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca008',
+            account: '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca009',
             score: '502750000000000000',
             balance: '148750000000000000',
             predictedProfits: '354000000000000000',
@@ -87,15 +87,15 @@ storiesOf('Route ScoreBoard components', module)
             currentRank: 10,
             diffRank: 74,
             pastRank: 10,
-            account: '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca009',
+            account: '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca010',
             score: '719870000000000000',
             balance: '145870000000000000',
             predictedProfits: '574000000000000000',
         })])
 
-        const myWallet = text('Skype name', '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca004')
+        const myWallet = text('Skype name', '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca007')
 
         return (
-            <Component tableData={ data } myWallet={ myWallet } />
+            <Component tableData={ data } myAccount={ myWallet } />
         )
     })
