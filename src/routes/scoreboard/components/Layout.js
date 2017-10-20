@@ -20,6 +20,12 @@ const Layout = ({data, myWallet}) =>
             tokens each wallet holds. Scores updated every hour.
         </Paragraph>
         <ScoreTable tableData={ data } myWallet={ myWallet } />
+        <Block className={ cx('account') }>
+            <Block className={ cx('dot') }/>
+            <Paragraph className={ cx('your') }>
+                = YOUR ACCOUNT
+            </Paragraph>
+        </Block>
     </Block>
 
 export default Layout

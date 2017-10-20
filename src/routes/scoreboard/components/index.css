@@ -26,3 +26,27 @@
     text-align: left;
     color: #626262;   
 }
+
+.account { 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.dot {
+    width: 25px;
+    height: 25px;
+    border-radius: 12px;
+    background-color: #ceedf3;
+    margin-right: 7px;
+}
+
+.your {
+    font-family: Montserrat;
+    font-size: 10px;
+    line-height: 1.2;
+    letter-spacing: 2px;
+    text-align: left;
+    color: #626262;
+}

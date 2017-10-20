@@ -8,7 +8,7 @@ storiesOf('Route ScoreBoard', module)
     .addDecorator(host({
       title: 'ScoreBoard ',
       align: 'center',
-      height: 650,
+      height: 700,
     }))
     .add('Layout', () => {
         const data = array('Wallet Provider ', [object('User 1', {

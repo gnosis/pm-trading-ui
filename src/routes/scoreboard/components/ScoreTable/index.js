@@ -42,7 +42,7 @@ const columns = [{
     headerStyle,
     style: { ...columnBold, color: '#000000' },
     width: 50,
-},  {
+}, {
     Header: 'Rank Change',
     accessor: 'diffRank',
     id: 'diffRank',
@@ -63,16 +63,14 @@ const columns = [{
     style: { ...columnBold, color: '#000000', letterSpacing: '0.5px' },
     Cell: olyCell('score'),
     width: 160,
-},
-{
+}, {
     Header: 'Total Balance (OLY)',
     accessor: 'balance',
     headerStyle,
     style: columnStyle,
     Cell: olyCell('balance'),
     width: 160,
-},
-{
+}, {
     Header: 'Predicted Profits',
     accessor: 'predictedProfits',
     headerStyle,
