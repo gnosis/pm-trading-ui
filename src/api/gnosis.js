@@ -13,6 +13,11 @@ import Decimal from 'decimal.js'
 
 let gnosisInstance
 
+export const calcLMSRCost = Gnosis.calcLMSRCost
+export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
+export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
+export const calcLMSRProfit = Gnosis.calcLMSRProfit
+
 /**
  * Initializes connection to GnosisJS
  * @param {*dictionary} GNOSIS_OPTIONS
@@ -190,10 +195,13 @@ export const fundMarket = async (market) => {
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
 
-
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
 
-  const marketAllowance = await gnosis.etherToken.allowance(hexWithPrefix(market.creator), hexWithPrefix(marketContract.address))
+  const marketAllowance = await gnosis.etherToken.allowance(
+    hexWithPrefix(market.creator),
+    hexWithPrefix(marketContract.address),
+  )
+
   if (marketAllowance.lt(marketFundingWei)) {
     await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
   }
@@ -223,7 +231,7 @@ export const closeMarket = async (market) => {
   return market
 }
 
-export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost) => {
+export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
 
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
@@ -235,7 +243,12 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
 
   // buyOutComeTokens handles approving
-  return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCount.toString() })
+  return await gnosis.buyOutcomeTokens({
+    market,
+    outcomeTokenIndex,
+    outcomeTokenCount: outcomeTokenCount.toString(),
+    approvalResetAmount,
+  })
 }
 
 export const resolveEvent = async (event, selectedOutcomeIndex) => {
@@ -281,10 +294,6 @@ export const withdrawFees = async (marketAddress) => {
   throw new Error('Invalid Market - can\'t find the specified Market')
 }
 
-export const calcLMSRCost = Gnosis.calcLMSRCost
-export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
-export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
-export const calcLMSRProfit = Gnosis.calcLMSRProfit
 
 /*
 * Gas Calculation functions

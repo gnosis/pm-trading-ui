@@ -6,8 +6,14 @@ import autobind from 'autobind-decorator'
 import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { weiToEth } from 'utils/helpers'
-import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST, SCALAR_SHORT_COLOR, SCALAR_LONG_COLOR } from 'utils/constants'
-import { marketShape } from 'utils/shapes'
+import {
+  COLOR_SCHEME_DEFAULT,
+  OUTCOME_TYPES,
+  GAS_COST,
+  SCALAR_SHORT_COLOR,
+  SCALAR_LONG_COLOR,
+} from 'utils/constants'
+import { marketShape, marketShareShape } from 'utils/shapes'
 
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -288,11 +294,11 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">{fieldError || maxReturnField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
+                <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                    Gas Costs
+                  <DecimalValue value={gasCostEstimation} decimals={5} />{' '}
+                  <CurrencyName collateralToken={collateralToken} />
                 </div>
-                <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} decimals={5} /> <CurrencyName collateralToken={collateralToken} /></div>
               </div>
               {submitFailed && (
                 <div className="row marketBuySharesForm__row">
@@ -334,6 +340,7 @@ MarketBuySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   buyShares: PropTypes.func,
+  marketShares: PropTypes.arrayOf(marketShareShape),
   selectedOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
