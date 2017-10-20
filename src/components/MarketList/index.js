@@ -84,7 +84,10 @@ class MarketList extends Component {
     return (
       <button
         type="button"
-        className={`market ${isResolved ? 'market--resolved' : ''}`}
+        className={cn({
+          market,
+          'market--resolved': isResolved,
+        })}
         key={market.address}
         onClick={() => this.handleViewMarket(market)}
       >
@@ -93,7 +96,9 @@ class MarketList extends Component {
           {isOwner &&
             !isResolved && (
               <div className="market__control">
-                <a onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>Resolve</a>
+                <a href="javascript:void(0)" onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>
+                  Resolve
+                </a>
               </div>
             )}
         </div>
@@ -200,6 +205,30 @@ class MarketList extends Component {
   render() {
     const { markets } = this.props
 
+    let createMarketButton = (
+      <div
+        className={cn({
+          'marketStats__control--container': true,
+          disabled: !this.props.hasWallet,
+        })}
+      >
+        <button
+          type="button"
+          onClick={this.props.hasWallet ? this.handleCreateMarket : false}
+          className="marketStats__control btn btn-default"
+          disabled={!this.props.defaultAccount}
+        >
+          Create Market
+        </button>
+      </div>
+    )
+
+    if (!this.props.hasWallet) {
+      createMarketButton = (
+        <Tooltip overlay="You need a wallet connected in order to create a market">{createMarketButton}</Tooltip>
+      )
+    }
+
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
@@ -231,28 +260,7 @@ class MarketList extends Component {
         <div className="marketListPage__controls">
           <div className="container">
             <div className="row">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                <Tooltip
-                  overlay="You need a wallet connected in order to create a market"
-                  trigger={this.props.defaultAccount ? [] : ['hover']}
-                >
-                  <div
-                    className={cn({
-                      'marketStats__control--container': true,
-                      disabled: !this.props.defaultAccount,
-                    })}
-                  >
-                    <button
-                      type="button"
-                      onClick={this.props.defaultAccount ? this.handleCreateMarket : false}
-                      className="marketStats__control btn btn-default"
-                      disabled={!this.props.defaultAccount}
-                    >
-                      Create Market
-                    </button>
-                  </div>
-                </Tooltip>
-              </div>
+              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">{createMarketButton}</div>
             </div>
           </div>
         </div>
@@ -276,6 +284,7 @@ MarketList.propTypes = {
   changeUrl: PropTypes.func,
   handleSubmit: PropTypes.func,
   isModerator: PropTypes.bool,
+  hasWallet: PropTypes.bool,
 }
 
 export default reduxForm({
