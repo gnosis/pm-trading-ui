@@ -30,7 +30,7 @@ class Layout extends React.PureComponent {
         const {data, myPosition, containsAccount} = this.props; 
         const dataTable = calculateDataTable(data, myPosition, containsAccount); 
         let myAccount = myPosition ? myPosition.account : undefined;
-        const noRows = !dataTable;
+        const hasRows = !!dataTable;
 
         return (
             <PageFrame>
@@ -43,13 +43,17 @@ class Layout extends React.PureComponent {
                     tokens each wallet holds. Scores updated every hour.
                 </Paragraph>
                 <ScoreTable tableData={ dataTable } myAccount={ myAccount } />
-                { noRows && <Paragraph>No rows found</Paragraph> }
-                <Block className={ cx('ol-account') }>
-                    <Block className={ cx('dot') }/>
-                    <Paragraph className={ cx('your') }>
-                        = YOUR ACCOUNT
+                { hasRows
+                    ? <Block className={ cx('ol-account') }>
+                        <Block className={ cx('dot') }/>
+                        <Paragraph className={ cx('your') }>
+                            = YOUR ACCOUNT
+                        </Paragraph>
+                    </Block>
+                    : <Paragraph className={ cx('norows') }>
+                        No rows found
                     </Paragraph>
-                </Block>
+                }
             </PageFrame>
         )
     }

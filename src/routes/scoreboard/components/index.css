@@ -50,3 +50,11 @@
     text-align: left;
     color: #626262;
 }
+
+.norows {
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 18px;
+    color: #626262;
+    margin: 10px 0px;
+}
