@@ -44,11 +44,7 @@ class App extends Component {
       <div className="appContainer">
         <HeaderContainer version={process.env.VERSION} />
         {this.props.hasWallet && <TransactionFloaterContainer />}
-        <TransitionGroup>
-          <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
-            {this.props.children}
-          </CSSTransition>
-        </TransitionGroup>
+        {this.props.children}
         <Modal
           isOpen={this.props.blockchainConnection && (!this.props.provider || !this.props.provider.account)}
           contentLabel="no-account-modal"

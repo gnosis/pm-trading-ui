@@ -27,11 +27,11 @@ class AppRouter extends Component {
     return (
       <Router key={Math.random()} history={history}>
         <Route path="/" component={App}>
-          <Route path="scoreboard" component={ ScoreBoardPage} />
           <IndexRedirect to="dashboard" />
           <Route path="dashboard" component={DashboardPage} />
           <Route path="transactions" component={TransactionsPage} />
           <Route path="account" component={AccountPage} />
+          <Route path="scoreboard" component={ ScoreBoardPage} />
           <Route path="markets">
             <IndexRedirect to="list" />
             <Route path="new" component={MarketCreateWizardPage} />
