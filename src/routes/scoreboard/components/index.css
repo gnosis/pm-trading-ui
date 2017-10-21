@@ -27,7 +27,7 @@
     color: #626262;   
 }
 
-.account { 
+.ol-account { 
     display: flex;
     flex-direction: row;
     align-items: center;

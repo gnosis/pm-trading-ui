@@ -10,6 +10,10 @@ const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
 
 const calculateDataTable = (data, myPosition, containsAccount) => {
+    if (!data) {
+        return undefined
+    }
+
     let dataTable = data.slice(0, 10)
     
     if (!containsAccount) {
@@ -24,7 +28,8 @@ class Layout extends React.PureComponent {
     render() { 
         const {data, myPosition, containsAccount} = this.props; 
         const dataTable = calculateDataTable(data, myPosition, containsAccount); 
-        let myAccount = myPosition.account;
+        let myAccount = myPosition ? myPosition.account : undefined;
+        const noRows = !dataTable;
 
         return (
             <Block>
@@ -37,7 +42,8 @@ class Layout extends React.PureComponent {
                     tokens each wallet holds. Scores updated every hour.
                 </Paragraph>
                 <ScoreTable tableData={ dataTable } myAccount={ myAccount } />
-                <Block className={ cx('account') }>
+                { noRows && <Paragraph>No rows found</Paragraph> }
+                <Block className={ cx('ol-account') }>
                     <Block className={ cx('dot') }/>
                     <Paragraph className={ cx('your') }>
                         = YOUR ACCOUNT

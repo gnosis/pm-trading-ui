@@ -1,9 +1,10 @@
+import * as React from 'react'
 import { connect } from 'react-redux'
-import ScoreBoard from '../components/Layout'
+import Layout from '../components/Layout'
 import actions from './actions'
 import selector from './selector'
 
-class ScoreBoard extends Reac.Component {
+class ScoreBoard extends React.Component {
     
     constructor(props) {
         super(props);

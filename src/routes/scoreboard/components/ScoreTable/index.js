@@ -87,17 +87,22 @@ const columns = [{
     width: 160,
 }]
 
-const ScoreBoard = ({ tableData, myAccount }) =>
-        <ReactTable
-            data={ tableData }
-            columns={ columns }
-            showPagination={ false }
-            defaultPageSize={ tableData.length > 11 ? 11 : tableData.length  }
-            style={ tableStyle }
-            getTrProps={ ownTrCallback(myAccount) }
-            getTheadProps={ ownTheadCallback }
-            sortable={ false }
-        />
+const EmptyData = () => <div />
 
+const ScoreBoard = ({ tableData, myAccount }) => {
+    const size = tableData ? tableData.length > 11 ? 11 : tableData.length : 0;
+
+    return <ReactTable
+        data={ tableData }
+        columns={ columns }
+        showPagination={ false }
+        defaultPageSize={ size }
+        style={ tableStyle }
+        getTrProps={ ownTrCallback(myAccount) }
+        getTheadProps={ ownTheadCallback }
+        sortable={ false }
+        NoDataComponent={ EmptyData }
+    />
+}
 
 export default ScoreBoard

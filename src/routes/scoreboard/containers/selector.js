@@ -7,7 +7,7 @@ const accountSelector = createSelector(
 );
 
 export default createStructuredSelector({
-    data: usersSelectorAsList,
+    data: olympiaUsersSelectorAsList,
     myPosition: meSelector,
     containsAccount: accountSelector, 
 });
