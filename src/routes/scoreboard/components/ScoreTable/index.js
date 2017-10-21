@@ -62,21 +62,18 @@ const columns = [{
     headerStyle,
     style: { ...columnBold, color: '#000000', letterSpacing: '0.5px' },
     Cell: olyCell('score'),
-    width: 160,
 }, {
     Header: 'Total Balance (OLY)',
     accessor: 'balance',
     headerStyle,
     style: columnStyle,
     Cell: olyCell('balance'),
-    width: 160,
 }, {
     Header: 'Predicted Profits',
     accessor: 'predictedProfits',
     headerStyle,
     style: columnStyle,
     Cell: olyCell('predictedProfits'),
-    width: 160,
 }, {
     Header: 'Reward',
     accesor: 'currentRank',
@@ -84,7 +81,6 @@ const columns = [{
     headerStyle,
     style: columnStyle,
     Cell: rewardCell,
-    width: 160,
 }]
 
 const EmptyData = () => <div />

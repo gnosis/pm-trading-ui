@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
+import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import * as React from 'react'
 import * as css from './index.css'
@@ -32,7 +33,7 @@ class Layout extends React.PureComponent {
         const noRows = !dataTable;
 
         return (
-            <Block>
+            <PageFrame>
                 <Block className={ cx('trophy') }>
                     <Img src={ trophy } width="100" />
                     <Paragraph>Scoreboard</Paragraph>
@@ -49,7 +50,7 @@ class Layout extends React.PureComponent {
                         = YOUR ACCOUNT
                     </Paragraph>
                 </Block>
-            </Block>
+            </PageFrame>
         )
     }
 }
