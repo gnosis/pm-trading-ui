@@ -11,13 +11,22 @@ class ScoreBoard extends React.Component {
     }
     
     componentDidMount() {
-        this.props.fetchOlympiaUsers();
+        this.props.fetchOlympiaUsers()
+        this.props.addUsers([{
+            currentRank: 19,
+            diffRank: 10,
+            pastRank: 29,
+            account: this.props.myAccount,
+            score: '454000000000000000',
+            balance: '100000000000000000',
+            predictedProfits: '354000000000000000',
+        }])
     }
 
     render() {
-        const { data, myPosition, containsAccount } = this.props;
+        const { data, myAccount } = this.props;
 
-        return <Layout data={ data } myPosition={ myPosition } containsAccount={ containsAccount } />
+        return <Layout data={ data } myAccount={ myAccount } />
     }
 }
 

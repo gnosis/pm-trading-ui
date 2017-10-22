@@ -1,13 +1,27 @@
 import { createSelector, createStructuredSelector } from 'reselect';
+import { getCurrentAccount } from 'selectors/blockchain'
 import { firstOlympiaUsersSelectorAsList, meSelector } from '../store/selectors';
 
-const accountSelector = createSelector(
+const usersSelector = createSelector(
+    firstOlympiaUsersSelectorAsList,
     meSelector,
-    (me) => me !== undefined ? true : false,
-);
+    (firstUsers, me) => {
+        if (!me) {
+            return firstUsers;
+        }
+
+        if (!firstUsers) {
+            return undefined;
+        }
+
+        const user = firstUsers ? firstUsers.find((user) => user.account === me.account) : undefined
+        const dataTable =  user ? firstUsers : firstUsers.push(me);
+        
+        return dataTable;
+    }
+)
 
 export default createStructuredSelector({
-    data: firstOlympiaUsersSelectorAsList,
-    myPosition: meSelector,
-    containsAccount: accountSelector, 
+    data: usersSelector,
+    myAccount: getCurrentAccount,
 });

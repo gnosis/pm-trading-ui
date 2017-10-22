@@ -18,6 +18,7 @@ const headerStyle = {
 const headerLeft = {
     ...headerStyle,
     textAlign: 'left',
+    paddingLeft: '5px',
 }
 
 const columnStyle = {
@@ -54,7 +55,7 @@ const columns = [{
     Header: 'User',
     accessor: 'account',
     headerStyle: headerLeft,
-    style: columnStyle,
+    style: { ...columnStyle, textAlign: 'left' },
     width: 385,
 }, {
     Header: 'Total Score (OLY)',

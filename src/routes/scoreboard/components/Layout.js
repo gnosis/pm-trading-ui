@@ -10,26 +10,11 @@ import ScoreTable from './ScoreTable'
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
 
-const calculateDataTable = (data, myPosition, containsAccount) => {
-    if (!data) {
-        return undefined
-    }
-
-    let dataTable = data.slice(0, 10)
-    
-    if (!containsAccount) {
-        dataTable.splice(11, 0, myPosition)
-    }
-
-    return dataTable;
-}
-
 class Layout extends React.PureComponent {
 
     render() { 
-        const {data, myPosition, containsAccount} = this.props; 
-        const dataTable = calculateDataTable(data, myPosition, containsAccount); 
-        let myAccount = myPosition ? myPosition.account : undefined;
+        const dataTable = this.props.data;
+        let myAccount = this.props.myAccount;
         const hasRows = !!dataTable;
 
         return (
