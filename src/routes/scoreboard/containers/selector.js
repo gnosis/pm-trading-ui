@@ -1,5 +1,5 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import { olympiaUsersSelectorAsList, meSelector } from '../store/selectors';
+import { firstOlympiaUsersSelectorAsList, meSelector } from '../store/selectors';
 
 const accountSelector = createSelector(
     meSelector,
@@ -7,7 +7,7 @@ const accountSelector = createSelector(
 );
 
 export default createStructuredSelector({
-    data: olympiaUsersSelectorAsList,
+    data: firstOlympiaUsersSelectorAsList,
     myPosition: meSelector,
     containsAccount: accountSelector, 
 });

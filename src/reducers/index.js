@@ -6,7 +6,7 @@ import modal from './modal'
 import transactions from './transactions'
 import blockchain from './blockchain'
 import notifications from './notifications'
-import scoreboard from 'routes/scoreboard/store/reducers/users'
+import users from 'routes/scoreboard/store/reducers/users'
 
 const reducers = combineReducers({
   routing: routerReducer,
@@ -16,7 +16,9 @@ const reducers = combineReducers({
   transactions,
   blockchain,
   notifications,
-  scoreboard,
+  olympia: combineReducers({
+    ranking: users
+  }),
 })
 
 const rootReducer = (state, action) => {
