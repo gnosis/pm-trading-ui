@@ -27,7 +27,7 @@ class AppRouter extends Component {
     return (
       <Router key={Math.random()} history={history}>
         <Route path="/" component={App}>
-          <IndexRedirect to="dashboard" />
+          <IndexRedirect to="markets" />
           <Route path="dashboard" component={DashboardPage} />
           <Route path="transactions" component={TransactionsPage} />
           <Route path="account" component={AccountPage} />
