@@ -5,22 +5,21 @@ import * as css from './index.css'
 
 const cx = classNames.bind(css)
 
-class Block extends React.PureComponent {
+class Title extends React.PureComponent {
 
     render() {
-        const { margin, children, ...props } = this.props
+        const { children, ...props } = this.props
 
         return (
-            <div className={ cx(margin) } { ...props }>
+            <h1 className={ cx('ol-title') } { ...props }>
                 { children }
-            </div>
+            </h1>
         )
     }
 }
 
-Block.propTypes = {
-    margin: PropTypes.string,
+Title.propTypes = {
     children: PropTypes.node,
 }
 
-export default Block
+export default Title

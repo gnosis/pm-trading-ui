@@ -34,7 +34,7 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
         <Link to="/scoreboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
           Scoreboard
         </Link>
-        <Link to="/rules" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+        <Link to="/gamerules" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
           Game Rules
         </Link>
 

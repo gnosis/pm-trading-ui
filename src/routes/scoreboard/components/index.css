@@ -21,11 +21,9 @@
 }
 
 .explanation {
-    font-family: Montserrat;
     font-size: 12px;
     line-height: 14px;
     text-align: left;
-    color: #626262;   
 }
 
 .ol-account { 
@@ -44,12 +42,10 @@
 }
 
 .your {
-    font-family: Montserrat;
     font-size: 10px;
     line-height: 1.2;
     letter-spacing: 2px;
     text-align: left;
-    color: #626262;
     margin: 0;
 }
 

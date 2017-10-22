@@ -5,22 +5,21 @@ import * as css from './index.css'
 
 const cx = classNames.bind(css)
 
-class Block extends React.PureComponent {
+class Subtitle extends React.PureComponent {
 
     render() {
-        const { margin, children, ...props } = this.props
+        const { children, ...props } = this.props
 
         return (
-            <div className={ cx(margin) } { ...props }>
+            <h3 className={ cx('ol-subtitle') } { ...props }>
                 { children }
-            </div>
+            </h3>
         )
     }
 }
-
-Block.propTypes = {
-    margin: PropTypes.string,
+    
+Subtitle.propTypes = {
     children: PropTypes.node,
 }
-
-export default Block
+    
+export default Subtitle

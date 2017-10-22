@@ -14,6 +14,7 @@ import TransactionsPage from 'containers/TransactionsPage'
 import AccountPage from 'containers/AccountPage'
 import DashboardPage from 'containers/DashboardPage'
 import ScoreBoardPage from 'routes/scoreboard/containers/ScoreBoard'
+import GameRulesPage from 'routes/gamerules/containers/GameRules'
 import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
 
 class AppRouter extends Component {
@@ -32,6 +33,7 @@ class AppRouter extends Component {
           <Route path="transactions" component={TransactionsPage} />
           <Route path="account" component={AccountPage} />
           <Route path="scoreboard" component={ ScoreBoardPage} />
+          <Route path="gamerules" component={ GameRulesPage} />
           <Route path="markets">
             <IndexRedirect to="list" />
             <Route path="new" component={MarketCreateWizardPage} />
