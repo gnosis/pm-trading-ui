@@ -11,6 +11,9 @@ class Uport extends InjectedWeb3 {
    */
   static providerPriority = 100
 
+  constructor() {
+    super({ enableWatcher: false })
+  }
   /**
    * Tries to initialize and enable the current provider
    * @param {object} opts - Integration Options
@@ -21,12 +24,16 @@ class Uport extends InjectedWeb3 {
     super.initialize(opts)
     this.runProviderRegister(this, { priority: Uport.providerPriority })
 
-    this.walletEnabled = false
 
     const uport = new Connect('GnosisOlympia')
-    this.web3 = uport.getWeb3()
+    this.web3 = await uport.getWeb3()
+    this.provider = await uport.getProvider()
     this.walletEnabled = true
-
+    if (this.walletEnabled) {
+      this.network = await this.getNetwork()
+      this.account = await this.getAccount()
+      this.balance = await this.getBalance()
+    }
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,
       network: this.network,
