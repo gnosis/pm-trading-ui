@@ -142,7 +142,7 @@ class MarketDetail extends Component {
         })
       })
 
-    if (this.props.defaultAccount) {
+    if (this.props.hasWallet) {
       this.props.requestGasCost(GAS_COST.BUY_SHARES)
       this.props.requestGasCost(GAS_COST.SELL_SHARES)
     }
@@ -398,6 +398,7 @@ class MarketDetail extends Component {
 }
 
 MarketDetail.propTypes = {
+  hasWallet: PropTypes.bool,
   fetchMarketParticipantTrades: PropTypes.func,
   params: PropTypes.shape({
     id: PropTypes.string,
