@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ProviderIcon from 'components/ProviderIcon'
 import './connectWallet.less'
 
-const ConnectWallet = ({ closeModal, getProviderIcon }) => (
+const ConnectWallet = ({ closeModal }) => (
   <div className="connectWallet">
     <a className="connectWallet__close" href="javascript:void(0);" onClick={() => closeModal()} />
     <h3>
@@ -11,13 +12,13 @@ const ConnectWallet = ({ closeModal, getProviderIcon }) => (
     <ul className="connectWallet__provider-list">
       <li>
         <a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
-          {getProviderIcon('METAMASK')}
+          <ProviderIcon provider={{ name: 'metamask' }} />
           MetaMask
         </a>
       </li>
       <li>
         <a href="https://github.com/ethereum/mist" target="_blank" rel="noopener noreferrer">
-          {getProviderIcon('Mist')}
+          <ProviderIcon provider={{ name: 'mist' }} />
           Mist
         </a>
       </li>
@@ -27,7 +28,6 @@ const ConnectWallet = ({ closeModal, getProviderIcon }) => (
 
 ConnectWallet.propTypes = {
   closeModal: PropTypes.func,
-  getProviderIcon: PropTypes.func,
 }
 
 export default ConnectWallet
