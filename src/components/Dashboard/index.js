@@ -87,29 +87,6 @@ class Dashboard extends Component {
     this.setState({ visibleControl: this.state.visibleControl === type ? null : type })
   }
 
-  renderExpandableContent() {
-    const { visibleControl } = this.state
-
-    if (visibleControl === EXPAND_DEPOSIT) {
-      // const {
-      //   market,
-      //   selectedCategoricalOutcome,
-      //   selectedBuyInvest,
-      //   buyShares,
-      // } = this.props
-
-      return (
-        <div className="expandable__inner">
-          <div className="container">
-            <span>Something comes here</span>
-          </div>
-        </div>
-      )
-    }
-
-    return <div />
-  }
-
   renderControls() {
     const { defaultAccount } = this.props
     const canCreateMarket = process.env.WHITELIST[defaultAccount] !== undefined
@@ -406,7 +383,6 @@ class Dashboard extends Component {
           </div>
         </div>
         {metricsSection}
-        {this.renderControls()}
         <div className="expandable">{this.renderExpandableContent()}</div>
         <div className="dashboardWidgets dashboardWidgets--markets">
           <div className="container">
