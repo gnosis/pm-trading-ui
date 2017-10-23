@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
+import PageFrame from 'components/layout/PageFrame'
+import Block from 'components/layout/Block'
+import Title from 'components/layout/Title'
 import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -11,6 +14,7 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 import config from 'config.json'
+import Metrics from './Metrics'
 
 import './dashboard.less'
 
@@ -336,27 +340,7 @@ class Dashboard extends Component {
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     if (defaultAccount) {
       metricsSection = (
-        <div className="dashboardPage__stats">
-          <div className="container">
-            <div className="row dashboardStats">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-                <div className="dashboardStats__icon icon icon--etherTokens" />
-                <span className="dashboardStats__value">
-                  <DecimalValue value={etherTokens} />
-                </span>
-                <div className="dashboardStats__label">Ether Tokens</div>
-              </div>
-              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-                <div className="dashboardStats__icon icon icon--incomeForecast" />
-                <span className="dashboardStats__value" style={{ color: 'green' }}>
-                  <DecimalValue value={accountPredictiveAssets} />
-                  &nbsp;ETH
-                </span>
-                <div className="dashboardStats__label">Outstanding predictions</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Metrics />
       )
 
       tradesHoldingsSection = (
@@ -374,16 +358,19 @@ class Dashboard extends Component {
     return (
       <div className="dashboardPage">
         <div className="dashboardPage__header">
-          <div className="container">
+          <PageFrame>
             <div className="row">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                <h1>Dashboard</h1>
-              </div>
+                <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
+                    <Block margin="md">
+                        <Title>Dashboard</Title>
+                    </Block>
+                    <Block margin="xl">
+                        { metricsSection }
+                    </Block>
+                </div>
             </div>
-          </div>
+          </PageFrame>
         </div>
-        {metricsSection}
-        <div className="expandable">{this.renderExpandableContent()}</div>
         <div className="dashboardWidgets dashboardWidgets--markets">
           <div className="container">
             <div className="row">

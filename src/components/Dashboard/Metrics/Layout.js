@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
-import PageFrame from 'components/layout/PageFrame'
 import * as React from 'react'
 import * as css from './index.css'
 
@@ -22,13 +21,11 @@ const Metric = ({ img, title, explanation }) => (
 )
 
 const Metrics = ({ tokens, predictedProfits, rank }) => (
-    <PageFrame>
-        <Block className={ cx('dashboardStats', 'ol-db-container') }>
-            <Metric img={ group } title={ tokens } explanation="OLY TOKENS" />
-            <Metric img={ shape } title={ predictedProfits } explanation="PREIDCTED PROFITS" />
-            <Metric img={ arrows} title={ rank } explanation="YOUR RANK" />
-        </Block>
-    </PageFrame>
+    <Block className={ cx('ol-db-container') }>
+        <Metric img={ group } title={ tokens } explanation="OLY TOKENS" />
+        <Metric img={ shape } title={ predictedProfits } explanation="PREIDCTED PROFITS" />
+        <Metric img={ arrows} title={ rank } explanation="YOUR RANK" />
+    </Block>
 )
 
 export default Metrics
