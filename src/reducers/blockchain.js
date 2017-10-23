@@ -9,7 +9,6 @@ import {
   registerProvider,
   updateProvider,
   setEtherTokens,
-  setActiveNetworks,
 } from 'actions/blockchain'
 import { GAS_COST } from 'utils/constants'
 
@@ -29,15 +28,6 @@ const reducer = handleActions({
       ...state,
       connection,
       connectionTried: true,
-    }
-  },
-  [setActiveNetworks]: (state, action) => {
-    const { currentNetwork, targetNetwork } = action.payload
-
-    return {
-      ...state,
-      currentNetwork,
-      targetNetwork,
     }
   },
   [setGnosisInitialized]: (state, action) => {
@@ -106,8 +96,6 @@ const reducer = handleActions({
   providers: {},
   activeProvider: undefined,
   etherTokens: undefined,
-  currentNetwork: undefined,
-  targetNetwork: undefined,
 })
 
 export default reducer

@@ -4,7 +4,7 @@ import Web3 from 'web3'
 import Gnosis from '@gnosis.pm/gnosisjs'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
-import { hexWithPrefix, weiToEth, promisify } from 'utils/helpers'
+import { hexWithPrefix, weiToEth, promisify, timeoutCondition } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
 // import { normalize } from 'normalizr'
 
@@ -13,6 +13,21 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 
 let gnosisInstance
+
+const windowLoaded = new Promise((accept, reject) => {
+  if (typeof window === 'undefined') {
+    return accept()
+  }
+
+  if (typeof window.addEventListener !== 'function') {
+    return reject(new Error('expected to be able to register event listener'))
+  }
+
+  window.addEventListener('load', function loadHandler(event) {
+    window.removeEventListener('load', loadHandler, false)
+    return accept(event)
+  }, false)
+})
 
 /**
  * Initializes connection to GnosisJS
@@ -367,26 +382,33 @@ export const getEtherTokens = async (account) => {
 
 export const getHostedNetwork = async () => {
   const web3FromHostedUrl = new Web3(new Web3.providers.HttpProvider(process.env.ETHEREUM_URL))
-  console.log(web3FromHostedUrl)
-  let version
+  // await windowLoaded
+  let networkId
   try {
-    version = await promisify(web3FromHostedUrl.version.getNetwork)
+    console.log('wait for getNetwork')
+    console.log(web3FromHostedUrl)
+
+    console.log(networkId)
   } catch (e) {
-    version = undefined
+    console.log(web3FromHostedUrl)
+    console.log(e)
+    networkId = undefined
   }
-  return version ? parseInt(version, 10) : undefined
+  return networkId ? parseInt(networkId, 10) : undefined
 }
 
 export const getGnosisNetwork = async () => {
   const gnosis = await getGnosisConnection()
 
-  let version
+  let networkId
   try {
-    version = await promisify(gnosis.web3.version.getNetwork)
+    console.log('wait for getnetwork (gnosis)')
+    networkId = await promisify(gnosis.web3.version.getNetwork)
+    console.log(networkId)
   } catch (e) {
-    version = undefined
+    networkId = undefined
   }
-  return version ? parseInt(version, 10) : undefined
+  return networkId ? parseInt(networkId, 10) : undefined
 }
 
 /**

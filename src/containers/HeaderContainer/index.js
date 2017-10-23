@@ -3,7 +3,13 @@ import { connect } from 'react-redux'
 import { openModal } from 'actions/modal'
 
 import Header from 'components/Header'
-import { getCurrentAccount, getCurrentBalance, getCurrentNetwork, getSelectedProvider } from 'selectors/blockchain'
+import {
+  getCurrentAccount,
+  getCurrentBalance,
+  getCurrentNetwork,
+  getSelectedProvider,
+  isConnectedToCorrectNetwork,
+} from 'selectors/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 
 export const getProviderIcon = (name) => {
@@ -25,11 +31,13 @@ const mapStateToProps = state => ({
   currentBalance: getCurrentBalance(state),
   currentNetwork: getCurrentNetwork(state),
   currentProvider: getSelectedProvider(state),
+  isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
   getProviderIcon,
 })
 
 const mapDispatchToProps = dispatch => ({
   openConnectWalletModal: () => dispatch(openModal({ modalName: 'ModalConnectWallet' })),
+  openNetworkCheckModal: () => dispatch(openModal({ modalName: 'ModalNetworkCheck' })),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)

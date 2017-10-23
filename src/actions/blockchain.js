@@ -11,8 +11,6 @@ import {
   calcFundingGasCost,
   getGasPrice,
   getEtherTokens,
-  getHostedNetwork,
-  getGnosisNetwork,
 } from 'api'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
@@ -24,7 +22,6 @@ import { findDefaultProvider } from 'selectors/blockchain'
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
-export const setActiveNetworks = createAction('SET_ACTIVE_NETWORKS')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
@@ -86,6 +83,7 @@ export const initGnosis = () => async (dispatch, getState) => {
     // determine new provider
     const newProvider = findDefaultProvider(state)
     if (newProvider) {
+      console.log(`Connecting to ${newProvider.name}`)
       await dispatch(setActiveProvider(newProvider.name))
 
       // init Gnosis connection
@@ -99,11 +97,6 @@ export const initGnosis = () => async (dispatch, getState) => {
     await dispatch(setConnectionStatus({ connected: false }))
     return await dispatch(setGnosisInitialized({ initialized: false, error }))
   }
-
-  // check if we're on the right network
-  const gnosisNetworkId = await getGnosisNetwork()
-  const hostedNetworkId = await getHostedNetwork()
-  await dispatch(setActiveNetworks({ currentNetwork: gnosisNetworkId, targetNetwork: hostedNetworkId }))
 
   // connect
   try {
