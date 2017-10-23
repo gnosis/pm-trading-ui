@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import createIcon from 'blockies'
 
 const Identicon = ({ account }) => {
-
   const canvas = createIcon({ // All options are optional
     seed: account, // seed used to generate icon data, default: random
     color: '#00a6c4', // to manually specify the icon color, default: random

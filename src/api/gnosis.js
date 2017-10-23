@@ -197,7 +197,11 @@ export const fundMarket = async (market) => {
 
   await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
 
-  const marketAllowance = await gnosis.etherToken.allowance(hexWithPrefix(market.creator), hexWithPrefix(marketContract.address))
+  const marketAllowance = await gnosis.etherToken.allowance(
+    hexWithPrefix(market.creator),
+    hexWithPrefix(marketContract.address),
+  )
+
   if (marketAllowance.lt(marketFundingWei)) {
     await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
   }

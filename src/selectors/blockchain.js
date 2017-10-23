@@ -29,6 +29,16 @@ export const getCurrentAccount = (state) => {
   }
 }
 
+export const checkWalletConnection = (state) => { 
+  const provider = getSelectedProvider(state)
+
+  if (provider && provider.account) {
+    return true
+  }
+
+  return false
+}
+
 /**
  * Returns the balance of the currently selected provider, network and account
  * @param {*} state - redux state
