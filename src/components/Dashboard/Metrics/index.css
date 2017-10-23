@@ -1,6 +1,7 @@
 .ol-db-metric {
     display: flex;
     margin-right: 100px;
+    align-items: center;
 }
 
 .ol-db-container {
