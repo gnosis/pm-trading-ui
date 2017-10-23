@@ -5,6 +5,7 @@ import Decimal from 'decimal.js'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
+import { Connect } from 'uport-connect'
 
 export const hexWithoutPrefix = (value) => {
   if (HEX_VALUE_REGEX.test(value)) {
@@ -148,14 +149,17 @@ export const getModerators = () => process.env.WHITELIST
 
 export const getGnosisJsOptions = (provider) => {
   const opts = {}
+  console.log(provider)
   if (provider && provider.name === WALLET_PROVIDER.METAMASK) {
     // Inject window.web3
     opts.ethereum = window.web3.currentProvider
   } else if (provider && provider === WALLET_PROVIDER.PARITY) {
     // Inject window.web3
     opts.ethereum = window.web3.currentProvider
-  } else if (provider && provider === WALLET_PROVIDER.UPORT) {
-    opts.ethereum = provider.provider
+  } else if (provider && provider.name === WALLET_PROVIDER.UPORT) {
+    const uport = new Connect('GnosisOlympia')
+    opts.ethereum = uport.getProvider()
+    console.log(opts.ethereum)
   } else {
     // Default remote node
     opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
