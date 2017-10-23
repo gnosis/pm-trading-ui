@@ -17,7 +17,14 @@ import {
   closeMarket,
 } from 'actions/market'
 import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
-import { getCurrentAccount, getGasCosts, getGasPrice, isGasCostFetched, isGasPriceFetched } from 'selectors/blockchain'
+import {
+  getCurrentAccount,
+  getGasCosts,
+  getGasPrice,
+  isGasCostFetched,
+  isGasPriceFetched,
+  checkWalletConnection,
+} from 'selectors/blockchain'
 import { isModerator, getModerators } from 'utils/helpers'
 
 const mapStateToProps = (state, ownProps) => {
@@ -33,6 +40,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
+    hasWallet: checkWalletConnection(state),
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
     defaultAccount: getCurrentAccount(state),
     creatorIsModerator: isModerator(getCurrentAccount(state)),
