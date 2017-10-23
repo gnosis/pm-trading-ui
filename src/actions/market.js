@@ -36,6 +36,12 @@ import {
   MAX_ALLOWANCE_WEI,
 } from 'utils/constants'
 
+import {
+  BUY_SHARES,
+} from 'utils/transactionExplanations'
+
+import { openModal, closeModal } from 'actions/modal'
+
 /**
  * Constant names for marketcreation stages
  * @readonly
@@ -344,6 +350,7 @@ export const buyMarketShares = (
   )
   const approvalResetAmount = marketAllowance.lt(transactionCost.toString()) ? MAX_ALLOWANCE_WEI : null
 
+  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions: BUY_SHARES }))
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
@@ -356,6 +363,8 @@ export const buyMarketShares = (
 
     throw e
   }
+
+  dispatch(closeModal())
 
   const netOutcomeTokensSold = market.netOutcomeTokensSold
   const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toNumber()
