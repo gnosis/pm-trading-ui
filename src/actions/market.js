@@ -396,12 +396,29 @@ export const buyMarketShares = (
  */
 export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => async (dispatch) => {
   const transactionId = uuid()
+  const gnosis = await api.getGnosisConnection()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
 
+  // Reset the allowance if the cost of current transaction is greater than the current allowance
+  // TODO: Calculate transaction cost
+  const currentAccount = await api.getCurrentAccount()
+
+  const marketAllowance = await gnosis.etherToken.allowance(
+    currentAccount,
+    market.address,
+  )
+  const approvalResetAmount = marketAllowance.lt(transactionCost.toString()) ? MAX_ALLOWANCE_WEI : null
+
+  const transactions = [
+    ...(approvalResetAmount ? [SETTING_ALLOWANCE, OUTCOME_TOKENS] : [OUTCOME_TOKENS]),
+  ]
+
+  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
+
   try {
-    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
+    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
   } catch (e) {
     console.error(e)
@@ -411,6 +428,7 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
     throw e
   }
 
+  dispatch(closeModal())
   // TODO: Calculate new shares
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
