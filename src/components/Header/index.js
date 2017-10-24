@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
+import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
@@ -43,7 +44,10 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
         {currentAccount && currentProvider && (
           <div className="headerContainer__account">
             {currentNetwork && currentNetwork !== 'MAIN' && <span className="headerContainer__network--text">Network: {upperFirst(currentNetwork.toLowerCase())}</span>}
-            <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
+            <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
+                <span className="headerContainer__account--text">
+                    { collateralTokenToText() }
+                </span>
             <Identicon account={currentAccount} />
           </div>
         )}
