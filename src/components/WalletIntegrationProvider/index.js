@@ -3,11 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { map } from 'lodash'
-import {
-  registerProvider,
-  updateProvider,
-  initGnosis,
-} from 'actions/blockchain'
+import { registerProvider, updateProvider, initGnosis } from 'actions/blockchain'
 import { isGnosisInitialized } from 'selectors/blockchain'
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
@@ -22,11 +18,11 @@ class WalletIntegrationProvider extends Component {
       runProviderRegister: this.handleProviderRegister,
     }
 
-    window.addEventListener('load', () => {
+    window.addEventListener('load', () =>
       Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
         .then(this.props.initGnosis)
-        .catch(this.props.initGnosis)
-    })
+        .catch(this.props.initGnosis),
+    )
   }
 
   @autobind

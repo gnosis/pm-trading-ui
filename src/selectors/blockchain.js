@@ -1,4 +1,4 @@
-import { get, find, sortBy } from 'lodash'
+import { get, find, orderBy } from 'lodash'
 import Decimal from 'decimal.js'
 
 /**
@@ -6,7 +6,7 @@ import Decimal from 'decimal.js'
  * @param {*} state - redux state
  */
 export const findDefaultProvider = (state) => {
-  const providers = sortBy(state.blockchain.providers, ['priority'])
+  const providers = orderBy(state.blockchain.providers, ['priority'], ['desc'])
 
   return find(providers, {
     loaded: true, available: true,
@@ -72,6 +72,4 @@ export const getGasPrice = state => (
 
 export const isGasPriceFetched = state => state.blockchain.gasPrice !== undefined
 
-export const getEtherTokensAmount = (state, account) => {
-  return new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))
-}
+export const getEtherTokensAmount = (state, account) => new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))
