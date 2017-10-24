@@ -42,8 +42,10 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
       </div>
       <div className="headerContainer__group headerContainer__group--right account">
         {currentAccount && currentProvider && (
+          <ProviderIcon provider={currentProvider} />
+        )}
+        {currentAccount && currentProvider && (
           <div className="headerContainer__account">
-            {currentNetwork && currentNetwork !== 'MAIN' && <span className="headerContainer__network--text">Network: {upperFirst(currentNetwork.toLowerCase())}</span>}
             <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
                 <span className="headerContainer__account--text">
                     { collateralTokenToText() }
@@ -51,9 +53,7 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
             <Identicon account={currentAccount} />
           </div>
         )}
-        {currentAccount && currentProvider && (
-          <ProviderIcon provider={currentProvider} />
-        )}
+        
       </div>
     </div>
   </div>
