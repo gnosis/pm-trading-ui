@@ -6,6 +6,8 @@ import Decimal from 'decimal.js'
 
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount, calcLMSRProfit } from 'api'
 
+import InteractionButton from 'containers/InteractionButton'
+
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 
@@ -342,12 +344,23 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-6 col-md-offset-6 marketMyShares__sellColumn">
-              <button className={`btn btn-primary ${submitDisabled ? 'disabled' : ''}`} disabled={submitDisabled}>
-                {submitting ? 'Loading' : 'Sell Shares'}
-              </button>
-              <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>
-                Cancel
-              </button>
+              <div className="row">
+                <div className="col-md-6">
+                  <InteractionButton
+                    loading={submitting}
+                    disabled={submitDisabled}
+                    className="btn btn-block btn-primary"
+                    type="submit"
+                  >
+                    Sell Shares
+                  </InteractionButton>
+                </div>
+                <div className="col-md-6">
+                  <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           {submitFailed && (

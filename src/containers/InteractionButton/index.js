@@ -10,6 +10,8 @@ import LoadingIndicator from 'components/LoadingIndicator'
 
 import { checkWalletConnection, isGnosisInitialized, isConnectedToCorrectNetwork, isOnWhitelist } from 'selectors/blockchain'
 
+import './interactionButton.less'
+
 const InteractionButton = ({
   className,
   onClick,
@@ -27,32 +29,58 @@ const InteractionButton = ({
     return null
   }
 
-  const isDisabled = disabled || !hasWallet || !gnosisInitialized || !correctNetwork
+  // "you need a wallet"
+  const walletError = !hasWallet || !gnosisInitialized
+
+  // "you are on the wrong chain"
+  const networkError = !correctNetwork
+
+  // loading from props or uninitialized gnosisjs
   const isLoading = loading || !gnosisInitialized
+
+  // disabled from props or wallet error or network error
+  const isDisabled = disabled || walletError || networkError
+
+  const classNames = cn(
+    'interactionButton',
+    className,
+    { disabled: isDisabled },
+    { loading: isLoading },
+  )
 
   const btn = (
     <button
-      className={cn(
-        className,
-        { disabled },
-      )}
+      className={classNames}
       type={type || 'button'}
-      onClick={onClick && !disabled ? onClick : null}
-      disabled={disabled}
+      onClick={(e) => {
+        if (isDisabled) {
+          e.preventDefault()
+          return
+        }
+
+        if (typeof onClick === 'function') {
+          onClick()
+        }
+      }}
+      disabled={isDisabled}
     >
       {children}
     </button>
   )
 
   if (isLoading) {
-    return <LoadingIndicator />
+    return (
+      <button className={classNames} type="button" disabled>
+        <LoadingIndicator width={28} height={28} />
+      </button>
+    )
   }
 
-  if (isDisabled) {
+  if (walletError) {
     return <Tooltip overlay="You need a wallet connected in order to create a market">{btn}</Tooltip>
   }
 
-  if (!correctNetwork) {
+  if (networkError) {
     return <Tooltip overlay="You are connected to the wrong chain. You can only interact with Gnosis when you're on the same chain as us.">{btn}</Tooltip>
   }
 

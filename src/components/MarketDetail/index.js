@@ -10,6 +10,8 @@ import { calcLMSRProfit } from 'api'
 import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
+import InteractionButton from 'containers/InteractionButton'
+
 import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue, { decimalToText } from 'components/DecimalValue'
 
@@ -340,16 +342,16 @@ class MarketDetail extends Component {
               </button>
             ))}
           {market.stage !== MARKET_STAGES.MARKET_CLOSED &&
-          market.creator === defaultAccount &&
-          process.env.WHITELIST[defaultAccount] ? (
-            <button
+          market.creator === defaultAccount ? (
+            <InteractionButton
               key="close-market"
               type="button"
               className="marketControls__button btn btn-default"
               onClick={() => closeMarket(market)}
+              requiresWhitelist
             >
               Close Market
-            </button>
+            </InteractionButton>
           ) : (
             <div />
           )}

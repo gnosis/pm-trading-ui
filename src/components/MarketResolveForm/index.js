@@ -31,7 +31,7 @@ class MarketResolveForm extends Component {
     throw new Error(`got unexpected type ${type}`)
   }
   renderResolveScalar() {
-    const { handleSubmit } = this.props
+    const { handleSubmit, submitting } = this.props
 
     return (
       <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
@@ -41,6 +41,7 @@ class MarketResolveForm extends Component {
         <InteractionButton
           type="submit"
           className="btn btn-primary"
+          loading={submitting}
         >
           Resolve Oracle
         </InteractionButton>
@@ -49,7 +50,7 @@ class MarketResolveForm extends Component {
   }
 
   renderResolveCategorical() {
-    const { handleSubmit, market: { eventDescription: { outcomes } } } = this.props
+    const { handleSubmit, submitting, market: { eventDescription: { outcomes } } } = this.props
     const outcomesFormatted = []
     outcomes.forEach((outcome) => {
       outcomesFormatted.push({ label: outcome, value: outcome })
@@ -65,9 +66,13 @@ class MarketResolveForm extends Component {
             radioValues={outcomesFormatted}
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <InteractionButton
+          type="submit"
+          className="btn btn-primary"
+          loading={submitting}
+        >
           Resolve Oracle
-        </button>
+        </InteractionButton>
       </form>
     )
   }

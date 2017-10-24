@@ -15,6 +15,8 @@ import {
 } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 
+import InteractionButton from 'containers/InteractionButton'
+
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
@@ -313,12 +315,13 @@ class MarketBuySharesForm extends Component {
               )}
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">
-                  <button
-                    className={`btn btn-primary col-md-12 ${!submitEnabled ? 'disabled' : ''}`}
+                  <InteractionButton
+                    className="btn btn-primary col-md-12"
                     disabled={!submitEnabled}
+                    loading={submitting}
                   >
-                    {submitting ? 'Loading...' : 'Buy Tokens'}
-                  </button>
+                    Buy Tokens
+                  </InteractionButton>
                 </div>
                 <div className="col-md-6">
                   <button
