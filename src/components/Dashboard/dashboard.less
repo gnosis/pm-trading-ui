@@ -55,21 +55,25 @@
   }
 }
 
-.dashboardControls__button {
-  margin-right: 20px;
+.dashboardControls {
+  padding: 40px 0 20px 0;
+  
+  &__button {
+    margin-right: 20px;
 
-  &--active {
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -@expandable-margin;
-      left: 50%;
-      margin-left: -@expandable-arrow-size;
-      width: 0;
-      height: 0;
-      border-left: @expandable-arrow-size solid transparent;
-      border-right: @expandable-arrow-size solid transparent;
-      border-bottom: @expandable-arrow-size solid @bg-color-muted;
+    &--active {
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -@expandable-margin;
+        left: 50%;
+        margin-left: -@expandable-arrow-size;
+        width: 0;
+        height: 0;
+        border-left: @expandable-arrow-size solid transparent;
+        border-right: @expandable-arrow-size solid transparent;
+        border-bottom: @expandable-arrow-size solid @bg-color-muted;
+      }
     }
   }
 }

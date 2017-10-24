@@ -5,9 +5,8 @@ import moment from 'moment'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
-import Tooltip from 'rc-tooltip'
-import 'rc-tooltip/assets/bootstrap.css'
 import { reduxForm, Field } from 'redux-form'
+import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
@@ -77,10 +76,6 @@ class MarketList extends Component {
     const isResolved = market.oracle && market.oracle.isOutcomeSet
     const isOwner = this.props.defaultAccount && market.creator === this.props.defaultAccount
 
-    const resolveUrl = `/markets/${market.address}/resolve`
-
-    const outcomes = <Outcome market={market} />
-
     return (
       <button
         type="button"
@@ -96,13 +91,13 @@ class MarketList extends Component {
           {isOwner &&
             !isResolved && (
               <div className="market__control">
-                <a href="javascript:void(0)" onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>
+                <a href="javascript:void(0)" onClick={e => this.handleViewMarketResolve(e, `/markets/${market.address}/resolve`)}>
                   Resolve
                 </a>
               </div>
             )}
         </div>
-        {outcomes}
+        <Outcome market={market} />
         <div className="market__info row">
           {isResolved ? (
             <div className="info__group col-md-3">
@@ -205,30 +200,6 @@ class MarketList extends Component {
   render() {
     const { markets } = this.props
 
-    let createMarketButton = (
-      <div
-        className={cn({
-          'marketStats__control--container': true,
-          disabled: !this.props.hasWallet,
-        })}
-      >
-        <button
-          type="button"
-          onClick={this.props.hasWallet ? this.handleCreateMarket : false}
-          className="marketStats__control btn btn-default"
-          disabled={!this.props.hasWallet}
-        >
-          Create Market
-        </button>
-      </div>
-    )
-
-    if (!this.props.hasWallet) {
-      createMarketButton = (
-        <Tooltip overlay="You need a wallet connected in order to create a market">{createMarketButton}</Tooltip>
-      )
-    }
-
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
@@ -260,7 +231,15 @@ class MarketList extends Component {
         <div className="marketListPage__controls">
           <div className="container">
             <div className="row">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">{createMarketButton}</div>
+              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
+                <InteractionButton
+                  onClick={this.handleCreateMarket}
+                  className="marketStats__control btn btn-default"
+                  whitelistRequired
+                >
+                  Create Market
+                </InteractionButton>
+              </div>
             </div>
           </div>
         </div>
@@ -284,7 +263,6 @@ MarketList.propTypes = {
   changeUrl: PropTypes.func,
   handleSubmit: PropTypes.func,
   isModerator: PropTypes.bool,
-  hasWallet: PropTypes.bool,
 }
 
 export default reduxForm({

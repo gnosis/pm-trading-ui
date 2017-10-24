@@ -17,7 +17,7 @@ const mapStateToProps = (state) => {
   const targetNetworkURL = process.env.ETHEREUM_URL
 
   const targetNetworkId = getTargetNetworkId(state)
-  console.log(targetNetworkId)
+  
   let targetNetwork
   if (targetNetworkId) {
     targetNetwork = ETHEREUM_NETWORK_IDS[targetNetworkId]

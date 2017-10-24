@@ -7,7 +7,9 @@ import Decimal from 'decimal.js'
 import { OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
-import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
+import InteractionButton from 'containers/InteractionButton'
+
+import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
 
 import './marketResolveForm.less'
@@ -36,9 +38,12 @@ class MarketResolveForm extends Component {
         <div className="marketResolveScalar">
           <Field name="selectedValue" component={FormInput} label={'Enter outcome'} />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <InteractionButton
+          type="submit"
+          className="btn btn-primary"
+        >
           Resolve Oracle
-        </button>
+        </InteractionButton>
       </form>
     )
   }

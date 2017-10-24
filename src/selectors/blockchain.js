@@ -116,3 +116,13 @@ export const shouldOpenNetworkModal = state =>
   isRemoteConnectionEstablished(state) &&
   checkWalletConnection(state) &&
   !isConnectedToCorrectNetwork(state)
+
+export const isOnWhitelist = (state) => {
+  const account = getCurrentAccount(state)
+
+  if (account) {
+    return process.env.WHITELIST[account] !== undefined
+  }
+
+  return false
+}
