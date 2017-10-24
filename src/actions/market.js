@@ -37,7 +37,9 @@ import {
 } from 'utils/constants'
 
 import {
-  BUY_SHARES,
+  DEPOSIT,
+  OUTCOME_TOKENS,
+  SETTING_ALLOWANCE,
 } from 'utils/transactionExplanations'
 
 import { openModal, closeModal } from 'actions/modal'
@@ -350,7 +352,12 @@ export const buyMarketShares = (
   )
   const approvalResetAmount = marketAllowance.lt(transactionCost.toString()) ? MAX_ALLOWANCE_WEI : null
 
-  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions: BUY_SHARES }))
+  const transactions = [
+    DEPOSIT(cost),
+    ...(approvalResetAmount ? [SETTING_ALLOWANCE, OUTCOME_TOKENS] : [OUTCOME_TOKENS]),
+  ]
+
+  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
