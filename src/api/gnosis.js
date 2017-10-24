@@ -4,7 +4,7 @@ import Web3 from 'web3'
 import Gnosis from '@gnosis.pm/gnosisjs'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
-import { hexWithPrefix, weiToEth, promisify, timeoutCondition } from 'utils/helpers'
+import { hexWithPrefix, weiToEth, promisify } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
 // import { normalize } from 'normalizr'
 
@@ -14,20 +14,10 @@ import Decimal from 'decimal.js'
 
 let gnosisInstance
 
-const windowLoaded = new Promise((accept, reject) => {
-  if (typeof window === 'undefined') {
-    return accept()
-  }
-
-  if (typeof window.addEventListener !== 'function') {
-    return reject(new Error('expected to be able to register event listener'))
-  }
-
-  window.addEventListener('load', function loadHandler(event) {
-    window.removeEventListener('load', loadHandler, false)
-    return accept(event)
-  }, false)
-})
+export const calcLMSRCost = Gnosis.calcLMSRCost
+export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
+export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
+export const calcLMSRProfit = Gnosis.calcLMSRProfit
 
 /**
  * Initializes connection to GnosisJS
@@ -214,8 +204,9 @@ export const fundMarket = async (market) => {
   const collateralToken = await getCollateralToken()
   await collateralToken.deposit({ value: marketFundingWei.toString() })
 
-  const marketAllowance = await collateralToken.allowance(
-    hexWithPrefix(market.creator), hexWithPrefix(marketContract.address),
+  const marketAllowance = await gnosis.etherToken.allowance(
+    hexWithPrefix(market.creator),
+    hexWithPrefix(marketContract.address),
   )
 
   if (marketAllowance.lt(marketFundingWei)) {
@@ -247,7 +238,7 @@ export const closeMarket = async (market) => {
   return market
 }
 
-export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost) => {
+export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
 
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
@@ -263,8 +254,8 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   return await gnosis.buyOutcomeTokens({
     market: market.address,
     outcomeTokenIndex,
-    outcomeTokenCount:
-    outcomeTokenCount.toString(),
+    outcomeTokenCount: outcomeTokenCount.toString(),
+    approvalResetAmount,
   })
 }
 
@@ -311,10 +302,6 @@ export const withdrawFees = async (marketAddress) => {
   throw new Error('Invalid Market - can\'t find the specified Market')
 }
 
-export const calcLMSRCost = Gnosis.calcLMSRCost
-export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
-export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
-export const calcLMSRProfit = Gnosis.calcLMSRProfit
 
 /*
 * Gas Calculation functions
@@ -378,58 +365,4 @@ export const getEtherTokens = async (account) => {
     return new Decimal(balance.toFixed(0))
   }
   return undefined
-}
-
-export const getHostedNetwork = async () => {
-  const web3FromHostedUrl = new Web3(new Web3.providers.HttpProvider(process.env.ETHEREUM_URL))
-  // await windowLoaded
-  let networkId
-  try {
-    console.log('wait for getNetwork')
-    console.log(web3FromHostedUrl)
-
-    console.log(networkId)
-  } catch (e) {
-    console.log(web3FromHostedUrl)
-    console.log(e)
-    networkId = undefined
-  }
-  return networkId ? parseInt(networkId, 10) : undefined
-}
-
-export const getGnosisNetwork = async () => {
-  const gnosis = await getGnosisConnection()
-
-  let networkId
-  try {
-    console.log('wait for getnetwork (gnosis)')
-    networkId = await promisify(gnosis.web3.version.getNetwork)
-    console.log(networkId)
-  } catch (e) {
-    networkId = undefined
-  }
-  return networkId ? parseInt(networkId, 10) : undefined
-}
-
-/**
- * Validates the current network used by gnosis.js against the that is running on the Ethereum URL for this enviroment
- * @throws {error} - If invalid/wrong network
- */
-export const doNetworkTest = async () => {
-  const networkIds = await Promise.all([
-    getGnosisNetwork(),
-    getHostedNetwork(),
-  ])
-
-  const [currentId, shouldBeId] = networkIds
-
-  if (!currentId || !shouldBeId) {
-    throw new Error('no network')
-  }
-
-  if (parseInt(currentId, 10) !== parseInt(shouldBeId, 10)) {
-    throw new Error('networks dont match')
-  }
-
-  return true
 }

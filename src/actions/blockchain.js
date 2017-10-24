@@ -25,7 +25,6 @@ export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
-
 export const registerProvider = createAction('REGISTER_PROVIDER')
 export const updateProvider = createAction('UPDATE_PROVIDER')
 

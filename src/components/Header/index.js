@@ -11,6 +11,7 @@ import './header.less'
 
 const Header = ({
   version,
+  hasWallet,
   currentAccount,
   currentNetwork,
   currentBalance,
@@ -22,7 +23,7 @@ const Header = ({
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
-        <Link to={currentAccount ? '/' : '/markets/list'}>
+        <Link to={hasWallet ? '/' : '/markets/list'}>
           <div className="headerLogo" />
         </Link>
       </div>
@@ -30,7 +31,7 @@ const Header = ({
         {version}
       </div>
       <div className="headerContainer__group headerContainer__group--left">
-        {currentAccount && (
+        {hasWallet && (
           <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
             Dashboard
           </Link>
@@ -42,7 +43,7 @@ const Header = ({
         >
           Markets
         </Link>
-        {currentAccount && (
+        {hasWallet && (
           <Link
             to="/transactions"
             activeClassName="headerContainer__navLink--active"
@@ -60,15 +61,19 @@ const Header = ({
             <a className="headerContainer__network--wrongChainHelp" href="javascript:void(0)" onClick={() => openNetworkCheckModal()}>This is not the chain used for this plattform.<br />Click here for help</a>
           </div>
         )}
-        {currentAccount && currentProvider && (
+        {hasWallet && currentProvider && (
           <div className="headerContainer__account">
             <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
-            <Identicon className="" />
+            <Identicon className="" account={currentAccount} />
           </div>
         )}
-        {currentAccount && currentProvider && <ProviderIcon provider={currentProvider} />}
-        {!currentAccount && (
-          <a className="headerContainer__connect-wallet" href="javascript:void(0)" onClick={() => openConnectWalletModal()}>
+        {hasWallet && currentProvider && <ProviderIcon provider={currentProvider} />}
+        {!hasWallet && (
+          <a
+            href="javascript:void(0)"
+            className="headerContainer__connect-wallet"
+            onClick={() => openConnectWalletModal()}
+          >
             Connect a wallet
           </a>
         )}
@@ -81,10 +86,10 @@ Header.propTypes = {
   version: PropTypes.string,
   isConnectedToCorrectNetwork: PropTypes.bool,
   currentNetwork: PropTypes.string,
+  hasWallet: PropTypes.bool,
   currentAccount: PropTypes.string,
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
-  getProviderIcon: PropTypes.func,
   openConnectWalletModal: PropTypes.func,
   openNetworkCheckModal: PropTypes.func,
 }
