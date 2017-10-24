@@ -6,6 +6,8 @@ import { Field, propTypes } from 'redux-form'
 import * as validators from 'utils/validators'
 import { ORACLE_TYPES, GAS_COST } from 'utils/constants'
 
+import { collateralTokenToText } from 'components/CurrencyName'
+
 import GroupCentralizedOracle from 'components/GroupCentralizedOracle'
 import GroupBlockDifficulty from 'components/GroupBlockDifficulty'
 
@@ -97,7 +99,7 @@ export default class MarketCreateWizard extends Component {
           <div className="col-md-offset-2 col-md-10">
             <Field
               name="funding"
-              continuousPlaceholder="ETH"
+              continuousPlaceholder={ collateralTokenToText() }
               component={FormInput}
               type="text"
               validate={validators.all(

@@ -10,7 +10,7 @@ import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 
 
 import DecimalValue from 'components/DecimalValue'
-import CurrencyName from 'components/CurrencyName'
+import CurrencyName, { collateralTokenToText } from 'components/CurrencyName'
 
 import FormRadioButton from 'components/FormRadioButton'
 import Input from 'components/FormInput'
@@ -194,7 +194,7 @@ class MarketShortSellForm extends Component {
                 <div className="col-md-12">
                   <Field
                     name="confirm" component={Checkbox} className="marketBuyCheckbox"
-                    text="I AGREE AND UNDERSTAND THAT ETH WILL BE TRANSFERRED FROM MY ACCOUNT"
+                    text={ `I AGREE AND UNDERSTAND THAT ${collateralTokenToText()} WILL BE TRANSFERRED FROM MY ACCOUNT` }
                   />
                 </div>
               </div>
