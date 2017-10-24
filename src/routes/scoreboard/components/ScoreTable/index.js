@@ -1,7 +1,14 @@
 import 'react-table/react-table.css'
 import * as React from 'react'
 import ReactTable from 'react-table'
-import { rankCell, olyCell, rewardCell, ownTrCallback, ownTheadCallback } from './cells'
+import { 
+    badgeCell,
+    rankCell,
+    olyCell,
+    rewardCell,
+    ownTrCallback,
+    ownTheadCallback
+} from './table'
 
 const tableStyle = {
     border: 'none',
@@ -76,6 +83,13 @@ const columns = [{
     style: columnStyle,
     Cell: olyCell('predictedProfits'),
 }, {
+    Header: 'Badge',
+    accessor: 'predictions',
+    id: 'predictions',
+    Cell: badgeCell,
+    headerStyle,
+    style: columnStyle
+}, {
     Header: 'Reward',
     accesor: 'currentRank',
     id: 'reward',
@@ -88,7 +102,7 @@ const EmptyData = () => <div />
 
 const ScoreBoard = ({ tableData, myAccount }) => {
     const size = tableData ? tableData.length > 11 ? 11 : tableData.length : 0;
-
+    debugger
     return <ReactTable
         data={ tableData }
         columns={ columns }

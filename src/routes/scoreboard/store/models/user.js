@@ -8,6 +8,7 @@ const UserRecord = Record({
     score: undefined,
     balance: undefined,
     predictedProfits: undefined,
+    predictions: undefined,
 }, 'User');
 
 export default UserRecord;
