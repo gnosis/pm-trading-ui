@@ -10,14 +10,12 @@ const tokenSelector = createSelector(
 
 const profitsSelector = createSelector(
     meSelector,
-    (account) => account ? roundProfits(account.predictedProfits) : undefined,
+    account => (account ? roundProfits(account.predictedProfits) : undefined),
 )
 
 const rankSelector = createSelector(
     meSelector,
-    (account) => { 
-        return account ? account.currentRank : undefined
-    },
+    account => ( account ? account.currentRank : undefined),
 )
 
 export default createStructuredSelector({
