@@ -16,6 +16,11 @@
     min-height: 32px;
 }
 
+.ol-db-title-badge {
+    font-size: 14px;
+    line-height: 28px;
+}
+
 .ol-db-explanation{
     font-family: Montserrat;
     font-size: 10px;

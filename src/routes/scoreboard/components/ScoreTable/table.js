@@ -7,8 +7,13 @@ import * as css from './index.css'
 const cx = classNames.bind(css)
 
 export const badgeOf = (value) => {
+    const unknown = 'Unknown'
+
+    if (!value) {
+        return unknown
+    }
     
-    const isJunior = !value || (value >= 1 && value <= 4);
+    const isJunior = value >= 1 && value <= 4;
     if (isJunior) {
         return 'Junior Predictor'
     }
@@ -33,7 +38,7 @@ export const badgeOf = (value) => {
         return 'Psychic'
     }
 
-    return 'Unknown'
+    return unknown
 }
 
 export const rankCell = (props) => {

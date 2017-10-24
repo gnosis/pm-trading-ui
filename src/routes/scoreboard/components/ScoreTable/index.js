@@ -102,7 +102,7 @@ const EmptyData = () => <div />
 
 const ScoreBoard = ({ tableData, myAccount }) => {
     const size = tableData ? tableData.length > 11 ? 11 : tableData.length : 0;
-    debugger
+
     return <ReactTable
         data={ tableData }
         columns={ columns }
