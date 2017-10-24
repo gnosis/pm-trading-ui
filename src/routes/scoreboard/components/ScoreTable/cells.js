@@ -1,5 +1,7 @@
 import classNames from 'classnames/bind'
 import * as React from 'react'
+import { roundProfits } from 'utils/helpers';
+
 import * as css from './index.css'
 
 const cx = classNames.bind(css)
@@ -12,8 +14,8 @@ export const rankCell = (props) => {
 }
 
 export const olyCell = prop => (props) => {
-    const value = props.row[prop];
-    const result = value.substr(0, 1) + '.' + value.substr(1,2);
+    const value = props.row[prop]
+    const result = roundProfits(value)
     return <span>{ result }</span>
 }
 

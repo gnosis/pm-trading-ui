@@ -162,3 +162,13 @@ export const getGnosisJsOptions = (provider) => {
 
   return opts
 }
+
+export const roundProfits = (profits) => {
+    if (!profits) {
+        return undefined
+    }
+
+    const result = profits.substr(0, 1) + '.' + profits.substr(1,2)
+
+    return result
+}
