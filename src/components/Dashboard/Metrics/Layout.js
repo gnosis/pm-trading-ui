@@ -6,11 +6,12 @@ import * as css from './index.css'
 
 const cx = classNames.bind(css)
 
-const arrows = require('./assets/arrows.png')
+const arrows = require('./assets/arrows.svg')
 const group = require('./assets/group.png')
-const shape = require('./assets/shape.png')
+const shape = require('./assets/shape.svg')
+const ball = require('./assets/crystal-ball.svg')
 
-const Metric = ({ img, title, explanation, width = 37, height = 37 }) => (
+const Metric = ({ img, title, explanation, children, width = 37, height = 37 }) => (
     <Block className={ cx('ol-db-metric') }>
         <Img
             className={ cx('ol-db-icon') }
@@ -19,17 +20,26 @@ const Metric = ({ img, title, explanation, width = 37, height = 37 }) => (
             height={ width }
         />
         <Block>
-            <Block className={ cx('ol-db-title') }>{ title ? title : '--' }</Block>
+            { children }
             <Block className={ cx('ol-db-explanation') }>{ explanation }</Block>
         </Block>
     </Block>
 )
 
-const Metrics = ({ tokens, predictedProfits, rank }) => (
+const Metrics = ({ tokens, predictedProfits, rank, badge }) => (
     <Block className={ cx('ol-db-container') }>
-        <Metric img={ group } title={ tokens } explanation="OLY TOKENS" />
-        <Metric img={ shape } width={ 45 } height={ 45 } title={ predictedProfits } explanation="PREDICTED PROFITS" />
-        <Metric img={ arrows} title={ rank } explanation="YOUR RANK" />
+        <Metric img={ group } explanation="OLY TOKENS">
+            <Block className={ cx('ol-db-title') }>{ tokens ? tokens : '--' }</Block>
+        </Metric>
+        <Metric img={ shape } width={ 45 } height={ 45 } explanation="PREDICTED PROFITS">
+            <Block className={ cx('ol-db-title') }>{ predictedProfits ? predictedProfits : '--' }</Block>
+        </Metric>
+        <Metric img={ arrows } explanation="YOUR RANK">
+            <Block className={ cx('ol-db-title') }>{ rank ? rank : '--' }</Block>
+        </Metric>
+        <Metric img={ ball } explanation="BADGE">
+            <Block className={ cx('ol-db-title', 'ol-db-title-badge') }>{ badge ? badge : '--' }</Block>
+        </Metric>
     </Block>
 )
 

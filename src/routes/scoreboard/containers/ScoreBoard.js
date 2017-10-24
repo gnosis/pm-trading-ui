@@ -20,6 +20,7 @@ class ScoreBoard extends React.Component {
             score: '454000000000000000',
             balance: '100000000000000000',
             predictedProfits: '354000000000000000',
+            predictions: 12,
         }])
     }
 

@@ -6,6 +6,41 @@ import * as css from './index.css'
 
 const cx = classNames.bind(css)
 
+export const badgeOf = (value) => {
+    const unknown = 'Unknown'
+
+    if (!value) {
+        return unknown
+    }
+    
+    const isJunior = value >= 1 && value <= 4;
+    if (isJunior) {
+        return 'Junior Predictor'
+    }
+
+    const isGazer = value >= 5 && value <= 9;
+    if (isGazer) {
+        return 'Crystal Gazer'
+    }
+
+    const isFortune = value >= 10 && value <= 14;
+    if (isFortune) {
+        return 'Fortune Teller'
+    }
+
+    const isClairvoyant = value >= 15 && value <= 19;
+    if (isClairvoyant) {
+        return 'Clairvoyant'
+    }
+
+    const isJPsychic = value >= 20;
+    if (isJPsychic) {
+        return 'Psychic'
+    }
+
+    return unknown
+}
+
 export const rankCell = (props) => {
     const diff = props.row.diffRank;
     const color = diff == 0 ? 'neutralRank' : diff > 0 ? 'greenRank' : 'redRank'
@@ -16,6 +51,13 @@ export const rankCell = (props) => {
 export const olyCell = prop => (props) => {
     const value = props.row[prop]
     const result = roundProfits(value)
+    return <span>{ result }</span>
+}
+
+export const badgeCell = (props) => {
+    const value = props.row.predictions
+    const result = badgeOf(value)
+    
     return <span>{ result }</span>
 }
 
