@@ -21,9 +21,6 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
         {version}
       </div>
       <div className="headerContainer__group headerContainer__group--left">
-        <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
-          Dashboard
-        </Link>
         <Link
           to="/markets/list"
           activeClassName="headerContainer__navLink--active"
@@ -31,15 +28,16 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
         >
           Markets
         </Link>
-        {currentAccount && (
-          <Link
-            to="/transactions"
-            activeClassName="headerContainer__navLink--active"
-            className="headerContainer__navLink"
-          >
-            Transactions
-          </Link>
-        )}
+        <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+          Dashboard
+        </Link>
+        <Link to="/scoreboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+          Scoreboard
+        </Link>
+        <Link to="/gamerules" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+          Game Rules
+        </Link>
+
       </div>
       <div className="headerContainer__group headerContainer__group--right account">
         {currentAccount && currentProvider && (

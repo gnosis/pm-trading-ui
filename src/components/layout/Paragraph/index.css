@@ -1,0 +1,16 @@
+.default-paragraph {
+    font-family: Montserrat;
+    color: #626262;   
+}
+
+.medium {
+    color: #686868;
+}
+
+.dark {
+    color: black;
+}
+
+.no-margin{
+    margin-bottom: 5px;
+}

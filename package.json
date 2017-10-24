@@ -15,7 +15,9 @@
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix",
     "test": "jest",
-    "precommit": "./precommit.sh"
+    "precommit": "./precommit.sh",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -64,6 +66,7 @@
     "react-router": "3.0.2",
     "react-router-redux": "4.0.7",
     "react-select": "^1.0.0-rc.10",
+    "react-table": "^6.6.0",
     "react-textarea-autosize": "^4.0.5",
     "react-transition-group": "^2.2.0",
     "recharts": "^1.0.0-alpha.1",
@@ -79,6 +82,10 @@
     "web3": "0.18.4"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.2.12",
+    "@storybook/addon-knobs": "^3.2.12",
+    "@storybook/addon-links": "^3.2.12",
+    "@storybook/react": "^3.2.12",
     "autoprefixer": "7.1.4",
     "babel-core": "6.26.0",
     "babel-eslint": "7.1.1",
@@ -117,8 +124,11 @@
     "postcss-loader": "^2.0.6",
     "pre-commit": "^1.2.2",
     "react-hot-loader": "^3.0.0-beta.7",
+    "react-youtube": "^7.5.0",
     "resolve-url-loader": "^2.0.3",
     "sass-loader": "^6.0.6",
+    "storybook-host": "^4.1.4",
+    "storybook-router": "^0.3.1",
     "style-loader": "^0.13.2",
     "truffle-hdwallet-provider": "0.0.3",
     "url-loader": "^0.5.9",
