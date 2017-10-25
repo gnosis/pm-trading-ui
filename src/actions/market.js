@@ -40,6 +40,7 @@ import {
   DEPOSIT,
   OUTCOME_TOKENS,
   SETTING_ALLOWANCE,
+  REVOKE_TOKENS,
 } from 'utils/transactionExplanations'
 
 import { openModal, closeModal } from 'actions/modal'
@@ -472,6 +473,11 @@ export const redeemWinnings = market => async (dispatch) => {
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Redeeming Winnings for  "${market.eventDescription.title}"`))
 
+  const marketType = market.event.type
+  const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS] 
+
+  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
+
   try {
     console.log('winnings: ', await api.redeemWinnings(market.event.type, market.event.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
@@ -482,6 +488,8 @@ export const redeemWinnings = market => async (dispatch) => {
 
     throw e
   }
+
+  dispatch(closeModal())
 
   // TODO: Update market so we can't redeem again
 
