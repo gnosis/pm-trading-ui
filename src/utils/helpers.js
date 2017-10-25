@@ -163,12 +163,12 @@ export const getGnosisJsOptions = (provider) => {
   return opts
 }
 
-export const promisify = (func, timeout) => new Promise((resolve, reject) => {
+export const promisify = (func, params, timeout) => new Promise((resolve, reject) => {
   if (timeout) {
     setTimeout(() => reject('Promise timed out'), timeout)
   }
 
-  func((err, res) => {
+  func(...params, (err, res) => {
     if (err) {
       return reject(err)
     }

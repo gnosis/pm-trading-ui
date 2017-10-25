@@ -41,7 +41,7 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Network Identifier
    */
   async getNetworkId() {
-    return await promisify(this.web3.version.getNetwork, 10000)
+    return await promisify(this.web3.version.getNetwork, [], 10000)
   }
 
   /**
@@ -50,7 +50,7 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Accountaddress
    */
   async getAccount() {
-    const accounts = await promisify(this.web3.eth.getAccounts, 10000)
+    const accounts = await promisify(this.web3.eth.getAccounts, [], 10000)
 
     return accounts && accounts.length ? accounts[0] : null
   }
@@ -64,6 +64,14 @@ class InjectedWeb3 {
     if (!this.account) {
       throw new Error('No Account available')
     }
+
+    const balance = await promisify(this.web3.eth.getBalance, [this.account], 10000)
+
+    if (typeof balance !== 'undefined') {
+      return weiToEth(balance.toString())
+    }
+
+    throw new Error('Invalid Balance')
   }
 
   /**

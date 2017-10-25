@@ -36,7 +36,13 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
 /**
  * Returns an instance of the connection to GnosisJS
  */
-export const getGnosisConnection = async () => gnosisInstance
+export const getGnosisConnection = async () => {
+  if (!gnosisInstance) {
+    throw new Error('GnosisJS not initialized yet')
+  }
+
+  return gnosisInstance
+}
 
 /**
  * Returns the default node account

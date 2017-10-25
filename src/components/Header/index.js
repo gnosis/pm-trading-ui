@@ -55,7 +55,7 @@ const Header = ({
       </div>
 
       <div className="headerContainer__group headerContainer__group--right account">
-        {!isConnectedToCorrectNetwork && (
+        {hasWallet && !isConnectedToCorrectNetwork && (
           <div className="headerContainer__network">
             <p className="headerContainer__network--wrongChain">Network: {upperFirst(currentNetwork.toLowerCase())}</p>
             <a className="headerContainer__network--wrongChainHelp" href="javascript:void(0)" onClick={() => openNetworkCheckModal()}>This is not the chain used for this plattform.<br />Click here for help</a>
