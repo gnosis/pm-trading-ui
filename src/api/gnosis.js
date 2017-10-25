@@ -257,7 +257,7 @@ export const resolveEvent = async (event, selectedOutcomeIndex) => {
   return await gnosis.resolveEvent(event.address, parseInt(selectedOutcomeIndex, 10))
 }
 
-export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenCount) => {
+export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenCount, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
 
   const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
@@ -266,6 +266,7 @@ export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenC
     market: hexWithPrefix(marketAddress),
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCountWei,
+    approvalResetAmount,
   })
 }
 
