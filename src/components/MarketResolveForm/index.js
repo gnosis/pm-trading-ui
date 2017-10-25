@@ -50,7 +50,7 @@ class MarketResolveForm extends Component {
   }
 
   renderResolveCategorical() {
-    const { handleSubmit, submitting, market: { eventDescription: { outcomes } } } = this.props
+    const { handleSubmit, submitting, market: { eventDescription: { outcomes }, local } } = this.props
     const outcomesFormatted = []
     outcomes.forEach((outcome) => {
       outcomesFormatted.push({ label: outcome, value: outcome })
@@ -69,7 +69,7 @@ class MarketResolveForm extends Component {
         <InteractionButton
           type="submit"
           className="btn btn-primary"
-          loading={submitting}
+          loading={submitting || local}
         >
           Resolve Oracle
         </InteractionButton>

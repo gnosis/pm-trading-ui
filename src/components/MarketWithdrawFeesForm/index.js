@@ -48,7 +48,7 @@ class MarketWithdrawFeesForm extends Component {
               <InteractionButton
                 className="marketWithdrawFeesForm--submit btn btn-primary"
                 disabled={!submitEnabled}
-                loading={submitting}
+                loading={submitting || market.local}
               >
                 Withdraw
               </InteractionButton>

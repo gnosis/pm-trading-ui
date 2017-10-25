@@ -223,12 +223,11 @@ class MarketBuySharesForm extends Component {
       selectedBuyInvest,
       submitFailed,
       submitting,
-      market: { event: { collateralToken } },
+      market: { event: { collateralToken }, address, local },
       selectedOutcome,
       gasCosts,
       gasPrice,
       changeUrl,
-      market: { address },
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
@@ -318,7 +317,8 @@ class MarketBuySharesForm extends Component {
                   <InteractionButton
                     className="btn btn-primary col-md-12"
                     disabled={!submitEnabled}
-                    loading={submitting}
+                    loading={submitting || local}
+                    type="submit"
                   >
                     Buy Tokens
                   </InteractionButton>

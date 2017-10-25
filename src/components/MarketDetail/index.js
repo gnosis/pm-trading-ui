@@ -347,6 +347,7 @@ class MarketDetail extends Component {
               key="close-market"
               type="button"
               className="marketControls__button btn btn-default"
+              loading={market.local}
               onClick={() => closeMarket(market)}
               requiresWhitelist
             >

@@ -347,7 +347,7 @@ class MarketMySharesForm extends Component {
               <div className="row">
                 <div className="col-md-6">
                   <InteractionButton
-                    loading={submitting}
+                    loading={submitting || market.local}
                     disabled={submitDisabled}
                     className="btn btn-block btn-primary"
                     type="submit"
