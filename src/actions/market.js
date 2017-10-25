@@ -405,11 +405,12 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
   // TODO: Calculate transaction cost
   const currentAccount = await api.getCurrentAccount()
 
-  const marketAllowance = await gnosis.etherToken.allowance(
-    currentAccount,
-    market.address,
-  )
-  const approvalResetAmount = marketAllowance.lt(transactionCost.toString()) ? MAX_ALLOWANCE_WEI : null
+  const marketAllowance = await gnosis.contracts.Token
+    .at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex))
+    .allowance(currentAccount, market.address)
+
+  const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
+  const approvalResetAmount = marketAllowance.lt(outcomeTokenCountWei) ? MAX_ALLOWANCE_WEI : null
 
   const transactions = [
     ...(approvalResetAmount ? [SETTING_ALLOWANCE, OUTCOME_TOKENS] : [OUTCOME_TOKENS]),
