@@ -29,6 +29,7 @@ const mapStateToProps = (state) => {
 
   return {
     markets: sortMarkets(filteredMarktes, filterOrderBy && filterOrderBy.value),
+    defaultAccount,
     isModerator,
   }
 }
