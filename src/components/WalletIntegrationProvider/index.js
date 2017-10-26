@@ -51,16 +51,16 @@ class WalletIntegrationProvider extends Component {
     if (provider.constructor.providerName === 'UPORT') {
         await this.props.initGnosis(provider.constructor.providerName)
         const account = (await getGnosisConnection()).defaultAccount
-        const value = await getOlympiaTokensByAcoount(account) 
+        const value = await getOlympiaTokensByAcoount(account)
         data.account = account
-        data.balance = value;
-  
+        data.balance = value
+
         await this.props.updateProvider({
           provider: provider.constructor.providerName,
           ...data,
         })
     }
-
+  
   }
 
   @autobind
