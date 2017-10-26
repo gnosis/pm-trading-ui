@@ -293,7 +293,7 @@ class Dashboard extends Component {
                 <div className="dashboardStats__label">Ether Tokens</div>
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
-                <div className="dashboardStats__icon icon icon--incomeForecast" />
+                <div className="dashboardStats__icon icon icon--outstandingPredictions" />
                 <span className="dashboardStats__value" style={{ color: 'green' }}>
                   <DecimalValue value={accountPredictiveAssets} />
                   &nbsp;ETH
