@@ -202,11 +202,11 @@ export const fundMarket = async (market) => {
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
 
-  const collateralToken = await gnosis.contracts.Token.at(
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(
     await gnosis.contracts.Event.at(market.event).collateralToken(),
   )
 
-  if (collateralToken.address === gnosis.etherToken.address) {
+  if (await collateralToken.name() === 'Ether Token') {
     await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
   }
 
@@ -251,13 +251,13 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
   const collateralTokenWei = Decimal(cost).mul(1e18)
-  
+
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
-  const collateralToken = await gnosis.contracts.Token.at(
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(
     await gnosis.contracts.Event.at(market.event.address).collateralToken(),
   )
 
-  if (gnosis.etherToken.address === collateralToken.address) {
+  if (await collateralToken.name() === 'Ether Token') {
     await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
   }
 
