@@ -12,36 +12,13 @@ import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 import config from 'config.json'
 
+import InteractionButton from 'containers/InteractionButton'
+
 import './dashboard.less'
 
-const EXPAND_DEPOSIT = 'DEPOSIT'
-
-const controlButtons = {
-  /*
-  [EXPAND_DEPOSIT]: {
-    label: 'Make Deposit',
-    className: 'btn btn-primary',
-    component: <span>Make Deposit</span>,
-  },
-  [EXPAND_WITHDRAW]: {
-    label: 'Withdraw Money',
-    className: 'btn btn-default',
-    component: <span>Withdraw Money</span>,
-  },
-  */
-}
-
 class Dashboard extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      expandableSelected: undefined,
-    }
-  }
-
   componentWillMount() {
-    if (!this.props.defaultAccount) {
+    if (!this.props.hasWallet) {
       this.props.changeUrl('/markets/list')
       return
     }
@@ -50,7 +27,7 @@ class Dashboard extends Component {
       this.props.requestMarkets()
       this.props.requestGasPrice()
 
-      if (this.props.defaultAccount) {
+      if (this.props.hasWallet) {
         this.props.requestAccountShares(this.props.defaultAccount)
         this.props.requestAccountTrades(this.props.defaultAccount)
         this.props.requestEtherTokens(this.props.defaultAccount)
@@ -70,86 +47,27 @@ class Dashboard extends Component {
 
   @autobind
   handleCreateMarket() {
-    /*
-    const options = {
-      title: 'Test Market',
-      description: 'Test123',
-      outcomes: ['Yes', 'No'],
-      resolutionDate: new Date().toISOString(),
-      funding: new BigNumber('0.2345'),
-      fee: new BigNumber('12.00'),
-      eventType: 'CATEGORICAL',
-      oracleType: 'CENTRALIZED',
-    }
-
-    this.props.createMarket(options)*/
     this.props.changeUrl('/markets/new')
   }
 
-  @autobind
-  handleExpand(type) {
-    // Toggle
-    this.setState({ visibleControl: this.state.visibleControl === type ? null : type })
-  }
-
-  renderExpandableContent() {
-    const { visibleControl } = this.state
-
-    if (visibleControl === EXPAND_DEPOSIT) {
-      // const {
-      //   market,
-      //   selectedCategoricalOutcome,
-      //   selectedBuyInvest,
-      //   buyShares,
-      // } = this.props
-
-      return (
-        <div className="expandable__inner">
-          <div className="container">
-            <span>Something comes here</span>
-          </div>
-        </div>
-      )
-    }
-
-    return <div />
-  }
-
   renderControls() {
-    const { defaultAccount } = this.props
-    const canCreateMarket = process.env.WHITELIST[defaultAccount] !== undefined
     return (
-      <div className="dashboardControls container">
-        <div className="row">
-          <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-            {Object.keys(controlButtons).map(type => (
-              <button
-                key={type}
-                type="button"
-                className={`
-                  dashboardControls__button
-                  ${controlButtons[type].className}
-                  ${type === this.state.visibleControl ? 'dashboardControls__button--active' : ''}`}
-                onClick={() => this.handleExpand(type)}
-              >
-                {controlButtons[type].label}
-              </button>
-            ))}
-            {canCreateMarket ? (
-              <button
-                type="button"
+      <div className="dashboardControls">
+        <div className="container">
+          <div className="row">
+            <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
+              <InteractionButton
                 onClick={this.handleCreateMarket}
                 className="dashboardControls__button btn btn-default"
+                whitelistRequired
               >
-                Create Market
-              </button>
-            ) : (
-              <div />
-            )}
+                    Create Market
+              </InteractionButton>
+            </div>
           </div>
         </div>
       </div>
-    )
+    ) 
   }
 
   renderNewMarkets(markets) {
@@ -359,10 +277,10 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { accountPredictiveAssets, etherTokens, defaultAccount } = this.props
+    const { accountPredictiveAssets, etherTokens, hasWallet } = this.props
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
-    if (defaultAccount) {
+    if (hasWallet) {
       metricsSection = (
         <div className="dashboardPage__stats">
           <div className="container">
@@ -412,7 +330,6 @@ class Dashboard extends Component {
         </div>
         {metricsSection}
         {this.renderControls()}
-        <div className="expandable">{this.renderExpandableContent()}</div>
         <div className="dashboardWidgets dashboardWidgets--markets">
           <div className="container">
             <div className="row">
@@ -436,6 +353,7 @@ Dashboard.propTypes = {
   //   market: marketPropType,
   markets: PropTypes.arrayOf(marketPropType),
   defaultAccount: PropTypes.string,
+  hasWallet: PropTypes.bool,
   accountShares: PropTypes.array,
   accountTrades: PropTypes.array,
   accountPredictiveAssets: PropTypes.string,

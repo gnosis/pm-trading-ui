@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { ETHEREUM_NETWORK, WALLET_PROVIDER } from 'integrations/constants'
-import { TRANSACTION_COMPLETE_STATUS } from './constants'
+import { TRANSACTION_COMPLETE_STATUS, INTERACTION_STATE } from './constants'
 
 export const eventDescriptionShape = PropTypes.shape({
   description: PropTypes.string,

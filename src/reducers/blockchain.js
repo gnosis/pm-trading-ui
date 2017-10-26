@@ -94,7 +94,7 @@ const reducer = handleActions({
   connection: undefined,
   connectionTried: false,
   providers: {},
-  activeProvider: null,
+  activeProvider: undefined,
   etherTokens: undefined,
 })
 

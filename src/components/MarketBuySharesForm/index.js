@@ -15,6 +15,8 @@ import {
 } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 
+import InteractionButton from 'containers/InteractionButton'
+
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
@@ -151,7 +153,7 @@ class MarketBuySharesForm extends Component {
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
     if (isOutcomeSelected) {
       newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome])
-        .add(outcomeTokenCount)
+        .add(outcomeTokenCount.toString())
         .toString()
     }
     const selectedMarginalPrice = isOutcomeSelected
@@ -221,12 +223,11 @@ class MarketBuySharesForm extends Component {
       selectedBuyInvest,
       submitFailed,
       submitting,
-      market: { event: { collateralToken } },
+      market: { event: { collateralToken }, address, local },
       selectedOutcome,
       gasCosts,
       gasPrice,
       changeUrl,
-      market: { address },
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
@@ -299,6 +300,10 @@ class MarketBuySharesForm extends Component {
                   <DecimalValue value={gasCostEstimation} decimals={5} />{' '}
                   <CurrencyName collateralToken={collateralToken} />
                 </div>
+                <div className="col-md-6">
+                  <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
+                  <CurrencyName collateralToken={collateralToken} />
+                </div>
               </div>
               {submitFailed && (
                 <div className="row marketBuySharesForm__row">
@@ -309,12 +314,14 @@ class MarketBuySharesForm extends Component {
               )}
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">
-                  <button
-                    className={`btn btn-primary col-md-12 ${!submitEnabled ? 'disabled' : ''}`}
+                  <InteractionButton
+                    className="btn btn-primary col-md-12"
                     disabled={!submitEnabled}
+                    loading={submitting || local}
+                    type="submit"
                   >
-                    {submitting ? 'Loading...' : 'Buy Tokens'}
-                  </button>
+                    Buy Tokens
+                  </InteractionButton>
                 </div>
                 <div className="col-md-6">
                   <button

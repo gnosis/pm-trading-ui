@@ -15,10 +15,10 @@ const config = require('./src/config.json')
 const whitelist = config.productionWhitelist
 
 const gnosisDbUrl =
-  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
+  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
 
 const ethereumUrl =
-  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.host}:${config.ethereum.port}`
+  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.host}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
   context: path.join(__dirname, 'src'),

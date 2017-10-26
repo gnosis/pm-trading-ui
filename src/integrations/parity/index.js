@@ -31,6 +31,7 @@ class Parity extends InjectedWeb3 {
     }
 
     if (this.walletEnabled) {
+      this.networkId = await this.getNetwork()
       this.network = await this.getNetwork()
       this.account = await this.getAccount()
       this.balance = await this.getBalance()
@@ -38,6 +39,7 @@ class Parity extends InjectedWeb3 {
 
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,
+      networkId: this.networkId,
       network: this.network,
       account: this.account,
       balance: this.balance,

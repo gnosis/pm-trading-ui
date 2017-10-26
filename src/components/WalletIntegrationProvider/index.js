@@ -17,12 +17,11 @@ class WalletIntegrationProvider extends Component {
       runProviderUpdate: this.handleProviderUpdate,
       runProviderRegister: this.handleProviderRegister,
     }
-
-    window.addEventListener('load', () =>
+    window.addEventListener('load', () => {
       Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
-        .then(this.props.initGnosis)
-        .catch(this.props.initGnosis),
-    )
+        .then(this.props.initGnosis, this.props.initGnosis)
+        .catch(this.props.initGnosis)
+    })
   }
 
   @autobind

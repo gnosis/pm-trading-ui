@@ -6,6 +6,8 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { weiToEth } from 'utils/helpers'
 
+import InteractionButton from 'containers/InteractionButton'
+
 import './marketWithdrawFeesForm.less'
 
 class MarketWithdrawFeesForm extends Component {
@@ -42,12 +44,14 @@ class MarketWithdrawFeesForm extends Component {
         <div className="row marketWithdrawFeesForm__row">
           <div className="col-md-6">
             <form onSubmit={handleSubmit(this.handleWithdrawFees)}>
-              <button
-                className={`marketWithdrawFeesForm--submit btn btn-primary ${!submitEnabled ? 'disabled' : ''}`}
+              
+              <InteractionButton
+                className="marketWithdrawFeesForm--submit btn btn-primary"
                 disabled={!submitEnabled}
+                loading={submitting || market.local}
               >
-                {submitting ? 'Loading...' : 'Withdraw'}
-              </button>
+                Withdraw
+              </InteractionButton>
             </form>
           </div>
         </div>

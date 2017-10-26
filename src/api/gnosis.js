@@ -1,9 +1,10 @@
-/* globals __ETHEREUM_HOST__ */
+/* globals process.env */
+import Web3 from 'web3'
 
 import Gnosis from '@gnosis.pm/gnosisjs'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
-import { hexWithPrefix, weiToEth } from 'utils/helpers'
+import { hexWithPrefix, weiToEth, promisify } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
 // import { normalize } from 'normalizr'
 
@@ -35,7 +36,13 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
 /**
  * Returns an instance of the connection to GnosisJS
  */
-export const getGnosisConnection = async () => gnosisInstance
+export const getGnosisConnection = async () => {
+  if (!gnosisInstance) {
+    throw new Error('GnosisJS not initialized yet')
+  }
+
+  return gnosisInstance
+}
 
 /**
  * Returns the default node account
@@ -209,7 +216,7 @@ export const fundMarket = async (market) => {
   )
 
   if (marketAllowance.lt(marketFundingWei)) {
-    await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
+    await collateralToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
   }
 
   if (process.env.NODE_ENV !== 'production') {
@@ -244,6 +251,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
   const collateralTokenWei = Decimal(cost).mul(1e18)
+  
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
   const collateralToken = await gnosis.contracts.Token.at(
     await gnosis.contracts.Event.at(market.event.address).collateralToken(),
@@ -255,7 +263,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
 
   // buyOutComeTokens handles approving
   return await gnosis.buyOutcomeTokens({
-    market,
+    market: market.address,
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCount.toString(),
     approvalResetAmount,
@@ -363,6 +371,10 @@ export const getGasPrice = async () => {
  */
 export const getEtherTokens = async (account) => {
   const gnosis = await getGnosisConnection()
-  const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
-  return new Decimal(balance.toFixed(0))
+
+  if (gnosis && gnosis.etherToken) {
+    const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
+    return new Decimal(balance.toFixed(0))
+  }
+  return undefined
 }

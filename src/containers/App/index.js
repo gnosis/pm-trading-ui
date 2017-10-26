@@ -8,14 +8,13 @@ import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
 
 import { connectBlockchain } from 'actions/blockchain'
-import { providerPropType } from 'utils/shapes'
 
 import LoadingIndicator from 'components/LoadingIndicator'
 
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
-import { getSelectedProvider } from 'selectors/blockchain'
+import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
 
 import './app.less'
 
@@ -57,6 +56,7 @@ App.propTypes = {
 const mapStateToProps = state => ({
   provider: getSelectedProvider(state),
   blockchainConnection: state.blockchain.connectionTried,
+  isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 
 export default connect(mapStateToProps, {
