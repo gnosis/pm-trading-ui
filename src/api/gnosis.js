@@ -209,7 +209,6 @@ export const fundMarket = async (market) => {
   if (await collateralToken.name() === 'Ether Token') {
     await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
   }
-  console.log(await collateralToken.name())
 
   const marketAllowance = await gnosis.etherToken.allowance(
     hexWithPrefix(market.creator),
