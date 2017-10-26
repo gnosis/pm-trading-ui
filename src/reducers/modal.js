@@ -22,6 +22,7 @@ const reducer = handleActions({
 }, {
   isOpen: false,
   currentModal: undefined,
+  transactions: [],
 })
 
 
