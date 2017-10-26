@@ -1,14 +1,15 @@
 import { restFetch, hexWithoutPrefix, addIdToObjectsInArray, getOutcomeName, normalizeScalarPoint } from 'utils/helpers'
 import { normalize } from 'normalizr'
 import { OUTCOME_TYPES } from 'utils/constants'
-
 import sha1 from 'sha1'
-
+import qs from 'querystring'
 import {
   marketSchema,
 } from './schema'
 
 const API_URL = `${process.env.GNOSISDB_URL}/api`
+
+const whitelistedAddressesFilter = qs.stringify({creator: Object.keys(process.env.WHITELIST)})
 
 export const requestMarket = async marketAddress =>
   restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/`).then(response =>
@@ -16,7 +17,7 @@ export const requestMarket = async marketAddress =>
   )
 
 export const requestMarkets = async () =>
-  restFetch(`${API_URL}/markets/`)
+  restFetch(`${API_URL}/markets?${whitelistedAddressesFilter}`)
     .then(response => normalize(
       response.results.filter(market => typeof market.funding !== 'undefined'),
       [marketSchema]),
