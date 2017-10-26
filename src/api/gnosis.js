@@ -345,3 +345,9 @@ export const getEtherTokens = async (account) => {
   const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
   return new Decimal(balance.toFixed(0))
 }
+
+export const getOlympiaTokensByAcoount = async (account) => {
+    const gnosis = await getGnosisConnection();
+    const balance = await gnosis.olympiaToken.balanceOf(account);
+    return new Decimal(balance.toFixed(0)).toString();
+}

@@ -47,9 +47,9 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
         {currentAccount && currentProvider && (
           <div className="headerContainer__account">
             <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
-                <span className="headerContainer__account--text">
-                    { collateralTokenToText() }
-                </span>
+            <span className="headerContainer__account--text">
+                { collateralTokenToText() }
+            </span>
             <Identicon account={currentAccount} />
           </div>
         )}
