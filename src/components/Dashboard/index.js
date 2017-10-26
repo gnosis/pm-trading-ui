@@ -61,13 +61,13 @@ class Dashboard extends Component {
                 className="dashboardControls__button btn btn-default"
                 whitelistRequired
               >
-                    Create Market
+                Create Market
               </InteractionButton>
             </div>
           </div>
         </div>
       </div>
-    ) 
+    )
   }
 
   renderNewMarkets(markets) {
@@ -151,11 +151,16 @@ class Dashboard extends Component {
               <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
               {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">
-              <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
-                Sell
-              </a>
-            </div>
+            {market.event &&
+              market.oracle &&
+              !market.oracle.isOutcomeSet &&
+              !market.event.isWinningOutcomeSet && (
+                <div className="col-md-2 dashboardMarket--highlight">
+                  <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
+                    SELL
+                  </a>
+                </div>
+              )}
           </div>
         </div>
       )
