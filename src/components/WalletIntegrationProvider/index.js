@@ -1,4 +1,4 @@
-import { getOlympiaTokensByAcoount } from 'api'
+import { getGnosisConnection, getOlympiaTokensByAcoount } from 'api'
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -28,12 +28,6 @@ class WalletIntegrationProvider extends Component {
 
   @autobind
   async handleProviderUpdate(provider, data) {
-    if ( provider.constructor.providerName === 'UPORT') {
-      await this.props.initGnosis()
-      const value = await getOlympiaTokensByAcoount(data.account) 
-      data.balance = value;
-    } 
-    
     await this.props.updateProvider({
       provider: provider.constructor.providerName,
       ...data,
@@ -50,7 +44,23 @@ class WalletIntegrationProvider extends Component {
       if (requireGnosisReinit) {
         await this.props.initGnosis()
       }
+
+      return
     }
+
+    if (provider.constructor.providerName === 'UPORT') {
+        await this.props.initGnosis(provider.constructor.providerName)
+        const account = (await getGnosisConnection()).defaultAccount
+        const value = await getOlympiaTokensByAcoount(account) 
+        data.account = account
+        data.balance = value;
+  
+        await this.props.updateProvider({
+          provider: provider.constructor.providerName,
+          ...data,
+        })
+    }
+
   }
 
   @autobind

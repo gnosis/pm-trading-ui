@@ -37,9 +37,11 @@ export const getGnosisConnection = async () => gnosisInstance
  */
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
-  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts(
+  
+  return gnosis.defaultAccount
+  /*return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts(
     (e, accounts) => (e ? reject(e) : resolve(accounts[0]))),
-  )
+  )*/
 }
 
 /**
