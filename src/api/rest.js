@@ -9,7 +9,8 @@ import {
 
 const API_URL = `${process.env.GNOSISDB_URL}/api`
 
-const whitelistedAddressesFilter = qs.stringify({creator: Object.keys(process.env.WHITELIST)})
+const addresses = Object.keys(process.env.WHITELIST).map(address => hexWithoutPrefix(address))
+const whitelistedAddressesFilter = qs.stringify({ creator: addresses[0] })
 
 export const requestMarket = async marketAddress =>
   restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/`).then(response =>
@@ -17,7 +18,7 @@ export const requestMarket = async marketAddress =>
   )
 
 export const requestMarkets = async () =>
-  restFetch(`${API_URL}/markets?${whitelistedAddressesFilter}`)
+  restFetch(`${API_URL}/markets/?${whitelistedAddressesFilter}`)
     .then(response => normalize(
       response.results.filter(market => typeof market.funding !== 'undefined'),
       [marketSchema]),
