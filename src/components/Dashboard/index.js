@@ -61,13 +61,13 @@ class Dashboard extends Component {
                 className="dashboardControls__button btn btn-default"
                 whitelistRequired
               >
-                    Create Market
+                Create Market
               </InteractionButton>
             </div>
           </div>
         </div>
       </div>
-    ) 
+    )
   }
 
   renderNewMarkets(markets) {
@@ -104,7 +104,9 @@ class Dashboard extends Component {
   renderMyHoldings(holdings, markets) {
     return holdings.map((holding, index) => {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
-      const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
+      const filteredMarkets = markets.filter(
+        market => market.event.address === eventAddress && process.env.WHITELIST[market.creator],
+      )
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
       let probability = new Decimal(0)
       let maximumWin = new Decimal(0)
@@ -123,49 +125,70 @@ class Dashboard extends Component {
         })
       }
 
-      return (
-        <div className="dashboardMarket dashboardMarket--onDark" key={index}>
-          <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>
-            {holding.eventDescription.title}
-          </div>
-          <div className="outcome row">
-            <div className="col-md-3">
-              <div
-                className={'entry__color pull-left'}
-                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }}
-              />
-              <div className="dashboardMarket--highlight pull-left">
-                {getOutcomeName(market, holding.outcomeToken.index)}
+      if (market) {
+        return (
+          <div className="dashboardMarket dashboardMarket--onDark" key={index}>
+            <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>
+              {holding.eventDescription.title}
+            </div>
+            <div className="outcome row">
+              <div className="col-md-3">
+                <div
+                  className={'entry__color pull-left'}
+                  style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }}
+                />
+                <div className="dashboardMarket--highlight pull-left">
+                  {getOutcomeName(market, holding.outcomeToken.index)}
+                </div>
+              </div>
+              <div className="col-md-3 dashboardMarket--highlight">
+                {Decimal(holding.balance)
+                  .div(1e18)
+                  .gte(LOWEST_DISPLAYED_VALUE) ? (
+                    <DecimalValue value={weiToEth(holding.balance)} />
+                ) : (
+                  `< ${LOWEST_DISPLAYED_VALUE}`
+                )}&nbsp;
+                {market.event &&
+                  market.event.type === 'SCALAR' && <CurrencyName outcomeToken={market.eventDescription.unit} />}
+              </div>
+              <div className="col-md-2 dashboardMarket--highlight">
+                <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
+                {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
+              </div>
+              <div className="col-md-4 dashboardMarket--highlight">
+                {market.event &&
+                  market.oracle &&
+                  !market.oracle.isOutcomeSet &&
+                  !market.event.isWinningOutcomeSet && (
+                    <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
+                      SELL
+                    </a>
+                  )}
+                {market.event &&
+                  market.oracle &&
+                  market.oracle.isOutcomeSet &&
+                  market.event.isWinningOutcomeSet && (
+                    <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
+                      REDEEM WINNINGS
+                    </a>
+                  )}
               </div>
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">
-              {Decimal(holding.balance)
-                .div(1e18)
-                .gte(LOWEST_DISPLAYED_VALUE) ? (
-                  <DecimalValue value={weiToEth(holding.balance)} />
-              ) : (
-                `< ${LOWEST_DISPLAYED_VALUE}`
-              )}
-            </div>
-            <div className="col-md-2 dashboardMarket--highlight">
-              <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
-              {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
-            </div>
-            <div className="col-md-2 dashboardMarket--highlight">
-              <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
-                Sell
-              </a>
-            </div>
           </div>
-        </div>
-      )
+        )
+      }
+
+      return <div />
     })
   }
 
   renderMyTrades(trades, markets) {
     return trades.map((trade, index) => {
       const eventAddress = add0xPrefix(trade.outcomeToken.event)
-      const filteredMarkets = markets.filter(market => market.event.address === eventAddress)
+      const filteredMarkets = markets.filter(
+        market => market.event.address === eventAddress && process.env.WHITELIST[market.creator],
+      )
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
       let averagePrice
       if (trade.orderType === 'BUY') {
@@ -365,6 +388,7 @@ Dashboard.propTypes = {
   changeUrl: PropTypes.func,
   requestEtherTokens: PropTypes.func,
   gnosisInitialized: PropTypes.bool,
+  redeemWinnings: PropTypes.func,
 }
 
 export default Dashboard
