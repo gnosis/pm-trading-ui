@@ -126,7 +126,6 @@ class Dashboard extends Component {
       }
 
       if (market) {
-        console.log(market.event && market.event.type)
         return (
           <div className="dashboardMarket dashboardMarket--onDark" key={index}>
             <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>
