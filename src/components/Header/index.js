@@ -24,7 +24,7 @@ const Header = ({
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
         <Link to={hasWallet ? '/' : '/markets/list'}>
-          <div className="headerLogo" />
+          <div className="headerLogo beta" />
         </Link>
       </div>
       <div className="headerContainer__group headerContainer__group--left headerContainer__group--version">
