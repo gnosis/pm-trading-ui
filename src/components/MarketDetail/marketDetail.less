@@ -1,4 +1,4 @@
-@import '../../less/vars.less';
+@import "../../less/vars.less";
 
 @expandable-arrow-size: 15px;
 @expandable-margin: 40px;
@@ -94,7 +94,7 @@
 
 .marketControls__button--active {
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -@expandable-margin;
     left: 50%;
@@ -130,7 +130,7 @@
 
     &::before {
       visibility: visible;
-      content: '';
+      content: "";
       position: absolute;
       margin-bottom: 50px;
     }
@@ -139,9 +139,11 @@
 
 @detailBadgesSize: 64px;
 
-.redeemWinning,
-.withdrawFees {
-  margin: 12px 0;
+.redeemWinning {
+  display: flex;
+  flex-direction: column;
+  max-width: 267px;
+  margin: 20px 0;
 
   &__icon {
     width: @detailBadgesSize;
@@ -170,20 +172,19 @@
   }
 
   &__action {
-    display: inline-block;
-    float: right;
-    padding-right: 50px;
-    height: @detailBadgesSize;
-
     .btn {
-      height: 100%;
-      text-align: right;
-      float: right;
+      float: none;
+      padding: 10px;
+      margin-top: 30px;
+      height: auto;
+      width: 100%;
+      text-align: center;
+      line-height: 1;
     }
   }
 
   &::after {
-    content: '';
+    content: "";
     display: table;
     clear: both;
   }

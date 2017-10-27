@@ -288,15 +288,17 @@ class MarketDetail extends Component {
         )}
         {showWinning && (
           <div className="redeemWinning">
-            <div className="redeemWinning__icon icon icon--achievementBadge" />
-            <div className="redeemWinning__details">
-              <div className="redeemWinning__heading">
-                <DecimalValue value={winnings} /> {collateralTokenToText(market.event.collateralToken)}
+            <div className="redeemWinning__icon-details-container">
+              <div className="redeemWinning__icon icon icon--achievementBadge" />
+              <div className="redeemWinning__details">
+                <div className="redeemWinning__heading">
+                  <DecimalValue value={winnings} /> {collateralTokenToText(market.event.collateralToken)}
+                </div>
+                <div className="redeemWinning__label">Your Winnings</div>
               </div>
-              <div className="redeemWinning__label">Your Winnings</div>
             </div>
             <div className="redeemWinning__action">
-              <button className="btn btn-link" type="button" onClick={this.handleRedeemWinnings}>
+              <button className="btn btn-primary btn-xs" type="button" onClick={this.handleRedeemWinnings}>
                 Redeem Winnings
               </button>
             </div>
@@ -316,7 +318,7 @@ class MarketDetail extends Component {
   }
 
   renderControls() {
-    const { market, closeMarket, defaultAccount } = this.props
+    const { market, closeMarket, defaultAccount, redeemWinnings } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
@@ -341,20 +343,18 @@ class MarketDetail extends Component {
               </button>
             ))}
           {market.stage !== MARKET_STAGES.MARKET_CLOSED &&
-          market.creator === defaultAccount ? (
-            <InteractionButton
-              key="close-market"
-              type="button"
-              className="marketControls__button btn btn-default"
-              loading={market.local}
-              onClick={() => closeMarket(market)}
-              requiresWhitelist
-            >
-              Close Market
-            </InteractionButton>
-          ) : (
-            <div />
-          )}
+            market.creator === defaultAccount && (
+              <InteractionButton
+                key="close-market"
+                type="button"
+                className="marketControls__button btn btn-default"
+                loading={market.local}
+                onClick={() => closeMarket(market)}
+                requiresWhitelist
+              >
+                Close Market
+              </InteractionButton>
+            )}
         </div>
       </div>
     )
