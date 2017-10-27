@@ -6,13 +6,7 @@ import autobind from 'autobind-decorator'
 import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { weiToEth } from 'utils/helpers'
-import {
-  COLOR_SCHEME_DEFAULT,
-  OUTCOME_TYPES,
-  GAS_COST,
-  SCALAR_SHORT_COLOR,
-  SCALAR_LONG_COLOR,
-} from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST, SCALAR_SHORT_COLOR, SCALAR_LONG_COLOR } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 
 import InteractionButton from 'containers/InteractionButton'
@@ -39,7 +33,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getOutcomeTokenCount(investment, outcomeIndex) {
-    if (!investment || !(parseFloat(investment) > 0)) {
+    if (!investment || !(parseFloat(investment) > 0) || parseFloat(investment) >= 1000) {
       return new Decimal(0)
     }
 
@@ -115,8 +109,7 @@ class MarketBuySharesForm extends Component {
   }
 
   renderCategorical() {
-    const { market, market: { eventDescription } } = this.props
-
+    const { market, market: { eventDescription }, selectedOutcome, selectedBuyInvest } = this.props
     return (
       <div className="col-md-7">
         <Field
@@ -124,6 +117,8 @@ class MarketBuySharesForm extends Component {
           name="selectedOutcome"
           className="marketBuyOutcome"
           market={market}
+          selectedOutcome={selectedOutcome}
+          selectedBuyInvest={selectedBuyInvest}
           radioValues={eventDescription.outcomes.map((label, index) => ({
             value: index,
             label: eventDescription.outcomes[index],
@@ -278,7 +273,12 @@ class MarketBuySharesForm extends Component {
             <div className="col-md-5">
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-8">
-                  <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
+                  <Field
+                    name="invest"
+                    component={Input}
+                    className="marketBuyInvest"
+                    placeholder="Investment"
+                  />
                 </div>
                 <div className="col-md-4">
                   <div className="marketBuyCurrency">
