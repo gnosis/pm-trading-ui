@@ -27,15 +27,16 @@
     align-items: center;
     text-align: center;
 
-    &--wrongChain,&--wrongChainHelp {
+    &--wrongChain,
+    &--wrongChainHelp {
       margin: 0;
       line-height: 1;
       font-weight: 300;
-      letter-spacing: .5px;
+      letter-spacing: 0.5px;
     }
 
     &--wrongChain {
-      color: @active-highlight-error;    
+      color: @active-highlight-error;
     }
   }
 
@@ -45,14 +46,13 @@
       font-weight: 500;
       margin-right: 5px;
       margin-bottom: 2px;
-      letter-spacing: .5px;
+      letter-spacing: 0.5px;
     }
 
     img {
       margin-left: 10px;
     }
   }
-
 }
 
 .headerContainer__navLink {
@@ -61,12 +61,12 @@
   text-transform: uppercase;
   font-weight: 500;
   padding-bottom: 2px;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
   border-bottom: 2px solid transparent;
   color: black !important;
   font-size: 11px;
 
-  @media(min-width: @screen-sm) {
+  @media (min-width: @screen-sm) {
     font-size: 14px;
     margin-left: 20px;
   }
@@ -83,7 +83,7 @@
     color: white !important;
     font-size: 12px;
     display: none;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
   }
 
   &&--right {
@@ -95,7 +95,7 @@
     padding-right: 0;
     height: @navbarHeight;
 
-    @media(min-width: @screen-sm) {
+    @media (min-width: @screen-sm) {
       width: 200px;
       padding-right: 70px;
       position: relative;
@@ -107,22 +107,36 @@
     display: flex;
     align-items: center;
   }
-  
 }
 
 .headerLogo {
   display: inline-block;
   height: 25px;
   width: 70px;
-  background-image: url('../../assets/img/gnosis_logo_icon.svg');
+  background-image: url("../../assets/img/gnosis_logo_icon.svg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;
 
-  @media(min-width: @screen-sm) {
+  @media (min-width: @screen-sm) {
     height: 40px;
     width: 130px;
-    background-image: url('../../assets/img/gnosis_logo.svg');
+    background-image: url("../../assets/img/gnosis_logo.svg");
+  }
+
+  &.beta {
+    position: relative;
+    font-family: inherit;
+    font-size: 8px;
+    color: #989898;
+    letter-spacing: 1px;
+    font-weight: normal;
+    &:after {
+      content: "BETA";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
   }
 }
 
@@ -135,14 +149,14 @@
   background-position: left center;
 
   &--metamask {
-    background-image: url('../../assets/img/icons/icon_metamask.svg');
+    background-image: url("../../assets/img/icons/icon_metamask.svg");
   }
 
   &--parity {
-    background-image: url('../../assets/img/icons/icon_parity.svg');
+    background-image: url("../../assets/img/icons/icon_parity.svg");
   }
 
   &--default {
-    background-image: url('../../assets/img/icons/icon_etherTokens.svg');
+    background-image: url("../../assets/img/icons/icon_etherTokens.svg");
   }
 }
