@@ -20,7 +20,7 @@ const FormBarChartRadioButton = ({
   const outcomeTokensSold = [...market.netOutcomeTokensSold]
   const renderOutcomes = market.eventDescription.outcomes
 
-  if (selectedOutcome) {
+  if (typeof selectedOutcome !== 'undefined') {
     outcomeTokensSold[selectedOutcome] = Decimal(market.netOutcomeTokensSold[selectedOutcome])
       .add(outcomeTokenCount.toString())
       .toString()
