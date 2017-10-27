@@ -85,11 +85,7 @@ FormBarChartRadioButton.propTypes = {
   className: PropTypes.string,
   highlightColor: PropTypes.string,
   selectedOutcome: PropTypes.number,
-<<<<<<< HEAD
   outcomeTokenCount: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Decimal)]),
-=======
-  outcomeTokenCount: PropTypes.object,
->>>>>>> 171184551dfeb4bea9000d5764679318db1ef1aa
 }
 
 export default FormBarChartRadioButton
