@@ -31,11 +31,6 @@ const Header = ({
         {version}
       </div>
       <div className="headerContainer__group headerContainer__group--left">
-        {hasWallet && (
-          <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
-            Dashboard
-          </Link>
-        )}
         <Link
           to="/markets/list"
           activeClassName="headerContainer__navLink--active"
@@ -43,6 +38,11 @@ const Header = ({
         >
           Markets
         </Link>
+        {hasWallet && (
+          <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+            Dashboard
+          </Link>
+        )}
         {hasWallet && (
           <Link
             to="/transactions"
@@ -55,18 +55,28 @@ const Header = ({
       </div>
 
       <div className="headerContainer__group headerContainer__group--right account">
-        {hasWallet && !isConnectedToCorrectNetwork && (
-          <div className="headerContainer__network">
-            <p className="headerContainer__network--wrongChain">Network: {upperFirst(currentNetwork.toLowerCase())}</p>
-            <a className="headerContainer__network--wrongChainHelp" href="javascript:void(0)" onClick={() => openNetworkCheckModal()}>This is not the chain used for this plattform.<br />Click here for help</a>
-          </div>
-        )}
-        {hasWallet && currentProvider && (
-          <div className="headerContainer__account">
-            <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
-            <Identicon className="" account={currentAccount} />
-          </div>
-        )}
+        {hasWallet &&
+          !isConnectedToCorrectNetwork && (
+            <div className="headerContainer__network">
+              <p className="headerContainer__network--wrongChain">
+                Network: {upperFirst(currentNetwork.toLowerCase())}
+              </p>
+              <a
+                className="headerContainer__network--wrongChainHelp"
+                href="javascript:void(0)"
+                onClick={() => openNetworkCheckModal()}
+              >
+                This is not the chain used for this plattform.<br />Click here for help
+              </a>
+            </div>
+          )}
+        {hasWallet &&
+          currentProvider && (
+            <div className="headerContainer__account">
+              <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
+              <Identicon className="" account={currentAccount} />
+            </div>
+          )}
         {hasWallet && currentProvider && <ProviderIcon provider={currentProvider} />}
         {!hasWallet && (
           <a
