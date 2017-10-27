@@ -157,10 +157,23 @@ class Dashboard extends Component {
                 <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
                 {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
               </div>
-              <div className="col-md-2 dashboardMarket--highlight">
-                <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
-                  Sell
-                </a>
+              <div className="col-md-4 dashboardMarket--highlight">
+                {market.event &&
+                  market.oracle &&
+                  !market.oracle.isOutcomeSet &&
+                  !market.event.isWinningOutcomeSet && (
+                    <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
+                      SELL
+                    </a>
+                  )}
+                {market.event &&
+                  market.oracle &&
+                  market.oracle.isOutcomeSet &&
+                  market.event.isWinningOutcomeSet && (
+                    <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
+                      REDEEM WINNINGS
+                    </a>
+                  )}
               </div>
             </div>
           </div>
@@ -376,6 +389,7 @@ Dashboard.propTypes = {
   changeUrl: PropTypes.func,
   requestEtherTokens: PropTypes.func,
   gnosisInitialized: PropTypes.bool,
+  redeemWinnings: PropTypes.func,
 }
 
 export default Dashboard
