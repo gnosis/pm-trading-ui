@@ -316,7 +316,7 @@ class MarketMySharesForm extends Component {
                 <label>New predicted value</label>
                 <span>
                   <DecimalValue value={newScalarPredictedValue} />&nbsp;
-                  <CurrencyName outcomeToken={market.eventDescription.unit} />
+                  <span>{market.eventDescription.unit}</span>
                 </span>
               </div>
             ) : (
