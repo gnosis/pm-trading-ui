@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import cn from 'classnames'
@@ -12,79 +12,104 @@ import { checkWalletConnection, isGnosisInitialized, isConnectedToCorrectNetwork
 
 import './interactionButton.less'
 
-const InteractionButton = ({
-  className,
-  onClick,
-  hasWallet,
-  correctNetwork,
-  gnosisInitialized,
-  whitelistRequired,
-  whitelisted,
-  children,
-  type,
-  disabled,
-  loading,
-}) => {
-  if (whitelistRequired && !whitelisted) {
-    return null
+class InteractionButton extends Component {
+  constructor() {
+    super()
+
+    this.state = { loading: false }
   }
+  render() {
+    const {
+      className,
+      onClick,
+      hasWallet,
+      correctNetwork,
+      gnosisInitialized,
+      whitelistRequired,
+      whitelisted,
+      children,
+      type,
+      disabled,
+      loading,
+    } = this.props
+      
+    if (whitelistRequired && !whitelisted) {
+      return null
+    }
 
-  // "you need a wallet"
-  const walletError = !hasWallet || !gnosisInitialized
+    // "you need a wallet"
+    const walletError = !hasWallet || !gnosisInitialized
 
-  // "you are on the wrong chain"
-  const networkError = !correctNetwork
+    // "you are on the wrong chain"
+    const networkError = !correctNetwork
 
-  // loading from props or uninitialized gnosisjs
-  const isLoading = loading || !gnosisInitialized
+    // loading from props or uninitialized gnosisjs
+    const isLoading = loading || !gnosisInitialized || this.state.loading
 
-  // disabled from props or wallet error or network error
-  const isDisabled = disabled || walletError || networkError
+    // disabled from props or wallet error or network error
+    const isDisabled = disabled || walletError || networkError
 
-  const classNames = cn(
-    'interactionButton',
-    className,
-    { disabled: isDisabled },
-    { loading: isLoading },
-  )
+    const classNames = cn(
+      'interactionButton',
+      className,
+      { disabled: isDisabled },
+      { loading: isLoading },
+    )
 
-  const btn = (
-    <button
-      className={classNames}
-      type={type || 'button'}
-      onClick={(e) => {
-        if (isDisabled) {
-          e.preventDefault()
-          return
-        }
+    const btn = (
+      <button
+        className={classNames}
+        type={type || 'button'}
+        onClick={(e) => {
+          if (isDisabled) {
+            e.preventDefault()
+            return
+          }
 
-        if (typeof onClick === 'function') {
-          onClick()
-        }
-      }}
-      disabled={isDisabled}
-    >
-      {children}
-    </button>
-  )
+          if (typeof onClick === 'function') {
+            const ret = onClick()
 
-  if (isLoading) {
-    return (
-      <button className={classNames} type="button" disabled>
-        <LoadingIndicator width={28} height={28} />
+            if (typeof ret === 'object' && ret.constructor.name === 'Promise') {
+              try {
+                this.setState({ loading: true })
+                ret
+                  .then(() => this.setState({ loading: false }))
+                  .catch(() => this.setState({ loading: false }))
+              } catch (e) {
+                // fails if promise execute after component unmount
+              }
+            }
+          }
+        }}
+        disabled={isDisabled}
+      >
+        <div className="interactionButton__inner">
+          {children}
+        </div>
       </button>
     )
-  }
 
-  if (walletError) {
-    return <Tooltip overlay="You need a wallet connected in order to create a market">{btn}</Tooltip>
-  }
+    if (isLoading) {
+      return (
+        <button className={classNames} type="button" disabled>
+          <div className="interactionButton__inner">
+            {children}
+          </div>
+          <LoadingIndicator width={28} height={28} className="interactionButtonLoading" />
+        </button>
+      )
+    }
 
-  if (networkError) {
-    return <Tooltip overlay="You are connected to the wrong chain. You can only interact with Gnosis when you're on the same chain as us.">{btn}</Tooltip>
-  }
+    if (walletError) {
+      return <Tooltip overlay="You need a wallet connected in order to create a market">{btn}</Tooltip>
+    }
 
-  return btn
+    if (networkError) {
+      return <Tooltip overlay="You are connected to the wrong chain. You can only interact with Gnosis when you're on the same chain as us.">{btn}</Tooltip>
+    }
+
+    return btn
+  }
 }
 
 InteractionButton.propTypes = {
