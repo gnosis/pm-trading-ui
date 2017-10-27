@@ -1,69 +1,82 @@
 @import url("../../less/vars.less");
 
-@outcome-bar-height: 15px;
+.formBarChartRadioButtons {
+  margin: 10px 0;
+  width: 100%;
 
-.outcome__bar {
-  & + & {
-    margin-top: 10px;
-  }
-
-  &--inner {
-    max-width: 85%;
-  }
-}
-
-.formBarRadioButton {
   &--error {
-    .barRadioButton__text {
+    .radioButton__text {
       color: @active-highlight-error !important;
     }
   }
 
-  .barRadioButton {
+  .formBarChartRadioButton {
+    display: flex;
+    margin-bottom: 5px;
+
     &__text {
+      width: 100%;
+      position: relative;
+      align-self: stretch;
       text-transform: none;
-      display: table-cell;
       font-weight: normal;
       font-size: 14px;
-      margin: 20px 0 6px 0;
+      margin: 0;
+      padding: 0;
+
       color: @font-color-light;
       line-height: 16px;
-      vertical-align: middle;
-      padding-left: 6px;
-    }
 
+      display: inline-flex;
+      align-items: center;
+    }
+    
     &__input[type="radio"] {
       margin: 0;
       appearance: none;
-      display: table-cell;
-      height: @outcome-bar-height;
-      border-top-right-radius: 5px;
-      border-bottom-right-radius: 5px;
+      width: 33.68px;
+      height: 32px;
+      border-radius: 9999px;
       background-color: @bg-color-muted;
       border: 0px solid @bg-color-muted;
-
+  
       // for use with currentColor:
       color: @active-highlight;
 
-      transition: background-color 0.2s ease, border 0.2s ease,
-        width 0.3s ease-in-out;
+      transition: background-color 0.2s ease, border 0.2s ease;
 
       // current color is highlight color
       &:checked {
         background-color: currentColor;
         border-width: 4px;
       }
-
-      &:checked + .barRadioButton__text {
+  
+      &:checked+.radioButton__text {
         font-weight: 800;
       }
-
-      &:checked,
-      &:hover,
-      &:focus {
+  
+      &:checked, &:hover, &:focus {
         outline: none;
         box-shadow: 0 0 4px 1px currentColor;
       }
     }
+
+    &__outcome {
+      transition: width 1s ease-in-out;
+      position: relative;
+      margin: 0 5px;
+
+      .outcome__bar--inner {
+        width: 100%;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        background-color: rgb(140, 140, 140);
+        color: rgb(140, 140, 140);
+      }
+    }
+  
   }
 }

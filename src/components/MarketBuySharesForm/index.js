@@ -109,22 +109,34 @@ class MarketBuySharesForm extends Component {
   }
 
   renderCategorical() {
-    const { market, market: { eventDescription }, selectedOutcome, selectedBuyInvest } = this.props
+    const { selectedBuyInvest, selectedOutcome, market, market: { eventDescription } } = this.props
+
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
+
     return (
       <div className="col-md-7">
-        <Field
-          component={FormBarChartRadioButton}
-          name="selectedOutcome"
-          className="marketBuyOutcome"
-          market={market}
-          selectedOutcome={selectedOutcome}
-          selectedBuyInvest={selectedBuyInvest}
-          radioValues={eventDescription.outcomes.map((label, index) => ({
-            value: index,
-            label: eventDescription.outcomes[index],
-            highlightColor: COLOR_SCHEME_DEFAULT[index],
-          }))}
-        />
+        <div className="row">
+          <div className="col-md-12">
+            <h2 className="marketBuyHeading">Your Bet</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <Field
+              component={FormBarChartRadioButton}
+              name="selectedOutcome"
+              className="marketBuyOutcome"
+              market={market}
+              selectedOutcome={selectedOutcome}
+              outcomeTokenCount={outcomeTokenCount}
+              radioValues={eventDescription.outcomes.map((label, index) => ({
+                value: index,
+                label: eventDescription.outcomes[index],
+                highlightColor: COLOR_SCHEME_DEFAULT[index],
+              }))}
+            />
+          </div>
+        </div>
       </div>
     )
   }
@@ -192,20 +204,18 @@ class MarketBuySharesForm extends Component {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="row">
-              <div className="col-md-12">
-                <ScalarSlider
-                  lowerBound={parseInt(lowerBound, 10)}
-                  upperBound={parseInt(upperBound, 10)}
-                  unit={unit}
-                  decimals={decimals}
-                  marginalPriceCurrent={currentMarginalPrice}
-                  marginalPriceSelected={selectedMarginalPrice.toNumber()}
-                  selectedCost={outcomeTokenCount}
-                />
-              </div>
-            </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <ScalarSlider
+              lowerBound={parseInt(lowerBound, 10)}
+              upperBound={parseInt(upperBound, 10)}
+              unit={unit}
+              decimals={decimals}
+              marginalPriceCurrent={currentMarginalPrice}
+              marginalPriceSelected={selectedMarginalPrice.toNumber()}
+              selectedCost={outcomeTokenCount}
+            />
           </div>
         </div>
       </div>
