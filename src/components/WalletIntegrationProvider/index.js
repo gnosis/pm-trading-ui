@@ -1,4 +1,4 @@
-import { getGnosisConnection, getOlympiaTokensByAcoount } from 'api'
+import { getGnosisConnection, getOlympiaTokensByAccount } from 'api'
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -53,7 +53,7 @@ class WalletIntegrationProvider extends Component {
     if (provider.constructor.providerName === 'UPORT') {
         await this.props.initGnosis(this.props.uportDefaultAccount)
         const account = (await getGnosisConnection()).defaultAccount
-        const balance = await getOlympiaTokensByAcoount(account)
+        const balance = await getOlympiaTokensByAccount(account)
 
         await this.props.updateProvider({
           ...data,
