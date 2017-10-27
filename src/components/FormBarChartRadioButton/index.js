@@ -6,14 +6,36 @@ import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { bemifyClassName } from 'utils/helpers'
 import { calcLMSRMarginalPrice } from 'api'
 import DecimalValue from 'components/DecimalValue'
+import Decimal from 'decimal.js'
 
 import './formBarChartRadioButton.less'
 
-const FormBarChartRadioButton = ({ input, radioValues, label, className, meta: { error, touched }, market }) => {
+const FormBarChartRadioButton = ({
+  input,
+  radioValues,
+  label,
+  className,
+  meta: { error, touched },
+  market,
+  selectedOutcome,
+  selectedBuyInvest,
+}) => {
+  const outcomeTokensSold = [...market.netOutcomeTokensSold]
   const renderOutcomes = market.eventDescription.outcomes
+  let selectedBuyInvestWei
+
+  if (selectedBuyInvest && parseInt(selectedBuyInvest) < 1000) {
+    selectedBuyInvestWei = Decimal(selectedBuyInvest)
+      .mul(1e18)
+      .toString()
+    outcomeTokensSold[selectedOutcome] = Decimal(market.netOutcomeTokensSold[selectedOutcome])
+      .add(selectedBuyInvestWei)
+      .toString()
+  }
+
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: market.netOutcomeTokensSold,
+      netOutcomeTokensSold: outcomeTokensSold,
       funding: market.funding,
       outcomeTokenIndex: outcomeIndex,
     })
@@ -63,6 +85,8 @@ FormBarChartRadioButton.propTypes = {
   ),
   className: PropTypes.string,
   highlightColor: PropTypes.string,
+  selectedOutcome: PropTypes.number,
+  selectedBuyInvest: PropTypes.string,
 }
 
 export default FormBarChartRadioButton

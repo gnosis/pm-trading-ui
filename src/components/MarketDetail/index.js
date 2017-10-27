@@ -7,7 +7,7 @@ import cn from 'classnames'
 import Decimal from 'decimal.js'
 import { calcLMSRProfit } from 'api'
 
-import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
+import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES, MIN_CONSIDER_VALUE } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import InteractionButton from 'containers/InteractionButton'
@@ -164,7 +164,7 @@ class MarketDetail extends Component {
 
   @autobind
   handleRedeemWinnings() {
-    this.props.redeemWinnings(this.props.market)
+    return this.props.redeemWinnings(this.props.market)
   }
 
   renderLoading() {
@@ -238,7 +238,6 @@ class MarketDetail extends Component {
 
   renderDetails(market) {
     const showWinning = market.oracle.isOutcomeSet
-    const showLost = false // determine if we lost?
     const timeToResolution = moment
       .utc(market.eventDescription.resolutionDate)
       .local()
@@ -255,6 +254,7 @@ class MarketDetail extends Component {
           feeFactor: market.fee,
         }),
       )
+
       return sum.plus(new Decimal(shareWinnings))
     }, new Decimal(0))
 
@@ -286,33 +286,25 @@ class MarketDetail extends Component {
             </div>
           </div>
         )}
-        {showWinning && (
-          <div className="redeemWinning">
-            <div className="redeemWinning__icon-details-container">
-              <div className="redeemWinning__icon icon icon--achievementBadge" />
-              <div className="redeemWinning__details">
-                <div className="redeemWinning__heading">
-                  <DecimalValue value={winnings} /> {collateralTokenToText(market.event.collateralToken)}
+        {showWinning &&
+          winnings.gt(MIN_CONSIDER_VALUE) && (
+            <div className="redeemWinning">
+              <div className="redeemWinning__icon-details-container">
+                <div className="redeemWinning__icon icon icon--achievementBadge" />
+                <div className="redeemWinning__details">
+                  <div className="redeemWinning__heading">
+                    <DecimalValue value={winnings} /> {collateralTokenToText(market.event.collateralToken)}
+                  </div>
+                  <div className="redeemWinning__label">Your Winnings</div>
                 </div>
-                <div className="redeemWinning__label">Your Winnings</div>
+              </div>
+              <div className="redeemWinning__action">
+                <InteractionButton className="btn btn-primary" onClick={this.handleRedeemWinnings}>
+                  Redeem Winnings
+                </InteractionButton>
               </div>
             </div>
-            <div className="redeemWinning__action">
-              <button className="btn btn-primary btn-xs" type="button" onClick={this.handleRedeemWinnings}>
-                Redeem Winnings
-              </button>
-            </div>
-          </div>
-        )}
-        {showLost && (
-          <div className="redeemWinning redeemWinning--lost">
-            <div className="redeemWinning__icon icon icon--cross" />
-            <div className="redeemWinning__details">
-              <div className="redeemWinning__heading">200 {collateralTokenToText(market.event.collateralToken)}</div>
-              <div className="redeemWinning__label">You lost</div>
-            </div>
-          </div>
-        )}
+          )}
       </div>
     )
   }

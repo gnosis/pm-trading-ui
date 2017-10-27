@@ -7,6 +7,15 @@
   height: 45px;
 
   &.loading {
-    padding: 0;
+    .interactionButton__inner {
+      visibility: hidden;
+    }
+  }
+
+  &Loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 }

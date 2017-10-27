@@ -31,7 +31,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
         <div>
           {market.marginalPrices ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0) : 0}%
         </div>
-        <div>
+        <div className="date">
           { showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}
         </div>
       </div>

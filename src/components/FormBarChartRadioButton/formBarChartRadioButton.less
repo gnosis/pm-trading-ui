@@ -1,4 +1,4 @@
-@import url('../../less/vars.less');
+@import url("../../less/vars.less");
 
 @outcome-bar-height: 15px;
 
@@ -32,7 +32,7 @@
       padding-left: 6px;
     }
 
-    &__input[type='radio'] {
+    &__input[type="radio"] {
       margin: 0;
       appearance: none;
       display: table-cell;
@@ -45,7 +45,8 @@
       // for use with currentColor:
       color: @active-highlight;
 
-      transition: background-color 0.2s ease, border 0.2s ease;
+      transition: background-color 0.2s ease, border 0.2s ease,
+        width 0.3s ease-in-out;
 
       // current color is highlight color
       &:checked {
