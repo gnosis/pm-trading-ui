@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { map } from 'lodash'
 import { registerProvider, updateProvider, initGnosis } from 'actions/blockchain'
-import { isGnosisInitialized } from 'selectors/blockchain'
+import { getUportDefaultAccount, isGnosisInitialized } from 'selectors/blockchain'
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
@@ -42,29 +42,33 @@ class WalletIntegrationProvider extends Component {
       })
 
       if (requireGnosisReinit) {
-        await this.props.initGnosis()
+        // Just in case any other provider is updated and the default one
+        // is UPORT we do not want to scan the code again
+        await this.props.initGnosis(this.props.uportDefaultAccount)
       }
 
       return
     }
 
     if (provider.constructor.providerName === 'UPORT') {
-        await this.props.initGnosis(provider.constructor.providerName)
+        await this.props.initGnosis(this.props.uportDefaultAccount)
         const account = (await getGnosisConnection()).defaultAccount
-        const value = await getOlympiaTokensByAcoount(account)
-        data.account = account
-        data.balance = value
+        const balance = await getOlympiaTokensByAcoount(account)
 
         await this.props.updateProvider({
-          provider: provider.constructor.providerName,
           ...data,
+          provider: provider.constructor.providerName,
+          account,
+          balance,
         })
     }
-  
   }
 
   @autobind
   async handleProviderRegister(provider, data) {
+    if (provider.constructor.providerName === 'UPORT') {
+        data.account = this.props.uportDefaultAccount
+    }
     await this.props.registerProvider({
       provider: provider.constructor.providerName,
       ...data,
@@ -85,10 +89,12 @@ WalletIntegrationProvider.propTypes = {
   registerProvider: PropTypes.func.isRequired,
   updateProvider: PropTypes.func.isRequired,
   initGnosis: PropTypes.func.isRequired,
+  uportDefaultAccount: PropTypes.string,
 }
 
 const mapStateToProps = state => ({
   gnosisInitialized: isGnosisInitialized(state),
+  uportDefaultAccount: getUportDefaultAccount(state),
 })
 
 export default connect(mapStateToProps, {

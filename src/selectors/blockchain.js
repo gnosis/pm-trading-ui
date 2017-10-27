@@ -13,6 +13,12 @@ export const findDefaultProvider = (state) => {
   })
 }
 
+export const getUportDefaultAccount = (state) => {
+    const provider = get(state, 'blockchain.providers.UPORT')
+
+    return provider && provider.account ? provider.account : undefined
+}
+
 export const getSelectedProvider = state => get(state, `blockchain.providers['${state.blockchain.activeProvider}']`)
 
 export const getSelectedProviderName = state => get(state, 'blockchain.activeProvider')
