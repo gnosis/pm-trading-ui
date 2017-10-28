@@ -191,6 +191,10 @@ export const roundProfits = (profits) => {
         return undefined
     }
 
+    if (profits.length === 1) {
+        return profits
+    }
+    
     const result = profits.substr(0, 1) + '.' + profits.substr(1, 2)
 
     return result

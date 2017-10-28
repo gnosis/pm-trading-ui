@@ -1,16 +1,14 @@
-import { usersData } from 'stories/knobs/scoreboardUsers'
+import { restFetch } from 'utils/helpers'
 import addUsers from './addUsers'
 
-const url = ''
-const dummyData = usersData
-const composeTournament = new Promise((resolve, reject) => resolve(dummyData))
+const url = 'https://gnosisdb-olympia.gnosis.pm/api/scoreboard/'
 
 export default (params) => (dispatch) =>
-    //restFetch(url)
-    composeTournament
+    restFetch(url)
         .then((response) => {
             if (!response) {
                 return []
             }
-            dispatch(addUsers(response));
+
+            dispatch(addUsers(response.results));
         })

@@ -78,10 +78,10 @@ const columns = [{
     Cell: olyCell('balance'),
 }, {
     Header: 'Predicted Profits',
-    accessor: 'predictedProfits',
+    accessor: 'predictedProfit',
     headerStyle,
     style: columnStyle,
-    Cell: olyCell('predictedProfits'),
+    Cell: olyCell('predictedProfit'),
 }, {
     Header: 'Badge',
     accessor: 'predictions',

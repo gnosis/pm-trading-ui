@@ -20,6 +20,7 @@ export const firstOlympiaUsersSelectorAsList = createSelector(
     olympiaUsersSelectorAsList,
     (users) => users
         ? users
+            .filter(user => user.currentRank > 0)
             .sort((userA, userB) => {
                 if (userA.currentRank > userB.currentRank) {
                     return 1;

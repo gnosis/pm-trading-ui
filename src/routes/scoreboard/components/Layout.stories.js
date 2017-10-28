@@ -22,7 +22,7 @@ storiesOf('Route ScoreBoard', module)
             account: '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca099',
             score: '55400000000000000',
             balance: '200000000000000000',
-            predictedProfits: '354000000000000000',
+            predictedProfit: '354000000000000000',
         })
 
         return (
@@ -40,7 +40,7 @@ storiesOf('Route ScoreBoard', module)
             account: '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca007',
             score: '520600000000000000',
             balance: '166600000000000000',
-            predictedProfits: '354000000000000000',
+            predictedProfit: '354000000000000000',
         })
 
         return (

@@ -8,12 +8,8 @@ const cx = classNames.bind(css)
 
 export const badgeOf = (value) => {
     const unknown = 'Unknown'
-
-    if (!value) {
-        return unknown
-    }
     
-    const isJunior = value >= 1 && value <= 4;
+    const isJunior = value >= 0 && value <= 4;
     if (isJunior) {
         return 'Junior Predictor'
     }
@@ -37,7 +33,7 @@ export const badgeOf = (value) => {
     if (isJPsychic) {
         return 'Psychic'
     }
-
+    debugger
     return unknown
 }
 

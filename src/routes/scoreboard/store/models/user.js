@@ -7,7 +7,7 @@ const UserRecord = Record({
     account: undefined,
     score: undefined,
     balance: undefined,
-    predictedProfits: undefined,
+    predictedProfit: undefined,
     predictions: undefined,
 }, 'User');
 
