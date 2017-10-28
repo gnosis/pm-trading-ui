@@ -4,6 +4,7 @@ const CLEAR_LOCAL_STORAGE = 'CLEAR_LOCAL_STORAGE'
 
 const PERSIST_PATHS = [
   'transactions.log',
+  'blockchain.providers.UPORT.account',
 ]
 
 export default store => next => (action) => {

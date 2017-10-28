@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind'
+import DecimalValue from 'components/DecimalValue'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
 import * as React from 'react'
@@ -29,7 +30,7 @@ const Metric = ({ img, title, explanation, children, width = 37, height = 37 }) 
 const Metrics = ({ tokens, predictedProfits, rank, badge }) => (
     <Block className={ cx('ol-db-container') }>
         <Metric img={ group } explanation="OLY TOKENS">
-            <Block className={ cx('ol-db-title') }>{ tokens ? tokens : '--' }</Block>
+            <DecimalValue value={tokens} className={ cx('ol-db-title') } />
         </Metric>
         <Metric img={ shape } width={ 45 } height={ 45 } explanation="PREDICTED PROFITS">
             <Block className={ cx('ol-db-title') }>{ predictedProfits ? predictedProfits : '--' }</Block>

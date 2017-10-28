@@ -37,9 +37,8 @@ export const getGnosisConnection = async () => gnosisInstance
  */
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
-  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts(
-    (e, accounts) => (e ? reject(e) : resolve(accounts[0]))),
-  )
+
+  return gnosis.defaultAccount
 }
 
 /**
@@ -344,4 +343,10 @@ export const getEtherTokens = async (account) => {
   const gnosis = await getGnosisConnection()
   const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
   return new Decimal(balance.toFixed(0))
+}
+
+export const getOlympiaTokensByAccount = async (account) => {
+    const gnosis = await getGnosisConnection();
+    const balance = await gnosis.olympiaToken.balanceOf(account);
+    return new Decimal(balance.toFixed(0)).toString();
 }

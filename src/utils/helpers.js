@@ -147,7 +147,7 @@ export const isModerator = accountAddress => (
 
 export const getModerators = () => process.env.WHITELIST
 
-export const getGnosisJsOptions = (provider) => {
+export const getGnosisJsOptions = (provider, defaultAccount = undefined) => {
   const opts = {}
   if (provider && provider.name === WALLET_PROVIDER.METAMASK) {
     // Inject window.web3
@@ -158,6 +158,7 @@ export const getGnosisJsOptions = (provider) => {
   } else if (provider && provider.name === WALLET_PROVIDER.UPORT) {
     const uport = new Connect('GnosisOlympia')
     opts.ethereum = uport.getProvider()
+    opts.defaultAccount = defaultAccount
   } else {
     // Default remote node
     opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
@@ -171,7 +172,7 @@ export const roundProfits = (profits) => {
         return undefined
     }
 
-    const result = profits.substr(0, 1) + '.' + profits.substr(1,2)
+    const result = profits.substr(0, 1) + '.' + profits.substr(1, 2)
 
     return result
 }

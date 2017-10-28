@@ -6,7 +6,7 @@ import { badgeOf } from 'routes/scoreboard/components/ScoreTable/table'
 
 const tokenSelector = createSelector(
     getCurrentBalance,
-    (balance) => balance ? balance.substring(0,5) : undefined,
+    (balance) => balance ? balance : '0',
 )
 
 const profitsSelector = createSelector(
