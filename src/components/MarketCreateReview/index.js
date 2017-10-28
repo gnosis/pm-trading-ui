@@ -164,7 +164,7 @@ class MarketCreateReview extends Component {
             text={
               <p className="paymentCheckbox__disclaimer">
               I Hereby confirm, that I understand and agree to the terms and conditions
-              and want to proceed with the payment. ETH will be transfered from my account.
+              and want to proceed with the payment. OLY will be transfered from my account.
             </p>
           }
           />

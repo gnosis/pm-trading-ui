@@ -1,4 +1,4 @@
-gnosis-management
+Olympia Interface
 ------
 
 Start with `npm start`, server available under `http://localhost:8000/`

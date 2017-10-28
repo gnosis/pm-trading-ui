@@ -7,6 +7,7 @@ import { upperFirst } from 'lodash'
 const providerIconClasses = {
   [WALLET_PROVIDER.METAMASK]: 'metamask',
   [WALLET_PROVIDER.PARITY]: 'parity',
+  [WALLET_PROVIDER.UPORT]: 'uport',
 }
 
 const ProviderIcon = ({ provider = {} }) => (

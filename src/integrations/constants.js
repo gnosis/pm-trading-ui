@@ -11,6 +11,7 @@ export const WALLET_PROVIDER = {
   METAMASK: 'METAMASK',
   PARITY: 'PARITY',
   REMOTE: 'REMOTE',
+  UPORT: 'UPORT',
 }
 
 export const ETHEREUM_NETWORK_IDS = {

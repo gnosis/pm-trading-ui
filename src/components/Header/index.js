@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
+import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
@@ -43,15 +44,13 @@ const Header = ({
             Dashboard
           </Link>
         )}
-        {hasWallet && (
-          <Link
-            to="/transactions"
-            activeClassName="headerContainer__navLink--active"
-            className="headerContainer__navLink"
-          >
-            Transactions
-          </Link>
-        )}
+        <Link to="/scoreboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+          Scoreboard
+        </Link>
+        <Link to="/gamerules" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+          Game Rules
+        </Link>
+
       </div>
 
       <div className="headerContainer__group headerContainer__group--right account">
@@ -73,7 +72,10 @@ const Header = ({
         {hasWallet &&
           currentProvider && (
             <div className="headerContainer__account">
-              <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
+              <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
+              <span className="headerContainer__account--text">
+                { collateralTokenToText() }
+              </span>
               <Identicon className="" account={currentAccount} />
             </div>
           )}

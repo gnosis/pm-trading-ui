@@ -7,8 +7,10 @@ class InjectedWeb3 {
   runProviderUpdate() {}
   runProviderRegister() {}
 
-  constructor() {
-    this.watcherInterval = setInterval(this.watcher, 1000)
+  constructor(enableWatcher = true) {
+    if (enableWatcher) {
+      this.watcherInterval = setInterval(this.watcher, 1000)
+    }
   }
 
   /**

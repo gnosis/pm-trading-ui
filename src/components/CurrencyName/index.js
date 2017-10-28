@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 // Current mapping does not contain any logic
 export const outcomeTokenToText = outcomeToken => outcomeToken
-export const collateralTokenToText = () => 'ETH'
+export const collateralTokenToText = () => 'OLY'
 
 const CurrencyName = ({ collateralToken, outcomeToken }) => {
   if (collateralToken) {
