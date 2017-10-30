@@ -310,7 +310,7 @@ class MarketDetail extends Component {
   }
 
   renderControls() {
-    const { market, closeMarket, defaultAccount, redeemWinnings } = this.props
+    const { market, closeMarket, defaultAccount } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
