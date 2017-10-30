@@ -53,33 +53,24 @@ const Header = ({
 
       </div>
 
-      <div className="headerContainer__group headerContainer__group--right account">
-        {hasWallet &&
-          !isConnectedToCorrectNetwork && (
-            <div className="headerContainer__network">
-              <p className="headerContainer__network--wrongChain">
-                Network: {upperFirst(currentNetwork.toLowerCase())}
-              </p>
-              <a
-                className="headerContainer__network--wrongChainHelp"
-                href="javascript:void(0)"
-                onClick={() => openNetworkCheckModal()}
-              >
-                This is not the chain used for this plattform.<br />Click here for help
-              </a>
-            </div>
-          )}
+      <div className="headerContainer__group headerContainer__group--right">
         {hasWallet &&
           currentProvider && (
             <div className="headerContainer__account">
+              {currentNetwork &&
+                currentNetwork !== 'MAIN' && (
+                  <span className="headerContainer__network--text">
+                    Network: {upperFirst(currentNetwork.toLowerCase())}
+                  </span>
+                )}
+              <ProviderIcon provider={currentProvider} />
               <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
               <span className="headerContainer__account--text">
                 { collateralTokenToText() }
               </span>
-              <Identicon className="" account={currentAccount} />
+              <Identicon className="" />
             </div>
-          )}
-        {hasWallet && currentProvider && <ProviderIcon provider={currentProvider} />}
+        )}
         {!hasWallet && (
           <a
             href="javascript:void(0)"

@@ -102,11 +102,11 @@
       height: @navbarHeight;
     }
   }
+}
 
-  &.account {
+.headerContainer__account {
     display: flex;
     align-items: center;
-  }
 }
 
 .headerLogo {
@@ -131,11 +131,12 @@
     color: #989898;
     letter-spacing: 1px;
     font-weight: normal;
+
     &:after {
       content: "BETA";
       position: absolute;
       right: 0;
-      bottom: 0;
+      bottom: -5px;
     }
   }
 }
@@ -159,7 +160,7 @@
   &--uport {
     width: 32px;
     height: 32px;
-    margin-right: 12px;
+    margin: 0 12px;
     background-image: url('../../components/Dashboard/Metrics/assets/crystal-ball.svg');
   }
 
