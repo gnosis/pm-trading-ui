@@ -6,7 +6,7 @@ import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
-import { COLOR_SCHEME_DEFAULT, LOWEST_DISPLAYED_VALUE } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, LOWEST_DISPLAYED_VALUE, RESOLUTION_TIME } from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
@@ -134,10 +134,10 @@ class Dashboard extends Component {
             <div className="outcome row">
               <div className="col-md-3">
                 <div
-                  className={'entry__color pull-left'}
+                  className={'entry__color'}
                   style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }}
                 />
-                <div className="dashboardMarket--highlight pull-left">
+                <div className="dashboardMarket--highlight">
                   {getOutcomeName(market, holding.outcomeToken.index)}
                 </div>
               </div>
@@ -207,7 +207,7 @@ class Dashboard extends Component {
           <div className="outcome row">
             <div className="col-md-3">
               <div
-                className={'entry__color pull-left'}
+                className={'entry__color'}
                 style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
               />
               <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
@@ -217,7 +217,7 @@ class Dashboard extends Component {
               &nbsp;{market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
-              {moment.utc(market.creationDate).format('MMMM Y')}
+              {moment.utc(market.creationDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
             <div className="col-md-2 dashboardMarket--highlight">{trade.orderType}</div>
           </div>

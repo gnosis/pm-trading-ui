@@ -18,7 +18,7 @@ export const requestMarket = async marketAddress =>
   )
 
 export const requestMarkets = async () =>
-  restFetch(`${API_URL}/markets/?${whitelistedAddressesFilter}`)
+  restFetch(`${API_URL}/markets`)
     .then(response => normalize(
       response.results.filter(market => typeof market.funding !== 'undefined'),
       [marketSchema]),
