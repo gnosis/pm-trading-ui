@@ -126,8 +126,8 @@ class MarketDetail extends Component {
     this.props
       .fetchMarket()
       .then(() => {
+        this.props.fetchMarketTrades(this.props.market)
         if (this.props.defaultAccount) {
-          this.props.fetchMarketTrades(this.props.market)
           this.props.fetchMarketShares(this.props.defaultAccount)
         }
         if (firstFetch) {
