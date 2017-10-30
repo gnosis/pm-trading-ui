@@ -7,8 +7,10 @@ import cn from 'classnames'
 import Decimal from 'decimal.js'
 import { calcLMSRProfit } from 'api'
 
-import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES } from 'utils/constants'
+import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES, MIN_CONSIDER_VALUE } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
+
+import InteractionButton from 'containers/InteractionButton'
 
 import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue, { decimalToText } from 'components/DecimalValue'
@@ -106,9 +108,6 @@ class MarketDetail extends Component {
 
   componentWillMount() {
     this.fetchEssentialData(!this.props.params.view)
-    this.props.requestGasCost(GAS_COST.BUY_SHARES)
-    this.props.requestGasCost(GAS_COST.SELL_SHARES)
-
     this.fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
   }
 
@@ -139,14 +138,15 @@ class MarketDetail extends Component {
         }
       })
       .catch((err) => {
-        console.error(e)
         this.setState({
           marketFetchError: err,
         })
       })
 
-    this.props.requestGasCost(GAS_COST.BUY_SHARES)
-    this.props.requestGasCost(GAS_COST.SELL_SHARES)
+    if (this.props.hasWallet) {
+      this.props.requestGasCost(GAS_COST.BUY_SHARES)
+      this.props.requestGasCost(GAS_COST.SELL_SHARES)
+    }
 
     if (this.props.defaultAccount && this.props.params.id) {
       this.props.fetchMarketParticipantTrades(this.props.params.id, this.props.defaultAccount)
@@ -164,7 +164,7 @@ class MarketDetail extends Component {
 
   @autobind
   handleRedeemWinnings() {
-    this.props.redeemWinnings(this.props.market)
+    return this.props.redeemWinnings(this.props.market)
   }
 
   renderLoading() {
@@ -238,7 +238,6 @@ class MarketDetail extends Component {
 
   renderDetails(market) {
     const showWinning = market.oracle.isOutcomeSet
-    const showLost = false // determine if we lost?
     const timeToResolution = moment
       .utc(market.eventDescription.resolutionDate)
       .local()
@@ -255,6 +254,7 @@ class MarketDetail extends Component {
           feeFactor: market.fee,
         }),
       )
+
       return sum.plus(new Decimal(shareWinnings))
     }, new Decimal(0))
 
@@ -286,37 +286,31 @@ class MarketDetail extends Component {
             </div>
           </div>
         )}
-        {showWinning && (
-          <div className="redeemWinning">
-            <div className="redeemWinning__icon icon icon--achievementBadge" />
-            <div className="redeemWinning__details">
-              <div className="redeemWinning__heading">
-                <DecimalValue value={winnings} /> {collateralTokenToText(market.event.collateralToken)}
+        {showWinning &&
+          winnings.gt(MIN_CONSIDER_VALUE) && (
+            <div className="redeemWinning">
+              <div className="redeemWinning__icon-details-container">
+                <div className="redeemWinning__icon icon icon--achievementBadge" />
+                <div className="redeemWinning__details">
+                  <div className="redeemWinning__heading">
+                    <DecimalValue value={winnings} /> {collateralTokenToText(market.event.collateralToken)}
+                  </div>
+                  <div className="redeemWinning__label">Your Winnings</div>
+                </div>
               </div>
-              <div className="redeemWinning__label">Your Winnings</div>
+              <div className="redeemWinning__action">
+                <InteractionButton className="btn btn-primary" onClick={this.handleRedeemWinnings}>
+                  Redeem Winnings
+                </InteractionButton>
+              </div>
             </div>
-            <div className="redeemWinning__action">
-              <button className="btn btn-link" type="button" onClick={this.handleRedeemWinnings}>
-                Redeem Winnings
-              </button>
-            </div>
-          </div>
-        )}
-        {showLost && (
-          <div className="redeemWinning redeemWinning--lost">
-            <div className="redeemWinning__icon icon icon--cross" />
-            <div className="redeemWinning__details">
-              <div className="redeemWinning__heading">200 {collateralTokenToText(market.event.collateralToken)}</div>
-              <div className="redeemWinning__label">You lost</div>
-            </div>
-          </div>
-        )}
+          )}
       </div>
     )
   }
 
   renderControls() {
-    const { market, closeMarket, defaultAccount } = this.props
+    const { market, closeMarket, defaultAccount, redeemWinnings } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
@@ -341,19 +335,18 @@ class MarketDetail extends Component {
               </button>
             ))}
           {market.stage !== MARKET_STAGES.MARKET_CLOSED &&
-          market.creator === defaultAccount &&
-          process.env.WHITELIST[defaultAccount] ? (
-            <button
-              key="close-market"
-              type="button"
-              className="marketControls__button btn btn-default"
-              onClick={() => closeMarket(market)}
-            >
-              Close Market
-            </button>
-          ) : (
-            <div />
-          )}
+            market.creator === defaultAccount && (
+              <InteractionButton
+                key="close-market"
+                type="button"
+                className="marketControls__button btn btn-default"
+                loading={market.local}
+                onClick={() => closeMarket(market)}
+                requiresWhitelist
+              >
+                Close Market
+              </InteractionButton>
+            )}
         </div>
       </div>
     )
@@ -399,6 +392,7 @@ class MarketDetail extends Component {
 }
 
 MarketDetail.propTypes = {
+  hasWallet: PropTypes.bool,
   fetchMarketParticipantTrades: PropTypes.func,
   params: PropTypes.shape({
     id: PropTypes.string,

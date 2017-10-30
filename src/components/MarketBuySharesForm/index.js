@@ -7,7 +7,9 @@ import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { weiToEth } from 'utils/helpers'
 import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST, SCALAR_SHORT_COLOR, SCALAR_LONG_COLOR } from 'utils/constants'
-import { marketShape } from 'utils/shapes'
+import { marketShape, marketShareShape } from 'utils/shapes'
+
+import InteractionButton from 'containers/InteractionButton'
 
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -31,7 +33,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getOutcomeTokenCount(investment, outcomeIndex) {
-    if (!investment || !(parseFloat(investment) > 0)) {
+    if (!investment || !(parseFloat(investment) > 0) || parseFloat(investment) >= 1000) {
       return new Decimal(0)
     }
 
@@ -107,21 +109,34 @@ class MarketBuySharesForm extends Component {
   }
 
   renderCategorical() {
-    const { market, market: { eventDescription } } = this.props
+    const { selectedBuyInvest, selectedOutcome, market, market: { eventDescription } } = this.props
+
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
 
     return (
       <div className="col-md-7">
-        <Field
-          component={FormBarChartRadioButton}
-          name="selectedOutcome"
-          className="marketBuyOutcome"
-          market={market}
-          radioValues={eventDescription.outcomes.map((label, index) => ({
-            value: index,
-            label: eventDescription.outcomes[index],
-            highlightColor: COLOR_SCHEME_DEFAULT[index],
-          }))}
-        />
+        <div className="row">
+          <div className="col-md-12">
+            <h2 className="marketBuyHeading">Your Bet</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <Field
+              component={FormBarChartRadioButton}
+              name="selectedOutcome"
+              className="marketBuyOutcome"
+              market={market}
+              selectedOutcome={selectedOutcome}
+              outcomeTokenCount={outcomeTokenCount}
+              radioValues={eventDescription.outcomes.map((label, index) => ({
+                value: index,
+                label: eventDescription.outcomes[index],
+                highlightColor: COLOR_SCHEME_DEFAULT[index],
+              }))}
+            />
+          </div>
+        </div>
       </div>
     )
   }
@@ -145,7 +160,7 @@ class MarketBuySharesForm extends Component {
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
     if (isOutcomeSelected) {
       newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome])
-        .add(outcomeTokenCount)
+        .add(outcomeTokenCount.toString())
         .toString()
     }
     const selectedMarginalPrice = isOutcomeSelected
@@ -189,20 +204,18 @@ class MarketBuySharesForm extends Component {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="row">
-              <div className="col-md-12">
-                <ScalarSlider
-                  lowerBound={parseInt(lowerBound, 10)}
-                  upperBound={parseInt(upperBound, 10)}
-                  unit={unit}
-                  decimals={decimals}
-                  marginalPriceCurrent={currentMarginalPrice}
-                  marginalPriceSelected={selectedMarginalPrice.toNumber()}
-                  selectedCost={outcomeTokenCount}
-                />
-              </div>
-            </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <ScalarSlider
+              lowerBound={parseInt(lowerBound, 10)}
+              upperBound={parseInt(upperBound, 10)}
+              unit={unit}
+              decimals={decimals}
+              marginalPriceCurrent={currentMarginalPrice}
+              marginalPriceSelected={selectedMarginalPrice.toNumber()}
+              selectedCost={outcomeTokenCount}
+            />
           </div>
         </div>
       </div>
@@ -215,12 +228,11 @@ class MarketBuySharesForm extends Component {
       selectedBuyInvest,
       submitFailed,
       submitting,
-      market: { event: { collateralToken } },
+      market: { event: { collateralToken }, address, local },
       selectedOutcome,
       gasCosts,
       gasPrice,
       changeUrl,
-      market: { address },
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
@@ -271,7 +283,12 @@ class MarketBuySharesForm extends Component {
             <div className="col-md-5">
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-8">
-                  <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
+                  <Field
+                    name="invest"
+                    component={Input}
+                    className="marketBuyInvest"
+                    placeholder="Investment"
+                  />
                 </div>
                 <div className="col-md-4">
                   <div className="marketBuyCurrency">
@@ -288,11 +305,15 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">{fieldError || maxReturnField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
+                <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                    Gas Costs
+                  <DecimalValue value={gasCostEstimation} decimals={5} />{' '}
+                  <CurrencyName collateralToken={collateralToken} />
                 </div>
                 <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} decimals={5} /> <CurrencyName collateralToken={collateralToken} /></div>
+                  <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
+                  <CurrencyName collateralToken={collateralToken} />
+                </div>
               </div>
               {submitFailed && (
                 <div className="row marketBuySharesForm__row">
@@ -303,12 +324,14 @@ class MarketBuySharesForm extends Component {
               )}
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">
-                  <button
-                    className={`btn btn-primary col-md-12 ${!submitEnabled ? 'disabled' : ''}`}
+                  <InteractionButton
+                    className="btn btn-primary col-md-12"
                     disabled={!submitEnabled}
+                    loading={submitting || local}
+                    type="submit"
                   >
-                    {submitting ? 'Loading...' : 'Buy Tokens'}
-                  </button>
+                    Buy Tokens
+                  </InteractionButton>
                 </div>
                 <div className="col-md-6">
                   <button
@@ -334,6 +357,7 @@ MarketBuySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   buyShares: PropTypes.func,
+  marketShares: PropTypes.arrayOf(marketShareShape),
   selectedOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,

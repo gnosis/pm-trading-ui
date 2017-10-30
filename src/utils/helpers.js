@@ -47,6 +47,7 @@ export const toEntity = (data, entityType, idKey = 'address') => {
  */
 export const weiToEth = (value) => {
   let ethValue = new Decimal(0)
+
   if (typeof value === 'string') {
     ethValue = new Decimal(value)
     if (ethValue.gt(0)) {
@@ -54,9 +55,14 @@ export const weiToEth = (value) => {
     }
     return new Decimal(0).div(1e18).toString()
   }
-  if (value instanceof Decimal && value.gt(0)) {
+  if (
+    typeof value === 'object' &&
+    (value.constructor.name === 'Decimal' || value.constructor.name === 'BigNumber') &&
+    value.gt(0)
+  ) {
     return value.div(1e18).toString()
   }
+
   return ethValue.toString()
 }
 
@@ -166,6 +172,19 @@ export const getGnosisJsOptions = (provider, defaultAccount = undefined) => {
 
   return opts
 }
+
+export const promisify = (func, params, timeout) => new Promise((resolve, reject) => {
+  if (timeout) {
+    setTimeout(() => reject('Promise timed out'), timeout)
+  }
+
+  func(...params, (err, res) => {
+    if (err) {
+      return reject(err)
+    }
+    return resolve(res)
+  })
+})
 
 export const roundProfits = (profits) => {
     if (!profits) {

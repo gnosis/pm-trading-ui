@@ -24,9 +24,9 @@ export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
+export const setEtherTokens = createAction('SET_ETHER_TOKENS')
 export const registerProvider = createAction('REGISTER_PROVIDER')
 export const updateProvider = createAction('UPDATE_PROVIDER')
-export const setEtherTokens = createAction('SET_ETHER_TOKENS')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
@@ -82,7 +82,6 @@ export const initGnosis = (defaultAccount = undefined) => async (dispatch, getSt
 
     // determine new provider
     const newProvider = findDefaultProvider(state)
-
     if (newProvider) {
       await dispatch(setActiveProvider(newProvider.name))
 
@@ -94,6 +93,7 @@ export const initGnosis = (defaultAccount = undefined) => async (dispatch, getSt
     }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)
+    await dispatch(setConnectionStatus({ connected: false }))
     return await dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 
@@ -105,7 +105,7 @@ export const initGnosis = (defaultAccount = undefined) => async (dispatch, getSt
       await getCurrentBalance(account)
     }
     await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
-    return await dispatch(setConnectionStatus({ connected: true }))
+    await dispatch(setConnectionStatus({ connected: true }))
   } catch (error) {
     console.warn(`Gnosis.js connection Error: ${error}`)
     return await dispatch(setConnectionStatus({ connected: false }))

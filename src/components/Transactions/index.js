@@ -1,10 +1,9 @@
-import React, { PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import {
-  RESOLUTION_TIME,
-  TRANSACTION_COMPLETE_STATUS,
-} from 'utils/constants'
+import { RESOLUTION_TIME, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
+import { transactionShape } from 'utils/shapes'
 
 import ProgressSpinner from 'components/ProgressSpinner'
 
@@ -16,7 +15,7 @@ const completionMessages = {
   [TRANSACTION_COMPLETE_STATUS.TIMEOUT]: 'Transaction timed out',
 }
 
-const renderProgressIndicator = ({ completed, completionStatus, progress }) => {
+const ProgressIndicator = ({ completed, completionStatus, progress }) => {
   if (completed) {
     if (completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR) {
       return (
@@ -34,15 +33,14 @@ const renderProgressIndicator = ({ completed, completionStatus, progress }) => {
   }
 
   return (
-    <ProgressSpinner
-      width={32}
-      height={32}
-      strokeWidthPx={1}
-      fontSizePx={8}
-      progress={progress}
-      modifier="spinning"
-    />
+    <ProgressSpinner width={32} height={32} strokeWidthPx={1} fontSizePx={8} progress={progress} modifier="spinning" />
   )
+}
+
+ProgressIndicator.propTypes = {
+  completed: PropTypes.bool,
+  completionStatus: PropTypes.string,
+  progress: PropTypes.number,
 }
 
 const renderTransaction = type => ({
@@ -56,7 +54,7 @@ const renderTransaction = type => ({
   progress,
 }) => (
   <div key={id} className={`transactionsPage__transaction transactionsPage__transaction--${type} transaction`}>
-    {renderProgressIndicator({ completed, completionStatus, progress })}
+    <ProgressIndicator completed={completed} completionStatus={completionStatus} progress={progress} />
     <div className="transaction__content">
       <div className="transaction__heading">{label}</div>
       <div className="transaction__details">
@@ -80,42 +78,58 @@ const renderTransaction = type => ({
           </div>
         )}
       </div>
-      {completed && (
-        <div className="transaction__message">{completionMessages[completionStatus]}</div>
-      )}
-    </div>
-  </div>
-  )
-
-const Transactions = ({ runningTransactions, completedTransactions }) => (
-  <div className="transactionsPage">
-    <div className="container">
-      <div className="transactionsPage__heading">
-        <div className="transactionsPage__headingIcon"><div className="icon icon--new" /></div>
-        Currently Running Transactions
-      </div>
-      {!runningTransactions.length && (
-        <div className="transactionsPage__transaction transactionsPage__transaction--empty transaction">
-          There are no currently running transactions
-        </div>
-      )}
-      {runningTransactions.map(renderTransaction('running'))}
-      <div className="transactionsPage__heading">
-        <div className="transactionsPage__headingIcon"><div className="icon icon--countdown" /></div>
-        Previous Transactions</div>
-      {!completedTransactions.length && (
-        <div className="transactionsPage__transaction transactionsPage__transaction--empty transaction">
-          There are no previous transactions
-        </div>
-      )}
-      {completedTransactions.map(renderTransaction('completed'))}
+      {completed && <div className="transaction__message">{completionMessages[completionStatus]}</div>}
     </div>
   </div>
 )
 
+class Transactions extends Component {
+  componentWillMount() {
+    if (!this.props.currentAccount) {
+      this.props.changeUrl('/markets/list')
+    }
+  }
+
+  render() {
+    const { runningTransactions, completedTransactions } = this.props
+    return (
+      <div className="transactionsPage">
+        <div className="container">
+          <div className="transactionsPage__heading">
+            <div className="transactionsPage__headingIcon">
+              <div className="icon icon--new" />
+            </div>
+            Currently Running Transactions
+          </div>
+          {!runningTransactions.length && (
+            <div className="transactionsPage__transaction transactionsPage__transaction--empty transaction">
+              There are no currently running transactions
+            </div>
+          )}
+          {runningTransactions.map(renderTransaction('running'))}
+          <div className="transactionsPage__heading">
+            <div className="transactionsPage__headingIcon">
+              <div className="icon icon--countdown" />
+            </div>
+            Previous Transactions
+          </div>
+          {!completedTransactions.length && (
+            <div className="transactionsPage__transaction transactionsPage__transaction--empty transaction">
+              There are no previous transactions
+            </div>
+          )}
+          {completedTransactions.map(renderTransaction('completed'))}
+        </div>
+      </div>
+    )
+  }
+}
+
 Transactions.propTypes = {
-  runningTransactions: PropTypes.arrayOf(PropTypes.object),
-  completedTransactions: PropTypes.arrayOf(PropTypes.object),
+  changeUrl: PropTypes.func,
+  completedTransactions: PropTypes.arrayOf(transactionShape),
+  currentAccount: PropTypes.string,
+  runningTransactions: PropTypes.arrayOf(transactionShape),
 }
 
 export default Transactions

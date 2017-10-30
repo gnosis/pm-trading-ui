@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import moment from 'moment'
+import cn from 'classnames'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
-import cn from 'classnames'
+import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
@@ -70,38 +71,33 @@ class MarketList extends Component {
     }
   }
 
-  renderCategoricalOutcomes(market) {}
-
-  renderScalarOutcomes(market) {}
-
   @autobind
   renderMarket(market) {
     const isResolved = market.oracle && market.oracle.isOutcomeSet
     const isOwner = this.props.defaultAccount && market.creator === this.props.defaultAccount
 
-    const resolveUrl = `/markets/${market.address}/resolve`
-
-    const outcomes = <Outcome market={market} />
-
     return (
       <button
         type="button"
-        className={`market ${isResolved ? 'market--resolved' : ''}`}
+        className={cn({
+          market,
+          'market--resolved': isResolved,
+        })}
         key={market.address}
         onClick={() => this.handleViewMarket(market)}
       >
         <div className="market__header">
           <h2 className="market__title">{market.eventDescription.title}</h2>
           {isOwner &&
-          !isResolved && (
-            <div className="market__control">
-              <a href={`/#${resolveUrl}`} onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>
-                Resolve
-              </a>
-            </div>
-          )}
+            !isResolved && (
+              <div className="market__control">
+                <a href="javascript:void(0)" onClick={e => this.handleViewMarketResolve(e, `/markets/${market.address}/resolve`)}>
+                  Resolve
+                </a>
+              </div>
+            )}
         </div>
-        {outcomes}
+        <Outcome market={market} />
         <div className="market__info row">
           {isResolved ? (
             <div className="info__group col-md-3">
@@ -236,15 +232,13 @@ class MarketList extends Component {
           <div className="container">
             <div className="row">
               <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                <button
-                  type="button"
+                <InteractionButton
                   onClick={this.handleCreateMarket}
                   className="marketStats__control btn btn-default"
-                  disabled={!this.props.defaultAccount}
-                  title={this.props.defaultAccount ? '' : 'Please connect to an ethereum network to create a market'}
+                  whitelistRequired
                 >
                   Create Market
-                </button>
+                </InteractionButton>
               </div>
             </div>
           </div>

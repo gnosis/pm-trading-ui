@@ -6,8 +6,9 @@ import autobind from 'autobind-decorator'
 
 import { OUTCOME_TYPES, RESOLUTION_TIME, COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
+import InteractionButton from 'containers/InteractionButton'
+
 import CurrencyName from 'components/CurrencyName'
-import Checkbox from 'components/FormCheckbox'
 import DecimalValue from 'components/DecimalValue'
 
 import './marketCreateReview.less'
@@ -170,9 +171,9 @@ class MarketCreateReview extends Component {
         </div>
         */}
         <div className="checkout__paymentSubmit">
-          <button className="btn btn-primary" type="button" onClick={this.handleCreateMarket}>
+          <InteractionButton className="btn btn-primary" type="button" onClick={this.handleCreateMarket} whitelistRequired>
             Pay & Create Market
-          </button>
+          </InteractionButton>
         </div>
       </div>
     )

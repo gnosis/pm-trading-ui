@@ -1,7 +1,7 @@
 import autobind from 'autobind-decorator'
-import { ETHEREUM_NETWORK } from 'integrations/constants'
+import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 
-import { weiToEth } from 'utils/helpers'
+import { weiToEth, promisify } from 'utils/helpers'
 
 class InjectedWeb3 {
   runProviderUpdate() {}
@@ -28,43 +28,22 @@ class InjectedWeb3 {
    * Returns the current Networks Name
    * @async
    * @see src/integrations/constants ETHEREUM_NETWORK constants
-   * @returns {Promise<string>} - Network Identifier
+   * @returns {Promise<string>} - Network Name Constant
    */
   async getNetwork() {
-    return new Promise((resolve, reject) => {
-      this.web3.version.getNetwork((err, netId) => {
-        if (err) {
-          reject(err)
-        } else {
-          switch (netId) {
-            case '1': {
-              resolve(ETHEREUM_NETWORK.MAIN)
-              break
-            }
-            case '2': {
-              resolve(ETHEREUM_NETWORK.MORDEN)
-              break
-            }
-            case '3': {
-              resolve(ETHEREUM_NETWORK.ROPSTEN)
-              break
-            }
-            case '4': {
-              resolve(ETHEREUM_NETWORK.RINKEBY)
-              break
-            }
-            case '42': {
-              resolve(ETHEREUM_NETWORK.KOVAN)
-              break
-            }
-            default: {
-              resolve(ETHEREUM_NETWORK.UNKNOWN)
-              break
-            }
-          }
-        }
-      })
-    })
+    const networkId = await this.getNetworkId()
+
+    const networkName = ETHEREUM_NETWORK_IDS[networkId]
+    return networkName || ETHEREUM_NETWORK.UNKNOWN
+  }
+
+  /**
+   * Returns the current Networks ID
+   * @async
+   * @returns {Promise<string>} - Network Identifier
+   */
+  async getNetworkId() {
+    return await promisify(this.web3.version.getNetwork, [], 10000)
   }
 
   /**
@@ -73,16 +52,9 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Accountaddress
    */
   async getAccount() {
-    return new Promise((resolve, reject) => {
-      this.web3.eth.getAccounts(
-        (e, accounts) => {
-          if (e) {
-            reject(e)
-          }
-          resolve(accounts && accounts.length ? accounts[0] : null)
-        },
-      )
-    })
+    const accounts = await promisify(this.web3.eth.getAccounts, [], 10000)
+
+    return accounts && accounts.length ? accounts[0] : null
   }
 
   /**
@@ -91,16 +63,17 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Accountbalance in WEI for current account
    */
   async getBalance() {
-    return new Promise((resolve, reject) => {
-      if (this.account) {
-        this.web3.eth.getBalance(
-          this.account,
-          (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))),
-        )
-      } else {
-        return reject(new Error('No Account available'))
-      }
-    })
+    if (!this.account) {
+      throw new Error('No Account available')
+    }
+
+    const balance = await promisify(this.web3.eth.getBalance, [this.account], 10000)
+
+    if (typeof balance !== 'undefined') {
+      return weiToEth(balance.toString())
+    }
+
+    throw new Error('Invalid Balance')
   }
 
   /**
@@ -116,10 +89,11 @@ class InjectedWeb3 {
         await this.runProviderUpdate(this, { account: this.account })
       }
 
-      const currentNetwork = await this.getNetwork()
-      if (this.network !== currentNetwork) {
-        this.network = currentNetwork
-        await this.runProviderUpdate(this, { network: this.network })
+      const currentNetworkId = await this.getNetworkId()
+      if (this.networkId !== currentNetworkId) {
+        this.networkId = currentNetworkId
+        this.network = await this.getNetwork()
+        await this.runProviderUpdate(this, { network: this.network, networkId: this.networkId })
       }
 
       const currentBalance = await this.getBalance()
@@ -128,7 +102,7 @@ class InjectedWeb3 {
         await this.runProviderUpdate(this, { balance: this.balance })
       }
 
-      if (!this.walletEnabled && currentAccount) {
+      if (!this.walletEnabled && this.account) {
         this.walletEnabled = true
         await this.runProviderUpdate(this, { available: true })
       }

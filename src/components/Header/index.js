@@ -10,12 +10,22 @@ import { upperFirst } from 'lodash'
 
 import './header.less'
 
-const Header = ({ version, currentAccount, currentBalance, currentNetwork, currentProvider }) => (
+const Header = ({
+  version,
+  hasWallet,
+  currentAccount,
+  currentNetwork,
+  currentBalance,
+  currentProvider,
+  isConnectedToCorrectNetwork,
+  openConnectWalletModal,
+  openNetworkCheckModal,
+}) => (
   <div className="headerContainer">
     <div className="container">
       <div className="headerContainer__group headerContainer__group--logo">
-        <Link to="/">
-          <div className="headerLogo" />
+        <Link to={hasWallet ? '/' : '/markets/list'}>
+          <div className="headerLogo beta" />
         </Link>
       </div>
       <div className="headerContainer__group headerContainer__group--left headerContainer__group--version">
@@ -29,9 +39,11 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
         >
           Markets
         </Link>
-        <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
-          Dashboard
-        </Link>
+        {hasWallet && (
+          <Link to="/dashboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+            Dashboard
+          </Link>
+        )}
         <Link to="/scoreboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
           Scoreboard
         </Link>
@@ -40,20 +52,34 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
         </Link>
 
       </div>
-      <div className="headerContainer__group headerContainer__group--right account">
-        {currentAccount && currentProvider && (
-          <ProviderIcon provider={currentProvider} />
-        )}
-        {currentAccount && currentProvider && (
-          <div className="headerContainer__account">
-            <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
-            <span className="headerContainer__account--text">
+
+      <div className="headerContainer__group headerContainer__group--right">
+        {hasWallet &&
+          currentProvider && (
+            <div className="headerContainer__account">
+              {currentNetwork &&
+                currentNetwork !== 'MAIN' && (
+                  <span className="headerContainer__network--text">
+                    Network: {upperFirst(currentNetwork.toLowerCase())}
+                  </span>
+                )}
+              <ProviderIcon provider={currentProvider} />
+              <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
+              <span className="headerContainer__account--text">
                 { collateralTokenToText() }
-            </span>
-            <Identicon account={currentAccount} />
-          </div>
+              </span>
+              <Identicon className="" />
+            </div>
         )}
-        
+        {!hasWallet && (
+          <a
+            href="javascript:void(0)"
+            className="headerContainer__connect-wallet"
+            onClick={() => openConnectWalletModal()}
+          >
+            Connect a wallet
+          </a>
+        )}
       </div>
     </div>
   </div>
@@ -61,10 +87,14 @@ const Header = ({ version, currentAccount, currentBalance, currentNetwork, curre
 
 Header.propTypes = {
   version: PropTypes.string,
+  isConnectedToCorrectNetwork: PropTypes.bool,
   currentNetwork: PropTypes.string,
+  hasWallet: PropTypes.bool,
   currentAccount: PropTypes.string,
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
+  openConnectWalletModal: PropTypes.func,
+  openNetworkCheckModal: PropTypes.func,
 }
 
 export default Header

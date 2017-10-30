@@ -6,6 +6,11 @@
   vertical-align: middle;
   padding: 30px 0 40px;
 
+  &__connect-wallet {
+    cursor: pointer;
+    font-size: 16px;
+  }
+
   &__inner {
     position: relative;
   }
@@ -15,12 +20,24 @@
     align-items: center;
   }
 
-  &__network--text {
-    line-height: 40px;
-    font-weight: 300;
+  &__network {
     margin-right: 5px;
-    margin-bottom: 2px;
-    letter-spacing: .5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    &--wrongChain,
+    &--wrongChainHelp {
+      margin: 0;
+      line-height: 1;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    &--wrongChain {
+      color: @active-highlight-error;
+    }
   }
 
   &__account {
@@ -29,14 +46,13 @@
       font-weight: 500;
       margin-right: 5px;
       margin-bottom: 2px;
-      letter-spacing: .5px;
+      letter-spacing: 0.5px;
     }
 
     img {
       margin-left: 10px;
     }
   }
-
 }
 
 .headerContainer__navLink {
@@ -45,12 +61,12 @@
   text-transform: uppercase;
   font-weight: 500;
   padding-bottom: 2px;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
   border-bottom: 2px solid transparent;
   color: black !important;
   font-size: 11px;
 
-  @media(min-width: @screen-sm) {
+  @media (min-width: @screen-sm) {
     font-size: 14px;
     margin-left: 20px;
   }
@@ -67,7 +83,7 @@
     color: white !important;
     font-size: 12px;
     display: none;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
   }
 
   &&--right {
@@ -79,19 +95,18 @@
     padding-right: 0;
     height: @navbarHeight;
 
-    @media(min-width: @screen-sm) {
+    @media (min-width: @screen-sm) {
       width: 200px;
       padding-right: 70px;
       position: relative;
       height: @navbarHeight;
     }
   }
+}
 
-  &.account {
+.headerContainer__account {
     display: flex;
     align-items: center;
-  }
-  
 }
 
 .headerLogo {
@@ -103,10 +118,26 @@
   background-repeat: no-repeat;
   background-position: left center;
 
-  @media(min-width: @screen-sm) {
+  @media (min-width: @screen-sm) {
     height: 40px;
     width: 130px;
-    background-image: url('./olympia-logo.svg');
+    background-image: url("./olympia-logo.svg");
+  }
+
+  &.beta {
+    position: relative;
+    font-family: inherit;
+    font-size: 8px;
+    color: #989898;
+    letter-spacing: 1px;
+    font-weight: normal;
+
+    &:after {
+      content: "BETA";
+      position: absolute;
+      right: 0;
+      bottom: -5px;
+    }
   }
 }
 
@@ -119,21 +150,21 @@
   background-position: left center;
 
   &--metamask {
-    background-image: url('../../assets/img/icons/icon_metamask.svg');
+    background-image: url("../../assets/img/icons/icon_metamask.svg");
   }
 
   &--parity {
-    background-image: url('../../assets/img/icons/icon_parity.svg');
+    background-image: url("../../assets/img/icons/icon_parity.svg");
   }
 
   &--uport {
     width: 32px;
     height: 32px;
-    margin-right: 12px;
+    margin: 0 12px;
     background-image: url('../../components/Dashboard/Metrics/assets/crystal-ball.svg');
   }
 
   &--default {
-    background-image: url('../../assets/img/icons/icon_etherTokens.svg');
+    background-image: url("../../assets/img/icons/icon_etherTokens.svg");
   }
 }

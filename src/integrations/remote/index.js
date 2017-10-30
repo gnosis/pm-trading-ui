@@ -1,5 +1,5 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { registerProvider, updateProvider } from 'actions/blockchain'
+import { promisify } from 'utils/helpers'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import Web3 from 'web3'
 
@@ -23,6 +23,7 @@ class Remote extends InjectedWeb3 {
     try {
       this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
 
+      this.networkId = await this.getNetworkId()
       this.network = await this.getNetwork()
       this.account = await this.getAccount()
       this.balance = await this.getBalance()
@@ -32,9 +33,10 @@ class Remote extends InjectedWeb3 {
       // remote not available
       this.walletEnabled = false
     }
-    
+
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,
+      networkId: this.networkId,
       network: this.network,
       account: this.account,
       balance: this.balance,
