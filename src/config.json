@@ -21,7 +21,7 @@
  },
  "gnosisdb": {
    "protocol": "https",
-   "host": "gnosisdb-kovan.gnosis.pm",
+   "host": "gnosisdb-olympia.gnosis.pm",
    "port": 443
  },
  "ethereum": {
