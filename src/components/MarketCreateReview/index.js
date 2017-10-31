@@ -5,6 +5,7 @@ import moment from 'moment'
 import autobind from 'autobind-decorator'
 
 import { OUTCOME_TYPES, RESOLUTION_TIME, COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { isModerator } from 'utils/helpers'
 
 import InteractionButton from 'containers/InteractionButton'
 
@@ -32,8 +33,8 @@ class MarketCreateReview extends Component {
       this.props.changeUrl('/markets/new')
     }
 
-    if (!process.env.WHITELIST[this.props.currentAccount]) {
-      this.props.changeUrl('/')
+    if (!isModerator(this.props.currentAccount)) {
+      this.props.changeUrl('/markets')
     }
   }
 

@@ -5,6 +5,7 @@ import { Field, propTypes } from 'redux-form'
 
 import * as validators from 'utils/validators'
 import { ORACLE_TYPES, GAS_COST } from 'utils/constants'
+import { isModerator } from 'utils/helpers'
 
 import GroupCentralizedOracle from 'components/GroupCentralizedOracle'
 import GroupBlockDifficulty from 'components/GroupBlockDifficulty'
@@ -17,7 +18,7 @@ import './marketCreateWizard.less'
 
 export default class MarketCreateWizard extends Component {
   componentDidMount() {
-    if (!process.env.WHITELIST[this.props.defaultAccount]) {
+    if (!isModerator(this.props.defaultAccount)) {
       this.props.changeUrl('/markets')
     }
 
