@@ -102,7 +102,7 @@ module.exports = {
         NODE_ENV: JSON.stringify(nodeEnv),
         GNOSISDB_URL: JSON.stringify(gnosisDbUrl),
         ETHEREUM_URL: JSON.stringify(ethereumUrl),
-        WHITELIST: whitelist,
+        WHITELIST: JSON.stringify(whitelist),
       },
     }),
   ],
