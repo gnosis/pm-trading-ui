@@ -1,7 +1,7 @@
 /* globals process.env */
 import Web3 from 'web3'
 
-import Gnosis from '@gnosis.pm/gnosisjs'
+import Gnosis from '@gnosis.pm/gnosisjs/src/'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/src/utils'
 
 import { hexWithPrefix, weiToEth, promisify } from 'utils/helpers'
