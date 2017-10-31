@@ -7,6 +7,7 @@ import { map } from 'lodash'
 import { registerProvider, updateProvider, initGnosis } from 'actions/blockchain'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { getUportDefaultAccount, isGnosisInitialized } from 'selectors/blockchain'
+import { weiToEth } from 'utils/helpers'
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
@@ -59,7 +60,7 @@ class WalletIntegrationProvider extends Component {
                 ...data,
                 provider: provider.constructor.providerName,
                 account,
-                balance,
+                balance: weiToEth(balance),
             })
 
             await this.props.fetchOlympiaUserData(account)

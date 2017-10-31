@@ -185,17 +185,3 @@ export const promisify = (func, params, timeout) => new Promise((resolve, reject
     return resolve(res)
   })
 })
-
-export const roundProfits = (profits) => {
-    if (!profits) {
-        return undefined
-    }
-
-    if (profits.length === 1) {
-        return profits
-    }
-    
-    const result = profits.substr(0, 1) + '.' + profits.substr(1, 2)
-
-    return result
-}
