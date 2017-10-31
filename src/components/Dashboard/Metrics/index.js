@@ -6,12 +6,12 @@ import selector from './selector'
 class Metrics extends React.PureComponent {
 
     render() {
-        const { tokens, predictedProfits, rank, badge } = this.props
+        const { tokens, predictedProfit, rank, badge } = this.props
         
         return (
             <Layout
                 tokens={ tokens }
-                predictedProfits={ predictedProfits }
+                predictedProfit={ predictedProfit }
                 rank={ rank }
                 badge={ badge }
             />

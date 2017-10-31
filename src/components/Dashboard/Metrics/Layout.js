@@ -27,13 +27,13 @@ const Metric = ({ img, title, explanation, children, width = 37, height = 37 }) 
     </Block>
 )
 
-const Metrics = ({ tokens, predictedProfits, rank, badge }) => (
+const Metrics = ({ tokens, predictedProfit, rank, badge }) => (
     <Block className={ cx('ol-db-container') }>
         <Metric img={ group } explanation="OLY TOKENS">
             <DecimalValue value={tokens} className={ cx('ol-db-title') } />
         </Metric>
         <Metric img={ shape } width={ 45 } height={ 45 } explanation="PREDICTED PROFITS">
-            <Block className={ cx('ol-db-title') }>{ predictedProfits ? predictedProfits : '--' }</Block>
+            <Block className={ cx('ol-db-title') }>{ predictedProfit ? predictedProfit : '--' }</Block>
         </Metric>
         <Metric img={ arrows } explanation="YOUR RANK">
             <Block className={ cx('ol-db-title') }>{ rank ? rank : '--' }</Block>
