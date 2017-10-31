@@ -22,7 +22,8 @@
     "import/no-unresolved": 0,
     "import/no-extraneous-dependencies": 0,
     "import/extensions": 0,
-    "import/prefer-default-export": 0
+    "import/prefer-default-export": 0,
+    "indent": ["error", 4, { "SwitchCase": 1 }]
   },
   "env": {
     "jest/globals": true,
