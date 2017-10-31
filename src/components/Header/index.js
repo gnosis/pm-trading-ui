@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
+import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
@@ -43,41 +44,33 @@ const Header = ({
             Dashboard
           </Link>
         )}
-        {hasWallet && (
-          <Link
-            to="/transactions"
-            activeClassName="headerContainer__navLink--active"
-            className="headerContainer__navLink"
-          >
-            Transactions
-          </Link>
-        )}
+        <Link to="/scoreboard" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+          Scoreboard
+        </Link>
+        <Link to="/gamerules" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
+          Game Rules
+        </Link>
+
       </div>
 
-      <div className="headerContainer__group headerContainer__group--right account">
-        {hasWallet &&
-          !isConnectedToCorrectNetwork && (
-            <div className="headerContainer__network">
-              <p className="headerContainer__network--wrongChain">
-                Network: {upperFirst(currentNetwork.toLowerCase())}
-              </p>
-              <a
-                className="headerContainer__network--wrongChainHelp"
-                href="javascript:void(0)"
-                onClick={() => openNetworkCheckModal()}
-              >
-                This is not the chain used for this plattform.<br />Click here for help
-              </a>
-            </div>
-          )}
+      <div className="headerContainer__group headerContainer__group--right">
         {hasWallet &&
           currentProvider && (
             <div className="headerContainer__account">
-              <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
-              <Identicon className="" account={currentAccount} />
+              {currentNetwork &&
+                currentNetwork !== 'MAIN' && (
+                  <span className="headerContainer__network--text">
+                    Network: {upperFirst(currentNetwork.toLowerCase())}
+                  </span>
+                )}
+              <ProviderIcon provider={currentProvider} />
+              <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
+              <span className="headerContainer__account--text">
+                { collateralTokenToText() }
+              </span>
+              <Identicon className="" />
             </div>
-          )}
-        {hasWallet && currentProvider && <ProviderIcon provider={currentProvider} />}
+        )}
         {!hasWallet && (
           <a
             href="javascript:void(0)"
@@ -93,15 +86,15 @@ const Header = ({
 )
 
 Header.propTypes = {
-  version: PropTypes.string,
-  isConnectedToCorrectNetwork: PropTypes.bool,
-  currentNetwork: PropTypes.string,
-  hasWallet: PropTypes.bool,
-  currentAccount: PropTypes.string,
-  currentBalance: PropTypes.string,
-  currentProvider: providerPropType,
-  openConnectWalletModal: PropTypes.func,
-  openNetworkCheckModal: PropTypes.func,
+    version: PropTypes.string,
+    isConnectedToCorrectNetwork: PropTypes.bool,
+    currentNetwork: PropTypes.string,
+    hasWallet: PropTypes.bool,
+    currentAccount: PropTypes.string,
+    currentBalance: PropTypes.string,
+    currentProvider: providerPropType,
+    openConnectWalletModal: PropTypes.func,
+    openNetworkCheckModal: PropTypes.func,
 }
 
 export default Header
