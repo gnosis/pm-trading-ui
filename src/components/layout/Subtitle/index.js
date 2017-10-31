@@ -11,15 +11,15 @@ class Subtitle extends React.PureComponent {
         const { children, ...props } = this.props
 
         return (
-            <h3 className={ cx('ol-subtitle') } { ...props }>
-                { children }
-            </h3>
+          <h3 className={cx('ol-subtitle')} {...props}>
+            { children }
+          </h3>
         )
     }
 }
-    
+
 Subtitle.propTypes = {
     children: PropTypes.node,
 }
-    
+
 export default Subtitle

@@ -11,9 +11,9 @@ class Block extends React.PureComponent {
         const { margin, children, className, ...props } = this.props
 
         return (
-            <div className={ cx(margin, className) } { ...props }>
-                { children }
-            </div>
+          <div className={cx(margin, className)} {...props}>
+            { children }
+          </div>
         )
     }
 }

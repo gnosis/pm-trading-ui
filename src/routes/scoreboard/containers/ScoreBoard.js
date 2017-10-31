@@ -14,7 +14,7 @@ class ScoreBoard extends React.Component {
     render() {
         const { data, myAccount } = this.props
 
-        return <Layout data={ data } myAccount={ myAccount } />
+        return <Layout data={data} myAccount={myAccount} />
     }
 }
 

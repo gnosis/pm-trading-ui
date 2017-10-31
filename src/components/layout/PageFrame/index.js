@@ -6,8 +6,8 @@ import * as css from './index.css'
 const cx = classNames.bind(css)
 
 const PageFrame = ({ children }) =>
-    <Block className={ cx('container', 'pageFrame') }>
-        { children }
-    </Block>
+  <Block className={cx('container', 'pageFrame')}>
+    { children }
+  </Block>
 
 export default PageFrame

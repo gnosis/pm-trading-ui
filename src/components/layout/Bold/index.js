@@ -7,9 +7,9 @@ class Bold extends React.PureComponent {
         const { children, ...props } = this.props
 
         return (
-            <b { ...props }>
-                { children }
-            </b>
+          <b {...props}>
+            { children }
+          </b>
         )
     }
 }
