@@ -19,7 +19,16 @@ const Slider = ({ input, label, min, max }) => {
       <label className="formSlider__range--min">{min.toFixed(0)}</label>
       <input className="formSlider__input fluid" type="range" min={min} max={max} {...input} step="0.01" />
       <label className="formSlider__range--max">{max.toFixed(0)}</label>
-      <input className="formSlider__value" {...input} type="number" min={min} max={max} step="0.01" />
+      <div className="formSlider__value-container">
+        <input
+          className="formSlider__value inputField__input"
+          {...input}
+          type="number"
+          min={min}
+          max={max}
+          step="0.01"
+        />
+      </div>
     </div>
   )
 }
