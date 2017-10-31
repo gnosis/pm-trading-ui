@@ -19,8 +19,13 @@ class ScoreBoard extends React.Component {
 }
 
 ScoreBoard.propTypes = {
-    data: PropTypes.objectOf(PropTypes.object),
-    myAccount: PropTypes.objectOf(PropTypes.object),
+    data: PropTypes.objectOf(PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.object,
+        PropTypes.bool,
+    ])),
+    myAccount: PropTypes.string,
     fetchOlympiaUsers: PropTypes.func.isRequired,
 }
 

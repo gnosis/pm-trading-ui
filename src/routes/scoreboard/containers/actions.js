@@ -1,3 +1,3 @@
-import { fetchOlympiaUsers, addUsers } from '../store/actions';
+import { fetchOlympiaUsers, addUsers } from '../store/actions'
 
-export default { fetchOlympiaUsers, addUsers };
+export default { fetchOlympiaUsers, addUsers }

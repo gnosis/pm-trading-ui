@@ -33,7 +33,7 @@ export const badgeOf = (value) => {
     if (isJPsychic) {
         return 'Psychic'
     }
-    debugger
+
     return unknown
 }
 
