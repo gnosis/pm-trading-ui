@@ -31,45 +31,45 @@ export const updateProvider = createAction('UPDATE_PROVIDER')
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
 export const requestGasPrice = () => async (dispatch) => {
-  const gasPrice = await getGasPrice()
-  dispatch(setGasPrice({ entityType: 'gasPrice', gasPrice }))
+    const gasPrice = await getGasPrice()
+    dispatch(setGasPrice({ entityType: 'gasPrice', gasPrice }))
 }
 
 export const requestGasCost = contractType => async (dispatch) => {
-  if (contractType === GAS_COST.MARKET_CREATION) {
-    calcMarketGasCost().then((gasCost) => {
-      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-    })
-  } else if (contractType === GAS_COST.BUY_SHARES) {
-    calcBuySharesGasCost().then((gasCost) => {
-      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-    })
-  } else if (contractType === GAS_COST.SELL_SHARES) {
-    calcSellSharesGasCost().then((gasCost) => {
-      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-    })
-  } else if (contractType === GAS_COST.CATEGORICAL_EVENT) {
-    calcCategoricalEventGasCost().then((gasCost) => {
-      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-    })
-  } else if (contractType === GAS_COST.SCALAR_EVENT) {
-    calcScalarEventGasCost().then((gasCost) => {
-      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-    })
-  } else if (contractType === GAS_COST.CENTRALIZED_ORACLE) {
-    calcCentralizedOracleGasCost().then((gasCost) => {
-      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-    })
-  } else if (contractType === GAS_COST.FUNDING) {
-    calcFundingGasCost().then((gasCost) => {
-      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-    })
-  }
+    if (contractType === GAS_COST.MARKET_CREATION) {
+        calcMarketGasCost().then((gasCost) => {
+            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+        })
+    } else if (contractType === GAS_COST.BUY_SHARES) {
+        calcBuySharesGasCost().then((gasCost) => {
+            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+        })
+    } else if (contractType === GAS_COST.SELL_SHARES) {
+        calcSellSharesGasCost().then((gasCost) => {
+            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+        })
+    } else if (contractType === GAS_COST.CATEGORICAL_EVENT) {
+        calcCategoricalEventGasCost().then((gasCost) => {
+            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+        })
+    } else if (contractType === GAS_COST.SCALAR_EVENT) {
+        calcScalarEventGasCost().then((gasCost) => {
+            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+        })
+    } else if (contractType === GAS_COST.CENTRALIZED_ORACLE) {
+        calcCentralizedOracleGasCost().then((gasCost) => {
+            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+        })
+    } else if (contractType === GAS_COST.FUNDING) {
+        calcFundingGasCost().then((gasCost) => {
+            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+        })
+    }
 }
 
 export const requestEtherTokens = account => async (dispatch) => {
-  const etherTokens = await getEtherTokens(account)
-  dispatch(setEtherTokens({ entityType: 'etherTokens', account, etherTokens }))
+    const etherTokens = await getEtherTokens(account)
+    dispatch(setEtherTokens({ entityType: 'etherTokens', account, etherTokens }))
 }
 
 /**
@@ -77,37 +77,37 @@ export const requestEtherTokens = account => async (dispatch) => {
  */
 export const initGnosis = (defaultAccount = undefined) => async (dispatch, getState) => {
   // initialize
-  try {
-    const state = getState()
+    try {
+        const state = getState()
 
     // determine new provider
-    const newProvider = findDefaultProvider(state)
-    if (newProvider) {
-      await dispatch(setActiveProvider(newProvider.name))
+        const newProvider = findDefaultProvider(state)
+        if (newProvider) {
+            await dispatch(setActiveProvider(newProvider.name))
 
       // init Gnosis connection
-      const opts = getGnosisJsOptions(newProvider, defaultAccount)
-      await initGnosisConnection(opts)
-      await dispatch(setGnosisInitialized({ initialized: true }))
-      await requestEtherTokens()
+            const opts = getGnosisJsOptions(newProvider, defaultAccount)
+            await initGnosisConnection(opts)
+            await dispatch(setGnosisInitialized({ initialized: true }))
+            await requestEtherTokens()
+        }
+    } catch (error) {
+        console.warn(`Gnosis.js initialization Error: ${error}`)
+        await dispatch(setConnectionStatus({ connected: false }))
+        return await dispatch(setGnosisInitialized({ initialized: false, error }))
     }
-  } catch (error) {
-    console.warn(`Gnosis.js initialization Error: ${error}`)
-    await dispatch(setConnectionStatus({ connected: false }))
-    return await dispatch(setGnosisInitialized({ initialized: false, error }))
-  }
 
   // connect
-  try {
+    try {
     // runs test executions on gnosisjs
-    const getConnection = async () => {
-      const account = await getCurrentAccount()
-      await getCurrentBalance(account)
+        const getConnection = async () => {
+            const account = await getCurrentAccount()
+            await getCurrentBalance(account)
+        }
+        await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
+        await dispatch(setConnectionStatus({ connected: true }))
+    } catch (error) {
+        console.warn(`Gnosis.js connection Error: ${error}`)
+        return await dispatch(setConnectionStatus({ connected: false }))
     }
-    await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
-    await dispatch(setConnectionStatus({ connected: true }))
-  } catch (error) {
-    console.warn(`Gnosis.js connection Error: ${error}`)
-    return await dispatch(setConnectionStatus({ connected: false }))
-  }
 }

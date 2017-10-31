@@ -9,11 +9,11 @@ class Paragraph extends React.PureComponent {
 
     render() {
         const { children, color, nomargin, ...props } = this.props
-        const noMargin = nomargin ? 'no-margin' : undefined;
+        const noMargin = nomargin ? 'no-margin' : undefined
         return (
-            <p className={ cx('default-paragraph', color, noMargin) }  { ...props }>
-                { children }
-            </p>
+          <p className={cx('default-paragraph', color, noMargin)} {...props}>
+            { children }
+          </p>
         )
     }
 }

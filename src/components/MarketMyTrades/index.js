@@ -5,7 +5,7 @@ import moment from 'moment'
 import { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { COLOR_SCHEME_DEFAULT, RESOLUTION_TIME } from 'utils/constants'
-import { getOutcomeName } from 'utils/helpers'
+import { getOutcomeName, weiToEth } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMyTrades.less'
@@ -36,6 +36,7 @@ class MarketMyTrades extends Component {
       return undefined
     }
   }
+
   renderTrades() {
     const { market } = this.props
 
@@ -60,6 +61,18 @@ class MarketMyTrades extends Component {
             .local()
             .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
         </td>
+        <td>
+          {trade.cost !== 'None' ? (
+            <div>
+              {Decimal(weiToEth(trade.cost))
+                .toDP(2, 1)
+                .toString()}&nbsp;
+              <CurrencyName collateralToken={market.event.collateralToken} />
+            </div>
+          ) : (
+            '0'
+          )}
+        </td>
       </tr>
     ))
 
@@ -83,6 +96,7 @@ class MarketMyTrades extends Component {
                 </th>
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Avg. Price</th>
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Date</th>
+                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Cost</th>
               </tr>
             </thead>
             <tbody>{this.renderTrades()}</tbody>

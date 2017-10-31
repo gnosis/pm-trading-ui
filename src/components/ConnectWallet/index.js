@@ -22,7 +22,7 @@ const ConnectWallet = ({ closeModal }) => (
 )
 
 ConnectWallet.propTypes = {
-  closeModal: PropTypes.func,
+    closeModal: PropTypes.func,
 }
 
 export default ConnectWallet

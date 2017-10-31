@@ -11,9 +11,9 @@ class Title extends React.PureComponent {
         const { children, ...props } = this.props
 
         return (
-            <h1 className={ cx('ol-title') } { ...props }>
-                { children }
-            </h1>
+          <h1 className={cx('ol-title')} {...props}>
+            { children }
+          </h1>
         )
     }
 }

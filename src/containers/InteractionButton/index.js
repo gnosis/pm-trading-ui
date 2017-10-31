@@ -8,7 +8,12 @@ import 'rc-tooltip/assets/bootstrap.css'
 
 import LoadingIndicator from 'components/LoadingIndicator'
 
-import { checkWalletConnection, isGnosisInitialized, isConnectedToCorrectNetwork, isOnWhitelist } from 'selectors/blockchain'
+import {
+  checkWalletConnection,
+  isGnosisInitialized,
+  isConnectedToCorrectNetwork,
+  isOnWhitelist,
+} from 'selectors/blockchain'
 
 import './interactionButton.less'
 
@@ -18,6 +23,15 @@ class InteractionButton extends Component {
 
     this.state = { loading: false }
   }
+
+  componentDidMount() {
+    this.mounted = true
+  }
+
+  componentWillUnmount() {
+    this.mounted = false
+  }
+
   render() {
     const {
       className,
@@ -32,7 +46,7 @@ class InteractionButton extends Component {
       disabled,
       loading,
     } = this.props
-      
+
     if (whitelistRequired && !whitelisted) {
       return null
     }
@@ -49,12 +63,7 @@ class InteractionButton extends Component {
     // disabled from props or wallet error or network error
     const isDisabled = disabled || walletError || networkError
 
-    const classNames = cn(
-      'interactionButton',
-      className,
-      { disabled: isDisabled },
-      { loading: isLoading },
-    )
+    const classNames = cn('interactionButton', className, { disabled: isDisabled }, { loading: isLoading })
 
     const btn = (
       <button
@@ -70,31 +79,27 @@ class InteractionButton extends Component {
             const ret = onClick()
 
             if (typeof ret === 'object' && ret.constructor.name === 'Promise') {
-              try {
-                this.setState({ loading: true })
-                ret
-                  .then(() => this.setState({ loading: false }))
-                  .catch(() => this.setState({ loading: false }))
-              } catch (e) {
-                // fails if promise execute after component unmount
-              }
+              this.setState({ loading: true })
+              ret
+                .then(() => {
+                  if (this.mounted) this.setState({ loading: false })
+                })
+                .catch(() => {
+                  if (this.mounted) this.setState({ loading: false })
+                })
             }
           }
         }}
         disabled={isDisabled}
       >
-        <div className="interactionButton__inner">
-          {children}
-        </div>
+        <div className="interactionButton__inner">{children}</div>
       </button>
     )
 
     if (isLoading) {
       return (
         <button className={classNames} type="button" disabled>
-          <div className="interactionButton__inner">
-            {children}
-          </div>
+          <div className="interactionButton__inner">{children}</div>
           <LoadingIndicator width={28} height={28} className="interactionButtonLoading" />
         </button>
       )
@@ -105,7 +110,11 @@ class InteractionButton extends Component {
     }
 
     if (networkError) {
-      return <Tooltip overlay="You are connected to the wrong chain. You can only interact with Gnosis when you're on the same chain as us.">{btn}</Tooltip>
+      return (
+        <Tooltip overlay="You are connected to the wrong chain. You can only interact with Gnosis when you're on the same chain as us.">
+          {btn}
+        </Tooltip>
+      )
     }
 
     return btn

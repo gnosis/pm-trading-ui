@@ -17,6 +17,6 @@ storiesOf('Route ScoreBoard components', module)
         const myWallet = text('User Account', '0x90F8bf6A479f320ead074411a4B0e7944Ea8ca007')
 
         return (
-            <Component tableData={ data } myAccount={ myWallet } />
+          <Component tableData={data} myAccount={myWallet} />
         )
     })

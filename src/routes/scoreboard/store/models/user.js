@@ -1,4 +1,4 @@
-import { Record } from 'immutable';
+import { Record } from 'immutable'
 
 const UserRecord = Record({
     currentRank: undefined,
@@ -9,6 +9,6 @@ const UserRecord = Record({
     balance: undefined,
     predictedProfit: undefined,
     predictions: undefined,
-}, 'User');
+}, 'User')
 
-export default UserRecord;
+export default UserRecord
