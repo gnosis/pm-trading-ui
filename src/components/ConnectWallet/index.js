@@ -7,19 +7,14 @@ const ConnectWallet = ({ closeModal }) => (
   <div className="connectWallet">
     <a className="connectWallet__close" href="javascript:void(0);" onClick={() => closeModal()} />
     <h3>
-      In order to interact with Gnosis you need an Ethereum Wallet.<br />We currently support these providers:
+        In order to participate in Olympia, you need to create an identity using uPort.<br />
+        Download it and refresh your browser
     </h3>
     <ul className="connectWallet__provider-list">
       <li>
-        <a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
-          <ProviderIcon provider={{ name: 'metamask' }} />
-          MetaMask
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/ethereum/mist" target="_blank" rel="noopener noreferrer">
-          <ProviderIcon provider={{ name: 'mist' }} />
-          Mist
+        <a href="https://www.uport.me/" target="_blank" rel="noopener noreferrer">
+          <ProviderIcon provider={{ name: 'uport' }} />
+          uPort
         </a>
       </li>
     </ul>
