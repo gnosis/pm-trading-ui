@@ -15,7 +15,9 @@
     "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Account 10"
  },
   "productionWhitelist": {
-
+    "0x75e70a0204a9c2353f9de428cb87f38ead9f0160": "Denis",
+    "0x8a5e5508046316a6511d24306bcaab0a6d8511f1": "Olympia",
+    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis2"
  },
  "gnosisdb": {
    "protocol": "https",
