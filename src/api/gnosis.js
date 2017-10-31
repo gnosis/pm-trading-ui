@@ -2,7 +2,7 @@
 import Web3 from 'web3'
 
 import Gnosis from '@gnosis.pm/gnosisjs'
-import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
+import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/src/utils'
 
 import { hexWithPrefix, weiToEth, promisify } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
