@@ -110,7 +110,7 @@ const user10 = {
     predictions: 1,
 }
 
-export const usersData = [ user1, user2, user3, user4, user5, user6, user7, user8, user9, user10 ];
+export const usersData = [user1, user2, user3, user4, user5, user6, user7, user8, user9, user10]
 
 const users = [
     object('User 1', user1),
@@ -125,4 +125,4 @@ const users = [
     object('User 10', user10),
 ]
 
-export default array('ScoreBoard Ranking', users);
+export default array('ScoreBoard Ranking', users)

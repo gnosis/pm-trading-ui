@@ -13,9 +13,8 @@ const trophy = require('../assets/trophy.svg')
 class Layout extends React.PureComponent {
 
     render() { 
-        const dataTable = this.props.data;
-        let myAccount = this.props.myAccount;
-        const hasRows = !!dataTable;
+        const { data, myAccount } = this.props
+        const hasRows = !!data
 
         return (
             <PageFrame>
@@ -27,7 +26,7 @@ class Layout extends React.PureComponent {
                     The total score is calculated based on the sum of predicted profits and OLY 
                     tokens each wallet holds. Scores updated every hour.
                 </Paragraph>
-                <ScoreTable tableData={ dataTable } myAccount={ myAccount } />
+                <ScoreTable tableData={ data } myAccount={ myAccount } />
                 { hasRows
                     ? <Block className={ cx('ol-account') }>
                         <Block className={ cx('dot') }/>

@@ -88,7 +88,7 @@ const columns = [{
     id: 'predictions',
     Cell: badgeCell,
     headerStyle,
-    style: columnStyle
+    style: columnStyle,
 }, {
     Header: 'Reward',
     accesor: 'currentRank',
