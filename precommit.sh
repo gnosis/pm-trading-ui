@@ -20,7 +20,7 @@ fi
 
 for FILE in $STAGED_FILES
 do
-  "$ESLINT" "$FILE --fix"
+  "$ESLINT" "$FILE" "--fix"
 
   if [[ "$?" == 0 ]]; then
     echo -e "\t\033[32mESLint Passed: $FILE\033[0m"

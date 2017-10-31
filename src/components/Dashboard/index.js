@@ -6,11 +6,10 @@ import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
-import { COLOR_SCHEME_DEFAULT, LOWEST_DISPLAYED_VALUE, RESOLUTION_TIME } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, LOWEST_DISPLAYED_VALUE, TRANSACTION_DESCRIPTIONS, RESOLUTION_TIME } from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
-import config from 'config.json'
 
 import InteractionButton from 'containers/InteractionButton'
 
@@ -219,7 +218,7 @@ class Dashboard extends Component {
             <div className="col-md-3 dashboardMarket--highlight">
               {moment.utc(market.creationDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">{trade.orderType}</div>
+            <div className="col-md-2 dashboardMarket--highlight">{TRANSACTION_DESCRIPTIONS[trade.orderType]}</div>
           </div>
         </div>
       )

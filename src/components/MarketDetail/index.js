@@ -126,8 +126,8 @@ class MarketDetail extends Component {
     this.props
       .fetchMarket()
       .then(() => {
+        this.props.fetchMarketTrades(this.props.market)
         if (this.props.defaultAccount) {
-          this.props.fetchMarketTrades(this.props.market)
           this.props.fetchMarketShares(this.props.defaultAccount)
         }
         if (firstFetch) {
@@ -310,7 +310,7 @@ class MarketDetail extends Component {
   }
 
   renderControls() {
-    const { market, closeMarket, defaultAccount, redeemWinnings } = this.props
+    const { market, closeMarket, defaultAccount } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
