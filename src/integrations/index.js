@@ -1,3 +1,4 @@
 import Uport from './uport'
+import Remote from './remote'
 
-export { Uport }
+export { Uport, Remote }
