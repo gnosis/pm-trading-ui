@@ -10,7 +10,9 @@ import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
-
+import Block from 'components/layout/Block'
+import PageFrame from 'components/layout/PageFrame'
+import Title from 'components/layout/Title'
 import Outcome from 'components/Outcome'
 
 import FormRadioButton from 'components/FormRadioButton'
@@ -203,31 +205,33 @@ class MarketList extends Component {
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
-          <div className="container">
-            <h1>Market overview</h1>
-          </div>
+            <PageFrame>
+                <Block margin="md">
+                    <Title>Market overview</Title>
+                </Block>
+            </PageFrame>
         </div>
-        <div className="marketListPage__stats">
-          <div className="container">
-            <div className="row marketStats">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
-                <div className="marketStats__icon icon icon--market" />
-                <span className="marketStats__value">{markets.length}</span>
-                <div className="marketStats__label">Open Markets</div>
-              </div>
-              <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
-                <div className="marketStats__icon icon icon--market--countdown" />
-                <span className="marketStats__value">{markets.length}</span>
-                <div className="marketStats__label">Closing Soon</div>
-              </div>
-              <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
-                <div className="marketStats__icon icon icon--new" />
-                <span className="marketStats__value">{markets.length}</span>
-                <div className="marketStats__label">New Markets</div>
-              </div>
+        <Block margin="md">
+            <div className="container">
+                <div className="row marketStats">
+                    <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
+                        <div className="marketStats__icon icon icon--market" />
+                        <span className="marketStats__value">{markets.length}</span>
+                        <div className="marketStats__label">Open Markets</div>
+                    </div>
+                    <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
+                        <div className="marketStats__icon icon icon--market--countdown" />
+                        <span className="marketStats__value">{markets.length}</span>
+                        <div className="marketStats__label">Closing Soon</div>
+                    </div>
+                    <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
+                        <div className="marketStats__icon icon icon--new" />
+                        <span className="marketStats__value">{markets.length}</span>
+                        <div className="marketStats__label">New Markets</div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
+        </Block>
         <div className="marketListPage__controls">
           <div className="container">
             <div className="row">
