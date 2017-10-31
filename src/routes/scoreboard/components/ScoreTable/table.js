@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 import * as React from 'react'
-import { roundProfits } from 'utils/helpers';
+import { weiToEth } from 'utils/helpers';
 
 import * as css from './index.css'
 
@@ -46,7 +46,7 @@ export const rankCell = (props) => {
 
 export const olyCell = prop => (props) => {
     const value = props.row[prop]
-    const result = roundProfits(value)
+    const result = weiToEth(value)
     return <span>{ result }</span>
 }
 
