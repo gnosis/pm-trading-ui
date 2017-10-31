@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import Layout from '../components/Layout'
@@ -5,30 +6,27 @@ import actions from './actions'
 import selector from './selector'
 
 class ScoreBoard extends React.Component {
-    
-    constructor(props) {
-        super(props);
-    }
-    
+
     componentDidMount() {
         this.props.fetchOlympiaUsers()
-        this.props.addUsers([{
-            currentRank: 19,
-            diffRank: 10,
-            pastRank: 29,
-            account: this.props.myAccount,
-            score: '454000000000000000',
-            balance: '100000000000000000',
-            predictedProfits: '354000000000000000',
-            predictions: 12,
-        }])
     }
 
     render() {
-        const { data, myAccount } = this.props;
+        const { data, myAccount } = this.props
 
         return <Layout data={ data } myAccount={ myAccount } />
     }
+}
+
+ScoreBoard.propTypes = {
+    data: PropTypes.objectOf(PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.object,
+        PropTypes.bool,
+    ])),
+    myAccount: PropTypes.string,
+    fetchOlympiaUsers: PropTypes.func.isRequired,
 }
 
 export default connect(selector, actions)(ScoreBoard)

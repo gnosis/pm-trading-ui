@@ -5,7 +5,9 @@ import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { map } from 'lodash'
 import { registerProvider, updateProvider, initGnosis } from 'actions/blockchain'
+import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { getUportDefaultAccount, isGnosisInitialized } from 'selectors/blockchain'
+import { weiToEth } from 'utils/helpers'
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
@@ -25,43 +27,45 @@ class WalletIntegrationProvider extends Component {
     })
   }
 
-  @autobind
-  async handleProviderUpdate(provider, data) {
-    await this.props.updateProvider({
-      provider: provider.constructor.providerName,
-      ...data,
-    })
-
-    if (this.props.gnosisInitialized) {
-      let requireGnosisReinit = false
-      GNOSIS_REINIT_KEYS.forEach((searchKey) => {
-        if (Object.keys(data).indexOf(searchKey) > -1) {
-          requireGnosisReinit = true
-        }
-      })
-
-      if (requireGnosisReinit) {
-        // Just in case any other provider is updated and the default one
-        // is UPORT we do not want to scan the code again
-        await this.props.initGnosis(this.props.uportDefaultAccount)
-      }
-
-      return
-    }
-
-    if (provider.constructor.providerName === 'UPORT') {
-        await this.props.initGnosis(this.props.uportDefaultAccount)
-        const account = (await getGnosisConnection()).defaultAccount
-        const balance = await getOlympiaTokensByAccount(account)
-
+    @autobind
+    async handleProviderUpdate(provider, data) {
         await this.props.updateProvider({
-          ...data,
-          provider: provider.constructor.providerName,
-          account,
-          balance,
+            provider: provider.constructor.providerName,
+            ...data,
         })
+
+        if (this.props.gnosisInitialized) {
+            let requireGnosisReinit = false
+            GNOSIS_REINIT_KEYS.forEach((searchKey) => {
+                if (Object.keys(data).indexOf(searchKey) > -1) {
+                    requireGnosisReinit = true
+                }
+            })
+
+            if (requireGnosisReinit) {
+                // Just in case any other provider is updated and the default one
+                // is UPORT we do not want to scan the code again
+                await this.props.initGnosis(this.props.uportDefaultAccount)
+            }
+
+            return
+        }
+
+        if (provider.constructor.providerName === 'UPORT') {
+            await this.props.initGnosis(this.props.uportDefaultAccount)
+            const account = (await getGnosisConnection()).defaultAccount
+            const balance = await getOlympiaTokensByAccount(account)
+
+            await this.props.updateProvider({
+                ...data,
+                provider: provider.constructor.providerName,
+                account,
+                balance: weiToEth(balance),
+            })
+
+            await this.props.fetchOlympiaUserData(account)
+        }
     }
-  }
 
   @autobind
   async handleProviderRegister(provider, data) {
@@ -87,6 +91,7 @@ WalletIntegrationProvider.propTypes = {
   gnosisInitialized: PropTypes.bool,
   registerProvider: PropTypes.func.isRequired,
   updateProvider: PropTypes.func.isRequired,
+  fetchOlympiaUserData: PropTypes.func.isRequired,
   initGnosis: PropTypes.func.isRequired,
   uportDefaultAccount: PropTypes.string,
 }
@@ -100,4 +105,5 @@ export default connect(mapStateToProps, {
   registerProvider,
   updateProvider,
   initGnosis,
+  fetchOlympiaUserData,
 })(WalletIntegrationProvider)

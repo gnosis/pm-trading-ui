@@ -1,7 +1,7 @@
 import { createSelector, createStructuredSelector } from 'reselect';
 import { getCurrentBalance } from 'selectors/blockchain'
 import { meSelector } from 'routes/scoreboard/store/selectors';
-import { roundProfits } from 'utils/helpers';
+import { weiToEth } from 'utils/helpers';
 import { badgeOf } from 'routes/scoreboard/components/ScoreTable/table'
 
 const tokenSelector = createSelector(
@@ -11,7 +11,7 @@ const tokenSelector = createSelector(
 
 const profitsSelector = createSelector(
     meSelector,
-    account => (account ? roundProfits(account.predictedProfits) : undefined),
+    account => (account ? weiToEth(account.predictedProfit) : undefined),
 )
 
 const rankSelector = createSelector(
@@ -27,7 +27,7 @@ const badgeSelector = createSelector(
 
 export default createStructuredSelector({
     tokens: tokenSelector,
-    predictedProfits: profitsSelector,
+    predictedProfit: profitsSelector,
     rank: rankSelector,
     badge: badgeSelector,
 });
