@@ -31,6 +31,10 @@ class MarketCreateReview extends Component {
     if (!this.props.hasValues) {
       this.props.changeUrl('/markets/new')
     }
+
+    if (!process.env.WHITELIST[this.props.currentAccount]) {
+      this.props.changeUrl('/')
+    }
   }
 
   componentWillUnmount() {
@@ -286,6 +290,7 @@ MarketCreateReview.propTypes = {
   createMarketCost: PropTypes.string,
   hasValues: PropTypes.bool,
   changeUrl: PropTypes.func,
+  currentAccount: PropTypes.string,
   submitForm: PropTypes.func,
   reset: PropTypes.func,
   submitting: PropTypes.bool,

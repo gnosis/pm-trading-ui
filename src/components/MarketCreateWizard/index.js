@@ -17,10 +17,9 @@ import './marketCreateWizard.less'
 
 export default class MarketCreateWizard extends Component {
   componentDidMount() {
-    if (!this.props.defaultAccount) {
+    if (!process.env.WHITELIST[this.props.defaultAccount]) {
       this.props.changeUrl('/markets')
     }
-
 
     // i commented this out because we dont have such property 'outcomes'
     // maybe we did before, but now this check will always overwrite our outcomes
