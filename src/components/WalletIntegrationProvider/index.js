@@ -22,8 +22,11 @@ class WalletIntegrationProvider extends Component {
         }
         window.addEventListener('load', () => {
             Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
-        .then(this.props.initGnosis, this.props.initGnosis)
-        .catch(this.props.initGnosis)
+                .then(
+                    this.props.initGnosis(this.props.uportDefaultAccount),
+                    this.props.initGnosis(this.props.uportDefaultAccount),
+                )
+                .catch(this.props.initGnosis(this.props.uportDefaultAccount))
         })
     }
 
@@ -67,7 +70,7 @@ class WalletIntegrationProvider extends Component {
         }
     }
 
-  @autobind
+    @autobind
     async handleProviderRegister(provider, data) {
         if (provider.constructor.providerName === 'UPORT') {
             data.account = this.props.uportDefaultAccount

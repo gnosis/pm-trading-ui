@@ -164,7 +164,7 @@ export const getGnosisJsOptions = (provider, defaultAccount = undefined) => {
     } else if (provider && provider.name === WALLET_PROVIDER.UPORT) {
         const uport = new Connect('GnosisOlympia')
         opts.ethereum = uport.getProvider()
-        opts.defaultAccount = provider.account
+        opts.defaultAccount = defaultAccount
     } else {
     // Default remote node
         opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
