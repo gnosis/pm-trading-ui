@@ -9,6 +9,7 @@ const pkg = require('./package.json')
 const nodeEnv = process.env.NODE_ENV || 'development'
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
+const intercomId = process.env.INTERCOM_ID
 
 const config = require('./src/config.json')
 
@@ -100,6 +101,7 @@ module.exports = {
                 GNOSISDB_URL: JSON.stringify(gnosisDbUrl),
                 ETHEREUM_URL: JSON.stringify(ethereumUrl),
                 WHITELIST: JSON.stringify(whitelist),
+                INTERCOM_ID: JSON.stringify(intercomId),
             },
         }),
     ],

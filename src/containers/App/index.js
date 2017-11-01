@@ -22,43 +22,45 @@ import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/bloc
 import './app.less'
 
 class App extends Component {
-  componentWillMount() {
-    window.Intercom("boot", {
-      app_id: "km54f6ih"
-    });
-  }
+    componentWillMount() {
+        if (process.env.INTERCOM_ID) {
+            window.Intercom('boot', {
+                app_id: process.env.INTERCOM_ID,
+            })
+        }
+    }
 
-  render() {
-    if (!this.props.blockchainConnection) {
+    render() {
+        if (!this.props.blockchainConnection) {
+            return (
+              <div className="appContainer">
+                <div className="loader-container">
+                  <LoadingIndicator width={100} height={100} />
+                  <h1>Connecting</h1>
+                </div>
+              </div>
+            )
+        }
+
+        const currentKey = this.props.location.pathname.split('/')[2] || this.props.location.pathname.split('/')[1] || '/'
+        const timeout = { enter: 200, exit: 200 }
+
         return (
           <div className="appContainer">
-            <div className="loader-container">
-              <LoadingIndicator width={100} height={100} />
-              <h1>Connecting</h1>
-            </div>
+            <HeaderContainer version={process.env.VERSION} />
+            {this.props.hasWallet && <TransactionFloaterContainer />}
+            <TransitionGroup>
+              <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
+                {this.props.children}
+              </CSSTransition>
+            </TransitionGroup>
+            <Hairline />
+            <PageFrame>
+              <Footer />
+            </PageFrame>
           </div>
         )
     }
-
-    const currentKey = this.props.location.pathname.split('/')[2] || this.props.location.pathname.split('/')[1] || '/'
-    const timeout = { enter: 200, exit: 200 }
-
-    return (
-      <div className="appContainer">
-        <HeaderContainer version={process.env.VERSION} />
-        {this.props.hasWallet && <TransactionFloaterContainer />}
-        <TransitionGroup>
-          <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
-            {this.props.children}
-          </CSSTransition>
-        </TransitionGroup>
-        <Hairline />
-        <PageFrame>
-          <Footer />
-        </PageFrame>
-      </div>
-    )
-  }
 }
 
 App.propTypes = {
