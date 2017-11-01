@@ -8,6 +8,7 @@ import LocalStorageDump from 'middlewares/LocalStorageDump'
 import LocalStorageLoad from 'middlewares/LocalStorageLoad'
 import Notifications from 'middlewares/Notifications'
 import Blockchain from 'middlewares/Blockchain'
+import Intercom from 'middlewares/Intercom'
 
 import reducer from 'reducers'
 
@@ -19,6 +20,7 @@ const middlewares = [
   LocalStorageLoad,
   LocalStorageDump,
   CrashReporter,
+  Intercom,
 ]
 
 const enhancers = [
