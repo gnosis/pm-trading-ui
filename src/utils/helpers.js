@@ -5,7 +5,7 @@ import Decimal from 'decimal.js'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
-import { Connect } from 'uport-connect'
+import Uport from 'integrations/uport'
 
 export const hexWithoutPrefix = (value) => {
     if (HEX_VALUE_REGEX.test(value)) {
@@ -162,7 +162,7 @@ export const getGnosisJsOptions = (provider, defaultAccount = undefined) => {
     // Inject window.web3
         opts.ethereum = window.web3.currentProvider
     } else if (provider && provider.name === WALLET_PROVIDER.UPORT) {
-        const uport = new Connect('GnosisOlympia')
+        const uport = Uport.uport
         opts.ethereum = uport.getProvider()
         opts.defaultAccount = provider.account
     } else {
