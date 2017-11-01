@@ -49,7 +49,8 @@ const expandableViews = {
       !props.market.local &&
       props.defaultAccount &&
       props.defaultAccount !== props.market.owner &&
-      !props.market.oracle.isOutcomeSet,
+      !props.market.oracle.isOutcomeSet &&
+      props.market.stage !== MARKET_STAGES.MARKET_CLOSED,
   },
   /* HIDDEN
   [EXPAND_SHORT_SELL]: {
