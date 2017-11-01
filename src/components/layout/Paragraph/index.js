@@ -8,10 +8,10 @@ const cx = classNames.bind(css)
 class Paragraph extends React.PureComponent {
 
     render() {
-        const { children, color, nomargin, ...props } = this.props
+        const { children, color, center, nomargin, ...props } = this.props
         const noMargin = nomargin ? 'no-margin' : undefined
         return (
-          <p className={cx('default-paragraph', color, noMargin)} {...props}>
+          <p className={cx('default-paragraph', color, noMargin, { center })} {...props}>
             { children }
           </p>
         )
@@ -20,6 +20,7 @@ class Paragraph extends React.PureComponent {
 
 Paragraph.propTypes = {
     nomargin: PropTypes.bool,
+    center: PropTypes.bool,
     color: PropTypes.string,
     children: PropTypes.node,
 }
