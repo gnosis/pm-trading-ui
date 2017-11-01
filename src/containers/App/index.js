@@ -21,8 +21,15 @@ import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/bloc
 
 import './app.less'
 
-const App = (props) => {
-    if (!props.blockchainConnection) {
+class App extends Component {
+  componentWillMount() {
+    window.Intercom("boot", {
+      app_id: "km54f6ih"
+    });
+  }
+
+  render() {
+    if (!this.props.blockchainConnection) {
         return (
           <div className="appContainer">
             <div className="loader-container">
@@ -33,16 +40,16 @@ const App = (props) => {
         )
     }
 
-    const currentKey = props.location.pathname.split('/')[2] || props.location.pathname.split('/')[1] || '/'
+    const currentKey = this.props.location.pathname.split('/')[2] || this.props.location.pathname.split('/')[1] || '/'
     const timeout = { enter: 200, exit: 200 }
 
     return (
       <div className="appContainer">
         <HeaderContainer version={process.env.VERSION} />
-        {props.hasWallet && <TransactionFloaterContainer />}
+        {this.props.hasWallet && <TransactionFloaterContainer />}
         <TransitionGroup>
           <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
-            {props.children}
+            {this.props.children}
           </CSSTransition>
         </TransitionGroup>
         <Hairline />
@@ -51,6 +58,7 @@ const App = (props) => {
         </PageFrame>
       </div>
     )
+  }
 }
 
 App.propTypes = {
