@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Router,
-  Route,
-  IndexRedirect,
-} from 'react-router'
+import { Router, Route, IndexRedirect } from 'react-router'
 
 import App from 'containers/App'
 import MarketListPage from 'containers/MarketListPage'
@@ -51,7 +47,6 @@ class AppRouter extends Component {
           </Router>
         )
     }
-
 }
 
 export default AppRouter
