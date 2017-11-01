@@ -3,6 +3,10 @@
     color: #626262;   
 }
 
+.soft {
+    color: #888888;
+}
+
 .medium {
     color: #686868;
 }
@@ -13,4 +17,8 @@
 
 .no-margin{
     margin-bottom: 5px;
+}
+
+.center {
+    text-align: center;
 }

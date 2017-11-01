@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
+import Footer from 'components/Footer'
 import PageFrame from 'components/layout/PageFrame'
 import Block from 'components/layout/Block'
 import Title from 'components/layout/Title'
@@ -347,6 +348,9 @@ class Dashboard extends Component {
               </div>
             </div>
             {tradesHoldingsSection}
+            <PageFrame>
+              <Footer />
+            </PageFrame>
           </div>
         )
     }
