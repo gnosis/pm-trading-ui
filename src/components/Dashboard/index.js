@@ -348,9 +348,6 @@ class Dashboard extends Component {
               </div>
             </div>
             {tradesHoldingsSection}
-            <PageFrame>
-              <Footer />
-            </PageFrame>
           </div>
         )
     }
