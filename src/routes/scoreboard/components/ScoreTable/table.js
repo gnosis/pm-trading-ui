@@ -40,7 +40,7 @@ export const badgeOf = (value) => {
 export const rankCell = (props) => {
     const diff = props.row.diffRank
     const color = diff == 0 ? 'neutralRank' : diff > 0 ? 'greenRank' : 'redRank'
-    const value = diff == 0 ? '-' : diff
+    const value = diff == 0 ? '-' : diff > 0 ? `+${diff}` : diff
     return <span className={cx(color)}>{ value }</span>
 }
 
