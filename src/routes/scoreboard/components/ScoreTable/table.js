@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
+import Decimal from 'decimal.js'
 import * as React from 'react'
-import { weiToEth } from 'utils/helpers'
 
 import * as css from './index.css'
 
@@ -40,13 +40,16 @@ export const badgeOf = (value) => {
 export const rankCell = (props) => {
     const diff = props.row.diffRank
     const color = diff == 0 ? 'neutralRank' : diff > 0 ? 'greenRank' : 'redRank'
-    const value = diff == 0 ? '-' : diff
+    const value = diff == 0 ? '-' : diff > 0 ? `+${diff}` : diff
     return <span className={cx(color)}>{ value }</span>
 }
 
 export const olyCell = prop => (props) => {
     const value = props.row[prop]
-    const result = weiToEth(value)
+    const result = Decimal(value)
+        .div(1e18)
+        .toDP(2, 1)
+        .toString()
     return <span>{ result }</span>
 }
 

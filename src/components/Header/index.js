@@ -13,13 +13,10 @@ import './header.less'
 const Header = ({
   version,
   hasWallet,
-  currentAccount,
   currentNetwork,
   currentBalance,
   currentProvider,
-  isConnectedToCorrectNetwork,
   openConnectWalletModal,
-  openNetworkCheckModal,
 }) => (
   <div className="headerContainer">
     <div className="container">
@@ -63,11 +60,11 @@ const Header = ({
                     Network: {upperFirst(currentNetwork.toLowerCase())}
                   </span>
                 )}
-              <ProviderIcon provider={currentProvider} />
               <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
               <span className="headerContainer__account--text">
                 { collateralTokenToText() }
               </span>
+              <ProviderIcon provider={currentProvider} />
               <Identicon className="" />
             </div>
         )}
@@ -87,14 +84,11 @@ const Header = ({
 
 Header.propTypes = {
     version: PropTypes.string,
-    isConnectedToCorrectNetwork: PropTypes.bool,
     currentNetwork: PropTypes.string,
     hasWallet: PropTypes.bool,
-    currentAccount: PropTypes.string,
     currentBalance: PropTypes.string,
     currentProvider: providerPropType,
     openConnectWalletModal: PropTypes.func,
-    openNetworkCheckModal: PropTypes.func,
 }
 
 export default Header
