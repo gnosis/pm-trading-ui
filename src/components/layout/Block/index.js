@@ -8,10 +8,10 @@ const cx = classNames.bind(css)
 class Block extends React.PureComponent {
 
     render() {
-        const { margin, children, className, ...props } = this.props
+        const { margin, center, children, className, ...props } = this.props
 
         return (
-          <div className={cx(margin, className)} {...props}>
+          <div className={cx(margin, className, { center })} {...props}>
             { children }
           </div>
         )
@@ -20,6 +20,7 @@ class Block extends React.PureComponent {
 
 Block.propTypes = {
     margin: PropTypes.string,
+    center: PropTypes.bool,
     children: PropTypes.node,
 }
 
