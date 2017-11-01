@@ -32,11 +32,13 @@ class Uport extends InjectedWeb3 {
         this.provider = await uport.getProvider()
         this.network = await this.getNetwork()
         this.networkId = await this.getNetworkId()
+        this.account = await this.getAccount()
 
         return this.runProviderUpdate(this, {
             available: true,
             network: this.network,
             networkId: this.networkId,
+            account: this.account,
         })
     }
 }
