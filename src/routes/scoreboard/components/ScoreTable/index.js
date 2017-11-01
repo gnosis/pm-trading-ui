@@ -101,7 +101,7 @@ const columns = [{
 const EmptyData = () => <div />
 
 const ScoreBoard = ({ tableData, myAccount }) => {
-    const size = tableData ? tableData.length > 11 ? 11 : tableData.length : 0
+    const size = tableData ? tableData.length > 16 ? 16 : tableData.length : 0
 
     return (<ReactTable
       data={tableData}

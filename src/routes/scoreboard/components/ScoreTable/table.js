@@ -65,23 +65,47 @@ export const rewardCell = (props) => {
     let result = ''
 
     if (position == 1) {
-        result = '100 GNO'
+        result = '15 GNO'
     }
 
     if (position == 2) {
-        result = '75 GNO'
+        result = '12 GNO'
     }
 
     if (position == 3) {
-        result = '50 GNO'
+        result = '10 GNO'
     }
 
     if (position == 4) {
-        result = '40 GNO'
+        result = '8 GNO'
     }
 
     if (position == 5) {
-        result = '10 GNO'
+        result = '7 GNO'
+    }
+
+    if (position == 6) {
+        result = '6 GNO'
+    }
+
+    if (position == 7) {
+        result = '5 GNO'
+    }
+
+    if (position == 8) {
+        result = '4 GNO'
+    }
+
+    if (position == 9) {
+        result = '3 GNO'
+    }
+
+    if (position == 10) {
+        result = '2 GNO'
+    }
+
+    if (position > 10 && position <= 15) {
+        result = '1 GNO'
     }
 
     const style = result ? { color: '#90712b', letterSpacing: '0.5px' } : undefined
