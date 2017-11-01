@@ -1,7 +1,7 @@
+import Decimal from 'decimal.js'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { getCurrentBalance } from 'selectors/blockchain'
 import { meSelector } from 'routes/scoreboard/store/selectors'
-import { weiToEth } from 'utils/helpers'
 import { badgeOf } from 'routes/scoreboard/components/ScoreTable/table'
 
 const tokenSelector = createSelector(
@@ -11,7 +11,7 @@ const tokenSelector = createSelector(
 
 const profitsSelector = createSelector(
     meSelector,
-    account => (account ? weiToEth(account.predictedProfit) : undefined),
+    account => (account ? Decimal(account.predictedProfit).div(1e18).toDP(2, 1).toString() : undefined),
 )
 
 const rankSelector = createSelector(

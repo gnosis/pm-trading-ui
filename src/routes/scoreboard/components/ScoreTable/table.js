@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
+import Decimal from 'decimal.js'
 import * as React from 'react'
-import { weiToEth } from 'utils/helpers'
 
 import * as css from './index.css'
 
@@ -46,7 +46,10 @@ export const rankCell = (props) => {
 
 export const olyCell = prop => (props) => {
     const value = props.row[prop]
-    const result = weiToEth(value)
+    const result = Decimal(value)
+        .div(1e18)
+        .toDP(2, 1)
+        .toString()
     return <span>{ result }</span>
 }
 
