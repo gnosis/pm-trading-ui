@@ -63,11 +63,11 @@ const Header = ({
                     Network: {upperFirst(currentNetwork.toLowerCase())}
                   </span>
                 )}
-              <ProviderIcon provider={currentProvider} />
               <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
               <span className="headerContainer__account--text">
                 { collateralTokenToText() }
               </span>
+              <ProviderIcon provider={currentProvider} />
               <Identicon className="" />
             </div>
         )}
