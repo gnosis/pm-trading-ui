@@ -12,7 +12,7 @@ class Uport extends InjectedWeb3 {
     static providerPriority = 100
 
     constructor() {
-        super(false)
+        super(false, 0)
     }
 
   /**

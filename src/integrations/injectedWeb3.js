@@ -7,7 +7,9 @@ class InjectedWeb3 {
     runProviderUpdate() {}
     runProviderRegister() {}
 
-    constructor(enableWatcher = true) {
+    constructor(enableWatcher = true, defaultTimeout = 10000) {
+        this.defaultTimeout = defaultTimeout
+
         if (enableWatcher) {
             this.watcherInterval = setInterval(this.watcher, 1000)
         }
@@ -43,7 +45,7 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Network Identifier
    */
     async getNetworkId() {
-        return await promisify(this.web3.version.getNetwork, [], 10000)
+        return await promisify(this.web3.version.getNetwork, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
     }
 
   /**
@@ -52,7 +54,7 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Accountaddress
    */
     async getAccount() {
-        const accounts = await promisify(this.web3.eth.getAccounts, [], 10000)
+        const accounts = await promisify(this.web3.eth.getAccounts, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
 
         return accounts && accounts.length ? accounts[0] : null
     }
@@ -67,7 +69,7 @@ class InjectedWeb3 {
             throw new Error('No Account available')
         }
 
-        const balance = await promisify(this.web3.eth.getBalance, [this.account], 10000)
+        const balance = await promisify(this.web3.eth.getBalance, [this.account], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
 
         if (typeof balance !== 'undefined') {
             return weiToEth(balance.toString())
