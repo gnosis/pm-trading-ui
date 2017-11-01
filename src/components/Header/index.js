@@ -13,13 +13,10 @@ import './header.less'
 const Header = ({
   version,
   hasWallet,
-  currentAccount,
   currentNetwork,
   currentBalance,
   currentProvider,
-  isConnectedToCorrectNetwork,
   openConnectWalletModal,
-  openNetworkCheckModal,
 }) => (
   <div className="headerContainer">
     <div className="container">
@@ -87,14 +84,11 @@ const Header = ({
 
 Header.propTypes = {
     version: PropTypes.string,
-    isConnectedToCorrectNetwork: PropTypes.bool,
     currentNetwork: PropTypes.string,
     hasWallet: PropTypes.bool,
-    currentAccount: PropTypes.string,
     currentBalance: PropTypes.string,
     currentProvider: providerPropType,
     openConnectWalletModal: PropTypes.func,
-    openNetworkCheckModal: PropTypes.func,
 }
 
 export default Header
