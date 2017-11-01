@@ -43,10 +43,6 @@ class Layout extends React.PureComponent {
                     }
               <Block margin="xl" />
             </PageFrame>
-            <Hairline />
-            <PageFrame>
-              <Footer />
-            </PageFrame>
           </Block>
         )
     }
