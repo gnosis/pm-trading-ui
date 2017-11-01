@@ -63,7 +63,7 @@ const expandableViews = {
       !props.market.oracle.isOutcomeSet &&
       props.market.eventDescription.outcomes &&
       props.market.eventDescription.outcomes.length > 2,
-  }, */
+  },*/
   [EXPAND_MY_SHARES]: {
     label: 'My Tokens',
     className: 'btn btn-default',
@@ -200,8 +200,12 @@ class MarketDetail extends Component {
     const infos = {
       Token: collateralTokenToText(market.event.collateralToken),
       Fee: `${decimalToText(market.fee, 2) / 10000} %`,
-      Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
-      'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
+      Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(
+        market.event.collateralToken,
+      )}`,
+      'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(
+        market.event.collateralToken,
+      )}`,
     }
     const showWithdrawFees =
       this.props.defaultAccount &&
@@ -216,7 +220,9 @@ class MarketDetail extends Component {
       infos.creator = market.creator
     }
     if (showWithdrawFees) {
-      infos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenToText(market.event.collateralToken)}`
+      infos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenToText(
+        market.event.collateralToken,
+      )}`
     }
 
     return (
@@ -240,13 +246,15 @@ class MarketDetail extends Component {
     const { marketShares } = this.props
 
     const winnings = marketShares.reduce((sum, share) => {
-      const shareWinnings = weiToEth(calcLMSRProfit({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        outcomeTokenCount: share.balance,
-        feeFactor: market.fee,
-      }))
+      const shareWinnings = weiToEth(
+        calcLMSRProfit({
+          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+          funding: market.funding,
+          outcomeTokenIndex: share.outcomeToken.index,
+          outcomeTokenCount: share.balance,
+          feeFactor: market.fee,
+        }),
+      )
 
       return sum.plus(new Decimal(shareWinnings))
     }, new Decimal(0))
@@ -308,9 +316,11 @@ class MarketDetail extends Component {
       <div className="marketControls container">
         <div className="row">
           {Object.keys(expandableViews)
-            .filter(view =>
+            .filter(
+              view =>
                 typeof expandableViews[view].showCondition !== 'function' ||
-                expandableViews[view].showCondition(this.props))
+                expandableViews[view].showCondition(this.props),
+            )
             .map(view => (
               <button
                 key={view}
