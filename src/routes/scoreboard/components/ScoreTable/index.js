@@ -51,19 +51,19 @@ const columns = [{
     style: { ...columnBold, color: '#000000' },
     width: 50,
 }, {
-    Header: 'Rank Change',
+    Header: 'Change (24h)',
     accessor: 'diffRank',
     id: 'diffRank',
     Cell: rankCell,
     headerStyle,
     style: columnBold,
-    width: 120,
+    width: 110,
 }, {
     Header: 'User',
     accessor: 'account',
     headerStyle: headerLeft,
     style: { ...columnStyle, textAlign: 'left' },
-    width: 385,
+    width: 150,
 }, {
     Header: 'Total Score (OLY)',
     accessor: 'score',
@@ -77,7 +77,7 @@ const columns = [{
     style: columnStyle,
     Cell: olyCell('balance'),
 }, {
-    Header: 'Predicted Profits',
+    Header: 'Predicted Profits (OLY)',
     accessor: 'predictedProfit',
     headerStyle,
     style: columnStyle,
