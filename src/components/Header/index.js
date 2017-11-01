@@ -86,15 +86,15 @@ const Header = ({
 )
 
 Header.propTypes = {
-  version: PropTypes.string,
-  isConnectedToCorrectNetwork: PropTypes.bool,
-  currentNetwork: PropTypes.string,
-  hasWallet: PropTypes.bool,
-  currentAccount: PropTypes.string,
-  currentBalance: PropTypes.string,
-  currentProvider: providerPropType,
-  openConnectWalletModal: PropTypes.func,
-  openNetworkCheckModal: PropTypes.func,
+    version: PropTypes.string,
+    isConnectedToCorrectNetwork: PropTypes.bool,
+    currentNetwork: PropTypes.string,
+    hasWallet: PropTypes.bool,
+    currentAccount: PropTypes.string,
+    currentBalance: PropTypes.string,
+    currentProvider: providerPropType,
+    openConnectWalletModal: PropTypes.func,
+    openNetworkCheckModal: PropTypes.func,
 }
 
 export default Header

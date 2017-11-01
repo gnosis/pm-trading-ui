@@ -9,27 +9,27 @@ import notifications from './notifications'
 import users from 'routes/scoreboard/store/reducers/users'
 
 const reducers = combineReducers({
-  routing: routerReducer,
-  form: formReducer,
-  modal,
-  entities,
-  transactions,
-  blockchain,
-  notifications,
-  olympia: combineReducers({
-    ranking: users
-  }),
+    routing: routerReducer,
+    form: formReducer,
+    modal,
+    entities,
+    transactions,
+    blockchain,
+    notifications,
+    olympia: combineReducers({
+        ranking: users,
+    }),
 })
 
 const rootReducer = (state, action) => {
-  let resultState = state
-  if (action.type === 'LOAD_LOCALSTORAGE') {
-    resultState = {
-      ...state,
-      ...action.payload,
+    let resultState = state
+    if (action.type === 'LOAD_LOCALSTORAGE') {
+        resultState = {
+            ...state,
+            ...action.payload,
+        }
     }
-  }
-  return reducers(resultState, action)
+    return reducers(resultState, action)
 }
 
 export default rootReducer

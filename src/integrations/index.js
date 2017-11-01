@@ -1,6 +1,5 @@
 import Uport from './uport'
-import Metamask from './metamask'
-import Parity from './parity'
 import Remote from './remote'
+import Metamask from './metamask'
 
-export { Uport, Metamask, Parity, Remote }
+export { Uport, Remote, Metamask }

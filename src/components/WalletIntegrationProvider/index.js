@@ -7,24 +7,25 @@ import { map } from 'lodash'
 import { registerProvider, updateProvider, initGnosis } from 'actions/blockchain'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { getUportDefaultAccount, isGnosisInitialized } from 'selectors/blockchain'
+import { weiToEth } from 'utils/helpers'
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
 class WalletIntegrationProvider extends Component {
-  constructor(props) {
-    super(props)
-    const { integrations } = props
+    constructor(props) {
+        super(props)
+        const { integrations } = props
 
-    const providerOptions = {
-      runProviderUpdate: this.handleProviderUpdate,
-      runProviderRegister: this.handleProviderRegister,
-    }
-    window.addEventListener('load', () => {
-      Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
+        const providerOptions = {
+            runProviderUpdate: this.handleProviderUpdate,
+            runProviderRegister: this.handleProviderRegister,
+        }
+        window.addEventListener('load', () => {
+            Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
         .then(this.props.initGnosis, this.props.initGnosis)
         .catch(this.props.initGnosis)
-    })
-  }
+        })
+    }
 
     @autobind
     async handleProviderUpdate(provider, data) {
@@ -59,7 +60,7 @@ class WalletIntegrationProvider extends Component {
                 ...data,
                 provider: provider.constructor.providerName,
                 account,
-                balance,
+                balance: weiToEth(balance),
             })
 
             await this.props.fetchOlympiaUserData(account)
@@ -67,42 +68,42 @@ class WalletIntegrationProvider extends Component {
     }
 
   @autobind
-  async handleProviderRegister(provider, data) {
-    if (provider.constructor.providerName === 'UPORT') {
-        data.account = this.props.uportDefaultAccount
+    async handleProviderRegister(provider, data) {
+        if (provider.constructor.providerName === 'UPORT') {
+            data.account = this.props.uportDefaultAccount
+        }
+        await this.props.registerProvider({
+            provider: provider.constructor.providerName,
+            ...data,
+        })
     }
-    await this.props.registerProvider({
-      provider: provider.constructor.providerName,
-      ...data,
-    })
-  }
 
-  render() {
-    const { children } = this.props
+    render() {
+        const { children } = this.props
 
-    return children
-  }
+        return children
+    }
 }
 
 WalletIntegrationProvider.propTypes = {
-  children: PropTypes.element,
-  integrations: PropTypes.objectOf(PropTypes.object),
-  gnosisInitialized: PropTypes.bool,
-  registerProvider: PropTypes.func.isRequired,
-  updateProvider: PropTypes.func.isRequired,
-  fetchOlympiaUserData: PropTypes.func.isRequired,
-  initGnosis: PropTypes.func.isRequired,
-  uportDefaultAccount: PropTypes.string,
+    children: PropTypes.element,
+    integrations: PropTypes.objectOf(PropTypes.object),
+    gnosisInitialized: PropTypes.bool,
+    registerProvider: PropTypes.func.isRequired,
+    updateProvider: PropTypes.func.isRequired,
+    fetchOlympiaUserData: PropTypes.func.isRequired,
+    initGnosis: PropTypes.func.isRequired,
+    uportDefaultAccount: PropTypes.string,
 }
 
 const mapStateToProps = state => ({
-  gnosisInitialized: isGnosisInitialized(state),
-  uportDefaultAccount: getUportDefaultAccount(state),
+    gnosisInitialized: isGnosisInitialized(state),
+    uportDefaultAccount: getUportDefaultAccount(state),
 })
 
 export default connect(mapStateToProps, {
-  registerProvider,
-  updateProvider,
-  initGnosis,
-  fetchOlympiaUserData,
+    registerProvider,
+    updateProvider,
+    initGnosis,
+    fetchOlympiaUserData,
 })(WalletIntegrationProvider)

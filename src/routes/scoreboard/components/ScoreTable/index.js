@@ -1,13 +1,13 @@
 import 'react-table/react-table.css'
 import * as React from 'react'
 import ReactTable from 'react-table'
-import { 
+import {
     badgeCell,
     rankCell,
     olyCell,
     rewardCell,
     ownTrCallback,
-    ownTheadCallback
+    ownTheadCallback,
 } from './table'
 
 const tableStyle = {
@@ -101,19 +101,19 @@ const columns = [{
 const EmptyData = () => <div />
 
 const ScoreBoard = ({ tableData, myAccount }) => {
-    const size = tableData ? tableData.length > 11 ? 11 : tableData.length : 0;
+    const size = tableData ? tableData.length > 11 ? 11 : tableData.length : 0
 
-    return <ReactTable
-        data={ tableData }
-        columns={ columns }
-        showPagination={ false }
-        defaultPageSize={ size }
-        style={ tableStyle }
-        getTrProps={ ownTrCallback(myAccount) }
-        getTheadProps={ ownTheadCallback }
-        sortable={ false }
-        NoDataComponent={ EmptyData }
-    />
+    return (<ReactTable
+      data={tableData}
+      columns={columns}
+      showPagination={false}
+      defaultPageSize={size}
+      style={tableStyle}
+      getTrProps={ownTrCallback(myAccount)}
+      getTheadProps={ownTheadCallback}
+      sortable={false}
+      NoDataComponent={EmptyData}
+    />)
 }
 
 export default ScoreBoard

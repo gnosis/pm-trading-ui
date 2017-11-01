@@ -1,18 +1,30 @@
-@import url('../../less/vars.less');
+@import url("../../less/vars.less");
 
 .formSlider {
   display: inline-block;
 
   &__value {
     text-align: center;
-    display: block;
     text-transform: none;
     color: @font-color-light;
+
+    &-container {
+      position: relative;
+
+      &:after {
+        content: "%";
+        position: absolute;
+        display: inline-block;
+        right: -20px;
+        top: 50%;
+        transform: translateY(-56%);
+      }
+    }
   }
 
-
   &__range {
-    &--min, &--max {
+    &--min,
+    &--max {
       display: inline-block;
       text-transform: none;
       color: @font-color-light;

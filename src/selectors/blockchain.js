@@ -7,11 +7,11 @@ import Decimal from 'decimal.js'
  * @param {*} state - redux state
  */
 export const findDefaultProvider = (state) => {
-  const providers = orderBy(state.blockchain.providers, ['priority'], ['desc'])
+    const providers = orderBy(state.blockchain.providers, ['priority'], ['desc'])
 
-  return find(providers, {
-    loaded: true, available: true,
-  })
+    return find(providers, {
+        loaded: true, available: true,
+    })
 }
 
 export const getUportDefaultAccount = (state) => {
@@ -29,21 +29,21 @@ export const getSelectedProviderName = state => get(state, 'blockchain.activePro
  * @param {*} state - redux state
  */
 export const getCurrentAccount = (state) => {
-  const provider = getSelectedProvider(state)
+    const provider = getSelectedProvider(state)
 
-  if (provider) {
-    return provider.account
-  }
+    if (provider) {
+        return provider.account
+    }
 }
 
 export const checkWalletConnection = (state) => {
-  const provider = getSelectedProvider(state)
+    const provider = getSelectedProvider(state)
 
-  if (provider && provider.account) {
-    return true
-  }
+    if (provider && provider.account) {
+        return true
+    }
 
-  return false
+    return false
 }
 
 /**
@@ -51,12 +51,12 @@ export const checkWalletConnection = (state) => {
  * @param {*} state - redux state
  */
 export const getCurrentBalance = (state) => {
-  const provider = getSelectedProvider(state)
+    const provider = getSelectedProvider(state)
 
-  if (provider) {
-    return provider.balance
-  }
-  return undefined
+    if (provider) {
+        return provider.balance
+    }
+    return undefined
 }
 
 /**
@@ -64,12 +64,12 @@ export const getCurrentBalance = (state) => {
  * @param {*} state - redux state
  */
 export const getCurrentNetwork = (state) => {
-  const provider = getSelectedProvider(state)
+    const provider = getSelectedProvider(state)
 
-  if (provider) {
-    return provider.network
-  }
-  return undefined
+    if (provider) {
+        return provider.network
+    }
+    return undefined
 }
 
 /**
@@ -77,12 +77,12 @@ export const getCurrentNetwork = (state) => {
  * @param {*} state - redux state
  */
 export const getCurrentNetworkId = (state) => {
-  const provider = getSelectedProvider(state)
+    const provider = getSelectedProvider(state)
 
-  if (provider) {
-    return provider.networkId
-  }
-  return undefined
+    if (provider) {
+        return provider.networkId
+    }
+    return undefined
 }
 
 /**
@@ -92,8 +92,8 @@ export const getCurrentNetworkId = (state) => {
 export const isGnosisInitialized = state => state.blockchain.gnosisInitialized
 
 export const getGasCosts = (state) => {
-  const gasCosts = get(state, 'blockchain.gasCosts', {})
-  return Object.keys(gasCosts).reduce((acc, item) =>
+    const gasCosts = get(state, 'blockchain.gasCosts', {})
+    return Object.keys(gasCosts).reduce((acc, item) =>
     ({ ...acc, [item]: gasCosts[item] ? gasCosts[item] : new Decimal(0) }), {})
 }
 
@@ -112,10 +112,10 @@ export const getTargetNetworkId = state => get(state, `blockchain.providers['${W
 export const isRemoteConnectionEstablished = state => get(state, `blockchain.providers['${WALLET_PROVIDER.REMOTE}'].available`, false)
 
 export const isConnectedToCorrectNetwork = (state) => {
-  const targetNetworkId = getTargetNetworkId(state)
-  const currentNetworkId = getCurrentNetworkId(state)
+    const targetNetworkId = getTargetNetworkId(state)
+    const currentNetworkId = getCurrentNetworkId(state)
 
-  return targetNetworkId === currentNetworkId
+    return targetNetworkId === currentNetworkId
 }
 
 export const shouldOpenNetworkModal = state =>
@@ -124,11 +124,11 @@ export const shouldOpenNetworkModal = state =>
   !isConnectedToCorrectNetwork(state)
 
 export const isOnWhitelist = (state) => {
-  const account = getCurrentAccount(state)
+    const account = getCurrentAccount(state)
 
-  if (account) {
-    return process.env.WHITELIST[account] !== undefined
-  }
+    if (account) {
+        return process.env.WHITELIST[account] !== undefined
+    }
 
-  return false
+    return false
 }
