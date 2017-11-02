@@ -38,7 +38,7 @@ class Uport extends InjectedWeb3 {
             signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
         })
 
-        await this.uport.requestCredentials({ notifications: true })
+        // await this.uport.requestCredentials({ notifications: true })
         this.web3 = await this.uport.getWeb3()
 
         this.provider = await this.uport.getProvider()
