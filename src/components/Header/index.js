@@ -14,7 +14,7 @@ import './header.less'
 class Header extends Component {
     @autobind
     handleConnectWalletClick() {
-        ga('olympiatracker.send', 'event', 'Connect a wallet', 'click')
+        ga('olympiatracker.send', 'event', 'Connect a wallet', 'click', "Connect a wallet click")
         this.props.openConnectWalletModal()
     }
 
