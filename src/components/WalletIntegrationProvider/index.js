@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator'
 import { map } from 'lodash'
 import { registerProvider, updateProvider, initGnosis } from 'actions/blockchain'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
-import { isGnosisInitialized, getUportDefaultAccount } from 'selectors/blockchain'
+import { getUportDefaultAccount, isGnosisInitialized } from 'selectors/blockchain'
 import { weiToEth } from 'utils/helpers'
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
@@ -59,7 +59,6 @@ class WalletIntegrationProvider extends Component {
             await this.props.initGnosis()
             const account = (await getGnosisConnection()).defaultAccount
             const balance = await getOlympiaTokensByAccount(account)
-            console.log(account)
             await this.props.updateProvider({
                 ...data,
                 provider: provider.constructor.providerName,

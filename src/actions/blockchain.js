@@ -14,10 +14,9 @@ import {
 } from 'api'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
-import { WALLET_PROVIDER } from 'integrations/constants'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider, getUportDefaultAccount } from 'selectors/blockchain'
+import { findDefaultProvider } from 'selectors/blockchain'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
