@@ -38,6 +38,7 @@ import {
 
 import {
   DEPOSIT,
+  SELL,
   OUTCOME_TOKENS,
   SETTING_ALLOWANCE,
   REVOKE_TOKENS,
@@ -219,11 +220,11 @@ export const requestAccountTrades = accountAddress => async (dispatch) => {
  */
 export const createMarket = options => async (dispatch) => {
   const {
-    eventDescription,
-    oracle,
-    event,
-    market,
-    transactionId,
+  eventDescription,
+  oracle,
+  event,
+  market,
+  transactionId,
   } = options
 
   // Start a new transaction log
@@ -245,7 +246,7 @@ export const createMarket = options => async (dispatch) => {
   // Create Oracle
   let oracleContractData
   try {
-    // Take from EventDescription
+  // Take from EventDescription
     oracle.eventDescription = eventDescriptionContractData.ipfsHash
 
     oracleContractData = await api.createOracle(oracle)
@@ -260,7 +261,7 @@ export const createMarket = options => async (dispatch) => {
   // Create Event
   let eventContractData
   try {
-    // Take from Oracle
+  // Take from Oracle
     event.oracle = oracleContractData.address
 
     if (event.type === OUTCOME_TYPES.CATEGORICAL) {
@@ -282,7 +283,7 @@ export const createMarket = options => async (dispatch) => {
 
   let marketContractData
   try {
-    // Take from Event
+  // Take from Event
     market.event = eventContractData.address
 
     if (event.type === OUTCOME_TYPES.CATEGORICAL) {
@@ -291,7 +292,7 @@ export const createMarket = options => async (dispatch) => {
       market.outcomes = [0, 1] // short, long
     }
 
-    // Create Market
+  // Create Market
     marketContractData = await api.createMarket(market)
     await dispatch(receiveEntities(normalize(createMarketModel(marketContractData), marketSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.MARKET))
@@ -347,15 +348,8 @@ export const buyMarketShares = (
   )
   const currentAccount = await api.getCurrentAccount()
 
-  const marketAllowance = await gnosis.etherToken.allowance(
-    currentAccount,
-    market.address,
-  )
-  const approvalResetAmount = marketAllowance.lt(transactionCost.toString()) ? MAX_ALLOWANCE_WEI : null
-
   const transactions = [
-    DEPOSIT(cost),
-    ...(approvalResetAmount ? [SETTING_ALLOWANCE, OUTCOME_TOKENS] : [OUTCOME_TOKENS]),
+    DEPOSIT(cost, 'OLY-Token', outcomeTokenCount.div(1e18).toDP(2).toNumber()),
   ]
 
   ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions start')
@@ -364,7 +358,7 @@ export const buyMarketShares = (
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
-    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount)
+    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions succeeded')
   } catch (e) {
@@ -407,25 +401,16 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
 
   // Reset the allowance if the cost of current transaction is greater than the current allowance
   // TODO: Calculate transaction cost
-  const currentAccount = await api.getCurrentAccount()
-
-  const marketAllowance = await gnosis.contracts.Token
-    .at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex))
-    .allowance(currentAccount, market.address)
-
   ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions start')
-
-  const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
-  const approvalResetAmount = marketAllowance.lt(outcomeTokenCountWei) ? MAX_ALLOWANCE_WEI : null
-
+  
   const transactions = [
-    ...(approvalResetAmount ? [SETTING_ALLOWANCE, OUTCOME_TOKENS] : [OUTCOME_TOKENS]),
+    SELL(Decimal(outcomeTokenCount).toDP(2).toNumber()),
   ]
 
   dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
 
   try {
-    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, approvalResetAmount)
+    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions succeeded')
   } catch (e) {
@@ -480,7 +465,7 @@ export const redeemWinnings = market => async (dispatch) => {
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Redeeming Winnings for  "${market.eventDescription.title}"`))
 
   const marketType = market.event.type
-  const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS] 
+  const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS]
 
   dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
 

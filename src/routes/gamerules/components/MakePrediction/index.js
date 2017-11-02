@@ -41,7 +41,7 @@ const MakePrediction = () => (
         To sign the transaction, scan the displayed barcode using your uPort app. From within the app, hit approve.
       </Paragraph>
     <Block className={cx('slider')} margin="md">
-      <Img src={prediction2} width={320} height={380} />
+      <Img src={prediction2} width={320} height={380} fullwidth />
       <Img src={prediction3} width={320} height={600} />
       <Img src={prediction4} width={320} height={600} />
     </Block>

@@ -1,6 +1,10 @@
 .default-paragraph {
     font-family: Montserrat;
-    color: #626262;   
+    color: #626262;
+    font-size: 18px;
+    line-height: 1.7;
+    font-weight: 300;
+    color: #333;
 }
 
 .soft {

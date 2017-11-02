@@ -14,16 +14,20 @@ const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 class WalletIntegrationProvider extends Component {
     constructor(props) {
         super(props)
-        const { integrations } = props
+        const { integrations, uportDefaultAccount } = props
 
         const providerOptions = {
             runProviderUpdate: this.handleProviderUpdate,
             runProviderRegister: this.handleProviderRegister,
+            uportDefaultAccount,
         }
         window.addEventListener('load', () => {
             Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
-        .then(this.props.initGnosis, this.props.initGnosis)
-        .catch(this.props.initGnosis)
+                .then(
+                    this.props.initGnosis,
+                    this.props.initGnosis,
+                )
+                .catch(this.props.initGnosis)
         })
     }
 
@@ -45,17 +49,16 @@ class WalletIntegrationProvider extends Component {
             if (requireGnosisReinit) {
                 // Just in case any other provider is updated and the default one
                 // is UPORT we do not want to scan the code again
-                await this.props.initGnosis(this.props.uportDefaultAccount)
+                await this.props.initGnosis()
             }
 
             return
         }
 
         if (provider.constructor.providerName === 'UPORT') {
-            await this.props.initGnosis(this.props.uportDefaultAccount)
+            await this.props.initGnosis()
             const account = (await getGnosisConnection()).defaultAccount
             const balance = await getOlympiaTokensByAccount(account)
-
             await this.props.updateProvider({
                 ...data,
                 provider: provider.constructor.providerName,
@@ -67,7 +70,7 @@ class WalletIntegrationProvider extends Component {
         }
     }
 
-  @autobind
+    @autobind
     async handleProviderRegister(provider, data) {
         if (provider.constructor.providerName === 'UPORT') {
             data.account = this.props.uportDefaultAccount
