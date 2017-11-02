@@ -220,11 +220,11 @@ export const requestAccountTrades = accountAddress => async (dispatch) => {
  */
 export const createMarket = options => async (dispatch) => {
     const {
-    eventDescription,
-    oracle,
-    event,
-    market,
-    transactionId,
+  eventDescription,
+  oracle,
+  event,
+  market,
+  transactionId,
   } = options
 
   // Start a new transaction log
@@ -246,7 +246,7 @@ export const createMarket = options => async (dispatch) => {
   // Create Oracle
     let oracleContractData
     try {
-    // Take from EventDescription
+  // Take from EventDescription
         oracle.eventDescription = eventDescriptionContractData.ipfsHash
 
         oracleContractData = await api.createOracle(oracle)
@@ -261,7 +261,7 @@ export const createMarket = options => async (dispatch) => {
   // Create Event
     let eventContractData
     try {
-    // Take from Oracle
+  // Take from Oracle
         event.oracle = oracleContractData.address
 
         if (event.type === OUTCOME_TYPES.CATEGORICAL) {
@@ -283,7 +283,7 @@ export const createMarket = options => async (dispatch) => {
 
     let marketContractData
     try {
-    // Take from Event
+  // Take from Event
         market.event = eventContractData.address
 
         if (event.type === OUTCOME_TYPES.CATEGORICAL) {
@@ -292,7 +292,7 @@ export const createMarket = options => async (dispatch) => {
             market.outcomes = [0, 1] // short, long
         }
 
-    // Create Market
+  // Create Market
         marketContractData = await api.createMarket(market)
         await dispatch(receiveEntities(normalize(createMarketModel(marketContractData), marketSchema)))
         await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.MARKET))
@@ -340,11 +340,11 @@ export const buyMarketShares = (
 
   // Reset the allowance if the cost of current transaction is greater than the current allowance
     const transactionCost = api.calcLMSRCost(
-    market.netOutcomeTokensSold,
-    market.funding,
-    outcomeIndex,
-    outcomeTokenCount,
-    market.fee,
+  market.netOutcomeTokensSold,
+  market.funding,
+  outcomeIndex,
+  outcomeTokenCount,
+  market.fee,
   )
     const currentAccount = await api.getCurrentAccount()
 
