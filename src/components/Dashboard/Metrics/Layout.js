@@ -10,7 +10,6 @@ const cx = classNames.bind(css)
 const arrows = require('./assets/arrows.svg')
 const group = require('./assets/group.png')
 const shape = require('./assets/shape.svg')
-const ball = require('./assets/crystal-ball.svg')
 
 const Metric = ({ img, title, explanation, children, width = 37, height = 37 }) => (
   <Block className={cx('ol-db-metric')}>
@@ -38,8 +37,8 @@ const Metrics = ({ tokens, predictedProfit, rank, badge }) => (
     <Metric img={arrows} explanation="YOUR RANK">
       <Block className={cx('ol-db-title')}>{ rank ? rank : '--' }</Block>
     </Metric>
-    <Metric img={ball} explanation="BADGE">
-      <Block className={cx('ol-db-title', 'ol-db-title-badge')}>{ badge ? badge : '--' }</Block>
+    <Metric img={badge.icon} width={47} height={42} explanation="BADGE">
+      <Block className={cx('ol-db-title', 'ol-db-title-badge')}>{ badge.name }</Block>
     </Metric>
   </Block>
 )
