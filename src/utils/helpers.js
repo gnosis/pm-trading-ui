@@ -153,7 +153,7 @@ export const isModerator = accountAddress => (
 
 export const getModerators = () => process.env.WHITELIST
 
-export const getGnosisJsOptions = (provider, defaultAccount = undefined) => {
+export const getGnosisJsOptions = (provider) => {
     const opts = {}
     if (provider && provider.name === WALLET_PROVIDER.METAMASK) {
     // Inject window.web3
