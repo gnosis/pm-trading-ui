@@ -26,9 +26,9 @@ class Layout extends React.PureComponent {
                 <Paragraph>Scoreboard</Paragraph>
               </Block>
               <Paragraph className={cx('explanation')}>
-                        The total score is calculated based on the sum of predicted profits and OLY
-                        tokens each wallet holds. Scores updated every hour.
-                    </Paragraph>
+                The total score is calculated based on the sum of predicted profits and OLY
+                tokens each wallet holds. Scores are updated every hour.
+              </Paragraph>
               <ScoreTable tableData={data} myAccount={myAccount} />
               { hasRows
                         ? <Block className={cx('ol-account')}>
