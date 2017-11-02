@@ -17,7 +17,7 @@ const LogIn = () => (
   <Block margin="xl">
     <Subtitle>Log-in</Subtitle>
     <Paragraph color="medium">
-        Once the tournament starts, you will be able to access Olympia at http://olympia.gnosis.pm. <br />
+        Once the tournament starts, you will be able to access Olympia at http://olympia.gnosis.pm. <br /><br />
         To log in, select Continue via uPort, scan the QR code with your installed uPort app by heading
          to the camera icon in the very top left, and accept the login request.
       </Paragraph>
