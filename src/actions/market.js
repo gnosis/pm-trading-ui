@@ -38,6 +38,7 @@ import {
 
 import {
   DEPOSIT,
+  SELL,
   OUTCOME_TOKENS,
   SETTING_ALLOWANCE,
   REVOKE_TOKENS,
@@ -397,23 +398,15 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
 
   // Reset the allowance if the cost of current transaction is greater than the current allowance
   // TODO: Calculate transaction cost
-    const currentAccount = await api.getCurrentAccount()
-
-    const marketAllowance = await gnosis.contracts.Token
-    .at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex))
-    .allowance(currentAccount, market.address)
-
-    const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
-    const approvalResetAmount = marketAllowance.lt(outcomeTokenCountWei) ? MAX_ALLOWANCE_WEI : null
 
     const transactions = [
-        ...(approvalResetAmount ? [SETTING_ALLOWANCE, OUTCOME_TOKENS] : [OUTCOME_TOKENS]),
+        SELL(Decimal(outcomeTokenCount).toDP(2).toNumber()),
     ]
 
     dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
 
     try {
-        await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, approvalResetAmount)
+        await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
         await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     } catch (e) {
         console.error(e)
