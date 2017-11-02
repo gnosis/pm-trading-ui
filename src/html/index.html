@@ -21,12 +21,24 @@
 <body>
   <div id="root"></div>
   <script>
-    window.onload = function() {
-      var interval = setInterval(function() {
-        var uPortWrapper = document.getElementById("uport_wrapper")
-        if (uPortWrapper) {console.log("haha uport, got you!")}
-      }, 100)
-    }
+          window.onload = function () {
+            var interval = setInterval(function () {
+              var uPortWrapper = document.getElementById("uport-wrapper")
+              if (uPortWrapper) {
+                console.log('timeInterval clear')
+                clearInterval(interval)
+                document.getElementById('uport-continue-btn').addEventListener("click", function () {
+                  ga('olympiatracker.send', 'event', 'Uport modal intercations', 'click', 'Continue with uport button')
+                })
+                document.getElementById('google-play-badge').addEventListener("click", function () {
+                  ga('olympiatracker.send', 'event', 'Uport modal intercations', 'click', 'Google play button')
+                })
+                document.getElementById('app-store-badge').addEventListener("click", function () {
+                  ga('olympiatracker.send', 'event', 'Uport modal intercations', 'click', 'App store button')
+                })
+              }
+            }, 100)
+          }
   </script>
 </body>
 
