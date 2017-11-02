@@ -45,7 +45,7 @@ const Header = ({
           Scoreboard
         </Link>
         <Link to="/gamerules" activeClassName="headerContainer__navLink--active" className="headerContainer__navLink">
-          Game Rules
+          Game Guide
         </Link>
 
       </div>

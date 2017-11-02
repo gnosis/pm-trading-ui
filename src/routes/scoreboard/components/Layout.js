@@ -1,7 +1,5 @@
 import classNames from 'classnames/bind'
-import Footer from 'components/Footer'
 import Block from 'components/layout/Block'
-import Hairline from 'components/layout/Hairline'
 import Img from 'components/layout/Img'
 import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
@@ -12,11 +10,29 @@ import ScoreTable from './ScoreTable'
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
 
+const Table = ({ data, myAccount }) => (
+  <Block>
+    <ScoreTable tableData={data} myAccount={myAccount} />
+    { myAccount && <Block className={cx('ol-account')}>
+      <Block className={cx('dot')} />
+      <Paragraph className={cx('your')}>
+                = YOUR ACCOUNT
+            </Paragraph>
+    </Block> }
+  </Block>
+)
+
+const NoRows = () => (
+  <Paragraph className={cx('norows')}>
+        No rows found
+    </Paragraph>
+)
+
 class Layout extends React.PureComponent {
 
     render() {
         const { data, myAccount } = this.props
-        const hasRows = !!data
+        const hasRows = data && data.size > 0
 
         return (
           <Block>
@@ -26,21 +42,13 @@ class Layout extends React.PureComponent {
                 <Paragraph>Scoreboard</Paragraph>
               </Block>
               <Paragraph className={cx('explanation')}>
-                        The total score is calculated based on the sum of predicted profits and OLY
-                        tokens each wallet holds. Scores updated every hour.
-                    </Paragraph>
-              <ScoreTable tableData={data} myAccount={myAccount} />
+                The total score is calculated based on the sum of predicted profits and OLY
+                tokens each wallet holds. Scores are updated every hour.
+              </Paragraph>
               { hasRows
-                        ? <Block className={cx('ol-account')}>
-                          <Block className={cx('dot')} />
-                          <Paragraph className={cx('your')}>
-                                = YOUR ACCOUNT
-                            </Paragraph>
-                        </Block>
-                        : <Paragraph className={cx('norows')}>
-                            No rows found
-                        </Paragraph>
-                    }
+                ? <Table data={data} myAccount={myAccount} />
+                : <NoRows />
+              }
               <Block margin="xl" />
             </PageFrame>
           </Block>
