@@ -28,6 +28,7 @@ class App extends Component {
                 app_id: process.env.INTERCOM_ID,
             })
         }
+        ga('create', 'UA-83220550-2', 'auto', 'olympiatracker');
     }
 
     render() {

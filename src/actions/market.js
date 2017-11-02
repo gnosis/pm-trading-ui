@@ -358,12 +358,15 @@ export const buyMarketShares = (
     ...(approvalResetAmount ? [SETTING_ALLOWANCE, OUTCOME_TOKENS] : [OUTCOME_TOKENS]),
   ]
 
+  ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions start')
+
   dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
+    ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions succeeded')
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
@@ -410,6 +413,8 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
     .at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex))
     .allowance(currentAccount, market.address)
 
+  ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions start')
+
   const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
   const approvalResetAmount = marketAllowance.lt(outcomeTokenCountWei) ? MAX_ALLOWANCE_WEI : null
 
@@ -422,6 +427,7 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
   try {
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
+    ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions succeeded')
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
