@@ -340,11 +340,11 @@ export const buyMarketShares = (
 
   // Reset the allowance if the cost of current transaction is greater than the current allowance
   const transactionCost = api.calcLMSRCost(
-  market.netOutcomeTokensSold,
-  market.funding,
-  outcomeIndex,
-  outcomeTokenCount,
-  market.fee,
+    market.netOutcomeTokensSold,
+    market.funding,
+    outcomeIndex,
+    outcomeTokenCount,
+    market.fee,
   )
   const currentAccount = await api.getCurrentAccount()
 
