@@ -14,9 +14,10 @@ import {
 } from 'api'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
+import { WALLET_PROVIDER } from 'integrations/constants'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider } from 'selectors/blockchain'
+import { findDefaultProvider, getUportDefaultAccount } from 'selectors/blockchain'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -75,7 +76,8 @@ export const requestEtherTokens = account => async (dispatch) => {
 /**
  * (Re)-Initializes Gnosis.js connection according to current providers settings
  */
-export const initGnosis = (defaultAccount = undefined) => async (dispatch, getState) => {
+export const initGnosis = () => async (dispatch, getState) => {
+    let defaultAccount
   // initialize
     try {
         const state = getState()
@@ -84,7 +86,12 @@ export const initGnosis = (defaultAccount = undefined) => async (dispatch, getSt
         const newProvider = findDefaultProvider(state)
         if (newProvider) {
             await dispatch(setActiveProvider(newProvider.name))
-      // init Gnosis connection
+
+            if (newProvider.name === WALLET_PROVIDER.UPORT) {
+                defaultAccount = getUportDefaultAccount(state)
+            }
+
+            // init Gnosis connection
             const opts = getGnosisJsOptions(newProvider, defaultAccount)
             await initGnosisConnection(opts)
             await dispatch(setGnosisInitialized({ initialized: true }))

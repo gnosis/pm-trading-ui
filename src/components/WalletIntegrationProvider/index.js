@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator'
 import { map } from 'lodash'
 import { registerProvider, updateProvider, initGnosis } from 'actions/blockchain'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
-import { getUportDefaultAccount, isGnosisInitialized } from 'selectors/blockchain'
+import { isGnosisInitialized, getUportDefaultAccount } from 'selectors/blockchain'
 import { weiToEth } from 'utils/helpers'
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
@@ -23,10 +23,10 @@ class WalletIntegrationProvider extends Component {
         window.addEventListener('load', () => {
             Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
                 .then(
-                    this.props.initGnosis(this.props.uportDefaultAccount),
-                    this.props.initGnosis(this.props.uportDefaultAccount),
+                    this.props.initGnosis,
+                    this.props.initGnosis,
                 )
-                .catch(this.props.initGnosis(this.props.uportDefaultAccount))
+                .catch(this.props.initGnosis)
         })
     }
 
