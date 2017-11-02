@@ -1,6 +1,6 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
-import { Connect, SimpleSigner } from 'uport-connect'
+import uPortInstance, { requestCredentials } from './connector'
 
 let instance = null
 
@@ -31,18 +31,13 @@ class Uport extends InjectedWeb3 {
         super.initialize(opts)
         this.runProviderRegister(this, { priority: Uport.providerPriority })
 
-        this.uport = new Connect('Gnosis', {
-            clientId: '2ozUxc1QzFVo7b51giZsbkEsKw2nJ87amAf',
-            network: 'rinkeby',
-            signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
-        })
+        this.uport = uPortInstance
 
         if (!opts.uportDefaultAccount) {
-            await this.uport.requestCredentials({ notifications: true })
+            await requestCredentials()
         }
 
         this.web3 = await this.uport.getWeb3()
-
         this.provider = await this.uport.getProvider()
         this.network = await this.getNetwork()
         this.networkId = await this.getNetworkId()
