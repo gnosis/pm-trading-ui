@@ -128,7 +128,7 @@ export const rewardCell = (props) => {
         result = '2 GNO'
     }
 
-    if (position > 10 && position <= 15) {
+    if (position > 10 && position <= 100) {
         result = '1 GNO'
     }
 

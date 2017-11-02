@@ -31,7 +31,7 @@ export const firstOlympiaUsersSelectorAsList = createSelector(
 
                 return 0
             })
-            .take(15)
+            .take(100)
         : undefined,
 )
 
