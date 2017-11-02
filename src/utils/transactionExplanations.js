@@ -1,4 +1,4 @@
-export const DEPOSIT = (amount = '', currency = 'ETH') => `Depositing ${amount} ${currency} to this market's contract`
+export const DEPOSIT = (amount = '', currency = 'ETH', outcomeTokens = '') => `Depositing ${amount} ${currency}  to buy ${outcomeTokens} outcome tokens from this market`
 
 export const OUTCOME_TOKENS = 'Transaction of outcome tokens'
 
