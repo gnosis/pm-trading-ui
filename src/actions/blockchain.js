@@ -77,7 +77,6 @@ export const requestEtherTokens = account => async (dispatch) => {
  * (Re)-Initializes Gnosis.js connection according to current providers settings
  */
 export const initGnosis = () => async (dispatch, getState) => {
-    let defaultAccount
   // initialize
     try {
         const state = getState()
@@ -86,13 +85,8 @@ export const initGnosis = () => async (dispatch, getState) => {
         const newProvider = findDefaultProvider(state)
         if (newProvider) {
             await dispatch(setActiveProvider(newProvider.name))
-
-            if (newProvider.name === WALLET_PROVIDER.UPORT) {
-                defaultAccount = getUportDefaultAccount(state)
-            }
-
             // init Gnosis connection
-            const opts = getGnosisJsOptions(newProvider, defaultAccount)
+            const opts = getGnosisJsOptions(newProvider)
             await initGnosisConnection(opts)
             await dispatch(setGnosisInitialized({ initialized: true }))
             await requestEtherTokens()

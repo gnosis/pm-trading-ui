@@ -29,7 +29,6 @@ class Uport extends InjectedWeb3 {
    */
     async initialize(opts) {
         super.initialize(opts)
-
         this.runProviderRegister(this, { priority: Uport.providerPriority })
 
         this.uport = new Connect('Gnosis', {
@@ -53,6 +52,7 @@ class Uport extends InjectedWeb3 {
             available: true,
             network: this.network,
             networkId: this.networkId,
+            account: this.account,
         })
     }
 }
