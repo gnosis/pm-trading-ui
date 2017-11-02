@@ -39,7 +39,7 @@ const cx = classNames.bind(css)
 const GameRules = () => (
   <PageFrame>
     <Block margin="md">
-      <Title>GAME RULES</Title>
+      <Title>GAME GUIDE</Title>
       {/* <Youtube
         videoId="0WmUbiMHeSE"
         opts={videoOpts}
