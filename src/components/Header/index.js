@@ -31,7 +31,7 @@ class Header extends Component {
           <div className="headerContainer__group headerContainer__group--left headerContainer__group--version">
             {version}
           </div>
-          <div className="headerContainer__group headerContainer__group--left">
+          <div className="headerContainer__group headerContainer__group--left navLinks">
             <Link
               to="/markets/list"
               activeClassName="headerContainer__navLink--active"
