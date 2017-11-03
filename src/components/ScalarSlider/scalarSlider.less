@@ -4,12 +4,21 @@
 @slider-handle-size: 16px;
 @slider-handle-text-width: 200px;
 
-.slider {
-  margin-top: 100px;
+.scalarSlider {
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 10px;
+
+  &__inner {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+
   &__bar {
-    display: table-cell;
+    width: 100%;
     vertical-align: middle;
-    width: 60%;
     position: relative;
     height: 100%;
 
@@ -41,14 +50,28 @@
     }
 
     &--below {
-      .slider__handleText {
-        top: 100%;
+      .scalarSlider__handleText {
+        top: 30px;
+      }
+
+      &--pinRight {
+        .scalarSlider__handleText {
+          text-align: right;
+          padding-right: (@slider-handle-text-width/2);
+        }
+      }
+      &--pinLeft {
+        .scalarSlider__handleText {
+          text-align: left;
+          padding-left: (@slider-handle-text-width/2);
+        }
       }
     }
 
+
     &Text {
-      position: absolute;
-      top: -100%;
+      position: relative;
+      top: -20px;
       text-align: center;
       left: (@slider-handle-size / 2);
       width: @slider-handle-text-width;
@@ -69,14 +92,12 @@
   }
 
   &__upperBound {
-    &Label {
-      text-align: right;
-    }
+    text-align: left;
   }
 
   &__lowerBound, &__upperBound {
-    display: table-cell;
     width: 20%;
+    min-width: 120px;
     padding: 0 12px;
 
     &Label {
