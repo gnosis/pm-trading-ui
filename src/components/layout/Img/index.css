@@ -1,3 +1,9 @@
+.ol-img {
+    max-width: 100%;
+    border: 1px solid #ddd;
+    box-sizing: border-box;    
+}
+
 .fullwidth {
     padding: 0;
     width: 40% !important;
