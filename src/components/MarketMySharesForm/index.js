@@ -96,6 +96,10 @@ class MarketMySharesForm extends Component {
 
   @autobind
   validateTokenCount(val, values, props) {
+    if (parseFloat(val) >= 1000) {
+      return "Invalid amount"
+    }
+
     let decimalValue
     try {
       decimalValue = Decimal(val || 0)
@@ -241,7 +245,7 @@ class MarketMySharesForm extends Component {
     const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
     const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0).mul(1e18))
     let earnings = new Decimal(0)
-    if (share.balance && selectedSellAmount) {
+    if (share.balance && parseFloat(selectedSellAmount) < 1000) {
       earnings = weiToEth(
         calcLMSRProfit({
           netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
