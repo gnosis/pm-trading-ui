@@ -8,38 +8,38 @@ import { upperFirst } from 'lodash'
 import selector from './selector'
 
 const providerIconClasses = {
-    [WALLET_PROVIDER.METAMASK]: 'metamask',
-    [WALLET_PROVIDER.PARITY]: 'parity',
-    [WALLET_PROVIDER.UPORT]: 'uport',
+  [WALLET_PROVIDER.METAMASK]: 'metamask',
+  [WALLET_PROVIDER.PARITY]: 'parity',
+  [WALLET_PROVIDER.UPORT]: 'uport',
 }
 
 const uportBadgeStyle = {
-    objectFit: 'contain',
-    marginRight: '7px',
+  objectFit: 'contain',
+  marginRight: '7px',
 }
 
 const ProviderIcon = ({ provider = {}, badge }) => {
-    const isUport = provider && provider.name === 'UPORT'
+  const isUport = provider && provider.name === 'UPORT'
 
-    return (
-      <Block>
-        { isUport
-                ? <Img title={badge.name} style={uportBadgeStyle} src={badge.icon} width={40} height={38} />
-                : <div
-                  className={cn([
-                      'headerIcon',
-                      `headerIcon--${providerIconClasses[name] || 'default'}`,
-                  ])}
-                  title={`You are using ${upperFirst(provider.name.toLowerCase())} to connect to Gnosis`}
-                />
-            }
-      </Block>
-    )
+  return (
+    <Block>
+      { isUport
+        ? <Img title={badge.name} style={uportBadgeStyle} src={badge.icon} width={40} height={38} />
+        : <div
+          className={cn([
+            'headerIcon',
+            `headerIcon--${providerIconClasses[name] || 'default'}`,
+          ])}
+          title={`You are using ${upperFirst(provider.name.toLowerCase())} to connect to Gnosis`}
+        />
+      }
+    </Block>
+  )
 }
 
 ProviderIcon.propTypes = {
-    provider: PropTypes.shape({}),
-    badge: PropTypes.string,
+  provider: PropTypes.shape({}),
+  badge: PropTypes.objectOf(PropTypes.string),
 }
 
 export default connect(selector)(ProviderIcon)

@@ -1,6 +1,5 @@
 import { get } from 'lodash'
 import Decimal from 'decimal.js'
-
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
 import { getOracleByAddress } from './oracle'
@@ -86,16 +85,26 @@ export const filterMarkets = state => (opts) => {
  */
 export const sortMarkets = (markets = [], orderBy = null) => {
   switch (orderBy) {
-    case 'RESOLUTION_DATE_ASC':
-      return markets.sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
-    case 'RESOLUTION_DATE_DESC':
-      return markets.sort((a, b) => a.eventDescription.resolutionDate < b.eventDescription.resolutionDate)
-    case 'TRADING_VOLUME_ASC':
-      return markets.sort((a, b) => a.tradingVolume > b.tradingVolume)
-    case 'TRADING_VOLUME_DESC':
-      return markets.sort((a, b) => a.tradingVolume < b.tradingVolume)
-    default:
-      return markets
+  case 'RESOLUTION_DATE_ASC':
+    return markets.sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
+  case 'RESOLUTION_DATE_DESC':
+    return markets.sort((a, b) => a.eventDescription.resolutionDate < b.eventDescription.resolutionDate)
+  case 'TRADING_VOLUME_DESC':
+    return markets.sort((a, b) => {
+      const tradingA = Decimal(a.tradingVolume).div(1e18).toDP(2, 1)
+      const tradingB = Decimal(b.tradingVolume).div(1e18).toDP(2, 1)
+
+      return tradingB.comparedTo(tradingA)
+    })
+  case 'TRADING_VOLUME_ASC':
+    return markets.sort((a, b) => {
+      const tradingA = Decimal(a.tradingVolume).div(1e18).toDP(2, 1)
+      const tradingB = Decimal(b.tradingVolume).div(1e18).toDP(2, 1)
+
+      return tradingA.comparedTo(tradingB)
+    })
+  default:
+    return markets
   }
 }
 
