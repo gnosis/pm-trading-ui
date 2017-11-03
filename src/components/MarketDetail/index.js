@@ -245,6 +245,11 @@ class MarketDetail extends Component {
       .diff(moment(), 'hours')
     const { marketShares } = this.props
 
+    const marketClosedOrFinished = (
+      market.stage === MARKET_STAGES.MARKET_CLOSED ||
+      market.oracle.isOutcomeSet
+    )
+
     const winnings = marketShares.reduce((sum, share) => {
       const shareWinnings = weiToEth(
         calcLMSRProfit({
@@ -265,7 +270,7 @@ class MarketDetail extends Component {
           <p className="marketDescription__text">{market.eventDescription.description}</p>
         </div>
         <Outcome market={market} />
-        {timeToResolution < ONE_WEEK_IN_HOURS ? (
+        {!marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS ? (
           <div className="marketTimer">
             <div className="marketTimer__live">
               <Countdown target={market.eventDescription.resolutionDate} />
@@ -279,12 +284,18 @@ class MarketDetail extends Component {
           </div>
         ) : (
           <div className="marketTimer">
+            <div className="marketTimer__live marketTimer__live--big">
+              <div className="marketTimer__liveLabel">Resolution Time</div>
+            </div>
             <div className="marketTimer__live">
               {moment
                 .utc(market.eventDescription.resolutionDate)
                 .local()
                 .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
+            {marketClosedOrFinished && (
+                <div className="marketTimer__marketClosed">{timeToResolution < 0 ? 'This market was resolved.' : 'This market was closed.'}</div>
+            )}
           </div>
         )}
         {showWinning &&
@@ -307,9 +318,9 @@ class MarketDetail extends Component {
             </div>
           )}
       </div>
-    )
-  }
-
+      )
+    }
+    
   renderControls() {
     const { market, closeMarket, defaultAccount } = this.props
     return (
