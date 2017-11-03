@@ -104,7 +104,16 @@ export const sortMarkets = (markets = [], orderBy = null) => {
       return tradingA.comparedTo(tradingB)
     })
   default:
-    return markets
+    return markets.sort((a, b) => {
+      const resolvedA = get(a, 'oracle.isOutcomeSet', false)
+      const resolvedB = get(b, 'oracle.isOutcomeSet', false)
+
+      if (resolvedA === resolvedB) {
+        return 0
+      }
+
+      return resolvedA ? 1 : -1
+    })
   }
 }
 
