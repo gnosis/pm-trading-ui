@@ -38,7 +38,7 @@ class Layout extends React.PureComponent {
           <Block>
             <PageFrame>
               <Block className={cx('trophy')}>
-                <Img src={trophy} width="100" bordered />
+                <Img src={trophy} width="100" />
                 <Paragraph>Scoreboard</Paragraph>
               </Block>
               <Paragraph className={cx('explanation')}>
