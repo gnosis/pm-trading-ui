@@ -30,6 +30,10 @@ class App extends Component {
         }
     }
 
+    componentDidMount() {
+        ga('create', 'UA-83220550-2', 'auto', 'olympiatracker')
+    }
+
     render() {
         if (!this.props.blockchainConnection) {
             return (
