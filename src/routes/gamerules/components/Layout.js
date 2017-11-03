@@ -20,7 +20,7 @@ import Profits from './Profits'
 */
 
 const GameRules = () => (
-  <PageFrame>
+  <PageFrame width={'750px'} >
     <Block margin="md">
       <Title>GAME GUIDE</Title>
       {/* <Youtube

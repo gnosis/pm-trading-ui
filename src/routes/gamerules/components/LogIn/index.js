@@ -23,12 +23,12 @@ const LogIn = () => (
       </Paragraph>
     <Block>
       <Block className={cx('slider')}>
-        <Img src={login1} />
-        <Img src={login2} />
+        <Img src={login1} bordered />
+        <Img src={login2} bordered />
       </Block>
       <Block className={cx('slider')}>
-        <Img src={login3} width={350} height={622} />
-        <Img src={login4} width={350} height={622} />
+        <Img src={login3} width={350} height={622} bordered />
+        <Img src={login4} width={350} height={622} bordered />
       </Block>
     </Block>
   </Block>

@@ -4,7 +4,7 @@ import Subtitle from 'components/layout/Subtitle'
 import Paragraph from 'components/layout/Paragraph'
 
 const SignUp = () => (
-  <Block margin="xl">
+  <Block margin="md">
     <Subtitle>Sign-up</Subtitle>
     <Paragraph color="medium">
         To participate in our two-week tournament, verify your identity by signing up via the uPort app on Android or iOS. <br /><br />

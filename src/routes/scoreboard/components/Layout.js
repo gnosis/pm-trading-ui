@@ -32,7 +32,7 @@ class Layout extends React.PureComponent {
 
     render() {
         const { data, myAccount } = this.props
-        const hasRows = data && data.size > 0
+        const hasRows = data && data.size > 1
 
         return (
           <Block>
