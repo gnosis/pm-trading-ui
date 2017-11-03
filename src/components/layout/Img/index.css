@@ -1,7 +1,10 @@
 .ol-img {
     max-width: 100%;
-    border: 1px solid #ddd;
     box-sizing: border-box;    
+}
+
+.bordered {
+    border: 1px solid #ddd;
 }
 
 .fullwidth {

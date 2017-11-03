@@ -8,15 +8,16 @@ const cx = classNames.bind(css)
 class Img extends React.PureComponent {
 
     render() {
-        const { fullwidth, alt, className, ...props } = this.props
+        const { fullwidth, alt, bordered, className, ...props } = this.props
 
-        return <img alt={alt} {...props} className={cx('ol-img', { fullwidth }, className)} />
+        return <img alt={alt} {...props} className={cx('ol-img', { fullwidth, bordered }, className)} />
     }
 }
 
 Img.propTypes = {
     alt: PropTypes.string,
     fullwidth: PropTypes.bool,
+    bordered: PropTypes.bool,
     className: PropTypes.string,
 }
 

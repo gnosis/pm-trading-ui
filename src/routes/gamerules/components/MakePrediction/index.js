@@ -19,7 +19,7 @@ const MakePrediction = () => (
   <Block margin="xl">
     <Subtitle>Make a prediction</Subtitle>
     <Block margin="md">
-      <Img src={prediction1} width={1140} />
+      <Img src={prediction1} width={1140} bordered />
     </Block>
     <Paragraph color="medium">
         When clicking on a prediction market from the Dashboard or Market Overview, you’ll be navigated to the market’s detail page. It includes a description of the prediction market and presents the probabilities of the different outcome options (for categorical events) or the currently estimated price (for scalar events).
@@ -41,16 +41,16 @@ const MakePrediction = () => (
         To sign the transaction, scan the displayed barcode using your uPort app. From within the app, hit approve.
       </Paragraph>
     <Block className={cx('slider')} margin="md">
-      <Img src={prediction2} width={320} height={380} fullwidth />
-      <Img src={prediction3} width={320} height={600} />
-      <Img src={prediction4} width={320} height={600} />
+      <Img src={prediction2} width={320} height={380} fullwidth bordered />
+      <Img src={prediction3} width={320} height={600} bordered />
+      <Img src={prediction4} width={320} height={600} bordered />
     </Block>
     <Block margin="md">
       <Paragraph>
             A chart of the different outcome tokens (for categorical events) or short/long tokens (for scalar events) over a time period of a week, or a day will be displayed in the bottom section.
         </Paragraph>
     </Block>
-    <Img src={prediction5} width={'100%'} />
+    <Img src={prediction5} width={'100%'} bordered />
   </Block>
 )
 

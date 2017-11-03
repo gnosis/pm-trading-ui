@@ -11,7 +11,7 @@ const MarketOverview = () => (
   <Block margin="xl">
     <Subtitle>Market Overview</Subtitle>
     <Block margin="md">
-      <Img src={marketoverview1} width={1140} />
+      <Img src={marketoverview1} width={1140} bordered />
     </Block>
     <Paragraph color="medium">
         Once logged in, you'll find <Bold>200 OLY tokens</Bold> in your wallet which you can use to make predictions on various topics. OLY is the official play-money token issued for the Olympia tournament.
