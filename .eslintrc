@@ -23,7 +23,7 @@
     "import/no-extraneous-dependencies": 0,
     "import/extensions": 0,
     "import/prefer-default-export": 0,
-    "indent": ["error", 4, { "SwitchCase": 1 }]
+    "indent": ["error", 2]
   },
   "env": {
     "jest/globals": true,
