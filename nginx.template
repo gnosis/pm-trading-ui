@@ -18,6 +18,14 @@ server {
 
   keepalive_timeout   70;
   add_header          Alternate-Protocol  $NGINX_SSL_PORT:npn-spdy/2;
+
+  location ~* ^.+.(jpg|jpeg|png|gif|ico|svg|css|js)$ {
+    expires 30d;
+    add_header Pragma public;
+    add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+    proxy_pass  http://$APP;
+  }
+
   location    / {
 
     gzip on;
