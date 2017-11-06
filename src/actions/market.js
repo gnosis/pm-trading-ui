@@ -44,7 +44,7 @@ import {
   REVOKE_TOKENS,
 } from 'utils/transactionExplanations'
 
-import { openModal, closeModal } from 'actions/modal'
+import { openModal, closeModal, updateModal } from 'actions/modal'
 
 /**
  * Constant names for marketcreation stages
@@ -352,7 +352,7 @@ export const buyMarketShares = (
     DEPOSIT(cost, 'OLY-Token', outcomeTokenCount.div(1e18).toDP(2).toNumber()),
   ]
 
-  ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions start')
+  window.ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions start')
 
   dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
   // Start a new transaction log
@@ -360,16 +360,16 @@ export const buyMarketShares = (
   try {
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
-    ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions succeeded')
+    window.ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions succeeded')
+    dispatch(updateModal({ status: 'OK' }))
+    setTimeout(dispatch(closeModal()), 2000)
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
-
+    await dispatch(updateModal({ status: 'ERROR', errorMessage: 'An error occured. Please refresh the page and try again.' }))
     throw e
   }
-
-  dispatch(closeModal())
 
   const netOutcomeTokensSold = market.netOutcomeTokensSold
   const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toNumber()
@@ -401,8 +401,8 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
 
   // Reset the allowance if the cost of current transaction is greater than the current allowance
   // TODO: Calculate transaction cost
-  ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions start')
-  
+  window.ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions start')
+
   const transactions = [
     SELL(Decimal(outcomeTokenCount).toDP(2).toNumber()),
   ]
@@ -412,12 +412,14 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
   try {
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
-    ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions succeeded')
+    window.ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions succeeded')
+    dispatch(updateModal({ status: 'OK' }))
+    setTimeout(dispatch(closeModal()), 2000)
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
-
+    await dispatch(updateModal({ status: 'ERROR', errorMessage: 'An error occured. Please refresh the page and try again.' }))
     throw e
   }
 
