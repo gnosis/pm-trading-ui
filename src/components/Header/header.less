@@ -6,6 +6,26 @@
   vertical-align: middle;
   padding: 30px 0 40px;
 
+  @media (min-width: 768px) {
+    .navLinks {
+      min-width: 450px;
+
+      .headerContainer__navLink {
+        font-size: 13px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .navLinks {
+      min-width: 420px;
+
+      .headerContainer__navLink {
+        font-size: 12px;
+      }
+    }
+  }
+
   &__connect-wallet {
     cursor: pointer;
     font-size: 16px;
@@ -40,7 +60,7 @@
     }
 
     &--text {
-        margin-right: 20px;
+      margin-right: 20px;
     }
   }
 
@@ -114,15 +134,15 @@
 }
 
 .headerContainer__account {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .headerLogo {
   display: inline-block;
   height: 25px;
   width: 70px;
-  background-image: url('./olympia-logo.svg');
+  background-image: url("./olympia-logo.svg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;
@@ -170,7 +190,7 @@
     width: 32px;
     height: 32px;
     margin-left: 10px;
-    background-image: url('../../components/Dashboard/Metrics/assets/crystal-ball.svg');
+    background-image: url("../../components/Dashboard/Metrics/assets/crystal-ball.svg");
   }
 
   &--default {
