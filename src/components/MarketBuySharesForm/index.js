@@ -249,9 +249,9 @@ class MarketBuySharesForm extends Component {
     let maxReturnField
 
     if (noOutcomeSelected) {
-      fieldError = <span className="marketBuyWin__invalidParam">Select an outcome</span>
+      fieldError = <span className="marketBuyWin__invalidParam">--</span>
     } else if (Decimal(percentageWin.toString()).isZero()) {
-      fieldError = <span className="marketBuyWin__invalidParam">Enter investment</span>
+      fieldError = <span className="marketBuyWin__invalidParam">--</span>
     } else if (Decimal(outcomeTokenCount.toString()).isZero()) {
       fieldError = <span className="marketBuyWin__invalidParam">Invalid investment</span>
     } else {
