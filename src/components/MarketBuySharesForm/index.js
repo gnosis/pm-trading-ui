@@ -141,6 +141,30 @@ class MarketBuySharesForm extends Component {
     )
   }
 
+  @autobind
+  validateInvestment(val, values, props = this.props) {
+    if (parseFloat(val) >= 1000) {
+      return 'Invalid amount'
+    }
+
+    let decimalValue
+    try {
+      decimalValue = Decimal(val || 0)
+    } catch (e) {
+      return 'Invalid Number value'
+    }
+
+    if (decimalValue.lte(0)) {
+      return "Number can't be negative or equal to zero."
+    }
+
+    if (decimalValue.gt(props && props.currentBalance ? props.currentBalance : 0)) {
+      return "You're trying to invest more OLY tokens than you have."
+    }
+
+    return undefined
+  }
+
   renderScalar() {
     const {
       selectedBuyInvest,
@@ -243,7 +267,7 @@ class MarketBuySharesForm extends Component {
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
 
-    let submitEnabled = false
+    const submitEnabled = this.validateInvestment(selectedBuyInvest) === undefined
     let fieldError
     let tokenCountField
     let maxReturnField
@@ -271,8 +295,6 @@ class MarketBuySharesForm extends Component {
           <CurrencyName collateralToken={collateralToken} />)
         </span>
       )
-
-      submitEnabled = !Decimal(selectedBuyInvest).isZero()
     }
 
     return (
@@ -288,6 +310,7 @@ class MarketBuySharesForm extends Component {
                     component={Input}
                     className="marketBuyInvest"
                     placeholder="Investment"
+                    validate={this.validateInvestment}
                   />
                 </div>
                 <div className="col-md-4">
