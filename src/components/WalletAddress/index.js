@@ -20,20 +20,23 @@ class WalletAddress extends Component {
     }
   }
 
-  render() {
-    const { address } = this.props
+  getText() {
+    const { address } = this.props
     const { showAddress } = this.state
-    let text
 
-    if (this.state.showAddress) {
-      text = address
+    if (showAddress) {
+      return address
     } else if (moderators[address]) {
-      text = moderators[address]
+      return moderators[address]
     } else {
-      text = generateDeterministicRandomName(address)
+      return generateDeterministicRandomName(address)
     }
+  }
 
-    return <Span className={cx('walletAddress')} onClick={() => this.setState({ showAddress: !showAddress })} title="Click to see Address">{ text }</Span>
+  render() {
+    const { showAddress } = this.state
+
+    return <Span className={cx('walletAddress')} onClick={() => this.setState({ showAddress: !showAddress })} title="Click to see Address">{ this.getText() }</Span>
   }
 }
 
