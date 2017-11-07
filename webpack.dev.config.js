@@ -114,7 +114,7 @@ module.exports = {
       template: path.join(__dirname, 'src/html/index.html'),
     }),
     new HtmlWebpackIncludeAssetsPlugin({
-      assets: 'src/assets/js/analytics.js',
+      assets: 'src/utils/analytics/ga.js',
       append: true,
     }),
     new webpack.DefinePlugin({
