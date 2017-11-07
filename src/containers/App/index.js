@@ -15,6 +15,7 @@ import LoadingIndicator from 'components/LoadingIndicator'
 
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
+import { providerPropType } from 'utils/shapes'
 
 import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
 import initGoogleAnalytics from 'utils/analytics/init'
@@ -72,6 +73,7 @@ App.propTypes = {
   blockchainConnection: PropTypes.bool,
   children: PropTypes.node,
   location: PropTypes.object,
+  provider: providerPropType,
 }
 
 const mapStateToProps = state => ({
