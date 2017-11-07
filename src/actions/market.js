@@ -39,12 +39,11 @@ import {
 import {
   DEPOSIT,
   SELL,
-  OUTCOME_TOKENS,
-  SETTING_ALLOWANCE,
   REVOKE_TOKENS,
 } from 'utils/transactionExplanations'
 
 import { openModal, closeModal } from 'actions/modal'
+import gaSend from 'utils/analytics/gaSend'
 
 /**
  * Constant names for marketcreation stages
@@ -352,7 +351,7 @@ export const buyMarketShares = (
     DEPOSIT(cost, 'OLY-Token', outcomeTokenCount.div(1e18).toDP(2).toNumber()),
   ]
 
-  ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions start')
+  gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions start'])
 
   dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
   // Start a new transaction log
@@ -360,7 +359,7 @@ export const buyMarketShares = (
   try {
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
-    ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions succeeded')
+    gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions succeeded'])
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
@@ -401,8 +400,7 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
 
   // Reset the allowance if the cost of current transaction is greater than the current allowance
   // TODO: Calculate transaction cost
-  ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions start')
-  
+  gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions start'])
   const transactions = [
     SELL(Decimal(outcomeTokenCount).toDP(2).toNumber()),
   ]
@@ -412,7 +410,7 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
   try {
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
-    ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions succeeded')
+    gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions succeeded'])
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
