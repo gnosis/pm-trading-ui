@@ -31,18 +31,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-<<<<<<< HEAD
-    window.ga('create', 'UA-83220550-2', 'auto', 'olympiatracker')
-  }
-
-  render() {
-    const { provider } = this.props
-=======
     initGoogleAnalytics()
   }
 
   render() {
->>>>>>> c29ecd5689eefeb854f0a794e914fc28e33ce4a7
+    const { provider } = this.props
     if (!this.props.blockchainConnection) {
       return (
         <div className="appContainer">
@@ -60,11 +53,7 @@ class App extends Component {
     return (
       <div className="appContainer">
         <HeaderContainer version={process.env.VERSION} />
-<<<<<<< HEAD
         {provider && provider.account && <TransactionFloaterContainer />}
-=======
-        {this.props.hasWallet && <TransactionFloaterContainer />}
->>>>>>> c29ecd5689eefeb854f0a794e914fc28e33ce4a7
         <TransitionGroup>
           <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
             {this.props.children}
@@ -83,10 +72,6 @@ App.propTypes = {
   blockchainConnection: PropTypes.bool,
   children: PropTypes.node,
   location: PropTypes.object,
-<<<<<<< HEAD
-=======
-  hasWallet: PropTypes.bool,
->>>>>>> c29ecd5689eefeb854f0a794e914fc28e33ce4a7
 }
 
 const mapStateToProps = state => ({
