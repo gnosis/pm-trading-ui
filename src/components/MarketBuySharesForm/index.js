@@ -141,8 +141,7 @@ class MarketBuySharesForm extends Component {
     )
   }
 
-  @autobind
-  validateInvestment(val, values, props = this.props) {
+  validateInvestment = (val, values, props = this.props) => {
     if (parseFloat(val) >= 1000) {
       return 'Invalid amount'
     }
