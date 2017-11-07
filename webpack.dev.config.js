@@ -102,10 +102,15 @@ module.exports = {
         yandex: false,
         windows: false,
       },
+<<<<<<< HEAD
+=======
+      inject: true,
+>>>>>>> c29ecd5689eefeb854f0a794e914fc28e33ce4a7
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),
     }),
+<<<<<<< HEAD
     new webpack.EnvironmentPlugin({
       VERSION: `${version}#${build}`,
       NODE_ENV: 'development',
@@ -117,6 +122,17 @@ module.exports = {
         : ''}`,
       WHITELIST: whitelist,
       INTERCOM_ID: undefined,
+=======
+    new webpack.DefinePlugin({
+      'process.env': {
+        VERSION: JSON.stringify(`${version}#${build}`),
+        NODE_ENV: JSON.stringify(nodeEnv),
+        GNOSISDB_URL: JSON.stringify(gnosisDbUrl),
+        ETHEREUM_URL: JSON.stringify(ethereumUrl),
+        WHITELIST: JSON.stringify(whitelist),
+        INTERCOM_ID: JSON.stringify(intercomId),
+      },
+>>>>>>> c29ecd5689eefeb854f0a794e914fc28e33ce4a7
     }),
   ],
 }

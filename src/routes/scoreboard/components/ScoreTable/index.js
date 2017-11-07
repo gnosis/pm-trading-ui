@@ -6,114 +6,116 @@ import {
     rankCell,
     olyCell,
     rewardCell,
+    userAddressCell,
     ownTrCallback,
     ownTheadCallback,
 } from './table'
 
 const tableStyle = {
-    border: 'none',
+  border: 'none',
 }
 
 const headerStyle = {
-    backgroundColor: '#EBEBEB',
-    border: 'none',
-    lineHeight: '42px',
-    fontWeight: 'bold',
-    padding: 0,
+  backgroundColor: '#EBEBEB',
+  border: 'none',
+  lineHeight: '42px',
+  fontWeight: 'bold',
+  padding: 0,
 }
 
 const headerLeft = {
-    ...headerStyle,
-    textAlign: 'left',
-    paddingLeft: '5px',
+  ...headerStyle,
+  textAlign: 'left',
+  paddingLeft: '5px',
 }
 
 const columnStyle = {
-    textAlign: 'center',
-    border: 'none',
-    borderBottom: '1px solid #C5C5C5',
-    lineHeight: '33px',
-    fontFamily: 'Montserrat',
-    fontSize: '14px',
-    color: '#626262',
+  textAlign: 'center',
+  border: 'none',
+  borderBottom: '1px solid #C5C5C5',
+  lineHeight: '33px',
+  fontFamily: 'Montserrat',
+  fontSize: '14px',
+  color: '#626262',
 }
 
 const columnBold = {
-    ...columnStyle,
-    fontWeight: '500',
+  ...columnStyle,
+  fontWeight: '500',
 }
 
 const columns = [{
-    Header: '#',
-    id: 'currentRank',
-    accessor: 'currentRank',
-    headerStyle,
-    style: { ...columnBold, color: '#000000' },
-    width: 50,
+  Header: '#',
+  id: 'currentRank',
+  accessor: 'currentRank',
+  headerStyle,
+  style: { ...columnBold, color: '#000000' },
+  width: 50,
 }, {
-    Header: 'Change (24h)',
-    accessor: 'diffRank',
-    id: 'diffRank',
-    Cell: rankCell,
-    headerStyle,
-    style: columnBold,
-    width: 110,
+  Header: 'Change (24h)',
+  accessor: 'diffRank',
+  id: 'diffRank',
+  Cell: rankCell,
+  headerStyle,
+  style: columnBold,
+  width: 110,
 }, {
-    Header: 'User',
-    accessor: 'account',
-    headerStyle: headerLeft,
-    style: { ...columnStyle, textAlign: 'left' },
-    width: 150,
+  Header: 'User',
+  accessor: 'account',
+  headerStyle: headerLeft,
+  style: { ...columnStyle, textAlign: 'left' },
+  width: 150,
+  Cell: userAddressCell,
 }, {
-    Header: 'Total Score (OLY)',
-    accessor: 'score',
-    headerStyle,
-    style: { ...columnBold, color: '#000000', letterSpacing: '0.5px' },
-    Cell: olyCell('score'),
+  Header: 'Total Score (OLY)',
+  accessor: 'score',
+  headerStyle,
+  style: { ...columnBold, color: '#000000', letterSpacing: '0.5px' },
+  Cell: olyCell('score'),
 }, {
-    Header: 'Total Balance (OLY)',
-    accessor: 'balance',
-    headerStyle,
-    style: columnStyle,
-    Cell: olyCell('balance'),
+  Header: 'Total Balance (OLY)',
+  accessor: 'balance',
+  headerStyle,
+  style: columnStyle,
+  Cell: olyCell('balance'),
 }, {
-    Header: 'Predicted Profits (OLY)',
-    accessor: 'predictedProfit',
-    headerStyle,
-    style: columnStyle,
-    Cell: olyCell('predictedProfit'),
+  Header: 'Predicted Profits (OLY)',
+  accessor: 'predictedProfit',
+  headerStyle,
+  style: columnStyle,
+  Cell: olyCell('predictedProfit'),
 }, {
-    Header: 'Badge',
-    accessor: 'predictions',
-    id: 'predictions',
-    Cell: badgeCell,
-    headerStyle,
-    style: columnStyle,
+  Header: 'Badge',
+  accessor: 'predictions',
+  id: 'predictions',
+  Cell: badgeCell,
+  headerStyle,
+  style: columnStyle,
 }, {
-    Header: 'Reward',
-    accesor: 'currentRank',
-    id: 'reward',
-    headerStyle,
-    style: columnStyle,
-    Cell: rewardCell,
+  Header: 'Reward',
+  accesor: 'currentRank',
+  id: 'reward',
+  headerStyle,
+  style: columnStyle,
+  Cell: rewardCell,
 }]
 
 const EmptyData = () => <div />
 
 const ScoreBoard = ({ tableData, myAccount }) => {
-    const size = tableData ? tableData.size > 101 ? 101 : tableData.size : 0
+  const size = tableData ? tableData.size > 101 ? 101 : tableData.size : 0
 
-    return (<ReactTable
-      data={tableData}
-      columns={columns}
-      showPagination={false}
-      defaultPageSize={size}
-      style={tableStyle}
-      getTrProps={ownTrCallback(myAccount)}
-      getTheadProps={ownTheadCallback}
-      sortable={false}
-      NoDataComponent={EmptyData}
-    />)
+  return (<ReactTable
+    data={tableData}
+    columns={columns}
+    showPagination={false}
+    defaultPageSize={size}
+    style={tableStyle}
+    getTrProps={ownTrCallback(myAccount)}
+    getTheadProps={ownTheadCallback}
+    sortable={false}
+    NoDataComponent={EmptyData}
+  />)
 }
 
 export default ScoreBoard

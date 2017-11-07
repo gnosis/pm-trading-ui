@@ -1,21 +1,20 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-class Bold extends PureComponent {
-
+class Span extends PureComponent {
   render() {
     const { children, ...props } = this.props
 
     return (
-      <b {...props}>
+      <span {...props}>
         { children }
-      </b>
+      </span>
     )
   }
 }
 
-Bold.propTypes = {
+Span.propTypes = {
   children: PropTypes.node,
 }
 
-export default Bold
+export default Span
