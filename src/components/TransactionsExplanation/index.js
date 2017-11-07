@@ -28,8 +28,6 @@ const TransactionsExplanation = ({ transactions, closeModal }) => (
 TransactionsExplanation.propTypes = {
   transactions: PropTypes.arrayOf(PropTypes.string),
   closeModal: PropTypes.func,
-  errorMessage: PropTypes.string,
-  status: PropTypes.string,
 }
 
 export default TransactionsExplanation
