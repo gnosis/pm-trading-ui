@@ -44,7 +44,7 @@ class WalletAddress extends Component {
     return (<Span
       className={cx('walletAddress')}
       onClick={this.onAddressClick}
-      title={`${text} (Click to see ${showAddress ? 'address' : 'deterministic name'})`}
+      title={`${text} (Click to see ${showAddress ? 'deterministic name' : 'address'})`}
     >
       { text }
     </Span>)
