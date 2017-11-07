@@ -20,6 +20,10 @@ class WalletAddress extends Component {
     }
   }
 
+  onAddressClick = () => {
+    this.setState({ showAddress: !this.state.showAddress })
+  }
+
   getText() {
     const { address } = this.props
     const { showAddress } = this.state
@@ -36,7 +40,14 @@ class WalletAddress extends Component {
   render() {
     const { showAddress } = this.state
 
-    return <Span className={cx('walletAddress')} onClick={() => this.setState({ showAddress: !showAddress })} title="Click to see Address">{ this.getText() }</Span>
+    const text = this.getText()
+    return (<Span
+      className={cx('walletAddress')}
+      onClick={this.onAddressClick}
+      title={`${text} (Click to see ${showAddress ? 'address' : 'deterministic name'})`}
+    >
+      { text }
+    </Span>)
   }
 }
 
