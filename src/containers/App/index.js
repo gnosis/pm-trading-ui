@@ -18,7 +18,7 @@ import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
 import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
-import init from 'utils/analytics/init'
+import initGoogleAnalytics from 'utils/analytics/init'
 import ga from 'utils/analytics/ga'
 
 import './app.less'
@@ -33,9 +33,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (!ga) {
-      init()
-    }
+    initGoogleAnalytics()
   }
 
   render() {
