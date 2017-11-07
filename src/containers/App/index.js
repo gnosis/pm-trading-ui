@@ -18,68 +18,72 @@ import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
 import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
+import init from 'utils/analytics/init'
+import ga from 'utils/analytics/ga'
 
 import './app.less'
 
 class App extends Component {
-    componentWillMount() {
-        if (process.env.INTERCOM_ID) {
-            window.Intercom('boot', {
-                app_id: process.env.INTERCOM_ID,
-            })
-        }
+  componentWillMount() {
+    if (process.env.INTERCOM_ID) {
+      window.Intercom('boot', {
+        app_id: process.env.INTERCOM_ID,
+      })
     }
+  }
 
-    componentDidMount() {
-        ga('create', 'UA-83220550-2', 'auto', 'olympiatracker')
+  componentDidMount() {
+    if (!ga) {
+      init()
     }
+  }
 
-    render() {
-        if (!this.props.blockchainConnection) {
-            return (
-              <div className="appContainer">
-                <div className="loader-container">
-                  <LoadingIndicator width={100} height={100} />
-                  <h1>Connecting</h1>
-                </div>
-              </div>
-            )
-        }
-
-        const currentKey = this.props.location.pathname.split('/')[2] || this.props.location.pathname.split('/')[1] || '/'
-        const timeout = { enter: 200, exit: 200 }
-
-        return (
-          <div className="appContainer">
-            <HeaderContainer version={process.env.VERSION} />
-            {this.props.hasWallet && <TransactionFloaterContainer />}
-            <TransitionGroup>
-              <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
-                {this.props.children}
-              </CSSTransition>
-            </TransitionGroup>
-            <Hairline />
-            <PageFrame>
-              <Footer />
-            </PageFrame>
+  render() {
+    if (!this.props.blockchainConnection) {
+      return (
+        <div className="appContainer">
+          <div className="loader-container">
+            <LoadingIndicator width={100} height={100} />
+            <h1>Connecting</h1>
           </div>
-        )
+        </div>
+      )
     }
+
+    const currentKey = this.props.location.pathname.split('/')[2] || this.props.location.pathname.split('/')[1] || '/'
+    const timeout = { enter: 200, exit: 200 }
+
+    return (
+      <div className="appContainer">
+        <HeaderContainer version={process.env.VERSION} />
+        {this.props.hasWallet && <TransactionFloaterContainer />}
+        <TransitionGroup>
+          <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
+            {this.props.children}
+          </CSSTransition>
+        </TransitionGroup>
+        <Hairline />
+        <PageFrame>
+          <Footer />
+        </PageFrame>
+      </div>
+    )
+  }
 }
 
 App.propTypes = {
-    blockchainConnection: PropTypes.bool,
-    children: PropTypes.node,
-    location: PropTypes.object,
-    hasWallet: PropTypes.bool,
+  blockchainConnection: PropTypes.bool,
+  children: PropTypes.node,
+  location: PropTypes.object,
+  hasWallet: PropTypes.bool,
 }
 
 const mapStateToProps = state => ({
-    provider: getSelectedProvider(state),
-    blockchainConnection: state.blockchain.connectionTried,
-    isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
+  provider: getSelectedProvider(state),
+  blockchainConnection: state.blockchain.connectionTried,
+  isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 
 export default connect(mapStateToProps, {
-    connectBlockchain,
+  connectBlockchain,
 })(App)

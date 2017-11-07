@@ -1,7 +1,6 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -94,10 +93,6 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),
-    }),
-    new HtmlWebpackIncludeAssetsPlugin({
-      assets: 'src/utils/analytics/ga.js',
-      append: true,
     }),
     new webpack.DefinePlugin({
       'process.env': {

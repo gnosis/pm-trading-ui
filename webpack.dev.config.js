@@ -113,10 +113,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),
     }),
-    new HtmlWebpackIncludeAssetsPlugin({
-      assets: 'src/utils/analytics/ga.js',
-      append: true,
-    }),
     new webpack.DefinePlugin({
       'process.env': {
         VERSION: JSON.stringify(`${version}#${build}`),
