@@ -52,8 +52,8 @@ class MarketResolveForm extends Component {
   renderResolveCategorical() {
     const { handleSubmit, submitting, market: { eventDescription: { outcomes }, local } } = this.props
     const outcomesFormatted = []
-    outcomes.forEach((outcome) => {
-      outcomesFormatted.push({ label: outcome, value: outcome })
+    outcomes.forEach((outcome, outcomeIndex) => {
+      outcomesFormatted.push({ label: outcome, value: outcomeIndex })
     })
 
     return (
