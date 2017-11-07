@@ -4,7 +4,9 @@
   &__row {
     margin: 20px 0;
     display: flex;
+    margin-bottom: 10px;
     flex-direction: row;
+    align-items: center;
 
     &:first-child {
       margin-top: 0;
@@ -65,7 +67,7 @@
 .marketBuyCurrency {
   height: 100%;
   font-size: 32px;
-  padding-top: 5px;
+  padding-bottom: 33px;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -73,12 +75,13 @@
 }
 
 .marketBuyWin {
+
   &__row {
     display: block;
-    margin-bottom: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 30px;
   }
 
   &__min {
@@ -104,5 +107,8 @@
     font-weight: 500;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    margin-bottom: 10px;
+    height: 20px;
+    line-height: 30px;
   }
 }
