@@ -21,7 +21,7 @@ class WalletAddress extends Component {
   }
 
   onAddressClick = () => {
-    this.setState({ showAddress: !this.state.showAddress })
+    this.setState(() => ({ showAddress: !this.state.showAddress }))
   }
 
   getText() {
