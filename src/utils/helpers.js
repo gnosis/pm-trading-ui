@@ -190,7 +190,7 @@ export const promisify = (func, params, timeout) => new Promise((resolve, reject
 })
 
 export const generateDeterministicRandomName = (seed) => {
-  const rng = seedrandom(seed, { state: true })
+  const rng = seedrandom(seed.toLowerCase(), { state: true })
 
     // generate 5 so later we have more params left over for longer names, without changing everyone's other words
     // eslint-disable-next-line no-unsued-vars

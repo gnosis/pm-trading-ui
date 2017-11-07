@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
+import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
-import autobind from 'autobind-decorator'
+
+import Span from 'components/layout/Span'
 
 import { getModerators, generateDeterministicRandomName } from 'utils/helpers'
 
-import './style.less'
+import * as css from './style.less'
+
+const cx = classNames.bind(css)
 
 const moderators = getModerators()
 
@@ -16,13 +20,9 @@ class WalletAddress extends Component {
     }
   }
 
-  @autobind
-  handleOnClick() {
-    this.setState({ showAddress: !this.state.showAddress })
-  }
-
   render() {
     const { address } = this.props
+    const { showAddress } = this.state
     let text
 
     if (this.state.showAddress) {
@@ -33,7 +33,7 @@ class WalletAddress extends Component {
       text = generateDeterministicRandomName(address)
     }
 
-    return <span className="walletAddress" onClick={this.handleOnClick} title="Click to see Address">{ text }</span>
+    return <Span className={cx('walletAddress')} onClick={() => this.setState({ showAddress: !showAddress })} title="Click to see Address">{ text }</Span>
   }
 }
 
