@@ -3,7 +3,6 @@ import { handleActions } from 'redux-actions'
 import {
   openModal,
   closeModal,
-  updateModal,
 } from 'actions/modal'
 
 const reducer = handleActions({
@@ -22,16 +21,10 @@ const reducer = handleActions({
     errorMessage: '',
     status: undefined,
   }),
-  [updateModal]: (state, action) => ({
-    ...state,
-    ...action.payload,
-  }),
 }, {
   isOpen: false,
   currentModal: undefined,
   transactions: [],
-  errorMessage: undefined,
-  status: undefined,
 })
 
 

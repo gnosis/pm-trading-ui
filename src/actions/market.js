@@ -33,18 +33,15 @@ import {
   OUTCOME_TYPES,
   TRANSACTION_COMPLETE_STATUS,
   MARKET_STAGES,
-  MAX_ALLOWANCE_WEI,
 } from 'utils/constants'
 
 import {
   DEPOSIT,
   SELL,
-  OUTCOME_TOKENS,
-  SETTING_ALLOWANCE,
   REVOKE_TOKENS,
 } from 'utils/transactionExplanations'
 
-import { openModal, closeModal, updateModal } from 'actions/modal'
+import { openModal, closeModal } from 'actions/modal'
 
 /**
  * Constant names for marketcreation stages
@@ -361,13 +358,12 @@ export const buyMarketShares = (
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     window.ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Buy shares transactions succeeded')
-    dispatch(updateModal({ status: 'OK' }))
-    setTimeout(dispatch(closeModal()), 2000)
+    await dispatch(closeModal())
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
-    await dispatch(updateModal({ status: 'ERROR', errorMessage: 'An error occured. Please refresh the page and try again.' }))
+    await dispatch(closeModal())
     throw e
   }
 
@@ -413,17 +409,14 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     window.ga('olympiatracker.send', 'event', 'Transactions', 'uport', 'Sell shares transactions succeeded')
-    dispatch(updateModal({ status: 'OK' }))
-    setTimeout(dispatch(closeModal()), 2000)
+    await dispatch(closeModal())
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
-    await dispatch(updateModal({ status: 'ERROR', errorMessage: 'An error occured. Please refresh the page and try again.' }))
+    await dispatch(closeModal())
     throw e
   }
-
-  dispatch(closeModal())
   // TODO: Calculate new shares
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }

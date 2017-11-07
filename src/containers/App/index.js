@@ -35,6 +35,7 @@ class App extends Component {
   }
 
   render() {
+    const { provider } = this.props
     if (!this.props.blockchainConnection) {
       return (
         <div className="appContainer">
@@ -52,7 +53,7 @@ class App extends Component {
     return (
       <div className="appContainer">
         <HeaderContainer version={process.env.VERSION} />
-        {this.props.hasWallet && <TransactionFloaterContainer />}
+        {provider && provider.account && <TransactionFloaterContainer />}
         <TransitionGroup>
           <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
             {this.props.children}
@@ -71,7 +72,6 @@ App.propTypes = {
   blockchainConnection: PropTypes.bool,
   children: PropTypes.node,
   location: PropTypes.object,
-  hasWallet: PropTypes.bool,
 }
 
 const mapStateToProps = state => ({
