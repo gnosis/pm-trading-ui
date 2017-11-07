@@ -90,22 +90,27 @@ class MarketBuySharesForm extends Component {
     })
   }
 
-  renderOutcomes() {
-    const { market: { event } } = this.props
-
-    if (event.type === OUTCOME_TYPES.CATEGORICAL) {
-      return this.renderCategorical()
+  validateInvestment = (val, values, props = this.props) => {
+    if (parseFloat(val) >= 1000) {
+      return 'Invalid amount'
     }
 
-    if (event.type === OUTCOME_TYPES.SCALAR) {
-      return this.renderScalar()
+    let decimalValue
+    try {
+      decimalValue = Decimal(val || 0)
+    } catch (e) {
+      return 'Invalid Number value'
     }
 
-    return (
-      <div className="col-md-6">
-        <span>Invalid Outcomes...</span>
-      </div>
-    )
+    if (decimalValue.lte(0)) {
+      return "Number can't be negative or equal to zero."
+    }
+
+    if (decimalValue.gt(props && props.currentBalance ? props.currentBalance : 0)) {
+      return "You're trying to invest more OLY tokens than you have."
+    }
+
+    return undefined
   }
 
   renderCategorical() {
@@ -141,27 +146,22 @@ class MarketBuySharesForm extends Component {
     )
   }
 
-  validateInvestment = (val, values, props = this.props) => {
-    if (parseFloat(val) >= 1000) {
-      return 'Invalid amount'
+  renderOutcomes() {
+    const { market: { event } } = this.props
+
+    if (event.type === OUTCOME_TYPES.CATEGORICAL) {
+      return this.renderCategorical()
     }
 
-    let decimalValue
-    try {
-      decimalValue = Decimal(val || 0)
-    } catch (e) {
-      return 'Invalid Number value'
+    if (event.type === OUTCOME_TYPES.SCALAR) {
+      return this.renderScalar()
     }
 
-    if (decimalValue.lte(0)) {
-      return "Number can't be negative or equal to zero."
-    }
-
-    if (decimalValue.gt(props && props.currentBalance ? props.currentBalance : 0)) {
-      return "You're trying to invest more OLY tokens than you have."
-    }
-
-    return undefined
+    return (
+      <div className="col-md-6">
+        <span>Invalid Outcomes...</span>
+      </div>
+    )
   }
 
   renderScalar() {
