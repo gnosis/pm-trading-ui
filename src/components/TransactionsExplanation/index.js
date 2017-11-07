@@ -21,7 +21,6 @@ const TransactionsExplanation = ({ transactions, closeModal }) => (
         To approve this transaction, use your uPort App on your mobile device and sign the transaction by either
         entering your PIN/Password or by using your devices authorisation method such as fingerprint or a face scanner.
       </h4>
-      )
     </div>
   </div>
 )
