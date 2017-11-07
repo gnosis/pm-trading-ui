@@ -30,7 +30,9 @@ class WalletAddress extends Component {
 
     if (showAddress) {
       return address
-    } else if (moderators[address]) {
+    }
+
+    if (moderators[address]) {
       return moderators[address]
     }
 
