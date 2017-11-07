@@ -3,7 +3,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Modal from 'react-modal'
 import Footer from 'components/Footer'
 import Hairline from 'components/layout/Hairline'
 import PageFrame from 'components/layout/PageFrame'
@@ -19,7 +18,6 @@ import HeaderContainer from 'containers/HeaderContainer'
 
 import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
 import initGoogleAnalytics from 'utils/analytics/init'
-import ga from 'utils/analytics/ga'
 
 import './app.less'
 
