@@ -28,9 +28,9 @@ class WalletAddress extends Component {
       return address
     } else if (moderators[address]) {
       return moderators[address]
-    } else {
-      return generateDeterministicRandomName(address)
     }
+
+    return generateDeterministicRandomName(address)
   }
 
   render() {
