@@ -90,6 +90,7 @@ class MarketBuySharesForm extends Component {
     })
   }
 
+  // redux-form validate field function. Return undefined if it is ok or a string with an error.
   validateInvestment = (investmentValue) => {
     const { currentBalance } = this.props
     if (parseFloat(investmentValue) >= 1000) {
@@ -267,7 +268,7 @@ class MarketBuySharesForm extends Component {
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
 
-    const submitEnabled = !this.validateInvestment(selectedBuyInvest)
+    const submitDisabled = this.props.invalid
     let fieldError
     let tokenCountField
     let maxReturnField
@@ -345,7 +346,7 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">
                   <InteractionButton
                     className="btn btn-primary col-md-12"
-                    disabled={!submitEnabled}
+                    disabled={submitDisabled}
                     loading={submitting || local}
                     type="submit"
                   >
