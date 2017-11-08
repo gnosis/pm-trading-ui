@@ -8,13 +8,14 @@ import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
+import gaSend from 'utils/analytics/gaSend'
 
 import './header.less'
 
 class Header extends Component {
   @autobind
   handleConnectWalletClick() {
-    ga('olympiatracker.send', 'event', 'Connect a wallet', 'click', 'Connect a wallet click')
+    gaSend(['event', 'Connect a wallet', 'click', 'Connect a wallet click'])
     this.props.openConnectWalletModal()
   }
 
@@ -24,7 +25,7 @@ class Header extends Component {
       <div className="headerContainer">
         <div className="container">
           <div className="headerContainer__group headerContainer__group--logo">
-            <Link to={hasWallet ? '/' : '/markets/list'}>
+            <Link to="/">
               <div className="headerLogo beta" />
             </Link>
           </div>

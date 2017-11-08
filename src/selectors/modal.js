@@ -1,1 +1,1 @@
-export const getTransactions = state => [...state.modal.transactions]
+export const getTransactions = state => state.modal.transactions
