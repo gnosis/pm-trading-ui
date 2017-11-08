@@ -52,26 +52,25 @@ class MarketList extends Component {
   }
 
   @autobind
-    handleViewMarket(market) {
-        this.props.changeUrl(`/markets/${market.address}`)
-        window.scroll(0, 0)
-    }
+  handleViewMarket(market) {
+    this.props.changeUrl(`/markets/${market.address}`)
+    window.scroll(0, 0)
+  }
 
   @autobind
   handleViewMarketResolve(event, resolveUrl) {
     event.preventDefault()
     event.stopPropagation()
 
-        this.props.changeUrl(resolveUrl)
-        window.scroll(0, 0)
-    }
+    this.props.changeUrl(resolveUrl)
+    window.scroll(0, 0)
+  }
 
   @autobind
-    handleCreateMarket() {
-        if (this.props.defaultAccount) {
-            this.props.changeUrl('/markets/new')
-            window.scroll(0, 0)
-        }
+  handleCreateMarket() {
+    if (this.props.defaultAccount) {
+      this.props.changeUrl('/markets/new')
+      window.scroll(0, 0)
     }
   }
 
