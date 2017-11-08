@@ -60,12 +60,14 @@
   position: absolute;
   width: @size;
   height: @size;
+  text-align: left;
   cursor: pointer;
   
   &::after, &::before {
     content: '';
     position: absolute;
     width: 100%;
+    top: calc(50% - (@stroke/2));
     height: @stroke;
     transition: background-color .4s ease-in;
     background-color: black;
