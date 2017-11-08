@@ -6,6 +6,26 @@
   vertical-align: middle;
   padding: 30px 0 40px;
 
+  @media (min-width: 768px) {
+    .navLinks {
+      min-width: 450px;
+
+      .headerContainer__navLink {
+        font-size: 13px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .navLinks {
+      min-width: 420px;
+
+      .headerContainer__navLink {
+        font-size: 12px;
+      }
+    }
+  }
+
   &__connect-wallet {
     cursor: pointer;
     font-size: 16px;
@@ -37,6 +57,10 @@
 
     &--wrongChain {
       color: @active-highlight-error;
+    }
+
+    &--text {
+      margin-right: 20px;
     }
   }
 
@@ -103,10 +127,9 @@
     }
   }
 
-  &.account {
-    display: flex;
-    align-items: center;
-  }
+.headerContainer__account {
+  display: flex;
+  align-items: center;
 }
 
 .headerLogo {
