@@ -75,9 +75,9 @@ const Header = ({
             <div className="headerContainer__account">
               <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;<span className="headerContainer__account--text">ETH</span>
               <Identicon className="" account={currentAccount} />
+              <ProviderIcon provider={currentProvider} />
             </div>
           )}
-        {hasWallet && currentProvider && <ProviderIcon provider={currentProvider} />}
         {!hasWallet && (
           <a
             href="javascript:void(0)"
