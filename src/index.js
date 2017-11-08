@@ -12,9 +12,7 @@ import 'less/style.less'
 
 import AppRouter from 'router'
 import BackdropProvider from 'containers/BackdropProvider'
-import WalletIntegrationProvider from 'components/WalletIntegrationProvider'
 import store from 'store'
-import * as walletIntegrations from 'integrations'
 import { setMomentRelativeTime } from './setup'
 
 setMomentRelativeTime()
@@ -33,11 +31,9 @@ const render = (App) => {
   ReactDOM.render(
     <AppContainer>
       <Provider store={store}>
-        <WalletIntegrationProvider store={store} integrations={walletIntegrations}>
-          <BackdropProvider>
-            <App history={history} />
-          </BackdropProvider>
-        </WalletIntegrationProvider>
+        <BackdropProvider>
+          <App history={history} />
+        </BackdropProvider>
       </Provider>
     </AppContainer>,
     rootElement,
@@ -47,7 +43,5 @@ const render = (App) => {
 render(AppRouter)
 
 if (module.hot) {
-  module.hot.accept('./router', () =>
-    render(require('./router').default),
-  )
+  module.hot.accept('./router', () => render(require('./router').default))
 }

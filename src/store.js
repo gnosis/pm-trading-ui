@@ -3,12 +3,13 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
 
+import Blockchain from 'middlewares/Blockchain'
 import CrashReporter from 'middlewares/CrashReporter'
+import Providers from 'middlewares/Providers'
+import Intercom from 'middlewares/Intercom'
 import LocalStorageDump from 'middlewares/LocalStorageDump'
 import LocalStorageLoad from 'middlewares/LocalStorageLoad'
 import Notifications from 'middlewares/Notifications'
-import Blockchain from 'middlewares/Blockchain'
-import Intercom from 'middlewares/Intercom'
 
 import reducer from 'reducers'
 
@@ -21,6 +22,7 @@ const middlewares = [
   LocalStorageDump,
   CrashReporter,
   Intercom,
+  Providers,
 ]
 
 const enhancers = [

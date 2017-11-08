@@ -15,7 +15,8 @@ class Header extends Component {
   @autobind
   handleConnectWalletClick() {
     ga('olympiatracker.send', 'event', 'Connect a wallet', 'click', 'Connect a wallet click')
-    this.props.openConnectWalletModal()
+    this.props.initProviders()
+    console.log(this.props.initProviders)
   }
 
   render() {
@@ -98,7 +99,7 @@ Header.propTypes = {
   hasWallet: PropTypes.bool,
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
-  openConnectWalletModal: PropTypes.func,
+  initProviders: PropTypes.func,
 }
 
 export default Header

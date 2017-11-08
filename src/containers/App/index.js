@@ -9,7 +9,7 @@ import PageFrame from 'components/layout/PageFrame'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
 
-import { connectBlockchain } from 'actions/blockchain'
+import { initProviders } from 'actions/blockchain'
 
 import LoadingIndicator from 'components/LoadingIndicator'
 
@@ -32,6 +32,7 @@ class App extends Component {
 
   componentDidMount() {
     initGoogleAnalytics()
+    this.props.initProviders()
   }
 
   render() {
@@ -72,6 +73,7 @@ App.propTypes = {
   children: PropTypes.node,
   location: PropTypes.object,
   hasWallet: PropTypes.bool,
+  initProviders: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -81,5 +83,5 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps, {
-  connectBlockchain,
+  initProviders,
 })(App)
