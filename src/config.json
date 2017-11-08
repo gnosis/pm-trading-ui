@@ -18,14 +18,14 @@
 
  },
  "gnosisdb": {
-   "protocol": "http",
-   "host": "localhost",
-   "port": 8000
+   "protocol": "https",
+   "host": "gnosisdb-kovan.gnosis.pm",
+   "port": ""
  },
  "ethereum": {
-   "protocol": "http",
-   "host": "localhost",
-   "port": 8545
+   "protocol": "https",
+   "host": "kovan.infura.io",
+   "port": ""
  },
  "fetchMarketTimeInterval": 15000
 }
