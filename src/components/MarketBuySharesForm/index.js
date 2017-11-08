@@ -381,6 +381,7 @@ MarketBuySharesForm.propTypes = {
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool,
+  currentBalance: PropTypes.string,
 }
 
 const form = {
