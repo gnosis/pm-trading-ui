@@ -8,13 +8,14 @@ import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
+import gaSend from 'utils/analytics/gaSend'
 
 import './header.less'
 
 class Header extends Component {
   @autobind
   handleConnectWalletClick() {
-    window.ga('olympiatracker.send', 'event', 'Connect a wallet', 'click', 'Connect a wallet click')
+    gaSend(['event', 'Connect a wallet', 'click', 'Connect a wallet click'])
     this.props.openConnectWalletModal()
   }
 
