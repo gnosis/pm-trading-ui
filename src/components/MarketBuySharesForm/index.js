@@ -90,14 +90,15 @@ class MarketBuySharesForm extends Component {
     })
   }
 
-  validateInvestment = (val, values, props = this.props) => {
-    if (parseFloat(val) >= 1000) {
+  validateInvestment = (investmentValue) => {
+    const { currentBalance } = this.props
+    if (parseFloat(investmentValue) >= 1000) {
       return 'Invalid amount'
     }
 
     let decimalValue
     try {
-      decimalValue = Decimal(val || 0)
+      decimalValue = Decimal(investmentValue || 0)
     } catch (e) {
       return 'Invalid Number value'
     }
@@ -106,7 +107,7 @@ class MarketBuySharesForm extends Component {
       return "Number can't be negative or equal to zero."
     }
 
-    if (decimalValue.gt(props && props.currentBalance ? props.currentBalance : 0)) {
+    if (decimalValue.gt(currentBalance)) {
       return "You're trying to invest more OLY tokens than you have."
     }
 
@@ -266,7 +267,7 @@ class MarketBuySharesForm extends Component {
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
 
-    const submitEnabled = this.validateInvestment(selectedBuyInvest) === undefined
+    const submitEnabled = !this.validateInvestment(selectedBuyInvest)
     let fieldError
     let tokenCountField
     let maxReturnField
