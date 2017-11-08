@@ -97,7 +97,7 @@ class MarketMySharesForm extends Component {
   @autobind
   validateTokenCount(val, values, props) {
     if (parseFloat(val) >= 1000) {
-      return "Invalid amount"
+      return 'Invalid amount'
     }
 
     let decimalValue

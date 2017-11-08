@@ -33,7 +33,6 @@ import {
   OUTCOME_TYPES,
   TRANSACTION_COMPLETE_STATUS,
   MARKET_STAGES,
-  MAX_ALLOWANCE_WEI,
 } from 'utils/constants'
 
 import {
@@ -360,15 +359,14 @@ export const buyMarketShares = (
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions succeeded'])
+    await dispatch(closeModal())
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
-
+    await dispatch(closeModal())
     throw e
   }
-
-  dispatch(closeModal())
 
   const netOutcomeTokensSold = market.netOutcomeTokensSold
   const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toNumber()
@@ -411,15 +409,14 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions succeeded'])
+    await dispatch(closeModal())
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
-
+    await dispatch(closeModal())
     throw e
   }
-
-  dispatch(closeModal())
   // TODO: Calculate new shares
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }

@@ -6,20 +6,12 @@ const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
 
-const nodeEnv = process.env.NODE_ENV || 'development'
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
-const intercomId = process.env.INTERCOM_ID
 
 const config = require('./src/config.json')
 
 const whitelist = config.productionWhitelist
-
-const gnosisDbUrl =
-  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
-
-const ethereumUrl =
-  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.host}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -94,15 +86,17 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),
     }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        VERSION: JSON.stringify(`${version}#${build}`),
-        NODE_ENV: JSON.stringify(nodeEnv),
-        GNOSISDB_URL: JSON.stringify(gnosisDbUrl),
-        ETHEREUM_URL: JSON.stringify(ethereumUrl),
-        WHITELIST: JSON.stringify(whitelist),
-        INTERCOM_ID: JSON.stringify(intercomId),
-      },
+    new webpack.EnvironmentPlugin({
+      VERSION: `${version}#${build}`,
+      NODE_ENV: 'production',
+      GNOSISDB_URL: `${config.gnosisdb.protocol}://${config.gnosisdb.host}${config.gnosisdb.port
+        ? `:${config.gnosisdb.port}`
+        : ''}`,
+      ETHEREUM_URL: `${config.ethereum.protocol}://${config.ethereum.host}${config.ethereum.port
+        ? `:${config.ethereum.port}`
+        : ''}`,
+      WHITELIST: whitelist,
+      INTERCOM_ID: undefined,
     }),
   ],
 }
