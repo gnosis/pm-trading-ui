@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
+import cn from 'classnames'
 
 import DecimalValue from 'components/DecimalValue'
 
@@ -27,28 +28,33 @@ const ScalarSlider = ({
   const selectedPercentage = new Decimal(marginalPriceSelected).mul(100)
   return (
     <div className="scalarSlider">
-      <div className="slider">
-        <div className="slider__lowerBound">
+      <div className="scalarSlider__inner">
+        <div className="scalarSlider__lowerBound">
           {bigLowerBound.div(10 ** decimals).toFixed(0)} {unit}
-          <div className="slider__lowerBoundLabel">Lower Bound</div>
+          <div className="scalarSlider__lowerBoundLabel">Lower Bound</div>
         </div>
-        <div className="slider__bar" title="Please enter a value on the right!">
-          <div className="slider__handle" style={{ left: `${percentage.toFixed(4)}%` }}>
-            <div className="slider__handleText">
-              <div className="slider__handleTextLabel">Current Bet</div>
+        <div className="scalarSlider__bar" title="Please enter a value on the right!">
+          <div className="scalarSlider__handle" style={{ left: `${percentage.toFixed(4)}%` }}>
+            <div className="scalarSlider__handleText">
+              <div className="scalarSlider__handleTextLabel">Current Bet</div>
               <DecimalValue value={value} decimals={decimals} /> {unit}
             </div>
           </div>
-          <div className="slider__handle slider__handle--below" style={{ left: `${selectedPercentage.toFixed(4)}%` }}>
-            <div className="slider__handleText">
-              <div className="slider__handleTextLabel">Selected Bet</div>
+          <div
+            className={cn('scalarSlider__handle scalarSlider__handle--below', {
+              'scalarSlider__handle--below--pinRight': selectedPercentage.gt(75),
+              'scalarSlider__handle--below--pinLeft': selectedPercentage.lt(25),
+            })} style={{ left: `${selectedPercentage.toFixed(4)}%` }}
+          >
+            <div className="scalarSlider__handleText">
+              <div className="scalarSlider__handleTextLabel">Selected Bet</div>
               <DecimalValue value={selectedValue} decimals={decimals} /> {unit}
             </div>
           </div>
         </div>
-        <div className="slider__upperBound">
+        <div className="scalarSlider__upperBound">
           {bigUpperBound.div(10 ** decimals).toFixed(0)} {unit}
-          <div className="slider__upperBoundLabel">Upper Bound</div>
+          <div className="scalarSlider__upperBoundLabel">Upper Bound</div>
         </div>
       </div>
     </div>
