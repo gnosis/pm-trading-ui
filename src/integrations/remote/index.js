@@ -1,8 +1,8 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import baseIntegration from 'integrations/baseIntegration'
+import BaseIntegration from 'integrations/baseIntegration'
 import Web3 from 'web3'
 
-class Remote extends baseIntegration {
+class Remote extends BaseIntegration {
   static providerName = WALLET_PROVIDER.REMOTE
   /**
    * Provider with highest priority starts off as active, if other providers are also available.

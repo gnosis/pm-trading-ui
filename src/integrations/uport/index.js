@@ -1,8 +1,8 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import baseIntegration from 'integrations/baseIntegration'
+import BaseIntegration from 'integrations/baseIntegration'
 import uPortInstance, { requestCredentials } from './connector'
 
-class Uport extends baseIntegration {
+class Uport extends BaseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
 
   /**
