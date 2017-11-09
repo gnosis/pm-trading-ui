@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import createIcon from 'blockies'
+import Tooltip from 'rc-tooltip'
 
 const Identicon = ({ account }) => {
-  const canvas = createIcon({ // All options are optional
+  const canvas = createIcon({
+    // All options are optional
     seed: account, // seed used to generate icon data, default: random
     color: '#00a6c4', // to manually specify the icon color, default: random
     bgcolor: '#60c7da', // choose a different background color, default: random
@@ -13,15 +15,16 @@ const Identicon = ({ account }) => {
     // default: random. Set to -1 to disable it. These "spots" create structures
     // that look like eyes, mouths and noses.
   })
-  // debugger
+
   return (
-    <img src={canvas.toDataURL()} alt={account} title={account} />
+    <Tooltip placement="bottom" overlay={account}>
+      <img src={canvas.toDataURL()} alt={account} />
+    </Tooltip>
   )
 }
 
 Identicon.propTypes = {
   account: PropTypes.string,
 }
-
 
 export default Identicon
