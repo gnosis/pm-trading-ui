@@ -34,6 +34,7 @@ class Uport extends InjectedWeb3 {
     this.uport = uPortInstance
 
     if (!opts.uportDefaultAccount) {
+      this.uport.firstReq = true
       await requestCredentials()
     }
 
