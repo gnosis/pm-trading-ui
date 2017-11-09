@@ -5,10 +5,15 @@ import { weiToEth, promisify } from 'utils/helpers'
 class BaseIntegration {
   runProviderUpdate() {}
   runProviderRegister() {}
-  enableWatcher = true
-  defaultTimeout = 1000
 
-  constructor(enableWatcher = this.enableWatcher, defaultTimeout = this.defaultTimeout) {
+  /**
+   *
+   * @param {object} opts - Constructor Options
+   * @param {boolean} opts.enableWatcher - Boolean option for using the watcher for changes inside
+   * the provider (account, balance, network, etc)
+   * @param {number} opts.defaultTimeout - Time interval for watcher
+   */
+  constructor({ enableWatcher = true, defaultTimeout = 1000 } = {}) {
     this.defaultTimeout = defaultTimeout
     this.enableWatcher = enableWatcher
     if (this.enableWatcher) {

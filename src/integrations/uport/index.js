@@ -14,7 +14,8 @@ class Uport extends BaseIntegration {
   static watcherTimeout = 0
 
   constructor() {
-    super(Uport.enableWatcher, Uport.watcherTimeout)
+    const { enableWatcher, watcherTimeout } = Uport
+    super({ enableWatcher, watcherTimeout })
   }
 
   /**
