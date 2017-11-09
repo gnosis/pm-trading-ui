@@ -68,6 +68,7 @@
     "redux-form": "7.0.4",
     "redux-thunk": "^2.2.0",
     "reselect": "^2.5.4",
+    "seedrandom": "^2.4.3",
     "sha1": "^1.1.1",
     "truffle-contract": "^3.0.0",
     "uport-connect": "^0.7.0-alpha-1",

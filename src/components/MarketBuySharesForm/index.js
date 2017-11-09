@@ -90,22 +90,29 @@ class MarketBuySharesForm extends Component {
     })
   }
 
-  renderOutcomes() {
-    const { market: { event } } = this.props
-
-    if (event.type === OUTCOME_TYPES.CATEGORICAL) {
-      return this.renderCategorical()
+  // redux-form validate field function. Return undefined if it is ok or a string with an error.
+  validateInvestment = (investmentValue) => {
+    const { currentBalance } = this.props
+    if (parseFloat(investmentValue) >= 1000) {
+      return 'Invalid amount'
     }
 
-    if (event.type === OUTCOME_TYPES.SCALAR) {
-      return this.renderScalar()
+    let decimalValue
+    try {
+      decimalValue = Decimal(investmentValue || 0)
+    } catch (e) {
+      return 'Invalid Number value'
     }
 
-    return (
-      <div className="col-md-6">
-        <span>Invalid Outcomes...</span>
-      </div>
-    )
+    if (decimalValue.lte(0)) {
+      return "Number can't be negative or equal to zero."
+    }
+
+    if (decimalValue.gt(currentBalance)) {
+      return "You're trying to invest more OLY tokens than you have."
+    }
+
+    return undefined
   }
 
   renderCategorical() {
@@ -137,6 +144,24 @@ class MarketBuySharesForm extends Component {
             />
           </div>
         </div>
+      </div>
+    )
+  }
+
+  renderOutcomes() {
+    const { market: { event } } = this.props
+
+    if (event.type === OUTCOME_TYPES.CATEGORICAL) {
+      return this.renderCategorical()
+    }
+
+    if (event.type === OUTCOME_TYPES.SCALAR) {
+      return this.renderScalar()
+    }
+
+    return (
+      <div className="col-md-6">
+        <span>Invalid Outcomes...</span>
       </div>
     )
   }
@@ -243,15 +268,15 @@ class MarketBuySharesForm extends Component {
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
 
-    let submitEnabled = false
+    const submitDisabled = this.props.invalid
     let fieldError
     let tokenCountField
     let maxReturnField
 
     if (noOutcomeSelected) {
-      fieldError = <span className="marketBuyWin__invalidParam">Select an outcome</span>
+      fieldError = <span className="marketBuyWin__invalidParam">--</span>
     } else if (Decimal(percentageWin.toString()).isZero()) {
-      fieldError = <span className="marketBuyWin__invalidParam">Enter investment</span>
+      fieldError = <span className="marketBuyWin__invalidParam">--</span>
     } else if (Decimal(outcomeTokenCount.toString()).isZero()) {
       fieldError = <span className="marketBuyWin__invalidParam">Invalid investment</span>
     } else {
@@ -271,8 +296,6 @@ class MarketBuySharesForm extends Component {
           <CurrencyName collateralToken={collateralToken} />)
         </span>
       )
-
-      submitEnabled = !Decimal(selectedBuyInvest).isZero()
     }
 
     return (
@@ -288,6 +311,7 @@ class MarketBuySharesForm extends Component {
                     component={Input}
                     className="marketBuyInvest"
                     placeholder="Investment"
+                    validate={this.validateInvestment}
                   />
                 </div>
                 <div className="col-md-4">
@@ -322,7 +346,7 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">
                   <InteractionButton
                     className="btn btn-primary col-md-12"
-                    disabled={!submitEnabled}
+                    disabled={submitDisabled}
                     loading={submitting || local}
                     type="submit"
                   >
@@ -358,6 +382,7 @@ MarketBuySharesForm.propTypes = {
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool,
+  currentBalance: PropTypes.string,
 }
 
 const form = {
