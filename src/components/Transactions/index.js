@@ -24,13 +24,13 @@ const ProgressIndicator = ({ completed, completionStatus, progress }) => {
           <div className="icon icon--checkmark" />
         </div>
       )
-    } else {
-      return (
-        <div className="transaction__icon">
-          <div className="icon icon--error" />
-        </div>
-      )
     }
+
+    return (
+      <div className="transaction__icon">
+        <div className="icon icon--error" />
+      </div>
+    )
   }
 
   return (
