@@ -107,7 +107,7 @@ class MarketMyTrades extends Component {
       return (
         <div className="marketMyTrades">
           <h2 className="marketMyTrades__heading">You haven&apos;t interacted with this market yet.</h2>
-          <h3>Every transaction that happens on this market will be shown here.</h3>
+          <h2><small>Every transaction that happens on this market will be shown here.</small></h2>
         </div>
       )
     }

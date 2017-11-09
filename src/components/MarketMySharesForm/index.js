@@ -97,7 +97,7 @@ class MarketMySharesForm extends Component {
   @autobind
   validateTokenCount(val, values, props) {
     if (parseFloat(val) >= 1000) {
-      return "Invalid amount"
+      return 'Invalid amount'
     }
 
     let decimalValue
@@ -386,11 +386,8 @@ class MarketMySharesForm extends Component {
     if (!marketShares || !marketShares.length) {
       return (
         <div className="marketMyShares">
-          <h2 className="marketMyShares__heading">
-            You don&apos;t hold any shares for this market.
-            <br />
-            <small>It may take some time for the blockchain to mine your share purchase.</small>
-          </h2>
+          <h2 className="marketMyShares__heading">You don&apos;t hold any shares for this market.</h2>
+          <h2><small>It may take some time for the blockchain to mine your share purchase.</small></h2>
         </div>
       )
     }
