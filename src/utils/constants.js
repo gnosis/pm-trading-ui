@@ -46,6 +46,7 @@ export const TRANSACTION_COMPLETE_STATUS = {
   NO_ERROR: 'NO_ERROR',
   ERROR: 'ERROR',
   TIMEOUT: 'TIMEOUT',
+  LOST: 'LOST',
 }
 
 export const GAS_COST = {
