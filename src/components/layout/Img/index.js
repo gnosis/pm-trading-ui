@@ -6,7 +6,6 @@ import * as css from './index.css'
 const cx = classNames.bind(css)
 
 class Img extends PureComponent {
-
   render() {
     const { fullwidth, alt, bordered, className, ...props } = this.props
 

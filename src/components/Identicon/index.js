@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import createIcon from 'blockies'
 import Tooltip from 'rc-tooltip'
+import Img from 'components/layout/Img'
 
 const Identicon = ({ account }) => {
   const canvas = createIcon({
@@ -18,7 +19,7 @@ const Identicon = ({ account }) => {
 
   return (
     <Tooltip placement="bottom" overlay={account}>
-      <img src={canvas.toDataURL()} alt={account} />
+      <Img src={canvas.toDataURL()} alt={account} />
     </Tooltip>
   )
 }
