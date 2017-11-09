@@ -283,12 +283,7 @@ class MarketBuySharesForm extends Component {
             <div className="col-md-5">
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-8">
-                  <Field
-                    name="invest"
-                    component={Input}
-                    className="marketBuyInvest"
-                    placeholder="Investment"
-                  />
+                  <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
                 </div>
                 <div className="col-md-4">
                   <div className="marketBuyCurrency">
@@ -301,7 +296,7 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">{fieldError || tokenCountField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Maximum return in %</div>
+                <div className="col-md-6">Maximum return</div>
                 <div className="col-md-6">{fieldError || maxReturnField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
