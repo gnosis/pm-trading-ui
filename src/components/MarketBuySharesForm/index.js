@@ -283,12 +283,7 @@ class MarketBuySharesForm extends Component {
             <div className="col-md-5">
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-8">
-                  <Field
-                    name="invest"
-                    component={Input}
-                    className="marketBuyInvest"
-                    placeholder="Investment"
-                  />
+                  <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
                 </div>
                 <div className="col-md-4">
                   <div className="marketBuyCurrency">
@@ -301,44 +296,47 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">{fieldError || tokenCountField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Maximum return/div>
-                <div className="col-md-6">{fieldError || maxReturnField}</div>
-              </div>
-              <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} decimals={5} />{' '}
-                  <CurrencyName collateralToken={collateralToken} />
+                  Maximum return/div>
+                  <div className="col-md-6">{fieldError || maxReturnField}</div>
                 </div>
-              </div>
-              {submitFailed && (
                 <div className="row marketBuySharesForm__row">
-                  <div className="col-md-12">
-                    Sorry - your investment couldn&apos;t be processed. Please ensure you&apos;re on the right network.
+                  <div className="col-md-6">Gas Costs</div>
+                  <div className="col-md-6">
+                    <DecimalValue value={gasCostEstimation} decimals={5} />{' '}
+                    <CurrencyName collateralToken={collateralToken} />
                   </div>
                 </div>
-              )}
-              <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">
-                  <InteractionButton
-                    className="btn btn-primary col-md-12"
-                    disabled={!submitEnabled}
-                    loading={submitting || local}
-                    type="submit"
-                  >
-                    Buy Tokens
-                  </InteractionButton>
-                </div>
-                <div className="col-md-6">
-                  <button
-                    className="btn btn-default col-md-12 marketBuySharesForm__cancel"
-                    type="button"
-                    onClick={() => {
-                      changeUrl(`/markets/${address}/`)
-                    }}
-                  >
-                    Cancel
-                  </button>
+                {submitFailed && (
+                  <div className="row marketBuySharesForm__row">
+                    <div className="col-md-12">
+                      Sorry - your investment couldn&apos;t be processed. Please ensure you&apos;re on the right
+                      network.
+                    </div>
+                  </div>
+                )}
+                <div className="row marketBuySharesForm__row">
+                  <div className="col-md-6">
+                    <InteractionButton
+                      className="btn btn-primary col-md-12"
+                      disabled={!submitEnabled}
+                      loading={submitting || local}
+                      type="submit"
+                    >
+                      Buy Tokens
+                    </InteractionButton>
+                  </div>
+                  <div className="col-md-6">
+                    <button
+                      className="btn btn-default col-md-12 marketBuySharesForm__cancel"
+                      type="button"
+                      onClick={() => {
+                        changeUrl(`/markets/${address}/`)
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
