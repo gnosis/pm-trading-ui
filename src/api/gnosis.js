@@ -1,6 +1,3 @@
-/* globals process.env */
-import Web3 from 'web3'
-
 import Gnosis from '@gnosis.pm/gnosisjs/'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
