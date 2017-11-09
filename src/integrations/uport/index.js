@@ -1,10 +1,8 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import InjectedWeb3 from 'integrations/injectedWeb3'
+import baseIntegration from 'integrations/baseIntegration'
 import uPortInstance, { requestCredentials } from './connector'
 
-let instance = null
-
-class Uport extends InjectedWeb3 {
+class Uport extends baseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
 
   /**
@@ -12,13 +10,11 @@ class Uport extends InjectedWeb3 {
    * This allows "fallback providers" like a remote ethereum host to be used as a last resort.
    */
   static providerPriority = 100
+  static enableWatcher = false
+  static watcherTimeout = 0
 
   constructor() {
-    if (!instance) {
-      super(false, 0)
-      instance = this
-    }
-    return instance
+    super(Uport.enableWatcher, Uport.watcherTimeout)
   }
 
   /**

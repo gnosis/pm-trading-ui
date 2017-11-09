@@ -1,17 +1,18 @@
-import autobind from 'autobind-decorator'
 import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 
 import { weiToEth, promisify } from 'utils/helpers'
 
-class InjectedWeb3 {
+class BaseIntegration {
   runProviderUpdate() {}
   runProviderRegister() {}
+  enableWatcher = true
+  defaultTimeout = 1000
 
-  constructor(enableWatcher = true, defaultTimeout = 10000) {
+  constructor(enableWatcher = this.enableWatcher, defaultTimeout = this.defaultTimeout) {
     this.defaultTimeout = defaultTimeout
-
-    if (enableWatcher) {
-      this.watcherInterval = setInterval(this.watcher, 1000)
+    this.enableWatcher = enableWatcher
+    if (this.enableWatcher) {
+      this.watcherInterval = setInterval(this.watcher, defaultTimeout)
     }
   }
 
@@ -92,8 +93,8 @@ class InjectedWeb3 {
    * Periodic updater to get all relevant information from this provider
    * @async
    */
-  @autobind
-  async watcher() {
+
+  watcher = async () => {
     try {
       const currentAccount = await this.getAccount()
       if (this.account !== currentAccount) {
@@ -127,4 +128,4 @@ class InjectedWeb3 {
   }
 }
 
-export default InjectedWeb3
+export default BaseIntegration
