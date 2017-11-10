@@ -1,5 +1,7 @@
 import {
   initGnosisConnection,
+  getGnosisConnection,
+  getOlympiaTokensByAccount,
   getCurrentBalance,
   getCurrentAccount,
   calcMarketGasCost,
@@ -13,15 +15,17 @@ import {
   getEtherTokens,
 } from 'api'
 
-import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
+import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider } from 'selectors/blockchain'
+import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
+import { findDefaultProvider, isGnosisInitialized, getUportDefaultAccount } from 'selectors/blockchain'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
+export const initProviders = createAction('INIT_PROVIDERS')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
@@ -30,46 +34,48 @@ export const updateProvider = createAction('UPDATE_PROVIDER')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
+const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
+
 export const requestGasPrice = () => async (dispatch) => {
-    const gasPrice = await getGasPrice()
-    dispatch(setGasPrice({ entityType: 'gasPrice', gasPrice }))
+  const gasPrice = await getGasPrice()
+  dispatch(setGasPrice({ entityType: 'gasPrice', gasPrice }))
 }
 
 export const requestGasCost = contractType => async (dispatch) => {
-    if (contractType === GAS_COST.MARKET_CREATION) {
-        calcMarketGasCost().then((gasCost) => {
-            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-        })
-    } else if (contractType === GAS_COST.BUY_SHARES) {
-        calcBuySharesGasCost().then((gasCost) => {
-            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-        })
-    } else if (contractType === GAS_COST.SELL_SHARES) {
-        calcSellSharesGasCost().then((gasCost) => {
-            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-        })
-    } else if (contractType === GAS_COST.CATEGORICAL_EVENT) {
-        calcCategoricalEventGasCost().then((gasCost) => {
-            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-        })
-    } else if (contractType === GAS_COST.SCALAR_EVENT) {
-        calcScalarEventGasCost().then((gasCost) => {
-            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-        })
-    } else if (contractType === GAS_COST.CENTRALIZED_ORACLE) {
-        calcCentralizedOracleGasCost().then((gasCost) => {
-            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-        })
-    } else if (contractType === GAS_COST.FUNDING) {
-        calcFundingGasCost().then((gasCost) => {
-            dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
-        })
-    }
+  if (contractType === GAS_COST.MARKET_CREATION) {
+    calcMarketGasCost().then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
+  } else if (contractType === GAS_COST.BUY_SHARES) {
+    calcBuySharesGasCost().then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
+  } else if (contractType === GAS_COST.SELL_SHARES) {
+    calcSellSharesGasCost().then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
+  } else if (contractType === GAS_COST.CATEGORICAL_EVENT) {
+    calcCategoricalEventGasCost().then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
+  } else if (contractType === GAS_COST.SCALAR_EVENT) {
+    calcScalarEventGasCost().then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
+  } else if (contractType === GAS_COST.CENTRALIZED_ORACLE) {
+    calcCentralizedOracleGasCost().then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
+  } else if (contractType === GAS_COST.FUNDING) {
+    calcFundingGasCost().then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
+  }
 }
 
 export const requestEtherTokens = account => async (dispatch) => {
-    const etherTokens = await getEtherTokens(account)
-    dispatch(setEtherTokens({ entityType: 'etherTokens', account, etherTokens }))
+  const etherTokens = await getEtherTokens(account)
+  dispatch(setEtherTokens({ entityType: 'etherTokens', account, etherTokens }))
 }
 
 /**
@@ -77,36 +83,91 @@ export const requestEtherTokens = account => async (dispatch) => {
  */
 export const initGnosis = () => async (dispatch, getState) => {
   // initialize
-    try {
-        const state = getState()
+  try {
+    const state = getState()
 
     // determine new provider
-        const newProvider = findDefaultProvider(state)
-        if (newProvider) {
-            await dispatch(setActiveProvider(newProvider.name))
-            // init Gnosis connection
-            const opts = getGnosisJsOptions(newProvider)
-            await initGnosisConnection(opts)
-            await dispatch(setGnosisInitialized({ initialized: true }))
-            await requestEtherTokens()
-        }
-    } catch (error) {
-        console.warn(`Gnosis.js initialization Error: ${error}`)
-        await dispatch(setConnectionStatus({ connected: false }))
-        return await dispatch(setGnosisInitialized({ initialized: false, error }))
+    const newProvider = findDefaultProvider(state)
+    if (newProvider) {
+      await dispatch(setActiveProvider(newProvider.name))
+      // init Gnosis connection
+      const opts = getGnosisJsOptions(newProvider)
+      await initGnosisConnection(opts)
+      await dispatch(setGnosisInitialized({ initialized: true }))
+      await requestEtherTokens()
     }
+  } catch (error) {
+    console.warn(`Gnosis.js initialization Error: ${error}`)
+    await dispatch(setConnectionStatus({ connected: false }))
+    return await dispatch(setGnosisInitialized({ initialized: false, error }))
+  }
 
   // connect
-    try {
+  try {
     // runs test executions on gnosisjs
-        const getConnection = async () => {
-            const account = await getCurrentAccount()
-            await getCurrentBalance(account)
-        }
-        await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
-        await dispatch(setConnectionStatus({ connected: true }))
-    } catch (error) {
-        console.warn(`Gnosis.js connection Error: ${error}`)
-        return await dispatch(setConnectionStatus({ connected: false }))
+    const getConnection = async () => {
+      const account = await getCurrentAccount()
+      await getCurrentBalance(account)
     }
+    await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
+    await dispatch(setConnectionStatus({ connected: true }))
+  } catch (error) {
+    console.warn(`Gnosis.js connection Error: ${error}`)
+    return await dispatch(setConnectionStatus({ connected: false }))
+  }
+}
+
+export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
+  await dispatch(
+    updateProvider({
+      provider: provider.constructor.providerName,
+      ...data,
+    }),
+  )
+
+  if (isGnosisInitialized(getState())) {
+    let requireGnosisReinit = false
+    GNOSIS_REINIT_KEYS.forEach((searchKey) => {
+      if (Object.keys(data).indexOf(searchKey) > -1) {
+        requireGnosisReinit = true
+      }
+    })
+
+    if (requireGnosisReinit) {
+      // Just in case any other provider is updated and the default one
+      // is UPORT we do not want to scan the code again
+      await dispatch(initGnosis())
+    }
+
+    return
+  }
+
+  if (provider.constructor.providerName === 'UPORT') {
+    await dispatch(initGnosis())
+    const account = (await getGnosisConnection()).defaultAccount
+    const balance = await getOlympiaTokensByAccount(account)
+    await dispatch(
+      updateProvider({
+        ...data,
+        provider: provider.constructor.providerName,
+        account,
+        balance: weiToEth(balance),
+      }),
+    )
+
+    await dispatch(fetchOlympiaUserData(account))
+  }
+}
+
+export const runProviderRegister = (provider, data) => async (dispatch, getState) => {
+  const providerData = { ...data }
+  if (provider.constructor.providerName === 'UPORT') {
+    providerData.account = getUportDefaultAccount(getState())
+  }
+  await dispatch(
+    registerProvider({
+      provider: provider.constructor.providerName,
+      ...providerData,
+    }),
+  )
 }

@@ -1,9 +1,8 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { promisify } from 'utils/helpers'
-import InjectedWeb3 from 'integrations/injectedWeb3'
+import BaseIntegration from 'integrations/baseIntegration'
 import Web3 from 'web3'
 
-class Remote extends InjectedWeb3 {
+class Remote extends BaseIntegration {
   static providerName = WALLET_PROVIDER.REMOTE
   /**
    * Provider with highest priority starts off as active, if other providers are also available.
@@ -43,4 +42,5 @@ class Remote extends InjectedWeb3 {
     })
   }
 }
+
 export default new Remote()
