@@ -1,6 +1,7 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -39,7 +40,7 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader' },
+      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, loader: 'babel-loader' },
       {
         test: /\.(jpe?g|png|svg)$/i,
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
@@ -105,5 +106,6 @@ module.exports = {
         WHITELIST: whitelist,
       },
     }),
+    new UglifyJsWebpackPlugin(),
   ],
 }
