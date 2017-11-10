@@ -31,17 +31,15 @@ class WalletIntegrationProvider extends Component {
       ...data,
     })
 
-    if (this.props.gnosisInitialized) {
-      let requireGnosisReinit = false
-      GNOSIS_REINIT_KEYS.forEach((searchKey) => {
-        if (Object.keys(data).indexOf(searchKey) > -1) {
-          requireGnosisReinit = true
-        }
-      })
-
-      if (requireGnosisReinit) {
-        await this.props.initGnosis()
+    let requireGnosisReinit = false
+    GNOSIS_REINIT_KEYS.forEach((searchKey) => {
+      if (Object.keys(data).indexOf(searchKey) > -1) {
+        requireGnosisReinit = true
       }
+    })
+
+    if (requireGnosisReinit) {
+      await this.props.initGnosis()
     }
   }
 
