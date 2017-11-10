@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { map } from 'lodash'
 import { registerProvider, updateProvider, initGnosis } from 'actions/blockchain'
-import { isGnosisInitialized } from 'selectors/blockchain'
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
@@ -61,17 +60,12 @@ class WalletIntegrationProvider extends Component {
 WalletIntegrationProvider.propTypes = {
   children: PropTypes.element,
   integrations: PropTypes.objectOf(PropTypes.object),
-  gnosisInitialized: PropTypes.bool,
   registerProvider: PropTypes.func.isRequired,
   updateProvider: PropTypes.func.isRequired,
   initGnosis: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
-  gnosisInitialized: isGnosisInitialized(state),
-})
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   registerProvider,
   updateProvider,
   initGnosis,
