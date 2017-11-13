@@ -1,11 +1,11 @@
 /* global __VERSION__ */
 
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Modal from 'react-modal'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
+import { providerPropType } from 'utils/shapes'
 
 import { connectBlockchain } from 'actions/blockchain'
 
@@ -36,7 +36,7 @@ const App = (props) => {
   return (
     <div className="appContainer">
       <HeaderContainer version={process.env.VERSION} />
-      {props.hasWallet && <TransactionFloaterContainer />}
+      {props.provider && props.provider.account && <TransactionFloaterContainer />}
       <TransitionGroup>
         <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>
           {props.children}
@@ -50,7 +50,7 @@ App.propTypes = {
   blockchainConnection: PropTypes.bool,
   children: PropTypes.node,
   location: PropTypes.object,
-  hasWallet: PropTypes.bool,
+  provider: providerPropType,
 }
 
 const mapStateToProps = state => ({
