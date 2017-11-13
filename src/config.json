@@ -14,13 +14,14 @@
     "0xaca94ef8bd5ffee41947b4585a84bda5a3d3da6e": "Account 9",
     "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Account 10",
     "0x75e70a0204a9c2353f9de428cb87f38ead9f0160": "DenisUport",
-    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask"
+    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",
+    "0x8b872b278cbdadd6a24751051d7d030bb7f35385": "GiacomoUport"
  },
   "productionWhitelist": {
     "0x75e70a0204a9c2353f9de428cb87f38ead9f0160": "Denis",
     "0x8a5e5508046316a6511d24306bcaab0a6d8511f1": "Olympia",
-    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis2",
-    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask"
+    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",
+    "0x8b872b278cbdadd6a24751051d7d030bb7f35385": "GiacomoUport"
  },
  "gnosisdb": {
    "protocol": "https",
