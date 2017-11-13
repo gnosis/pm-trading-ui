@@ -331,7 +331,7 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">{fieldError || tokenCountField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Maximum return in %</div>
+                <div className="col-md-6">Maximum return</div>
                 <div className="col-md-6">{fieldError || maxReturnField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
