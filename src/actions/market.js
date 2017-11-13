@@ -1,3 +1,4 @@
+import allowedRangePrice from 'utils/marginPrice'
 import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
@@ -358,6 +359,15 @@ export const buyMarketShares = (
     ...(approvalResetAmount ? [SETTING_ALLOWANCE, OUTCOME_TOKENS] : [OUTCOME_TOKENS]),
   ]
 
+  const payload = (await api.requestMarket(market.address))
+  const updatedMarket = payload.entities.markets[market.address]
+  const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
+  const oldPrice = market.marginalPrices[outcomeIndex]
+  if (!allowedRangePrice(oldPrice, updatedPrice)) {
+    dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
+    return await dispatch(receiveEntities(payload))
+  }
+
   dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
@@ -474,7 +484,7 @@ export const redeemWinnings = market => async (dispatch) => {
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Redeeming Winnings for  "${market.eventDescription.title}"`))
 
   const marketType = market.event.type
-  const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS] 
+  const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS]
 
   dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
 
