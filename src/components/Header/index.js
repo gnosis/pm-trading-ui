@@ -99,6 +99,7 @@ Header.propTypes = {
   hasWallet: PropTypes.bool,
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
+  currentAccount: PropTypes.string,
   initProviders: PropTypes.func,
 }
 
