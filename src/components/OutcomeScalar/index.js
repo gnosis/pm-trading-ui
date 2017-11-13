@@ -12,8 +12,7 @@ import './outcomeScalar.less'
 const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
   const marginalPrice = calcLMSRMarginalPrice({
     netOutcomeTokensSold: market.netOutcomeTokensSold,
-    // This is a temporary fix to avoid NaN when there is no funding, which should never occour
-    funding: Decimal(parseInt(market.funding, 10) || 1e18),
+    funding: market.funding,
     outcomeTokenIndex: 1, // always calc for long when calculating estimation
   })
 
