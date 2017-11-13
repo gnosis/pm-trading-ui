@@ -65,7 +65,10 @@ class MarketBuySharesForm extends Component {
   }
 
   getMaximumWin(outcomeTokenCount, investment) {
-    return investment ? outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18) : new Decimal(0)
+    if (/\d+/.test(investment)) {
+      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
+    }
+    return '--'
   }
 
   getPercentageWin(outcomeTokenCount, investment) {
@@ -83,7 +86,7 @@ class MarketBuySharesForm extends Component {
   @autobind
   handleBuyShares() {
     const {
-      market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome, limitMargin
+      market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome, limitMargin,
     } = this.props
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
@@ -101,6 +104,8 @@ class MarketBuySharesForm extends Component {
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
   validateInvestment = (investmentValue) => {
+    if (!investmentValue || !/\d+/.test(investmentValue)) return false
+
     const { currentBalance } = this.props
     if (parseFloat(investmentValue) >= 1000) {
       return 'Invalid amount'
@@ -126,7 +131,7 @@ class MarketBuySharesForm extends Component {
 
   renderCategorical() {
     const {
-      selectedBuyInvest, selectedOutcome, limitMargin, market, market: { eventDescription }
+      selectedBuyInvest, selectedOutcome, limitMargin, market, market: { eventDescription },
     } = this.props
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
@@ -261,16 +266,18 @@ class MarketBuySharesForm extends Component {
 
   render() {
     const {
+      changeUrl,
+      gasCosts,
+      gasPrice,
+      invalid,
       handleSubmit,
+      market: { event: { collateralToken }, address, local },
       selectedBuyInvest,
       submitFailed,
       submitting,
       limitMargin,
       market: { event: { collateralToken }, address, local },
       selectedOutcome,
-      gasCosts,
-      gasPrice,
-      changeUrl,
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
@@ -280,7 +287,7 @@ class MarketBuySharesForm extends Component {
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares || 0))
 
-    const submitDisabled = this.props.invalid
+    const submitDisabled = invalid || !selectedBuyInvest
     let fieldError
     let tokenCountField
     let maxReturnField
