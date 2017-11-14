@@ -1,4 +1,4 @@
-@import url('../../less/vars.less');
+@import url("../../less/vars.less");
 
 .formOutcomeList {
   display: block;
@@ -33,10 +33,21 @@
         display: none;
       }
     }
+
+    &__add {
+      color: @font-color-muted;
+      display: block;
+      margin: 10px 0 10px 5px;
+      cursor: pointer;
+
+      &:hover {
+        color: @font-color-light;
+      }
+    }
   }
 
   &::after {
-    content: '';
+    content: "";
     display: table;
     clear: both;
   }

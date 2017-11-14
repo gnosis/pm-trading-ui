@@ -41,6 +41,9 @@ const FormOutcomeList = ({ fields, label, meta: { error, invalid } }) => (
         )}
       </div>
     ))}
+    <a className="entry__add" onClick={() => fields.push('')}>
+      Add
+    </a>
     {invalid && error && <span>{error}</span>}
   </div>
 )
