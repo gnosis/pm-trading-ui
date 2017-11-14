@@ -132,7 +132,9 @@ class MarketCreateReview extends Component {
   }
 
   renderCheckout() {
-    const { createMarketCost, formValues: { funding, collateralToken } } = this.props
+    const { createMarketCost, formValues: { funding, collateralToken }, currentBalance } = this.props
+    const totalAmount = Decimal(funding || 0).add(Decimal(createMarketCost || 0))
+    const isFundingCorrect = Decimal(currentBalance || 0).gte(totalAmount)
 
     return (
       <div className="checkout">
@@ -153,7 +155,7 @@ class MarketCreateReview extends Component {
           <li className="checkout__listItem checkout__listItem--total">
             <span className="listItem__label">Total</span>
             <span className="listItem__value">
-              <DecimalValue value={Decimal(funding || 0).add(Decimal(createMarketCost || 0))} />
+              <DecimalValue value={totalAmount} />
             </span>
           </li>
         </ul>
@@ -179,10 +181,12 @@ class MarketCreateReview extends Component {
             className="btn btn-primary"
             type="button"
             onClick={this.handleCreateMarket}
+            disabled={!isFundingCorrect}
             whitelistRequired
           >
             Pay & Create Market
           </InteractionButton>
+          {!isFundingCorrect && <span>You don&apos;t have suffiecient funds to create this market.</span>}
         </div>
       </div>
     )
@@ -303,6 +307,7 @@ MarketCreateReview.propTypes = {
   submitForm: PropTypes.func,
   reset: PropTypes.func,
   submitting: PropTypes.bool,
+  currentBalance: PropTypes.string,
 }
 
 export default MarketCreateReview
