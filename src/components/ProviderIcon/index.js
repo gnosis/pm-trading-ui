@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import Tooltip from 'rc-tooltip'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
 import { WALLET_PROVIDER } from 'integrations/constants'
@@ -23,16 +24,16 @@ const ProviderIcon = ({ provider = {}, badge }) => {
 
   return (
     <Block>
-      { isUport
-        ? <Img title={badge.name} style={uportBadgeStyle} src={badge.icon} width={40} height={38} />
-        : <div
-          className={cn([
-            'headerIcon',
-            `headerIcon--${providerIconClasses[name] || 'default'}`,
-          ])}
+      {isUport ? (
+        <Tooltip placement="bottom" overlay={badge.name}>
+          <Img style={uportBadgeStyle} src={badge.icon} width={40} height={38} />
+        </Tooltip>
+      ) : (
+        <div
+          className={cn(['headerIcon', `headerIcon--${providerIconClasses[name] || 'default'}`])}
           title={`You are using ${upperFirst(provider.name.toLowerCase())} to connect to Gnosis`}
         />
-      }
+      )}
     </Block>
   )
 }

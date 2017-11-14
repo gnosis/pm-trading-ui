@@ -20,7 +20,7 @@ class Header extends Component {
   }
 
   render() {
-    const { version, hasWallet, currentNetwork, currentBalance, currentProvider } = this.props
+    const { version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider } = this.props
     return (
       <div className="headerContainer">
         <div className="container">
@@ -78,7 +78,7 @@ class Header extends Component {
                   <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
                   <span className="headerContainer__account--text">{collateralTokenToText()}</span>
                   <ProviderIcon provider={currentProvider} />
-                  <Identicon className="" />
+                  <Identicon account={currentAccount} />
                 </div>
               )}
             {!hasWallet && (
@@ -99,6 +99,7 @@ Header.propTypes = {
   hasWallet: PropTypes.bool,
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
+  currentAccount: PropTypes.string,
   initProviders: PropTypes.func,
 }
 
