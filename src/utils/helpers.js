@@ -162,7 +162,7 @@ export const getGnosisJsOptions = (provider) => {
     // Inject window.web3
     opts.ethereum = window.web3.currentProvider
   } else if (provider && provider.name === WALLET_PROVIDER.UPORT) {
-    const uport = Uport.uport
+    const { uport } = Uport
     opts.ethereum = uport.getProvider()
     opts.defaultAccount = provider.account
   } else {
