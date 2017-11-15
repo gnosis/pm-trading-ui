@@ -79,3 +79,5 @@ export const TRANSACTION_DESCRIPTIONS = {
   BUY: 'BOUGHT',
   SELL: 'SOLD',
 }
+
+export const LIMIT_MARGIN_DEFAULT = '5'

@@ -49,9 +49,7 @@ export const getGnosisConnection = async () => {
  */
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
-  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts(
-    (e, accounts) => (e ? reject(e) : resolve(accounts[0]))),
-  )
+  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts((e, accounts) => (e ? reject(e) : resolve(accounts[0]))))
 }
 
 /**
@@ -202,9 +200,7 @@ export const fundMarket = async (market) => {
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
 
-  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(
-    await gnosis.contracts.Event.at(market.event).collateralToken(),
-  )
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event).collateralToken())
 
   if (await collateralToken.name() === 'Ether Token') {
     await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
@@ -250,15 +246,13 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
-  const collateralTokenWei = Decimal(cost).mul(1e18)
+  const collateralTokenWei = Decimal(cost).mul(1e18).toString()
 
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
-  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(
-    await gnosis.contracts.Event.at(market.event.address).collateralToken(),
-  )
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
 
-  if (await collateralToken.name() === 'Ether Token') {
-    await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
+  if ((await collateralToken.name()) === 'Ether Token') {
+    await gnosis.etherToken.deposit({ value: collateralTokenWei })
   }
 
   // buyOutComeTokens handles approving
@@ -266,6 +260,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
     market: market.address,
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCount.toString(),
+    cost: collateralTokenWei,
     approvalResetAmount,
   })
 }
@@ -358,11 +353,7 @@ export const calcSellSharesGasCost = async () => {
  */
 export const getGasPrice = async () => {
   const gnosis = await getGnosisConnection()
-  return await new Promise(
-    (resolve, reject) => gnosis.web3.eth.getGasPrice(
-      (e, r) => (e ? reject(e) : resolve(r)),
-    ),
-  )
+  return await new Promise((resolve, reject) => gnosis.web3.eth.getGasPrice((e, r) => (e ? reject(e) : resolve(r))))
 }
 
 /**

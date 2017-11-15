@@ -13,7 +13,7 @@ import CurrencyName from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
 
-import { COLOR_SCHEME_DEFAULT, GAS_COST, LOWEST_DISPLAYED_VALUE, MIN_CONSIDER_VALUE } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, GAS_COST, LOWEST_DISPLAYED_VALUE, MIN_CONSIDER_VALUE, LIMIT_MARGIN_DEFAULT } from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
@@ -29,7 +29,9 @@ class MarketMySharesForm extends Component {
   }
 
   componentWillMount() {
-    const { gasCosts, gasPrice, requestGasCost, requestGasPrice } = this.props
+    const {
+      gasCosts, gasPrice, requestGasCost, requestGasPrice,
+    } = this.props
 
     if (gasCosts.sellShares === undefined) {
       requestGasCost(GAS_COST.SELL_SHARES)
@@ -112,11 +114,9 @@ class MarketMySharesForm extends Component {
     }
 
     if (
-      decimalValue.gt(
-        Decimal(props.marketShares.filter(share => share.id === this.state.extendedSellId)[0].balance)
-          .div(1e18)
-          .toString(),
-      )
+      decimalValue.gt(Decimal(props.marketShares.filter(share => share.id === this.state.extendedSellId)[0].balance)
+        .div(1e18)
+        .toString())
     ) {
       return "You're trying to sell more than you invested."
     }
@@ -145,50 +145,46 @@ class MarketMySharesForm extends Component {
         cost: share.balance,
       })
 
-      tableRows.push(
-        <tr className="marketMyShares__share" key={share.id}>
-          <td>
-            <div
-              className={'shareOutcome__color'}
-              style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
-            />
-          </td>
-          <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
-          <td>
-            {Decimal(share.balance)
+      tableRows.push(<tr className="marketMyShares__share" key={share.id}>
+        <td>
+          <div
+            className="shareOutcome__color"
+            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
+          />
+        </td>
+        <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
+        <td>
+          {Decimal(share.balance)
               .div(1e18)
               .gte(LOWEST_DISPLAYED_VALUE) ? (
                 <DecimalValue value={Decimal(share.balance).div(1e18)} />
             ) : (
               `< ${LOWEST_DISPLAYED_VALUE}`
             )}
-          </td>
-          <td>
-            <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
-            <CurrencyName collateralToken={market.event.collateralToken} />
-          </td>
-          <td>
-            {/* eslint-disable no-script-url */}
-            {!resolved && (
-              <a
-                href="javascript:void(0);"
-                className="marketMyShares__sellButton"
-                onClick={e => this.handleShowSellView(e, share.id)}
-              >
+        </td>
+        <td>
+          <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
+          <CurrencyName collateralToken={market.event.collateralToken} />
+        </td>
+        <td>
+          {/* eslint-disable no-script-url */}
+          {!resolved && (
+          <a
+            href="javascript:void(0);"
+            className="marketMyShares__sellButton"
+            onClick={e => this.handleShowSellView(e, share.id)}
+          >
                 Sell
-              </a>
+          </a>
             )}
-            {/* eslint-enable no-script-url */}
-          </td>
-        </tr>,
-      )
+          {/* eslint-enable no-script-url */}
+        </td>
+      </tr>)
 
       if (share.id === extendedSellId) {
-        tableRows.push(
-          <tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
-            <td colSpan={5}>{this.renderSellShareView()}</td>
-          </tr>,
-        )
+        tableRows.push(<tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
+          <td colSpan={5}>{this.renderSellShareView()}</td>
+                       </tr>)
       }
     })
 
@@ -203,6 +199,7 @@ class MarketMySharesForm extends Component {
       submitting,
       submitFailed,
       selectedSellAmount,
+      limitMargin,
       handleSubmit,
       marketShares,
       gasCosts,
@@ -247,15 +244,13 @@ class MarketMySharesForm extends Component {
 
     let earnings = new Decimal(0)
     if (share.balance && parseFloat(selectedSellAmount) < 1000) {
-      earnings = weiToEth(
-        calcLMSRProfit({
-          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
-          funding: market.funding,
-          outcomeTokenIndex: share.outcomeToken.index,
-          outcomeTokenCount: selectedSellAmountWei,
-          feeFactor: market.fee,
-        }),
-      )
+      earnings = weiToEth(calcLMSRProfit({
+        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+        funding: market.funding,
+        outcomeTokenIndex: share.outcomeToken.index,
+        outcomeTokenCount: selectedSellAmountWei,
+        feeFactor: market.fee,
+      }))
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
@@ -345,6 +340,15 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-3 col-md-offset-3">
+              <label htmlFor="limitMargin">Limit Margin in %</label>
+              <Field
+                component={FormInput}
+                name="limitMargin"
+                placeholder={LIMIT_MARGIN_DEFAULT}
+                className="limitMarginField"
+              />
+            </div>
+            <div className="col-md-3 col-md-offset-3">
               <label>Gas costs</label>
               <span>
                 <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
@@ -422,6 +426,7 @@ MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
+  limitMargin: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,
 }

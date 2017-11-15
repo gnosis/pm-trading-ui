@@ -6,7 +6,10 @@ import autobind from 'autobind-decorator'
 import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { weiToEth } from 'utils/helpers'
-import { COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST, SCALAR_SHORT_COLOR, SCALAR_LONG_COLOR } from 'utils/constants'
+import {
+  COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST,
+  SCALAR_SHORT_COLOR, SCALAR_LONG_COLOR, LIMIT_MARGIN_DEFAULT,
+} from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 
 import InteractionButton from 'containers/InteractionButton'
@@ -32,12 +35,14 @@ class MarketBuySharesForm extends Component {
     }
   }
 
-  getOutcomeTokenCount(investment, outcomeIndex) {
+  getOutcomeTokenCount(investment, outcomeIndex, limitMargin) {
     if (!investment || !(parseFloat(investment) > 0) || parseFloat(investment) >= 1000) {
       return new Decimal(0)
     }
 
     const invest = new Decimal(investment).mul(1e18)
+      .div(new Decimal(100).add(limitMargin == null ? LIMIT_MARGIN_DEFAULT : limitMargin).toString()).mul(100)
+      .round()
     const { market: { funding, netOutcomeTokensSold, fee } } = this.props
 
     let outcomeTokenCount
@@ -78,9 +83,11 @@ class MarketBuySharesForm extends Component {
 
   @autobind
   handleBuyShares() {
-    const { market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome } = this.props
+    const {
+      market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome, limitMargin
+    } = this.props
 
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
 
     return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest).then(() => {
       // Fetch new trades
@@ -123,9 +130,15 @@ class MarketBuySharesForm extends Component {
   }
 
   renderCategorical() {
+<<<<<<< HEAD
     const { selectedBuyInvest, selectedOutcome, market, market: { eventDescription } } = this.props
+=======
+    const {
+      selectedBuyInvest, selectedOutcome, limitMargin, market, market: { eventDescription }
+    } = this.props
+>>>>>>> a3ff76b... Implement limit margin for buying shares
 
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
 
     return (
       <div className="col-md-7">
@@ -177,6 +190,7 @@ class MarketBuySharesForm extends Component {
     const {
       selectedBuyInvest,
       selectedOutcome,
+      limitMargin,
       market: {
         event: { lowerBound, upperBound },
         eventDescription: { decimals, unit },
@@ -188,7 +202,7 @@ class MarketBuySharesForm extends Component {
     const isOutcomeSelected = selectedOutcome !== undefined
     const currentMarginalPrice = marginalPrices[1]
     // Get the amount of tokens to buy
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
     if (isOutcomeSelected) {
       newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome])
@@ -265,14 +279,24 @@ class MarketBuySharesForm extends Component {
       selectedBuyInvest,
       submitFailed,
       submitting,
+<<<<<<< HEAD
+=======
+      limitMargin,
+      market: { event: { collateralToken }, address, local },
+>>>>>>> a3ff76b... Implement limit margin for buying shares
       selectedOutcome,
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
     // Get the amount of tokens to buy
+<<<<<<< HEAD
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
 
     const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest !== undefined ? selectedBuyInvest : 0)
+=======
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
+    const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest || '0')
+>>>>>>> a3ff76b... Implement limit margin for buying shares
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
 
@@ -327,6 +351,18 @@ class MarketBuySharesForm extends Component {
                     <CurrencyName collateralToken={collateralToken} />
                   </div>
                 </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-6">Limit Margin in %</div>
+                <div className="col-md-3">
+                  <Field
+                    name="limitMargin"
+                    component={Input}
+                    className="limitMarginField"
+                    placeholder={LIMIT_MARGIN_DEFAULT}
+                  />
+                </div>
+                <div className="col-md-3">%</div>
               </div>
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Token Count</div>
@@ -388,6 +424,7 @@ MarketBuySharesForm.propTypes = {
   marketShares: PropTypes.arrayOf(marketShareShape),
   selectedOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  limitMargin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool,
   currentBalance: PropTypes.string,
