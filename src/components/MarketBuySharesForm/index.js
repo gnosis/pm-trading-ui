@@ -23,7 +23,9 @@ import './marketBuySharesForm.less'
 
 class MarketBuySharesForm extends Component {
   componentWillMount() {
-    const { requestGasCost, requestGasPrice, isGasCostFetched, isGasPriceFetched } = this.props
+    const {
+      requestGasCost, requestGasPrice, isGasCostFetched, isGasPriceFetched,
+    } = this.props
     if (!isGasCostFetched(GAS_COST.BUY_SHARES)) {
       requestGasCost(GAS_COST.BUY_SHARES)
     }
@@ -59,7 +61,7 @@ class MarketBuySharesForm extends Component {
 
   getMaximumWin(outcomeTokenCount, investment) {
     if (/^-?\d+\.?\d*$/.test(investment)) {
-      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
+      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18)).div(1e18)
     }
     return '--'
   }
@@ -78,7 +80,9 @@ class MarketBuySharesForm extends Component {
 
   @autobind
   handleBuyShares() {
-    const { market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome } = this.props
+    const {
+      market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome,
+    } = this.props
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
 
@@ -123,7 +127,9 @@ class MarketBuySharesForm extends Component {
   }
 
   renderCategorical() {
-    const { selectedBuyInvest, selectedOutcome, market, market: { eventDescription } } = this.props
+    const {
+      selectedBuyInvest, selectedOutcome, market, market: { eventDescription },
+    } = this.props
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
 
@@ -271,10 +277,9 @@ class MarketBuySharesForm extends Component {
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
     // Get the amount of tokens to buy
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
-
-    const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest !== undefined ? selectedBuyInvest : 0)
+    const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest || '0')
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
-    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
+    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares || 0))
 
     const submitDisabled = invalid || !selectedBuyInvest
     let fieldError
@@ -292,7 +297,7 @@ class MarketBuySharesForm extends Component {
         <span className="marketBuyWin__row marketBuyWin__max">
           <DecimalValue value={weiToEth(outcomeTokenCount)} />&nbsp;
           <div
-            className={'marketBuyWin__outcomeColor'}
+            className="marketBuyWin__outcomeColor"
             style={{ backgroundColor: COLOR_SCHEME_DEFAULT[selectedOutcome] }}
           />&nbsp;
         </span>

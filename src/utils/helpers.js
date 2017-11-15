@@ -34,9 +34,7 @@ export const toEntity = (data, entityType, idKey = 'address') => {
         },
       },
     },
-    result: [
-      id,
-    ],
+    result: [id],
   }
 }
 
@@ -54,11 +52,7 @@ export const weiToEth = (value) => {
     }
     return new Decimal(0).div(1e18).toString()
   }
-  if (
-    typeof value === 'object' &&
-    (value.constructor.name === 'Decimal' || value.constructor.name === 'BigNumber') &&
-    value.gt(0)
-  ) {
+  if (typeof value === 'object' && value.gt && value.gt(0)) {
     return value.div(1e18).toString()
   }
 
@@ -80,20 +74,19 @@ export const getOutcomeName = (market, index) => {
 
 export const normalizeScalarPoint = (
   marginalPrices,
-  { event: {
-    lowerBound, upperBound,
-  },
-  eventDescription: { decimals },
-}) => {
+  { event: { lowerBound, upperBound }, eventDescription: { decimals } },
+) => {
   const bigDecimals = parseInt(decimals, 10)
 
   const bigUpperBound = Decimal(upperBound).div(10 ** bigDecimals)
   const bigLowerBound = Decimal(lowerBound).div(10 ** bigDecimals)
 
   const bounds = bigUpperBound.sub(bigLowerBound)
-  return Decimal(marginalPrices[1].toString()).times(bounds).add(bigLowerBound)
-          .toDP(decimals)
-          .toNumber()
+  return Decimal(marginalPrices[1].toString())
+    .times(bounds)
+    .add(bigLowerBound)
+    .toDP(decimals)
+    .toNumber()
 }
 
 /**
@@ -111,10 +104,11 @@ export const restFetch = url =>
   fetch(url)
     .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
     .then(res => res.json())
-    .catch(err => new Promise((resolve, reject) => {
-      console.warn(`Gnosis DB: ${err}`)
-      reject(err)
-    }))
+    .catch(err =>
+      new Promise((resolve, reject) => {
+        console.warn(`Gnosis DB: ${err}`)
+        reject(err)
+      }))
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
@@ -130,25 +124,28 @@ export const bemifyClassName = (className, element, modifier) => {
       classPath += `--${modifier}`
     }
 
-    return classNames.filter(s => s.length).map(cls => `${cls}${classPath}`).join(' ')
+    return classNames
+      .filter(s => s.length)
+      .map(cls => `${cls}${classPath}`)
+      .join(' ')
   }
 
   return ''
 }
 
-export const timeoutCondition = (timeout, rejectReason) => new Promise((_, reject) => {
-  setTimeout(() => {
-    reject(rejectReason)
-  }, timeout)
-})
+export const timeoutCondition = (timeout, rejectReason) =>
+  new Promise((_, reject) => {
+    setTimeout(() => {
+      reject(rejectReason)
+    }, timeout)
+  })
 
 /**
  * Determines if an account is a Moderator
  * @param {*string} accountAddress
  */
-export const isModerator = accountAddress => (
-  Object.keys(process.env.WHITELIST).length ? process.env.WHITELIST[accountAddress] !== undefined : false
-)
+export const isModerator = accountAddress =>
+  (Object.keys(process.env.WHITELIST).length ? process.env.WHITELIST[accountAddress] !== undefined : false)
 
 export const getModerators = () => process.env.WHITELIST
 
@@ -169,15 +166,17 @@ export const getGnosisJsOptions = (provider) => {
   return opts
 }
 
-export const promisify = (func, params, timeout) => new Promise((resolve, reject) => {
-  if (timeout) {
-    setTimeout(() => reject('Promise timed out'), timeout)
-  }
-
-  func(...params, (err, res) => {
-    if (err) {
-      return reject(err)
+export const promisify = (func, params, timeout) =>
+  new Promise((resolve, reject) => {
+    if (timeout) {
+      setTimeout(() => reject('Promise timed out'), timeout)
     }
-    return resolve(res)
+
+    func(...params, (err, res) => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve(res)
+    })
   })
-})
+
