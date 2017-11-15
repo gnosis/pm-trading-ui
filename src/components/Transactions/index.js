@@ -13,6 +13,7 @@ const completionMessages = {
   [TRANSACTION_COMPLETE_STATUS.NO_ERROR]: 'Transaction finished successfully',
   [TRANSACTION_COMPLETE_STATUS.ERROR]: 'Transaction did not finish, errors occured',
   [TRANSACTION_COMPLETE_STATUS.TIMEOUT]: 'Transaction timed out',
+  [TRANSACTION_COMPLETE_STATUS.LOST]: 'Because of a page reload, we lost the status of this Transaction',
 }
 
 const ProgressIndicator = ({ completed, completionStatus, progress }) => {
@@ -23,13 +24,13 @@ const ProgressIndicator = ({ completed, completionStatus, progress }) => {
           <div className="icon icon--checkmark" />
         </div>
       )
-    } else {
-      return (
-        <div className="transaction__icon">
-          <div className="icon icon--error" />
-        </div>
-      )
     }
+
+    return (
+      <div className="transaction__icon">
+        <div className="icon icon--error" />
+      </div>
+    )
   }
 
   return (
