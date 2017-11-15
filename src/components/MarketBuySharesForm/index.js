@@ -58,7 +58,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getMaximumWin(outcomeTokenCount, investment) {
-    if (/\d+/.test(investment)) {
+    if (/^-?\d+\.?\d*$/.test(investment)) {
       return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
     }
     return '--'
