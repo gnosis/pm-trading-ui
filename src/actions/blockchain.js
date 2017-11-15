@@ -1,6 +1,5 @@
 import {
   initGnosisConnection,
-  getGnosisConnection,
   getOlympiaTokensByAccount,
   getCurrentBalance,
   getCurrentAccount,
@@ -144,18 +143,16 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
 
   if (provider.constructor.providerName === 'UPORT') {
     await dispatch(initGnosis())
-    const account = (await getGnosisConnection()).defaultAccount
-    const balance = await getOlympiaTokensByAccount(account)
+    const balance = await getOlympiaTokensByAccount(data.account)
     await dispatch(
       updateProvider({
         ...data,
         provider: provider.constructor.providerName,
-        account,
         balance: weiToEth(balance),
       }),
     )
 
-    await dispatch(fetchOlympiaUserData(account))
+    await dispatch(fetchOlympiaUserData(data.account))
   }
 }
 
