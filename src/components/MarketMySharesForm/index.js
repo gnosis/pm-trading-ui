@@ -246,8 +246,9 @@ class MarketMySharesForm extends Component {
       }
     }
 
-    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
-    const newTokenCount = currentTokenCount.sub(new Decimal(/^-?\d+\.?\d*$/.test(selectedSellAmount) ? selectedSellAmount : 0).mul(1e18))
+    const currentTokenBalance = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
+    const newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
+
     let earnings = new Decimal(0)
     if (share.balance && parseFloat(selectedSellAmount) < 1000) {
       earnings = weiToEth(calcLMSRProfit({
@@ -262,9 +263,12 @@ class MarketMySharesForm extends Component {
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
+      if (
+        outcomeTokenIndex === share.outcomeToken.index &&
+        !currentTokenBalance.sub(newTokenBalance).isZero()
+      ) {
         return Decimal(outcomeTokenAmount)
-          .sub(currentTokenCount.sub(newTokenCount.toString()).toString())
+          .sub(currentTokenBalance.sub(newTokenBalance))
           .floor()
           .toString()
       }
