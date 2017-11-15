@@ -58,12 +58,8 @@ class MarketList extends Component {
   }
 
   @autobind
-  handleViewMarketResolve(event, resolveUrl) {
-    event.preventDefault()
+  handleViewMarketResolve(event) {
     event.stopPropagation()
-
-    this.props.changeUrl(resolveUrl)
-    window.scroll(0, 0)
   }
 
   @autobind
@@ -78,6 +74,7 @@ class MarketList extends Component {
   renderMarket(market) {
     const isResolved = market.oracle && market.oracle.isOutcomeSet
     const isOwner = this.props.defaultAccount && market.creator === this.props.defaultAccount
+    const showResolveButton = isOwner && !isResolved
 
     return (
       <button
@@ -91,15 +88,15 @@ class MarketList extends Component {
       >
         <div className="market__header">
           <h2 className="market__title">{market.eventDescription.title}</h2>
-          {isOwner &&
-            !isResolved && (
-              <div className="market__control">
-                <Link
-                  to={`/markets/${market.address}/resolve`}
-                >
+          {showResolveButton && (
+          <div className="market__control">
+            <Link
+              to={`/markets/${market.address}/resolve`}
+              onClick={this.handleViewMarketResolve}
+            >
                   Resolve
                 </Link>
-              </div>
+          </div>
             )}
         </div>
         <Outcome market={market} />

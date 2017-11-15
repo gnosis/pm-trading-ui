@@ -1,6 +1,6 @@
 /* global __VERSION__ */
 
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
@@ -15,7 +15,6 @@ import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
 import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
-import { providerPropType } from 'utils/shapes'
 
 import './app.less'
 
