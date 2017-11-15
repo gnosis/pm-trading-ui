@@ -13,7 +13,7 @@ import CurrencyName from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
 
-import { COLOR_SCHEME_DEFAULT, GAS_COST, LOWEST_DISPLAYED_VALUE, MIN_CONSIDER_VALUE } from 'utils/constants'
+import { COLOR_SCHEME_DEFAULT, GAS_COST, LOWEST_DISPLAYED_VALUE, MIN_CONSIDER_VALUE, LIMIT_MARGIN_DEFAULT } from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
@@ -203,6 +203,7 @@ class MarketMySharesForm extends Component {
       submitting,
       submitFailed,
       selectedSellAmount,
+      limitMargin,
       handleSubmit,
       marketShares,
       gasCosts,
@@ -341,6 +342,15 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-3 col-md-offset-3">
+              <label for="limitMargin">Limit Margin in %</label>
+              <Field
+                component={FormInput}
+                name="limitMargin"
+                placeholder={LIMIT_MARGIN_DEFAULT}
+                className="limitMarginField"
+              />
+            </div>
+            <div className="col-md-3 col-md-offset-3">
               <label>Gas costs</label>
               <span>
                 <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
@@ -419,6 +429,7 @@ MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
+  limitMargin: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,
 }

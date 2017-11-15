@@ -245,13 +245,13 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
-  const collateralTokenWei = Decimal(cost).mul(1e18)
+  const collateralTokenWei = Decimal(cost).mul(1e18).toString()
 
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
   const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
 
   if ((await collateralToken.name()) === 'Ether Token') {
-    await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
+    await gnosis.etherToken.deposit({ value: collateralTokenWei })
   }
 
   // buyOutComeTokens handles approving
@@ -259,6 +259,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
     market: market.address,
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCount.toString(),
+    cost: collateralTokenWei,
     approvalResetAmount,
   })
 
