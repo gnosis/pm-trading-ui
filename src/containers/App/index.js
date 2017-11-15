@@ -1,10 +1,11 @@
 /* global __VERSION__ */
 
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
+import { providerPropType } from 'utils/shapes'
 
 import { connectBlockchain } from 'actions/blockchain'
 
