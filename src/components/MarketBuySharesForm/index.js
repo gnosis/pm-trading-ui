@@ -95,7 +95,9 @@ class MarketBuySharesForm extends Component {
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
   validateInvestment = (investmentValue) => {
-    if (!investmentValue || !/\d+/.test(investmentValue)) return false
+    // check if investment is not undefined and test it against number regexp to prevent errors from decimal.js
+    const validInvestment = investmentValue || /^-?\d+\.?\d*$/.test(investmentValue)
+    if (!validInvestment) return false
 
     const { currentBalance } = this.props
     if (parseFloat(investmentValue) >= 1000) {
@@ -104,7 +106,7 @@ class MarketBuySharesForm extends Component {
 
     let decimalValue
     try {
-      decimalValue = Decimal(investmentValue || 0)
+      decimalValue = Decimal(investmentValue)
     } catch (e) {
       return 'Invalid Number value'
     }
