@@ -6,13 +6,13 @@ import cn from 'classnames'
 import Decimal from 'decimal.js'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
+import { Link } from 'react-router'
+
 import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
-
 import Outcome from 'components/Outcome'
-
 import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
 import FormSelect from 'components/FormSelect'
@@ -94,12 +94,11 @@ class MarketList extends Component {
           {isOwner &&
             !isResolved && (
               <div className="market__control">
-                <a
-                  href="javascript:void(0)"
-                  onClick={e => this.handleViewMarketResolve(e, `/markets/${market.address}/resolve`)}
+                <Link
+                  to={`/markets/${market.address}/resolve`}
                 >
                   Resolve
-                </a>
+                </Link>
               </div>
             )}
         </div>
