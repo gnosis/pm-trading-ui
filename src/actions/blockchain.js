@@ -16,7 +16,7 @@ import {
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider, isGnosisInitialized, getUportDefaultAccount } from 'selectors/blockchain'
+import { findDefaultProvider, isGnosisInitialized } from 'selectors/blockchain'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -144,11 +144,8 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
   }
 }
 
-export const runProviderRegister = (provider, data) => async (dispatch, getState) => {
+export const runProviderRegister = (provider, data) => async (dispatch) => {
   const providerData = { ...data }
-  if (provider.constructor.providerName === 'UPORT') {
-    providerData.account = getUportDefaultAccount(getState())
-  }
   await dispatch(
     registerProvider({
       provider: provider.constructor.providerName,

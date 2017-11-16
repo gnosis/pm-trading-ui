@@ -38,7 +38,10 @@ class Uport extends BaseIntegration {
    */
   async initialize(opts) {
     super.initialize(opts)
-    this.runProviderRegister(this, { priority: Uport.providerPriority })
+    this.runProviderRegister(this, {
+      priority: Uport.providerPriority,
+      account: opts.uportDefaultAccount,
+    })
 
     this.uport = uPortInstance
 
@@ -75,6 +78,7 @@ class Uport extends BaseIntegration {
       opts.runProviderUpdate(this, {
         provider: Uport.providerName,
         balance: weiToEth(balance),
+        account: this.account,
       })
       opts.dispatch(fetchOlympiaUserData(this.account))
     })
