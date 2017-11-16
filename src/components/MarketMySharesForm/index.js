@@ -250,7 +250,7 @@ class MarketMySharesForm extends Component {
         outcomeTokenIndex: share.outcomeToken.index,
         outcomeTokenCount: selectedSellAmountWei,
         feeFactor: market.fee,
-      }).mul(new Decimal(100).sub(sellLimitMargin == null ? LIMIT_MARGIN_DEFAULT : sellLimitMargin).toString()).div(100))
+      }).mul(new Decimal(100).sub(sellLimitMargin == null ? LIMIT_MARGIN_DEFAULT : sellLimitMargin)).div(100))
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
