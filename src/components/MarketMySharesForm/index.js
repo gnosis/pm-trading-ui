@@ -82,7 +82,7 @@ class MarketMySharesForm extends Component {
   }
 
   @autobind
-  async handleSellShare(shareId, shareAmount) {
+  async handleSellShare(shareId, shareAmount, earnings) {
     const shareIndex = this.props.marketShares.map(share => share.id).indexOf(shareId)
     const shareBalance = new Decimal(this.props.marketShares[shareIndex].balance)
     const shareBalanceRounded = shareBalance.div(1e18).toDP(2, 1)
@@ -90,7 +90,7 @@ class MarketMySharesForm extends Component {
     const sellAmount = shareBalanceRounded.sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE)
       ? weiToEth(shareBalance)
       : shareAmount
-    await this.props.sellShares(this.props.market, shareIndex, sellAmount)
+    await this.props.sellShares(this.props.market, shareIndex, sellAmount, earnings)
     return this.props.reset()
   }
 
@@ -203,7 +203,7 @@ class MarketMySharesForm extends Component {
       submitting,
       submitFailed,
       selectedSellAmount,
-      limitMargin,
+      sellLimitMargin,
       handleSubmit,
       marketShares,
       gasCosts,
@@ -254,7 +254,9 @@ class MarketMySharesForm extends Component {
           outcomeTokenIndex: share.outcomeToken.index,
           outcomeTokenCount: selectedSellAmountWei,
           feeFactor: market.fee,
-        }),
+        }).mul(
+          new Decimal(100).sub(sellLimitMargin == null ? LIMIT_MARGIN_DEFAULT : sellLimitMargin).toString(),
+        ).div(100),
       )
     }
 
@@ -304,7 +306,7 @@ class MarketMySharesForm extends Component {
 
     return (
       <div className="marketMyShares__sellContainer">
-        <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellId, selectedSellAmount))}>
+        <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellId, selectedSellAmount, earnings))}>
           <div className="row marketMyShares__sellRow">
             <div className="col-md-3 col-md-offset-3 marketMyShares__sellColumn">
               <label htmlFor="sellAmount">Amount to Sell</label>
@@ -333,7 +335,7 @@ class MarketMySharesForm extends Component {
               </div>
             )}
             <div className="col-md-3">
-              <label>Earnings</label>
+              <label>Minimum Earnings</label>
               <span>
                 <DecimalValue value={earnings} />&nbsp;
                 <CurrencyName collateralToken={market.event.collateralToken} />
@@ -342,7 +344,7 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-3 col-md-offset-3">
-              <label for="limitMargin">Limit Margin in %</label>
+              <label htmlFor="limitMargin">Limit Margin in %</label>
               <Field
                 component={FormInput}
                 name="limitMargin"
@@ -350,7 +352,7 @@ class MarketMySharesForm extends Component {
                 className="limitMarginField"
               />
             </div>
-            <div className="col-md-3 col-md-offset-3">
+            <div className="col-md-3">
               <label>Gas costs</label>
               <span>
                 <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
@@ -429,7 +431,7 @@ MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
-  limitMargin: PropTypes.string,
+  sellLimitMargin: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,
 }

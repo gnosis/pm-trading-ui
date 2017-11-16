@@ -389,7 +389,7 @@ export const buyMarketShares = (
  * @param {number} outcomeIndex - Index of outcome to sell shares of
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to sell
  */
-export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => async (dispatch) => {
+export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnings) => async (dispatch) => {
   const transactionId = uuid()
   const gnosis = await api.getGnosisConnection()
 
@@ -406,7 +406,7 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
   dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
 
   try {
-    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount)
+    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, earnings)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions succeeded'])
     await dispatch(closeModal())
