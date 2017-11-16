@@ -40,6 +40,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     limitMargin: marketBuySelector(state, 'limitMargin'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
+    sellLimitMargin: marketMySharesSelector(state, 'limitMargin'),
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
     hasWallet: checkWalletConnection(state),
@@ -67,8 +68,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
     dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
-  sellShares: (market, outcomeIndex, outcomeTokenCount) =>
-    dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount)),
+  sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) =>
+    dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
   resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
