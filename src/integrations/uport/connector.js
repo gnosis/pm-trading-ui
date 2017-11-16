@@ -1,5 +1,7 @@
 import { Connect, SimpleSigner } from 'uport-connect'
 
+export const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
+
 const uport = new Connect('Gnosis', {
   clientId: '2ozUxc1QzFVo7b51giZsbkEsKw2nJ87amAf',
   network: 'rinkeby',
@@ -9,5 +11,6 @@ const uport = new Connect('Gnosis', {
 export default uport
 
 export const requestCredentials = async () => {
-  await uport.requestCredentials({ notifications: true })
+  const cred = await uport.requestCredentials({ notifications: true })
+  localStorage.setItem(UPORT_OLYMPIA_KEY, JSON.stringify(cred))
 }

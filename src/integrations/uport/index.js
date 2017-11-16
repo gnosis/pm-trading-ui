@@ -1,6 +1,6 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
-import uPortInstance, { requestCredentials } from './connector'
+import uPortInstance, { requestCredentials, UPORT_OLYMPIA_KEY } from './connector'
 
 class Uport extends BaseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
@@ -18,6 +18,15 @@ class Uport extends BaseIntegration {
     super({ enableWatcher, watcherTimeout })
   }
 
+  hasCredentials() {
+    return window.localStorage.getItem(UPORT_OLYMPIA_KEY) !== null
+  }
+
+  getCredentialsFromLocalStorage() {
+    const cred = window.localStorage.getItem(UPORT_OLYMPIA_KEY)
+
+    return JSON.parse(cred)
+  }
   /**
    * Tries to initialize and enable the current provider
    * @param {object} opts - Integration Options
@@ -30,10 +39,15 @@ class Uport extends BaseIntegration {
 
     this.uport = uPortInstance
 
-    if (!opts.uportDefaultAccount) {
-      this.uport.firstReq = true
+    if (!this.hasCredentials()) {
       await requestCredentials()
     }
+
+    const cred = this.getCredentialsFromLocalStorage()
+
+    this.uport.address = cred.address
+    this.uport.pushToken = cred.pushToken
+    this.uport.publicEncKey = cred.publicEncKey
 
     this.web3 = await this.uport.getWeb3()
     this.provider = await this.uport.getProvider()

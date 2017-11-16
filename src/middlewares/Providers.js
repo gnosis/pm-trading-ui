@@ -16,8 +16,8 @@ export default store => next => (action) => {
     }
 
     Promise.all(map(walletIntegrations, integration => integration.initialize(providerOptions)))
-      .then(dispatch(initGnosis()), dispatch(initGnosis()))
-      .catch(dispatch(initGnosis()))
+      .then(() => dispatch(initGnosis()))
+      .catch(() => dispatch(initGnosis()))
   }
 
   return handledAction
