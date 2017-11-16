@@ -27,12 +27,23 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     return (
       <div className="outcomes outcomes--categorical">
         <div className="entry__color" style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex] }} />
-        <div className="outcome">{ renderOutcomes[trendingOutcomeIndex] }</div>
+        <div className="outcome">{renderOutcomes[trendingOutcomeIndex]}</div>
         <div>
           {market.marginalPrices ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0) : 0}%
         </div>
-        <div className="date">
-          { showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}
+        <div className="date">{showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}</div>
+      </div>
+    )
+  }
+
+  if (market.oracle.isOutcomeSet && market.oracle.outcome !== undefined) {
+    return (
+      <div className={`${className} outcomes outcomes--categorical`}>
+        <div className="outcome outcome__winning">
+          {renderOutcomes[market.oracle.outcome]}
+          <div className="outcome__bar--value">{`${Math.round(tokenDistribution[market.oracle.outcome] * 100).toFixed(
+            0,
+          )}%`}</div>
         </div>
       </div>
     )
@@ -50,11 +61,16 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
             <div className="outcome__bar">
               <div
                 className="outcome__bar--inner"
-                style={{ width: `${tokenDistribution[outcomeIndex] * 100}%`, backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex] }}
+                style={{
+                  width: `${tokenDistribution[outcomeIndex] * 100}%`,
+                  backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex],
+                }}
               >
                 <div className="outcome__bar--label">
-                  { renderOutcomes[outcomeIndex] }
-                  <div className="outcome__bar--value">{ `${Math.round(tokenDistribution[outcomeIndex] * 100).toFixed(0)}%` }</div>
+                  {renderOutcomes[outcomeIndex]}
+                  <div className="outcome__bar--value">{`${Math.round(tokenDistribution[outcomeIndex] * 100).toFixed(
+                    0,
+                  )}%`}</div>
                 </div>
               </div>
             </div>
@@ -67,7 +83,12 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
 
 OutcomeCategorical.propTypes = {
   market: marketShape,
-  opts: PropTypes.object,
+  opts: PropTypes.shape({
+    className: PropTypes.string,
+    showOnlyTrendingOutcome: PropTypes.bool,
+    showDate: PropTypes.bool,
+    dateFormat: PropTypes.string,
+  }),
 }
 
 export default OutcomeCategorical
