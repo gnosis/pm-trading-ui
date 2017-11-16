@@ -31,18 +31,14 @@ class MarketResolveForm extends Component {
     throw new Error(`got unexpected type ${type}`)
   }
   renderResolveScalar() {
-    const { handleSubmit, submitting } = this.props
-
+    const { handleSubmit, submitting, market } = this.props
+    const { eventDescription: { unit } } = market
     return (
       <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
         <div className="marketResolveScalar">
-          <Field name="selectedValue" component={FormInput} label={'Enter outcome'} />
+          <Field continuousPlaceholder={unit} name="selectedValue" component={FormInput} label={'Enter outcome'} />
         </div>
-        <InteractionButton
-          type="submit"
-          className="btn btn-primary"
-          loading={submitting}
-        >
+        <InteractionButton type="submit" className="btn btn-primary" loading={submitting}>
           Resolve Oracle
         </InteractionButton>
       </form>
@@ -66,11 +62,7 @@ class MarketResolveForm extends Component {
             radioValues={outcomesFormatted}
           />
         </div>
-        <InteractionButton
-          type="submit"
-          className="btn btn-primary"
-          loading={submitting || local}
-        >
+        <InteractionButton type="submit" className="btn btn-primary" loading={submitting || local}>
           Resolve Oracle
         </InteractionButton>
       </form>
