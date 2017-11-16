@@ -43,7 +43,7 @@ class MarketBuySharesForm extends Component {
     }
 
     const invest = new Decimal(investment).mul(1e18)
-      .div(new Decimal(100).add(limitMargin == null ? LIMIT_MARGIN_DEFAULT : limitMargin).toString()).mul(100)
+      .div(new Decimal(100).add(limitMargin == null ? LIMIT_MARGIN_DEFAULT : limitMargin)).mul(100)
       .round()
     const { market: { funding, netOutcomeTokensSold, fee } } = this.props
 
