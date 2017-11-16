@@ -13,11 +13,11 @@ export default store => next => (action) => {
       runProviderUpdate: (provider, data) => dispatch(runProviderUpdate(provider, data)),
       runProviderRegister: (provider, data) => dispatch(runProviderRegister(provider, data)),
       uportDefaultAccount: getUportDefaultAccount(getState()),
+      initGnosis: () => dispatch(initGnosis()),
+      dispatch,
     }
 
     Promise.all(map(walletIntegrations, integration => integration.initialize(providerOptions)))
-      .then(() => dispatch(initGnosis()))
-      .catch(() => dispatch(initGnosis()))
   }
 
   return handledAction

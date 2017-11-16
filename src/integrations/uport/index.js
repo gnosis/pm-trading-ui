@@ -1,5 +1,8 @@
+import { getOlympiaTokensByAccount } from 'api'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
+import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
+import { weiToEth } from 'utils/helpers'
 import uPortInstance, { requestCredentials, UPORT_OLYMPIA_KEY } from './connector'
 
 class Uport extends BaseIntegration {
@@ -43,17 +46,19 @@ class Uport extends BaseIntegration {
       await requestCredentials()
     }
 
-    const cred = this.getCredentialsFromLocalStorage()
-
-    this.uport.address = cred.address
-    this.uport.pushToken = cred.pushToken
-    this.uport.publicEncKey = cred.publicEncKey
-
     this.web3 = await this.uport.getWeb3()
     this.provider = await this.uport.getProvider()
     this.network = await this.getNetwork()
     this.networkId = await this.getNetworkId()
-    this.account = opts.uportDefaultAccount || (await this.getAccount())
+
+    const cred = this.getCredentialsFromLocalStorage()
+
+    if (cred) {
+      this.uport.address = cred.address
+      this.uport.pushToken = cred.pushToken
+      this.uport.publicEncKey = cred.publicEncKey
+      this.account = opts.uportDefaultAccount || (await this.getAccount())
+    }
 
     return this.runProviderUpdate(this, {
       available: true,
@@ -61,6 +66,19 @@ class Uport extends BaseIntegration {
       networkId: this.networkId,
       account: this.account,
     })
+    .then(async () => {
+      if (!this.account) {
+        return
+      }
+      await opts.initGnosis()
+      const balance = await getOlympiaTokensByAccount(this.account)
+      opts.runProviderUpdate(this, {
+        provider: Uport.providerName,
+        balance: weiToEth(balance),
+      })
+      opts.dispatch(fetchOlympiaUserData(this.account))
+    })
+    .catch(() => opts.initGnosis())
   }
 }
 

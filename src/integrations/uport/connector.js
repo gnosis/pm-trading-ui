@@ -11,6 +11,10 @@ const uport = new Connect('Gnosis', {
 export default uport
 
 export const requestCredentials = async () => {
-  const cred = await uport.requestCredentials({ notifications: true })
-  localStorage.setItem(UPORT_OLYMPIA_KEY, JSON.stringify(cred))
+  try {
+    const cred = await uport.requestCredentials({ notifications: true })
+    localStorage.setItem(UPORT_OLYMPIA_KEY, JSON.stringify(cred))
+  } catch (err) {
+    localStorage.removeItem(UPORT_OLYMPIA_KEY)
+  }
 }

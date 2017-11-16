@@ -1,6 +1,5 @@
 import {
   initGnosisConnection,
-  getOlympiaTokensByAccount,
   getCurrentBalance,
   getCurrentAccount,
   calcMarketGasCost,
@@ -14,10 +13,9 @@ import {
   getEtherTokens,
 } from 'api'
 
-import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
+import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { findDefaultProvider, isGnosisInitialized, getUportDefaultAccount } from 'selectors/blockchain'
 
 // TODO define reducer for GnosisStatus
@@ -87,11 +85,17 @@ export const initGnosis = () => async (dispatch, getState) => {
 
     // determine new provider
     const newProvider = findDefaultProvider(state)
+
     if (newProvider) {
       await dispatch(setActiveProvider(newProvider.name))
       // init Gnosis connection
-      const opts = getGnosisJsOptions(newProvider)
-      await initGnosisConnection(opts)
+      if (newProvider.account) {
+        const opts = getGnosisJsOptions(newProvider)
+        await initGnosisConnection(opts)
+      } else {
+        throw new Error('No account found')
+      }
+
       await dispatch(setGnosisInitialized({ initialized: true }))
       await requestEtherTokens()
     }
@@ -137,22 +141,6 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
       // is UPORT we do not want to scan the code again
       await dispatch(initGnosis())
     }
-
-    return
-  }
-
-  if (provider.constructor.providerName === 'UPORT') {
-    await dispatch(initGnosis())
-    const balance = await getOlympiaTokensByAccount(data.account)
-    await dispatch(
-      updateProvider({
-        ...data,
-        provider: provider.constructor.providerName,
-        balance: weiToEth(balance),
-      }),
-    )
-
-    await dispatch(fetchOlympiaUserData(data.account))
   }
 }
 
