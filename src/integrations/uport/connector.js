@@ -1,3 +1,4 @@
+import { decodeToken } from 'jsontokens'
 import { Connect, SimpleSigner } from 'uport-connect'
 
 export const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
@@ -17,4 +18,29 @@ export const requestCredentials = async () => {
   } catch (err) {
     localStorage.removeItem(UPORT_OLYMPIA_KEY)
   }
+}
+
+export const getCredentialsFromLocalStorage = () => {
+  const cred = localStorage.getItem(UPORT_OLYMPIA_KEY)
+
+  return cred ? JSON.parse(cred) : cred
+}
+
+export const hasValidCredential = () => {
+  const cred = getCredentialsFromLocalStorage()
+  if (cred === null) {
+    return false
+  }
+
+  const pushToken = decodeToken(cred.pushToken)
+  if (!pushToken) {
+    return false
+  }
+
+  const expiration = pushToken.payload.exp // When the uPort credential will expire
+  const oneDay = 24 * 60 * 6 // one day in seconds
+  const now = new Date() / 1000 // in seconds
+  const isValid = (expiration - oneDay) > now
+
+  return isValid
 }

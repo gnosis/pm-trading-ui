@@ -3,7 +3,7 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
-import uPortInstance, { requestCredentials, UPORT_OLYMPIA_KEY } from './connector'
+import uPortInstance, { hasValidCredential, requestCredentials, getCredentialsFromLocalStorage } from './connector'
 
 class Uport extends BaseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
@@ -21,15 +21,6 @@ class Uport extends BaseIntegration {
     super({ enableWatcher, watcherTimeout })
   }
 
-  hasCredentials() {
-    return window.localStorage.getItem(UPORT_OLYMPIA_KEY) !== null
-  }
-
-  getCredentialsFromLocalStorage() {
-    const cred = window.localStorage.getItem(UPORT_OLYMPIA_KEY)
-
-    return JSON.parse(cred)
-  }
   /**
    * Tries to initialize and enable the current provider
    * @param {object} opts - Integration Options
@@ -45,7 +36,7 @@ class Uport extends BaseIntegration {
 
     this.uport = uPortInstance
 
-    if (!this.hasCredentials()) {
+    if (!hasValidCredential()) {
       await requestCredentials()
     }
 
@@ -54,7 +45,7 @@ class Uport extends BaseIntegration {
     this.network = await this.getNetwork()
     this.networkId = await this.getNetworkId()
 
-    const cred = this.getCredentialsFromLocalStorage()
+    const cred = getCredentialsFromLocalStorage()
 
     if (cred) {
       this.uport.address = cred.address
