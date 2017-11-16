@@ -1,7 +1,5 @@
 import {
   initGnosisConnection,
-  getGnosisConnection,
-  getOlympiaTokensByAccount,
   getCurrentBalance,
   getCurrentAccount,
   calcMarketGasCost,
@@ -15,11 +13,10 @@ import {
   getEtherTokens,
 } from 'api'
 
-import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
+import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
-import { findDefaultProvider, isGnosisInitialized, getUportDefaultAccount } from 'selectors/blockchain'
+import { findDefaultProvider, isGnosisInitialized } from 'selectors/blockchain'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -88,11 +85,17 @@ export const initGnosis = () => async (dispatch, getState) => {
 
     // determine new provider
     const newProvider = findDefaultProvider(state)
+
     if (newProvider) {
       await dispatch(setActiveProvider(newProvider.name))
       // init Gnosis connection
-      const opts = getGnosisJsOptions(newProvider)
-      await initGnosisConnection(opts)
+      if (newProvider.account) {
+        const opts = getGnosisJsOptions(newProvider)
+        await initGnosisConnection(opts)
+      } else {
+        throw new Error('No account found')
+      }
+
       await dispatch(setGnosisInitialized({ initialized: true }))
       await requestEtherTokens()
     }
@@ -138,32 +141,11 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
       // is UPORT we do not want to scan the code again
       await dispatch(initGnosis())
     }
-
-    return
-  }
-
-  if (provider.constructor.providerName === 'UPORT') {
-    await dispatch(initGnosis())
-    const account = (await getGnosisConnection()).defaultAccount
-    const balance = await getOlympiaTokensByAccount(account)
-    await dispatch(
-      updateProvider({
-        ...data,
-        provider: provider.constructor.providerName,
-        account,
-        balance: weiToEth(balance),
-      }),
-    )
-
-    await dispatch(fetchOlympiaUserData(account))
   }
 }
 
-export const runProviderRegister = (provider, data) => async (dispatch, getState) => {
+export const runProviderRegister = (provider, data) => async (dispatch) => {
   const providerData = { ...data }
-  if (provider.constructor.providerName === 'UPORT') {
-    providerData.account = getUportDefaultAccount(getState())
-  }
   await dispatch(
     registerProvider({
       provider: provider.constructor.providerName,

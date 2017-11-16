@@ -9,8 +9,6 @@ import delay from 'await-delay'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
-import uPortInstance, { requestCredentials } from 'integrations/uport/connector'
-
 let gnosisInstance
 
 export const {
@@ -244,13 +242,6 @@ export const closeMarket = async (market) => {
 export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
 
-  if (uPortInstance.firstReq) {
-    // set firstReq to false so uPort intro modal is not shown
-
-    uPortInstance.firstReq = false
-    await requestCredentials()
-  }
-
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
@@ -283,13 +274,6 @@ export const resolveEvent = async (event, selectedOutcomeIndex) => {
 export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenCount, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
 
-  if (uPortInstance.firstReq) {
-    // set firstReq to false so uPort intro modal is not shown
-
-    uPortInstance.firstReq = false
-    await requestCredentials()
-  }
-
   const outcomeTokenCountWei = Decimal(outcomeTokenCount)
     .mul(1e18)
     .toString()
@@ -307,13 +291,6 @@ export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenC
 export const redeemWinnings = async (eventType, eventAddress) => {
   const gnosis = await getGnosisConnection()
 
-  if (uPortInstance.firstReq) {
-    // set firstReq to false so uPort intro modal is not shown
-
-    uPortInstance.firstReq = false
-    await requestCredentials()
-  }
-
   const eventContract =
     eventType === OUTCOME_TYPES.CATEGORICAL
       ? await gnosis.contracts.CategoricalEvent.at(eventAddress)
@@ -327,13 +304,6 @@ export const redeemWinnings = async (eventType, eventAddress) => {
 
 export const withdrawFees = async (marketAddress) => {
   const gnosis = await getGnosisConnection()
-
-  if (uPortInstance.firstReq) {
-    // set firstReq to false so uPort intro modal is not shown
-
-    uPortInstance.firstReq = false
-    await requestCredentials()
-  }
 
   const marketContract = gnosis.contracts.Market.at(marketAddress)
 
