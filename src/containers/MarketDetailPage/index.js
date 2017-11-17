@@ -19,6 +19,7 @@ import {
 import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
 import {
   getCurrentAccount,
+  getCurrentBalance,
   getGasCosts,
   getGasPrice,
   isGasCostFetched,
@@ -53,6 +54,7 @@ const mapStateToProps = (state, ownProps) => {
     isGasPriceFetched: isGasPriceFetched(state),
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
+    currentBalance: getCurrentBalance(state),
   }
 }
 
