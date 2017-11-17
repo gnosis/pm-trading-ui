@@ -6,7 +6,12 @@ import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
-import { COLOR_SCHEME_DEFAULT, LOWEST_DISPLAYED_VALUE, TRANSACTION_DESCRIPTIONS, RESOLUTION_TIME } from 'utils/constants'
+import {
+  COLOR_SCHEME_DEFAULT,
+  LOWEST_DISPLAYED_VALUE,
+  TRANSACTION_DESCRIPTIONS,
+  RESOLUTION_TIME,
+} from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
@@ -136,9 +141,7 @@ class Dashboard extends Component {
                   className={'entry__color'}
                   style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }}
                 />
-                <div className="dashboardMarket--highlight">
-                  {getOutcomeName(market, holding.outcomeToken.index)}
-                </div>
+                <div className="dashboardMarket--highlight">{getOutcomeName(market, holding.outcomeToken.index)}</div>
               </div>
               <div className="col-md-3 dashboardMarket--highlight">
                 {Decimal(holding.balance)
@@ -232,13 +235,18 @@ class Dashboard extends Component {
       market =>
         process.env.WHITELIST[market.creator] && !market.oracle.isOutcomeSet && !market.event.isWinningOutcomeSet,
     )
-    const newMarkets = whitelistedMarkets.filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
+    const newMarkets = whitelistedMarkets
+      .filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
+      .sort((a, b) => a.creationDate > b.creationDate)
+      .slice(0, 5)
+
     /* const closingMarkets = markets.filter(
       market => moment.utc(market.eventDescription.resolutionDate).isBetween(moment(), moment().add(24, 'hours')),
     )*/
     let closingMarkets = whitelistedMarkets
       .filter(market => new Date() - new Date(market.eventDescription.resolutionDate) < 0)
       .sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
+      .slice(0, 5)
 
     if (marketType === 'newMarkets') {
       return (
