@@ -21,56 +21,61 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     return marginalPrice.toFixed()
   })
 
+  // show only treding outcome
   if (showOnlyTrendingOutcome && !market.oracle.isOutcomeSet) {
     const tokenDistributionInt = tokenDistribution.map(outcome => parseInt(parseFloat(outcome) * 10000, 10))
     const trendingOutcomeIndex = tokenDistributionInt.indexOf(Math.max(...tokenDistributionInt))
+    const outcomeEntryStyle = {
+      backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex],
+    }
+    const treningMarginalPricePercent = market.marginalPrices
+      ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0)
+      : 0
+
     return (
       <div className="outcomes outcomes--categorical">
-        <div className="entry__color" style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex] }} />
+        <div className="entry__color" style={outcomeEntryStyle} />
         <div className="outcome">{renderOutcomes[trendingOutcomeIndex]}</div>
-        <div>
-          {market.marginalPrices ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0) : 0}%
-        </div>
+        <div>{treningMarginalPricePercent}%</div>
         <div className="date">{showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}</div>
       </div>
     )
   }
 
+  // show only winning outcome
   if (market.oracle.isOutcomeSet && market.oracle.outcome !== undefined) {
+    const tokenDistributionPercent = `${Math.round(tokenDistribution[market.oracle.outcome] * 100).toFixed(0)}%`
+
     return (
       <div className={`${className} outcomes outcomes--categorical`}>
         <div className="outcome outcome__winning">
           {renderOutcomes[market.oracle.outcome]}
-          <div className="outcome__bar--value">{`${Math.round(tokenDistribution[market.oracle.outcome] * 100).toFixed(
-            0,
-          )}%`}</div>
+          <div className="outcome__bar--value">{tokenDistributionPercent}</div>
         </div>
       </div>
     )
   }
 
+  // show all outcomes
   return (
     <div className={`${className} outcomes outcomes--categorical`}>
       {renderOutcomes.map((outcome, outcomeIndex) => {
         if (market.oracle.isOutcomeSet && market.oracle.outcome !== outcomeIndex) {
           return <div key={outcomeIndex} className="outcome" />
         }
+        const outcomeBarStyle = {
+          width: `${tokenDistribution[outcomeIndex] * 100}%`,
+          backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex],
+        }
+        const tokenDistributionPercent = `${Math.round(tokenDistribution[outcomeIndex] * 100).toFixed(0)}%`
 
         return (
           <div key={outcomeIndex} className="outcome">
             <div className="outcome__bar">
-              <div
-                className="outcome__bar--inner"
-                style={{
-                  width: `${tokenDistribution[outcomeIndex] * 100}%`,
-                  backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex],
-                }}
-              >
+              <div className="outcome__bar--inner" style={outcomeBarStyle}>
                 <div className="outcome__bar--label">
                   {renderOutcomes[outcomeIndex]}
-                  <div className="outcome__bar--value">{`${Math.round(tokenDistribution[outcomeIndex] * 100).toFixed(
-                    0,
-                  )}%`}</div>
+                  <div className="outcome__bar--value">{tokenDistributionPercent}</div>
                 </div>
               </div>
             </div>
