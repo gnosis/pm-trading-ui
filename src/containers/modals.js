@@ -1,3 +1,4 @@
 export ModalMarketProgress from 'containers/ModalMarketProgress'
 export ModalNetworkCheck from 'containers/ModalNetworkCheck'
+export ModalOutcomePriceChanged from 'containers/ModalOutcomePriceChanged'
 export ModalTransactionsExplanation from 'containers/ModalTransactionsExplanation'

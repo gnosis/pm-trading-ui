@@ -1,3 +1,4 @@
+import allowedRangePrice from 'utils/marginPrice'
 import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
@@ -349,6 +350,15 @@ export const buyMarketShares = (
   const transactions = [
     DEPOSIT(cost, 'OLY-Token', outcomeTokenCount.div(1e18).toDP(2).toNumber()),
   ]
+
+  const payload = (await api.requestMarket(market.address))
+  const updatedMarket = payload.entities.markets[market.address]
+  const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
+  const oldPrice = market.marginalPrices[outcomeIndex]
+  if (!allowedRangePrice(oldPrice, updatedPrice)) {
+    dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
+    return await dispatch(receiveEntities(payload))
+  }
 
   gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions start'])
 
