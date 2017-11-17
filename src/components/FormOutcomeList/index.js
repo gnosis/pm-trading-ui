@@ -15,7 +15,10 @@ class FormOutcomeList extends Component {
     const { target } = event
     const { value } = target
     const index = +target.getAttribute('data-index')
-    if (index === fields.length - 1 && value != null && value.length > 0) {
+
+    // new outcome is added when user started typing inside the last field
+    const addNewOutcome = index === fields.length - 1 && value != null && value.length > 0
+    if (addNewOutcome) {
       fields.push('')
     }
   }
@@ -29,29 +32,37 @@ class FormOutcomeList extends Component {
 
   render() {
     const { fields, label, meta: { error, invalid } } = this.props
+    const showDeleteButton = fields.length > 2
+
     return (
       <div className="formOutcomeList">
         <label htmlFor="outcomes" className="formOutcomeList__label">
           {label}
         </label>
-        {fields.map((field, index) => (
-          <div key={index} className={'formOutcomeList__entry'}>
-            <div className={'entry__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }} />
-            <Field
-              component={FormInput}
-              name={`${field}`}
-              onChange={this.addOutcomeOnChange}
-              data-index={index}
-              className="formOutcomeListInput"
-              placeholder="Add another..."
-            />
-            {fields.length > 2 && (
-              <a className="entry__delete" href="" tabIndex="-1" data-index={index} onClick={this.removeOutcome}>
-                Delete
-              </a>
-            )}
-          </div>
-        ))}
+        {fields.map((field, index) => {
+          const outcomeEntryStyle = {
+            backgroundColor: COLOR_SCHEME_DEFAULT[index],
+          }
+
+          return (
+            <div key={index} className={'formOutcomeList__entry'}>
+              <div className="entry__color" style={outcomeEntryStyle} />
+              <Field
+                component={FormInput}
+                name={field}
+                onChange={this.addOutcomeOnChange}
+                data-index={index}
+                className="formOutcomeListInput"
+                placeholder="Add another..."
+              />
+              {showDeleteButton && (
+                <a className="entry__delete" href="" tabIndex="-1" data-index={index} onClick={this.removeOutcome}>
+                  Delete
+                </a>
+              )}
+            </div>
+          )
+        })}
         <a className="entry__add" onClick={this.addOutcome}>
           Add
         </a>
