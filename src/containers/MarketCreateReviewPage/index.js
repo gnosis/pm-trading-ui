@@ -5,7 +5,7 @@ import moment from 'moment'
 import uuid from 'uuid/v4'
 
 import MarketCreateReview from 'components/MarketCreateReview'
-import { getGasCosts, getGasPrice, getCurrentAccount } from 'selectors/blockchain'
+import { getGasCosts, getGasPrice, getCurrentAccount, getCurrentBalance } from 'selectors/blockchain'
 import { createMarket } from 'actions/market'
 import { openModal } from 'actions/modal'
 import { ORACLE_TYPES, OUTCOME_TYPES } from 'utils/constants'
@@ -70,6 +70,7 @@ const mapStateToProps = (state) => {
   const selector = formValueSelector(FORM_NAME)
   const hasValues = typeof (selector(state, 'outcomeType')) !== 'undefined'
   const currentAccount = getCurrentAccount(state)
+  const currentBalance = getCurrentBalance(state)
 
   if (hasValues) {
     const submitting = isSubmitting(FORM_NAME)(state)
@@ -113,6 +114,7 @@ const mapStateToProps = (state) => {
       hasValues,
       submitting,
       currentAccount,
+      currentBalance,
     }
   }
 
