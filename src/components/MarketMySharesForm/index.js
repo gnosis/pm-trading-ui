@@ -96,7 +96,7 @@ class MarketMySharesForm extends Component {
 
   @autobind
   validateTokenCount(val, values, props) {
-    if (parseFloat(val) >= 1000) {
+    if (parseFloat(val) >= 1000 || !/^-?\d+\.?\d*$/.test(val)) {
       return 'Invalid amount'
     }
 
@@ -242,8 +242,9 @@ class MarketMySharesForm extends Component {
       }
     }
 
-    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
-    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0).mul(1e18))
+    const currentTokenBalance = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
+    const newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
+
     let earnings = new Decimal(0)
     if (share.balance && parseFloat(selectedSellAmount) < 1000) {
       earnings = weiToEth(
@@ -258,9 +259,12 @@ class MarketMySharesForm extends Component {
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
+      if (
+        outcomeTokenIndex === share.outcomeToken.index &&
+        !currentTokenBalance.sub(newTokenBalance.toString()).isZero()
+      ) {
         return Decimal(outcomeTokenAmount)
-          .sub(currentTokenCount.sub(newTokenCount.toString()).toString())
+          .sub(currentTokenBalance.sub(newTokenBalance.toString()).toString())
           .floor()
           .toString()
       }
@@ -387,7 +391,9 @@ class MarketMySharesForm extends Component {
       return (
         <div className="marketMyShares">
           <h2 className="marketMyShares__heading">You don&apos;t hold any shares for this market.</h2>
-          <h2><small>It may take some time for the blockchain to mine your share purchase.</small></h2>
+          <h2>
+            <small>It may take some time for the blockchain to mine your share purchase.</small>
+          </h2>
         </div>
       )
     }
