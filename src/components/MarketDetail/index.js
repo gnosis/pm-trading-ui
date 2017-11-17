@@ -242,6 +242,7 @@ class MarketDetail extends Component {
     const marketClosed = market.stage === MARKET_STAGES.MARKET_CLOSED
     const marketResolved = market.oracle.isOutcomeSet
     const marketClosedOrFinished = marketClosed || marketResolved
+    const marketStatus = marketResolved ? 'resolved.' : 'closed.'
 
     const winnings = marketShares.reduce((sum, share) => {
       const shareWinnings = weiToEth(calcLMSRProfit({
@@ -286,7 +287,7 @@ class MarketDetail extends Component {
             </div>
             {marketClosedOrFinished && (
               <div className="marketTimer__marketClosed">
-                {`This market was ${marketResolved ? 'resolved.' : 'closed.'}`}
+                {`This market was ${marketStatus}`}
               </div>
             )}
           </div>
