@@ -26,6 +26,9 @@ const ScalarSlider = ({
     .add(bigLowerBound.div(10 ** decimals).toString())
   const selectedPercentage = new Decimal(marginalPriceSelected).mul(100)
 
+  const currentValueSliderStyle = { left: `${percentage.toFixed(4)}%` }
+  const selectedValueSliderStyle = { left: `${selectedPercentage.toFixed(4)}%` }
+
   return (
     <div className="scalarSlider">
       <div className="scalarSlider__inner">
@@ -34,7 +37,7 @@ const ScalarSlider = ({
           <div className="scalarSlider__lowerBoundLabel">Lower Bound</div>
         </div>
         <div className="scalarSlider__bar" title="Please enter a value on the right!">
-          <div className="scalarSlider__handle" style={{ left: `${percentage.toFixed(4)}%` }}>
+          <div className="scalarSlider__handle" style={currentValueSliderStyle}>
             <div className="scalarSlider__handleText">
               <div className="scalarSlider__handleTextLabel">Current Bet</div>
               <DecimalValue value={value} decimals={decimals} /> {unit}
@@ -45,7 +48,7 @@ const ScalarSlider = ({
               'scalarSlider__handle--below--pinRight': selectedPercentage.gt(75),
               'scalarSlider__handle--below--pinLeft': selectedPercentage.lt(25),
             })}
-            style={{ left: `${selectedPercentage.toFixed(4)}%` }}
+            style={selectedValueSliderStyle}
           >
             <div className="scalarSlider__handleText">
               <div className="scalarSlider__handleTextLabel">Selected Bet</div>
