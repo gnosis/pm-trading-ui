@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
-import Footer from 'components/Footer'
 import PageFrame from 'components/layout/PageFrame'
 import Block from 'components/layout/Block'
 import Title from 'components/layout/Title'
@@ -23,6 +22,15 @@ import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 
 import Metrics from './Metrics'
 import './dashboard.less'
+
+const getNewMarkets = (markets = [], limit) =>
+  markets.sort((a, b) => a.creationDate < b.creationDate).slice(0, limit || markets.length)
+
+const getSoonClosingMarkets = (markets = [], limit) =>
+  markets
+    .filter(market => new Date() - new Date(market.eventDescription.resolutionDate) < 0)
+    .sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
+    .slice(0, markets.length || limit)
 
 class Dashboard extends Component {
   componentWillMount() {
@@ -230,21 +238,12 @@ class Dashboard extends Component {
 
   renderWidget(marketType) {
     const { markets, accountShares, accountTrades } = this.props
-    const oneDayHours = 24 * 60 * 60 * 1000
+
     const whitelistedMarkets = markets.filter(market =>
       process.env.WHITELIST[market.creator] && !market.oracle.isOutcomeSet && !market.event.isWinningOutcomeSet)
-    const newMarkets = whitelistedMarkets
-      .filter(market => new Date() - new Date(market.creationDate) < oneDayHours)
-      .sort((a, b) => a.creationDate > b.creationDate)
-      .slice(0, 5)
+    const newMarkets = getNewMarkets(whitelistedMarkets, 5)
 
-    /* const closingMarkets = markets.filter(
-      market => moment.utc(market.eventDescription.resolutionDate).isBetween(moment(), moment().add(24, 'hours')),
-    ) */
-    let closingMarkets = whitelistedMarkets
-      .filter(market => new Date() - new Date(market.eventDescription.resolutionDate) < 0)
-      .sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
-      .slice(0, 5)
+    const closingMarkets = getSoonClosingMarkets(whitelistedMarkets, 5)
 
     if (marketType === 'newMarkets') {
       return (
@@ -263,9 +262,6 @@ class Dashboard extends Component {
     }
 
     if (marketType === 'closingMarkets') {
-      if (closingMarkets.length > 4) {
-        closingMarkets = closingMarkets.slice(0, 4)
-      }
       return (
         <div className="dashboardWidget col-md-6">
           <div className="dashboardWidget__market-title">Soon-Closing Markets</div>
