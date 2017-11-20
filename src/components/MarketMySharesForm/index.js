@@ -55,7 +55,7 @@ class MarketMySharesForm extends Component {
     const { extendedSellId } = this.state
     const { selectedSellAmount, marketShares, initialize } = this.props
 
-    if (selectedSellAmount === undefined && extendedSellId !== undefined) {
+    if (selectedSellAmount === undefined && extendedSellId !== undefined && marketShares.length) {
       // By default form is filled up with fill amount
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
       const fullAmount = Decimal(share.balance)
@@ -156,9 +156,9 @@ class MarketMySharesForm extends Component {
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
         <td>
           {Decimal(share.balance)
-              .div(1e18)
-              .gte(LOWEST_DISPLAYED_VALUE) ? (
-                <DecimalValue value={Decimal(share.balance).div(1e18)} />
+            .div(1e18)
+            .gte(LOWEST_DISPLAYED_VALUE) ? (
+              <DecimalValue value={Decimal(share.balance).div(1e18)} />
             ) : (
               `< ${LOWEST_DISPLAYED_VALUE}`
             )}
@@ -170,14 +170,14 @@ class MarketMySharesForm extends Component {
         <td>
           {/* eslint-disable no-script-url */}
           {!resolved && (
-          <a
-            href="javascript:void(0);"
-            className="marketMyShares__sellButton"
-            onClick={e => this.handleShowSellView(e, share.id)}
-          >
+            <a
+              href="javascript:void(0);"
+              className="marketMyShares__sellButton"
+              onClick={e => this.handleShowSellView(e, share.id)}
+            >
                 Sell
-          </a>
-            )}
+            </a>
+          )}
           {/* eslint-enable no-script-url */}
         </td>
       </tr>)
@@ -185,7 +185,7 @@ class MarketMySharesForm extends Component {
       if (share.id === extendedSellId) {
         tableRows.push(<tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
           <td colSpan={5}>{this.renderSellShareView()}</td>
-                       </tr>)
+        </tr>)
       }
     })
 
