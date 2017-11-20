@@ -28,15 +28,15 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     const outcomeEntryStyle = {
       backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex],
     }
-    const treningMarginalPricePercent = market.marginalPrices
+    const trendingMarginalPricePercent = market.marginalPrices
       ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0)
-      : 0
+      : '0'
 
     return (
       <div className="outcomes outcomes--categorical">
         <div className="entry__color" style={outcomeEntryStyle} />
         <div className="outcome">{renderOutcomes[trendingOutcomeIndex]}</div>
-        <div>{treningMarginalPricePercent}%</div>
+        <div>{trendingMarginalPricePercent}%</div>
         <div className="date">{showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}</div>
       </div>
     )
