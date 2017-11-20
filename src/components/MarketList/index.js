@@ -30,11 +30,11 @@ const resolutionFilters = [
     value: '',
   },
   {
-    label: 'Resolved',
+    label: 'Open',
     value: 'RESOLVED',
   },
   {
-    label: 'Unresolved',
+    label: 'Ended',
     value: 'UNRESOLVED',
   },
 ]
@@ -204,7 +204,7 @@ class MarketList extends Component {
     const openMarketsAmount = markets.filter(
       ({ stage, oracle: { isOutcomeSet } }) => stage !== MARKET_STAGES.MARKET_CLOSED && !isOutcomeSet,
     ).length
-    const closingSoonMarketsAmount = markets.filter(
+    const endingSoonMarketsAmount = markets.filter(
       ({ eventDescription: { resolutionDate } }) => new Date(resolutionDate) - new Date() < threeDayMSeconds,
     ).length
     const newMarketsAmount = markets.filter(
@@ -228,8 +228,8 @@ class MarketList extends Component {
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market--countdown" />
-                <span className="marketStats__value">{closingSoonMarketsAmount}</span>
-                <div className="marketStats__label">Closing Soon</div>
+                <span className="marketStats__value">{endingSoonMarketsAmount}</span>
+                <div className="marketStats__label">Ending Soon</div>
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--new" />
