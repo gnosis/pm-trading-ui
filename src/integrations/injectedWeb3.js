@@ -1,14 +1,25 @@
-import autobind from 'autobind-decorator'
-import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
+import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS, WATCHABLE } from 'integrations/constants'
+import { values } from 'lodash'
 
 import { weiToEth, promisify } from 'utils/helpers'
 
-class InjectedWeb3 {
+class BaseIntegration {
   runProviderUpdate() {}
   runProviderRegister() {}
 
-  constructor() {
-    this.watcherInterval = setInterval(this.watcher, 1000)
+  /**
+   *
+   * @param {object} opts - Constructor Options
+   * @param {string} opts.watchersEnabled - Array of watchable properties. Empty array disables watcher completely @see WATCHABLE
+   * @param {number} opts.defaultTimeout - Time interval for watcher
+   */
+  constructor({ watchersEnabled = values(WATCHABLE), defaultTimeout = 1000 } = {}) {
+    this.defaultTimeout = defaultTimeout
+    this.watchersEnabled = watchersEnabled
+
+    if (this.watchersEnabled.length > 0) {
+      this.watcherInterval = setInterval(this.watcher, defaultTimeout)
+    }
   }
 
   /**
@@ -18,8 +29,10 @@ class InjectedWeb3 {
    * @param {function} opts.runProviderRegister - Function to run when this provider registers
    */
   async initialize(opts) {
-    this.runProviderUpdate = typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
-    this.runProviderRegister = typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
+    this.runProviderUpdate =
+      typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
+    this.runProviderRegister =
+      typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
   }
 
   /**
@@ -41,7 +54,7 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Network Identifier
    */
   async getNetworkId() {
-    return await promisify(this.web3.version.getNetwork, [], 10000)
+    return await promisify(this.web3.version.getNetwork, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
   }
 
   /**
@@ -50,7 +63,11 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Accountaddress
    */
   async getAccount() {
-    const accounts = await promisify(this.web3.eth.getAccounts, [], 10000)
+    const accounts = await promisify(
+      this.web3.eth.getAccounts,
+      [],
+      this.defaultTimeout > 0 ? this.defaultTimeout : undefined,
+    )
 
     return accounts && accounts.length ? accounts[0] : null
   }
@@ -65,7 +82,11 @@ class InjectedWeb3 {
       throw new Error('No Account available')
     }
 
-    const balance = await promisify(this.web3.eth.getBalance, [this.account], 10000)
+    const balance = await promisify(
+      this.web3.eth.getBalance,
+      [this.account],
+      this.defaultTimeout > 0 ? this.defaultTimeout : undefined,
+    )
 
     if (typeof balance !== 'undefined') {
       return weiToEth(balance.toString())
@@ -78,26 +99,32 @@ class InjectedWeb3 {
    * Periodic updater to get all relevant information from this provider
    * @async
    */
-  @autobind
-  async watcher() {
+
+  watcher = async () => {
     try {
-      const currentAccount = await this.getAccount()
-      if (this.account !== currentAccount) {
-        this.account = currentAccount
-        await this.runProviderUpdate(this, { account: this.account })
+      if (this.watchersEnabled.indexOf(WATCHABLE.ACCOUNT) > -1) {
+        const currentAccount = await this.getAccount()
+        if (this.account !== currentAccount) {
+          this.account = currentAccount
+          await this.runProviderUpdate(this, { account: this.account })
+        }
       }
 
-      const currentNetworkId = await this.getNetworkId()
-      if (this.networkId !== currentNetworkId) {
-        this.networkId = currentNetworkId
-        this.network = await this.getNetwork()
-        await this.runProviderUpdate(this, { network: this.network, networkId: this.networkId })
+      if (this.watchersEnabled.indexOf(WATCHABLE.NETWORK) > -1) {
+        const currentNetworkId = await this.getNetworkId()
+        if (this.networkId !== currentNetworkId) {
+          this.networkId = currentNetworkId
+          this.network = await this.getNetwork()
+          await this.runProviderUpdate(this, { network: this.network, networkId: this.networkId })
+        }
       }
 
-      const currentBalance = await this.getBalance()
-      if (this.balance !== currentBalance) {
-        this.balance = currentBalance
-        await this.runProviderUpdate(this, { balance: this.balance })
+      if (this.watchersEnabled.indexOf(WATCHABLE.BALANCE) > -1) {
+        const currentBalance = await this.getBalance()
+        if (this.balance !== currentBalance) {
+          this.balance = currentBalance
+          await this.runProviderUpdate(this, { balance: this.balance })
+        }
       }
 
       if (!this.walletEnabled && this.account) {
@@ -111,7 +138,6 @@ class InjectedWeb3 {
       }
     }
   }
-
 }
 
-export default InjectedWeb3
+export default BaseIntegration
