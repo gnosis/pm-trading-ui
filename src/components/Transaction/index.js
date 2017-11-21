@@ -25,7 +25,9 @@ DetailLabel.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 }
 
-const Transaction = ({ label, startTime, endTime, completed, completionStatus, progress, type }) => (
+const Transaction = ({
+  label, startTime, endTime, completed, completionStatus, progress, type,
+}) => (
   <div className={`transactionsPage__transaction transactionsPage__transaction--${type} transaction`}>
     <ProgressIndicator completed={completed} completionStatus={completionStatus} progress={progress} />
     <div className="transaction__content">
@@ -47,7 +49,8 @@ const Transaction = ({ label, startTime, endTime, completed, completionStatus, p
             <DetailLabel label="Transaction Time">{`took ${moment(endTime).from(
               moment(startTime),
               true,
-            )}`}</DetailLabel>
+            )}`}
+            </DetailLabel>
           </div>
         )}
       </div>

@@ -11,7 +11,9 @@ import './outcomeCategorical.less'
 const OutcomeCategorical = ({ market, opts = {} }) => {
   const renderOutcomes = market.eventDescription.outcomes
   const showOnlyWinningOutcome = market.oracle.isOutcomeSet && market.oracle.outcome !== undefined
-  const { showOnlyTrendingOutcome, showDate, dateFormat, className } = opts
+  const {
+    showOnlyTrendingOutcome, showDate, dateFormat, className,
+  } = opts
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.netOutcomeTokensSold,
