@@ -11,14 +11,14 @@ class BaseIntegration {
    *
    * @param {object} opts - Constructor Options
    * @param {string} opts.watchersEnabled - Array of watchable properties. Empty array disables watcher completely @see WATCHABLE
-   * @param {number} opts.defaultTimeout - Time interval for watcher
+   * @param {number} opts.watcherTimeout - Time interval for watcher
    */
-  constructor({ watchersEnabled = values(WATCHABLE), defaultTimeout = 1000 } = {}) {
-    this.defaultTimeout = defaultTimeout
+  constructor({ watchersEnabled = values(WATCHABLE), watcherTimeout = 1000 } = {}) {
+    this.watcherTimeout = watcherTimeout
     this.watchersEnabled = watchersEnabled
 
     if (this.watchersEnabled.length > 0) {
-      this.watcherInterval = setInterval(this.watcher, defaultTimeout)
+      this.watcherInterval = setInterval(this.watcher, watcherTimeout)
     }
   }
 

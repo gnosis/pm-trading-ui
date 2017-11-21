@@ -14,7 +14,7 @@ class Uport extends BaseIntegration {
    */
   static providerPriority = 100
   static watchersEnabled = [WATCHABLE.BALANCE, WATCHABLE.NETWORK]
-  static watcherTimeout = 0
+  static watcherTimeout = 5000
 
   constructor() {
     const { watchersEnabled, watcherTimeout } = Uport
