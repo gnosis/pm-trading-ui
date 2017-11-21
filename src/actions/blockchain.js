@@ -12,12 +12,14 @@ import {
   calcRedeemWinningsGasCost,
   getGasPrice,
   getEtherTokens,
+  getOlympiaTokensByAccount,
 } from 'api'
 
-import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
+import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider } from 'selectors/blockchain'
+
+import { findDefaultProvider, isGnosisInitialized, getSelectedProvider } from 'selectors/blockchain'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -114,4 +116,47 @@ export const initGnosis = () => async (dispatch, getState) => {
     console.warn(`Gnosis.js connection Error: ${error}`)
     return await dispatch(setConnectionStatus({ connected: false }))
   }
+}
+
+export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
+  await dispatch(updateProvider({
+    provider: provider.constructor.providerName,
+    ...data,
+  }))
+
+  if (isGnosisInitialized(getState())) {
+    let requireGnosisReinit = false
+    GNOSIS_REINIT_KEYS.forEach((searchKey) => {
+      if (Object.keys(data).indexOf(searchKey) > -1) {
+        requireGnosisReinit = true
+      }
+    })
+
+    if (requireGnosisReinit) {
+      // Just in case any other provider is updated and the default one
+      // is UPORT we do not want to scan the code again
+      await dispatch(initGnosis())
+    }
+  }
+}
+
+export const runProviderRegister = (provider, data) => async (dispatch) => {
+  const providerData = { ...data }
+  await dispatch(registerProvider({
+    provider: provider.constructor.providerName,
+    ...providerData,
+  }))
+}
+
+export const refreshTokenBalance = () => async (dispatch, getState) => {
+  const state = getState()
+  const { name: providerName, ...provider } = getSelectedProvider(state)
+
+  const balance = await getOlympiaTokensByAccount(provider.account)
+
+  await dispatch(updateProvider({
+    provider: providerName,
+    ...provider,
+    balance: weiToEth(balance),
+  }))
 }

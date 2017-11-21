@@ -17,6 +17,10 @@ import {
 } from 'actions/transactions'
 
 import {
+  refreshTokenBalance,
+} from 'actions/blockchain'
+
+import {
   createEventDescriptionModel,
   createOracleModel,
   createEventModel,
@@ -318,6 +322,8 @@ export const createMarket = options => async (dispatch) => {
     throw e
   }
 
+  dispatch(refreshTokenBalance())
+
   await dispatch(closeLog(transactionId))
   return marketContractData
 }
@@ -395,6 +401,8 @@ export const buyMarketShares = (
       netOutcomeTokensSold,
     },
   }))
+
+  dispatch(refreshTokenBalance())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
@@ -480,6 +488,8 @@ export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
   await dispatch(updateEntity({ entityType: 'oracles', data: { id: market.oracle.address, isOutcomeSet: true, outcome: outcomeIndex } }))
   await dispatch(updateEntity({ entityType: 'events', data: { id: market.event.address, isWiningOutcomeSet: true } }))
 
+  dispatch(refreshTokenBalance())
+
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
@@ -511,6 +521,8 @@ export const redeemWinnings = market => async (dispatch) => {
     throw e
   }
 
+  dispatch(closeModal())
+
   // TODO: Update market so we can't redeem again
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
@@ -536,6 +548,8 @@ export const withdrawFees = market => async (dispatch) => {
 
     throw e
   }
+
+  dispatch(refreshTokenBalance())
 
   // TODO: Update market so we can't withdraw again
 
@@ -571,6 +585,8 @@ export const closeMarket = market => async (dispatch) => {
       stage,
     },
   }))
+
+  dispatch(refreshTokenBalance())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
