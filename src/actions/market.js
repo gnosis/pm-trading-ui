@@ -393,6 +393,15 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnin
   const outcomeCountWei = Decimal(outcomeTokenCount).mul(1e18)
   const approvalResetAmount = outcomeCountWei.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
+  const payload = (await api.requestMarket(market.address))
+  const updatedMarket = payload.entities.markets[market.address]
+  const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
+  const oldPrice = market.marginalPrices[outcomeIndex]
+  if (!allowedRangePrice(oldPrice, updatedPrice)) {
+    dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
+    return await dispatch(receiveEntities(payload))
+  }
+
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
 
