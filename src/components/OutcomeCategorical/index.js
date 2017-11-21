@@ -10,6 +10,7 @@ import './outcomeCategorical.less'
 
 const OutcomeCategorical = ({ market, opts = {} }) => {
   const renderOutcomes = market.eventDescription.outcomes
+  const showOnlyWinningOutcome = market.oracle.isOutcomeSet && market.oracle.outcome !== undefined
   const { showOnlyTrendingOutcome, showDate, dateFormat, className } = opts
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
@@ -31,19 +32,20 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     const trendingMarginalPricePercent = market.marginalPrices
       ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0)
       : '0'
+    const resolutionDateFormatted = showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''
 
     return (
       <div className="outcomes outcomes--categorical">
         <div className="entry__color" style={outcomeEntryStyle} />
         <div className="outcome">{renderOutcomes[trendingOutcomeIndex]}</div>
         <div>{trendingMarginalPricePercent}%</div>
-        <div className="date">{showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''}</div>
+        <div className="date">{resolutionDateFormatted}</div>
       </div>
     )
   }
 
   // show only winning outcome
-  if (market.oracle.isOutcomeSet && market.oracle.outcome !== undefined) {
+  if (showOnlyWinningOutcome) {
     const tokenDistributionPercent = `${Math.round(tokenDistribution[market.oracle.outcome] * 100).toFixed(0)}%`
 
     return (
