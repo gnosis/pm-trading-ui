@@ -1,5 +1,5 @@
 import { getOlympiaTokensByAccount } from 'api'
-import { WALLET_PROVIDER } from 'integrations/constants'
+import { WALLET_PROVIDER, WATCHABLE } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
@@ -13,12 +13,12 @@ class Uport extends BaseIntegration {
    * This allows "fallback providers" like a remote ethereum host to be used as a last resort.
    */
   static providerPriority = 100
-  static enableWatcher = false
+  static watchersEnabled = [WATCHABLE.BALANCE, WATCHABLE.NETWORK]
   static watcherTimeout = 0
 
   constructor() {
-    const { enableWatcher, watcherTimeout } = Uport
-    super({ enableWatcher, watcherTimeout })
+    const { watchersEnabled, watcherTimeout } = Uport
+    super({ watchersEnabled, watcherTimeout })
   }
 
   /**
@@ -60,20 +60,20 @@ class Uport extends BaseIntegration {
       networkId: this.networkId,
       account: this.account,
     })
-    .then(async () => {
-      if (!this.account) {
-        return
-      }
-      await opts.initGnosis()
-      const balance = await getOlympiaTokensByAccount(this.account)
-      opts.runProviderUpdate(this, {
-        provider: Uport.providerName,
-        balance: weiToEth(balance),
-        account: this.account,
+      .then(async () => {
+        if (!this.account) {
+          return
+        }
+        await opts.initGnosis()
+        const balance = await getOlympiaTokensByAccount(this.account)
+        opts.runProviderUpdate(this, {
+          provider: Uport.providerName,
+          balance: weiToEth(balance),
+          account: this.account,
+        })
+        opts.dispatch(fetchOlympiaUserData(this.account))
       })
-      opts.dispatch(fetchOlympiaUserData(this.account))
-    })
-    .catch(() => opts.initGnosis())
+      .catch(() => opts.initGnosis())
   }
 }
 
