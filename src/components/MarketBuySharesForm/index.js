@@ -7,8 +7,12 @@ import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { weiToEth } from 'utils/helpers'
 import {
-  COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST,
-  SCALAR_SHORT_COLOR, SCALAR_LONG_COLOR, LIMIT_MARGIN_DEFAULT,
+  COLOR_SCHEME_DEFAULT,
+  OUTCOME_TYPES,
+  GAS_COST,
+  SCALAR_SHORT_COLOR,
+  SCALAR_LONG_COLOR,
+  LIMIT_MARGIN_DEFAULT,
 } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 
@@ -42,8 +46,10 @@ class MarketBuySharesForm extends Component {
       return new Decimal(0)
     }
 
-    const invest = new Decimal(investment).mul(1e18)
-      .div(new Decimal(100).add(limitMargin == null ? LIMIT_MARGIN_DEFAULT : limitMargin)).mul(100)
+    const invest = new Decimal(investment)
+      .mul(1e18)
+      .div(new Decimal(100).add(limitMargin == null ? LIMIT_MARGIN_DEFAULT : limitMargin))
+      .mul(100)
       .round()
     const { market: { funding, netOutcomeTokensSold, fee } } = this.props
 
@@ -83,20 +89,22 @@ class MarketBuySharesForm extends Component {
   @autobind
   handleBuyShares() {
     const {
-      market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome, limitMargin
+      market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome, limitMargin,
     } = this.props
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
 
-    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest).then(() => {
-      // Fetch new trades
-      this.props.fetchMarketTrades(market)
-      // Fetch new market participant trades
-      this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
-      // Fetch new shares
-      this.props.fetchMarketShares(defaultAccount)
-      return reset()
-    })
+    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
+      .then(() => {
+        // Fetch new trades
+        this.props.fetchMarketTrades(market)
+        // Fetch new market participant trades
+        this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
+        // Fetch new shares
+        this.props.fetchMarketShares(defaultAccount)
+        return reset()
+      })
+      .catch(e => console.log(e))
   }
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
@@ -126,7 +134,7 @@ class MarketBuySharesForm extends Component {
 
   renderCategorical() {
     const {
-      selectedBuyInvest, selectedOutcome, limitMargin, market, market: { eventDescription }
+      selectedBuyInvest, selectedOutcome, limitMargin, market, market: { eventDescription },
     } = this.props
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
