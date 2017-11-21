@@ -427,6 +427,15 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount) => asy
     ...(approvalResetAmount ? [SETTING_ALLOWANCE, OUTCOME_TOKENS] : [OUTCOME_TOKENS]),
   ]
 
+  const payload = (await api.requestMarket(market.address))
+  const updatedMarket = payload.entities.markets[market.address]
+  const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
+  const oldPrice = market.marginalPrices[outcomeIndex]
+  if (!allowedRangePrice(oldPrice, updatedPrice)) {
+    dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
+    return await dispatch(receiveEntities(payload))
+  }
+
   dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
 
   try {
