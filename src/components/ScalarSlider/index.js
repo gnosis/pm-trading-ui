@@ -7,24 +7,21 @@ import DecimalValue from 'components/DecimalValue'
 
 import './scalarSlider.less'
 
-const ScalarSlider = ({
-  lowerBound,
-  upperBound,
-  unit,
-  marginalPriceCurrent,
-  marginalPriceSelected,
-  decimals,
-}) => {
+const ScalarSlider = ({ lowerBound, upperBound, unit, marginalPriceCurrent, marginalPriceSelected, decimals }) => {
   const bigLowerBound = new Decimal(lowerBound)
   const bigUpperBound = new Decimal(upperBound)
 
   // current value
   const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
 
-  const value = new Decimal(marginalPriceCurrent).mul(bounds.toString()).add(bigLowerBound.div(10 ** decimals).toString())
+  const value = new Decimal(marginalPriceCurrent)
+    .mul(bounds.toString())
+    .add(bigLowerBound.div(10 ** decimals).toString())
   const percentage = new Decimal(marginalPriceCurrent).mul(100)
 
-  const selectedValue = new Decimal(marginalPriceSelected).mul(bounds.toString()).add(bigLowerBound.div(10 ** decimals).toString())
+  const selectedValue = new Decimal(marginalPriceSelected)
+    .mul(bounds.toString())
+    .add(bigLowerBound.div(10 ** decimals).toString())
   const selectedPercentage = new Decimal(marginalPriceSelected).mul(100)
   return (
     <div className="scalarSlider">
@@ -44,7 +41,8 @@ const ScalarSlider = ({
             className={cn('scalarSlider__handle scalarSlider__handle--below', {
               'scalarSlider__handle--below--pinRight': selectedPercentage.gt(75),
               'scalarSlider__handle--below--pinLeft': selectedPercentage.lt(25),
-            })} style={{ left: `${selectedPercentage.toFixed(4)}%` }}
+            })}
+            style={{ left: `${selectedPercentage.toFixed(4)}%` }}
           >
             <div className="scalarSlider__handleText">
               <div className="scalarSlider__handleTextLabel">Selected Bet</div>
@@ -65,7 +63,7 @@ ScalarSlider.propTypes = {
   lowerBound: PropTypes.number,
   upperBound: PropTypes.number,
   unit: PropTypes.string,
-  marginalPriceCurrent: PropTypes.number,
+  marginalPriceCurrent: PropTypes.string,
   marginalPriceSelected: PropTypes.number,
   decimals: PropTypes.number,
 }
