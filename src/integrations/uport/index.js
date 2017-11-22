@@ -75,6 +75,25 @@ class Uport extends BaseIntegration {
       })
       .catch(() => opts.initGnosis())
   }
+
+  /**
+   * Returns the balance of olympia tokens for the current default account in Wei
+   * @async
+   * @returns {Promise<string>} - Accountbalance in WEI for current account
+   */
+  async getBalance() {
+    if (!this.account) {
+      throw new Error('No Account available')
+    }
+
+    const balance = await getOlympiaTokensByAccount(this.account)
+
+    if (typeof balance !== 'undefined') {
+      return weiToEth(balance.toString())
+    }
+
+    throw new Error('Invalid Balance')
+  }
 }
 
 export default new Uport()
