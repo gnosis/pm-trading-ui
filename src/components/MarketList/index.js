@@ -32,11 +32,11 @@ const resolutionFilters = [
     value: '',
   },
   {
-    label: 'Open',
+    label: 'Ended',
     value: 'RESOLVED',
   },
   {
-    label: 'Ended',
+    label: 'Open',
     value: 'UNRESOLVED',
   },
 ]
