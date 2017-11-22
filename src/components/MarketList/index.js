@@ -207,9 +207,10 @@ class MarketList extends Component {
     const { markets } = this.props
 
     const threeDayMSeconds = 3 * 24 * 60 * 60 * 1000
+    const now = new Date()
     const openMarketsAmount = markets.filter(({ stage, oracle: { isOutcomeSet } }) => stage !== MARKET_STAGES.MARKET_CLOSED && !isOutcomeSet).length
-    const endingSoonMarketsAmount = markets.filter(({ eventDescription: { resolutionDate } }) => new Date(resolutionDate) - new Date() < threeDayMSeconds).length
-    const newMarketsAmount = markets.filter(({ creationDate }) => new Date() - new Date(creationDate) < threeDayMSeconds).length
+    const endingSoonMarketsAmount = markets.filter(({ eventDescription: { resolutionDate } }) => new Date(resolutionDate) - now < threeDayMSeconds).length
+    const newMarketsAmount = markets.filter(({ creationDate }) => now - new Date(creationDate) < threeDayMSeconds).length
 
     return (
       <div className="marketListPage">
