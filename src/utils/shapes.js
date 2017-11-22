@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { ETHEREUM_NETWORK, WALLET_PROVIDER } from 'integrations/constants'
-import { TRANSACTION_COMPLETE_STATUS, INTERACTION_STATE } from './constants'
+import { TRANSACTION_COMPLETE_STATUS } from './constants'
 
 export const eventDescriptionShape = PropTypes.shape({
   description: PropTypes.string,
@@ -22,7 +22,7 @@ export const marketShareShape = PropTypes.shape({
   event: PropTypes.string,
   eventDescription: eventDescriptionShape,
   id: PropTypes.string,
-  marginalPrice: PropTypes.number,
+  marginalPrice: PropTypes.string,
   outcomeToken: outcomeTokenShape,
   owner: PropTypes.string,
 })
