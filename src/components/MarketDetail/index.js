@@ -245,10 +245,10 @@ class MarketDetail extends Component {
       .diff(moment(), 'hours')
     const { marketShares } = this.props
 
-    const marketClosedOrFinished = (
-      market.stage === MARKET_STAGES.MARKET_CLOSED ||
-      market.oracle.isOutcomeSet
-    )
+    const marketClosed = market.stage === MARKET_STAGES.MARKET_CLOSED
+    const marketResolved = market.oracle.isOutcomeSet
+    const marketClosedOrFinished = marketClosed || marketResolved
+    const marketStatus = marketResolved ? 'resolved.' : 'closed.'
 
     const winnings = marketShares.reduce((sum, share) => {
       const shareWinnings = weiToEth(
@@ -294,7 +294,9 @@ class MarketDetail extends Component {
                 .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
             {marketClosedOrFinished && (
-            <div className="marketTimer__marketClosed">{timeToResolution < 0 ? 'This market was resolved.' : 'This market was closed.'}</div>
+              <div className="marketTimer__marketClosed">
+                {`This market was ${marketStatus}`}
+              </div>
             )}
           </div>
         )}

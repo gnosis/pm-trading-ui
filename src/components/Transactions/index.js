@@ -1,88 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 
-import { RESOLUTION_TIME, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
+import Transaction from 'components/Transaction'
 import { transactionShape } from 'utils/shapes'
 
-import ProgressSpinner from 'components/ProgressSpinner'
-
 import './Transactions.less'
-
-const completionMessages = {
-  [TRANSACTION_COMPLETE_STATUS.NO_ERROR]: 'Transaction finished successfully',
-  [TRANSACTION_COMPLETE_STATUS.ERROR]: 'Transaction did not finish, errors occured',
-  [TRANSACTION_COMPLETE_STATUS.TIMEOUT]: 'Transaction timed out',
-  [TRANSACTION_COMPLETE_STATUS.LOST]: 'Because of a page reload, we lost the status of this Transaction',
-}
-
-const ProgressIndicator = ({ completed, completionStatus, progress }) => {
-  if (completed) {
-    if (completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR) {
-      return (
-        <div className="transaction__icon">
-          <div className="icon icon--checkmark" />
-        </div>
-      )
-    }
-
-    return (
-      <div className="transaction__icon">
-        <div className="icon icon--error" />
-      </div>
-    )
-  }
-
-  return (
-    <ProgressSpinner width={32} height={32} strokeWidthPx={1} fontSizePx={8} progress={progress} modifier="spinning" />
-  )
-}
-
-ProgressIndicator.propTypes = {
-  completed: PropTypes.bool,
-  completionStatus: PropTypes.string,
-  progress: PropTypes.number,
-}
-
-const renderTransaction = type => ({
-  id,
-  label,
-  events,
-  startTime,
-  endTime,
-  completed,
-  completionStatus,
-  progress,
-}) => (
-  <div key={id} className={`transactionsPage__transaction transactionsPage__transaction--${type} transaction`}>
-    <ProgressIndicator completed={completed} completionStatus={completionStatus} progress={progress} />
-    <div className="transaction__content">
-      <div className="transaction__heading">{label}</div>
-      <div className="transaction__details">
-        <div className="transaction__detail">
-          <div className="icon icon--new" />
-          <div className="transaction__detailLabel">Created at</div>
-          {moment(startTime).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-        </div>
-        {endTime && (
-          <div className="transaction__detail">
-            <div className="icon icon--enddate" />
-            <div className="transaction__detailLabel">Finished at</div>
-            {moment(endTime).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-          </div>
-        )}
-        {endTime && (
-          <div className="transaction__detail">
-            <div className="icon icon--countdown" />
-            <div className="transaction__detailLabel">Transaction Time</div>
-            {`took ${moment(endTime).from(moment(startTime), true)}`}
-          </div>
-        )}
-      </div>
-      {completed && <div className="transaction__message">{completionMessages[completionStatus]}</div>}
-    </div>
-  </div>
-)
 
 class Transactions extends Component {
   componentWillMount() {
@@ -107,7 +29,7 @@ class Transactions extends Component {
               There are no currently running transactions
             </div>
           )}
-          {runningTransactions.map(renderTransaction('running'))}
+          {runningTransactions.map(transaction => <Transaction key={transaction.id} type="running" {...transaction} />)}
           <div className="transactionsPage__heading">
             <div className="transactionsPage__headingIcon">
               <div className="icon icon--countdown" />
@@ -119,7 +41,9 @@ class Transactions extends Component {
               There are no previous transactions
             </div>
           )}
-          {completedTransactions.map(renderTransaction('completed'))}
+          {completedTransactions.map(transaction =>
+            <Transaction key={transaction.id} type="completed" {...transaction} />,
+          )}
         </div>
       </div>
     )
