@@ -27,7 +27,7 @@ const getSoonClosingMarkets = (markets = [], limit) =>
   markets
     .filter(market => new Date() - new Date(market.eventDescription.resolutionDate) < 0)
     .sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
-    .slice(0, markets.length || limit)
+    .slice(0, limit || markets.length)
 
 class Dashboard extends Component {
   componentWillMount() {
