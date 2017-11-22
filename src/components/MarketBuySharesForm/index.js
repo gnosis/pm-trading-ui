@@ -104,7 +104,7 @@ class MarketBuySharesForm extends Component {
         this.props.fetchMarketShares(defaultAccount)
         return reset()
       })
-      .catch(e => console.log(e))
+      .catch(e => console.error(e))
   }
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
