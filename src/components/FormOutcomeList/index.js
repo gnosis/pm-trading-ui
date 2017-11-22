@@ -20,7 +20,7 @@ class FormOutcomeList extends Component {
     const index = +target.getAttribute('data-index')
 
     // new outcome is added when user started typing inside the last field
-    const addNewOutcome = index === fields.length - 1 && value != null && value.length > 0
+    const addNewOutcome = index === fields.length - 1 && value != null && value.length > 0 && fields.length < 3
     if (addNewOutcome) {
       fields.push('')
     }
@@ -35,6 +35,7 @@ class FormOutcomeList extends Component {
 
   render() {
     const { fields, label, meta: { error, invalid } } = this.props
+    const showAddButton = fields.length < 3
     const showDeleteButton = fields.length > 2
     const addOutcomeLabel = 'Add'
     const deleteOutcomeLabel = 'Delete'
@@ -62,7 +63,7 @@ class FormOutcomeList extends Component {
             />
           )
         })}
-        <AddOutcome text={addOutcomeLabel} onClick={this.addOutcome} />
+        {showAddButton && <AddOutcome text={addOutcomeLabel} onClick={this.addOutcome} />}
         {invalid && error && <span>{error}</span>}
       </div>
     )
