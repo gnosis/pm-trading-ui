@@ -13,7 +13,13 @@ import CurrencyName from 'components/CurrencyName'
 
 import FormInput from 'components/FormInput'
 
-import { COLOR_SCHEME_DEFAULT, GAS_COST, LOWEST_DISPLAYED_VALUE, MIN_CONSIDER_VALUE, LIMIT_MARGIN_DEFAULT } from 'utils/constants'
+import {
+  COLOR_SCHEME_DEFAULT,
+  GAS_COST,
+  LOWEST_DISPLAYED_VALUE,
+  MIN_CONSIDER_VALUE,
+  LIMIT_MARGIN_DEFAULT,
+} from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
@@ -54,8 +60,10 @@ class MarketMySharesForm extends Component {
   componentDidUpdate() {
     const { extendedSellId } = this.state
     const { selectedSellAmount, marketShares, initialize } = this.props
+    const sellAmountAndMarketSharesAreDefined =
+      selectedSellAmount === undefined && extendedSellId !== undefined && marketShares.length
 
-    if (selectedSellAmount === undefined && extendedSellId !== undefined && marketShares.length) {
+    if (sellAmountAndMarketSharesAreDefined) {
       // By default form is filled up with fill amount
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
       const fullAmount = Decimal(share.balance)
@@ -168,7 +176,6 @@ class MarketMySharesForm extends Component {
           <CurrencyName collateralToken={market.event.collateralToken} />
         </td>
         <td>
-          {/* eslint-disable no-script-url */}
           {!resolved && (
             <a
               href="javascript:void(0);"
@@ -178,7 +185,6 @@ class MarketMySharesForm extends Component {
                 Sell
             </a>
           )}
-          {/* eslint-enable no-script-url */}
         </td>
       </tr>)
 
@@ -251,7 +257,9 @@ class MarketMySharesForm extends Component {
         outcomeTokenIndex: share.outcomeToken.index,
         outcomeTokenCount: selectedSellAmountWei,
         feeFactor: market.fee,
-      }).mul(new Decimal(100).sub(sellLimitMargin == null ? LIMIT_MARGIN_DEFAULT : sellLimitMargin)).div(100))
+      })
+        .mul(new Decimal(100).sub(sellLimitMargin == null ? LIMIT_MARGIN_DEFAULT : sellLimitMargin))
+        .div(100))
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
