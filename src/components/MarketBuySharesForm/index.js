@@ -276,7 +276,6 @@ class MarketBuySharesForm extends Component {
       submitFailed,
       submitting,
       limitMargin,
-      market: { event: { collateralToken }, address, local },
       selectedOutcome,
     } = this.props
 
