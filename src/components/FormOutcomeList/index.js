@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Field } from 'redux-form'
 
-import FormInput from 'components/FormInput'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import AddOutcome from './AddOutcome'
-import DeleteOutcome from './DeleteOutcome'
 import Outcome from './Outcome'
 
 import './formOutcomeList.less'
