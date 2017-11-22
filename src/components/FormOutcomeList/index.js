@@ -6,6 +6,7 @@ import FormInput from 'components/FormInput'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import AddOutcome from './AddOutcome'
 import DeleteOutcome from './DeleteOutcome'
+import Outcome from './Outcome'
 
 import './formOutcomeList.less'
 
@@ -52,18 +53,16 @@ class FormOutcomeList extends Component {
           }
 
           return (
-            <div key={index} className={'formOutcomeList__entry'}>
-              <div className="entry__color" style={outcomeEntryStyle} />
-              <Field
-                component={FormInput}
-                name={field}
-                onChange={this.addOutcomeOnChange}
-                data-index={index}
-                className="formOutcomeListInput"
-                placeholder="Add another..."
-              />
-              {showDeleteButton && <DeleteOutcome onClick={this.removeOutcome} text={deleteOutcomeLabel} />}
-            </div>
+            <Outcome
+              key={index}
+              index={index}
+              field={field}
+              showDeleteButton={showDeleteButton}
+              onChange={this.addOutcomeOnChange}
+              outcomeEntryStyle={outcomeEntryStyle}
+              deleteOutcomeLabel={deleteOutcomeLabel}
+              onDeleteClick={this.removeOutcome}
+            />
           )
         })}
         <AddOutcome text={addOutcomeLabel} onClick={this.addOutcome} />
