@@ -1,5 +1,5 @@
 import { getOlympiaTokensByAccount } from 'api'
-import { WALLET_PROVIDER, WATCHABLE } from 'integrations/constants'
+import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
@@ -13,12 +13,15 @@ class Uport extends BaseIntegration {
    * This allows "fallback providers" like a remote ethereum host to be used as a last resort.
    */
   static providerPriority = 100
-  static watchersEnabled = [WATCHABLE.BALANCE, WATCHABLE.NETWORK]
-  static watcherTimeout = 5000
+  static watcherInterval = 5000
 
   constructor() {
-    const { watchersEnabled, watcherTimeout } = Uport
-    super({ watchersEnabled, watcherTimeout })
+    super()
+
+    this.watcher = setInterval(() => {
+      this.watch('balance', this.getBalance)
+      this.watch('network', this.getNetwork)
+    }, Uport.watcherInterval)
   }
 
   /**
