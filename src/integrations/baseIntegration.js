@@ -8,21 +8,6 @@ class BaseIntegration {
   runProviderRegister() {}
 
   /**
-   *
-   * @param {object} opts - Constructor Options
-   * @param {string} opts.watchersEnabled - Array of watchable properties. Empty array disables watcher completely @see WATCHABLE
-   * @param {number} opts.watcherTimeout - Time interval for watcher
-   */
-  constructor({ watchersEnabled = values(WATCHABLE), watcherTimeout = 1000 } = {}) {
-    this.watcherTimeout = watcherTimeout
-    this.watchersEnabled = watchersEnabled
-
-    if (this.watchersEnabled.length > 0) {
-      this.watcherInterval = setInterval(this.watcher, watcherTimeout)
-    }
-  }
-
-  /**
    * Initializes the Integration
    * @param {object} opts - Integration Options
    * @param {function} opts.runProviderUpdate - Function to run when this provider updates
@@ -95,47 +80,28 @@ class BaseIntegration {
     throw new Error('Invalid Balance')
   }
 
-  /**
-   * Periodic updater to get all relevant information from this provider
-   * @async
-   */
+  watch = async (property, getter) => {
+    let value
 
-  watcher = async () => {
     try {
-      if (this.watchersEnabled.indexOf(WATCHABLE.ACCOUNT) > -1) {
-        const currentAccount = await this.getAccount()
-        if (this.account !== currentAccount) {
-          this.account = currentAccount
-          await this.runProviderUpdate(this, { account: this.account })
-        }
-      }
-
-      if (this.watchersEnabled.indexOf(WATCHABLE.NETWORK) > -1) {
-        const currentNetworkId = await this.getNetworkId()
-        if (this.networkId !== currentNetworkId) {
-          this.networkId = currentNetworkId
-          this.network = await this.getNetwork()
-          await this.runProviderUpdate(this, { network: this.network, networkId: this.networkId })
-        }
-      }
-
-      if (this.watchersEnabled.indexOf(WATCHABLE.BALANCE) > -1) {
-        const currentBalance = await this.getBalance()
-        if (this.balance !== currentBalance) {
-          this.balance = currentBalance
-          await this.runProviderUpdate(this, { balance: this.balance })
-        }
-      }
-
-      if (!this.walletEnabled && this.account) {
-        this.walletEnabled = true
-        await this.runProviderUpdate(this, { available: true })
-      }
-    } catch (err) {
+      value = await getter.call(this)
+    } catch (e) {
       if (this.walletEnabled) {
         this.walletEnabled = false
         await this.runProviderUpdate(this, { available: false })
       }
+
+      return
+    }
+
+    if (this[property] !== value) {
+      const providerUpdate = { [property]: value }
+
+      if (!this.walletEnabled) {
+        providerUpdate.available = true
+        this.walletEnabled = true
+      }
+      this.runProviderUpdate(this, providerUpdate)
     }
   }
 }
