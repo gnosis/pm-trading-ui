@@ -1,4 +1,4 @@
-import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS, WATCHABLE } from 'integrations/constants'
+import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import { values } from 'lodash'
 
 import { weiToEth, promisify } from 'utils/helpers'
