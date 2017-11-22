@@ -219,11 +219,11 @@ export const requestAccountTrades = accountAddress => async (dispatch) => {
  */
 export const createMarket = options => async (dispatch) => {
   const {
-  eventDescription,
-  oracle,
-  event,
-  market,
-  transactionId,
+    eventDescription,
+    oracle,
+    event,
+    market,
+    transactionId,
   } = options
 
   // Start a new transaction log
@@ -291,7 +291,7 @@ export const createMarket = options => async (dispatch) => {
       market.outcomes = [0, 1] // short, long
     }
 
-  // Create Market
+    // Create Market
     marketContractData = await api.createMarket(market)
     await dispatch(receiveEntities(normalize(createMarketModel(marketContractData), marketSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.MARKET))
@@ -401,7 +401,15 @@ export const buyMarketShares = (
  */
 export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnings) => async (dispatch) => {
   const transactionId = uuid()
-  const gnosis = await api.getGnosisConnection()
+
+  const payload = (await api.requestMarket(market.address))
+  const updatedMarket = payload.entities.markets[market.address]
+  const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
+  const oldPrice = market.marginalPrices[outcomeIndex]
+  if (!allowedRangePrice(oldPrice, updatedPrice)) {
+    dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
+    return await dispatch(receiveEntities(payload))
+  }
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
