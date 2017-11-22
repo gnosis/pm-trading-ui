@@ -1,5 +1,4 @@
 import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
-import { values } from 'lodash'
 
 import { weiToEth, promisify } from 'utils/helpers'
 
@@ -39,7 +38,7 @@ class BaseIntegration {
    * @returns {Promise<string>} - Network Identifier
    */
   async getNetworkId() {
-    return await promisify(this.web3.version.getNetwork, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
+    return promisify(this.web3.version.getNetwork, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
   }
 
   /**
