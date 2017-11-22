@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import AddOutcome from './AddOutcome'
 import Outcome from './Outcome'
 
@@ -45,24 +44,17 @@ class FormOutcomeList extends Component {
         <label htmlFor="outcomes" className="formOutcomeList__label">
           {label}
         </label>
-        {fields.map((field, index) => {
-          const outcomeEntryStyle = {
-            backgroundColor: COLOR_SCHEME_DEFAULT[index],
-          }
-
-          return (
-            <Outcome
-              key={index}
-              index={index}
-              field={field}
-              showDeleteButton={showDeleteButton}
-              onChange={this.addOutcomeOnChange}
-              outcomeEntryStyle={outcomeEntryStyle}
-              deleteOutcomeLabel={deleteOutcomeLabel}
-              onDeleteClick={this.removeOutcome}
-            />
-          )
-        })}
+        {fields.map((field, index) => (
+          <Outcome
+            key={index}
+            index={index}
+            field={field}
+            showDelete={showDeleteButton}
+            onChange={this.addOutcomeOnChange}
+            deleteLabel={deleteOutcomeLabel}
+            onDeleteClick={this.removeOutcome}
+          />
+        ))}
         {showAddButton && <AddOutcome text={addOutcomeLabel} onClick={this.addOutcome} />}
         {invalid && error && <span>{error}</span>}
       </div>
