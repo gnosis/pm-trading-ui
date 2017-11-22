@@ -4,11 +4,16 @@ import { Field } from 'redux-form'
 
 import FormInput from 'components/FormInput'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import AddOutcome from './AddOutcome'
+import DeleteOutcome from './DeleteOutcome'
 
 import './formOutcomeList.less'
 
 class FormOutcomeList extends Component {
-  addOutcome = () => this.props.fields.push('')
+  addOutcome = (event) => {
+    event.preventDefault()
+    this.props.fields.push('')
+  }
 
   addOutcomeOnChange = (event) => {
     const { fields } = this.props
@@ -33,6 +38,8 @@ class FormOutcomeList extends Component {
   render() {
     const { fields, label, meta: { error, invalid } } = this.props
     const showDeleteButton = fields.length > 2
+    const addOutcomeLabel = 'Add'
+    const deleteOutcomeLabel = 'Delete'
 
     return (
       <div className="formOutcomeList">
@@ -55,17 +62,11 @@ class FormOutcomeList extends Component {
                 className="formOutcomeListInput"
                 placeholder="Add another..."
               />
-              {showDeleteButton && (
-                <a className="entry__delete" href="" tabIndex="-1" data-index={index} onClick={this.removeOutcome}>
-                  Delete
-                </a>
-              )}
+              {showDeleteButton && <DeleteOutcome onClick={this.removeOutcome} text={deleteOutcomeLabel} />}
             </div>
           )
         })}
-        <a className="entry__add" onClick={this.addOutcome}>
-          Add
-        </a>
+        <AddOutcome text={addOutcomeLabel} onClick={this.addOutcome} />
         {invalid && error && <span>{error}</span>}
       </div>
     )
