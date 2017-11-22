@@ -1,19 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'redux-form'
+import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import FormInput from 'components/FormInput'
 import DeleteOutcome from '../DeleteOutcome'
 
 const Outcome = ({
   onDeleteClick,
   onChange,
-  outcomeEntryStyle,
-  showDeleteButton = false,
+  showDelete,
   field,
   index,
-  deleteOutcomeLabel,
-}) => (
-  <div className="formOutcomeList__entry">
+  deleteLabel,
+}) => {
+  const outcomeEntryStyle = {
+    backgroundColor: COLOR_SCHEME_DEFAULT[index],
+  }
+
+  return (<div className="formOutcomeList__entry">
     <div className="entry__color" style={outcomeEntryStyle} />
     <Field
       component={FormInput}
@@ -23,18 +27,15 @@ const Outcome = ({
       className="formOutcomeListInput"
       placeholder="Add another..."
     />
-    {showDeleteButton && <DeleteOutcome onClick={onDeleteClick} text={deleteOutcomeLabel} />}
-  </div>
-)
+    {showDelete && <DeleteOutcome onClick={onDeleteClick} text={deleteLabel} />}
+  </div>)
+}
 
 Outcome.propTypes = {
-  outcomeEntryStyle: PropTypes.shape({
-    backgroundColor: PropTypes.string,
-  }),
-  showDeleteButton: PropTypes.bool,
+  showDelete: PropTypes.bool,
   field: PropTypes.string,
   index: PropTypes.number,
-  deleteOutcomeLabel: PropTypes.string,
+  deleteLabel: PropTypes.string,
   onChange: PropTypes.func,
   onDeleteClick: PropTypes.func,
 }
