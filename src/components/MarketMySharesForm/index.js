@@ -101,7 +101,11 @@ class MarketMySharesForm extends Component {
     const sellAmount = shareBalanceRounded.sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE)
       ? weiToEth(shareBalance)
       : shareAmount
-    await this.props.sellShares(this.props.market, shareIndex, sellAmount, earnings)
+    try {
+      await this.props.sellShares(this.props.market, shareIndex, sellAmount, earnings)
+    } catch (e) {
+      console.error(e)
+    }
     return this.props.reset()
   }
 
