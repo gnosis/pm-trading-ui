@@ -42,7 +42,8 @@ class MarketBuySharesForm extends Component {
   }
 
   getOutcomeTokenCount(investment, outcomeIndex, limitMargin) {
-    if (!investment || !(parseFloat(investment) > 0) || parseFloat(investment) >= 1000) {
+    const validInvestment = /^-?\d+\.?\d*$/.test(investment) && investment && (parseFloat(investment) > 0) && parseFloat(investment) < 1000
+    if (!validInvestment) {
       return new Decimal(0)
     }
 
@@ -71,7 +72,10 @@ class MarketBuySharesForm extends Component {
   }
 
   getMaximumWin(outcomeTokenCount, investment) {
-    return investment ? outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18) : new Decimal(0)
+    if (/^-?\d+\.?\d*$/.test(investment)) {
+      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
+    }
+    return '--'
   }
 
   getPercentageWin(outcomeTokenCount, investment) {
@@ -109,6 +113,10 @@ class MarketBuySharesForm extends Component {
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
   validateInvestment = (investmentValue) => {
+    // check if investment is not undefined and test it against number regexp to prevent errors from decimal.js
+    const validInvestment = investmentValue || /^-?\d+\.?\d*$/.test(investmentValue)
+    if (!validInvestment) return false
+
     const { currentBalance } = this.props
     if (parseFloat(investmentValue) >= 1000) {
       return 'Invalid amount'
@@ -116,7 +124,7 @@ class MarketBuySharesForm extends Component {
 
     let decimalValue
     try {
-      decimalValue = Decimal(investmentValue || 0)
+      decimalValue = Decimal(investmentValue)
     } catch (e) {
       return 'Invalid Number value'
     }
@@ -269,16 +277,17 @@ class MarketBuySharesForm extends Component {
 
   render() {
     const {
+      changeUrl,
+      gasCosts,
+      gasPrice,
+      invalid,
       handleSubmit,
+      market: { event: { collateralToken }, address, local },
       selectedBuyInvest,
       submitFailed,
       submitting,
       limitMargin,
-      market: { event: { collateralToken }, address, local },
       selectedOutcome,
-      gasCosts,
-      gasPrice,
-      changeUrl,
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
@@ -288,7 +297,7 @@ class MarketBuySharesForm extends Component {
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares || 0))
 
-    const submitDisabled = this.props.invalid
+    const submitDisabled = invalid || !selectedBuyInvest
     let fieldError
     let tokenCountField
     let maxReturnField
@@ -357,7 +366,7 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">{fieldError || tokenCountField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Maximum return in %</div>
+                <div className="col-md-6">Maximum return</div>
                 <div className="col-md-6">{fieldError || maxReturnField}</div>
               </div>
               <div className="row marketBuySharesForm__row">

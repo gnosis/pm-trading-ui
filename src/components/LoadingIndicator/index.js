@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const LoadingIndicator = ({ className, width = 40, height = 40 }) => (
+const LoadingIndicator = ({ className = '', width = 40, height = 40 }) => (
   <svg
     version="1.1"
     id="loader-1"
@@ -11,7 +11,7 @@ const LoadingIndicator = ({ className, width = 40, height = 40 }) => (
     height={`${height}px`}
     viewBox="0 0 40 40"
     enableBackground="new 0 0 40 40"
-    className={className || ''}
+    className={className}
   >
     <path
       opacity="0.2"

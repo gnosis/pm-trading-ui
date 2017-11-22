@@ -60,8 +60,10 @@ class MarketMySharesForm extends Component {
   componentDidUpdate() {
     const { extendedSellId } = this.state
     const { selectedSellAmount, marketShares, initialize } = this.props
+    const sellAmountAndMarketSharesAreDefined =
+      selectedSellAmount === undefined && extendedSellId !== undefined && marketShares.length
 
-    if (selectedSellAmount === undefined && extendedSellId !== undefined) {
+    if (sellAmountAndMarketSharesAreDefined) {
       // By default form is filled up with fill amount
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
       const fullAmount = Decimal(share.balance)
@@ -109,7 +111,7 @@ class MarketMySharesForm extends Component {
 
   @autobind
   validateTokenCount(val, values, props) {
-    if (parseFloat(val) >= 1000) {
+    if (parseFloat(val) >= 1000 || !/^-?\d+\.?\d*$/.test(val)) {
       return 'Invalid amount'
     }
 
@@ -178,7 +180,6 @@ class MarketMySharesForm extends Component {
           <CurrencyName collateralToken={market.event.collateralToken} />
         </td>
         <td>
-          {/* eslint-disable no-script-url */}
           {!resolved && (
             <a
               href="javascript:void(0);"
@@ -188,7 +189,6 @@ class MarketMySharesForm extends Component {
                 Sell
             </a>
           )}
-          {/* eslint-enable no-script-url */}
         </td>
       </tr>)
 
@@ -250,8 +250,9 @@ class MarketMySharesForm extends Component {
       }
     }
 
-    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
-    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0).mul(1e18))
+    const currentTokenBalance = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
+    const newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
+
     let earnings = new Decimal(0)
     if (share.balance && parseFloat(selectedSellAmount) < 1000) {
       earnings = weiToEth(calcLMSRProfit({
@@ -266,9 +267,12 @@ class MarketMySharesForm extends Component {
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
+      if (
+        outcomeTokenIndex === share.outcomeToken.index &&
+        !currentTokenBalance.sub(newTokenBalance).isZero()
+      ) {
         return Decimal(outcomeTokenAmount)
-          .sub(currentTokenCount.sub(newTokenCount.toString()).toString())
+          .sub(currentTokenBalance.sub(newTokenBalance))
           .floor()
           .toString()
       }
