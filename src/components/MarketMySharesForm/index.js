@@ -60,8 +60,10 @@ class MarketMySharesForm extends Component {
   componentDidUpdate() {
     const { extendedSellId } = this.state
     const { selectedSellAmount, marketShares, initialize } = this.props
+    const sellAmountAndMarketSharesAreDefined =
+      selectedSellAmount === undefined && extendedSellId !== undefined && marketShares.length
 
-    if (selectedSellAmount === undefined && extendedSellId !== undefined) {
+    if (sellAmountAndMarketSharesAreDefined) {
       // By default form is filled up with fill amount
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
       const fullAmount = Decimal(share.balance)
@@ -174,7 +176,6 @@ class MarketMySharesForm extends Component {
           <CurrencyName collateralToken={market.event.collateralToken} />
         </td>
         <td>
-          {/* eslint-disable no-script-url */}
           {!resolved && (
             <a
               href="javascript:void(0);"
@@ -184,7 +185,6 @@ class MarketMySharesForm extends Component {
                 Sell
             </a>
           )}
-          {/* eslint-enable no-script-url */}
         </td>
       </tr>)
 
