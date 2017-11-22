@@ -10,7 +10,7 @@ import './formInput.less'
 const Input = ({
   input,
   label,
-  type,
+  type = 'text',
   className,
   placeholder,
   continuousPlaceholder,
@@ -19,25 +19,24 @@ const Input = ({
 }) => {
   const showErrorMessage = touched && error
 
+  const containerClassName = `inputField ${bemifyClassName(className)}`
+  const labelClassName = `inputField__label ${bemifyClassName(className, 'label')}`
+  const inputClassName = cn('inputField__input', {
+    [bemifyClassName(className, 'input')]: className,
+    'inputField__input--error': showErrorMessage,
+    [bemifyClassName(className, 'input', 'error')]: className && showErrorMessage,
+  })
+  const placeholderClassName = `inputField__continuousPlaceholder ${bemifyClassName(className, 'continuousPlaceholder')}`
+
   return (
-    <div className={`inputField ${bemifyClassName(className)}`}>
-      <label htmlFor={input.name} className={`inputField__label ${bemifyClassName(className, 'label')}`}>
+    <div className={containerClassName}>
+      <label htmlFor={input.name} className={labelClassName}>
         {label}
       </label>
-      <input
-        className={cn('inputField__input', {
-          [bemifyClassName(className, 'input')]: className,
-          'inputField__input--error': showErrorMessage,
-          [bemifyClassName(className, 'input', 'error')]: className && showErrorMessage,
-        })}
-        placeholder={placeholder}
-        type={`${type || 'text'}`}
-        {...input}
-        {...rest}
-      />
+      <input className={inputClassName} placeholder={placeholder} type={type} {...input} {...rest} />
       {continuousPlaceholder && (
         <input
-          className={`inputField__continuousPlaceholder ${bemifyClassName(className, 'continuousPlaceholder')}`}
+          className={placeholderClassName}
           type="text"
           value={continuousPlaceholder}
           disabled
