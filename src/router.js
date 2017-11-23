@@ -15,8 +15,6 @@ import AccountPage from 'containers/AccountPage'
 import DashboardPage from 'containers/DashboardPage'
 import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
 
-export const MY_SHARES_PARAM = 'my-shares'
-
 const AppRouter = ({ history }) => (
   <Router key={Math.random()} history={history}>
     <Route path="/" component={App}>
