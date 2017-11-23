@@ -1,4 +1,7 @@
 import { handleActions } from 'redux-actions'
+import { get } from 'lodash'
+
+const LOAD_LOCALSTORAGE = 'LOAD_LOCALSTORAGE'
 
 import {
   TRANSACTION_STATUS,
@@ -75,6 +78,30 @@ const reducer = handleActions({
     ...state,
     visible: false,
   }),
+  [LOAD_LOCALSTORAGE]: (state, action) => {
+    const newState = {
+      ...state,
+      log: {},
+    }
+
+    const savedLogs = get(action, 'payload.transactions.log', {})
+    const logs = Object.keys(savedLogs)
+      .forEach((id) => {
+        const log = savedLogs[id]
+
+        if (log.completed) {
+          newState.log[id] = log
+        } else {
+          newState.log[id] = {
+            ...log,
+            completed: true,
+            completionStatus: 'LOST',
+          }
+        }
+      })
+
+    return newState
+  },
 }, { log: {}, visible: false })
 
 
