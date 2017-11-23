@@ -11,12 +11,13 @@ import {
   calcFundingGasCost,
   getGasPrice,
   getEtherTokens,
+  getOlympiaTokensByAccount,
 } from 'api'
 
-import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
+import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider, isGnosisInitialized } from 'selectors/blockchain'
+import { findDefaultProvider, isGnosisInitialized, getSelectedProvider } from 'selectors/blockchain'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -121,12 +122,10 @@ export const initGnosis = () => async (dispatch, getState) => {
 }
 
 export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
-  await dispatch(
-    updateProvider({
-      provider: provider.constructor.providerName,
-      ...data,
-    }),
-  )
+  await dispatch(updateProvider({
+    provider: provider.constructor.providerName,
+    ...data,
+  }))
 
   if (isGnosisInitialized(getState())) {
     let requireGnosisReinit = false
@@ -146,10 +145,21 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
 
 export const runProviderRegister = (provider, data) => async (dispatch) => {
   const providerData = { ...data }
-  await dispatch(
-    registerProvider({
-      provider: provider.constructor.providerName,
-      ...providerData,
-    }),
-  )
+  await dispatch(registerProvider({
+    provider: provider.constructor.providerName,
+    ...providerData,
+  }))
+}
+
+export const refreshTokenBalance = () => async (dispatch, getState) => {
+  const state = getState()
+  const { name: providerName, ...provider } = getSelectedProvider(state)
+
+  const balance = await getOlympiaTokensByAccount(provider.account)
+
+  await dispatch(updateProvider({
+    provider: providerName,
+    ...provider,
+    balance: weiToEth(balance),
+  }))
 }

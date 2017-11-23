@@ -13,12 +13,15 @@ class Uport extends BaseIntegration {
    * This allows "fallback providers" like a remote ethereum host to be used as a last resort.
    */
   static providerPriority = 100
-  static enableWatcher = false
-  static watcherTimeout = 0
+  static watcherInterval = 5000
 
   constructor() {
-    const { enableWatcher, watcherTimeout } = Uport
-    super({ enableWatcher, watcherTimeout })
+    super()
+
+    this.watcher = setInterval(() => {
+      this.watch('balance', this.getBalance)
+      this.watch('network', this.getNetwork)
+    }, Uport.watcherInterval)
   }
 
   /**
@@ -60,20 +63,39 @@ class Uport extends BaseIntegration {
       networkId: this.networkId,
       account: this.account,
     })
-    .then(async () => {
-      if (!this.account) {
-        return
-      }
-      await opts.initGnosis()
-      const balance = await getOlympiaTokensByAccount(this.account)
-      opts.runProviderUpdate(this, {
-        provider: Uport.providerName,
-        balance: weiToEth(balance),
-        account: this.account,
+      .then(async () => {
+        if (!this.account) {
+          return
+        }
+        await opts.initGnosis()
+        const balance = await getOlympiaTokensByAccount(this.account)
+        opts.runProviderUpdate(this, {
+          provider: Uport.providerName,
+          balance: weiToEth(balance),
+          account: this.account,
+        })
+        opts.dispatch(fetchOlympiaUserData(this.account))
       })
-      opts.dispatch(fetchOlympiaUserData(this.account))
-    })
-    .catch(() => opts.initGnosis())
+      .catch(() => opts.initGnosis())
+  }
+
+  /**
+   * Returns the balance of olympia tokens for the current default account in Wei
+   * @async
+   * @returns {Promise<string>} - Accountbalance in WEI for current account
+   */
+  async getBalance() {
+    if (!this.account) {
+      throw new Error('No Account available')
+    }
+
+    const balance = await getOlympiaTokensByAccount(this.account)
+
+    if (typeof balance !== 'undefined') {
+      return weiToEth(balance.toString())
+    }
+
+    throw new Error('Invalid Balance')
   }
 }
 

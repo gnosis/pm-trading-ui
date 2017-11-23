@@ -3,8 +3,9 @@ import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
 import * as api from 'api'
-
 import { receiveEntities, updateEntity } from 'actions/entities'
+
+import { refreshTokenBalance } from 'actions/blockchain'
 
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'actions/transactions'
 
@@ -292,6 +293,8 @@ export const createMarket = options => async (dispatch) => {
     throw e
   }
 
+  dispatch(refreshTokenBalance())
+
   await dispatch(closeLog(transactionId))
   return marketContractData
 }
@@ -372,6 +375,8 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
     },
   }))
 
+  dispatch(refreshTokenBalance())
+
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
@@ -430,6 +435,9 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnin
     await dispatch(closeModal())
     throw e
   }
+
+  dispatch(refreshTokenBalance())
+
   // TODO: Calculate new shares
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
@@ -462,6 +470,8 @@ export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
   }))
   await dispatch(updateEntity({ entityType: 'events', data: { id: market.event.address, isWiningOutcomeSet: true } }))
 
+  dispatch(refreshTokenBalance())
+
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
@@ -493,6 +503,8 @@ export const redeemWinnings = market => async (dispatch) => {
 
   dispatch(closeModal())
 
+  dispatch(refreshTokenBalance())
+
   // TODO: Update market so we can't redeem again
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
@@ -518,6 +530,8 @@ export const withdrawFees = market => async (dispatch) => {
 
     throw e
   }
+
+  dispatch(refreshTokenBalance())
 
   // TODO: Update market so we can't withdraw again
 
@@ -553,6 +567,8 @@ export const closeMarket = market => async (dispatch) => {
       stage,
     },
   }))
+
+  dispatch(refreshTokenBalance())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
