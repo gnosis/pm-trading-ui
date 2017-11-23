@@ -12,8 +12,6 @@ import ScoreBoardPage from 'routes/scoreboard/containers/ScoreBoard'
 import GameRulesPage from 'routes/gamerules/containers/GameRules'
 import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
 
-export const MY_SHARES_PARAM = 'my-shares'
-
 const AppRouter = ({ history }) => (
   <Router key={Math.random()} history={history}>
     <Route path="/" component={App}>

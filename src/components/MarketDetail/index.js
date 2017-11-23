@@ -19,85 +19,14 @@ import Countdown from 'components/Countdown'
 import Outcome from 'components/Outcome'
 import MarketGraph from 'components/MarketGraph'
 
-import MarketBuySharesForm from 'components/MarketBuySharesForm'
-import MarketResolveForm from 'components/MarketResolveForm'
-import MarketMySharesForm from 'components/MarketMySharesForm'
-import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
-// import MarketShortSellForm from 'components/MarketShortSellForm'
-import MarketMyTrades from 'components/MarketMyTrades'
 import config from 'config.json'
-import { MY_SHARES_PARAM } from 'router'
+import expandableViews, { EXPAND_MY_SHARES } from './ExpandableViews'
 
 import './marketDetail.less'
 import { weiToEth } from '../../utils/helpers'
 import { marketShareShape } from '../../utils/shapes'
 
 const ONE_WEEK_IN_HOURS = 168
-const EXPAND_BUY_SHARES = 'buy-shares'
-// const EXPAND_SHORT_SELL = 'short-sell'
-const EXPAND_MY_TRADES = 'my-trades'
-const EXPAND_MY_SHARES = 'my-shares'
-const EXPAND_RESOLVE = 'resolve'
-const EXPAND_WITHDRAW_FEES = 'withdraw-fees'
-
-const expandableViews = {
-  [EXPAND_BUY_SHARES]: {
-    label: 'Buy Tokens',
-    className: 'btn btn-default',
-    component: MarketBuySharesForm,
-    showCondition: props =>
-      props.market &&
-      !props.market.local &&
-      props.defaultAccount &&
-      props.defaultAccount !== props.market.owner &&
-      !props.market.oracle.isOutcomeSet &&
-      props.market.stage !== MARKET_STAGES.MARKET_CLOSED,
-  },
-  /* HIDDEN
-  [EXPAND_SHORT_SELL]: {
-    label: 'Short Sell',
-    className: 'btn btn-primary',
-    component: MarketShortSellForm,
-    showCondition: props =>
-      props.market &&
-      props.defaultAccount &&
-      !props.market.oracle.isOutcomeSet &&
-      props.market.eventDescription.outcomes &&
-      props.market.eventDescription.outcomes.length > 2,
-  }, */
-  [EXPAND_MY_SHARES]: {
-    label: 'My Tokens',
-    className: 'btn btn-default',
-    component: MarketMySharesForm,
-    showCondition: props => props.market && props.defaultAccount && props.defaultAccount !== props.market.owner,
-  },
-  [EXPAND_MY_TRADES]: {
-    label: 'My Trades',
-    className: 'btn btn-default',
-    component: MarketMyTrades,
-    showCondition: props => props.market && props.defaultAccount && props.defaultAccount !== props.market.owner,
-  },
-  [EXPAND_RESOLVE]: {
-    label: 'Resolve',
-    className: 'btn btn-default',
-    component: MarketResolveForm,
-    showCondition: props =>
-      props.market &&
-      props.defaultAccount &&
-      props.defaultAccount === props.market.oracle.owner &&
-      !props.market.oracle.isOutcomeSet,
-  },
-  [EXPAND_WITHDRAW_FEES]: {
-    label: 'Withdraw fees',
-    className: 'btn btn-default',
-    component: MarketWithdrawFeesForm,
-    showCondition: props =>
-      props.market &&
-      props.defaultAccount &&
-      props.market.oracle.owner === props.defaultAccount &&
-      new Decimal(props.market.collectedFees).gt(0),
-  },
-}
 
 class MarketDetail extends Component {
   constructor(props) {
@@ -128,7 +57,7 @@ class MarketDetail extends Component {
 
   scrollToSharesDiv = () => {
     const { pathname } = this.props.location
-    const isMySharesView = pathname.indexOf(MY_SHARES_PARAM) !== -1
+    const isMySharesView = pathname.indexOf(EXPAND_MY_SHARES) !== -1
     const shouldScroll = this.divSharesNode && isMySharesView
     if (shouldScroll) {
       const y = this.divSharesNode.offsetTop
