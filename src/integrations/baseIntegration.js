@@ -79,6 +79,12 @@ class BaseIntegration {
     throw new Error('Invalid Balance')
   }
 
+  /**
+   * Add a new watcher to a property inside the integration
+   * @param {string} property - Property inside the integration that is holding the value for this watcher
+   * @param {function} getter - (async) function that returns the value for the watcher
+   * @async
+   */
   watch = async (property, getter) => {
     let value
 
@@ -87,21 +93,25 @@ class BaseIntegration {
     } catch (e) {
       if (this.walletEnabled) {
         this.walletEnabled = false
-        await this.runProviderUpdate(this, { available: false })
+        await this.runProviderUpdate(this, { available: false, [property]: undefined })
       }
 
       return
     }
 
-    if (this[property] !== value) {
-      const providerUpdate = { [property]: value }
-
-      if (!this.walletEnabled) {
-        providerUpdate.available = true
-        this.walletEnabled = true
-      }
-      this.runProviderUpdate(this, providerUpdate)
+    const didPropertyChange = this[property] !== value
+    if (!didPropertyChange) {
+      return
     }
+
+    const providerUpdate = { [property]: value }
+
+    if (!this.walletEnabled) {
+      this.walletEnabled = true
+      providerUpdate.available = true
+    }
+
+    this.runProviderUpdate(this, providerUpdate)
   }
 }
 
