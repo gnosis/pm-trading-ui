@@ -103,8 +103,6 @@ class MarketDetail extends Component {
   constructor(props) {
     super(props)
 
-    this.scrollToSharesDiv = this.scrollToSharesDiv.bind(this)
-
     this.state = {
       marketFetchError: undefined,
     }
@@ -128,7 +126,7 @@ class MarketDetail extends Component {
     return Object.keys(expandableViews).find(view => expandableViews[view].showCondition(this.props))
   }
 
-  scrollToSharesDiv() {
+  scrollToSharesDiv = () => {
     const { pathname } = this.props.location
     const isMySharesView = pathname.indexOf(MY_SHARES_PARAM) !== -1
     const shouldScroll = this.divSharesNode && isMySharesView
