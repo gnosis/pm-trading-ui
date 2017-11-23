@@ -15,6 +15,7 @@ import {
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
+import { MY_SHARES_PARAM } from 'router'
 
 import InteractionButton from 'containers/InteractionButton'
 
@@ -55,7 +56,7 @@ class Dashboard extends Component {
 
   @autobind
   handleShowSellView(market, share) {
-    this.props.changeUrl(`/markets/${market.address}/my-shares/${add0xPrefix(share.id)}`)
+    this.props.changeUrl(`/markets/${market.address}/${MY_SHARES_PARAM}/${add0xPrefix(share.id)}`)
   }
 
   @autobind
