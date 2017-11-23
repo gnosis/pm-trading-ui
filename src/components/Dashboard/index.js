@@ -19,6 +19,7 @@ import {
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
+import { EXPAND_MY_SHARES } from 'components/MarketDetail/ExpandableViews'
 
 import Metrics from './Metrics'
 import './dashboard.less'
@@ -58,7 +59,7 @@ class Dashboard extends Component {
 
   @autobind
   handleShowSellView(market, share) {
-    this.props.changeUrl(`/markets/${market.address}/my-shares/${add0xPrefix(share.id)}`)
+    this.props.changeUrl(`/markets/${market.address}/${EXPAND_MY_SHARES}/${add0xPrefix(share.id)}`)
   }
 
   @autobind
