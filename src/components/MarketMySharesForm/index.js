@@ -68,7 +68,7 @@ class MarketMySharesForm extends Component {
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
       const fullAmount = Decimal(share.balance)
         .div(1e18)
-        .toDP(2, 1)
+        .toDP(4, 1)
         .toString()
       initialize({ sellAmount: fullAmount })
     }
@@ -96,7 +96,7 @@ class MarketMySharesForm extends Component {
     const share = this.props.marketShares.find(s => s.id === shareId)
     const shareIndex = share.outcomeToken.index
     const shareBalance = new Decimal(share.balance)
-    const shareBalanceRounded = shareBalance.div(1e18).toDP(2, 1)
+    const shareBalanceRounded = shareBalance.div(1e18).toDP(4, 1)
     const selectedSellAmount = new Decimal(shareAmount)
     const sellAmount = shareBalanceRounded.sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE)
       ? weiToEth(shareBalance)

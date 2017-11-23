@@ -36,7 +36,7 @@ class MarketResolveForm extends Component {
     return (
       <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
         <div className="marketResolveScalar">
-          <Field continuousPlaceholder={unit} name="selectedValue" component={FormInput} label={'Enter outcome'} />
+          <Field continuousPlaceholder={unit} name="selectedValue" component={FormInput} label="Enter outcome" />
         </div>
         <InteractionButton type="submit" className="btn btn-primary" loading={submitting}>
           Resolve Oracle
