@@ -24,6 +24,7 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
+import { MARKET_STAGES } from '../../utils/constants'
 
 const resolutionFilters = [
   {
@@ -31,11 +32,11 @@ const resolutionFilters = [
     value: '',
   },
   {
-    label: 'Resolved',
+    label: 'Ended',
     value: 'RESOLVED',
   },
   {
-    label: 'Unresolved',
+    label: 'Open',
     value: 'UNRESOLVED',
   },
 ]
@@ -80,6 +81,7 @@ class MarketList extends Component {
   renderMarket(market) {
     const isResolved = market.oracle && market.oracle.isOutcomeSet
     const isOwner = this.props.defaultAccount && market.creator === this.props.defaultAccount
+    const showResolveButton = isOwner && !isResolved
 
     return (
       <button
@@ -93,17 +95,13 @@ class MarketList extends Component {
       >
         <div className="market__header">
           <h2 className="market__title">{market.eventDescription.title}</h2>
-          {isOwner &&
-            !isResolved && (
-              <div className="market__control">
-                <a
-                  href="javascript:void(0)"
-                  onClick={e => this.handleViewMarketResolve(e, `/markets/${market.address}/resolve`)}
-                >
-                  Resolve
-                </a>
-              </div>
-            )}
+          {showResolveButton && (
+            <div className="market__control">
+              <Link to={`/markets/${market.address}/resolve`} onClick={this.handleViewMarketResolve}>
+                Resolve
+              </Link>
+            </div>
+          )}
         </div>
         <Outcome market={market} />
         <div className="market__info row">
@@ -208,6 +206,12 @@ class MarketList extends Component {
   render() {
     const { markets } = this.props
 
+    const threeDayMSeconds = 3 * 24 * 60 * 60 * 1000
+    const now = new Date()
+    const openMarketsAmount = markets.filter(({ stage, oracle: { isOutcomeSet } }) => stage !== MARKET_STAGES.MARKET_CLOSED && !isOutcomeSet).length
+    const endingSoonMarketsAmount = markets.filter(({ eventDescription: { resolutionDate } }) => new Date(resolutionDate) - now < threeDayMSeconds).length
+    const newMarketsAmount = markets.filter(({ creationDate }) => now - new Date(creationDate) < threeDayMSeconds).length
+
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
@@ -222,17 +226,17 @@ class MarketList extends Component {
             <div className="row marketStats">
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market" />
-                <span className="marketStats__value">{markets.length}</span>
+                <span className="marketStats__value">{openMarketsAmount}</span>
                 <div className="marketStats__label">Open Markets</div>
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market--countdown" />
-                <span className="marketStats__value">{markets.length}</span>
-                <div className="marketStats__label">Closing Soon</div>
+                <span className="marketStats__value">{endingSoonMarketsAmount}</span>
+                <div className="marketStats__label">Ending Soon</div>
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--new" />
-                <span className="marketStats__value">{markets.length}</span>
+                <span className="marketStats__value">{newMarketsAmount}</span>
                 <div className="marketStats__label">New Markets</div>
               </div>
             </div>

@@ -63,7 +63,7 @@ const expandableViews = {
       !props.market.oracle.isOutcomeSet &&
       props.market.eventDescription.outcomes &&
       props.market.eventDescription.outcomes.length > 2,
-  },*/
+  }, */
   [EXPAND_MY_SHARES]: {
     label: 'My Tokens',
     className: 'btn btn-default',
@@ -200,12 +200,8 @@ class MarketDetail extends Component {
     const infos = {
       Token: collateralTokenToText(market.event.collateralToken),
       Fee: `${decimalToText(market.fee, 2) / 10000} %`,
-      Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(
-        market.event.collateralToken,
-      )}`,
-      'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(
-        market.event.collateralToken,
-      )}`,
+      Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
+      'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
     }
     const showWithdrawFees =
       this.props.defaultAccount &&
@@ -220,9 +216,7 @@ class MarketDetail extends Component {
       infos.creator = market.creator
     }
     if (showWithdrawFees) {
-      infos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenToText(
-        market.event.collateralToken,
-      )}`
+      infos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenToText(market.event.collateralToken)}`
     }
 
     return (
@@ -245,21 +239,19 @@ class MarketDetail extends Component {
       .diff(moment(), 'hours')
     const { marketShares } = this.props
 
-    const marketClosedOrFinished = (
-      market.stage === MARKET_STAGES.MARKET_CLOSED ||
-      market.oracle.isOutcomeSet
-    )
+    const marketClosed = market.stage === MARKET_STAGES.MARKET_CLOSED
+    const marketResolved = market.oracle.isOutcomeSet
+    const marketClosedOrFinished = marketClosed || marketResolved
+    const marketStatus = marketResolved ? 'resolved.' : 'closed.'
 
     const winnings = marketShares.reduce((sum, share) => {
-      const shareWinnings = weiToEth(
-        calcLMSRProfit({
-          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
-          funding: market.funding,
-          outcomeTokenIndex: share.outcomeToken.index,
-          outcomeTokenCount: share.balance,
-          feeFactor: market.fee,
-        }),
-      )
+      const shareWinnings = weiToEth(calcLMSRProfit({
+        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+        funding: market.funding,
+        outcomeTokenIndex: share.outcomeToken.index,
+        outcomeTokenCount: share.balance,
+        feeFactor: market.fee,
+      }))
 
       return sum.plus(new Decimal(shareWinnings))
     }, new Decimal(0))
@@ -294,7 +286,9 @@ class MarketDetail extends Component {
                 .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
             {marketClosedOrFinished && (
-                <div className="marketTimer__marketClosed">{timeToResolution < 0 ? 'This market was resolved.' : 'This market was closed.'}</div>
+              <div className="marketTimer__marketClosed">
+                {`This market was ${marketStatus}`}
+              </div>
             )}
           </div>
         )}
@@ -318,20 +312,18 @@ class MarketDetail extends Component {
             </div>
           )}
       </div>
-      )
-    }
-    
+    )
+  }
+
   renderControls() {
     const { market, closeMarket, defaultAccount } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
           {Object.keys(expandableViews)
-            .filter(
-              view =>
-                typeof expandableViews[view].showCondition !== 'function' ||
-                expandableViews[view].showCondition(this.props),
-            )
+            .filter(view =>
+              typeof expandableViews[view].showCondition !== 'function' ||
+                expandableViews[view].showCondition(this.props))
             .map(view => (
               <button
                 key={view}
