@@ -85,8 +85,9 @@ class MarketMySharesForm extends Component {
 
   @autobind
   async handleSellShare(shareId, shareAmount, earnings) {
-    const shareIndex = this.props.marketShares.map(share => share.id).indexOf(shareId)
-    const shareBalance = new Decimal(this.props.marketShares[shareIndex].balance)
+    const share = this.props.marketShares.find(s => s.id === shareId)
+    const shareIndex = share.outcomeToken.index
+    const shareBalance = new Decimal(share.balance)
     const shareBalanceRounded = shareBalance.div(1e18).toDP(2, 1)
     const selectedSellAmount = new Decimal(shareAmount)
     const sellAmount = shareBalanceRounded.sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE)
