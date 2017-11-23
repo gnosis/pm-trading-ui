@@ -26,6 +26,7 @@ import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 // import MarketShortSellForm from 'components/MarketShortSellForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 import config from 'config.json'
+import { MY_SHARES_PARAM } from 'router'
 
 import './marketDetail.less'
 import { weiToEth } from '../../utils/helpers'
@@ -102,6 +103,8 @@ class MarketDetail extends Component {
   constructor(props) {
     super(props)
 
+    this.scrollToSharesDiv = this.scrollToSharesDiv.bind(this)
+
     this.state = {
       marketFetchError: undefined,
     }
@@ -112,6 +115,10 @@ class MarketDetail extends Component {
     this.fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
   }
 
+  componentDidMount() {
+    this.scrollToSharesDiv()
+  }
+
   componentWillUnmount() {
     clearInterval(this.fetchDataTimer)
   }
@@ -119,6 +126,16 @@ class MarketDetail extends Component {
   @autobind
   getAvailableView() {
     return Object.keys(expandableViews).find(view => expandableViews[view].showCondition(this.props))
+  }
+
+  scrollToSharesDiv() {
+    const { pathname } = this.props.location
+    const isMySharesView = pathname.indexOf(MY_SHARES_PARAM) !== -1
+    const shouldScroll = this.divSharesNode && isMySharesView
+    if (shouldScroll) {
+      const y = this.divSharesNode.offsetTop
+      window.scrollTo(0, y)
+    }
   }
 
   // Check available views on first fetch
@@ -388,7 +405,7 @@ class MarketDetail extends Component {
           </div>
         </div>
         {this.renderControls(market)}
-        <div className="expandable">{this.renderExpandableContent()}</div>
+        <div ref={(div) => { this.divSharesNode = div }} className="expandable">{this.renderExpandableContent()}</div>
         {market.trades ? <MarketGraph data={market.trades} market={market} /> : ''}
       </div>
     )
@@ -416,6 +433,9 @@ MarketDetail.propTypes = {
     address: PropTypes.string,
   }),
   closeMarket: PropTypes.func,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }),
 }
 
 export default MarketDetail
