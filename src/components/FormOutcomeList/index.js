@@ -1,49 +1,66 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Field } from 'redux-form'
 
-import FormInput from 'components/FormInput'
-import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import AddOutcome from './AddOutcome'
+import Outcome from './Outcome'
 
 import './formOutcomeList.less'
 
-const FormOutcomeList = ({ fields, label, meta: { error, invalid } }) => (
-  <div className="formOutcomeList">
-    <label htmlFor="outcomes" className="formOutcomeList__label">
-      {label}
-    </label>
-    {fields.map((field, index) => (
-      <div key={index} className={'formOutcomeList__entry'}>
-        <div className={'entry__color'} style={{ backgroundColor: COLOR_SCHEME_DEFAULT[index] }} />
-        <Field
-          component={FormInput}
-          name={`${field}`}
-          onChange={(e, val) => {
-            if (index === fields.length - 1 && val != null && val.length > 0) {
-              fields.push('')
-            }
-          }}
-          className="formOutcomeListInput"
-          placeholder="Add another..."
-        />
-        {fields.length > 2 && (
-          <a
-            className="entry__delete"
-            href=""
-            tabIndex="-1"
-            onClick={(e) => {
-              e.preventDefault()
-              fields.remove(index)
-            }}
-          >
-            Delete
-          </a>
-        )}
+class FormOutcomeList extends Component {
+  addOutcome = (event) => {
+    event.preventDefault()
+    this.props.fields.push('')
+  }
+
+  addOutcomeOnChange = (event) => {
+    const { fields } = this.props
+    const { target } = event
+    const { value } = target
+    const index = +target.getAttribute('data-index')
+
+    // new outcome is added when user started typing inside the last field
+    const addNewOutcome = index === fields.length - 1 && value != null && value.length > 0 && fields.length < 3
+    if (addNewOutcome) {
+      fields.push('')
+    }
+  }
+
+  removeOutcome = (event) => {
+    event.preventDefault()
+    const { fields } = this.props
+    const index = event.target.getAttribute('data-index')
+    fields.remove(index)
+  }
+
+  render() {
+    const { fields, label, meta: { error, invalid } } = this.props
+    const showAddButton = fields.length < 3
+    const showDeleteButton = fields.length > 2
+    const addOutcomeLabel = 'Add'
+    const deleteOutcomeLabel = 'Delete'
+
+    return (
+      <div className="formOutcomeList">
+        <label htmlFor="outcomes" className="formOutcomeList__label">
+          {label}
+        </label>
+        {fields.map((field, index) => (
+          <Outcome
+            key={index}
+            index={index}
+            field={field}
+            showDelete={showDeleteButton}
+            onChange={this.addOutcomeOnChange}
+            deleteLabel={deleteOutcomeLabel}
+            onDeleteClick={this.removeOutcome}
+          />
+        ))}
+        {showAddButton && <AddOutcome text={addOutcomeLabel} onClick={this.addOutcome} />}
+        {invalid && error && <span>{error}</span>}
       </div>
-    ))}
-    {invalid && error && <span>{error}</span>}
-  </div>
-)
+    )
+  }
+}
 
 FormOutcomeList.propTypes = {
   fields: PropTypes.shape({
