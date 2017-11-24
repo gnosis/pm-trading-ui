@@ -188,6 +188,7 @@ class MarketDetail extends Component {
     const marketResolved = market.oracle.isOutcomeSet
     const marketClosedOrFinished = marketClosed || marketResolved
     const marketStatus = marketResolved ? 'resolved.' : 'closed.'
+    const showCountdown = !marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS && resolutionDateNotPassed
 
     const winnings = marketShares.reduce((sum, share) => {
       const shareWinnings = weiToEth(calcLMSRProfit({
@@ -207,7 +208,7 @@ class MarketDetail extends Component {
           <p className="marketDescription__text">{market.eventDescription.description}</p>
         </div>
         <Outcome market={market} />
-        {!marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS && resolutionDateNotPassed ? (
+        {showCountdown ? (
           <div className="marketTimer">
             <div className="marketTimer__live">
               <Countdown target={market.eventDescription.resolutionDate} />
@@ -231,9 +232,7 @@ class MarketDetail extends Component {
                 .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
             {marketClosedOrFinished && (
-              <div className="marketTimer__marketClosed">
-                {`This market was ${marketStatus}`}
-              </div>
+              <div className="marketTimer__marketClosed">{`This market was ${marketStatus}`}</div>
             )}
           </div>
         )}
@@ -333,7 +332,14 @@ class MarketDetail extends Component {
           </div>
         </div>
         {this.renderControls(market)}
-        <div ref={(div) => { this.divSharesNode = div }} className="expandable">{this.renderExpandableContent()}</div>
+        <div
+          ref={(div) => {
+            this.divSharesNode = div
+          }}
+          className="expandable"
+        >
+          {this.renderExpandableContent()}
+        </div>
         {market.trades ? <MarketGraph data={market.trades} market={market} /> : ''}
       </div>
     )
