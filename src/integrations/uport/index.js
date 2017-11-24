@@ -6,8 +6,6 @@ import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
 import uPortInstance, { hasValidCredential, requestCredentials, getCredentialsFromLocalStorage } from './connector'
 
-const loginText = 'Log into <b>Gnosis Olympia</b>'
-
 class Uport extends BaseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
 
@@ -41,17 +39,8 @@ class Uport extends BaseIntegration {
     })
 
     this.uport = uPortInstance
-    const { firstReq } = this.uport
 
     if (!hasValidCredential()) {
-      setTimeout(() => {
-        if (document && firstReq) {
-          const loginTextParagraph = document.getElementById('uport-qr-text')
-          if (loginTextParagraph) {
-            loginTextParagraph.innerHTML = loginText
-          }
-        }
-      }, 100)
       await requestCredentials()
     }
 

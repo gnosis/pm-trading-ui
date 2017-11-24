@@ -9,10 +9,22 @@ const uport = new Connect('Gnosis', {
   signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
 })
 
+const loginText = 'Log into <b>Gnosis Olympia</b>'
+
 export default uport
 
 export const requestCredentials = async () => {
+  const { firstReq } = uport
   try {
+    if (document && firstReq) {
+      setTimeout(() => {
+        const loginTextParagraph = document.getElementById('uport-qr-text')
+        if (loginTextParagraph) {
+          loginTextParagraph.innerHTML = loginText
+        }
+      }, 100)
+    }
+
     const cred = await uport.requestCredentials({ notifications: true })
     localStorage.setItem(UPORT_OLYMPIA_KEY, JSON.stringify(cred))
   } catch (err) {
@@ -40,7 +52,7 @@ export const hasValidCredential = () => {
   const expiration = pushToken.payload.exp // When the uPort credential will expire
   const oneDay = 24 * 60 * 6 // one day in seconds
   const now = new Date() / 1000 // in seconds
-  const isValid = (expiration - oneDay) > now
+  const isValid = expiration - oneDay > now
 
   return isValid
 }
