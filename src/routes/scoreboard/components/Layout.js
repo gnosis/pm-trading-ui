@@ -35,7 +35,7 @@ const NoRows = () => (
 class Layout extends React.PureComponent {
   render() {
     const { data, myAccount } = this.props
-    const hasRows = data && data.size > 1 // minSize
+    const hasRows = data && data.size > 1
 
     return (
       <Block>
