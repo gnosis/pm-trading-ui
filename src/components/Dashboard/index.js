@@ -23,6 +23,7 @@ import { EXPAND_MY_SHARES } from 'components/MarketDetail/ExpandableViews'
 
 import Metrics from './Metrics'
 import './dashboard.less'
+import { isMarketResolved, isMarketClosed } from '../../utils/helpers'
 
 const getNewMarkets = (markets = [], limit) =>
   markets.sort((a, b) => a.creationDate < b.creationDate).slice(0, limit || markets.length)
@@ -125,6 +126,9 @@ class Dashboard extends Component {
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
       let probability = new Decimal(0)
       let maximumWin = new Decimal(0)
+      const marketResolved = isMarketResolved(market)
+      const marketClosed = isMarketClosed(market)
+      const marketResolvedOrClosed = marketClosed || marketResolved
       // Check market is not empty
       if (market.event) {
         probability = calcLMSRMarginalPrice({
@@ -172,16 +176,14 @@ class Dashboard extends Component {
               <div className="col-md-4 dashboardMarket--highlight">
                 {market.event &&
                   market.oracle &&
-                  !market.oracle.isOutcomeSet &&
-                  !market.event.isWinningOutcomeSet && (
+                  !marketResolvedOrClosed && (
                     <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
                       SELL
                     </a>
                   )}
                 {market.event &&
                   market.oracle &&
-                  market.oracle.isOutcomeSet &&
-                  market.event.isWinningOutcomeSet && (
+                  marketResolved && (
                     <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
                       REDEEM WINNINGS
                     </a>
@@ -241,7 +243,7 @@ class Dashboard extends Component {
     const { markets, accountShares, accountTrades } = this.props
 
     const whitelistedMarkets = markets.filter(market =>
-      process.env.WHITELIST[market.creator] && !market.oracle.isOutcomeSet && !market.event.isWinningOutcomeSet)
+      process.env.WHITELIST[market.creator] && !isMarketResolved(market) && !isMarketClosed(market))
     const newMarkets = getNewMarkets(whitelistedMarkets, 5)
 
     const closingMarkets = getSoonClosingMarkets(whitelistedMarkets, 5)
