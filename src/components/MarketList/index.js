@@ -4,6 +4,7 @@ import autobind from 'autobind-decorator'
 import moment from 'moment'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
+import { Link } from 'react-router'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
 import InteractionButton from 'containers/InteractionButton'
@@ -80,8 +81,29 @@ class MarketList extends Component {
   @autobind
   renderMarket(market) {
     const isResolved = market.oracle && market.oracle.isOutcomeSet
+    const isClosed = market.stage === MARKET_STAGES.MARKET_CLOSED
+    const isResolvedOrClosed = isResolved || isClosed
     const isOwner = this.props.defaultAccount && market.creator === this.props.defaultAccount
     const showResolveButton = isOwner && !isResolved
+
+    let marketStatusInfoField = (
+      <div className="info_field">
+        <div className="info__field--icon icon icon--countdown" />
+        <div className="info__field--label">
+          <Countdown target={market.eventDescription.resolutionDate} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
+        </div>
+      </div>
+    )
+
+    if (isResolvedOrClosed) {
+      const marketStatus = isResolved ? 'resolved' : 'closed'
+      marketStatusInfoField = (
+        <div className="info_field">
+          <div className="info__field--icon icon icon--checkmark" />
+          <div className="info__field--label">{marketStatus}</div>
+        </div>
+      )
+    }
 
     return (
       <button
@@ -105,23 +127,9 @@ class MarketList extends Component {
         </div>
         <Outcome market={market} />
         <div className="market__info row">
-          {isResolved ? (
-            <div className="info__group col-md-3">
-              <div className="info_field">
-                <div className="info__field--icon icon icon--checkmark" />
-                <div className="info__field--label">Resolved</div>
-              </div>
-            </div>
-          ) : (
-            <div className="info__group col-md-3">
-              <div className="info__field">
-                <div className="info__field--icon icon icon--countdown" />
-                <div className="info__field--label">
-                  <Countdown target={market.eventDescription.resolutionDate} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="info__group col-md-3">
+            <div className="info__field">{marketStatusInfoField}</div>
+          </div>
           <div className="info__group col-md-3">
             <div className="info__field">
               <div className="info__field--icon icon icon--enddate" />
@@ -210,7 +218,8 @@ class MarketList extends Component {
     const now = new Date()
     const openMarketsAmount = markets.filter(({ stage, oracle: { isOutcomeSet } }) => stage !== MARKET_STAGES.MARKET_CLOSED && !isOutcomeSet).length
     const endingSoonMarketsAmount = markets.filter(({ eventDescription: { resolutionDate } }) => new Date(resolutionDate) - now < threeDayMSeconds).length
-    const newMarketsAmount = markets.filter(({ creationDate }) => now - new Date(creationDate) < threeDayMSeconds).length
+    const newMarketsAmount = markets.filter(({ creationDate }) => now - new Date(creationDate) < threeDayMSeconds)
+      .length
 
     return (
       <div className="marketListPage">
