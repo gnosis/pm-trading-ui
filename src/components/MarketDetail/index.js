@@ -182,6 +182,7 @@ class MarketDetail extends Component {
       .local()
       .diff(moment(), 'hours')
     const { marketShares } = this.props
+    const resolutionDateNotPassed = moment(market.eventDescription.resolutionDate).isAfter(moment())
 
     const marketClosed = market.stage === MARKET_STAGES.MARKET_CLOSED
     const marketResolved = market.oracle.isOutcomeSet
@@ -206,7 +207,7 @@ class MarketDetail extends Component {
           <p className="marketDescription__text">{market.eventDescription.description}</p>
         </div>
         <Outcome market={market} />
-        {!marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS ? (
+        {!marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS && resolutionDateNotPassed ? (
           <div className="marketTimer">
             <div className="marketTimer__live">
               <Countdown target={market.eventDescription.resolutionDate} />
