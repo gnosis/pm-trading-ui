@@ -35,10 +35,7 @@ const NoRows = () => (
 class Layout extends React.PureComponent {
   render() {
     const { data, myAccount } = this.props
-    // For some reason ReactTable does not re-render table if data changes so
-    // we wait the first rendering to have the user listed if myAccount is present
-    const minSize = myAccount ? 100 : 1
-    const hasRows = data && data.size > minSize
+    const hasRows = data && data.size > 1 // minSize
 
     return (
       <Block>

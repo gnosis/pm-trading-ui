@@ -108,7 +108,8 @@ const ScoreTable = ({ tableData, myAccount }) => {
   const size = tableData ? tableData.size : 0
 
   return (<ReactTable
-    data={tableData.toArray()}
+    key={size}
+    data={tableData}
     columns={columns}
     showPagination={false}
     defaultPageSize={size}
@@ -120,17 +121,23 @@ const ScoreTable = ({ tableData, myAccount }) => {
   />)
 }
 
+const dataType = ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
+  currentRank: PropTypes.number.isRequired,
+  diffRank: PropTypes.number.isRequired,
+  pastRank: PropTypes.number.isRequired,
+  account: PropTypes.string.isRequired,
+  score: PropTypes.string.isRequired,
+  balance: PropTypes.string.isRequired,
+  predictedProfit: PropTypes.string.isRequired,
+  predictions: PropTypes.string.number,
+}))
+
+ReactTable.propTypes = {
+  data: dataType,
+}
+
 ScoreTable.propTypes = {
-  tableData: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
-    currentRank: PropTypes.number.isRequired,
-    diffRank: PropTypes.number.isRequired,
-    pastRank: PropTypes.number.isRequired,
-    account: PropTypes.string.isRequired,
-    score: PropTypes.string.isRequired,
-    balance: PropTypes.string.isRequired,
-    predictedProfit: PropTypes.string.isRequired,
-    predictions: PropTypes.string.number,
-  })),
+  tableData: dataType,
   myAccount: PropTypes.string,
 }
 
