@@ -23,7 +23,7 @@ import config from 'config.json'
 import expandableViews, { EXPAND_MY_SHARES } from './ExpandableViews'
 
 import './marketDetail.less'
-import { weiToEth } from '../../utils/helpers'
+import { weiToEth, isMarketClosed, isMarketResolved } from '../../utils/helpers'
 import { marketShareShape } from '../../utils/shapes'
 
 const ONE_WEEK_IN_HOURS = 168
@@ -176,7 +176,6 @@ class MarketDetail extends Component {
   }
 
   renderDetails(market) {
-    const showWinning = market.oracle.isOutcomeSet
     const timeToResolution = moment
       .utc(market.eventDescription.resolutionDate)
       .local()
@@ -184,11 +183,12 @@ class MarketDetail extends Component {
     const { marketShares } = this.props
     const resolutionDateNotPassed = moment(market.eventDescription.resolutionDate).isAfter(moment())
 
-    const marketClosed = market.stage === MARKET_STAGES.MARKET_CLOSED
-    const marketResolved = market.oracle.isOutcomeSet
+    const marketClosed = isMarketClosed(market)
+    const marketResolved = isMarketResolved(market)
+    const showWinning = marketResolved
     const marketClosedOrFinished = marketClosed || marketResolved
     const marketStatus = marketResolved ? 'resolved.' : 'closed.'
-    const showCountdown = !marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS && resolutionDateNotPassed
+    const showCountdown = !marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS
 
     const winnings = marketShares.reduce((sum, share) => {
       const shareWinnings = weiToEth(calcLMSRProfit({

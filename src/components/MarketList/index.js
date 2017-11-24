@@ -24,6 +24,7 @@ import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
 import { MARKET_STAGES } from '../../utils/constants'
+import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 const resolutionFilters = [
   {
@@ -74,8 +75,13 @@ class MarketList extends Component {
 
   @autobind
   renderMarket(market) {
-    const isResolved = market.oracle && market.oracle.isOutcomeSet
-    const isClosed = market.stage === MARKET_STAGES.MARKET_CLOSED
+    console.log('-------------------------')
+    console.log(market)
+    console.log(isMarketClosed(market), 'IS CLOSED?')
+    console.log(isMarketResolved(market), 'IS RESOLVED?')
+    console.log('-------------------------')
+    const isResolved = isMarketResolved(market)
+    const isClosed = isMarketClosed(market)
     const isResolvedOrClosed = isResolved || isClosed
     const isOwner = this.props.defaultAccount && market.creator === this.props.defaultAccount
     const showResolveButton = isOwner && !isResolved
@@ -104,7 +110,7 @@ class MarketList extends Component {
         type="button"
         className={cn({
           market,
-          'market--resolved': isResolved,
+          'market--resolved': isResolved || isClosed,
         })}
         key={market.address}
         onClick={() => this.handleViewMarket(market)}
@@ -210,9 +216,10 @@ class MarketList extends Component {
 
     const threeDayMSeconds = 3 * 24 * 60 * 60 * 1000
     const now = new Date()
-    const openMarketsAmount = markets.filter(({ stage, oracle: { isOutcomeSet } }) => stage !== MARKET_STAGES.MARKET_CLOSED && !isOutcomeSet).length
-    const endingSoonMarketsAmount = markets.filter(({ eventDescription: { resolutionDate } }) => new Date(resolutionDate) - now < threeDayMSeconds).length
-    const newMarketsAmount = markets.filter(({ creationDate }) => now - new Date(creationDate) < threeDayMSeconds)
+    const openMarkets = markets.filter(market => !isMarketClosed(market) && !isMarketResolved(market))
+    const openMarketsAmount = openMarkets.length
+    const endingSoonMarketsAmount = openMarkets.filter(({ eventDescription: { resolutionDate } }) => new Date(resolutionDate) - now < threeDayMSeconds).length
+    const newMarketsAmount = openMarkets.filter(({ creationDate }) => now - new Date(creationDate) < threeDayMSeconds)
       .length
 
     return (
