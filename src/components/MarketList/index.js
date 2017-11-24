@@ -75,11 +75,6 @@ class MarketList extends Component {
 
   @autobind
   renderMarket(market) {
-    console.log('-------------------------')
-    console.log(market)
-    console.log(isMarketClosed(market), 'IS CLOSED?')
-    console.log(isMarketResolved(market), 'IS RESOLVED?')
-    console.log('-------------------------')
     const isResolved = isMarketResolved(market)
     const isClosed = isMarketClosed(market)
     const isResolvedOrClosed = isResolved || isClosed
