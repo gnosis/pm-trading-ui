@@ -66,7 +66,7 @@ class MarketBuySharesForm extends Component {
 
   getMaximumWin(outcomeTokenCount, investment) {
     if (/^-?\d+\.?\d*$/.test(investment)) {
-      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
+      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18)).div(1e18)
     }
     return '--'
   }
@@ -99,7 +99,7 @@ class MarketBuySharesForm extends Component {
       // Fetch new shares
       this.props.fetchMarketShares(defaultAccount)
       return reset()
-    })
+    }).catch(e => console.error(e))
   }
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
@@ -286,7 +286,7 @@ class MarketBuySharesForm extends Component {
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
     const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest || '0')
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
-    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
+    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares || 0))
 
     const submitDisabled = invalid || !selectedBuyInvest
     let fieldError

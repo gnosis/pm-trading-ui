@@ -118,9 +118,7 @@ class Dashboard extends Component {
   renderMyHoldings(holdings, markets) {
     return holdings.map((holding, index) => {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
-      const filteredMarkets = markets.filter(
-        market => market.event.address === eventAddress && process.env.WHITELIST[market.creator],
-      )
+      const filteredMarkets = markets.filter(market => market.event.address === eventAddress && process.env.WHITELIST[market.creator])
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
       let probability = new Decimal(0)
       let maximumWin = new Decimal(0)
@@ -148,7 +146,7 @@ class Dashboard extends Component {
             <div className="outcome row">
               <div className="col-md-3">
                 <div
-                  className={'entry__color'}
+                  className="entry__color"
                   style={{ backgroundColor: COLOR_SCHEME_DEFAULT[holding.outcomeToken.index] }}
                 />
                 <div className="dashboardMarket--highlight">{getOutcomeName(market, holding.outcomeToken.index)}</div>
@@ -198,9 +196,7 @@ class Dashboard extends Component {
   renderMyTrades(trades, markets) {
     return trades.map((trade, index) => {
       const eventAddress = add0xPrefix(trade.outcomeToken.event)
-      const filteredMarkets = markets.filter(
-        market => market.event.address === eventAddress && process.env.WHITELIST[market.creator],
-      )
+      const filteredMarkets = markets.filter(market => market.event.address === eventAddress && process.env.WHITELIST[market.creator])
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
       let averagePrice
       if (trade.orderType === 'BUY') {
@@ -219,7 +215,7 @@ class Dashboard extends Component {
           <div className="outcome row">
             <div className="col-md-3">
               <div
-                className={'entry__color'}
+                className="entry__color"
                 style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
               />
               <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
@@ -241,10 +237,8 @@ class Dashboard extends Component {
   renderWidget(marketType) {
     const { markets, accountShares, accountTrades } = this.props
 
-    const whitelistedMarkets = markets.filter(
-      market =>
-        process.env.WHITELIST[market.creator] && !market.oracle.isOutcomeSet && !market.event.isWinningOutcomeSet,
-    )
+    const whitelistedMarkets = markets.filter(market =>
+      process.env.WHITELIST[market.creator] && !market.oracle.isOutcomeSet && !market.event.isWinningOutcomeSet)
     const newMarkets = getNewMarkets(whitelistedMarkets, 5)
 
     const closingMarkets = getSoonClosingMarkets(whitelistedMarkets, 5)
