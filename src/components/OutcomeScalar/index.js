@@ -10,11 +10,12 @@ import { calcLMSRMarginalPrice } from 'api'
 import './outcomeScalar.less'
 
 const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
-  const marginalPrice = calcLMSRMarginalPrice({
+  let marginalPrice = calcLMSRMarginalPrice({
     netOutcomeTokensSold: market.netOutcomeTokensSold,
     funding: market.funding,
     outcomeTokenIndex: 1, // always calc for long when calculating estimation
   })
+  const showOnlyWinningOutcome = market.oracle.isOutcomeSet && market.oracle.outcome !== undefined
 
   const decimals = parseInt(market.eventDescription.decimals, 10)
 
@@ -22,13 +23,25 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
   const lowerBound = Decimal(market.event.lowerBound).div(10 ** decimals)
 
   const bounds = upperBound.sub(lowerBound)
-  const value = Decimal(marginalPrice.toString()).times(bounds).add(lowerBound)
+  console.log(bounds.toString())
+  let value = Decimal(marginalPrice)
+    .times(bounds)
+    .add(lowerBound)
+
+  if (showOnlyWinningOutcome) {
+    value = Decimal(market.oracle.outcome).div(10 ** decimals)
+    marginalPrice = value.div(upperBound)
+  }
 
   if (showOnlyTrendingOutcome) {
     return (
       <div className="row">
         <div className="col-md-6">
-          <DecimalValue value={value} decimals={market.eventDescription.decimals} className="outcome__currentPrediction--value" />
+          <DecimalValue
+            value={value}
+            decimals={market.eventDescription.decimals}
+            className="outcome__currentPrediction--value"
+          />
           &nbsp;{market.eventDescription.unit}
         </div>
       </div>
