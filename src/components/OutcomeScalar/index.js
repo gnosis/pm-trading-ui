@@ -23,7 +23,6 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
   const lowerBound = Decimal(market.event.lowerBound).div(10 ** decimals)
 
   const bounds = upperBound.sub(lowerBound)
-  console.log(bounds.toString())
   let value = Decimal(marginalPrice)
     .times(bounds)
     .add(lowerBound)
