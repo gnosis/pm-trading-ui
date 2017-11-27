@@ -51,8 +51,6 @@ class Remote extends BaseIntegration {
       account: this.account,
       balance: this.balance,
     })
-      .then(() => opts.initGnosis())
-      .catch(() => opts.initGnosis())
   }
 }
 

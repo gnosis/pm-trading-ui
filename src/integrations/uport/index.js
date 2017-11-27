@@ -68,28 +68,23 @@ class Uport extends BaseIntegration {
           return
         }
         await opts.initGnosis()
-        const balance = await getOlympiaTokensByAccount(this.account)
-        opts.runProviderUpdate(this, {
-          provider: Uport.providerName,
-          balance: weiToEth(balance),
-          account: this.account,
-        })
         opts.dispatch(fetchOlympiaUserData(this.account))
       })
-      .catch(() => opts.initGnosis())
   }
 
   /**
    * Returns the balance of olympia tokens for the current default account in Wei
    * @async
+   * @param {string} account - Useraccount to get the balance for
    * @returns {Promise<string>} - Accountbalance in WEI for current account
    */
-  async getBalance() {
-    if (!this.account) {
+  async getBalance(account) {
+    const userAccount = account || this.account
+    if (!userAccount) {
       throw new Error('No Account available')
     }
 
-    const balance = await getOlympiaTokensByAccount(this.account)
+    const balance = await getOlympiaTokensByAccount(userAccount)
 
     if (typeof balance !== 'undefined') {
       return weiToEth(balance.toString())
