@@ -1,5 +1,4 @@
 import { getOlympiaTokensByAccount } from 'api'
-import { setTimeout } from 'timers'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'

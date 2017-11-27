@@ -14,9 +14,11 @@ const loginText = 'Log into <b>Gnosis Olympia</b>'
 export default uport
 
 export const requestCredentials = async () => {
-  const { firstReq } = uport
   try {
-    if (document && firstReq) {
+    if (document && uport.firstReq) {
+      // https://github.com/uport-project/uport-connect/blob/develop/src/util/qrdisplay.js#L41
+      // https://github.com/uport-project/uport-connect/blob/develop/src/util/qrdisplay.js#L72
+
       setTimeout(() => {
         const loginTextParagraph = document.getElementById('uport-qr-text')
         if (loginTextParagraph) {
