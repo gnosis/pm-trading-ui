@@ -48,9 +48,7 @@ export const getGnosisConnection = async () => {
  */
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
-  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts(
-    (e, accounts) => (e ? reject(e) : resolve(accounts[0]))),
-  )
+  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts((e, accounts) => (e ? reject(e) : resolve(accounts[0]))))
 }
 
 /**
@@ -246,13 +244,13 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
-  const collateralTokenWei = Decimal(cost).mul(1e18)
+  const collateralTokenWei = Decimal(cost).mul(1e18).toString()
 
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
   const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
 
-  if (await collateralToken.name() === 'Ether Token') {
-    await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
+  if ((await collateralToken.name()) === 'Ether Token') {
+    await gnosis.etherToken.deposit({ value: collateralTokenWei })
   }
 
   // buyOutComeTokens handles approving
@@ -260,6 +258,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
     market: market.address,
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCount.toString(),
+    cost: collateralTokenWei,
     approvalResetAmount,
   })
 
@@ -272,15 +271,25 @@ export const resolveEvent = async (event, selectedOutcomeIndex) => {
   await gnosis.resolveEvent(event.address, parseInt(selectedOutcomeIndex, 10))
 }
 
-export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenCount, approvalResetAmount) => {
+export const sellShares = async (
+  marketAddress,
+  outcomeTokenIndex,
+  outcomeTokenCount,
+  earnings,
+  approvalResetAmount,
+) => {
   const gnosis = await getGnosisConnection()
 
-  const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
+  const outcomeTokenCountWei = Decimal(outcomeTokenCount)
+    .mul(1e18)
+    .toString()
+  const minProfit = Decimal(earnings).mul(1e18).round().toString()
 
   const collateralTokensReceived = await gnosis.sellOutcomeTokens({
     market: hexWithPrefix(marketAddress),
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCountWei,
+    minProfit,
     approvalResetAmount,
   })
 
