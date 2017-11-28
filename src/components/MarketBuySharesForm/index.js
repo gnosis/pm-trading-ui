@@ -42,7 +42,8 @@ class MarketBuySharesForm extends Component {
   }
 
   getOutcomeTokenCount(investment, outcomeIndex, limitMargin) {
-    const validInvestment = /^-?\d+\.?\d*$/.test(investment) && investment && (parseFloat(investment) > 0) && parseFloat(investment) < 1000
+    const validInvestment =
+      /^-?\d+\.?\d*$/.test(investment) && investment && parseFloat(investment) > 0 && parseFloat(investment) < 1000
     if (!validInvestment) {
       return new Decimal(0)
     }
@@ -372,8 +373,8 @@ class MarketBuySharesForm extends Component {
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} decimals={5} />{' '}
-                  <CurrencyName collateralToken={collateralToken} />
+                  <DecimalValue value={gasCostEstimation} decimals={5} />
+                  {' ETH'}
                 </div>
               </div>
               {submitFailed && (
