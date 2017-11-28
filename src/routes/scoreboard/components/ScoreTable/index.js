@@ -1,14 +1,16 @@
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
 import 'react-table/react-table.css'
 import * as React from 'react'
 import ReactTable from 'react-table'
 import {
-    badgeCell,
-    rankCell,
-    olyCell,
-    rewardCell,
-    userAddressCell,
-    ownTrCallback,
-    ownTheadCallback,
+  badgeCell,
+  rankCell,
+  olyCell,
+  rewardCell,
+  userAddressCell,
+  ownTrCallback,
+  ownTheadCallback,
 } from './table'
 
 const tableStyle = {
@@ -102,10 +104,11 @@ const columns = [{
 
 const EmptyData = () => <div />
 
-const ScoreBoard = ({ tableData, myAccount }) => {
-  const size = tableData ? tableData.size > 101 ? 101 : tableData.size : 0
+const ScoreTable = ({ tableData, myAccount }) => {
+  const size = tableData ? tableData.size : 0
 
   return (<ReactTable
+    key={size}
     data={tableData}
     columns={columns}
     showPagination={false}
@@ -118,4 +121,29 @@ const ScoreBoard = ({ tableData, myAccount }) => {
   />)
 }
 
-export default ScoreBoard
+const dataType = ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
+  currentRank: PropTypes.number.isRequired,
+  diffRank: PropTypes.number.isRequired,
+  pastRank: PropTypes.number.isRequired,
+  account: PropTypes.string.isRequired,
+  score: PropTypes.string.isRequired,
+  balance: PropTypes.string.isRequired,
+  predictedProfit: PropTypes.string.isRequired,
+  predictions: PropTypes.string.number,
+}))
+
+ReactTable.propTypes = {
+  data: dataType,
+}
+
+ScoreTable.propTypes = {
+  tableData: dataType,
+  myAccount: PropTypes.string,
+}
+
+ScoreTable.defaultProps = {
+  tableData: [],
+  myAccount: 'Unknown',
+}
+
+export default ScoreTable
