@@ -124,6 +124,13 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress && process.env.WHITELIST[market.creator])
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
+
+      // Sometimes we have market share stored in gnosisDB but not the market itself
+      // This check is needed to prevent errors caused by it
+      if (!Object.keys(market).length) {
+        return null
+      }
+
       let probability = new Decimal(0)
       let maximumWin = new Decimal(0)
       const marketResolved = isMarketResolved(market)
