@@ -9,6 +9,7 @@ import {
   calcScalarEventGasCost,
   calcCentralizedOracleGasCost,
   calcFundingGasCost,
+  calcRedeemWinningsGasCost,
   getGasPrice,
   getEtherTokens,
 } from 'api'
@@ -35,7 +36,7 @@ export const requestGasPrice = () => async (dispatch) => {
   dispatch(setGasPrice({ entityType: 'gasPrice', gasPrice }))
 }
 
-export const requestGasCost = contractType => async (dispatch) => {
+export const requestGasCost = (contractType, opts) => async (dispatch) => {
   if (contractType === GAS_COST.MARKET_CREATION) {
     calcMarketGasCost().then((gasCost) => {
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
@@ -62,6 +63,10 @@ export const requestGasCost = contractType => async (dispatch) => {
     })
   } else if (contractType === GAS_COST.FUNDING) {
     calcFundingGasCost().then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
+  } else if (contractType === GAS_COST.REDEEM_WINNINGS) {
+    calcRedeemWinningsGasCost(opts).then((gasCost) => {
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   }
