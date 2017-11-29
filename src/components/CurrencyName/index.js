@@ -6,20 +6,25 @@ export const outcomeTokenToText = outcomeToken => outcomeToken
 export const collateralTokenToText = () => 'OLY'
 
 const CurrencyName = ({ collateralToken, outcomeToken }) => {
-    if (collateralToken) {
-        return <span>{collateralTokenToText(collateralToken)}</span>
-    }
+  if (collateralToken) {
+    return <span>{collateralTokenToText(collateralToken)}</span>
+  }
 
-    if (outcomeToken) {
-        return <span>{outcomeTokenToText(outcomeToken)}</span>
-    }
+  if (outcomeToken) {
+    return <span>{outcomeTokenToText(outcomeToken)}</span>
+  }
 
-    return <span>Unknown</span>
+  return <span>Unknown</span>
 }
 
 CurrencyName.propTypes = {
-    collateralToken: PropTypes.string,
-    outcomeToken: PropTypes.string,
+  collateralToken: PropTypes.string,
+  outcomeToken: PropTypes.string,
+}
+
+CurrencyName.defaultProps = {
+  collateralToken: 'OLY',
+  outcomeToken: '',
 }
 
 export default CurrencyName
