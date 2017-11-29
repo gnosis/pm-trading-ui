@@ -8,10 +8,8 @@ const assignSessionProps = (cred, uport) => {
 const init = async (uport, requestCredentials, getCredential) => {
   let credential = getCredential()
   if (!isValid(credential)) {
-    await requestCredentials()
+    credential = await requestCredentials()
   }
-
-  credential = getCredential()
 
   if (credential) {
     assignSessionProps(uport, credential)
