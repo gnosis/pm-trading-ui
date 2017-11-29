@@ -90,7 +90,7 @@ export default class MarketCreateWizard extends Component {
       <div className="marketDetails">
         <div className="row">
           <div className="col-md-offset-2 col-md-10">
-            <Field name="fee" component={FormSlider} min={0} max={10} label="Fee" unit="%" showDefaultUnit />
+            <Field name="fee" component={FormSlider} min={0} max={10} label="Fee" unit="%" />
           </div>
         </div>
         <div className="row">

@@ -17,7 +17,6 @@ import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
-import FormSlider from 'components/FormSlider'
 
 import FormRadioButton from 'components/FormRadioButton'
 import FormBarChartRadioButton from 'components/FormBarChartRadioButton'
@@ -342,20 +341,16 @@ class MarketBuySharesForm extends Component {
                 </div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Limit Margin</div>
-                <div className="col-md-6">
+                <div className="col-md-6">Limit Margin in %</div>
+                <div className="col-md-3">
                   <Field
                     name="limitMargin"
-                    component={FormSlider}
+                    component={Input}
                     className="limitMarginField"
                     placeholder={LIMIT_MARGIN_DEFAULT}
-                    min={0}
-                    max={5}
-                    unit="%"
-                    step={0.5}
-                    showInput={false}
                   />
                 </div>
+                <div className="col-md-3">%</div>
               </div>
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Token Count</div>

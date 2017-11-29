@@ -1,6 +1,4 @@
 @import url("../../less/vars.less");
-@import url("../FormSlider/slider.less");
-@import url("../FormSlider/thumb.less");
 
 .marketBuySharesForm {
   &__row {
@@ -18,14 +16,6 @@
   &__cancel {
     &::before {
       background: @bg-color-muted !important;
-    }
-  }
-  .formSlider {
-    padding-top: 15px;
-    &__input {
-      background: none;
-      .sliderCrossBrowser(@font-color-muted);
-      .thumbCrossBrowser(lighten(@font-color-muted, 5%), lighten(@font-color-muted, 5%));
     }
   }
 }
@@ -89,6 +79,7 @@
 }
 
 .marketBuyWin {
+
   &__row {
     display: block;
     overflow: hidden;
