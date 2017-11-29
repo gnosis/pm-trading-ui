@@ -20,7 +20,6 @@ import './marketShortSellForm.less'
 import '../MarketBuySharesForm/marketBuySharesForm.less'
 
 class MarketShortSellForm extends Component {
-
   getMaximumReturn(collateralTokenCount, profit) {
     if (!isNaN(parseFloat(collateralTokenCount)) && !isNaN(profit)
         && new Decimal(collateralTokenCount).gt(0) && new Decimal(profit).gte(0)) {
@@ -80,27 +79,26 @@ class MarketShortSellForm extends Component {
     if (!isNaN(parseFloat(selectedShortSellOutcome))) {
       // if (event.type === OUTCOME_TYPES.CATEGORICAL) {
       renderedOutcomes = eventDescription.outcomes
-      .filter((outcome, index) => index !== parseFloat(selectedShortSellOutcome))
+        .filter((outcome, index) => index !== parseFloat(selectedShortSellOutcome))
     }
     // Remove the current selected outcome from color_scheme, this allows us to
     // show the right colors for the unselected outcomes
     const colorScheme = Object.assign([], COLOR_SCHEME_DEFAULT)
     colorScheme.splice(selectedShortSellOutcome, 1)
 
-    return renderedOutcomes.map(
-      (outcome, index) =>
-        (
-          <div key={index} className="row">
-            <div
-              className={'entry__color col-md-4'} style={{ backgroundColor: colorScheme[index] }}
-            />
-            <div className="col-md-8">
-              {outcome}
-            </div>
-            {selectedShortSellAmount} Tokens
+    return renderedOutcomes.map((outcome, index) =>
+      (
+        <div key={index} className="row">
+          <div
+            className="entry__color col-md-4"
+            style={{ backgroundColor: colorScheme[index] }}
+          />
+          <div className="col-md-8">
+            {outcome}
           </div>
-        ),
-    )
+          {selectedShortSellAmount} Tokens
+        </div>
+      ))
   }
 
   renderCategorical() {
@@ -156,13 +154,15 @@ class MarketShortSellForm extends Component {
             <div className="col-md-4">
               <div className="row">
                 <div className="col-md-12">
-                  <h2 className="marketBuyHeading">YOUR BET</h2>
+                  <h2 className="marketBuyHeading">YOUR TRADE</h2>
                 </div>
               </div>
               <div className="row marketShortSellForm__row">
                 <div className="col-md-8">
                   <Field
-                    name="shortSellAmount" component={Input} className="marketSellAmount"
+                    name="shortSellAmount"
+                    component={Input}
+                    className="marketSellAmount"
                     placeholder="Enter amount"
                   />
                 </div>
@@ -176,7 +176,7 @@ class MarketShortSellForm extends Component {
               <div className="row marketShortSellForm__row">
                 <div className="col-md-6">
                     Maximum return
-                  </div>
+                </div>
                 <div className="col-md-6">
                   <span className="marketBuyWin__row marketBuyWin__max">
                     <DecimalValue value={maximumReturn} /> %
@@ -193,7 +193,9 @@ class MarketShortSellForm extends Component {
               <div className="row marketShortSellForm__row">
                 <div className="col-md-12">
                   <Field
-                    name="confirm" component={Checkbox} className="marketBuyCheckbox"
+                    name="confirm"
+                    component={Checkbox}
+                    className="marketBuyCheckbox"
                     text="I AGREE AND UNDERSTAND THAT ETH WILL BE TRANSFERRED FROM MY ACCOUNT"
                   />
                 </div>
@@ -212,7 +214,6 @@ class MarketShortSellForm extends Component {
       </div>
     )
   }
-
 }
 
 MarketShortSellForm.propTypes = {

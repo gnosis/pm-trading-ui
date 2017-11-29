@@ -7,7 +7,9 @@ import DecimalValue from 'components/DecimalValue'
 
 import './scalarSlider.less'
 
-const ScalarSlider = ({ lowerBound, upperBound, unit, marginalPriceCurrent, marginalPriceSelected, decimals }) => {
+const ScalarSlider = ({
+  lowerBound, upperBound, unit, marginalPriceCurrent, marginalPriceSelected, decimals,
+}) => {
   const bigLowerBound = new Decimal(lowerBound)
   const bigUpperBound = new Decimal(upperBound)
 
@@ -37,7 +39,7 @@ const ScalarSlider = ({ lowerBound, upperBound, unit, marginalPriceCurrent, marg
         <div className="scalarSlider__bar" title="Please enter a value on the right!">
           <div className="scalarSlider__handle" style={currentValueSliderStyle}>
             <div className="scalarSlider__handleText">
-              <div className="scalarSlider__handleTextLabel">Current Bet</div>
+              <div className="scalarSlider__handleTextLabel">Current Trade</div>
               <DecimalValue value={value} decimals={decimals} /> {unit}
             </div>
           </div>
@@ -49,7 +51,7 @@ const ScalarSlider = ({ lowerBound, upperBound, unit, marginalPriceCurrent, marg
             style={selectedValueSliderStyle}
           >
             <div className="scalarSlider__handleText">
-              <div className="scalarSlider__handleTextLabel">Selected Bet</div>
+              <div className="scalarSlider__handleTextLabel">Selected Trade</div>
               <DecimalValue value={selectedValue} decimals={decimals} /> {unit}
             </div>
           </div>

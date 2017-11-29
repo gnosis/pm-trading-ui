@@ -142,7 +142,7 @@ class MarketBuySharesForm extends Component {
       <div className="col-md-7">
         <div className="row">
           <div className="col-md-12">
-            <h2 className="marketBuyHeading">Your Bet</h2>
+            <h2 className="marketBuyHeading">Your Trade</h2>
           </div>
         </div>
         <div className="row">
@@ -234,7 +234,7 @@ class MarketBuySharesForm extends Component {
           <div className="col-md-6">
             <div className="row">
               <div className="col-md-12">
-                <h2 className="marketBuyHeading">Your Bet</h2>
+                <h2 className="marketBuyHeading">Your Trade</h2>
               </div>
             </div>
             <div className="row">
