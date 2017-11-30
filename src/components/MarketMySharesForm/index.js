@@ -365,7 +365,7 @@ class MarketMySharesForm extends Component {
               <label>Gas costs</label>
               <span>
                 <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
-                <CurrencyName collateralToken={market.event.collateralToken} />
+                {' ETH'}
               </span>
             </div>
           </div>
