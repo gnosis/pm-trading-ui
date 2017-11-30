@@ -360,7 +360,7 @@ MarketDetail.propTypes = {
     id: PropTypes.string,
     view: PropTypes.string,
   }),
-  reqiestGasPrice: PropTypes.func,
+  requestGasPrice: PropTypes.func,
   marketShares: PropTypes.arrayOf(marketShareShape),
   defaultAccount: PropTypes.string,
   market: marketShape,
