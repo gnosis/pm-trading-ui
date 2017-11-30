@@ -124,7 +124,8 @@ class Dashboard extends Component {
 
       // Sometimes we have market share stored in gnosisDB but not the market itself
       // This check is needed to prevent errors caused by it
-      if (!Object.keys(market).length) {
+      const marketPresent = Object.keys(market).length > 0
+      if (!marketPresent) {
         return null
       }
 
