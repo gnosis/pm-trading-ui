@@ -258,7 +258,7 @@ class MarketDetail extends Component {
                 <InteractionButton className="btn btn-primary" onClick={this.handleRedeemWinnings}>
                   Redeem Winnings
                 </InteractionButton>
-                <span className="redeemWinning__gasCost">Gas cost: {redeemWinningsTransactionGas}</span>
+                <span className="redeemWinning__gasCost">Gas cost: {redeemWinningsTransactionGas} ETH</span>
               </div>
             </div>
           )}
