@@ -246,7 +246,7 @@ class Dashboard extends Component {
     if (marketType === 'newMarkets') {
       return (
         <div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__market-title">New Markets</div>
+          <div className="dashboardWidget__market-title">Latest Markets</div>
           <div
             className={cn({
               dashboardWidget__container: true,
@@ -262,7 +262,7 @@ class Dashboard extends Component {
     if (marketType === 'closingMarkets') {
       return (
         <div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__market-title">Soon-Closing Markets</div>
+          <div className="dashboardWidget__market-title">Next Markets</div>
           <div
             className={cn({
               dashboardWidget__container: true,
