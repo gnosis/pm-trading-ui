@@ -3,7 +3,8 @@
 import { mapValues, startsWith, isArray, range } from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
-import { HEX_VALUE_REGEX, OUTCOME_TYPES } from 'utils/constants'
+import moment from 'moment'
+import { HEX_VALUE_REGEX, OUTCOME_TYPES, MARKET_STAGES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
 import Uport from 'integrations/uport'
@@ -25,6 +26,11 @@ export const hexWithoutPrefix = (value) => {
 export const add0xPrefix = value => (startsWith(value, '0x') ? value : `0x${value}`)
 
 export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix(value) : value)
+
+export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
+
+export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) =>
+  stage === MARKET_STAGES.MARKET_CLOSED || moment(resolutionDate).isBefore(moment().utc())
 
 export const toEntity = (data, entityType, idKey = 'address') => {
   const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
