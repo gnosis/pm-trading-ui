@@ -3,7 +3,7 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
-import uPortInstance, { hasValidCredential, requestCredentials, getCredentialsFromLocalStorage } from './connector'
+import initUportConnector from './connector'
 
 class Uport extends BaseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
@@ -14,6 +14,7 @@ class Uport extends BaseIntegration {
    */
   static providerPriority = 100
   static watcherInterval = 5000
+  static USE_NOTIFICATIONS = false
 
   constructor() {
     super()
@@ -37,25 +38,13 @@ class Uport extends BaseIntegration {
       account: opts.uportDefaultAccount,
     })
 
-    this.uport = uPortInstance
-
-    if (!hasValidCredential()) {
-      await requestCredentials()
-    }
+    this.uport = await initUportConnector(Uport.USE_NOTIFICATIONS)
 
     this.web3 = await this.uport.getWeb3()
     this.provider = await this.uport.getProvider()
     this.network = await this.getNetwork()
     this.networkId = await this.getNetworkId()
-
-    const cred = getCredentialsFromLocalStorage()
-
-    if (cred) {
-      this.uport.address = cred.address
-      this.uport.pushToken = cred.pushToken
-      this.uport.publicEncKey = cred.publicEncKey
-      this.account = opts.uportDefaultAccount || (await this.getAccount())
-    }
+    this.account = opts.uportDefaultAccount || (await this.getAccount())
 
     return this.runProviderUpdate(this, {
       available: true,
