@@ -2,6 +2,7 @@ language: node_js
 node_js: node
 dist: trusty
 before_install:
+- rm -rf node_modules
 - npm i -g babel-cli webpack truffle-contract
 after_success:
   - if [ ${TRAVIS_BRANCH} = "master" ]; then export NODE_ENV=production; else export NODE_ENV=development; fi
