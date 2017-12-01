@@ -4,7 +4,8 @@ import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
 import { getOracleByAddress } from './oracle'
 import { getEventDescriptionByAddress } from './eventDescription'
-import { isMarketResolved, isMarketClosed } from '../utils/helpers'
+import { isMarketResolved, isMarketClosed, weiToEth } from '../utils/helpers'
+import { OUTCOME_TYPES } from 'utils/constants'
 
 export const getMarketById = state => (marketAddress) => {
   const marketEntities = entitySelector(state, 'markets')
@@ -194,4 +195,85 @@ export const getAccountParticipatingInEvents = (state, account) => {
 
 export default {
   getMarkets,
+}
+
+const isValidMarket = market => market && market.event && market.oracle && market.eventDescription && market.shares !== undefined
+
+const marketCanRedeemWinnings = market => market.event.isWinningOutcomeSet
+
+const SCALAR_OUTCOME_RANGE = 1000000
+
+export const getMarketWinningsCategorical = (state, market, account) => {
+  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
+    return '0'
+  }
+
+  let winnings = Decimal(0)
+
+  market.shares.forEach((shareId) => {
+    const share = getMarketShareByShareId(state)(shareId)
+
+    if (share.owner === account &&
+        share.outcomeToken.index === parseInt(market.event.outcome, 10)) {
+      winnings = winnings.add(Decimal(share.balance))
+    }
+  })
+
+  return weiToEth(winnings)
+}
+
+export const getMarketWinningsScalar = (state, market, account) => {
+  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
+    return '0'
+  }
+
+  let winnings = Decimal(0)
+  const outcome = Decimal(market.event.outcome)
+  let outcomeClamped = Decimal(0)
+
+  const outcomeRange = Decimal(SCALAR_OUTCOME_RANGE)
+
+  const lowerBound = Decimal(market.event.lowerBound)
+  const upperBound = Decimal(market.event.upperBound)
+
+  if (outcome.lt(lowerBound)) {
+    outcomeClamped = Decimal(0)
+  } else if (outcome.gt(upperBound)) {
+    outcomeClamped = outcomeRange
+  } else {
+    outcomeClamped = outcomeRange.mul(outcome.sub(lowerBound).toString()).div(upperBound.sub(lowerBound).toString())
+  }
+
+  const factorShort = outcomeRange.sub(outcomeClamped)
+  const factorLong = outcomeRange.sub(factorShort.toString())
+
+  let shortOutcomeTokenCount = Decimal(0)
+  let longOutcomeTokenCount = Decimal(0)
+
+  market.shares.forEach((shareId) => {
+    const share = getMarketShareByShareId(state)(shareId)
+
+    if (share.owner === account) {
+      if (share.outcomeIndex === 0) {
+        shortOutcomeTokenCount = shortOutcomeTokenCount.add(share.balance)
+      } else {
+        longOutcomeTokenCount = longOutcomeTokenCount.add(share.balance)
+      }
+    }
+  })
+
+  winnings = shortOutcomeTokenCount.mul(factorShort).add(longOutcomeTokenCount).mul(factorLong).div(outcomeRange)
+
+  return weiToEth(winnings)
+}
+
+export const getMarketWinnings = (state, market, account) => {
+  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
+    return '0'
+  }
+
+  const isCategorical = market.event.type === OUTCOME_TYPES.CATEGORICAL
+  return isCategorical ?
+    getMarketWinningsCategorical(state, market, account) :
+    getMarketWinningsScalar(state, market, account)
 }

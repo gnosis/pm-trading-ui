@@ -16,7 +16,12 @@ import {
   withdrawFees,
   closeMarket,
 } from 'actions/market'
-import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
+import {
+  getMarketById,
+  getMarketSharesByMarket,
+  getMarketParticipantsTrades,
+  getMarketWinnings,
+} from 'selectors/market'
 import {
   getCurrentAccount,
   getCurrentBalance,
@@ -33,8 +38,12 @@ const mapStateToProps = (state, ownProps) => {
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const marketShortSellSelector = formValueSelector('marketShortSell')
 
+  const market = getMarketById(state)(ownProps.params.id)
+  const defaultAccount = getCurrentAccount(state)
+
   return {
-    market: getMarketById(state)(ownProps.params.id),
+    market,
+    defaultAccount,
     marketShares: getMarketSharesByMarket(state)(ownProps.params.id, getCurrentAccount(state)),
     selectedOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
@@ -45,10 +54,10 @@ const mapStateToProps = (state, ownProps) => {
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
     hasWallet: checkWalletConnection(state),
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
-    defaultAccount: getCurrentAccount(state),
     creatorIsModerator: isModerator(getCurrentAccount(state)),
     moderators: getModerators(),
     trades: getMarketParticipantsTrades(state)(),
+    winnings: getMarketWinnings(state, market, defaultAccount),
     initialValues: {
       selectedOutcome: 0,
     },

@@ -119,32 +119,41 @@ class Dashboard extends Component {
     ))
   }
 
-  renderMyHoldings(holdings, markets) {
+  renderMyHoldings(holdings, markets, marketWinnings) {
     return holdings.map((holding, index) => {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
-      const filteredMarkets = markets.filter(market => market.event.address === eventAddress && process.env.WHITELIST[market.creator])
-      const market = filteredMarkets.length ? filteredMarkets[0] : {}
-      let probability = new Decimal(0)
-      let maximumWin = new Decimal(0)
-      const marketResolved = isMarketResolved(market)
-      const marketClosed = isMarketClosed(market)
-      const marketResolvedOrClosed = marketClosed || marketResolved
-      // Check market is not empty
-      if (market.event) {
-        probability = calcLMSRMarginalPrice({
-          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-          funding: market.funding,
-          outcomeTokenIndex: holding.outcomeToken.index,
-        })
-        maximumWin = calcLMSROutcomeTokenCount({
-          netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-          funding: market.funding,
-          outcomeTokenIndex: holding.outcomeToken.index,
-          cost: holding.balance,
-        })
-      }
+
+      const filteredMarkets = markets.filter(market =>
+        market.event.address === eventAddress &&
+        process.env.WHITELIST[market.creator] &&
+        market.event &&
+        market.oracle &&
+        Decimal(holding.balance).gt(LOWEST_DISPLAYED_VALUE))
+
+      const market = filteredMarkets.length ? filteredMarkets[0] : undefined
 
       if (market) {
+        let probability = new Decimal(0)
+        let maximumWin = new Decimal(0)
+        const marketResolved = isMarketResolved(market)
+        const marketClosed = isMarketClosed(market)
+        const marketResolvedOrClosed = marketClosed || marketResolved
+        const winnings = marketWinnings[market.address] ? Decimal(marketWinnings[market.address]) : Decimal(0)
+        // Check market is not empty
+        if (market.event) {
+          probability = calcLMSRMarginalPrice({
+            netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+            funding: market.funding,
+            outcomeTokenIndex: holding.outcomeToken.index,
+          })
+          maximumWin = calcLMSROutcomeTokenCount({
+            netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
+            funding: market.funding,
+            outcomeTokenIndex: holding.outcomeToken.index,
+            cost: holding.balance,
+          })
+        }
+
         return (
           <div className="dashboardMarket dashboardMarket--onDark" key={index}>
             <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>
@@ -174,20 +183,16 @@ class Dashboard extends Component {
                 {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
               </div>
               <div className="col-md-4 dashboardMarket--highlight">
-                {market.event &&
-                  market.oracle &&
-                  !marketResolvedOrClosed && (
-                    <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
+                {!marketResolvedOrClosed && (
+                  <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
                       SELL
-                    </a>
-                  )}
-                {market.event &&
-                  market.oracle &&
-                  marketResolved && (
-                    <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
+                  </a>
+                )}
+                {marketResolvedOrClosed && winnings.gt(LOWEST_DISPLAYED_VALUE) && (
+                  <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
                       REDEEM WINNINGS
-                    </a>
-                  )}
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -240,7 +245,9 @@ class Dashboard extends Component {
   }
 
   renderWidget(marketType) {
-    const { markets, accountShares, accountTrades } = this.props
+    const {
+      markets, marketWinnings, accountShares, accountTrades,
+    } = this.props
 
     const whitelistedMarkets = markets.filter(market =>
       process.env.WHITELIST[market.creator] && !isMarketResolved(market) && !isMarketClosed(market))
@@ -285,7 +292,7 @@ class Dashboard extends Component {
         <div className="dashboardWidget dashboardWidget--onDark col-md-6">
           <div className="dashboardWidget__market-title">My Tokens</div>
           <div className="dashboardWidget__container">
-            {accountShares.length ? this.renderMyHoldings(accountShares, markets) : "You aren't holding any share."}
+            {accountShares.length ? this.renderMyHoldings(accountShares, markets, marketWinnings) : "You aren't holding any share."}
           </div>
         </div>
       )
@@ -364,6 +371,7 @@ Dashboard.propTypes = {
   accountTrades: PropTypes.array,
   accountPredictiveAssets: PropTypes.string,
   etherTokens: PropTypes.string,
+  winnings: PropTypes.objectOf(PropTypes.string),
   requestMarkets: PropTypes.func,
   requestGasPrice: PropTypes.func,
   requestAccountShares: PropTypes.func,
