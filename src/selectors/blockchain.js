@@ -35,6 +35,8 @@ export const getCurrentAccount = (state) => {
   if (provider) {
     return provider.account
   }
+
+  return undefined
 }
 
 export const checkWalletConnection = (state) => {
@@ -133,4 +135,16 @@ export const isOnWhitelist = (state) => {
   }
 
   return false
+}
+
+export const initializedAllProviders = (state) => {
+  const providerNames = Object.keys(state.blockchain.providers)
+
+  if (!providerNames.length) {
+    return false
+  }
+
+  const allProvidersLoaded = providerNames.every(providerName => state.blockchain.providers[providerName].loaded)
+
+  return allProvidersLoaded
 }
