@@ -18,7 +18,7 @@ const isValid = (cred) => {
   return valid
 }
 
-const assignSessionProps = (cred, uport) => {
+const assignSessionProps = (uport, cred) => {
   /* eslint-disable */
   uport.address = cred.address
   uport.pushToken = cred.pushToken
