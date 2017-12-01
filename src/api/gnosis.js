@@ -386,6 +386,28 @@ export const calcSellSharesGasCost = async () => {
 }
 
 /**
+ * Returns gas cost for redeem winnings
+ * @param {*object} opts options
+ * @param {*string} opts.eventAddress Address for the event
+ */
+
+export const calcRedeemWinningsGasCost = async (opts) => {
+  const { eventAddress } = opts
+  if (!eventAddress) {
+    return undefined
+  }
+
+  const gnosis = await getGnosisConnection()
+  const Event = await gnosis.contracts.Event.at(eventAddress)
+
+  const gasGost = await Event.redeemWinnings.estimateGas({
+    marketFactory: gnosis.contracts.StandardMarketFactory,
+    using: 'stats',
+  })
+  return gasGost
+}
+
+/**
  * Returns the current gas price
  */
 export const getGasPrice = async () => {

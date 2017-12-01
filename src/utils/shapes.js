@@ -22,7 +22,7 @@ export const marketShareShape = PropTypes.shape({
   event: PropTypes.string,
   eventDescription: eventDescriptionShape,
   id: PropTypes.string,
-  marginalPrice: PropTypes.string,
+  marginalPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   outcomeToken: outcomeTokenShape,
   owner: PropTypes.string,
 })
@@ -58,4 +58,17 @@ export const transactionShape = PropTypes.shape({
   endTime: PropTypes.string,
   completed: PropTypes.bool,
   completionStatus: PropTypes.oneOf(Object.values(TRANSACTION_COMPLETE_STATUS)),
+})
+
+export const gasCostsShape = PropTypes.shape({
+  redeemWinnings: PropTypes.number,
+  market: PropTypes.number,
+  buyShares: PropTypes.number,
+  sellShares: PropTypes.number,
+  resolveOracle: PropTypes.number,
+  withdrawFees: PropTypes.number,
+  categoricalEvent: PropTypes.number,
+  scalarEvent: PropTypes.number,
+  centralizedOracle: PropTypes.number,
+  funding: PropTypes.number,
 })
