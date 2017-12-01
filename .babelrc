@@ -28,7 +28,7 @@
     },
     "test": {
       "plugins": [
-        "babel-plugin-dynamic-import-node"
+        "dynamic-import-node"
       ]
     }
   }
