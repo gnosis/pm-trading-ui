@@ -222,7 +222,7 @@ class Dashboard extends Component {
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               {new Decimal(averagePrice).toFixed(4)}{' '}
-              {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
+              {market.event && <CurrencyName collateralToken={market.event.collateralToken} />}
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               {moment.utc(trade.date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
