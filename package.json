@@ -14,7 +14,7 @@
     "start:standalone": "cross-env GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' npm start",
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix --quiet",
-    "test": "jest",
+    "test": "jest --no-cache",
     "precommit": "./precommit.sh",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
