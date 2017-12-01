@@ -26,11 +26,6 @@
         ]
       ]
     },
-    "development": {
-      "plugins": [
-        "dynamic-import-node"
-      ]
-    },
     "test": {
       "plugins": [
         "dynamic-import-node"

@@ -5,6 +5,7 @@ node_js:
 dist: trusty
 before_install:
 - npm i -g babel-cli webpack truffle-contract
+after_install:
 - if [ ${TRAVIS_BRANCH} = "master" ]; then export NODE_ENV=production; else export NODE_ENV=development; fi
 after_success:
 - npm run build
