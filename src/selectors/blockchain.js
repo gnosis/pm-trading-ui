@@ -35,6 +35,8 @@ export const getCurrentAccount = (state) => {
   if (provider) {
     return provider.account
   }
+
+  return undefined
 }
 
 export const checkWalletConnection = (state) => {
