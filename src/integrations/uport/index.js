@@ -3,7 +3,7 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
-import uPortInstance, { hasValidCredential, requestCredentials, getCredentialsFromLocalStorage } from './connector'
+import initUportConnector from './connector'
 
 class Uport extends BaseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
@@ -14,6 +14,7 @@ class Uport extends BaseIntegration {
    */
   static providerPriority = 100
   static watcherInterval = 5000
+  static USE_NOTIFICATIONS = false
 
   constructor() {
     super()
@@ -37,25 +38,13 @@ class Uport extends BaseIntegration {
       account: opts.uportDefaultAccount,
     })
 
-    this.uport = uPortInstance
-
-    if (!hasValidCredential()) {
-      await requestCredentials()
-    }
+    this.uport = await initUportConnector(Uport.USE_NOTIFICATIONS)
 
     this.web3 = await this.uport.getWeb3()
     this.provider = await this.uport.getProvider()
     this.network = await this.getNetwork()
     this.networkId = await this.getNetworkId()
-
-    const cred = getCredentialsFromLocalStorage()
-
-    if (cred) {
-      this.uport.address = cred.address
-      this.uport.pushToken = cred.pushToken
-      this.uport.publicEncKey = cred.publicEncKey
-      this.account = opts.uportDefaultAccount || (await this.getAccount())
-    }
+    this.account = opts.uportDefaultAccount || (await this.getAccount())
 
     return this.runProviderUpdate(this, {
       available: true,
@@ -68,28 +57,23 @@ class Uport extends BaseIntegration {
           return
         }
         await opts.initGnosis()
-        const balance = await getOlympiaTokensByAccount(this.account)
-        opts.runProviderUpdate(this, {
-          provider: Uport.providerName,
-          balance: weiToEth(balance),
-          account: this.account,
-        })
         opts.dispatch(fetchOlympiaUserData(this.account))
       })
-      .catch(() => opts.initGnosis())
   }
 
   /**
    * Returns the balance of olympia tokens for the current default account in Wei
    * @async
+   * @param {string} account - Useraccount to get the balance for
    * @returns {Promise<string>} - Accountbalance in WEI for current account
    */
-  async getBalance() {
-    if (!this.account) {
+  async getBalance(account) {
+    const userAccount = account || this.account
+    if (!userAccount) {
       throw new Error('No Account available')
     }
 
-    const balance = await getOlympiaTokensByAccount(this.account)
+    const balance = await getOlympiaTokensByAccount(userAccount)
 
     if (typeof balance !== 'undefined') {
       return weiToEth(balance.toString())

@@ -146,14 +146,8 @@ export const requestMarketTrades = market => async (dispatch) => {
  * @param {String} accountAddress
  */
 export const requestAccountShares = accountAddress => async (dispatch) => {
-  const shares = await api.requestAccountShares(accountAddress)
-  return await dispatch(updateEntity({
-    entityType: 'accountShares',
-    data: {
-      id: accountAddress,
-      shares,
-    },
-  }))
+  const payload = await api.requestAccountShares(accountAddress)
+  return dispatch(receiveEntities(payload))
 }
 
 /**

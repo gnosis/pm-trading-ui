@@ -99,7 +99,7 @@ class BaseIntegration {
       return
     }
 
-    const didPropertyChange = this[property] !== value
+    const didPropertyChange = `${this[property] || undefined}` !== `${value || undefined}`
     if (!didPropertyChange) {
       return
     }
@@ -111,6 +111,7 @@ class BaseIntegration {
       providerUpdate.available = true
     }
 
+    this[property] = value
     this.runProviderUpdate(this, providerUpdate)
   }
 }

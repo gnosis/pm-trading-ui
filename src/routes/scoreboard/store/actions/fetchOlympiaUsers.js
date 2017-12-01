@@ -1,14 +1,15 @@
 import { restFetch } from 'utils/helpers'
 import addUsers from './addUsers'
 
-const url = 'https://gnosisdb-olympia.gnosis.pm/api/scoreboard/'
+const API_URL = `${process.env.GNOSISDB_URL}/api`
+const url = `${API_URL}/scoreboard/`
 
 export default () => dispatch =>
-    restFetch(url)
-        .then((response) => {
-            if (!response) {
-                dispatch(addUsers([]))
-            }
+  restFetch(url)
+    .then((response) => {
+      if (!response) {
+        dispatch(addUsers([]))
+      }
 
-            dispatch(addUsers(response.results))
-        })
+      dispatch(addUsers(response.results))
+    })

@@ -24,7 +24,7 @@ import expandableViews, { EXPAND_MY_SHARES } from './ExpandableViews'
 
 import './marketDetail.less'
 import { weiToEth, isMarketClosed, isMarketResolved } from '../../utils/helpers'
-import { marketShareShape } from '../../utils/shapes'
+import { marketShareShape, gasCostsShape } from '../../utils/shapes'
 
 const ONE_WEEK_IN_HOURS = 168
 
@@ -71,6 +71,7 @@ class MarketDetail extends Component {
     this.props
       .fetchMarket()
       .then(() => {
+        this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
         this.props.fetchMarketTrades(this.props.market)
         if (this.props.defaultAccount) {
           this.props.fetchMarketShares(this.props.defaultAccount)
@@ -96,6 +97,7 @@ class MarketDetail extends Component {
     if (this.props.defaultAccount && this.props.params.id) {
       this.props.fetchMarketParticipantTrades(this.props.params.id, this.props.defaultAccount)
     }
+    this.props.requestGasPrice()
   }
 
   @autobind
@@ -180,8 +182,8 @@ class MarketDetail extends Component {
       .utc(market.eventDescription.resolutionDate)
       .local()
       .diff(moment(), 'hours')
-
-    const winningDecimal = Decimal(this.props.winnings)
+    const { winnings, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
+    const winningDecimal = Decimal(winnings)
 
     const marketClosed = isMarketClosed(market)
     const marketResolved = isMarketResolved(market)
@@ -189,6 +191,11 @@ class MarketDetail extends Component {
     const marketClosedOrFinished = marketClosed || marketResolved
     const marketStatus = marketResolved ? 'resolved.' : 'closed.'
     const showCountdown = !marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS
+    const redeemWinningsTransactionGas = gasPrice
+      .mul(redeemWinningsGasCost || 0)
+      .div(1e18)
+      .toDP(5, 1)
+      .toString()
 
     return (
       <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
@@ -240,6 +247,7 @@ class MarketDetail extends Component {
                 <InteractionButton className="btn btn-primary" onClick={this.handleRedeemWinnings}>
                   Redeem Winnings
                 </InteractionButton>
+                <span className="redeemWinning__gasCost">Gas cost: {redeemWinningsTransactionGas} ETH</span>
               </div>
             </div>
           )}
@@ -341,6 +349,7 @@ MarketDetail.propTypes = {
     id: PropTypes.string,
     view: PropTypes.string,
   }),
+  requestGasPrice: PropTypes.func,
   marketShares: PropTypes.arrayOf(marketShareShape),
   defaultAccount: PropTypes.string,
   market: marketShape,
@@ -359,6 +368,8 @@ MarketDetail.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),
+  gasCosts: gasCostsShape,
+  gasPrice: PropTypes.instanceOf(Decimal),
 }
 
 export default MarketDetail
