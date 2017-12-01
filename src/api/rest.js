@@ -106,4 +106,4 @@ export const requestAccountShares = async address =>
     normalize(response.results.map(share => ({
       ...share,
       id: sha1(`${share.address}-${share.outcomeToken.address}`),
-    }), [marketSharesSchema])))
+    })), [marketSharesSchema]))
