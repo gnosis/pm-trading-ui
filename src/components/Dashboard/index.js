@@ -139,10 +139,12 @@ class Dashboard extends Component {
 
       if (market) {
         return (
-          <div className="dashboardMarket dashboardMarket--onDark" key={index}>
-            <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>
-              {holding.eventDescription.title}
-            </div>
+          <div
+            className="dashboardMarket dashboardMarket--onDark"
+            key={index}
+            onClick={() => this.handleViewMarket(market)}
+          >
+            <div className="dashboardMarket__title">{holding.eventDescription.title}</div>
             <div className="outcome row">
               <div className="col-md-3">
                 <div
@@ -213,12 +215,12 @@ class Dashboard extends Component {
         >
           <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
           <div className="outcome row">
-            <div className="col-md-3">
+            <div className="col-md-3 listItemOutcomeContainer">
               <div
                 className="entry__color"
                 style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
               />
-              <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
+              <div className="dashboardMarket--highlight listItemOutcome">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
               {new Decimal(averagePrice).toFixed(4)}

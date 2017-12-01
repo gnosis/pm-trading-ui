@@ -184,6 +184,16 @@
       display: flex;
       align-items: center;
     }
+
+    .entry__color {
+      margin-bottom: 0;
+    }
+  }
+  
+  
+  .listItemOutcomeContainer {
+    display: flex;
+    align-items: center;
   }
 
   .outcome {
@@ -348,6 +358,13 @@
     color: #ffffff;
     margin-top: 6px;
     display: inline-block;
+
+    &.listItemOutcome {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 76%;
+    }
   }
 
   &--top-6 {
