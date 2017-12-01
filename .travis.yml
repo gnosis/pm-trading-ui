@@ -3,17 +3,15 @@ node_js:
   - node
   - "8"
 dist: trusty
-before_install:
-- npm i -g babel-cli webpack truffle-contract
-after_install:
-- if [ ${TRAVIS_BRANCH} = "master" ]; then export NODE_ENV=production; else export NODE_ENV=development; fi
-after_success:
-- npm run build
 env:
   ETHEREUM_URL: https://rinkeby.infura.io:443
   GNOSISDB_URL: https://gnosisdb-olympia.gnosis.pm:443
   INTERCOM_ID: km54f6ih
-  NODE_ENV: development
+before_install:
+- npm i -g babel-cli webpack truffle-contract
+after_success:
+- if [ ${TRAVIS_BRANCH} = "master" ]; then export NODE_ENV=production; else export NODE_ENV=development; fi
+- npm run build
 deploy:
   matrix:
   - provider: s3
