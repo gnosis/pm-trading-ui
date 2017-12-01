@@ -136,20 +136,13 @@ export const isOnWhitelist = (state) => {
 }
 
 export const initializedAllProviders = (state) => {
-  let allLoaded = true
-
   const providerNames = Object.keys(state.blockchain.providers)
 
   if (!providerNames.length) {
-    allLoaded = false
-  } else {
-    providerNames.forEach((providerName) => {
-      if (!state.blockchain.providers[providerName].loaded) {
-        allLoaded = false
-        return false
-      }
-    })
+    return false
   }
 
-  return allLoaded
+  const allProvidersLoaded = providerNames.every(providerName => state.blockchain.providers[providerName].loaded)
+
+  return allProvidersLoaded
 }
