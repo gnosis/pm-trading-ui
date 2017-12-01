@@ -35,6 +35,7 @@ const requestCredentials = useNotifications => async () => {
     modifyUportLoginModal(uport.firstReq)
     const cred = await uport.requestCredentials({ notifications: useNotifications })
     localStorage.setItem(UPORT_OLYMPIA_KEY, JSON.stringify(cred))
+
     return cred
   } catch (err) {
     localStorage.removeItem(UPORT_OLYMPIA_KEY)
