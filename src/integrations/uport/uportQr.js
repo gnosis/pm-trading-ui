@@ -1,6 +1,6 @@
 const isValid = cred => !!cred
 
-const assignSessionProps = (cred, uport) => {
+const assignSessionProps = (uport, cred) => {
   // eslint-disable-next-line
   uport.address = cred.address
   // eslint-disable-next-line
