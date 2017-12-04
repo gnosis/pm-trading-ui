@@ -231,10 +231,10 @@ export const getMarketWinningsCategorical = (market, shares, account) => {
 
   shares.forEach((share) => {
     const shareOutcome = parseInt(share.outcomeToken.index, 10)
-
-    if (share.outcomeToken.event === market.event.address &&
-        share.owner === account &&
-        shareOutcome === marketOutcome) {
+    const belongsToMarket = share.outcomeToken.event === market.event.address
+    const belongsToUser = share.owner === account
+    const outcomeWon = shareOutcome === marketOutcome
+    if (belongsToMarket && belongsToUser && outcomeWon) {
       const outcomeInt = parseInt(share.outcomeToken.event, 10)
 
       // multiple shares bought for same outcome
@@ -275,12 +275,10 @@ export const getMarketWinningsScalar = (market, shares, account) => {
 
   let shortOutcomeTokenCount = Decimal(0)
   let longOutcomeTokenCount = Decimal(0)
-
   shares.forEach((share) => {
     const outcomeIndex = parseInt(share.outcomeToken.index, 10)
     if (share.outcomeToken.event === market.event.address &&
-        share.owner === account &&
-        share.outcomeToken.index === parseInt(market.event.outcome, 10)) {
+        share.owner === account) {
       if (outcomeIndex === 0) {
         shortOutcomeTokenCount = shortOutcomeTokenCount.add(share.balance)
       } else {
@@ -293,6 +291,7 @@ export const getMarketWinningsScalar = (market, shares, account) => {
     0: shortOutcomeTokenCount.mul(factorShort).div(outcomeRange),
     1: longOutcomeTokenCount.mul(factorLong).div(outcomeRange),
   }
+
 
   return mapValues(winningsByOutcome, val => val.toString())
 }

@@ -72,9 +72,10 @@ export const getMarketShares = (state) => {
 
 export const getMarketSharesByMarket = state => (marketAddress) => {
   const marketEntity = getMarketById(state)(marketAddress)
-  const shares = get(marketEntity, 'shares', [])
+  const shares = get(state, 'entities.marketShares', {})
 
-  return shares.map(shareAddress => getMarketShareByShareId(state)(shareAddress)).filter(share => share.balance > 0)
+  const sharesFiltered = Object.keys(shares).map(shareId => shares[shareId]).filter(share => share.outcomeToken.event === marketEntity.event.address)
+  return sharesFiltered
 }
 
 export const filterMarkets = state => (opts) => {
@@ -169,8 +170,6 @@ export const getAccountShares = (state, account) => {
   return filter(marketShareEntities, share => share.owner === account)
 }
 
-export const getAccountSharesArray = (state, account) => values(getAccountShares(state, account))
-
 /**
  * Returns the trades for the given account address
  * @param {*} state
@@ -185,7 +184,7 @@ export const getAccountPredictiveAssets = (state, account) => {
   let predictiveAssets = new Decimal(0)
 
   if (account) {
-    const shares = getAccountSharesArray(state, account)
+    const shares = values(getAccountShares(state, account))
     if (shares.length) {
       predictiveAssets = shares.reduce(
         (assets, share) => assets.add(new Decimal(share.balance).mul(share.marginalPrice)),
@@ -200,7 +199,7 @@ export const getAccountParticipatingInEvents = (state, account) => {
   const events = []
 
   if (account) {
-    const shares = getAccountSharesArray(state, account)
+    const shares = values(getAccountShares(state, account))
 
     if (shares.length) {
       shares.map((share) => {
@@ -216,58 +215,4 @@ export const getAccountParticipatingInEvents = (state, account) => {
 
 export default {
   getMarkets,
-}
-
-const eventMarketSelector = (state) => {
-  if (!state.entities) {
-    return []
-  }
-  if (!state.entities.markets) {
-    return []
-  }
-  const { markets } = state.entities
-  const map = new Map()
-  const marketSelector = getMarketById(state)
-  Object.keys(markets).forEach(marketAddress => map.set(markets[marketAddress].event, marketSelector(marketAddress)))
-  return map
-}
-const eventSharesSelector = createSelector(
-  getCurrentAccount,
-  getAccountShares,
-  (account, accountShares) => {
-    const map = new Map()
-    Object.keys(accountShares).forEach((index) => {
-      const share = accountShares[index]
-      const eventAddress = share.outcomeToken.event
-      const actualShares = map.get(eventAddress) || []
-      map.set(add0xPrefix(eventAddress), [...actualShares, share])
-    })
-    return map
-  },
-)
-export const marketSharesEnhancedSelector = createSelector(
-  eventMarketSelector,
-  eventSharesSelector,
-  (eventsMarkets, eventShares) => {
-    const marketShares = new Map()
-
-    eventsMarkets.forEach((market, event) => {
-      marketShares.set(market, eventShares.get(event) || [])
-    })
-    return marketShares
-  },
-)
-
-export const getMarketsWithAccountShares = (state) => {
-  const marketSharesMap = marketSharesEnhancedSelector(state)
-
-  const marketsWithShares = {}
-  marketSharesMap.forEach(((shares, market) => {
-    marketsWithShares[market.address] = {
-      ...market,
-      shares,
-    }
-  }))
-
-  return values(marketsWithShares)
 }

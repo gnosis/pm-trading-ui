@@ -7,7 +7,7 @@ import {
   getAccountShares,
   getAccountTrades,
   getAccountPredictiveAssets,
-  getMarketsWithAccountShares,
+  getMarkets,
 } from 'selectors/market'
 import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized, checkWalletConnection } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
@@ -16,7 +16,7 @@ import { weiToEth, getMarketWinnings } from 'utils/helpers'
 
 
 const mapStateToProps = (state) => {
-  const markets = getMarketsWithAccountShares(state)
+  const markets = getMarkets(state)
   const defaultAccount = getCurrentAccount(state)
   const accountTrades = getAccountTrades(state, defaultAccount)
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))

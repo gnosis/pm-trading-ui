@@ -133,10 +133,11 @@ class Dashboard extends Component {
         let probability = new Decimal(0)
         let maximumWin = new Decimal(0)
         const marketResolved = isMarketResolved(market)
-        const marketClosed = isMarketClosed(market)
         const outcomeTokenIndex = parseInt(holding.outcomeToken.index, 10)
         const winningsByOutcome = marketWinnings[market.address] ? marketWinnings[market.address] : {}
+
         const winnings = winningsByOutcome[outcomeTokenIndex] ? Decimal(winningsByOutcome[outcomeTokenIndex]) : Decimal(0)
+
         const hasWinnings = marketResolved && winnings.gt(0)
         const hasBalance = Decimal(holding.balance).div(1e18).gt(LOWEST_DISPLAYED_VALUE)
         const canRedeemWinnings = marketResolved && hasWinnings
@@ -157,7 +158,7 @@ class Dashboard extends Component {
         }
 
         return (
-          <div className="dashboardMarket dashboardMarket--onDark" key={holding.id}>
+          <div className="dashboardMarket dashboardMarket--onDark" key={`${holding.id}-${index}`}>
             <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>
               {holding.eventDescription.title}
             </div>
