@@ -246,7 +246,7 @@ export const getMarketWinningsCategorical = (market, shares, account) => {
   })
 
   // object length will always be 1 if won
-  return winningsByOutcome
+  return mapValues(winningsByOutcome, val => val.toString())
 }
 
 export const getMarketWinningsScalar = (market, shares, account) => {
@@ -294,7 +294,7 @@ export const getMarketWinningsScalar = (market, shares, account) => {
     1: longOutcomeTokenCount.mul(factorLong).div(outcomeRange),
   }
 
-  return winningsByOutcome
+  return mapValues(winningsByOutcome, val => val.toString())
 }
 
 export const getMarketWinnings = (market, shares, account) => {
