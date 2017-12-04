@@ -207,3 +207,103 @@ export const generateDeterministicRandomName = (seed) => {
 
   return `${adjectives[adjectiveIndex]} ${nouns[nounIndex]}`
 }
+
+const isValidMarket = market =>
+  market &&
+  market.event &&
+  market.oracle &&
+  market.eventDescription &&
+  market.shares !== undefined
+
+const marketCanRedeemWinnings = market => market.event.isWinningOutcomeSet
+
+const SCALAR_OUTCOME_RANGE = 1000000
+
+export const getMarketWinningsCategorical = (market, shares, account) => {
+  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
+    return {}
+  }
+
+  const marketOutcome = parseInt(market.event.outcome, 10)
+
+  // let winnings = Decimal(0)
+  const winningsByOutcome = {}
+
+  shares.forEach((share) => {
+    const shareOutcome = parseInt(share.outcomeToken.index, 10)
+
+    if (share.outcomeToken.event === market.event.address &&
+        share.owner === account &&
+        shareOutcome === marketOutcome) {
+      const outcomeInt = parseInt(share.outcomeToken.event, 10)
+
+      // multiple shares bought for same outcome
+      if (!winningsByOutcome[outcomeInt]) {
+        winningsByOutcome[outcomeInt] = Decimal(0)
+      }
+      winningsByOutcome[outcomeInt] = winningsByOutcome[outcomeInt].add(Decimal(share.balance))
+    }
+  })
+
+  // object length will always be 1 if won
+  return winningsByOutcome
+}
+
+export const getMarketWinningsScalar = (market, shares, account) => {
+  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
+    return {}
+  }
+
+  const outcome = Decimal(market.event.outcome)
+  let outcomeClamped = Decimal(0)
+
+  const outcomeRange = Decimal(SCALAR_OUTCOME_RANGE)
+
+  const lowerBound = Decimal(market.event.lowerBound)
+  const upperBound = Decimal(market.event.upperBound)
+
+  if (outcome.lt(lowerBound)) {
+    outcomeClamped = Decimal(0)
+  } else if (outcome.gt(upperBound)) {
+    outcomeClamped = outcomeRange
+  } else {
+    outcomeClamped = outcomeRange.mul(outcome.sub(lowerBound).toString()).div(upperBound.sub(lowerBound).toString())
+  }
+
+  const factorShort = outcomeRange.sub(outcomeClamped)
+  const factorLong = outcomeRange.sub(factorShort.toString())
+
+  let shortOutcomeTokenCount = Decimal(0)
+  let longOutcomeTokenCount = Decimal(0)
+
+  shares.forEach((share) => {
+    const outcomeIndex = parseInt(share.outcomeToken.index, 10)
+    if (share.outcomeToken.event === market.event.address &&
+        share.owner === account &&
+        share.outcomeToken.index === parseInt(market.event.outcome, 10)) {
+      if (outcomeIndex === 0) {
+        shortOutcomeTokenCount = shortOutcomeTokenCount.add(share.balance)
+      } else {
+        longOutcomeTokenCount = longOutcomeTokenCount.add(share.balance)
+      }
+    }
+  })
+
+  const winningsByOutcome = {
+    0: shortOutcomeTokenCount.mul(factorShort).div(outcomeRange),
+    1: longOutcomeTokenCount.mul(factorLong).div(outcomeRange),
+  }
+
+  return winningsByOutcome
+}
+
+export const getMarketWinnings = (market, shares, account) => {
+  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
+    return {}
+  }
+
+  const isCategorical = market.event.type === OUTCOME_TYPES.CATEGORICAL
+  return isCategorical ?
+    getMarketWinningsCategorical(market, shares, account) :
+    getMarketWinningsScalar(market, shares, account)
+}

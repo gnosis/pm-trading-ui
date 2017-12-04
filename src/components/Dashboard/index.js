@@ -9,7 +9,7 @@ import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import InteractionButton from 'containers/InteractionButton'
-import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
+import { add0xPrefix, weiToEth, getOutcomeName, getMarketWinnings } from 'utils/helpers'
 import {
   COLOR_SCHEME_DEFAULT,
   LOWEST_DISPLAYED_VALUE,
@@ -123,22 +123,24 @@ class Dashboard extends Component {
     return holdings.map((holding, index) => {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
 
-      const filteredMarkets = markets.filter(market =>
-        market.event.address === eventAddress &&
-        process.env.WHITELIST[market.creator] &&
+      const filteredMarkets = markets.filter(market => process.env.WHITELIST[market.creator] &&
         market.event &&
-        market.oracle &&
+        market.event.address === eventAddress &&
         Decimal(holding.balance).gt(LOWEST_DISPLAYED_VALUE))
 
-      const market = filteredMarkets.length ? filteredMarkets[0] : undefined
-
+      const market = filteredMarkets[0]
       if (market) {
         let probability = new Decimal(0)
         let maximumWin = new Decimal(0)
         const marketResolved = isMarketResolved(market)
         const marketClosed = isMarketClosed(market)
-        const marketResolvedOrClosed = marketClosed || marketResolved
-        const winnings = marketWinnings[market.address] ? Decimal(marketWinnings[market.address]) : Decimal(0)
+        const outcomeTokenIndex = parseInt(holding.outcomeToken.index, 10)
+        const winningsByOutcome = marketWinnings[market.address] ? marketWinnings[market.address] : {}
+        const winnings = winningsByOutcome[outcomeTokenIndex] ? Decimal(winningsByOutcome[outcomeTokenIndex]) : Decimal(0)
+        const hasWinnings = marketResolved && winnings.gt(0)
+        const hasBalance = Decimal(holding.balance).div(1e18).gt(LOWEST_DISPLAYED_VALUE)
+        const canRedeemWinnings = marketResolved && hasWinnings
+
         // Check market is not empty
         if (market.event) {
           probability = calcLMSRMarginalPrice({
@@ -155,7 +157,7 @@ class Dashboard extends Component {
         }
 
         return (
-          <div className="dashboardMarket dashboardMarket--onDark" key={index}>
+          <div className="dashboardMarket dashboardMarket--onDark" key={holding.id}>
             <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>
               {holding.eventDescription.title}
             </div>
@@ -179,18 +181,18 @@ class Dashboard extends Component {
                   market.event.type === 'SCALAR' && <CurrencyName outcomeToken={market.eventDescription.unit} />}
               </div>
               <div className="col-md-2 dashboardMarket--highlight">
-                <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
+                <DecimalValue value={weiToEth(marketResolved ? winnings : maximumWin.mul(probability).toString())} />&nbsp;
                 {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
               </div>
               <div className="col-md-4 dashboardMarket--highlight">
-                {!marketResolvedOrClosed && (
-                  <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
-                      SELL
-                  </a>
-                )}
-                {marketResolvedOrClosed && winnings.gt(LOWEST_DISPLAYED_VALUE) && (
+                {canRedeemWinnings && hasWinnings && (
                   <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
                       REDEEM WINNINGS
+                  </a>
+                )}
+                {!canRedeemWinnings && hasBalance && (
+                  <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
+                      SELL
                   </a>
                 )}
               </div>
@@ -250,6 +252,7 @@ class Dashboard extends Component {
     } = this.props
 
     const whitelistedMarkets = markets.filter(market =>
+      Object.keys(market).length && market.oracle && market.event &&
       process.env.WHITELIST[market.creator] && !isMarketResolved(market) && !isMarketClosed(market))
     const newMarkets = getNewMarkets(whitelistedMarkets, 5)
 
@@ -257,7 +260,7 @@ class Dashboard extends Component {
 
     if (marketType === 'newMarkets') {
       return (
-        <div className="dashboardWidget col-md-6">
+        <div className="dashboardWidget col-md-6" key={marketType}>
           <div className="dashboardWidget__market-title">New Markets</div>
           <div
             className={cn({
@@ -273,7 +276,7 @@ class Dashboard extends Component {
 
     if (marketType === 'closingMarkets') {
       return (
-        <div className="dashboardWidget col-md-6">
+        <div className="dashboardWidget col-md-6" key={marketType}>
           <div className="dashboardWidget__market-title">Soon-Closing Markets</div>
           <div
             className={cn({
@@ -289,7 +292,7 @@ class Dashboard extends Component {
 
     if (marketType === 'myHoldings') {
       return (
-        <div className="dashboardWidget dashboardWidget--onDark col-md-6">
+        <div className="dashboardWidget dashboardWidget--onDark col-md-6" key={marketType}>
           <div className="dashboardWidget__market-title">My Tokens</div>
           <div className="dashboardWidget__container">
             {accountShares.length ? this.renderMyHoldings(accountShares, markets, marketWinnings) : "You aren't holding any share."}
@@ -300,7 +303,7 @@ class Dashboard extends Component {
 
     if (marketType === 'myTrades') {
       return (
-        <div className="dashboardWidget dashboardWidget--onDark col-md-6">
+        <div className="dashboardWidget dashboardWidget--onDark col-md-6" key={marketType}>
           <div className="dashboardWidget__market-title">My Trades</div>
           <div className="dashboardWidget__container">
             {accountTrades.length ? this.renderMyTrades(accountTrades, markets) : "You haven't done any trade."}

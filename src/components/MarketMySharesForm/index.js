@@ -67,11 +67,14 @@ class MarketMySharesForm extends Component {
     if (sellAmountAndMarketSharesAreDefined) {
       // By default form is filled up with fill amount
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
-      const fullAmount = Decimal(share.balance)
-        .div(1e18)
-        .toDP(4, 1)
-        .toString()
-      initialize({ sellAmount: fullAmount })
+
+      if (share) {
+        const fullAmount = Decimal(share.balance)
+          .div(1e18)
+          .toDP(4, 1)
+          .toString()
+        initialize({ sellAmount: fullAmount })
+      }
     }
   }
 

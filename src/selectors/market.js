@@ -1,11 +1,14 @@
-import { get } from 'lodash'
+import { get, filter, values } from 'lodash'
 import Decimal from 'decimal.js'
+import { isMarketResolved, isMarketClosed, weiToEth, add0xPrefix } from 'utils/helpers'
+import { OUTCOME_TYPES } from 'utils/constants'
+import { createSelector } from 'reselect'
+import { getCurrentAccount } from 'selectors/blockchain'
+
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
 import { getOracleByAddress } from './oracle'
 import { getEventDescriptionByAddress } from './eventDescription'
-import { isMarketResolved, isMarketClosed, weiToEth } from '../utils/helpers'
-import { OUTCOME_TYPES } from 'utils/constants'
 
 export const getMarketById = state => (marketAddress) => {
   const marketEntities = entitySelector(state, 'markets')
@@ -53,6 +56,18 @@ export const getMarkets = (state) => {
   const marketEntities = entitySelector(state, 'markets')
 
   return Object.keys(marketEntities).map(getMarketById(state))
+}
+
+export const getMarketShares = (state) => {
+  if (!state.entities) {
+    return undefined
+  }
+
+  if (!state.entities.marketShares) {
+    return undefined
+  }
+
+  return state.entities.marketShares
 }
 
 export const getMarketSharesByMarket = state => (marketAddress) => {
@@ -146,9 +161,15 @@ export const getMarketParticipantsTrades = state => () => {
  * @param {String} account, an address
  */
 export const getAccountShares = (state, account) => {
-  const accountShares = entitySelector(state, 'accountShares')
-  return accountShares[account] ? accountShares[account].shares : []
+  const marketShareEntities = entitySelector(state, 'marketShares')
+  if (!account) {
+    return marketShareEntities
+  }
+
+  return filter(marketShareEntities, share => share.owner === account)
 }
+
+export const getAccountSharesArray = (state, account) => values(getAccountShares(state, account))
 
 /**
  * Returns the trades for the given account address
@@ -164,7 +185,7 @@ export const getAccountPredictiveAssets = (state, account) => {
   let predictiveAssets = new Decimal(0)
 
   if (account) {
-    const shares = getAccountShares(state, account)
+    const shares = getAccountSharesArray(state, account)
     if (shares.length) {
       predictiveAssets = shares.reduce(
         (assets, share) => assets.add(new Decimal(share.balance).mul(share.marginalPrice)),
@@ -179,7 +200,7 @@ export const getAccountParticipatingInEvents = (state, account) => {
   const events = []
 
   if (account) {
-    const shares = getAccountShares(state, account)
+    const shares = getAccountSharesArray(state, account)
 
     if (shares.length) {
       shares.map((share) => {
@@ -197,83 +218,56 @@ export default {
   getMarkets,
 }
 
-const isValidMarket = market => market && market.event && market.oracle && market.eventDescription && market.shares !== undefined
-
-const marketCanRedeemWinnings = market => market.event.isWinningOutcomeSet
-
-const SCALAR_OUTCOME_RANGE = 1000000
-
-export const getMarketWinningsCategorical = (state, market, account) => {
-  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
-    return '0'
+const eventMarketSelector = (state) => {
+  if (!state.entities) {
+    return []
   }
-
-  let winnings = Decimal(0)
-
-  market.shares.forEach((shareId) => {
-    const share = getMarketShareByShareId(state)(shareId)
-
-    if (share.owner === account &&
-        share.outcomeToken.index === parseInt(market.event.outcome, 10)) {
-      winnings = winnings.add(Decimal(share.balance))
-    }
-  })
-
-  return weiToEth(winnings)
+  if (!state.entities.markets) {
+    return []
+  }
+  const { markets } = state.entities
+  const map = new Map()
+  const marketSelector = getMarketById(state)
+  Object.keys(markets).forEach(marketAddress => map.set(markets[marketAddress].event, marketSelector(marketAddress)))
+  return map
 }
+const eventSharesSelector = createSelector(
+  getCurrentAccount,
+  getAccountShares,
+  (account, accountShares) => {
+    const map = new Map()
+    Object.keys(accountShares).forEach((index) => {
+      const share = accountShares[index]
+      const eventAddress = share.outcomeToken.event
+      const actualShares = map.get(eventAddress) || []
+      map.set(add0xPrefix(eventAddress), [...actualShares, share])
+    })
+    return map
+  },
+)
+export const marketSharesEnhancedSelector = createSelector(
+  eventMarketSelector,
+  eventSharesSelector,
+  (eventsMarkets, eventShares) => {
+    const marketShares = new Map()
 
-export const getMarketWinningsScalar = (state, market, account) => {
-  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
-    return '0'
-  }
+    eventsMarkets.forEach((market, event) => {
+      marketShares.set(market, eventShares.get(event) || [])
+    })
+    return marketShares
+  },
+)
 
-  let winnings = Decimal(0)
-  const outcome = Decimal(market.event.outcome)
-  let outcomeClamped = Decimal(0)
+export const getMarketsWithAccountShares = (state) => {
+  const marketSharesMap = marketSharesEnhancedSelector(state)
 
-  const outcomeRange = Decimal(SCALAR_OUTCOME_RANGE)
-
-  const lowerBound = Decimal(market.event.lowerBound)
-  const upperBound = Decimal(market.event.upperBound)
-
-  if (outcome.lt(lowerBound)) {
-    outcomeClamped = Decimal(0)
-  } else if (outcome.gt(upperBound)) {
-    outcomeClamped = outcomeRange
-  } else {
-    outcomeClamped = outcomeRange.mul(outcome.sub(lowerBound).toString()).div(upperBound.sub(lowerBound).toString())
-  }
-
-  const factorShort = outcomeRange.sub(outcomeClamped)
-  const factorLong = outcomeRange.sub(factorShort.toString())
-
-  let shortOutcomeTokenCount = Decimal(0)
-  let longOutcomeTokenCount = Decimal(0)
-
-  market.shares.forEach((shareId) => {
-    const share = getMarketShareByShareId(state)(shareId)
-
-    if (share.owner === account) {
-      if (share.outcomeIndex === 0) {
-        shortOutcomeTokenCount = shortOutcomeTokenCount.add(share.balance)
-      } else {
-        longOutcomeTokenCount = longOutcomeTokenCount.add(share.balance)
-      }
+  const marketsWithShares = {}
+  marketSharesMap.forEach(((shares, market) => {
+    marketsWithShares[market.address] = {
+      ...market,
+      shares,
     }
-  })
+  }))
 
-  winnings = shortOutcomeTokenCount.mul(factorShort).add(longOutcomeTokenCount).mul(factorLong).div(outcomeRange)
-
-  return weiToEth(winnings)
-}
-
-export const getMarketWinnings = (state, market, account) => {
-  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
-    return '0'
-  }
-
-  const isCategorical = market.event.type === OUTCOME_TYPES.CATEGORICAL
-  return isCategorical ?
-    getMarketWinningsCategorical(state, market, account) :
-    getMarketWinningsScalar(state, market, account)
+  return values(marketsWithShares)
 }

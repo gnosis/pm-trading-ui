@@ -1,6 +1,7 @@
-import { restFetch, hexWithoutPrefix, addIdToObjectsInArray, getOutcomeName, normalizeScalarPoint } from 'utils/helpers'
+import { restFetch, hexWithoutPrefix, hexWithPrefix, addIdToObjectsInArray, getOutcomeName, normalizeScalarPoint } from 'utils/helpers'
 import { normalize } from 'normalizr'
 import { OUTCOME_TYPES } from 'utils/constants'
+import { mapValues } from 'lodash'
 import sha1 from 'sha1'
 import qs from 'querystring'
 import { marketSchema, marketSharesSchema } from './schema'
@@ -40,6 +41,7 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
             id: sha1(`${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
             event: share.outcomeToken.event,
             ...share,
+            outcomeToken: mapValues(share.outcomeToken, hexWithPrefix),
           })),
         },
         marketSchema,
@@ -105,5 +107,6 @@ export const requestAccountShares = async address =>
   restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/shares/`).then(response =>
     normalize(response.results.map(share => ({
       ...share,
+      outcomeToken: mapValues(share.outcomeToken, hexWithPrefix),
       id: sha1(`${share.address}-${share.outcomeToken.address}`),
     })), [marketSharesSchema]))

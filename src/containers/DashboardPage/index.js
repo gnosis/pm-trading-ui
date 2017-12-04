@@ -4,20 +4,19 @@ import { push } from 'react-router-redux'
 
 import DashboardPage from 'components/Dashboard'
 import {
-  getMarkets,
   getAccountShares,
   getAccountTrades,
-  getMarketWinnings,
   getAccountPredictiveAssets,
+  getMarketsWithAccountShares,
 } from 'selectors/market'
 import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized, checkWalletConnection } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
-import { weiToEth } from 'utils/helpers'
+import { weiToEth, getMarketWinnings } from 'utils/helpers'
 
 
 const mapStateToProps = (state) => {
-  const markets = getMarkets(state)
+  const markets = getMarketsWithAccountShares(state)
   const defaultAccount = getCurrentAccount(state)
   const accountTrades = getAccountTrades(state, defaultAccount)
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
@@ -28,7 +27,7 @@ const mapStateToProps = (state) => {
   const marketWinnings = {}
   if (defaultAccount) {
     markets.forEach((market) => {
-      marketWinnings[market.address] = getMarketWinnings(state, market, defaultAccount)
+      marketWinnings[market.address] = getMarketWinnings(market, accountShares, defaultAccount)
     })
   }
 

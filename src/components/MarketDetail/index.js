@@ -182,9 +182,8 @@ class MarketDetail extends Component {
       .utc(market.eventDescription.resolutionDate)
       .local()
       .diff(moment(), 'hours')
-    const { winnings, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
-    const winningDecimal = Decimal(winnings)
-
+    const { winningsByOutcome, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
+    const winningsTotal = Object.keys(winningsByOutcome).reduce((acc, outcomeIndex) => acc.add(Decimal(winningsByOutcome[outcomeIndex] || '0')), Decimal(0))
     const marketClosed = isMarketClosed(market)
     const marketResolved = isMarketResolved(market)
     const showWinning = marketResolved
@@ -232,13 +231,13 @@ class MarketDetail extends Component {
           </div>
         )}
         {showWinning &&
-          winningDecimal.gt(MIN_CONSIDER_VALUE) && (
+          winningsTotal.gt(MIN_CONSIDER_VALUE) && (
             <div className="redeemWinning">
               <div className="redeemWinning__icon-details-container">
                 <div className="redeemWinning__icon icon icon--achievementBadge" />
                 <div className="redeemWinning__details">
                   <div className="redeemWinning__heading">
-                    <DecimalValue value={winningDecimal} /> {collateralTokenToText(market.event.collateralToken)}
+                    <DecimalValue value={weiToEth(winningsTotal)} /> {collateralTokenToText(market.event.collateralToken)}
                   </div>
                   <div className="redeemWinning__label">Your Winnings</div>
                 </div>
@@ -353,7 +352,7 @@ MarketDetail.propTypes = {
   marketShares: PropTypes.arrayOf(marketShareShape),
   defaultAccount: PropTypes.string,
   market: marketShape,
-  winnings: PropTypes.string,
+  winningsByOutcome: PropTypes.objectOf(PropTypes.string),
   changeUrl: PropTypes.func,
   fetchMarket: PropTypes.func,
   fetchMarketShares: PropTypes.func,
