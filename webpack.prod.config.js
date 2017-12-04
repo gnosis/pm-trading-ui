@@ -98,6 +98,7 @@ module.exports = {
         : ''}`,
       WHITELIST: whitelist,
       INTERCOM_ID: undefined,
+      RAVEN_ID: config.ravenPublicDSN,
     }),
     new UglifyJsWebpackPlugin(),
   ],
