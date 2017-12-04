@@ -42,7 +42,6 @@ const mapStateToProps = (state, ownProps) => {
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const marketShortSellSelector = formValueSelector('marketShortSell')
-
   const defaultAccount = getCurrentAccount(state)
   const marketShares = getMarketSharesByMarket(state)(ownProps.params.id, defaultAccount)
 
