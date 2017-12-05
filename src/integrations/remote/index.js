@@ -9,7 +9,7 @@ class Remote extends BaseIntegration {
    * This allows "fallback providers" like a remote etherium host to be used as a last resort.
    */
   static providerPriority = 1
-  static watcherInterval = 1000
+  static watcherInterval = 5000
 
   constructor() {
     super()

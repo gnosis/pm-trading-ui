@@ -3,6 +3,7 @@ import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
 import * as api from 'api'
+import { values } from 'lodash'
 import { receiveEntities, updateEntity } from 'actions/entities'
 
 import { refreshTokenBalance } from 'actions/blockchain'
@@ -19,6 +20,7 @@ import { DEPOSIT, SELL, REVOKE_TOKENS } from 'utils/transactionExplanations'
 
 import { openModal, closeModal } from 'actions/modal'
 import gaSend from 'utils/analytics/gaSend'
+import { getMarkets } from 'selectors/market'
 import { MAX_ALLOWANCE_WEI } from '../utils/constants'
 import { SETTING_ALLOWANCE } from '../utils/transactionExplanations'
 
@@ -146,14 +148,8 @@ export const requestMarketTrades = market => async (dispatch) => {
  * @param {String} accountAddress
  */
 export const requestAccountShares = accountAddress => async (dispatch) => {
-  const shares = await api.requestAccountShares(accountAddress)
-  return await dispatch(updateEntity({
-    entityType: 'accountShares',
-    data: {
-      id: accountAddress,
-      shares,
-    },
-  }))
+  const payload = await api.requestAccountShares(accountAddress)
+  return dispatch(receiveEntities(payload))
 }
 
 /**
