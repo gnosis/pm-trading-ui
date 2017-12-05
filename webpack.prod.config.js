@@ -15,6 +15,7 @@ const config = require('./src/config.json')
 const whitelist = config.productionWhitelist
 
 module.exports = {
+  devtool: 'source-map',
   context: path.join(__dirname, 'src'),
   entry: ['bootstrap-loader', 'index.js'],
   output: {
@@ -102,6 +103,8 @@ module.exports = {
       TRAVIS_BUILD_ID: undefined,
       TRAVIS_BRANCH: undefined,
     }),
-    new UglifyJsWebpackPlugin(),
+    new UglifyJsWebpackPlugin({
+      sourceMap: true,
+    }),
   ],
 }
