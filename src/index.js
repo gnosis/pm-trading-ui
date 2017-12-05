@@ -1,5 +1,6 @@
 import 'babel-polyfill'
 import 'whatwg-fetch'
+import Raven from 'raven-js'
 import { initProviders } from 'actions/blockchain'
 import React from 'react'
 
@@ -43,8 +44,8 @@ const render = (App) => {
   )
 }
 
-render(AppRouter)
+Raven.context(() => render(AppRouter))
 
 if (module.hot) {
-  module.hot.accept('./router', () => render(require('./router').default))
+  module.hot.accept('./router', () => Raven.context(() => render(require('./router').default)))
 }
