@@ -54,7 +54,7 @@ const Header = ({
         )}
       </div>
 
-      <div className="headerContainer__group headerContainer__group--right account">
+      <div className="headerContainer__group headerContainer__group--right headerContainer__account">
         {hasWallet &&
           !isConnectedToCorrectNetwork && (
             <div className="headerContainer__network">
