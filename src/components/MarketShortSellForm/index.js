@@ -154,7 +154,7 @@ class MarketShortSellForm extends Component {
             <div className="col-md-4">
               <div className="row">
                 <div className="col-md-12">
-                  <h2 className="marketBuyHeading">YOUR BET</h2>
+                  <h2 className="marketBuyHeading">YOUR TRADE</h2>
                 </div>
               </div>
               <div className="row marketShortSellForm__row">

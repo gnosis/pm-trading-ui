@@ -225,7 +225,7 @@ class Dashboard extends Component {
               &nbsp;{market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
-              {moment.utc(market.creationDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+              {moment.utc(trade.date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
             <div className="col-md-2 dashboardMarket--highlight">{TRANSACTION_DESCRIPTIONS[trade.orderType]}</div>
           </div>
