@@ -65,6 +65,7 @@ class RavenIntegration {
     this.isProduction = process.env.NODE_ENV === 'production'
     if (this.isProduction) {
       window.onunhandledrejection = (evt) => {
+        console.error(evt)
         Raven.captureException(evt.reason)
       }
     }
@@ -75,8 +76,8 @@ class RavenIntegration {
       MIDDLEWARE_WITH_RAVEN,
       createRavenMiddleware(Raven, {
         stateTransformer: (state) => {
-          // eslint-disable-next-line no-unused-vars
           const {
+            // eslint-disable-next-line no-unused-vars
             entities, olympia: { ranking }, ...newState
           } = state
           return newState
