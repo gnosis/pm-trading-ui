@@ -155,12 +155,6 @@ class MarketList extends Component {
 
   renderMarkets() {
     const { markets } = this.props
-    const openMarketsFirst = markets.sort((a, b) => {
-      const isFirstMarketEnded = isMarketClosed(a) || isMarketResolved(a)
-      const isSecondMarketEnded = isMarketClosed(b) || isMarketResolved(b)
-
-      return isFirstMarketEnded - isSecondMarketEnded
-    })
 
     return (
       <div className="marketList col-md-9">
@@ -169,7 +163,7 @@ class MarketList extends Component {
             <div className="marketList__title">
               Showing {markets.length} of {markets.length}
             </div>
-            <div className="marketListContainer">{openMarketsFirst.map(this.renderMarket)}</div>
+            <div className="marketListContainer">{markets.map(this.renderMarket)}</div>
           </div>
         ) : (
           <div className="marketListContainer">
