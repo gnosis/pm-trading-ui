@@ -10,7 +10,7 @@ env:
 before_install:
 - npm i -g babel-cli webpack truffle-contract
 after_success:
-- if [ ${TRAVIS_BRANCH} = "master" ]; then export NODE_ENV=production; else export NODE_ENV=development; fi
+- export NODE_ENV=production
 - npm run build
 deploy:
   matrix:
