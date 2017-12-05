@@ -51,6 +51,7 @@ const mapStateToProps = (state, ownProps) => {
     trades: getMarketParticipantsTrades(state)(),
     initialValues: {
       selectedOutcome: 0,
+      limitMargin: 5,
     },
     isGasCostFetched: property => isGasCostFetched(state, property),
     isGasPriceFetched: isGasPriceFetched(state),
