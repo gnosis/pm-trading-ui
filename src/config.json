@@ -19,12 +19,7 @@
     "0x697321d5d8337450e50a404025dd4e6f8fa46eb7": "Mikhail Uport"
  },
   "productionWhitelist": {
-    "0x75e70a0204a9c2353f9de428cb87f38ead9f0160": "Denis",
-    "0x8a5e5508046316a6511d24306bcaab0a6d8511f1": "Olympia",
-    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",
-    "0x8b872b278cbdadd6a24751051d7d030bb7f35385": "GiacomoUport",
-    "0x0108cbfe4aae2b4b6749f089cf51f370dca1dfd8": "Andre",
-    "0xb4ef9cd5925ab6b8d32ac10dc646f7e2be86cca8": "Lama"
+    "0x948429537f335bbcfc0c7aa348322db5fa1919be": "OlympiaAdmin"
  },
  "gnosisdb": {
    "protocol": "https",
