@@ -1,19 +1,34 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import Decimal from 'decimal.js'
 import { fieldPropTypes } from 'redux-form'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-import { bemifyClassName } from 'utils/helpers'
 import { calcLMSRMarginalPrice } from 'api'
 import DecimalValue from 'components/DecimalValue'
 
 import './formBarChartRadioButton.less'
 
-const FormBarChartRadioButton = ({ input, radioValues, label, className, meta: { error, touched }, market }) => {
+const FormBarChartRadioButton = ({
+  input,
+  radioValues,
+  label,
+  meta: { error, touched },
+  market,
+  selectedOutcome,
+  outcomeTokenCount,
+}) => {
+  const outcomeTokensSold = [...market.netOutcomeTokensSold]
   const renderOutcomes = market.eventDescription.outcomes
+
+  if (typeof selectedOutcome !== 'undefined') {
+    outcomeTokensSold[selectedOutcome] = Decimal(market.netOutcomeTokensSold[selectedOutcome])
+      .add(outcomeTokenCount.toString())
+      .toString()
+  }
+
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: market.netOutcomeTokensSold,
+      netOutcomeTokensSold: outcomeTokensSold,
       funding: market.funding,
       outcomeTokenIndex: outcomeIndex,
     })
@@ -22,26 +37,32 @@ const FormBarChartRadioButton = ({ input, radioValues, label, className, meta: {
   })
 
   return (
-    <div className={`outcome formBarRadioButton ${touched && error ? 'formBarRadioButton--error' : ''}`}>
+    <div className={`formBarChartRadioButtons ${touched && error ? 'formBarChartRadioButton--error' : ''}`}>
       {label && <label>{label}</label>}
       {radioValues.map(({ label: radioLabel, value, highlightColor }) => {
         const probability = tokenDistribution[value] * 100
-        const style = { width: `${probability}%`, backgroundColor: COLOR_SCHEME_DEFAULT[value] }
+        const style = { color: highlightColor, backgroundColor: COLOR_SCHEME_DEFAULT[value] }
         return (
-          <div key={value} className="outcome__bar">
+          <div key={value} className="formBarChartRadioButton">
             <input
               type="radio"
-              className={`outcome__bar--inner pull-left barRadioButton__input ${bemifyClassName(className, 'input')}`}
-              id={`barRadioButton_${input.name}_${value}`}
-              style={highlightColor ? { ...style, color: highlightColor } : style}
+              className="formBarChartRadioButton__input"
+              style={style}
+              id={`formBarChartRadioButton_${input.name}_${value}`}
               onChange={() => input.onChange(value)}
               checked={input && input.value.toString() === value.toString()}
               value={value}
             />
             <label
-              className={`barRadioButton__text ${bemifyClassName(className, 'text')}`}
-              htmlFor={`barRadioButton_${input.name}_${value}`}
+              className={'formBarChartRadioButton__text outcomes outcomes--categorical'}
+              htmlFor={`formBarChartRadioButton_${input.name}_${value}`}
             >
+              <div className="formBarChartRadioButton__outcome" style={{ width: `${probability}%` }}>
+                <div
+                  className="outcome__bar--inner pull-left"
+                  style={style}
+                />
+              </div>
               {radioLabel}&nbsp;
               <DecimalValue value={probability} decimals={2} />%
             </label>
@@ -63,6 +84,8 @@ FormBarChartRadioButton.propTypes = {
   ),
   className: PropTypes.string,
   highlightColor: PropTypes.string,
+  selectedOutcome: PropTypes.number,
+  outcomeTokenCount: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Decimal)]),
 }
 
 export default FormBarChartRadioButton

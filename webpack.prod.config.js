@@ -1,12 +1,12 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
 
-const nodeEnv = process.env.NODE_ENV || 'development'
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
@@ -14,16 +14,12 @@ const config = require('./src/config.json')
 
 const whitelist = config.productionWhitelist
 
-const gnosisDbUrl =
-  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
-
-const ethereumUrl =
-  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.host}:${config.ethereum.port}`
-
 module.exports = {
+  devtool: 'source-map',
   context: path.join(__dirname, 'src'),
   entry: ['bootstrap-loader', 'index.js'],
   output: {
+    publicPath: '/',
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
   },
@@ -39,7 +35,7 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader' },
+      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, loader: 'babel-loader' },
       {
         test: /\.(jpe?g|png|svg)$/i,
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
@@ -65,18 +61,14 @@ module.exports = {
   },
   devServer: {
     disableHostCheck: true,
-    contentBase: false,
     historyApiFallback: true,
     hot: false,
     port: 5000,
-    watchOptions: {
-      ignored: /node_modules/,
-    },
   },
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
-      logo: 'assets/img/gnosis_logo_favicon.png',
+      logo: 'assets/img/olympia_logo_favicon.png',
       // Generate a cache file with control hashes and
       // don't rebuild the favicons until those hashes change
       persistentCache: true,
@@ -96,14 +88,23 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),
     }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        VERSION: JSON.stringify(`${version}#${build}`),
-        NODE_ENV: JSON.stringify(nodeEnv),
-        GNOSISDB_URL: JSON.stringify(gnosisDbUrl),
-        ETHEREUM_URL: JSON.stringify(ethereumUrl),
-        WHITELIST: whitelist,
-      },
+    new webpack.EnvironmentPlugin({
+      VERSION: `${version}#${build}`,
+      NODE_ENV: 'production',
+      GNOSISDB_URL: `${config.gnosisdb.protocol}://${config.gnosisdb.host}${config.gnosisdb.port
+        ? `:${config.gnosisdb.port}`
+        : ''}`,
+      ETHEREUM_URL: `${config.ethereum.protocol}://${config.ethereum.host}${config.ethereum.port
+        ? `:${config.ethereum.port}`
+        : ''}`,
+      WHITELIST: whitelist,
+      INTERCOM_ID: undefined,
+      RAVEN_ID: config.ravenPublicDSN,
+      TRAVIS_BUILD_ID: undefined,
+      TRAVIS_BRANCH: undefined,
+    }),
+    new UglifyJsWebpackPlugin({
+      sourceMap: true,
     }),
   ],
 }

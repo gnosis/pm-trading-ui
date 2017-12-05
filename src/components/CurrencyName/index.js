@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 // Current mapping does not contain any logic
-export const outcomeTokenToText = () => 'Outcome Token'
-export const collateralTokenToText = () => 'ETH'
+export const outcomeTokenToText = outcomeToken => outcomeToken
+export const collateralTokenToText = () => 'OLY'
 
 const CurrencyName = ({ collateralToken, outcomeToken }) => {
   if (collateralToken) {
@@ -20,6 +20,11 @@ const CurrencyName = ({ collateralToken, outcomeToken }) => {
 CurrencyName.propTypes = {
   collateralToken: PropTypes.string,
   outcomeToken: PropTypes.string,
+}
+
+CurrencyName.defaultProps = {
+  collateralToken: 'OLY',
+  outcomeToken: '',
 }
 
 export default CurrencyName

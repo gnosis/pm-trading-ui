@@ -1,7 +1,12 @@
 {
   "presets": [
     "react",
-    "env",
+    [
+      "env",
+      {
+        "forceAllTransforms": true
+      }
+    ],
     "stage-0"
   ],
   "plugins": [
@@ -12,7 +17,18 @@
   "env": {
     "production": {
       "plugins": [
-        "transform-react-remove-prop-types"
+        [
+          "transform-react-remove-prop-types",
+          {
+            "mode": "remove",
+            "removeImport": true
+          }
+        ]
+      ]
+    },
+    "test": {
+      "plugins": [
+        "dynamic-import-node"
       ]
     }
   }

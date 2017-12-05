@@ -1,0 +1,14 @@
+.slider {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin: 50px auto;
+    justify-content: center;
+
+    & img {
+        width: 33%;
+        height: auto;
+        margin: 0;
+        margin: 0 25px 25px 0;
+    }
+}

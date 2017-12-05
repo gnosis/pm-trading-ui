@@ -16,28 +16,52 @@ import {
   withdrawFees,
   closeMarket,
 } from 'actions/market'
-import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
-import { getCurrentAccount, getGasCosts, getGasPrice, isGasCostFetched, isGasPriceFetched } from 'selectors/blockchain'
-import { isModerator, getModerators } from 'utils/helpers'
+import {
+  getMarketById,
+  getMarketSharesByMarket,
+  getMarketParticipantsTrades,
+} from 'selectors/market'
+import {
+  getCurrentAccount,
+  getCurrentBalance,
+  getGasCosts,
+  getGasPrice,
+  isGasCostFetched,
+  isGasPriceFetched,
+  checkWalletConnection,
+} from 'selectors/blockchain'
+import { isModerator, getModerators, getMarketWinnings } from 'utils/helpers'
 
 const mapStateToProps = (state, ownProps) => {
+  const market = getMarketById(state)(ownProps.params.id)
+
+  if (!Object.keys(market).length) {
+    return { market }
+  }
+
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const marketShortSellSelector = formValueSelector('marketShortSell')
+  const defaultAccount = getCurrentAccount(state)
+  const marketShares = getMarketSharesByMarket(state)(ownProps.params.id, defaultAccount)
 
   return {
-    market: getMarketById(state)(ownProps.params.id),
-    marketShares: getMarketSharesByMarket(state)(ownProps.params.id, getCurrentAccount(state)),
+    market,
+    defaultAccount,
+    marketShares,
     selectedOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
+    limitMargin: marketBuySelector(state, 'limitMargin'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
+    sellLimitMargin: marketMySharesSelector(state, 'limitMargin'),
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
+    hasWallet: checkWalletConnection(state),
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
-    defaultAccount: getCurrentAccount(state),
     creatorIsModerator: isModerator(getCurrentAccount(state)),
     moderators: getModerators(),
     trades: getMarketParticipantsTrades(state)(),
+    winningsByOutcome: getMarketWinnings(market, marketShares, defaultAccount),
     initialValues: {
       selectedOutcome: 0,
     },
@@ -45,6 +69,7 @@ const mapStateToProps = (state, ownProps) => {
     isGasPriceFetched: isGasPriceFetched(state),
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
+    currentBalance: getCurrentBalance(state),
   }
 }
 
@@ -56,13 +81,13 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
     dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
-  sellShares: (market, outcomeIndex, outcomeTokenCount) =>
-    dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount)),
+  sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) =>
+    dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
   resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   withdrawFees: market => dispatch(withdrawFees(market)),
-  requestGasCost: contractType => dispatch(requestGasCost(contractType)),
+  requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
   closeMarket: market => dispatch(closeMarket(market)),
 })

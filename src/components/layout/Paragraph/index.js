@@ -1,21 +1,28 @@
+import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
-import * as React from 'react'
+import React, { PureComponent } from 'react'
+import * as css from './index.css'
 
-class Paragraph extends React.PureComponent {
+const cx = classNames.bind(css)
 
-    render() {
-        const { children, ...props } = this.props
+class Paragraph extends PureComponent {
 
-        return (
-            <p { ...props }>
-                { children }
-            </p>
-        )
-    }
+  render() {
+    const { children, color, center, nomargin, ...props } = this.props
+    const noMargin = nomargin ? 'no-margin' : undefined
+    return (
+      <p className={cx('default-paragraph', color, noMargin, { center })} {...props}>
+        { children }
+      </p>
+    )
+  }
 }
 
 Paragraph.propTypes = {
-    children: PropTypes.node,
+  nomargin: PropTypes.bool,
+  center: PropTypes.bool,
+  color: PropTypes.string,
+  children: PropTypes.node,
 }
 
 export default Paragraph

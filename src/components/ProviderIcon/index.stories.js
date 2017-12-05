@@ -7,10 +7,10 @@ import Component from './index'
 
 storiesOf('Components', module)
     .addDecorator(host({
-      title: 'ProviderIcon',
-      align: 'center',
-      height: 50,
-      width: '100%',
+        title: 'ProviderIcon',
+        align: 'center',
+        height: 50,
+        width: '100%',
     }))
     .add('ProviderIcon', () => {
         const provider = object('Wallet Provider ', {
@@ -24,6 +24,6 @@ storiesOf('Components', module)
         })
 
         return (
-            <Component provider={ provider } />
+          <Component provider={provider} />
         )
     })

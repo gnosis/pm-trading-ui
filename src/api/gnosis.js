@@ -1,6 +1,4 @@
-/* globals __ETHEREUM_HOST__ */
-
-import Gnosis from '@gnosis.pm/gnosisjs'
+import Gnosis from '@gnosis.pm/gnosisjs/'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
 import { hexWithPrefix, weiToEth } from 'utils/helpers'
@@ -12,6 +10,10 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 
 let gnosisInstance
+
+export const {
+  calcLMSRCost, calcLMSROutcomeTokenCount, calcLMSRMarginalPrice, calcLMSRProfit,
+} = Gnosis
 
 /**
  * Initializes connection to GnosisJS
@@ -30,16 +32,21 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
 /**
  * Returns an instance of the connection to GnosisJS
  */
-export const getGnosisConnection = async () => gnosisInstance
+export const getGnosisConnection = async () => {
+  if (!gnosisInstance) {
+    throw new Error('GnosisJS not initialized yet')
+  }
+
+  return gnosisInstance
+}
 
 /**
  * Returns the default node account
  */
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
-  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts(
-    (e, accounts) => (e ? reject(e) : resolve(accounts[0]))),
-  )
+
+  return gnosis.defaultAccount
 }
 
 /**
@@ -47,10 +54,9 @@ export const getCurrentAccount = async () => {
  */
 export const getCurrentBalance = async (account) => {
   const gnosis = await getGnosisConnection()
-  return await new Promise((resolve, reject) => gnosis.web3.eth.getBalance(
-    account,
-    (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))),
-  ))
+  const balanceValue = await new Promise((resolve, reject) =>
+    gnosis.web3.eth.getBalance(account, (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString())))))
+  return balanceValue
 }
 
 const normalizeEventDescription = (eventDescription, eventType) => {
@@ -124,7 +130,7 @@ export const createEvent = async (event) => {
 
   const eventData = {
     ...event,
-    collateralToken: hexWithPrefix(gnosis.etherToken.address),
+    collateralToken: hexWithPrefix(gnosis.olympiaToken.address),
   }
 
   if (event.type === OUTCOME_TYPES.CATEGORICAL) {
@@ -144,14 +150,17 @@ export const createEvent = async (event) => {
     creator: await getCurrentAccount(),
     creationDate: moment().format(),
     ...event,
-    collateralToken: hexWithPrefix(gnosis.etherToken.address),
+    collateralToken: hexWithPrefix(gnosis.olympiaToken.address),
   }
 }
 
 export const createMarket = async (market) => {
   console.log('market', market)
   const gnosis = await getGnosisConnection()
-  const fee = Decimal(market.fee).mul(10000).trunc().toString() // fee times 10000 as uint24
+  const fee = Decimal(market.fee)
+    .mul(10000)
+    .trunc()
+    .toString() // fee times 10000 as uint24
 
   const marketContract = await gnosis.createMarket({
     ...market,
@@ -190,12 +199,19 @@ export const fundMarket = async (market) => {
   const marketFunding = Decimal(market.funding)
   const marketFundingWei = marketFunding.times(1e18)
 
-  
-  await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event).collateralToken())
 
-  const marketAllowance = await gnosis.etherToken.allowance(hexWithPrefix(market.creator), hexWithPrefix(marketContract.address))
+  if ((await collateralToken.name()) === 'Ether Token') {
+    await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
+  }
+
+  const marketAllowance = await gnosis.olympiaToken.allowance(
+    hexWithPrefix(market.creator),
+    hexWithPrefix(marketContract.address),
+  )
+
   if (marketAllowance.lt(marketFundingWei)) {
-    await gnosis.etherToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
+    await collateralToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
   }
 
   if (process.env.NODE_ENV !== 'production') {
@@ -223,50 +239,76 @@ export const closeMarket = async (market) => {
   return market
 }
 
-export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost) => {
+export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
 
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
-  const collateralTokenWei = Decimal(cost).mul(1e18)
+  const collateralTokenWei = Decimal(cost).mul(1e18).toString()
 
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
-  await gnosis.etherToken.deposit({ value: collateralTokenWei.toString() })
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
+
+  if ((await collateralToken.name()) === 'Ether Token') {
+    await gnosis.etherToken.deposit({ value: collateralTokenWei })
+  }
 
   // buyOutComeTokens handles approving
-  return await gnosis.buyOutcomeTokens({ market, outcomeTokenIndex, outcomeTokenCount: outcomeTokenCount.toString() })
+  const collateralTokensPaid = await gnosis.buyOutcomeTokens({
+    market: market.address,
+    outcomeTokenIndex,
+    outcomeTokenCount: outcomeTokenCount.toString(),
+    cost: collateralTokenWei,
+    approvalResetAmount,
+  })
+
+  return collateralTokensPaid
 }
 
 export const resolveEvent = async (event, selectedOutcomeIndex) => {
   const gnosis = await getGnosisConnection()
 
-  return await gnosis.resolveEvent(event.address, parseInt(selectedOutcomeIndex, 10))
+  await gnosis.resolveEvent(event.address, parseInt(selectedOutcomeIndex, 10))
 }
 
-export const sellShares = async (marketAddress, outcomeTokenIndex, outcomeTokenCount) => {
+export const sellShares = async (
+  marketAddress,
+  outcomeTokenIndex,
+  outcomeTokenCount,
+  earnings,
+  approvalResetAmount,
+) => {
   const gnosis = await getGnosisConnection()
 
-  const outcomeTokenCountWei = Decimal(outcomeTokenCount).mul(1e18).toString()
+  const outcomeTokenCountWei = Decimal(outcomeTokenCount)
+    .mul(1e18)
+    .toString()
+  const minProfit = Decimal(earnings).mul(1e18).round().toString()
 
-  return await gnosis.sellOutcomeTokens({
+  const collateralTokensReceived = await gnosis.sellOutcomeTokens({
     market: hexWithPrefix(marketAddress),
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCountWei,
+    minProfit,
+    approvalResetAmount,
   })
+
+  return collateralTokensReceived
 }
 
 export const redeemWinnings = async (eventType, eventAddress) => {
   const gnosis = await getGnosisConnection()
 
-  const eventContract = eventType === OUTCOME_TYPES.CATEGORICAL ?
-    await gnosis.contracts.CategoricalEvent.at(eventAddress) :
-    await gnosis.contracts.ScalarEvent.at(eventAddress)
+  const eventContract =
+    eventType === OUTCOME_TYPES.CATEGORICAL
+      ? await gnosis.contracts.CategoricalEvent.at(eventAddress)
+      : await gnosis.contracts.ScalarEvent.at(eventAddress)
 
   if (eventContract) {
-    return await eventContract.redeemWinnings()
+    await eventContract.redeemWinnings()
   }
-  throw new Error('Invalid Event - can\'t find the specified Event, invalid Eventtype?')
+  throw new Error("Invalid Event - can't find the specified Event, invalid Eventtype?")
 }
 
 export const withdrawFees = async (marketAddress) => {
@@ -275,16 +317,11 @@ export const withdrawFees = async (marketAddress) => {
   const marketContract = gnosis.contracts.Market.at(marketAddress)
 
   if (marketContract) {
-    return await marketContract.withdrawFees()
+    await marketContract.withdrawFees()
   }
 
-  throw new Error('Invalid Market - can\'t find the specified Market')
+  throw new Error("Invalid Market - can't find the specified Market")
 }
-
-export const calcLMSRCost = Gnosis.calcLMSRCost
-export const calcLMSROutcomeTokenCount = Gnosis.calcLMSROutcomeTokenCount
-export const calcLMSRMarginalPrice = Gnosis.calcLMSRMarginalPrice
-export const calcLMSRProfit = Gnosis.calcLMSRProfit
 
 /*
 * Gas Calculation functions
@@ -296,32 +333,78 @@ export const calcFundingGasCost = async () => {
 
 export const calcCategoricalEventGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  return await gnosis.createCategoricalEvent.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+  const gasCost = await gnosis.createCategoricalEvent.estimateGas({
+    marketFactory: gnosis.contracts.StandardMarketFactory,
+    using: 'stats',
+  })
+  return gasCost
 }
 
 export const calcScalarEventGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  return await gnosis.createScalarEvent.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+  const gasCost = await gnosis.createScalarEvent.estimateGas({
+    marketFactory: gnosis.contracts.StandardMarketFactory,
+    using: 'stats',
+  })
+  return gasCost
 }
 
 export const calcCentralizedOracleGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  return await gnosis.createCentralizedOracle.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+  const gasCost = await gnosis.createCentralizedOracle.estimateGas({
+    marketFactory: gnosis.contracts.StandardMarketFactory,
+    using: 'stats',
+  })
+  return gasCost
 }
 
 export const calcMarketGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  return await gnosis.createMarket.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+  const gasCost = await gnosis.createMarket.estimateGas({
+    marketFactory: gnosis.contracts.StandardMarketFactory,
+    using: 'stats',
+  })
+  return gasCost
 }
 
 export const calcBuySharesGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  return await gnosis.buyOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+  const gasCost = await gnosis.buyOutcomeTokens.estimateGas({
+    marketFactory: gnosis.contracts.StandardMarketFactory,
+    using: 'stats',
+  })
+  return gasCost
 }
 
 export const calcSellSharesGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  return await gnosis.sellOutcomeTokens.estimateGas({ marketFactory: gnosis.contracts.StandardMarketFactory, using: 'stats' })
+  const gasCost = await gnosis.sellOutcomeTokens.estimateGas({
+    marketFactory: gnosis.contracts.StandardMarketFactory,
+    using: 'stats',
+  })
+  return gasCost
+}
+
+/**
+ * Returns gas cost for redeem winnings
+ * @param {*object} opts options
+ * @param {*string} opts.eventAddress Address for the event
+ */
+
+export const calcRedeemWinningsGasCost = async (opts) => {
+  const { eventAddress } = opts
+  if (!eventAddress) {
+    return undefined
+  }
+
+  const gnosis = await getGnosisConnection()
+  const Event = await gnosis.contracts.Event.at(eventAddress)
+
+  const gasGost = await Event.redeemWinnings.estimateGas({
+    marketFactory: gnosis.contracts.StandardMarketFactory,
+    using: 'stats',
+  })
+  return gasGost
 }
 
 /**
@@ -329,11 +412,9 @@ export const calcSellSharesGasCost = async () => {
  */
 export const getGasPrice = async () => {
   const gnosis = await getGnosisConnection()
-  return await new Promise(
-    (resolve, reject) => gnosis.web3.eth.getGasPrice(
-      (e, r) => (e ? reject(e) : resolve(r)),
-    ),
-  )
+  const gasPrice = await new Promise((resolve, reject) =>
+    gnosis.web3.eth.getGasPrice((e, r) => (e ? reject(e) : resolve(r))))
+  return gasPrice
 }
 
 /**
@@ -342,6 +423,16 @@ export const getGasPrice = async () => {
  */
 export const getEtherTokens = async (account) => {
   const gnosis = await getGnosisConnection()
-  const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
-  return new Decimal(balance.toFixed(0))
+
+  if (gnosis && gnosis.etherToken) {
+    const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
+    return new Decimal(balance.toFixed(0))
+  }
+  return undefined
+}
+
+export const getOlympiaTokensByAccount = async (account) => {
+  const gnosis = await getGnosisConnection()
+  const balance = await gnosis.olympiaToken.balanceOf(account)
+  return new Decimal(balance.toFixed(0)).toString()
 }

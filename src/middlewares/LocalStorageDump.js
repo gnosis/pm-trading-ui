@@ -2,9 +2,7 @@ import { pick } from 'lodash'
 
 const CLEAR_LOCAL_STORAGE = 'CLEAR_LOCAL_STORAGE'
 
-const PERSIST_PATHS = [
-  'transactions.log',
-]
+const PERSIST_PATHS = ['transactions.log', 'blockchain.providers.UPORT.account']
 
 export default store => next => (action) => {
   const state = store.getState()

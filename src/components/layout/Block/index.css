@@ -1,0 +1,21 @@
+.sm {
+    margin-bottom: 17px;
+}
+
+.md {
+    margin-bottom: 42px;
+}
+
+.xl {
+    margin-bottom: 96px;
+}
+
+.xxl {
+    margin-bottom: 200px;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

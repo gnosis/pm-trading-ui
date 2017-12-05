@@ -1,15 +1,47 @@
-import { createSelector } from 'reselect';
-import { ContactRecord } from '../models';
-import { getCurrentAccount } from 'src/selectors/blockchain';
+import { createSelector } from 'reselect'
+import { getCurrentAccount } from 'selectors/blockchain'
+import { hexWithoutPrefix } from 'utils/helpers'
+
+const olympiaUsersSelectorAsList = (state) => {
+  if (!state.olympia) {
+    return undefined
+  }
+
+  if (!state.olympia.ranking) {
+    return undefined
+  }
+
+  return state.olympia.ranking.toList()
+}
 
 
-export const olympiaUsersSelectorAsList = (state) => state.olympia && state.olympia.users
-    ? state.olympia.users.toList()
-    : undefined;
+export const firstOlympiaUsersSelectorAsList = createSelector(
+  olympiaUsersSelectorAsList,
+  users => (users
+    ? users
+      .filter(user => user.currentRank > 0)
+      .sort((userA, userB) => {
+        if (userA.currentRank > userB.currentRank) {
+          return 1
+        }
+
+        if (userA.currentRank < userB.currentRank) {
+          return -1
+        }
+
+        return 0
+      })
+      .take(100)
+    : undefined),
+)
+
+export const nomalizedCurrentAccount = createSelector(
+  getCurrentAccount,
+  account => (account ? hexWithoutPrefix(account) : account),
+)
 
 export const meSelector = createSelector(
-    olympiaUsersSelectorAsList,
-    getCurrentAccount,
-    (users, account) =>
-        users.find((user) => user.account === account),
-);
+  olympiaUsersSelectorAsList,
+  nomalizedCurrentAccount,
+  (users, account) => (users ? users.find(user => user.account === account) : undefined),
+)

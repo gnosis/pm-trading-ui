@@ -5,6 +5,9 @@ import { Field, propTypes } from 'redux-form'
 
 import * as validators from 'utils/validators'
 import { ORACLE_TYPES, GAS_COST } from 'utils/constants'
+import { isModerator } from 'utils/helpers'
+
+import { collateralTokenToText } from 'components/CurrencyName'
 
 import GroupCentralizedOracle from 'components/GroupCentralizedOracle'
 import GroupBlockDifficulty from 'components/GroupBlockDifficulty'
@@ -17,10 +20,9 @@ import './marketCreateWizard.less'
 
 export default class MarketCreateWizard extends Component {
   componentDidMount() {
-    if (!this.props.defaultAccount) {
+    if (!isModerator(this.props.defaultAccount)) {
       this.props.changeUrl('/markets')
     }
-
 
     // i commented this out because we dont have such property 'outcomes'
     // maybe we did before, but now this check will always overwrite our outcomes
@@ -97,7 +99,7 @@ export default class MarketCreateWizard extends Component {
           <div className="col-md-offset-2 col-md-10">
             <Field
               name="funding"
-              continuousPlaceholder="ETH"
+              continuousPlaceholder={collateralTokenToText()}
               component={FormInput}
               type="text"
               validate={validators.all(

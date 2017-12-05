@@ -7,7 +7,9 @@ import Decimal from 'decimal.js'
 import { OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
-import FormRadioButton, { FormRadioButtonLabel } from 'components/FormRadioButton'
+import InteractionButton from 'containers/InteractionButton'
+
+import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
 
 import './marketResolveForm.less'
@@ -29,25 +31,25 @@ class MarketResolveForm extends Component {
     throw new Error(`got unexpected type ${type}`)
   }
   renderResolveScalar() {
-    const { handleSubmit } = this.props
-
+    const { handleSubmit, submitting, market } = this.props
+    const { eventDescription: { unit } } = market
     return (
       <form className="marketResolve" onSubmit={handleSubmit(this.handleResolve)}>
         <div className="marketResolveScalar">
-          <Field name="selectedValue" component={FormInput} label={'Enter outcome'} />
+          <Field continuousPlaceholder={unit} name="selectedValue" component={FormInput} label="Enter outcome" />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <InteractionButton type="submit" className="btn btn-primary" loading={submitting}>
           Resolve Oracle
-        </button>
+        </InteractionButton>
       </form>
     )
   }
 
   renderResolveCategorical() {
-    const { handleSubmit, market: { eventDescription: { outcomes } } } = this.props
+    const { handleSubmit, submitting, market: { eventDescription: { outcomes }, local } } = this.props
     const outcomesFormatted = []
-    outcomes.forEach((outcome) => {
-      outcomesFormatted.push({ label: outcome, value: outcome })
+    outcomes.forEach((outcome, outcomeIndex) => {
+      outcomesFormatted.push({ label: outcome, value: outcomeIndex })
     })
 
     return (
@@ -60,9 +62,9 @@ class MarketResolveForm extends Component {
             radioValues={outcomesFormatted}
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <InteractionButton type="submit" className="btn btn-primary" loading={submitting || local}>
           Resolve Oracle
-        </button>
+        </InteractionButton>
       </form>
     )
   }

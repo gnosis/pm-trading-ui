@@ -1,0 +1,28 @@
+.default-paragraph {
+    font-family: Montserrat;
+    color: #626262;
+    font-size: 18px;
+    line-height: 1.7;
+    font-weight: 300;
+    color: #333;
+}
+
+.soft {
+    color: #888888;
+}
+
+.medium {
+    color: #686868;
+}
+
+.dark {
+    color: black;
+}
+
+.no-margin{
+    margin-bottom: 5px;
+}
+
+.center {
+    text-align: center;
+}

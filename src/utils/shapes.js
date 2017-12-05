@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import { ETHEREUM_NETWORK, WALLET_PROVIDER } from 'integrations/constants'
+import { TRANSACTION_COMPLETE_STATUS } from './constants'
 
 export const eventDescriptionShape = PropTypes.shape({
   description: PropTypes.string,
@@ -21,7 +22,7 @@ export const marketShareShape = PropTypes.shape({
   event: PropTypes.string,
   eventDescription: eventDescriptionShape,
   id: PropTypes.string,
-  marginalPrice: PropTypes.number,
+  marginalPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   outcomeToken: outcomeTokenShape,
   owner: PropTypes.string,
 })
@@ -41,4 +42,33 @@ export const providerPropType = PropTypes.shape({
   priority: PropTypes.number,
   network: PropTypes.oneOf(Object.values(ETHEREUM_NETWORK)),
   balance: PropTypes.string,
+})
+
+export const eventShape = PropTypes.shape({
+  event: PropTypes.string,
+  label: PropTypes.string,
+  status: PropTypes.string,
+})
+
+export const transactionShape = PropTypes.shape({
+  id: PropTypes.string,
+  label: PropTypes.string,
+  events: PropTypes.arrayOf(eventShape),
+  startTime: PropTypes.string,
+  endTime: PropTypes.string,
+  completed: PropTypes.bool,
+  completionStatus: PropTypes.oneOf(Object.values(TRANSACTION_COMPLETE_STATUS)),
+})
+
+export const gasCostsShape = PropTypes.shape({
+  redeemWinnings: PropTypes.number,
+  market: PropTypes.number,
+  buyShares: PropTypes.number,
+  sellShares: PropTypes.number,
+  resolveOracle: PropTypes.number,
+  withdrawFees: PropTypes.number,
+  categoricalEvent: PropTypes.number,
+  scalarEvent: PropTypes.number,
+  centralizedOracle: PropTypes.number,
+  funding: PropTypes.number,
 })

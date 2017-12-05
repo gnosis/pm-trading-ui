@@ -1,16 +1,36 @@
 language: node_js
 node_js:
+  - node
   - "8"
 dist: trusty
-node_js:
-  node
-addons:
-  ssh_known_hosts:
-  - olympia-staging.gnosis.pm
-  - olympia-dev.gnosis.pm
+env:
+  ETHEREUM_URL: https://rinkeby.infura.io:443
+  GNOSISDB_URL: https://gnosisdb-olympia.gnosis.pm:443
+  INTERCOM_ID: km54f6ih
 before_install:
 - npm i -g babel-cli webpack truffle-contract
-- openssl aes-256-cbc -K $encrypted_28bae62eba17_key -iv $encrypted_28bae62eba17_iv -in .travis/deploy_key.enc -out .travis/deploy_key -d
 after_success:
-- chmod +x deploy.sh
-- ./deploy.sh
+- export NODE_ENV=production
+- npm run build
+deploy:
+  matrix:
+  - provider: s3
+    bucket: olympia-development
+    secret_access_key:
+      secure: XmO28ALS4VgBGmMOQJdQKMzwPxzr5s3BsWVsK8Z0XoR/ViOH5rGol6myinEcqidy2sKEvKsEM3wAqW7eKpLXJi3YKK+1cmnpAzBlLQY7rISMpWsHOJ8Rgar9DrxsoOzqOmq24M/shrdO/Jq3NoezqWVF+pz7M2kOp/4mryJ62G7EZPEUQSAiLAK4EG86FaiiGAU+LCjH3cvgdM7LwUkcrHjHfJrrg05qDUVOfd5QCyEfUvx+sa9iOxPoFUIzqjWuHJrEN1xgbz3CcvWaLtUT1Gxldbw23yIDDPasoOZ/RcCSlbgss8myj8mCsPL/lj01nV4QNx3a3TEPcIK9sfUFgTmRkgZTtm/T39rjY1DwMk2DFa7mwIr/yWvysoRtf5Cuf6e9rPQxKuEtyKYgiYMdBlDxzsD/61/lslSCo4+Hw7FHuSsSqS7DRA6LWH2cwF/x0xp8tFnmpaugcRmZMK43vz/FVo6AM9riUDLAWuNZqfEoXqDJw0ibPKmhfvZVOhQ0PCIp4PNOauoIYPN93AyTQIQ8tqItm+YEfHP1MR/bxxUnKD8fkztcAeOTIKlv4DcPzFAr4kyHnZPvot50MOtfCf+Paetwm5wcR0IBtH32Q50/0+W62BgRlgNVu6anuzGmx2TboTCF0uySf9qops9RDZ0CF66DX/d+eMR6Jrl/jQA=
+    access_key_id:
+      secure: a+SpPi6jQJXzm0wJhdt4RJyd/ksS9om8IdHt2dlNsxZFxvD8NBqHKyZ0HUDB9r/+ni/vdzomQS6QfznwDrGvsIVrLaZCsdzkyTREvSXvFW3zA9MMFvf/gyNr+TXW0VMZZPC+GRhnTjWSbbFau5sGzvAb3xZKqzUIBsyb6q4r9uJfuSt4vVk427jEQMGnWK/oupw+KyE2LBUIpydPKZWVpzyX2KBAIKJzM0wZhW0lPwpXj6UNzpxi96ODTo4/rlrjBWraMr6zxfuEryXNcC4hPjrBPC9nABslZtkMuFMikIRzzYzmTExwmh2oJ3pp70HHDP1WINriMZ4XSrF6BWOQkmK0iFlaWZCenqMTQer+fzE4aKcFZgEp88c/ax8G0pKFfVRi6DtTH1iCZ9bfYHp0nvC9jtpXcYHWpWUas9mO6GG7boTZXHdlE2PKkPQUz6I3zTAkSUf1Vg8AixryeQuKnnhI2GQQ3TitK6DbN/jAvt4qV951hq7Oc4VreTu/VrcoTfyuw1x+kwUYiRk95kC5q8rIzb9qqhaknP9BKZsPd29AtiXfb9muNxjTZuuDyYkUKhC73+ZvmJfp8XBoGX95LpaiJCSBNQ5YUvEwM/uQ1E8/cj8TEdyosrofGjIQB7upbNUVYL/PbDXQXQ4O1RQ5fkjb4XOVLLNVucjfuHnn8Bg=
+    skip_cleanup: true
+    local_dir: dist
+    on:
+      branch: development
+  - provider: s3
+    bucket: olympia-staging
+    secret_access_key:
+      secure: XmO28ALS4VgBGmMOQJdQKMzwPxzr5s3BsWVsK8Z0XoR/ViOH5rGol6myinEcqidy2sKEvKsEM3wAqW7eKpLXJi3YKK+1cmnpAzBlLQY7rISMpWsHOJ8Rgar9DrxsoOzqOmq24M/shrdO/Jq3NoezqWVF+pz7M2kOp/4mryJ62G7EZPEUQSAiLAK4EG86FaiiGAU+LCjH3cvgdM7LwUkcrHjHfJrrg05qDUVOfd5QCyEfUvx+sa9iOxPoFUIzqjWuHJrEN1xgbz3CcvWaLtUT1Gxldbw23yIDDPasoOZ/RcCSlbgss8myj8mCsPL/lj01nV4QNx3a3TEPcIK9sfUFgTmRkgZTtm/T39rjY1DwMk2DFa7mwIr/yWvysoRtf5Cuf6e9rPQxKuEtyKYgiYMdBlDxzsD/61/lslSCo4+Hw7FHuSsSqS7DRA6LWH2cwF/x0xp8tFnmpaugcRmZMK43vz/FVo6AM9riUDLAWuNZqfEoXqDJw0ibPKmhfvZVOhQ0PCIp4PNOauoIYPN93AyTQIQ8tqItm+YEfHP1MR/bxxUnKD8fkztcAeOTIKlv4DcPzFAr4kyHnZPvot50MOtfCf+Paetwm5wcR0IBtH32Q50/0+W62BgRlgNVu6anuzGmx2TboTCF0uySf9qops9RDZ0CF66DX/d+eMR6Jrl/jQA=
+    access_key_id:
+      secure: a+SpPi6jQJXzm0wJhdt4RJyd/ksS9om8IdHt2dlNsxZFxvD8NBqHKyZ0HUDB9r/+ni/vdzomQS6QfznwDrGvsIVrLaZCsdzkyTREvSXvFW3zA9MMFvf/gyNr+TXW0VMZZPC+GRhnTjWSbbFau5sGzvAb3xZKqzUIBsyb6q4r9uJfuSt4vVk427jEQMGnWK/oupw+KyE2LBUIpydPKZWVpzyX2KBAIKJzM0wZhW0lPwpXj6UNzpxi96ODTo4/rlrjBWraMr6zxfuEryXNcC4hPjrBPC9nABslZtkMuFMikIRzzYzmTExwmh2oJ3pp70HHDP1WINriMZ4XSrF6BWOQkmK0iFlaWZCenqMTQer+fzE4aKcFZgEp88c/ax8G0pKFfVRi6DtTH1iCZ9bfYHp0nvC9jtpXcYHWpWUas9mO6GG7boTZXHdlE2PKkPQUz6I3zTAkSUf1Vg8AixryeQuKnnhI2GQQ3TitK6DbN/jAvt4qV951hq7Oc4VreTu/VrcoTfyuw1x+kwUYiRk95kC5q8rIzb9qqhaknP9BKZsPd29AtiXfb9muNxjTZuuDyYkUKhC73+ZvmJfp8XBoGX95LpaiJCSBNQ5YUvEwM/uQ1E8/cj8TEdyosrofGjIQB7upbNUVYL/PbDXQXQ4O1RQ5fkjb4XOVLLNVucjfuHnn8Bg=
+    skip_cleanup: true
+    local_dir: dist
+    on:
+      branch: master

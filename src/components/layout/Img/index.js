@@ -1,17 +1,23 @@
+import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
-import * as React from 'react'
+import React, { PureComponent } from 'react'
+import * as css from './index.css'
 
-class Img extends React.PureComponent {
+const cx = classNames.bind(css)
 
-    render() {
-        const { ...props } = this.props;
-        
-        return <img { ...this.props } />;
-    }
+class Img extends PureComponent {
+  render() {
+    const { fullwidth, alt, bordered, className, ...props } = this.props
+
+    return <img alt={alt} {...props} className={cx('ol-img', { fullwidth, bordered }, className)} />
+  }
 }
 
 Img.propTypes = {
-    alt: PropTypes.string
+  alt: PropTypes.string,
+  fullwidth: PropTypes.bool,
+  bordered: PropTypes.bool,
+  className: PropTypes.string,
 }
 
 export default Img
