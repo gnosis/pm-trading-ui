@@ -74,7 +74,9 @@ export const getMarketSharesByMarket = state => (marketAddress) => {
   const marketEntity = getMarketById(state)(marketAddress)
   const shares = get(state, 'entities.marketShares', {})
 
-  const sharesFiltered = Object.keys(shares).map(shareId => shares[shareId]).filter(share => share.outcomeToken.event === marketEntity.event.address)
+  const sharesFiltered = Object.keys(shares)
+    .map(shareId => shares[shareId])
+    .filter(share => share.outcomeToken.event === marketEntity.event.address)
   return sharesFiltered
 }
 
@@ -131,14 +133,10 @@ export const sortMarkets = (markets = [], orderBy = null) => {
     })
   default:
     return markets.sort((a, b) => {
-      const resolvedA = get(a, 'oracle.isOutcomeSet', false)
-      const resolvedB = get(b, 'oracle.isOutcomeSet', false)
+      const isFirstMarketEnded = isMarketClosed(a) || isMarketResolved(a)
+      const isSecondMarketEnded = isMarketClosed(b) || isMarketResolved(b)
 
-      if (resolvedA === resolvedB) {
-        return 0
-      }
-
-      return resolvedA ? 1 : -1
+      return isFirstMarketEnded - isSecondMarketEnded
     })
   }
 }
