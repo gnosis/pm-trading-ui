@@ -84,6 +84,7 @@ module.exports = {
         yandex: false,
         windows: false,
       },
+      inject: true,
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),
