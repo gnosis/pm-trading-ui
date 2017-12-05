@@ -103,13 +103,17 @@ describe('marketSelector', () => {
           marketShares: {
             share1: {
               id: 'share1',
-              event: 'testevent123',
+              outcomeToken: {
+                event: 'event1',
+              },
               owner: 'testuser123',
               balance: 1e18,
             },
             share2: {
               id: 'share2',
-              event: 'testevent123',
+              outcomeToken: {
+                event: 'event1',
+              },
               owner: 'testuser123',
               balance: 1e18,
             },
@@ -120,13 +124,17 @@ describe('marketSelector', () => {
       expect(getMarketSharesByMarket(state)('testmarket123')).toMatchObject([
         {
           id: 'share1',
-          event: 'testevent123',
+          outcomeToken: {
+            event: 'event1',
+          },
           owner: 'testuser123',
           balance: 1e18,
         },
         {
           id: 'share2',
-          event: 'testevent123',
+          outcomeToken: {
+            event: 'event1',
+          },
           owner: 'testuser123',
           balance: 1e18,
         },
