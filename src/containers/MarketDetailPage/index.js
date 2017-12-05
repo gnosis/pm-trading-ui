@@ -16,7 +16,11 @@ import {
   withdrawFees,
   closeMarket,
 } from 'actions/market'
-import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
+import {
+  getMarketById,
+  getMarketSharesByMarket,
+  getMarketParticipantsTrades,
+} from 'selectors/market'
 import {
   getCurrentAccount,
   getCurrentBalance,
@@ -26,16 +30,25 @@ import {
   isGasPriceFetched,
   checkWalletConnection,
 } from 'selectors/blockchain'
-import { isModerator, getModerators } from 'utils/helpers'
+import { isModerator, getModerators, getMarketWinnings } from 'utils/helpers'
 
 const mapStateToProps = (state, ownProps) => {
+  const market = getMarketById(state)(ownProps.params.id)
+
+  if (!Object.keys(market).length) {
+    return { market }
+  }
+
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const marketShortSellSelector = formValueSelector('marketShortSell')
+  const defaultAccount = getCurrentAccount(state)
+  const marketShares = getMarketSharesByMarket(state)(ownProps.params.id, defaultAccount)
 
   return {
-    market: getMarketById(state)(ownProps.params.id),
-    marketShares: getMarketSharesByMarket(state)(ownProps.params.id, getCurrentAccount(state)),
+    market,
+    defaultAccount,
+    marketShares,
     selectedOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     limitMargin: marketBuySelector(state, 'limitMargin'),
@@ -45,10 +58,10 @@ const mapStateToProps = (state, ownProps) => {
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
     hasWallet: checkWalletConnection(state),
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
-    defaultAccount: getCurrentAccount(state),
     creatorIsModerator: isModerator(getCurrentAccount(state)),
     moderators: getModerators(),
     trades: getMarketParticipantsTrades(state)(),
+    winningsByOutcome: getMarketWinnings(market, marketShares, defaultAccount),
     initialValues: {
       selectedOutcome: 0,
     },

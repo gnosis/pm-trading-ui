@@ -182,8 +182,8 @@ class MarketDetail extends Component {
       .utc(market.eventDescription.resolutionDate)
       .local()
       .diff(moment(), 'hours')
-    const { marketShares, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
-
+    const { winningsByOutcome, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
+    const winningsTotal = Object.keys(winningsByOutcome).reduce((acc, outcomeIndex) => acc.add(Decimal(winningsByOutcome[outcomeIndex] || '0')), Decimal(0))
     const marketClosed = isMarketClosed(market)
     const marketResolved = isMarketResolved(market)
     const showWinning = marketResolved
@@ -195,18 +195,6 @@ class MarketDetail extends Component {
       .div(1e18)
       .toDP(5, 1)
       .toString()
-
-    const winnings = marketShares.reduce((sum, share) => {
-      const shareWinnings = weiToEth(calcLMSRProfit({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        outcomeTokenCount: share.balance,
-        feeFactor: market.fee,
-      }))
-
-      return sum.plus(new Decimal(shareWinnings))
-    }, new Decimal(0))
 
     return (
       <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
@@ -243,13 +231,13 @@ class MarketDetail extends Component {
           </div>
         )}
         {showWinning &&
-          winnings.gt(MIN_CONSIDER_VALUE) && (
+          winningsTotal.gt(MIN_CONSIDER_VALUE) && (
             <div className="redeemWinning">
               <div className="redeemWinning__icon-details-container">
                 <div className="redeemWinning__icon icon icon--achievementBadge" />
                 <div className="redeemWinning__details">
                   <div className="redeemWinning__heading">
-                    <DecimalValue value={winnings} /> {collateralTokenToText(market.event.collateralToken)}
+                    <DecimalValue value={weiToEth(winningsTotal)} /> {collateralTokenToText(market.event.collateralToken)}
                   </div>
                   <div className="redeemWinning__label">Your Winnings</div>
                 </div>
@@ -364,6 +352,7 @@ MarketDetail.propTypes = {
   marketShares: PropTypes.arrayOf(marketShareShape),
   defaultAccount: PropTypes.string,
   market: marketShape,
+  winningsByOutcome: PropTypes.objectOf(PropTypes.string),
   changeUrl: PropTypes.func,
   fetchMarket: PropTypes.func,
   fetchMarketShares: PropTypes.func,

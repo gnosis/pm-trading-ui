@@ -1,9 +1,10 @@
-import { restFetch, hexWithoutPrefix, addIdToObjectsInArray, getOutcomeName, normalizeScalarPoint } from 'utils/helpers'
+import { restFetch, hexWithoutPrefix, hexWithPrefix, addIdToObjectsInArray, getOutcomeName, normalizeScalarPoint } from 'utils/helpers'
 import { normalize } from 'normalizr'
 import { OUTCOME_TYPES } from 'utils/constants'
+import { mapValues } from 'lodash'
 import sha1 from 'sha1'
 import qs from 'querystring'
-import { marketSchema } from './schema'
+import { marketSchema, marketSharesSchema } from './schema'
 
 const API_URL = `${process.env.GNOSISDB_URL}/api`
 
@@ -40,6 +41,7 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
             id: sha1(`${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
             event: share.outcomeToken.event,
             ...share,
+            outcomeToken: mapValues(share.outcomeToken, hexWithPrefix),
           })),
         },
         marketSchema,
@@ -103,8 +105,8 @@ export const requestAccountShares = async address =>
   // restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
   //   .then(response => response.results)
   restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/shares/`).then(response =>
-    response.results.map((share) => {
-      const s = { ...share }
-      s.id = sha1(`${address}-${share.outcomeToken.address}`)
-      return s
-    }))
+    normalize(response.results.map(share => ({
+      ...share,
+      outcomeToken: mapValues(share.outcomeToken, hexWithPrefix),
+      id: sha1(`${share.address}-${share.outcomeToken.address}`),
+    })), [marketSharesSchema]))

@@ -36,5 +36,6 @@
    "host": "rinkeby.infura.io",
    "port": 443
  },
- "fetchMarketTimeInterval": 15000
+ "fetchMarketTimeInterval": 15000,
+ "ravenPublicDSN": "https://c84ba74579154c7aacd8c6ad69d96932@sentry.io/252604"
 }

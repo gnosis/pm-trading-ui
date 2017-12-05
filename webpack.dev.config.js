@@ -117,7 +117,10 @@ module.exports = {
         ? `:${config.ethereum.port}`
         : ''}`,
       WHITELIST: whitelist,
-      INTERCOM_ID: undefined,
+      INTERCOM_ID: null,
+      RAVEN_ID: null,
+      TRAVIS_BUILD_ID: null,
+      TRAVIS_BRANCH: null,
     }),
   ],
 }
