@@ -7,8 +7,11 @@ import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { weiToEth } from 'utils/helpers'
 import {
-  COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST,
-  SCALAR_SHORT_COLOR, SCALAR_LONG_COLOR, LIMIT_MARGIN_DEFAULT,
+  COLOR_SCHEME_DEFAULT,
+  COLOR_SCHEME_SCALAR,
+  OUTCOME_TYPES,
+  GAS_COST,
+  LIMIT_MARGIN_DEFAULT,
 } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 
@@ -220,12 +223,12 @@ class MarketBuySharesForm extends Component {
       {
         value: 0,
         label: 'Short',
-        highlightColor: SCALAR_SHORT_COLOR,
+        highlightColor: COLOR_SCHEME_SCALAR[0],
       },
       {
         value: 1,
         label: 'Long',
-        highlightColor: SCALAR_LONG_COLOR,
+        highlightColor: COLOR_SCHEME_SCALAR[1],
       },
     ]
 
@@ -274,7 +277,7 @@ class MarketBuySharesForm extends Component {
       gasPrice,
       invalid,
       handleSubmit,
-      market: { event: { collateralToken }, address, local },
+      market: { event: { collateralToken, type }, address, local },
       selectedBuyInvest,
       submitFailed,
       submitting,
@@ -301,12 +304,17 @@ class MarketBuySharesForm extends Component {
     } else if (Decimal(outcomeTokenCount.toString()).isZero()) {
       fieldError = <span className="marketBuyWin__invalidParam">Invalid investment</span>
     } else {
+      const colorSource = type === OUTCOME_TYPES.CATEGORICAL ? COLOR_SCHEME_DEFAULT : COLOR_SCHEME_SCALAR
+      const outcomeColorStyles = {
+        backgroundColor: colorSource[selectedOutcome],
+      }
+
       tokenCountField = (
         <span className="marketBuyWin__row marketBuyWin__max">
           <DecimalValue value={weiToEth(outcomeTokenCount)} />&nbsp;
           <div
             className="marketBuyWin__outcomeColor"
-            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[selectedOutcome] }}
+            style={outcomeColorStyles}
           />&nbsp;
         </span>
       )
