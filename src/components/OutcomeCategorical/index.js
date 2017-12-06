@@ -53,6 +53,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     return (
       <div className={`${className} outcomes outcomes--categorical`}>
         <div className="outcome outcome__winning">
+          <div className="icon icon--winningOutcome" />
           {renderOutcomes[market.oracle.outcome]}
           <div className="outcome__bar--value">{tokenDistributionPercent}</div>
         </div>
