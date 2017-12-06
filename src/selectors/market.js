@@ -1,11 +1,14 @@
-import { get } from 'lodash'
+import { get, filter, values } from 'lodash'
 import Decimal from 'decimal.js'
+import { isMarketResolved, isMarketClosed, weiToEth, add0xPrefix } from 'utils/helpers'
+import { OUTCOME_TYPES } from 'utils/constants'
+import { createSelector } from 'reselect'
+import { getCurrentAccount } from 'selectors/blockchain'
 
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
 import { getOracleByAddress } from './oracle'
 import { getEventDescriptionByAddress } from './eventDescription'
-import { isMarketResolved, isMarketClosed } from '../utils/helpers'
 
 export const getMarketById = state => (marketAddress) => {
   const marketEntities = entitySelector(state, 'markets')
@@ -55,11 +58,29 @@ export const getMarkets = (state) => {
   return Object.keys(marketEntities).map(getMarketById(state))
 }
 
+export const getMarketShares = (state) => {
+  if (!state.entities) {
+    return undefined
+  }
+
+  if (!state.entities.marketShares) {
+    return undefined
+  }
+
+  return state.entities.marketShares
+}
+
 export const getMarketSharesByMarket = state => (marketAddress) => {
   const marketEntity = getMarketById(state)(marketAddress)
-  const shares = get(marketEntity, 'shares', [])
+  const shares = get(state, 'entities.marketShares', {})
 
-  return shares.map(shareAddress => getMarketShareByShareId(state)(shareAddress)).filter(share => share.balance > 0)
+  const sharesFiltered = Object.keys(shares)
+    .map(shareId => ({
+      id: shareId,
+      ...shares[shareId],
+    }))
+    .filter(share => share.outcomeToken.event === marketEntity.event.address)
+  return sharesFiltered
 }
 
 export const filterMarkets = state => (opts) => {
@@ -94,22 +115,22 @@ export const sortMarkets = (markets = [], orderBy = null) => {
     case 'TRADING_VOLUME_DESC':
       return markets.sort((a, b) => {
         const tradingA = Decimal(a.tradingVolume)
-          .div(1e18)
-          .toDP(2, 1)
+        .div(1e18)
+        .toDP(2, 1)
         const tradingB = Decimal(b.tradingVolume)
-          .div(1e18)
-          .toDP(2, 1)
+        .div(1e18)
+        .toDP(2, 1)
 
         return tradingB.comparedTo(tradingA)
       })
     case 'TRADING_VOLUME_ASC':
       return markets.sort((a, b) => {
         const tradingA = Decimal(a.tradingVolume)
-          .div(1e18)
-          .toDP(2, 1)
+        .div(1e18)
+        .toDP(2, 1)
         const tradingB = Decimal(b.tradingVolume)
-          .div(1e18)
-          .toDP(2, 1)
+        .div(1e18)
+        .toDP(2, 1)
 
         return tradingA.comparedTo(tradingB)
       })
@@ -142,8 +163,15 @@ export const getMarketParticipantsTrades = state => () => {
  * @param {String} account, an address
  */
 export const getAccountShares = (state, account) => {
-  const accountShares = entitySelector(state, 'accountShares')
-  return accountShares[account] ? accountShares[account].shares : []
+  const marketShareEntities = entitySelector(state, 'marketShares')
+  if (!account) {
+    return marketShareEntities
+  }
+
+  return Object.keys(marketShareEntities).map(shareId => ({
+    id: shareId,
+    ...marketShareEntities[shareId],
+  })).filter(share => share.owner === account)
 }
 
 /**
@@ -160,7 +188,7 @@ export const getAccountPredictiveAssets = (state, account) => {
   let predictiveAssets = new Decimal(0)
 
   if (account) {
-    const shares = getAccountShares(state, account)
+    const shares = values(getAccountShares(state, account))
     if (shares.length) {
       predictiveAssets = shares.reduce(
         (assets, share) => assets.add(new Decimal(share.balance).mul(share.marginalPrice)),
@@ -175,7 +203,7 @@ export const getAccountParticipatingInEvents = (state, account) => {
   const events = []
 
   if (account) {
-    const shares = getAccountShares(state, account)
+    const shares = values(getAccountShares(state, account))
 
     if (shares.length) {
       shares.map((share) => {
