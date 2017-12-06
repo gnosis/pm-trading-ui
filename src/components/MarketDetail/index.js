@@ -62,6 +62,8 @@ class MarketDetail extends Component {
     if (shouldScroll) {
       const y = this.divSharesNode.offsetTop
       window.scrollTo(0, y)
+    } else {
+      window.scrollTo(0, 0)
     }
   }
 
