@@ -16,7 +16,7 @@ const shareMerge = (shareA, shareB) => {
   return {
     ...shareA,
     ...shareB,
-    balance: Decimal(shareA.balance).add(Decimal(shareB.balance)).toString(),
+    balance: Decimal(shareA.balance).add(shareB.balance).toString(),
   }
 }
 
