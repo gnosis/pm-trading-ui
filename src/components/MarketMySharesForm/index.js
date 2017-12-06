@@ -214,7 +214,6 @@ class MarketMySharesForm extends Component {
       submitting,
       submitFailed,
       selectedSellAmount,
-      sellLimitMargin,
       handleSubmit,
       marketShares,
       gasCosts,
@@ -266,7 +265,7 @@ class MarketMySharesForm extends Component {
         outcomeTokenCount: selectedSellAmountWei,
         feeFactor: market.fee,
       })
-        .mul(new Decimal(100).sub(sellLimitMargin == null ? LIMIT_MARGIN_DEFAULT : sellLimitMargin))
+        .mul(new Decimal(100).sub(LIMIT_MARGIN_DEFAULT))
         .div(100))
     }
 
@@ -357,15 +356,6 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-3 col-md-offset-3">
-              <label htmlFor="limitMargin">Limit Margin in %</label>
-              <Field
-                component={FormInput}
-                name="limitMargin"
-                placeholder={LIMIT_MARGIN_DEFAULT}
-                className="limitMarginField"
-              />
-            </div>
-            <div className="col-md-3">
               <label>Gas costs</label>
               <span>
                 <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
@@ -444,7 +434,6 @@ MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
-  sellLimitMargin: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,
 }

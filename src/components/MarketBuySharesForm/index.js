@@ -198,7 +198,6 @@ class MarketBuySharesForm extends Component {
     const {
       selectedBuyInvest,
       selectedOutcome,
-      limitMargin,
       market: {
         event: { lowerBound, upperBound },
         eventDescription: { decimals, unit },
@@ -210,7 +209,7 @@ class MarketBuySharesForm extends Component {
     const isOutcomeSelected = selectedOutcome !== undefined
     const currentMarginalPrice = marginalPrices[1]
     // Get the amount of tokens to buy
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
     if (isOutcomeSelected) {
       newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome])
@@ -351,18 +350,6 @@ class MarketBuySharesForm extends Component {
                 </div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Limit Margin in %</div>
-                <div className="col-md-3">
-                  <Field
-                    name="limitMargin"
-                    component={Input}
-                    className="limitMarginField"
-                    placeholder={LIMIT_MARGIN_DEFAULT}
-                  />
-                </div>
-                <div className="col-md-3">%</div>
-              </div>
-              <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Token Count</div>
                 <div className="col-md-6">{fieldError || tokenCountField}</div>
               </div>
@@ -422,7 +409,6 @@ MarketBuySharesForm.propTypes = {
   marketShares: PropTypes.arrayOf(marketShareShape),
   selectedOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  limitMargin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool,
   currentBalance: PropTypes.string,

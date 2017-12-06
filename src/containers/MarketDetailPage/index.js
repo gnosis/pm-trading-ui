@@ -53,7 +53,6 @@ const mapStateToProps = (state, ownProps) => {
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     limitMargin: marketBuySelector(state, 'limitMargin'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
-    sellLimitMargin: marketMySharesSelector(state, 'limitMargin'),
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
     hasWallet: checkWalletConnection(state),
