@@ -120,7 +120,7 @@ class Dashboard extends Component {
   }
 
   renderMyHoldings(holdings, markets, marketWinnings) {
-    return holdings.map((holding, index) => {
+    const myShares = holdings.map((holding, index) => {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
 
       const filteredMarkets = markets.filter(market => process.env.WHITELIST[market.creator] &&
@@ -158,7 +158,7 @@ class Dashboard extends Component {
         }
 
         return (
-          <div className="dashboardMarket dashboardMarket--onDark" key={`${holding.id}-${index}`}>
+          <div className="dashboardMarket dashboardMarket--onDark" key={holding.id}>
             <div className="dashboardMarket__title" onClick={() => this.handleViewMarket(market)}>
               {holding.eventDescription.title}
             </div>
@@ -201,9 +201,9 @@ class Dashboard extends Component {
           </div>
         )
       }
+    }).filter(val => !!val)
 
-      return <div />
-    })
+    return myShares.length ? myShares : <div>You aren't holding any share.</div>
   }
 
   renderMyTrades(trades, markets) {
@@ -296,7 +296,7 @@ class Dashboard extends Component {
         <div className="dashboardWidget dashboardWidget--onDark col-md-6" key={marketType}>
           <div className="dashboardWidget__market-title">My Tokens</div>
           <div className="dashboardWidget__container">
-            {accountShares.length ? this.renderMyHoldings(accountShares, markets, marketWinnings) : "You aren't holding any share."}
+            {this.renderMyHoldings(accountShares, markets, marketWinnings)}
           </div>
         </div>
       )
