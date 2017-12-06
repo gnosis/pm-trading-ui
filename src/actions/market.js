@@ -343,7 +343,6 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
 
   gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions start'])
 
-  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
@@ -417,8 +416,6 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnin
 
   if (approvalResetAmount) transactions.unshift(SETTING_ALLOWANCE)
 
-  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
-
   try {
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, earnings, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
@@ -483,8 +480,6 @@ export const redeemWinnings = market => async (dispatch) => {
 
   const marketType = market.event.type
   const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS]
-
-  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
 
   try {
     console.log('winnings: ', await api.redeemWinnings(market.event.type, market.event.address))
