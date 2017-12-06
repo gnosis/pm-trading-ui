@@ -316,10 +316,7 @@ class MarketBuySharesForm extends Component {
       tokenCountField = (
         <span className="marketBuyWin__row marketBuyWin__max">
           <DecimalValue value={weiToEth(outcomeTokenCount)} />&nbsp;
-          <div
-            className="marketBuyWin__outcomeColor"
-            style={outcomeColorStyles}
-          />&nbsp;
+          <div className="marketBuyWin__outcomeColor" style={outcomeColorStyles} />&nbsp;
         </span>
       )
 
@@ -366,6 +363,12 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">
                   <DecimalValue value={gasCostEstimation} decimals={5} />
                   {' ETH'}
+                </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-12 text-center"><span>
+                The actual cost you will pay might be less by 5% depending on the market price at the time of trading
+                </span>
                 </div>
               </div>
               {submitFailed && (
