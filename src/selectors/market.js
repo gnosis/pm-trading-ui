@@ -75,7 +75,10 @@ export const getMarketSharesByMarket = state => (marketAddress) => {
   const shares = get(state, 'entities.marketShares', {})
 
   const sharesFiltered = Object.keys(shares)
-    .map(shareId => shares[shareId])
+    .map(shareId => ({
+      id: shareId,
+      ...shares[shareId],
+    }))
     .filter(share => share.outcomeToken.event === marketEntity.event.address)
   return sharesFiltered
 }
@@ -165,7 +168,10 @@ export const getAccountShares = (state, account) => {
     return marketShareEntities
   }
 
-  return filter(marketShareEntities, share => share.owner === account)
+  return Object.keys(marketShareEntities).map(shareId => ({
+    id: shareId,
+    ...marketShareEntities[shareId],
+  })).filter(share => share.owner === account)
 }
 
 /**
