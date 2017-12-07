@@ -31,8 +31,6 @@ const MIDDLEWARE_ERROR_LOG = () => next => (action) => {
   try {
     return next(action)
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err)
     throw err
   }
 }
@@ -65,12 +63,27 @@ Raven.config(isProduction ? process.env.RAVEN_ID : undefined, {
   },
 }).install()
 
+const formatPromiseRejectionEvent = (event) => {
+  if (!event) {
+    return 'Unknown Promise Rejection Error'
+  }
+
+  if (event.reason == null) {
+    return JSON.stringify(event, null, 2)
+  }
+
+  if (typeof event.reason !== 'string') {
+    return JSON.stringify(event.reason, null, 2)
+  }
+
+  return event.reason
+}
+
 class RavenIntegration {
   constructor() {
     if (isProduction) {
       window.onunhandledrejection = (evt) => {
-        console.error(evt)
-        Raven.captureException(evt.reason)
+        Raven.captureException(formatPromiseRejectionEvent(evt))
       }
     }
   }
@@ -95,6 +108,16 @@ class RavenIntegration {
   throwError(err) {
     if (isProduction) {
       Raven.captureException(err)
+    }
+  }
+
+  recordAction(message, category, data) {
+    if (isProduction) {
+      Raven.captureBreadcrumb({
+        message,
+        category,
+        data,
+      })
     }
   }
 }
