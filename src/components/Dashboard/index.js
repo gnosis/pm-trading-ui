@@ -246,14 +246,14 @@ class Dashboard extends Component {
               />
               <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">
-              {new Decimal(averagePrice).toFixed(4)}
-              {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
+            <div className="col-md-3 dashboardMarket--highlight">
+              {new Decimal(averagePrice).toFixed(4)}{' '}
+              {market.event && <CurrencyName collateralToken={market.event.collateralToken} />}
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               {moment.utc(trade.date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">{TRANSACTION_DESCRIPTIONS[trade.orderType]}</div>
+            <div className="col-md-3 dashboardMarket--highlight">{TRANSACTION_DESCRIPTIONS[trade.orderType]}</div>
           </div>
         </div>
       )
