@@ -12,7 +12,7 @@
 <body>
   <div id="root"></div>
   <script>
-    window.onload=function(){var t=setInterval(function(){var e=document.getElementById("uport-wrapper");e&&(clearInterval(t),document.getElementById("uport-continue-btn").addEventListener("click",function(){ga("olympiatracker.send","event","Uport modal interactions","click","Continue with uport button")}),document.getElementById("google-play-badge").addEventListener("click",function(){ga("olympiatracker.send","event","Uport modal interactions","click","Google play button")}),document.getElementById("app-store-badge").addEventListener("click",function(){ga("olympiatracker.send","event","Uport modal interactions","click","App store button")}))},100)};
+    window.onload=function(){var t=setInterval(function(){var e=document.getElementById("uport-continue-btn"),n=document.getElementById("google-play-badge"),o=document.getElementById("app-store-badge");e&&n&&o&&(clearInterval(t),e.addEventListener("click",function(){ga("olympiatracker.send","event","Uport modal interactions","click","Continue with uport button")}),n.addEventListener("click",function(){ga("olympiatracker.send","event","Uport modal interactions","click","Google play button")}),o.addEventListener("click",function(){ga("olympiatracker.send","event","Uport modal interactions","click","App store button")}))},100)};
   </script>
 </body>
 
