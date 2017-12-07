@@ -17,7 +17,7 @@ const Outcome = ({ market, opts = { showOnlyTrendingOutcome: false } }) => {
   )
 
   if (isMarketResolved(market)) {
-    outcomeComponent = <WinningOutcome {...market} />
+    outcomeComponent = <WinningOutcome market={market} />
   }
 
   return outcomeComponent
