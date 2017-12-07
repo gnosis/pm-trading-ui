@@ -24,7 +24,7 @@ const WinningOutcome = ({
         outcomeTokenIndex: outcomeIndex,
       })
 
-      return marginalPrice.toFixed()
+      return marginalPrice.isNaN() ? 0 : marginalPrice.toFixed()
     })
 
     const tokenDistributionPercent = `${Math.round(tokenDistribution[winningOutcome] * 100).toFixed(0)}%`
