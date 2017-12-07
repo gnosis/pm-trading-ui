@@ -24,6 +24,7 @@ import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
+import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 class MarketMySharesForm extends Component {
   constructor(props) {
@@ -139,7 +140,7 @@ class MarketMySharesForm extends Component {
     const { marketShares, market } = this.props
     const { extendedSellId } = this.state
 
-    const resolved = market.oracle.isOutcomeSet || market.event.isWinningOutcomeSet
+    const resolvedOrClosed = isMarketClosed(market) || isMarketResolved(market)
 
     marketShares.forEach((share) => {
       const probability = calcLMSRMarginalPrice({
@@ -176,7 +177,7 @@ class MarketMySharesForm extends Component {
           <CurrencyName collateralToken={market.event.collateralToken} />
         </td>
         <td>
-          {!resolved && (
+          {!resolvedOrClosed && (
             <a
               href="javascript:void(0);"
               className="marketMyShares__sellButton"
