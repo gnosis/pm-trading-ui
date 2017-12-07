@@ -11,7 +11,9 @@ import './outcomeCategorical.less'
 const OutcomeCategorical = ({ market, opts = {} }) => {
   const renderOutcomes = market.eventDescription.outcomes
   const showOnlyWinningOutcome = market.oracle.isOutcomeSet && market.oracle.outcome !== undefined
-  const { showOnlyTrendingOutcome, showDate, dateFormat, className } = opts
+  const {
+    showOnlyTrendingOutcome, showDate, dateFormat, className,
+  } = opts
   const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.netOutcomeTokensSold,
@@ -47,12 +49,16 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
   // show only winning outcome
   if (showOnlyWinningOutcome) {
     const tokenDistributionPercent = `${Math.round(tokenDistribution[market.oracle.outcome] * 100).toFixed(0)}%`
+    const outcomeText = `${renderOutcomes[market.oracle.outcome]} (${tokenDistributionPercent})`
 
     return (
       <div className={`${className} outcomes outcomes--categorical`}>
-        <div className="outcome outcome__winning">
-          {renderOutcomes[market.oracle.outcome]}
-          <div className="outcome__bar--value">{tokenDistributionPercent}</div>
+        <div className="outcome outcome__winning--container">
+          <div className="outcome__winning--icon" />
+          <span className="outcome__winning--label">
+            Winning<br />outcome
+          </span>
+          <div className="outcome__winning--box">{outcomeText}</div>
         </div>
       </div>
     )
