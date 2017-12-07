@@ -68,12 +68,16 @@ const formatPromiseRejectionEvent = (event) => {
     return 'Unknown Promise Rejection Error'
   }
 
+  if (event.message != null) {
+    return event.message
+  }
+
   if (event.reason == null) {
-    return JSON.stringify(event, null, 2)
+    return JSON.stringify(event)
   }
 
   if (typeof event.reason !== 'string') {
-    return JSON.stringify(event.reason, null, 2)
+    return JSON.stringify(event.reason)
   }
 
   return event.reason
