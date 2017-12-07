@@ -10,7 +10,6 @@ import './outcomeCategorical.less'
 
 const OutcomeCategorical = ({ market, opts = {} }) => {
   const renderOutcomes = market.eventDescription.outcomes
-  const showOnlyWinningOutcome = market.oracle.isOutcomeSet && market.oracle.outcome !== undefined
   const {
     showOnlyTrendingOutcome, showDate, dateFormat, className,
   } = opts
@@ -42,20 +41,6 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
         <div className="outcome">{renderOutcomes[trendingOutcomeIndex]}</div>
         <div>{trendingMarginalPricePercent}%</div>
         <div className="date">{resolutionDateFormatted}</div>
-      </div>
-    )
-  }
-
-  // show only winning outcome
-  if (showOnlyWinningOutcome) {
-    const tokenDistributionPercent = `${Math.round(tokenDistribution[market.oracle.outcome] * 100).toFixed(0)}%`
-
-    return (
-      <div className={`${className} outcomes outcomes--categorical`}>
-        <div className="outcome outcome__winning">
-          {renderOutcomes[market.oracle.outcome]}
-          <div className="outcome__bar--value">{tokenDistributionPercent}</div>
-        </div>
       </div>
     )
   }
