@@ -144,10 +144,6 @@ class Dashboard extends Component {
             : Decimal(0)
 
           const hasWinnings = marketResolved && winnings.gt(0)
-          const hasBalance = Decimal(holding.balance)
-            .div(1e18)
-            .gt(LOWEST_DISPLAYED_VALUE)
-          const canRedeemWinnings = marketResolved && hasWinnings
 
           // Check market is not empty
           if (market.event) {
@@ -162,6 +158,13 @@ class Dashboard extends Component {
               outcomeTokenIndex: holding.outcomeToken.index,
               cost: holding.balance,
             })
+          }
+
+          const canRedeemWinnings = marketResolved && hasWinnings
+          const canSellShares = !marketResolved
+
+          if (marketResolved && !hasWinnings) {
+            return undefined
           }
 
           return (
@@ -195,18 +198,16 @@ class Dashboard extends Component {
                   {market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
                 </div>
                 <div className="col-md-4 dashboardMarket--highlight">
-                  {canRedeemWinnings &&
-                    hasWinnings && (
-                      <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
+                  {canRedeemWinnings && hasWinnings && (
+                    <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
                         REDEEM WINNINGS
-                      </a>
-                    )}
-                  {!canRedeemWinnings &&
-                    hasBalance && (
-                      <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
+                    </a>
+                  )}
+                  {canSellShares && (
+                    <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
                         SELL
-                      </a>
-                    )}
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

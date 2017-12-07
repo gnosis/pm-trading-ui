@@ -209,11 +209,10 @@ export const generateDeterministicRandomName = (seed) => {
 }
 
 const isValidMarket = market =>
-  market &&
+  !!(market &&
   market.event &&
   market.oracle &&
-  market.eventDescription &&
-  market.shares !== undefined
+  market.eventDescription)
 
 const marketCanRedeemWinnings = market => market.event.isWinningOutcomeSet
 

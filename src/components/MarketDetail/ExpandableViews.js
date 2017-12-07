@@ -41,13 +41,13 @@ const expandableViews = ({
     label: 'My Tokens',
     className: 'btn btn-default',
     component: MarketMySharesForm,
-    showCondition: props => props.market && props.defaultAccount && props.defaultAccount !== props.market.owner,
+    showCondition: props => props.market && props.defaultAccount,
   },
   [EXPAND_MY_TRADES]: {
     label: 'My Trades',
     className: 'btn btn-default',
     component: MarketMyTrades,
-    showCondition: props => props.market && props.defaultAccount && props.defaultAccount !== props.market.owner,
+    showCondition: props => props.market && props.defaultAccount,
   },
   [EXPAND_RESOLVE]: {
     label: 'Resolve',
