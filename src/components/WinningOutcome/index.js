@@ -24,9 +24,9 @@ const WinningOutcome = ({
         outcomeTokenIndex: outcomeIndex,
       })
 
-      return marginalPrice.toFixed()
+      return marginalPrice.isNaN ? 0 : marginalPrice.toFixed()
     })
-
+    console.log(tokenDistribution)
     const tokenDistributionPercent = `${Math.round(tokenDistribution[winningOutcome] * 100).toFixed(0)}%`
     outcomeText = `${outcomes[winningOutcome]} (${tokenDistributionPercent})`
   } else if (type === OUTCOME_TYPES.SCALAR) {
