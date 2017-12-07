@@ -20,7 +20,8 @@
     "0x948429537f335bbcfc0c7aa348322db5fa1919be": "OlympiaAdmin"
  },
   "productionWhitelist": {
-    "0x948429537f335bbcfc0c7aa348322db5fa1919be": "OlympiaAdmin"
+    "0x948429537f335bbcfc0c7aa348322db5fa1919be": "OlympiaAdmin",
+    "0x0dc8e28406e36421bff6aebc240bc6b6b00dd467": "Lama"
  },
  "gnosisdb": {
    "protocol": "https",
