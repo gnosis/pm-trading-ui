@@ -7,7 +7,6 @@ import Decimal from 'decimal.js'
 import { Link } from 'react-router'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
-import { Link } from 'react-router'
 
 import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
@@ -23,7 +22,6 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
-import { MARKET_STAGES } from '../../utils/constants'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 const resolutionFilters = [
