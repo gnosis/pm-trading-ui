@@ -205,6 +205,8 @@ class MarketBuySharesForm extends Component {
         marginalPrices,
       },
     } = this.props
+
+    const validInvestment = this.validateInvestment(selectedBuyInvest) === undefined || !selectedBuyInvest
     const isOutcomeSelected = selectedOutcome !== undefined
     const currentMarginalPrice = marginalPrices[1]
     // Get the amount of tokens to buy
@@ -215,7 +217,7 @@ class MarketBuySharesForm extends Component {
         .add(outcomeTokenCount.toString())
         .toString()
     }
-    const selectedMarginalPrice = isOutcomeSelected
+    const selectedMarginalPrice = isOutcomeSelected && validInvestment
       ? calcLMSRMarginalPrice({
         netOutcomeTokensSold: newNetOutcomeTokenSold,
         funding,
@@ -366,9 +368,11 @@ class MarketBuySharesForm extends Component {
                 </div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-12 text-center"><span>
-                The actual cost you will pay might be less by 5% depending on the market price at the time of trading
-                </span>
+                <div className="col-md-12 text-center">
+                  <span>
+                    The actual cost you will pay might be less by 5% depending on the market price at the time of
+                    trading
+                  </span>
                 </div>
               </div>
               {submitFailed && (
