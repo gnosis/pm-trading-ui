@@ -79,7 +79,7 @@ export const getMarketSharesByMarket = state => (marketAddress) => {
       id: shareId,
       ...shares[shareId],
     }))
-    .filter(share => share.outcomeToken.event === marketEntity.event.address)
+    .filter(share => share.outcomeToken.event === marketEntity.event.address && parseFloat(share.balance) > 0)
   return sharesFiltered
 }
 
