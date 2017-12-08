@@ -5,7 +5,6 @@ import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
-import { calcLMSRProfit } from 'api'
 
 import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES, MIN_CONSIDER_VALUE } from 'utils/constants'
 import { marketShape } from 'utils/shapes'

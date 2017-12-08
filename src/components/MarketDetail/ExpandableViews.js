@@ -57,7 +57,7 @@ const expandableViews = ({
       props.market &&
       props.defaultAccount &&
       props.defaultAccount === props.market.oracle.owner &&
-      !isMarketClosed(props.market),
+      !isMarketResolved(props.market),
   },
   [EXPAND_WITHDRAW_FEES]: {
     label: 'Withdraw fees',
