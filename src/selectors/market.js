@@ -1,6 +1,7 @@
 import { get, values } from 'lodash'
 import Decimal from 'decimal.js'
 import { isMarketResolved, isMarketClosed } from 'utils/helpers'
+import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
 
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
@@ -76,7 +77,8 @@ export const getMarketSharesByMarket = state => (marketAddress) => {
       id: shareId,
       ...shares[shareId],
     }))
-    .filter(share => share.outcomeToken.event === marketEntity.event.address && parseFloat(share.balance) > 0)
+    .filter(share =>
+      share.outcomeToken.event === marketEntity.event.address && Decimal(share.balance).gte(LOWEST_DISPLAYED_VALUE))
   return sharesFiltered
 }
 
@@ -165,10 +167,12 @@ export const getAccountShares = (state, account) => {
     return marketShareEntities
   }
 
-  return Object.keys(marketShareEntities).map(shareId => ({
-    id: shareId,
-    ...marketShareEntities[shareId],
-  })).filter(share => share.owner === account)
+  return Object.keys(marketShareEntities)
+    .map(shareId => ({
+      id: shareId,
+      ...marketShareEntities[shareId],
+    }))
+    .filter(share => share.owner === account && Decimal(share.balance).gte(LOWEST_DISPLAYED_VALUE))
 }
 
 /**

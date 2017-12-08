@@ -128,8 +128,7 @@ class Dashboard extends Component {
         const filteredMarkets = markets.filter(market =>
           process.env.WHITELIST[market.creator] &&
             market.event &&
-            market.event.address === eventAddress &&
-            Decimal(holding.balance).gt(LOWEST_DISPLAYED_VALUE))
+            market.event.address === eventAddress)
 
         const market = filteredMarkets[0]
         if (market) {
