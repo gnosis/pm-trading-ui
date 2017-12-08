@@ -378,13 +378,15 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
 /**
  * Sell shares on a specific market
  * @param {Market} market - Market to sell shares on
- * @param {number} outcomeIndex - Index of outcome to sell shares of
+ * @param {MarketShare} share - Marketshare object
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to sell
  */
-export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnings) => async (dispatch) => {
+export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (dispatch) => {
   const transactionId = uuid()
   const gnosis = await api.getGnosisConnection()
   const currentAccount = await api.getCurrentAccount()
+
+  const { outcomeToken: { index: outcomeIndex } } = share
 
   const marketAllowance = await gnosis.contracts.Token
     .at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex))
@@ -399,7 +401,7 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnin
   const oldPrice = market.marginalPrices[outcomeIndex]
   if (!allowedRangePrice(oldPrice, updatedPrice)) {
     dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
-    return await dispatch(receiveEntities(payload))
+    return dispatch(receiveEntities(payload))
   }
 
   // Start a new transaction log
@@ -429,10 +431,15 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnin
     throw e
   }
 
+  await dispatch(updateEntity({
+    entityType: 'marketShares',
+    data: {
+      id: share.id,
+      balance: Decimal(share.balance).sub(Decimal(outcomeCountWei)).toString(),
+    },
+  }))
   dispatch(refreshTokenBalance())
-
-  // TODO: Calculate new shares
-  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+  return dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
 /**
@@ -457,10 +464,8 @@ export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
     throw e
   }
 
-  await dispatch(updateEntity({
-    entityType: 'oracles',
-    data: { id: market.oracle.address, isOutcomeSet: true, outcome: outcomeIndex },
-  }))
+  // optimistically update oracle outcome and event outcome
+  await dispatch(updateEntity({ entityType: 'oracles', data: { id: market.oracle.address, isOutcomeSet: true, outcome: outcomeIndex } }))
   await dispatch(updateEntity({ entityType: 'events', data: { id: market.event.address, isWiningOutcomeSet: true } }))
 
   dispatch(refreshTokenBalance())
