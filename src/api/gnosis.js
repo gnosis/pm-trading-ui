@@ -213,6 +213,11 @@ export const closeMarket = async (market) => {
   return market
 }
 
+const STEP_ONE_OF_ONE = '<span style="font-weight: bold">QR 1/1</span>'
+const STEP_ONE_OF_TWO = '<span style="font-weight: bold">QR 1/2</span>'
+const STEP_TWO_OF_TWO = '<span style="font-weight: bold">QR 2/2</span>'
+const APPROVE_TX_OPTS = 'Setting allowance'
+
 export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
 
@@ -227,6 +232,16 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   if ((await collateralToken.name()) === 'Ether Token') {
     await gnosis.etherToken.deposit({ value: collateralTokenWei })
   }
+  const BUY_TX_OPTS = `Investing ${cost} OLY`
+
+  const info = {
+    approveTxOpts: {
+      explanation: approvalResetAmount ? `${STEP_ONE_OF_TWO} ${APPROVE_TX_OPTS}` : undefined,
+    },
+    buyTxOpts: {
+      explanation: approvalResetAmount ? `${STEP_TWO_OF_TWO} ${BUY_TX_OPTS}` : `${STEP_ONE_OF_ONE} ${BUY_TX_OPTS}`,
+    },
+  }
 
   // buyOutComeTokens handles approving
   const collateralTokensPaid = await gnosis.buyOutcomeTokens({
@@ -235,6 +250,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
     outcomeTokenCount: outcomeTokenCount.toString(),
     cost: collateralTokenWei,
     approvalResetAmount,
+    ...info,
   })
 
   return collateralTokensPaid
@@ -260,12 +276,24 @@ export const sellShares = async (
     .toString()
   const minProfit = Decimal(earnings).mul(1e18).round().toString()
 
+  const SELL_TX_OPTS = `Selling ${outcomeTokenCount} outcome tokens`
+
+  const info = {
+    approveTxOpts: {
+      explanation: approvalResetAmount ? `${STEP_ONE_OF_TWO} ${APPROVE_TX_OPTS}` : undefined,
+    },
+    sellTxOpts: {
+      explanation: approvalResetAmount ? `${STEP_TWO_OF_TWO} ${SELL_TX_OPTS}` : `${STEP_ONE_OF_ONE} ${SELL_TX_OPTS}`,
+    },
+  }
+
   const collateralTokensReceived = await gnosis.sellOutcomeTokens({
     market: hexWithPrefix(marketAddress),
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCountWei,
     minProfit,
     approvalResetAmount,
+    ...info,
   })
 
   return collateralTokensReceived

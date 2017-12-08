@@ -75,7 +75,7 @@
     "seedrandom": "^2.4.3",
     "sha1": "^1.1.1",
     "truffle-contract": "^3.0.0",
-    "uport-connect": "^0.7.0-alpha-1",
+    "uport-connect": "gnosis/uport-connect#testing",
     "uuid": "^3.1.0",
     "web3": "0.18.4"
   },
