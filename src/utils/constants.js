@@ -32,7 +32,7 @@ export const COLOR_SCHEME_DEFAULT = [
   '#73472c', // brown
 ]
 
-export const COLOR_SCHEME_SCALAR = ['#0be1b3', '#f2cc0a']
+export const COLOR_SCHEME_SCALAR = ['#e01563', '#0be1b1']
 
 export const TRANSACTION_STATUS = {
   RUNNING: 'RUNNING',
