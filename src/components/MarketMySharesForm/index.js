@@ -67,11 +67,14 @@ class MarketMySharesForm extends Component {
     if (sellAmountAndMarketSharesAreDefined) {
       // By default form is filled up with fill amount
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
-      const fullAmount = Decimal(share.balance)
-        .div(1e18)
-        .toDP(2, 1)
-        .toString()
-      initialize({ sellAmount: fullAmount })
+
+      if (share) {
+        const fullAmount = Decimal(share.balance)
+          .div(1e18)
+          .toDP(4, 1)
+          .toString()
+        initialize({ sellAmount: fullAmount })
+      }
     }
   }
 
@@ -95,14 +98,18 @@ class MarketMySharesForm extends Component {
   @autobind
   async handleSellShare(shareId, shareAmount, earnings) {
     const share = this.props.marketShares.find(s => s.id === shareId)
-    const shareIndex = share.outcomeToken.index
     const shareBalance = new Decimal(share.balance)
-    const shareBalanceRounded = shareBalance.div(1e18).toDP(2, 1)
+    const shareBalanceRounded = shareBalance.div(1e18).toDP(4, 1)
     const selectedSellAmount = new Decimal(shareAmount)
     const sellAmount = shareBalanceRounded.sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE)
       ? weiToEth(shareBalance)
       : shareAmount
-    await this.props.sellShares(this.props.market, shareIndex, sellAmount, earnings)
+    try {
+      await this.props.sellShares(this.props.market, share, sellAmount, earnings)
+      this.setState({ extendedSellId: undefined })
+    } catch (e) {
+      console.error(e)
+    }
     return this.props.reset()
   }
 
@@ -207,7 +214,6 @@ class MarketMySharesForm extends Component {
       submitting,
       submitFailed,
       selectedSellAmount,
-      sellLimitMargin,
       handleSubmit,
       marketShares,
       gasCosts,
@@ -259,17 +265,17 @@ class MarketMySharesForm extends Component {
         outcomeTokenCount: selectedSellAmountWei,
         feeFactor: market.fee,
       })
-        .mul(new Decimal(100).sub(sellLimitMargin == null ? LIMIT_MARGIN_DEFAULT : sellLimitMargin))
+        .mul(new Decimal(100).sub(LIMIT_MARGIN_DEFAULT))
         .div(100))
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
       if (
         outcomeTokenIndex === share.outcomeToken.index &&
-        !currentTokenBalance.sub(newTokenBalance.toString()).isZero()
+        !currentTokenBalance.sub(newTokenBalance).isZero()
       ) {
         return Decimal(outcomeTokenAmount)
-          .sub(currentTokenBalance.sub(newTokenBalance.toString()).toString())
+          .sub(currentTokenBalance.sub(newTokenBalance))
           .floor()
           .toString()
       }
@@ -350,19 +356,10 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-3 col-md-offset-3">
-              <label htmlFor="limitMargin">Limit Margin in %</label>
-              <Field
-                component={FormInput}
-                name="limitMargin"
-                placeholder={LIMIT_MARGIN_DEFAULT}
-                className="limitMarginField"
-              />
-            </div>
-            <div className="col-md-3">
               <label>Gas costs</label>
               <span>
                 <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
-                <CurrencyName collateralToken={market.event.collateralToken} />
+                {' ETH'}
               </span>
             </div>
           </div>
@@ -404,8 +401,9 @@ class MarketMySharesForm extends Component {
     if (!marketShares || !marketShares.length) {
       return (
         <div className="marketMyShares">
-          <h2 className="marketMyShares__heading">You don&apos;t hold any shares for this market.</h2>
-          <h2>
+          <h2 className="marketMyShares__heading">
+            You don&apos;t hold any shares for this market.
+            <br />
             <small>It may take some time for the blockchain to mine your share purchase.</small>
           </h2>
         </div>
@@ -436,7 +434,6 @@ MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
-  sellLimitMargin: PropTypes.string,
   marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,
 }
