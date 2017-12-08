@@ -1,9 +1,6 @@
-import { get, filter, values } from 'lodash'
+import { get, values } from 'lodash'
 import Decimal from 'decimal.js'
-import { isMarketResolved, isMarketClosed, weiToEth, add0xPrefix } from 'utils/helpers'
-import { OUTCOME_TYPES } from 'utils/constants'
-import { createSelector } from 'reselect'
-import { getCurrentAccount } from 'selectors/blockchain'
+import { isMarketResolved, isMarketClosed } from 'utils/helpers'
 
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
