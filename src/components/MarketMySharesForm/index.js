@@ -151,7 +151,6 @@ class MarketMySharesForm extends Component {
 
     Object.keys(marketShares).forEach((shareId) => {
       const share = marketShares[shareId]
-      console.log(share)
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
