@@ -34,7 +34,7 @@ const Input = ({
       <label htmlFor={input.name} className={labelClassName}>
         {label}
       </label>
-      <input className={inputClassName} placeholder={placeholder} type={type} {...input} {...rest} />
+      <input className={inputClassName} autoComplete="off" placeholder={placeholder} type={type} {...input} {...rest} />
       {continuousPlaceholder && (
         <input
           className={placeholderClassName}
