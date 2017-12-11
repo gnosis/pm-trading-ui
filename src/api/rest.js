@@ -89,18 +89,12 @@ const getFirstGraphPoint = (market) => {
 const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().toISOString() })
 
 export const requestMarketTrades = async market =>
-  restFetch(`${API_URL}/markets/${hexWithoutPrefix(market.address)}/trades/`)
-    .then((response) => {
-      const trades = response.results.map(result => transformMarketTrades(result, market))
-      const firstPoint = getFirstGraphPoint(market)
-      const lastPoint = trades.length ? getLastGraphPoint(trades) : { ...firstPoint, date: new Date().toISOString() }
-      return [
-        firstPoint,
-        ...trades,
-        lastPoint,
-      ]
-    })
-
+  restFetch(`${API_URL}/markets/${hexWithoutPrefix(market.address)}/trades/`).then((response) => {
+    const trades = response.results.map(result => transformMarketTrades(result, market))
+    const firstPoint = getFirstGraphPoint(market)
+    const lastPoint = trades.length ? getLastGraphPoint(trades) : { ...firstPoint, date: new Date().toISOString() }
+    return [firstPoint, ...trades, lastPoint]
+  })
 
 export const requestAccountTrades = async address =>
   restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/trades/`).then(response => response.results)
