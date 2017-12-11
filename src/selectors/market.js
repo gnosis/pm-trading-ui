@@ -115,14 +115,10 @@ export const sortMarkets = (markets = [], orderBy = null) => {
       })
     default:
       return markets.sort((a, b) => {
-        const resolvedA = get(a, 'oracle.isOutcomeSet', false)
-        const resolvedB = get(b, 'oracle.isOutcomeSet', false)
+        const isFirstMarketEnded = isMarketClosed(a) || isMarketResolved(a)
+        const isSecondMarketEnded = isMarketClosed(b) || isMarketResolved(b)
 
-        if (resolvedA === resolvedB) {
-          return 0
-        }
-
-        return resolvedA ? 1 : -1
+        return isFirstMarketEnded - isSecondMarketEnded
       })
   }
 }
