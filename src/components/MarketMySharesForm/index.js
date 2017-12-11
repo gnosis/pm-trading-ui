@@ -98,7 +98,6 @@ class MarketMySharesForm extends Component {
   @autobind
   async handleSellShare(shareId, shareAmount, earnings) {
     const share = this.props.marketShares[shareId]
-    const shareIndex = share.outcomeToken.index
     const shareBalance = new Decimal(share.balance)
     const shareBalanceRounded = shareBalance.div(1e18).toDP(4, 1)
     const selectedSellAmount = new Decimal(shareAmount)
@@ -106,7 +105,8 @@ class MarketMySharesForm extends Component {
       ? weiToEth(shareBalance)
       : shareAmount
     try {
-      await this.props.sellShares(this.props.market, shareIndex, sellAmount, earnings)
+      await this.props.sellShares(this.props.market, share, sellAmount, earnings)
+      this.setState({ extendedSellId: undefined })
     } catch (e) {
       console.error(e)
     }
