@@ -72,14 +72,16 @@ const formatPromiseRejectionEvent = (event) => {
     return event.message
   }
 
-  if (event.reason == null) {
+  if (event.reason == null || (typeof event.reason === 'object' && !Object.keys(event.reason).length)) {
     const isEmptyObject = !Object.keys(event).length
 
     return isEmptyObject ? 'Unknown Promise Rejection Error' : JSON.stringify(event)
   }
 
   if (typeof event.reason !== 'string') {
-    return JSON.stringify(event.reason)
+    const isEmptyObject = !Object.keys(event.reason).length
+
+    return isEmptyObject ? 'Unknown Promise Rejection Error' : JSON.stringify(event.reason)
   }
 
   return event.reason

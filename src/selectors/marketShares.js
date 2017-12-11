@@ -53,8 +53,9 @@ const eventMarketSelector = marketAddress => (state) => {
   }
 
   const market = state.entities.markets[marketAddress]
+  const eventAddress = add0xPrefix(market.event)
 
-  return { [market.event]: market }
+  return { [eventAddress]: market }
 }
 
 const eventSharesSelector = createSelector(
@@ -96,7 +97,6 @@ const enhanceShares = (oracles, events, eventMarkets, eventShares, account) => {
     }
 
     const oracle = oracles[event.oracle]
-
     shares.forEach((share) => {
       if (Decimal(share.balance).eq(0)) {
         return

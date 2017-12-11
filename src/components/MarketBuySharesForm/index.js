@@ -417,7 +417,7 @@ MarketBuySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   buyShares: PropTypes.func,
-  marketShares: PropTypes.arrayOf(marketShareShape),
+  marketShares: PropTypes.objectOf(marketShareShape),
   selectedOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,

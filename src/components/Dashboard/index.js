@@ -131,7 +131,7 @@ class Dashboard extends Component {
         <div
           className="dashboardMarket dashboardMarket--onDark"
           key={share.id}
-          onClick={() => this.handleViewMarket(market)}
+          onClick={() => this.handleViewMarket(share.market)}
         >
           <div className="dashboardMarket__title">{share.eventDescription.title}</div>
           <div className="outcome row">
