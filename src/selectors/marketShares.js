@@ -85,8 +85,7 @@ const eventSharesSelector = createSelector(
 
 const enhanceShares = (oracles, events, eventMarkets, eventShares, account) => {
   const enhancedShares = {}
-  console.log(eventShares)
-  console.log(eventMarkets)
+
   Object.keys(eventShares).forEach((eventAddress) => {
     const event = events[eventAddress]
     const market = eventMarkets[eventAddress]

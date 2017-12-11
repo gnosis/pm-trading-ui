@@ -62,11 +62,11 @@ class MarketMySharesForm extends Component {
     const { extendedSellId } = this.state
     const { selectedSellAmount, marketShares, initialize } = this.props
     const sellAmountAndMarketSharesAreDefined =
-      selectedSellAmount === undefined && extendedSellId !== undefined && marketShares.length
+      selectedSellAmount === undefined && extendedSellId !== undefined && Object.keys(marketShares).length
 
     if (sellAmountAndMarketSharesAreDefined) {
       // By default form is filled up with fill amount
-      const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
+      const share = marketShares[extendedSellId]
 
       if (share) {
         const fullAmount = Decimal(share.balance)
@@ -97,7 +97,7 @@ class MarketMySharesForm extends Component {
 
   @autobind
   async handleSellShare(shareId, shareAmount, earnings) {
-    const share = this.props.marketShares.find(s => s.id === shareId)
+    const share = this.props.marketShares[shareId]
     const shareIndex = share.outcomeToken.index
     const shareBalance = new Decimal(share.balance)
     const shareBalanceRounded = shareBalance.div(1e18).toDP(4, 1)
@@ -131,7 +131,7 @@ class MarketMySharesForm extends Component {
     }
 
     if (
-      decimalValue.gt(Decimal(props.marketShares.filter(share => share.id === this.state.extendedSellId)[0].balance)
+      decimalValue.gt(Decimal(props.marketShares[this.state.extendedSellId].balance)
         .div(1e18)
         .toString())
     ) {
@@ -211,7 +211,7 @@ class MarketMySharesForm extends Component {
       gasPrice,
     } = this.props
 
-    const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
+    const share = marketShares[extendedSellId]
     let newScalarPredictedValue // calculated only for scalar events
     let selectedSellAmountWei
     try {
