@@ -21,7 +21,7 @@ import {
   LIMIT_MARGIN_DEFAULT,
 } from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
-import { marketShape } from 'utils/shapes'
+import { marketShape, marketShareShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
@@ -149,18 +149,9 @@ class MarketMySharesForm extends Component {
 
     const resolvedOrClosed = isMarketClosed(market) || isMarketResolved(market)
 
-    marketShares.forEach((share) => {
-      const probability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-      const maximumWin = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        cost: share.balance,
-      })
+    Object.keys(marketShares).forEach((shareId) => {
+      const share = marketShares[shareId]
+      console.log(share)
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
@@ -180,7 +171,7 @@ class MarketMySharesForm extends Component {
             )}
         </td>
         <td>
-          <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
+          <DecimalValue value={Decimal(share.value).div(1e18)} />&nbsp;
           <CurrencyName collateralToken={market.event.collateralToken} />
         </td>
         <td>
@@ -398,7 +389,7 @@ class MarketMySharesForm extends Component {
 
   render() {
     const { marketShares } = this.props
-    if (!marketShares || !marketShares.length) {
+    if (!marketShares || !Object.keys(marketShares).length) {
       return (
         <div className="marketMyShares">
           <h2 className="marketMyShares__heading">
@@ -434,7 +425,7 @@ MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
-  marketShares: PropTypes.arrayOf(PropTypes.object),
+  marketShares: PropTypes.objectOf(marketShareShape),
   sellShares: PropTypes.func,
 }
 

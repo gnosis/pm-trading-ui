@@ -248,18 +248,23 @@ export const getMarketWinningsCategorical = (market, shares, account) => {
   return mapValues(winningsByOutcome, val => val.toString())
 }
 
-export const getMarketWinningsScalar = (market, shares, account) => {
-  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
-    return {}
+export const calcShareWinningsCategorical = (share, market, event) => {
+  const outcome = parseInt(event.outcome, 10)
+  const shareOutcome = parseInt(share.outcomeToken.index, 10)
+  if (shareOutcome !== outcome) {
+    return '0'
   }
 
-  const outcome = Decimal(market.event.outcome)
-  let outcomeClamped = Decimal(0)
+  return Decimal(share.balance).toString()
+}
 
+export const calcShareWinningsScalar = (share, market, event) => {
   const outcomeRange = Decimal(SCALAR_OUTCOME_RANGE)
+  const outcome = Decimal(parseInt(event.outcome, 10))
+  const lowerBound = Decimal(event.lowerBound)
+  const upperBound = Decimal(event.upperBound)
 
-  const lowerBound = Decimal(market.event.lowerBound)
-  const upperBound = Decimal(market.event.upperBound)
+  let outcomeClamped = Decimal(0)
 
   if (outcome.lt(lowerBound)) {
     outcomeClamped = Decimal(0)
@@ -272,36 +277,23 @@ export const getMarketWinningsScalar = (market, shares, account) => {
   const factorShort = outcomeRange.sub(outcomeClamped)
   const factorLong = outcomeRange.sub(factorShort.toString())
 
-  let shortOutcomeTokenCount = Decimal(0)
-  let longOutcomeTokenCount = Decimal(0)
-  shares.forEach((share) => {
-    const outcomeIndex = parseInt(share.outcomeToken.index, 10)
-    if (share.outcomeToken.event === market.event.address &&
-        share.owner === account) {
-      if (outcomeIndex === 0) {
-        shortOutcomeTokenCount = shortOutcomeTokenCount.add(share.balance)
-      } else {
-        longOutcomeTokenCount = longOutcomeTokenCount.add(share.balance)
-      }
-    }
-  })
-
-  const winningsByOutcome = {
-    0: shortOutcomeTokenCount.mul(factorShort).div(outcomeRange),
-    1: longOutcomeTokenCount.mul(factorLong).div(outcomeRange),
+  const isShort = parseInt(share.outcomeToken.index, 10) === 0
+  const isLong = parseInt(share.outcomeToken.index, 10)
+  if (isShort) {
+    return Decimal(share.balance).mul(factorShort).div(outcomeRange)
   }
 
+  if (isLong) {
+    return Decimal(share.balance).mul(factorLong).div(outcomeRange).toString()
+  }
 
-  return mapValues(winningsByOutcome, val => val.toString())
+  throw new Error(`Invalid Outcome for Scalar Event found: ${share.outcomeToken.index}`)
 }
 
-export const getMarketWinnings = (market, shares, account) => {
-  if (!isValidMarket(market) || !marketCanRedeemWinnings(market)) {
-    return {}
-  }
+export const calcShareWinnings = (share, market, event) => {
+  const isCategorical = event.type === OUTCOME_TYPES.CATEGORICAL
 
-  const isCategorical = market.event.type === OUTCOME_TYPES.CATEGORICAL
   return isCategorical ?
-    getMarketWinningsCategorical(market, shares, account) :
-    getMarketWinningsScalar(market, shares, account)
+    calcShareWinningsCategorical(share, market, event) :
+    calcShareWinningsScalar(share, market, event)
 }

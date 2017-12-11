@@ -18,9 +18,11 @@ import {
 } from 'actions/market'
 import {
   getMarketById,
-  getMarketSharesByMarket,
   getMarketParticipantsTrades,
 } from 'selectors/market'
+import {
+  getMarketShares,
+} from 'selectors/marketShares'
 import {
   getCurrentAccount,
   getCurrentBalance,
@@ -30,7 +32,7 @@ import {
   isGasPriceFetched,
   checkWalletConnection,
 } from 'selectors/blockchain'
-import { isModerator, getModerators, getMarketWinnings } from 'utils/helpers'
+import { isModerator, getModerators } from 'utils/helpers'
 
 const mapStateToProps = (state, ownProps) => {
   const market = getMarketById(state)(ownProps.params.id)
@@ -43,12 +45,11 @@ const mapStateToProps = (state, ownProps) => {
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const marketShortSellSelector = formValueSelector('marketShortSell')
   const defaultAccount = getCurrentAccount(state)
-  const marketShares = getMarketSharesByMarket(state)(ownProps.params.id, defaultAccount)
 
   return {
     market,
     defaultAccount,
-    marketShares,
+    marketShares: getMarketShares(market.address)(state),
     selectedOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     limitMargin: marketBuySelector(state, 'limitMargin'),
@@ -60,7 +61,6 @@ const mapStateToProps = (state, ownProps) => {
     creatorIsModerator: isModerator(getCurrentAccount(state)),
     moderators: getModerators(),
     trades: getMarketParticipantsTrades(state)(),
-    winningsByOutcome: getMarketWinnings(market, marketShares, defaultAccount),
     initialValues: {
       selectedOutcome: 0,
     },

@@ -13,3 +13,15 @@ export const getEventByAddress = state => (marketEventAddress) => {
 
   return undefined
 }
+
+export const getEvents = (state) => {
+  if (!state.entities) {
+    return {}
+  }
+
+  if (!state.entities.events) {
+    return {}
+  }
+
+  return state.entities.events
+}

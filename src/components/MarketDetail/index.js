@@ -183,8 +183,8 @@ class MarketDetail extends Component {
       .utc(market.eventDescription.resolutionDate)
       .local()
       .diff(moment(), 'hours')
-    const { winningsByOutcome, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
-    const winningsTotal = Object.keys(winningsByOutcome).reduce((acc, outcomeIndex) => acc.add(Decimal(winningsByOutcome[outcomeIndex] || '0')), Decimal(0))
+    const { marketShares, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
+    const winningsTotal = Object.keys(marketShares).reduce((acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')), Decimal(0))
     const marketClosed = isMarketClosed(market)
     const marketResolved = isMarketResolved(market)
     const showWinning = marketResolved
@@ -350,7 +350,7 @@ MarketDetail.propTypes = {
     view: PropTypes.string,
   }),
   requestGasPrice: PropTypes.func,
-  marketShares: PropTypes.arrayOf(marketShareShape),
+  marketShares: PropTypes.objectOf(marketShareShape),
   defaultAccount: PropTypes.string,
   market: marketShape,
   winningsByOutcome: PropTypes.objectOf(PropTypes.string),

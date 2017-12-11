@@ -1,4 +1,4 @@
-import { get, values } from 'lodash'
+import { values } from 'lodash'
 import Decimal from 'decimal.js'
 import { isMarketResolved, isMarketClosed } from 'utils/helpers'
 import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
@@ -44,42 +44,10 @@ export const getMarketById = state => (marketAddress) => {
   return market
 }
 
-export const getMarketShareByShareId = state => (shareAddress) => {
-  const marketShareEntities = entitySelector(state, 'marketShares')
-
-  return marketShareEntities[shareAddress]
-}
-
 export const getMarkets = (state) => {
   const marketEntities = entitySelector(state, 'markets')
 
   return Object.keys(marketEntities).map(getMarketById(state))
-}
-
-export const getMarketShares = (state) => {
-  if (!state.entities) {
-    return undefined
-  }
-
-  if (!state.entities.marketShares) {
-    return undefined
-  }
-
-  return state.entities.marketShares
-}
-
-export const getMarketSharesByMarket = state => (marketAddress) => {
-  const marketEntity = getMarketById(state)(marketAddress)
-  const shares = get(state, 'entities.marketShares', {})
-
-  const sharesFiltered = Object.keys(shares)
-    .map(shareId => ({
-      id: shareId,
-      ...shares[shareId],
-    }))
-    .filter(share =>
-      share.outcomeToken.event === marketEntity.event.address && Decimal(share.balance).gte(LOWEST_DISPLAYED_VALUE))
-  return sharesFiltered
 }
 
 export const filterMarkets = state => (opts) => {
@@ -216,8 +184,4 @@ export const getAccountParticipatingInEvents = (state, account) => {
     }
   }
   return events
-}
-
-export default {
-  getMarkets,
 }

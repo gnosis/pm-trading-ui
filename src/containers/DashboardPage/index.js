@@ -4,15 +4,17 @@ import { push } from 'react-router-redux'
 
 import DashboardPage from 'components/Dashboard'
 import {
-  getAccountShares,
   getAccountTrades,
   getAccountPredictiveAssets,
   getMarkets,
 } from 'selectors/market'
+import {
+  getAccountShares,
+} from 'selectors/marketShares'
 import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized, checkWalletConnection } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
-import { weiToEth, getMarketWinnings } from 'utils/helpers'
+import { weiToEth } from 'utils/helpers'
 
 
 const mapStateToProps = (state) => {
@@ -20,16 +22,10 @@ const mapStateToProps = (state) => {
   const defaultAccount = getCurrentAccount(state)
   const accountTrades = getAccountTrades(state, defaultAccount)
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
-  const accountShares = getAccountShares(state, defaultAccount)
+  const accountShares = getAccountShares(state)
+
   const gnosisInitialized = isGnosisInitialized(state)
   let etherTokens = getEtherTokensAmount(state, defaultAccount)
-
-  const marketWinnings = {}
-  if (defaultAccount) {
-    markets.forEach((market) => {
-      marketWinnings[market.address] = getMarketWinnings(market, accountShares, defaultAccount)
-    })
-  }
 
   if (etherTokens !== undefined) {
     etherTokens = weiToEth(etherTokens.toString())
@@ -42,7 +38,6 @@ const mapStateToProps = (state) => {
     defaultAccount,
     markets,
     etherTokens,
-    marketWinnings,
     accountShares,
     accountTrades,
     accountPredictiveAssets,

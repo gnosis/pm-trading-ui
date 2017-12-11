@@ -9,3 +9,15 @@ export const getOracleByAddress = state => (eventOracleAddress) => {
 
   return undefined
 }
+
+export const getOracles = (state) => {
+  if (!state.entities) {
+    return {}
+  }
+
+  if (!state.entities.oracles) {
+    return {}
+  }
+
+  return state.entities.oracles
+}
