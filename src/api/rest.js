@@ -3,29 +3,26 @@ import { normalize } from 'normalizr'
 import { OUTCOME_TYPES } from 'utils/constants'
 import sha1 from 'sha1'
 import qs from 'querystring'
-import {
-  marketSchema,
-} from './schema'
+import { marketSchema } from './schema'
 
 const API_URL = `${process.env.GNOSISDB_URL}/api`
 
-const addresses = Object.keys(process.env.WHITELIST).map(address => hexWithoutPrefix(address))
-const whitelistedAddressesFilter = qs.stringify({ creator: addresses[0] })
+// TODO The default assignment is because JEST test do not work out of the box with ENV variables. Fix that using the plugin dotenv(for example)
+const addresses = Object.keys(process.env.WHITELIST || {}).map(address => hexWithoutPrefix(address))
+const whitelistedAddressesFilter = qs.stringify({ creator: addresses.join() }, ',')
 
 export const requestMarket = async marketAddress =>
   restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/`).then(response =>
-    normalize({ ...response, local: false }, marketSchema),
-  )
+    normalize({ ...response, local: false }, marketSchema))
 
-export const requestMarkets = async () =>
-  restFetch(`${API_URL}/markets`)
-    .then(response => normalize(
-      response.results.filter(market => typeof market.funding !== 'undefined'),
-      [marketSchema]),
-    )
+export const requestMarkets = async () => {
+  const url = `${API_URL}/markets/?${whitelistedAddressesFilter}`
 
-export const requestFactories = async () =>
-  restFetch(`${API_URL}/factories`)
+  return restFetch(url).then(response =>
+    normalize(response.results.filter(market => typeof market.funding !== 'undefined'), [marketSchema]))
+}
+
+export const requestFactories = async () => restFetch(`${API_URL}/factories`)
 
 export const requestMarketShares = async (marketAddress, accountAddress) =>
   restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/shares/${hexWithoutPrefix(accountAddress)}/`)
@@ -36,32 +33,35 @@ export const requestMarketShares = async (marketAddress, accountAddress) =>
         return []
       }
 
-      return normalize({
-        address: marketAddress,
-        shares: response.results.map(share => ({
-          id: sha1(`${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
-          event: share.outcomeToken.event,
-          ...share,
-        })),
-      }, marketSchema)
+      return normalize(
+        {
+          address: marketAddress,
+          shares: response.results.map(share => ({
+            id: sha1(`${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
+            event: share.outcomeToken.event,
+            ...share,
+          })),
+        },
+        marketSchema,
+      )
     })
 
 export const requestMarketParticipantTrades = async (marketAddress, accountAddress) =>
-  restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
-    .then(response => addIdToObjectsInArray(response.results))
+  restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`).then(response => addIdToObjectsInArray(response.results))
 
-
-const transformMarketTrades = (trade, market) => (
-  trade.marginalPrices.reduce((prev, current, outcomeIndex) => {
-    const toReturn = { ...prev }
-    toReturn[getOutcomeName(market, outcomeIndex)] = current
-    return toReturn
-  }, {
-    date: trade.date,
-    scalarPoint: OUTCOME_TYPES.SCALAR === market.event.type ?
-      normalizeScalarPoint(trade.marginalPrices, market) : undefined,
-  })
-)
+const transformMarketTrades = (trade, market) =>
+  trade.marginalPrices.reduce(
+    (prev, current, outcomeIndex) => {
+      const toReturn = { ...prev }
+      toReturn[getOutcomeName(market, outcomeIndex)] = current
+      return toReturn
+    },
+    {
+      date: trade.date,
+      scalarPoint:
+        OUTCOME_TYPES.SCALAR === market.event.type ? normalizeScalarPoint(trade.marginalPrices, market) : undefined,
+    },
+  )
 
 const getFirstGraphPoint = (market) => {
   let firstPoint
@@ -78,7 +78,7 @@ const getFirstGraphPoint = (market) => {
         const toReturn = {
           ...prev,
         }
-        toReturn[current] = (1 / market.eventDescription.outcomes.length)
+        toReturn[current] = 1 / market.eventDescription.outcomes.length
         return toReturn
       }, {}),
     }
@@ -89,33 +89,22 @@ const getFirstGraphPoint = (market) => {
 const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().toISOString() })
 
 export const requestMarketTrades = async market =>
-  restFetch(`${API_URL}/markets/${hexWithoutPrefix(market.address)}/trades/`)
-    .then((response) => {
-      const trades = response.results.map(
-        result => transformMarketTrades(result, market),
-      )
-      const firstPoint = getFirstGraphPoint(market)
-      const lastPoint = trades.length ? getLastGraphPoint(trades) : { ...firstPoint, date: new Date().toISOString() }
-      return [
-        firstPoint,
-        ...trades,
-        lastPoint,
-      ]
-    })
-
+  restFetch(`${API_URL}/markets/${hexWithoutPrefix(market.address)}/trades/`).then((response) => {
+    const trades = response.results.map(result => transformMarketTrades(result, market))
+    const firstPoint = getFirstGraphPoint(market)
+    const lastPoint = trades.length ? getLastGraphPoint(trades) : { ...firstPoint, date: new Date().toISOString() }
+    return [firstPoint, ...trades, lastPoint]
+  })
 
 export const requestAccountTrades = async address =>
-  restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/trades/`)
-    .then(response => response.results)
+  restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/trades/`).then(response => response.results)
 
 export const requestAccountShares = async address =>
   // restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
   //   .then(response => response.results)
-  restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/shares/`)
-  .then(response => response.results.map(
-    (share) => {
+  restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/shares/`).then(response =>
+    response.results.map((share) => {
       const s = { ...share }
       s.id = sha1(`${address}-${share.outcomeToken.address}`)
       return s
-    },
-  ))
+    }))
