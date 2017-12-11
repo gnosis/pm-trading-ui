@@ -1,9 +1,7 @@
-import { get, filter, values } from 'lodash'
+import { values } from 'lodash'
 import Decimal from 'decimal.js'
-import { isMarketResolved, isMarketClosed, weiToEth, add0xPrefix } from 'utils/helpers'
-import { OUTCOME_TYPES } from 'utils/constants'
-import { createSelector } from 'reselect'
-import { getCurrentAccount } from 'selectors/blockchain'
+import { isMarketResolved, isMarketClosed } from 'utils/helpers'
+import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
 
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
@@ -46,41 +44,10 @@ export const getMarketById = state => (marketAddress) => {
   return market
 }
 
-export const getMarketShareByShareId = state => (shareAddress) => {
-  const marketShareEntities = entitySelector(state, 'marketShares')
-
-  return marketShareEntities[shareAddress]
-}
-
 export const getMarkets = (state) => {
   const marketEntities = entitySelector(state, 'markets')
 
   return Object.keys(marketEntities).map(getMarketById(state))
-}
-
-export const getMarketShares = (state) => {
-  if (!state.entities) {
-    return undefined
-  }
-
-  if (!state.entities.marketShares) {
-    return undefined
-  }
-
-  return state.entities.marketShares
-}
-
-export const getMarketSharesByMarket = state => (marketAddress) => {
-  const marketEntity = getMarketById(state)(marketAddress)
-  const shares = get(state, 'entities.marketShares', {})
-
-  const sharesFiltered = Object.keys(shares)
-    .map(shareId => ({
-      id: shareId,
-      ...shares[shareId],
-    }))
-    .filter(share => share.outcomeToken.event === marketEntity.event.address)
-  return sharesFiltered
 }
 
 export const filterMarkets = state => (opts) => {
@@ -168,10 +135,12 @@ export const getAccountShares = (state, account) => {
     return marketShareEntities
   }
 
-  return Object.keys(marketShareEntities).map(shareId => ({
-    id: shareId,
-    ...marketShareEntities[shareId],
-  })).filter(share => share.owner === account)
+  return Object.keys(marketShareEntities)
+    .map(shareId => ({
+      id: shareId,
+      ...marketShareEntities[shareId],
+    }))
+    .filter(share => share.owner === account && Decimal(share.balance).gte(LOWEST_DISPLAYED_VALUE))
 }
 
 /**
@@ -215,8 +184,4 @@ export const getAccountParticipatingInEvents = (state, account) => {
     }
   }
   return events
-}
-
-export default {
-  getMarkets,
 }

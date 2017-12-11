@@ -21,7 +21,7 @@ import {
   LIMIT_MARGIN_DEFAULT,
 } from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
-import { marketShape } from 'utils/shapes'
+import { marketShape, marketShareShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
@@ -62,11 +62,11 @@ class MarketMySharesForm extends Component {
     const { extendedSellId } = this.state
     const { selectedSellAmount, marketShares, initialize } = this.props
     const sellAmountAndMarketSharesAreDefined =
-      selectedSellAmount === undefined && extendedSellId !== undefined && marketShares.length
+      selectedSellAmount === undefined && extendedSellId !== undefined && Object.keys(marketShares).length
 
     if (sellAmountAndMarketSharesAreDefined) {
       // By default form is filled up with fill amount
-      const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
+      const share = marketShares[extendedSellId]
 
       if (share) {
         const fullAmount = Decimal(share.balance)
@@ -97,7 +97,7 @@ class MarketMySharesForm extends Component {
 
   @autobind
   async handleSellShare(shareId, shareAmount, earnings) {
-    const share = this.props.marketShares.find(s => s.id === shareId)
+    const share = this.props.marketShares[shareId]
     const shareBalance = new Decimal(share.balance)
     const shareBalanceRounded = shareBalance.div(1e18).toDP(4, 1)
     const selectedSellAmount = new Decimal(shareAmount)
@@ -131,7 +131,7 @@ class MarketMySharesForm extends Component {
     }
 
     if (
-      decimalValue.gt(Decimal(props.marketShares.filter(share => share.id === this.state.extendedSellId)[0].balance)
+      decimalValue.gt(Decimal(props.marketShares[this.state.extendedSellId].balance)
         .div(1e18)
         .toString())
     ) {
@@ -149,18 +149,8 @@ class MarketMySharesForm extends Component {
 
     const resolvedOrClosed = isMarketClosed(market) || isMarketResolved(market)
 
-    marketShares.forEach((share) => {
-      const probability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-      const maximumWin = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        cost: share.balance,
-      })
+    Object.keys(marketShares).forEach((shareId) => {
+      const share = marketShares[shareId]
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
@@ -180,7 +170,7 @@ class MarketMySharesForm extends Component {
             )}
         </td>
         <td>
-          <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
+          <DecimalValue value={Decimal(share.value).div(1e18)} />&nbsp;
           <CurrencyName collateralToken={market.event.collateralToken} />
         </td>
         <td>
@@ -220,7 +210,7 @@ class MarketMySharesForm extends Component {
       gasPrice,
     } = this.props
 
-    const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
+    const share = marketShares[extendedSellId]
     let newScalarPredictedValue // calculated only for scalar events
     let selectedSellAmountWei
     try {
@@ -398,7 +388,7 @@ class MarketMySharesForm extends Component {
 
   render() {
     const { marketShares } = this.props
-    if (!marketShares || !marketShares.length) {
+    if (!marketShares || !Object.keys(marketShares).length) {
       return (
         <div className="marketMyShares">
           <h2 className="marketMyShares__heading">
@@ -434,7 +424,7 @@ MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
-  marketShares: PropTypes.arrayOf(PropTypes.object),
+  marketShares: PropTypes.objectOf(marketShareShape),
   sellShares: PropTypes.func,
 }
 
