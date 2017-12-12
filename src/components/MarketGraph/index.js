@@ -108,7 +108,7 @@ const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) =
               ]}
             />
             <CartesianGrid className="grid" vertical />
-            <Tooltip className="tooltip" content={<CustomTooltip />} />
+            <Tooltip className="tooltip" content={<CustomTooltip isScalar unit={eventDescription.unit} />} />
             <Line
               type="stepAfter"
               dataKey="scalarPoint"
