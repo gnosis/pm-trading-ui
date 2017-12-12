@@ -169,6 +169,14 @@
     // }
   }
 
+
+  &__outcome {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 76%;
+  }
+
   &:first-child {
     border-top-left-radius: @market-border-radius;
     border-top-right-radius: @market-border-radius;
@@ -189,17 +197,16 @@
       margin-bottom: 0;
     }
   }
-  
-  
-  .listItemOutcomeContainer {
-    display: flex;
-    align-items: center;
-  }
 
   .outcome {
     margin-right: 10px;
     display: flex;
     align-items: center;
+
+    &__wrapper {
+      display: flex;
+      align-items: center;
+    }
     
     &__bar {
       display: inline-block;
@@ -358,13 +365,6 @@
     color: #ffffff;
     margin-top: 6px;
     display: inline-block;
-
-    &.listItemOutcome {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 76%;
-    }
   }
 
   &--top-6 {

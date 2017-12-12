@@ -11,6 +11,15 @@
   }
 
   .outcome {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+
+    &__wrapper {
+      max-width: 75%;
+    }
+
     &__bar {
       display: inline-block;
       position: relative;
