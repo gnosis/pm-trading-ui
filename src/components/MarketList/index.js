@@ -31,11 +31,11 @@ const resolutionFilters = [
   },
   {
     label: 'Open',
-    value: 'RESOLVED',
+    value: 'UNRESOLVED',
   },
   {
     label: 'Ended',
-    value: 'UNRESOLVED',
+    value: 'RESOLVED',
   },
 ]
 
