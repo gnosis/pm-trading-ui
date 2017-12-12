@@ -24,6 +24,7 @@ import { EXPAND_MY_SHARES } from 'components/MarketDetail/ExpandableViews'
 import Metrics from './Metrics'
 import './dashboard.less'
 import { isMarketResolved, isMarketClosed } from '../../utils/helpers'
+import { OUTCOME_TYPES, COLOR_SCHEME_SCALAR } from '../../utils/constants'
 
 const getNewMarkets = (markets = [], limit) =>
   markets.sort((a, b) => a.creationDate < b.creationDate).slice(0, limit || markets.length)
@@ -127,6 +128,8 @@ class Dashboard extends Component {
 
     return Object.keys(holdings).map((shareId) => {
       const share = holdings[shareId]
+      const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
+      const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
       return (
         <div
           className="dashboardMarket dashboardMarket--onDark"
@@ -136,10 +139,7 @@ class Dashboard extends Component {
           <div className="dashboardMarket__title">{share.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
-              <div
-                className="entry__color"
-                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
-              />
+              <div className="entry__color" style={outcomeColorStyle} />
               <div className="dashboardMarket--highlight">{getOutcomeName(share, share.outcomeToken.index)}</div>
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
@@ -160,12 +160,12 @@ class Dashboard extends Component {
             <div className="col-md-4 dashboardMarket--highlight">
               {share.isRedeemable && (
                 <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(share.market)}>
-                    REDEEM WINNINGS
+                  REDEEM WINNINGS
                 </a>
               )}
               {share.isSellable && (
                 <a href="javascript:void(0);" onClick={() => this.handleShowSellView(share.market, share)}>
-                    SELL
+                  SELL
                 </a>
               )}
             </div>
@@ -180,6 +180,12 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(trade.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress && process.env.WHITELIST[market.creator])
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
+      const marketPresent = Object.keys(market).length > 0
+      if (!marketPresent) {
+        return null
+      }
+      const colorScheme = market.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
+      const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.index] }
       let averagePrice
       if (trade.orderType === 'BUY') {
         averagePrice = parseInt(trade.cost, 10) / parseInt(trade.outcomeTokenCount, 10)
@@ -196,10 +202,7 @@ class Dashboard extends Component {
           <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
-              <div
-                className="entry__color"
-                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
-              />
+              <div className="entry__color" style={outcomeColorStyle} />
               <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
             <div className="col-md-3 dashboardMarket--highlight">

@@ -25,6 +25,7 @@ import { marketShape, marketShareShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
+import { COLOR_SCHEME_SCALAR, OUTCOME_TYPES } from '../../utils/constants'
 
 class MarketMySharesForm extends Component {
   constructor(props) {
@@ -151,13 +152,12 @@ class MarketMySharesForm extends Component {
 
     Object.keys(marketShares).forEach((shareId) => {
       const share = marketShares[shareId]
+      const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
+      const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
-          <div
-            className="shareOutcome__color"
-            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
-          />
+          <div className="shareOutcome__color" style={outcomeColorStyle} />
         </td>
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
         <td>
@@ -260,10 +260,7 @@ class MarketMySharesForm extends Component {
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (
-        outcomeTokenIndex === share.outcomeToken.index &&
-        !currentTokenBalance.sub(newTokenBalance).isZero()
-      ) {
+      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
         return Decimal(outcomeTokenAmount)
           .sub(currentTokenBalance.sub(newTokenBalance))
           .floor()
