@@ -25,6 +25,7 @@ import { marketShape, marketShareShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
+import { COLOR_SCHEME_SCALAR, OUTCOME_TYPES } from '../../utils/constants'
 
 class MarketMySharesForm extends Component {
   constructor(props) {
@@ -151,12 +152,14 @@ class MarketMySharesForm extends Component {
 
     Object.keys(marketShares).forEach((shareId) => {
       const share = marketShares[shareId]
+      const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
+      const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
           <div
             className="shareOutcome__color"
-            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
+            style={outcomeColorStyle}
           />
         </td>
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
