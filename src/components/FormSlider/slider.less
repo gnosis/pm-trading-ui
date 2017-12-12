@@ -1,0 +1,24 @@
+.slider(@color) {
+    border: none;
+    border-radius: 3px;
+    width: 100%;
+    height: 5px;
+    margin: 10px 0;
+    background-color: @color;
+    line-height: 12px;
+  }
+
+.sliderCrossBrowser(@color) {
+  &::slider-runnable-track {
+    .slider(@color);
+  }
+  &::-webkit-slider-runnable-track {
+    .slider(@color);
+  }
+  &::-moz-range-track {
+    .slider(@color);
+  }
+  &::-ms-track {
+    .slider(@color);
+  }
+}

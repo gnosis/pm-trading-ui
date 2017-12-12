@@ -222,6 +222,7 @@ MarketShortSellForm.propTypes = {
   }),
   selectedShortSellAmount: PropTypes.string,
   selectedShortSellOutcome: PropTypes.string,
+  handleSubmit: PropTypes.func,
 }
 
 const FORM = {

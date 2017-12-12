@@ -12,7 +12,11 @@
     "0x3e5e9111ae8eb78fe1cc3bb8915d5d461f3ef9a9": "Account 7",
     "0x28a8746e75304c0780e011bed21c72cd78cd535e": "Account 8",
     "0xaca94ef8bd5ffee41947b4585a84bda5a3d3da6e": "Account 9",
-    "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Account 10"
+    "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Account 10",
+    "0x75e70a0204a9c2353f9de428cb87f38ead9f0160": "DenisUport",
+    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",
+    "0x8b872b278cbdadd6a24751051d7d030bb7f35385": "GiacomoUport",
+    "0x697321d5d8337450e50a404025dd4e6f8fa46eb7": "Mikhail Uport"
  },
   "productionWhitelist": {
 

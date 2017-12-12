@@ -51,6 +51,7 @@ const mapStateToProps = (state, ownProps) => {
     trades: getMarketParticipantsTrades(state)(),
     initialValues: {
       selectedOutcome: 0,
+      limitMargin: 5,
     },
     isGasCostFetched: property => isGasCostFetched(state, property),
     isGasPriceFetched: isGasPriceFetched(state),
@@ -74,7 +75,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   withdrawFees: market => dispatch(withdrawFees(market)),
-  requestGasCost: contractType => dispatch(requestGasCost(contractType)),
+  requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
   closeMarket: market => dispatch(closeMarket(market)),
 })

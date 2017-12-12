@@ -7,8 +7,11 @@ import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
 import { weiToEth } from 'utils/helpers'
 import {
-  COLOR_SCHEME_DEFAULT, OUTCOME_TYPES, GAS_COST,
-  SCALAR_SHORT_COLOR, SCALAR_LONG_COLOR, LIMIT_MARGIN_DEFAULT,
+  COLOR_SCHEME_DEFAULT,
+  COLOR_SCHEME_SCALAR,
+  OUTCOME_TYPES,
+  GAS_COST,
+  LIMIT_MARGIN_DEFAULT,
 } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 
@@ -17,6 +20,7 @@ import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
+import FormSlider from 'components/FormSlider'
 
 import FormRadioButton from 'components/FormRadioButton'
 import FormBarChartRadioButton from 'components/FormBarChartRadioButton'
@@ -219,12 +223,12 @@ class MarketBuySharesForm extends Component {
       {
         value: 0,
         label: 'Short',
-        highlightColor: SCALAR_SHORT_COLOR,
+        highlightColor: COLOR_SCHEME_SCALAR[0],
       },
       {
         value: 1,
         label: 'Long',
-        highlightColor: SCALAR_LONG_COLOR,
+        highlightColor: COLOR_SCHEME_SCALAR[1],
       },
     ]
 
@@ -273,7 +277,7 @@ class MarketBuySharesForm extends Component {
       gasPrice,
       invalid,
       handleSubmit,
-      market: { event: { collateralToken }, address, local },
+      market: { event: { collateralToken, type }, address, local },
       selectedBuyInvest,
       submitFailed,
       submitting,
@@ -300,12 +304,17 @@ class MarketBuySharesForm extends Component {
     } else if (Decimal(outcomeTokenCount.toString()).isZero()) {
       fieldError = <span className="marketBuyWin__invalidParam">Invalid investment</span>
     } else {
+      const colorSource = type === OUTCOME_TYPES.CATEGORICAL ? COLOR_SCHEME_DEFAULT : COLOR_SCHEME_SCALAR
+      const outcomeColorStyles = {
+        backgroundColor: colorSource[selectedOutcome],
+      }
+
       tokenCountField = (
         <span className="marketBuyWin__row marketBuyWin__max">
           <DecimalValue value={weiToEth(outcomeTokenCount)} />&nbsp;
           <div
             className="marketBuyWin__outcomeColor"
-            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[selectedOutcome] }}
+            style={outcomeColorStyles}
           />&nbsp;
         </span>
       )
@@ -341,16 +350,20 @@ class MarketBuySharesForm extends Component {
                 </div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Limit Margin in %</div>
-                <div className="col-md-3">
+                <div className="col-md-6">Limit Margin</div>
+                <div className="col-md-6">
                   <Field
                     name="limitMargin"
-                    component={Input}
+                    component={FormSlider}
                     className="limitMarginField"
                     placeholder={LIMIT_MARGIN_DEFAULT}
+                    min={0}
+                    max={5}
+                    unit="%"
+                    step={0.5}
+                    showInput={false}
                   />
                 </div>
-                <div className="col-md-3">%</div>
               </div>
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Token Count</div>

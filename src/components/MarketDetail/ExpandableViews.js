@@ -4,7 +4,7 @@ import MarketMySharesForm from 'components/MarketMySharesForm'
 import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 import Decimal from 'decimal.js'
-import { MARKET_STAGES } from 'utils/constants'
+import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 export const EXPAND_BUY_SHARES = 'buy-shares'
 export const EXPAND_MY_TRADES = 'my-trades'
@@ -22,8 +22,8 @@ const expandableViews = ({
       !props.market.local &&
       props.defaultAccount &&
       props.defaultAccount !== props.market.owner &&
-      !props.market.oracle.isOutcomeSet &&
-      props.market.stage !== MARKET_STAGES.MARKET_CLOSED,
+      !isMarketClosed(props.market) &&
+      !isMarketResolved(props.market),
   },
   /* HIDDEN
   [EXPAND_SHORT_SELL]: {
@@ -57,7 +57,7 @@ const expandableViews = ({
       props.market &&
       props.defaultAccount &&
       props.defaultAccount === props.market.oracle.owner &&
-      !props.market.oracle.isOutcomeSet,
+      !isMarketClosed(props.market),
   },
   [EXPAND_WITHDRAW_FEES]: {
     label: 'Withdraw fees',

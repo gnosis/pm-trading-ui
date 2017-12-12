@@ -23,8 +23,8 @@ import config from 'config.json'
 import expandableViews, { EXPAND_MY_SHARES } from './ExpandableViews'
 
 import './marketDetail.less'
-import { weiToEth } from '../../utils/helpers'
-import { marketShareShape } from '../../utils/shapes'
+import { weiToEth, isMarketClosed, isMarketResolved } from '../../utils/helpers'
+import { marketShareShape, gasCostsShape } from '../../utils/shapes'
 
 const ONE_WEEK_IN_HOURS = 168
 
@@ -71,6 +71,7 @@ class MarketDetail extends Component {
     this.props
       .fetchMarket()
       .then(() => {
+        this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
         this.props.fetchMarketTrades(this.props.market)
         if (this.props.defaultAccount) {
           this.props.fetchMarketShares(this.props.defaultAccount)
@@ -96,6 +97,7 @@ class MarketDetail extends Component {
     if (this.props.defaultAccount && this.props.params.id) {
       this.props.fetchMarketParticipantTrades(this.props.params.id, this.props.defaultAccount)
     }
+    this.props.requestGasPrice()
   }
 
   @autobind
@@ -176,17 +178,23 @@ class MarketDetail extends Component {
   }
 
   renderDetails(market) {
-    const showWinning = market.oracle.isOutcomeSet
     const timeToResolution = moment
       .utc(market.eventDescription.resolutionDate)
       .local()
       .diff(moment(), 'hours')
-    const { marketShares } = this.props
+    const { marketShares, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
 
-    const marketClosed = market.stage === MARKET_STAGES.MARKET_CLOSED
-    const marketResolved = market.oracle.isOutcomeSet
+    const marketClosed = isMarketClosed(market)
+    const marketResolved = isMarketResolved(market)
+    const showWinning = marketResolved
     const marketClosedOrFinished = marketClosed || marketResolved
     const marketStatus = marketResolved ? 'resolved.' : 'closed.'
+    const showCountdown = !marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS
+    const redeemWinningsTransactionGas = gasPrice
+      .mul(redeemWinningsGasCost || 0)
+      .div(1e18)
+      .toDP(5, 1)
+      .toString()
 
     const winnings = marketShares.reduce((sum, share) => {
       const shareWinnings = weiToEth(calcLMSRProfit({
@@ -206,7 +214,7 @@ class MarketDetail extends Component {
           <p className="marketDescription__text">{market.eventDescription.description}</p>
         </div>
         <Outcome market={market} />
-        {!marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS ? (
+        {showCountdown ? (
           <div className="marketTimer">
             <div className="marketTimer__live">
               <Countdown target={market.eventDescription.resolutionDate} />
@@ -230,9 +238,7 @@ class MarketDetail extends Component {
                 .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
             {marketClosedOrFinished && (
-              <div className="marketTimer__marketClosed">
-                {`This market was ${marketStatus}`}
-              </div>
+              <div className="marketTimer__marketClosed">{`This market was ${marketStatus}`}</div>
             )}
           </div>
         )}
@@ -252,6 +258,7 @@ class MarketDetail extends Component {
                 <InteractionButton className="btn btn-primary" onClick={this.handleRedeemWinnings}>
                   Redeem Winnings
                 </InteractionButton>
+                <span className="redeemWinning__gasCost">Gas cost: {redeemWinningsTransactionGas} ETH</span>
               </div>
             </div>
           )}
@@ -332,8 +339,15 @@ class MarketDetail extends Component {
           </div>
         </div>
         {this.renderControls(market)}
-        <div ref={(div) => { this.divSharesNode = div }} className="expandable">{this.renderExpandableContent()}</div>
-        {market.trades ? <MarketGraph data={market.trades} market={market} /> : ''}
+        <div
+          ref={(div) => {
+            this.divSharesNode = div
+          }}
+          className="expandable"
+        >
+          {this.renderExpandableContent()}
+        </div>
+        {market.trades && <MarketGraph data={market.trades} market={market} />}
       </div>
     )
   }
@@ -346,6 +360,7 @@ MarketDetail.propTypes = {
     id: PropTypes.string,
     view: PropTypes.string,
   }),
+  requestGasPrice: PropTypes.func,
   marketShares: PropTypes.arrayOf(marketShareShape),
   defaultAccount: PropTypes.string,
   market: marketShape,
@@ -363,6 +378,8 @@ MarketDetail.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),
+  gasCosts: gasCostsShape,
+  gasPrice: PropTypes.instanceOf(Decimal),
 }
 
 export default MarketDetail

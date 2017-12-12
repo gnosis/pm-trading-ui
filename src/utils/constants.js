@@ -32,8 +32,7 @@ export const COLOR_SCHEME_DEFAULT = [
   '#73472c', // brown
 ]
 
-export const SCALAR_SHORT_COLOR = COLOR_SCHEME_DEFAULT[0]
-export const SCALAR_LONG_COLOR = COLOR_SCHEME_DEFAULT[2]
+export const COLOR_SCHEME_SCALAR = ['#0be1b3', '#f2cc0a']
 
 export const TRANSACTION_STATUS = {
   RUNNING: 'RUNNING',
@@ -73,7 +72,10 @@ export const LOWEST_DISPLAYED_VALUE = 0.001
 
 export const MIN_CONSIDER_VALUE = 0.001
 
-export const MAX_ALLOWANCE_WEI = Decimal(2).pow(256).sub(1).toString()
+export const MAX_ALLOWANCE_WEI = Decimal(2)
+  .pow(256)
+  .sub(1)
+  .toString()
 
 export const TRANSACTION_DESCRIPTIONS = {
   BUY: 'BOUGHT',

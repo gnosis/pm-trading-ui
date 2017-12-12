@@ -65,6 +65,12 @@
   }
 
   &__account {
+    vertical-align: middle;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+
     &--text {
       line-height: 40px;
       font-weight: 500;
@@ -110,10 +116,6 @@
     letter-spacing: 0.5px;
   }
 
-  &--right {
-    margin-left: auto;
-  }
-
   &--logo {
     width: 70px;
     padding-right: 0;
@@ -131,6 +133,7 @@
 .headerContainer__account {
   display: flex;
   align-items: center;
+  margin-left: auto;
 }
 
 .headerLogo {

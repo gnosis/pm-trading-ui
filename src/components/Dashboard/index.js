@@ -20,6 +20,7 @@ import { EXPAND_MY_SHARES } from 'components/MarketDetail/ExpandableViews'
 import InteractionButton from 'containers/InteractionButton'
 
 import './dashboard.less'
+import { isMarketResolved, isMarketClosed } from '../../utils/helpers'
 
 const getNewMarkets = (markets = [], limit) =>
   markets.sort((a, b) => a.creationDate < b.creationDate).slice(0, limit || markets.length)
@@ -120,8 +121,19 @@ class Dashboard extends Component {
       const eventAddress = add0xPrefix(holding.outcomeToken.event)
       const filteredMarkets = markets.filter(market => market.event.address === eventAddress && process.env.WHITELIST[market.creator])
       const market = filteredMarkets.length ? filteredMarkets[0] : {}
+
+      // Sometimes we have market share stored in gnosisDB but not the market itself
+      // This check is needed to prevent errors caused by it
+      const marketPresent = Object.keys(market).length > 0
+      if (!marketPresent) {
+        return null
+      }
+
       let probability = new Decimal(0)
       let maximumWin = new Decimal(0)
+      const marketResolved = isMarketResolved(market)
+      const marketClosed = isMarketClosed(market)
+      const marketResolvedOrClosed = marketClosed || marketResolved
       // Check market is not empty
       if (market.event) {
         probability = calcLMSRMarginalPrice({
@@ -171,16 +183,14 @@ class Dashboard extends Component {
               <div className="col-md-4 dashboardMarket--highlight">
                 {market.event &&
                   market.oracle &&
-                  !market.oracle.isOutcomeSet &&
-                  !market.event.isWinningOutcomeSet && (
+                  !marketResolvedOrClosed && (
                     <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
                       SELL
                     </a>
                   )}
                 {market.event &&
                   market.oracle &&
-                  market.oracle.isOutcomeSet &&
-                  market.event.isWinningOutcomeSet && (
+                  marketResolved && (
                     <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
                       REDEEM WINNINGS
                     </a>
@@ -222,14 +232,14 @@ class Dashboard extends Component {
               />
               <div className="dashboardMarket--highlight listItemOutcome">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">
-              {new Decimal(averagePrice).toFixed(4)}
-              &nbsp;{market.event ? <CurrencyName collateralToken={market.event.collateralToken} /> : <div />}
+            <div className="col-md-3 dashboardMarket--highlight">
+              {new Decimal(averagePrice).toFixed(4)}{' '}
+              {market.event && <CurrencyName collateralToken={market.event.collateralToken} />}
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               {moment.utc(trade.date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">{TRANSACTION_DESCRIPTIONS[trade.orderType]}</div>
+            <div className="col-md-3 dashboardMarket--highlight">{TRANSACTION_DESCRIPTIONS[trade.orderType]}</div>
           </div>
         </div>
       )
@@ -240,7 +250,7 @@ class Dashboard extends Component {
     const { markets, accountShares, accountTrades } = this.props
 
     const whitelistedMarkets = markets.filter(market =>
-      process.env.WHITELIST[market.creator] && !market.oracle.isOutcomeSet && !market.event.isWinningOutcomeSet)
+      process.env.WHITELIST[market.creator] && !isMarketResolved(market) && !isMarketClosed(market))
     const newMarkets = getNewMarkets(whitelistedMarkets, 5)
 
     const closingMarkets = getSoonClosingMarkets(whitelistedMarkets, 5)
@@ -248,7 +258,7 @@ class Dashboard extends Component {
     if (marketType === 'newMarkets') {
       return (
         <div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__market-title">New Markets</div>
+          <div className="dashboardWidget__market-title">Latest Markets</div>
           <div
             className={cn({
               dashboardWidget__container: true,
@@ -264,7 +274,7 @@ class Dashboard extends Component {
     if (marketType === 'closingMarkets') {
       return (
         <div className="dashboardWidget col-md-6">
-          <div className="dashboardWidget__market-title">Soon-Closing Markets</div>
+          <div className="dashboardWidget__market-title">Next Markets</div>
           <div
             className={cn({
               dashboardWidget__container: true,
