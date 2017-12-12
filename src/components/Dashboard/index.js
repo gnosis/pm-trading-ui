@@ -139,10 +139,7 @@ class Dashboard extends Component {
           <div className="dashboardMarket__title">{share.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
-              <div
-                className="entry__color"
-                style={outcomeColorStyle}
-              />
+              <div className="entry__color" style={outcomeColorStyle} />
               <div className="dashboardMarket--highlight">{getOutcomeName(share, share.outcomeToken.index)}</div>
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
@@ -163,12 +160,12 @@ class Dashboard extends Component {
             <div className="col-md-4 dashboardMarket--highlight">
               {share.isRedeemable && (
                 <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(share.market)}>
-                    REDEEM WINNINGS
+                  REDEEM WINNINGS
                 </a>
               )}
               {share.isSellable && (
                 <a href="javascript:void(0);" onClick={() => this.handleShowSellView(share.market, share)}>
-                    SELL
+                  SELL
                 </a>
               )}
             </div>
@@ -205,10 +202,7 @@ class Dashboard extends Component {
           <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
-              <div
-                className="entry__color"
-                style={outcomeColorStyle}
-              />
+              <div className="entry__color" style={outcomeColorStyle} />
               <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
