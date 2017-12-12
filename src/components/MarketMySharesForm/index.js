@@ -157,10 +157,7 @@ class MarketMySharesForm extends Component {
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
-          <div
-            className="shareOutcome__color"
-            style={outcomeColorStyle}
-          />
+          <div className="shareOutcome__color" style={outcomeColorStyle} />
         </td>
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
         <td>
@@ -263,10 +260,7 @@ class MarketMySharesForm extends Component {
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (
-        outcomeTokenIndex === share.outcomeToken.index &&
-        !currentTokenBalance.sub(newTokenBalance).isZero()
-      ) {
+      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
         return Decimal(outcomeTokenAmount)
           .sub(currentTokenBalance.sub(newTokenBalance))
           .floor()
