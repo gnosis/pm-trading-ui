@@ -12,7 +12,22 @@ const completionMessages = {
   [TRANSACTION_COMPLETE_STATUS.LOST]: 'Because of a page reload, we lost the status of this Transaction',
 }
 
-const Transaction = ({ label, startTime, endTime, completed, completionStatus, progress, type }) => (
+const DetailLabel = ({ label, date, children }) => (
+  <div>
+    <div className="transaction__detailLabel">{label}</div>
+    {date && children ? children : moment(date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+  </div>
+)
+
+DetailLabel.propTypes = {
+  label: PropTypes.string,
+  date: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+}
+
+const Transaction = ({
+  label, startTime, endTime, completed, completionStatus, progress, type,
+}) => (
   <div className={`transactionsPage__transaction transactionsPage__transaction--${type} transaction`}>
     <ProgressIndicator completed={completed} completionStatus={completionStatus} progress={progress} />
     <div className="transaction__content">
@@ -20,21 +35,22 @@ const Transaction = ({ label, startTime, endTime, completed, completionStatus, p
       <div className="transaction__details">
         <div className="transaction__detail">
           <div className="icon icon--new" />
-          <div className="transaction__detailLabel">Created at</div>
-          {moment(startTime).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+          <DetailLabel label="Created at" date={startTime} />
         </div>
         {endTime && (
           <div className="transaction__detail">
             <div className="icon icon--enddate" />
-            <div className="transaction__detailLabel">Finished at</div>
-            {moment(endTime).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+            <DetailLabel label="Finished at" date={endTime} />
           </div>
         )}
         {endTime && (
           <div className="transaction__detail">
             <div className="icon icon--countdown" />
-            <div className="transaction__detailLabel">Transaction Time</div>
-            {`took ${moment(endTime).from(moment(startTime), true)}`}
+            <DetailLabel label="Transaction Time">{`took ${moment(endTime).from(
+              moment(startTime),
+              true,
+            )}`}
+            </DetailLabel>
           </div>
         )}
       </div>
@@ -44,7 +60,6 @@ const Transaction = ({ label, startTime, endTime, completed, completionStatus, p
 )
 
 Transaction.propTypes = {
-  id: PropTypes.string,
   label: PropTypes.string,
   startTime: PropTypes.string,
   endTime: PropTypes.string,

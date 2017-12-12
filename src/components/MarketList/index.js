@@ -4,6 +4,7 @@ import autobind from 'autobind-decorator'
 import moment from 'moment'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
+import { Link } from 'react-router'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
 import InteractionButton from 'containers/InteractionButton'
@@ -24,6 +25,8 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
+import { MARKET_STAGES } from '../../utils/constants'
+import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 const resolutionFilters = [
   {
@@ -31,11 +34,11 @@ const resolutionFilters = [
     value: '',
   },
   {
-    label: 'Resolved',
+    label: 'Ended',
     value: 'RESOLVED',
   },
   {
-    label: 'Unresolved',
+    label: 'Open',
     value: 'UNRESOLVED',
   },
 ]
@@ -78,52 +81,56 @@ class MarketList extends Component {
 
   @autobind
   renderMarket(market) {
-    const isResolved = market.oracle && market.oracle.isOutcomeSet
+    const isResolved = isMarketResolved(market)
+    const isClosed = isMarketClosed(market)
+    const isResolvedOrClosed = isResolved || isClosed
     const isOwner = this.props.defaultAccount && market.creator === this.props.defaultAccount
+    const showResolveButton = isOwner && !isResolved
+
+    let marketStatusInfoField = (
+      <div className="info_field">
+        <div className="info__field--icon icon icon--countdown" />
+        <div className="info__field--label">
+          <Countdown target={market.eventDescription.resolutionDate} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
+        </div>
+      </div>
+    )
+
+    if (isResolvedOrClosed) {
+      const marketStatus = isResolved ? 'resolved' : 'closed'
+      marketStatusInfoField = (
+        <div className="info_field">
+          <div className="info__field--icon icon icon--checkmark" />
+          <div className="info__field--label">{marketStatus}</div>
+        </div>
+      )
+    }
 
     return (
       <button
         type="button"
         className={cn({
           market,
-          'market--resolved': isResolved,
+          'market--resolved': isResolved || isClosed,
         })}
         key={market.address}
         onClick={() => this.handleViewMarket(market)}
       >
         <div className="market__header">
           <h2 className="market__title">{market.eventDescription.title}</h2>
-          {isOwner &&
-            !isResolved && (
-              <div className="market__control">
-                <a
-                  href="javascript:void(0)"
-                  onClick={e => this.handleViewMarketResolve(e, `/markets/${market.address}/resolve`)}
-                >
-                  Resolve
-                </a>
-              </div>
-            )}
+          {showResolveButton && (
+            <div className="market__control">
+              <Link to={`/markets/${market.address}/resolve`} onClick={this.handleViewMarketResolve}>
+                Resolve
+              </Link>
+            </div>
+          )}
         </div>
         <Outcome market={market} />
         <div className="market__info row">
-          {isResolved ? (
-            <div className="info__group col-md-3">
-              <div className="info_field">
-                <div className="info__field--icon icon icon--checkmark" />
-                <div className="info__field--label">Resolved</div>
-              </div>
-            </div>
-          ) : (
-            <div className="info__group col-md-3">
-              <div className="info__field">
-                <div className="info__field--icon icon icon--countdown" />
-                <div className="info__field--label">
-                  <Countdown target={market.eventDescription.resolutionDate} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="info__group col-md-3">
+            <div className="info__field">{marketStatusInfoField}</div>
+          </div>
           <div className="info__group col-md-3">
             <div className="info__field">
               <div className="info__field--icon icon icon--enddate" />
@@ -208,6 +215,14 @@ class MarketList extends Component {
   render() {
     const { markets } = this.props
 
+    const threeDayMSeconds = 3 * 24 * 60 * 60 * 1000
+    const now = new Date()
+    const openMarkets = markets.filter(market => !isMarketClosed(market) && !isMarketResolved(market))
+    const openMarketsAmount = openMarkets.length
+    const endingSoonMarketsAmount = openMarkets.filter(({ eventDescription: { resolutionDate } }) => new Date(resolutionDate) - now < threeDayMSeconds).length
+    const newMarketsAmount = openMarkets.filter(({ creationDate }) => now - new Date(creationDate) < threeDayMSeconds)
+      .length
+
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
@@ -222,17 +237,17 @@ class MarketList extends Component {
             <div className="row marketStats">
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market" />
-                <span className="marketStats__value">{markets.length}</span>
+                <span className="marketStats__value">{openMarketsAmount}</span>
                 <div className="marketStats__label">Open Markets</div>
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market--countdown" />
-                <span className="marketStats__value">{markets.length}</span>
-                <div className="marketStats__label">Closing Soon</div>
+                <span className="marketStats__value">{endingSoonMarketsAmount}</span>
+                <div className="marketStats__label">Ending Soon</div>
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--new" />
-                <span className="marketStats__value">{markets.length}</span>
+                <span className="marketStats__value">{newMarketsAmount}</span>
                 <div className="marketStats__label">New Markets</div>
               </div>
             </div>

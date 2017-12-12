@@ -1,4 +1,7 @@
 import { handleActions } from 'redux-actions'
+import { get } from 'lodash'
+import RavenIntegration from 'utils/raven'
+
 
 import {
   TRANSACTION_STATUS,
@@ -12,27 +15,36 @@ import {
   addTransactionLogEntry,
 } from 'actions/transactions'
 
+const LOAD_LOCALSTORAGE = 'LOAD_LOCALSTORAGE'
+
 const reducer = handleActions({
-  [startTransactionLog]: (state, action) => ({
-    ...state,
-    log: {
-      ...state.log,
-      [action.payload.id]: {
-        ...action.payload,
-        events: action.payload.events.map((event) => {
-          if (!event.status) {
-            return {
-              ...event,
-              status: TRANSACTION_STATUS.RUNNING,
+  [startTransactionLog]: (state, action) => {
+    RavenIntegration.recordAction(`Start Transaction: ${action.payload.label}`, 'transaction', action.payload)
+    return {
+      ...state,
+      log: {
+        ...state.log,
+        [action.payload.id]: {
+          ...action.payload,
+          events: action.payload.events.map((event) => {
+            if (!event.status) {
+              return {
+                ...event,
+                status: TRANSACTION_STATUS.RUNNING,
+              }
             }
-          }
-          return event
-        }),
+            return event
+          }),
+        },
       },
-    },
-  }),
+    }
+  },
   [closeTransactionLog]: (state, action) => {
     const { id, ...payload } = action.payload
+
+    const transaction = state.log[id]
+    RavenIntegration.recordAction(`Close Transaction: ${transaction.label}`, 'transaction', action.payload)
+
     return {
       ...state,
       log: {
@@ -75,6 +87,30 @@ const reducer = handleActions({
     ...state,
     visible: false,
   }),
+  [LOAD_LOCALSTORAGE]: (state, action) => {
+    const newState = {
+      ...state,
+      log: {},
+    }
+
+    const savedLogs = get(action, 'payload.transactions.log', {})
+    const logs = Object.keys(savedLogs)
+      .forEach((id) => {
+        const log = savedLogs[id]
+
+        if (log.completed) {
+          newState.log[id] = log
+        } else {
+          newState.log[id] = {
+            ...log,
+            completed: true,
+            completionStatus: 'LOST',
+          }
+        }
+      })
+
+    return newState
+  },
 }, { log: {}, visible: false })
 
 

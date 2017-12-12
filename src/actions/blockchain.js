@@ -9,14 +9,16 @@ import {
   calcScalarEventGasCost,
   calcCentralizedOracleGasCost,
   calcFundingGasCost,
+  calcRedeemWinningsGasCost,
   getGasPrice,
   getEtherTokens,
+  getOlympiaTokensByAccount,
 } from 'api'
 
-import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
+import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider, isGnosisInitialized } from 'selectors/blockchain'
+import { findDefaultProvider, isGnosisInitialized, getSelectedProvider, initializedAllProviders } from 'selectors/blockchain'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -38,7 +40,7 @@ export const requestGasPrice = () => async (dispatch) => {
   dispatch(setGasPrice({ entityType: 'gasPrice', gasPrice }))
 }
 
-export const requestGasCost = contractType => async (dispatch) => {
+export const requestGasCost = (contractType, opts) => async (dispatch) => {
   if (contractType === GAS_COST.MARKET_CREATION) {
     calcMarketGasCost().then((gasCost) => {
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
@@ -65,6 +67,10 @@ export const requestGasCost = contractType => async (dispatch) => {
     })
   } else if (contractType === GAS_COST.FUNDING) {
     calcFundingGasCost().then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
+  } else if (contractType === GAS_COST.REDEEM_WINNINGS) {
+    calcRedeemWinningsGasCost(opts).then((gasCost) => {
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
   }
@@ -102,7 +108,7 @@ export const initGnosis = () => async (dispatch, getState) => {
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)
     await dispatch(setConnectionStatus({ connected: false }))
-    return await dispatch(setGnosisInitialized({ initialized: false, error }))
+    return dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 
   // connect
@@ -116,19 +122,20 @@ export const initGnosis = () => async (dispatch, getState) => {
     await dispatch(setConnectionStatus({ connected: true }))
   } catch (error) {
     console.warn(`Gnosis.js connection Error: ${error}`)
-    return await dispatch(setConnectionStatus({ connected: false }))
+    return dispatch(setConnectionStatus({ connected: false }))
   }
 }
 
 export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
-  await dispatch(
-    updateProvider({
-      provider: provider.constructor.providerName,
-      ...data,
-    }),
-  )
+  await dispatch(updateProvider({
+    provider: provider.constructor.providerName,
+    ...data,
+  }))
 
-  if (isGnosisInitialized(getState())) {
+  const state = getState()
+  const isInitialized = isGnosisInitialized(state)
+
+  if (isInitialized) {
     let requireGnosisReinit = false
     GNOSIS_REINIT_KEYS.forEach((searchKey) => {
       if (Object.keys(data).indexOf(searchKey) > -1) {
@@ -142,14 +149,33 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
       await dispatch(initGnosis())
     }
   }
+
+  if (!isInitialized) {
+    const providersLoaded = initializedAllProviders(state)
+
+    if (providersLoaded) {
+      initGnosis()
+    }
+  }
 }
 
 export const runProviderRegister = (provider, data) => async (dispatch) => {
   const providerData = { ...data }
-  await dispatch(
-    registerProvider({
-      provider: provider.constructor.providerName,
-      ...providerData,
-    }),
-  )
+  await dispatch(registerProvider({
+    provider: provider.constructor.providerName,
+    ...providerData,
+  }))
+}
+
+export const refreshTokenBalance = () => async (dispatch, getState) => {
+  const state = getState()
+  const { name: providerName, ...provider } = getSelectedProvider(state)
+
+  const balance = await getOlympiaTokensByAccount(provider.account)
+
+  await dispatch(updateProvider({
+    provider: providerName,
+    ...provider,
+    balance: weiToEth(balance),
+  }))
 }

@@ -31,4 +31,5 @@ chrome-user-data
 /semantic.json
 /semantic
 yarn-error.log
+yarn.lock
 package-lock.json

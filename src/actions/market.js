@@ -3,47 +3,26 @@ import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
 import * as api from 'api'
+import { values } from 'lodash'
+import { receiveEntities, updateEntity } from 'actions/entities'
 
-import {
-  receiveEntities,
-  updateEntity,
-} from 'actions/entities'
+import { refreshTokenBalance } from 'actions/blockchain'
 
-import {
-  startLog,
-  closeLog,
-  closeEntrySuccess,
-  closeEntryError,
-} from 'actions/transactions'
+import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'actions/transactions'
 
-import {
-  createEventDescriptionModel,
-  createOracleModel,
-  createEventModel,
-  createMarketModel,
-} from 'api/models'
+import { createEventDescriptionModel, createOracleModel, createEventModel, createMarketModel } from 'api/models'
 
-import {
-  eventDescriptionSchema,
-  eventSchema,
-  oracleSchema,
-  marketSchema,
-} from 'api/schema'
+import { eventDescriptionSchema, eventSchema, oracleSchema, marketSchema } from 'api/schema'
 
-import {
-  OUTCOME_TYPES,
-  TRANSACTION_COMPLETE_STATUS,
-  MARKET_STAGES,
-} from 'utils/constants'
+import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, MARKET_STAGES } from 'utils/constants'
 
-import {
-  DEPOSIT,
-  SELL,
-  REVOKE_TOKENS,
-} from 'utils/transactionExplanations'
+import { DEPOSIT, SELL, REVOKE_TOKENS } from 'utils/transactionExplanations'
 
 import { openModal, closeModal } from 'actions/modal'
 import gaSend from 'utils/analytics/gaSend'
+import { getMarkets } from 'selectors/market'
+import { MAX_ALLOWANCE_WEI } from '../utils/constants'
+import { SETTING_ALLOWANCE } from '../utils/transactionExplanations'
 
 /**
  * Constant names for marketcreation stages
@@ -169,14 +148,8 @@ export const requestMarketTrades = market => async (dispatch) => {
  * @param {String} accountAddress
  */
 export const requestAccountShares = accountAddress => async (dispatch) => {
-  const shares = await api.requestAccountShares(accountAddress)
-  return await dispatch(updateEntity({
-    entityType: 'accountShares',
-    data: {
-      id: accountAddress,
-      shares,
-    },
-  }))
+  const payload = await api.requestAccountShares(accountAddress)
+  return dispatch(receiveEntities(payload))
 }
 
 /**
@@ -219,11 +192,7 @@ export const requestAccountTrades = accountAddress => async (dispatch) => {
  */
 export const createMarket = options => async (dispatch) => {
   const {
-  eventDescription,
-  oracle,
-  event,
-  market,
-  transactionId,
+    eventDescription, oracle, event, market, transactionId,
   } = options
 
   // Start a new transaction log
@@ -245,7 +214,7 @@ export const createMarket = options => async (dispatch) => {
   // Create Oracle
   let oracleContractData
   try {
-  // Take from EventDescription
+    // Take from EventDescription
     oracle.eventDescription = eventDescriptionContractData.ipfsHash
 
     oracleContractData = await api.createOracle(oracle)
@@ -260,14 +229,18 @@ export const createMarket = options => async (dispatch) => {
   // Create Event
   let eventContractData
   try {
-  // Take from Oracle
+    // Take from Oracle
     event.oracle = oracleContractData.address
 
     if (event.type === OUTCOME_TYPES.CATEGORICAL) {
       event.outcomeCount = (eventDescription.outcomes || []).length
     } else if (event.type === OUTCOME_TYPES.SCALAR) {
-      event.lowerBound = Decimal(event.lowerBound).times(10 ** event.decimals).toString()
-      event.upperBound = Decimal(event.upperBound).times(10 ** event.decimals).toString()
+      event.lowerBound = Decimal(event.lowerBound)
+        .times(10 ** event.decimals)
+        .toString()
+      event.upperBound = Decimal(event.upperBound)
+        .times(10 ** event.decimals)
+        .toString()
     }
 
     eventContractData = await api.createEvent(event)
@@ -279,10 +252,9 @@ export const createMarket = options => async (dispatch) => {
     return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
   }
 
-
   let marketContractData
   try {
-  // Take from Event
+    // Take from Event
     market.event = eventContractData.address
 
     if (event.type === OUTCOME_TYPES.CATEGORICAL) {
@@ -291,7 +263,7 @@ export const createMarket = options => async (dispatch) => {
       market.outcomes = [0, 1] // short, long
     }
 
-  // Create Market
+    // Create Market
     marketContractData = await api.createMarket(market)
     await dispatch(receiveEntities(normalize(createMarketModel(marketContractData), marketSchema)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.MARKET))
@@ -317,6 +289,8 @@ export const createMarket = options => async (dispatch) => {
     throw e
   }
 
+  dispatch(refreshTokenBalance())
+
   await dispatch(closeLog(transactionId))
   return marketContractData
 }
@@ -328,12 +302,7 @@ export const createMarket = options => async (dispatch) => {
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to buy
  * @param {number|string|BigNumber} cost - Max transaction cost allowed in Ether
  */
-export const buyMarketShares = (
-  market,
-  outcomeIndex,
-  outcomeTokenCount,
-  cost,
-) => async (dispatch) => {
+export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
   const transactionId = uuid()
   const gnosis = await api.getGnosisConnection()
 
@@ -345,13 +314,25 @@ export const buyMarketShares = (
     outcomeTokenCount,
     market.fee,
   )
+
   const currentAccount = await api.getCurrentAccount()
+  const marketAllowance = await gnosis.olympiaToken.allowance(currentAccount, market.address)
+  const approvalResetAmount = transactionCost.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
   const transactions = [
-    DEPOSIT(cost, 'OLY-Token', outcomeTokenCount.div(1e18).toDP(2).toNumber()),
+    DEPOSIT(
+      cost,
+      'OLY-Token',
+      outcomeTokenCount
+        .div(1e18)
+        .toDP(2)
+        .toNumber(),
+    ),
   ]
 
-  const payload = (await api.requestMarket(market.address))
+  if (approvalResetAmount) transactions.unshift(SETTING_ALLOWANCE)
+
+  const payload = await api.requestMarket(market.address)
   const updatedMarket = payload.entities.markets[market.address]
   const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
   const oldPrice = market.marginalPrices[outcomeIndex]
@@ -362,11 +343,10 @@ export const buyMarketShares = (
 
   gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions start'])
 
-  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
-    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost)
+    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions succeeded'])
     await dispatch(closeModal())
@@ -378,7 +358,7 @@ export const buyMarketShares = (
     throw e
   }
 
-  const netOutcomeTokensSold = market.netOutcomeTokensSold
+  const { netOutcomeTokensSold } = market
   const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toNumber()
   netOutcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
 
@@ -390,18 +370,39 @@ export const buyMarketShares = (
     },
   }))
 
+  dispatch(refreshTokenBalance())
+
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
 /**
  * Sell shares on a specific market
  * @param {Market} market - Market to sell shares on
- * @param {number} outcomeIndex - Index of outcome to sell shares of
+ * @param {MarketShare} share - Marketshare object
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to sell
  */
-export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnings) => async (dispatch) => {
+export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (dispatch) => {
   const transactionId = uuid()
   const gnosis = await api.getGnosisConnection()
+  const currentAccount = await api.getCurrentAccount()
+
+  const { outcomeToken: { index: outcomeIndex } } = share
+
+  const marketAllowance = await gnosis.contracts.Token
+    .at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex))
+    .allowance(currentAccount, market.address)
+
+  const outcomeCountWei = Decimal(outcomeTokenCount).mul(1e18)
+  const approvalResetAmount = outcomeCountWei.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
+
+  const payload = (await api.requestMarket(market.address))
+  const updatedMarket = payload.entities.markets[market.address]
+  const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
+  const oldPrice = market.marginalPrices[outcomeIndex]
+  if (!allowedRangePrice(oldPrice, updatedPrice)) {
+    dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
+    return dispatch(receiveEntities(payload))
+  }
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
@@ -410,13 +411,15 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnin
   // TODO: Calculate transaction cost
   gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions start'])
   const transactions = [
-    SELL(Decimal(outcomeTokenCount).toDP(2).toNumber()),
+    SELL(Decimal(outcomeTokenCount)
+      .toDP(2)
+      .toNumber()),
   ]
 
-  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
+  if (approvalResetAmount) transactions.unshift(SETTING_ALLOWANCE)
 
   try {
-    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, earnings)
+    await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, earnings, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions succeeded'])
     await dispatch(closeModal())
@@ -427,8 +430,16 @@ export const sellMarketShares = (market, outcomeIndex, outcomeTokenCount, earnin
     await dispatch(closeModal())
     throw e
   }
-  // TODO: Calculate new shares
-  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+
+  await dispatch(updateEntity({
+    entityType: 'marketShares',
+    data: {
+      id: share.id,
+      balance: Decimal(share.balance).sub(Decimal(outcomeCountWei)).toString(),
+    },
+  }))
+  dispatch(refreshTokenBalance())
+  return dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
 /**
@@ -453,8 +464,11 @@ export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
     throw e
   }
 
+  // optimistically update oracle outcome and event outcome
   await dispatch(updateEntity({ entityType: 'oracles', data: { id: market.oracle.address, isOutcomeSet: true, outcome: outcomeIndex } }))
   await dispatch(updateEntity({ entityType: 'events', data: { id: market.event.address, isWiningOutcomeSet: true } }))
+
+  dispatch(refreshTokenBalance())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
@@ -472,8 +486,6 @@ export const redeemWinnings = market => async (dispatch) => {
   const marketType = market.event.type
   const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS]
 
-  dispatch(openModal({ modalName: 'ModalTransactionsExplanation', transactions }))
-
   try {
     console.log('winnings: ', await api.redeemWinnings(market.event.type, market.event.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
@@ -486,6 +498,8 @@ export const redeemWinnings = market => async (dispatch) => {
   }
 
   dispatch(closeModal())
+
+  dispatch(refreshTokenBalance())
 
   // TODO: Update market so we can't redeem again
 
@@ -512,6 +526,8 @@ export const withdrawFees = market => async (dispatch) => {
 
     throw e
   }
+
+  dispatch(refreshTokenBalance())
 
   // TODO: Update market so we can't withdraw again
 
@@ -547,6 +563,8 @@ export const closeMarket = market => async (dispatch) => {
       stage,
     },
   }))
+
+  dispatch(refreshTokenBalance())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }

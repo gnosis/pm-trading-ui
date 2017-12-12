@@ -15,6 +15,7 @@ const config = require('./src/config.json')
 const whitelist = config.productionWhitelist
 
 module.exports = {
+  devtool: 'source-map',
   context: path.join(__dirname, 'src'),
   entry: ['bootstrap-loader', 'index.js'],
   output: {
@@ -58,12 +59,6 @@ module.exports = {
       },
     ],
   },
-  devServer: {
-    disableHostCheck: true,
-    historyApiFallback: true,
-    hot: false,
-    port: 5000,
-  },
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
@@ -83,6 +78,7 @@ module.exports = {
         yandex: false,
         windows: false,
       },
+      inject: true,
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),
@@ -98,7 +94,12 @@ module.exports = {
         : ''}`,
       WHITELIST: whitelist,
       INTERCOM_ID: undefined,
+      RAVEN_ID: config.ravenPublicDSN,
+      TRAVIS_BUILD_ID: undefined,
+      TRAVIS_BRANCH: undefined,
     }),
-    new UglifyJsWebpackPlugin(),
+    new UglifyJsWebpackPlugin({
+      sourceMap: true,
+    }),
   ],
 }

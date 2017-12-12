@@ -4,23 +4,13 @@ import ProgressSpinner from 'components/ProgressSpinner'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 
 const ProgressIndicator = ({ completed, completionStatus, progress }) => {
-  if (completed) {
-    if (completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR) {
-      return (
-        <div className="transaction__icon">
-          <div className="icon icon--checkmark" />
-        </div>
-      )
-    }
+  const iconType = completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR ? 'checkmark' : 'error'
 
-    return (
-      <div className="transaction__icon">
-        <div className="icon icon--error" />
-      </div>
-    )
-  }
-
-  return (
+  return completed ? (
+    <div className="transaction__icon">
+      <div className={`icon icon--${iconType}`} />
+    </div>
+  ) : (
     <ProgressSpinner width={32} height={32} strokeWidthPx={1} fontSizePx={8} progress={progress} modifier="spinning" />
   )
 }

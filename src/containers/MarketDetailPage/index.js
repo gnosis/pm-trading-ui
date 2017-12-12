@@ -16,7 +16,13 @@ import {
   withdrawFees,
   closeMarket,
 } from 'actions/market'
-import { getMarketById, getMarketSharesByMarket, getMarketParticipantsTrades } from 'selectors/market'
+import {
+  getMarketById,
+  getMarketParticipantsTrades,
+} from 'selectors/market'
+import {
+  getMarketShares,
+} from 'selectors/marketShares'
 import {
   getCurrentAccount,
   getCurrentBalance,
@@ -29,23 +35,29 @@ import {
 import { isModerator, getModerators } from 'utils/helpers'
 
 const mapStateToProps = (state, ownProps) => {
+  const market = getMarketById(state)(ownProps.params.id)
+
+  if (!Object.keys(market).length) {
+    return { market }
+  }
+
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const marketShortSellSelector = formValueSelector('marketShortSell')
+  const defaultAccount = getCurrentAccount(state)
 
   return {
-    market: getMarketById(state)(ownProps.params.id),
-    marketShares: getMarketSharesByMarket(state)(ownProps.params.id, getCurrentAccount(state)),
+    market,
+    defaultAccount,
+    marketShares: getMarketShares(market.address)(state),
     selectedOutcome: marketBuySelector(state, 'selectedOutcome'),
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     limitMargin: marketBuySelector(state, 'limitMargin'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
-    sellLimitMargin: marketMySharesSelector(state, 'limitMargin'),
     selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
     hasWallet: checkWalletConnection(state),
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
-    defaultAccount: getCurrentAccount(state),
     creatorIsModerator: isModerator(getCurrentAccount(state)),
     moderators: getModerators(),
     trades: getMarketParticipantsTrades(state)(),
@@ -74,7 +86,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   withdrawFees: market => dispatch(withdrawFees(market)),
-  requestGasCost: contractType => dispatch(requestGasCost(contractType)),
+  requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
   closeMarket: market => dispatch(closeMarket(market)),
 })

@@ -41,9 +41,8 @@ class Transactions extends Component {
               There are no previous transactions
             </div>
           )}
-          {completedTransactions.map(transaction => (
-            <Transaction key={transaction.id} type="completed" {...transaction} />
-          ))}
+          {completedTransactions.map(transaction =>
+            <Transaction key={transaction.id} type="completed" {...transaction} />)}
         </div>
       </div>
     )

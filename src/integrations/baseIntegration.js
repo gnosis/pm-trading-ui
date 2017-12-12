@@ -7,21 +7,6 @@ class BaseIntegration {
   runProviderRegister() {}
 
   /**
-   *
-   * @param {object} opts - Constructor Options
-   * @param {boolean} opts.enableWatcher - Boolean option for using the watcher for changes inside
-   * the provider (account, balance, network, etc)
-   * @param {number} opts.defaultTimeout - Time interval for watcher
-   */
-  constructor({ enableWatcher = true, defaultTimeout = 1000 } = {}) {
-    this.defaultTimeout = defaultTimeout
-    this.enableWatcher = enableWatcher
-    if (this.enableWatcher) {
-      this.watcherInterval = setInterval(this.watcher, defaultTimeout)
-    }
-  }
-
-  /**
    * Initializes the Integration
    * @param {object} opts - Integration Options
    * @param {function} opts.runProviderUpdate - Function to run when this provider updates
@@ -53,7 +38,7 @@ class BaseIntegration {
    * @returns {Promise<string>} - Network Identifier
    */
   async getNetworkId() {
-    return await promisify(this.web3.version.getNetwork, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
+    return promisify(this.web3.version.getNetwork, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
   }
 
   /**
@@ -95,41 +80,39 @@ class BaseIntegration {
   }
 
   /**
-   * Periodic updater to get all relevant information from this provider
+   * Add a new watcher to a property inside the integration
+   * @param {string} property - Property inside the integration that is holding the value for this watcher
+   * @param {function} getter - (async) function that returns the value for the watcher
    * @async
    */
+  watch = async (property, getter) => {
+    let value
 
-  watcher = async () => {
     try {
-      const currentAccount = await this.getAccount()
-      if (this.account !== currentAccount) {
-        this.account = currentAccount
-        await this.runProviderUpdate(this, { account: this.account })
-      }
-
-      const currentNetworkId = await this.getNetworkId()
-      if (this.networkId !== currentNetworkId) {
-        this.networkId = currentNetworkId
-        this.network = await this.getNetwork()
-        await this.runProviderUpdate(this, { network: this.network, networkId: this.networkId })
-      }
-
-      const currentBalance = await this.getBalance()
-      if (this.balance !== currentBalance) {
-        this.balance = currentBalance
-        await this.runProviderUpdate(this, { balance: this.balance })
-      }
-
-      if (!this.walletEnabled && this.account) {
-        this.walletEnabled = true
-        await this.runProviderUpdate(this, { available: true })
-      }
-    } catch (err) {
+      value = await getter.call(this)
+    } catch (e) {
       if (this.walletEnabled) {
         this.walletEnabled = false
-        await this.runProviderUpdate(this, { available: false })
+        await this.runProviderUpdate(this, { available: false, [property]: undefined })
       }
+
+      return
     }
+
+    const didPropertyChange = `${this[property] || undefined}` !== `${value || undefined}`
+    if (!didPropertyChange) {
+      return
+    }
+
+    const providerUpdate = { [property]: value }
+
+    if (!this.walletEnabled) {
+      this.walletEnabled = true
+      providerUpdate.available = true
+    }
+
+    this[property] = value
+    this.runProviderUpdate(this, providerUpdate)
   }
 }
 

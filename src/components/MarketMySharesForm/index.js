@@ -21,9 +21,11 @@ import {
   LIMIT_MARGIN_DEFAULT,
 } from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
-import { marketShape } from 'utils/shapes'
+import { marketShape, marketShareShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
+import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
+import { COLOR_SCHEME_SCALAR, OUTCOME_TYPES } from '../../utils/constants'
 
 class MarketMySharesForm extends Component {
   constructor(props) {
@@ -60,15 +62,20 @@ class MarketMySharesForm extends Component {
   componentDidUpdate() {
     const { extendedSellId } = this.state
     const { selectedSellAmount, marketShares, initialize } = this.props
+    const sellAmountAndMarketSharesAreDefined =
+      selectedSellAmount === undefined && extendedSellId !== undefined && Object.keys(marketShares).length
 
-    if (selectedSellAmount === undefined && extendedSellId !== undefined) {
+    if (sellAmountAndMarketSharesAreDefined) {
       // By default form is filled up with fill amount
-      const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
-      const fullAmount = Decimal(share.balance)
-        .div(1e18)
-        .toDP(2, 1)
-        .toString()
-      initialize({ sellAmount: fullAmount })
+      const share = marketShares[extendedSellId]
+
+      if (share) {
+        const fullAmount = Decimal(share.balance)
+          .div(1e18)
+          .toDP(4, 1)
+          .toString()
+        initialize({ sellAmount: fullAmount })
+      }
     }
   }
 
@@ -91,21 +98,25 @@ class MarketMySharesForm extends Component {
 
   @autobind
   async handleSellShare(shareId, shareAmount, earnings) {
-    const share = this.props.marketShares.find(s => s.id === shareId)
-    const shareIndex = share.outcomeToken.index
+    const share = this.props.marketShares[shareId]
     const shareBalance = new Decimal(share.balance)
-    const shareBalanceRounded = shareBalance.div(1e18).toDP(2, 1)
+    const shareBalanceRounded = shareBalance.div(1e18).toDP(4, 1)
     const selectedSellAmount = new Decimal(shareAmount)
     const sellAmount = shareBalanceRounded.sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE)
       ? weiToEth(shareBalance)
       : shareAmount
-    await this.props.sellShares(this.props.market, shareIndex, sellAmount, earnings)
+    try {
+      await this.props.sellShares(this.props.market, share, sellAmount, earnings)
+      this.setState({ extendedSellId: undefined })
+    } catch (e) {
+      console.error(e)
+    }
     return this.props.reset()
   }
 
   @autobind
   validateTokenCount(val, values, props) {
-    if (parseFloat(val) >= 1000) {
+    if (parseFloat(val) >= 1000 || !/^-?\d+\.?\d*$/.test(val)) {
       return 'Invalid amount'
     }
 
@@ -121,7 +132,7 @@ class MarketMySharesForm extends Component {
     }
 
     if (
-      decimalValue.gt(Decimal(props.marketShares.filter(share => share.id === this.state.extendedSellId)[0].balance)
+      decimalValue.gt(Decimal(props.marketShares[this.state.extendedSellId].balance)
         .div(1e18)
         .toString())
     ) {
@@ -137,27 +148,16 @@ class MarketMySharesForm extends Component {
     const { marketShares, market } = this.props
     const { extendedSellId } = this.state
 
-    const resolved = market.oracle.isOutcomeSet || market.event.isWinningOutcomeSet
+    const resolvedOrClosed = isMarketClosed(market) || isMarketResolved(market)
 
-    marketShares.forEach((share) => {
-      const probability = calcLMSRMarginalPrice({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-      })
-      const maximumWin = calcLMSROutcomeTokenCount({
-        netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
-        funding: market.funding,
-        outcomeTokenIndex: share.outcomeToken.index,
-        cost: share.balance,
-      })
+    Object.keys(marketShares).forEach((shareId) => {
+      const share = marketShares[shareId]
+      const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
+      const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
-          <div
-            className="shareOutcome__color"
-            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
-          />
+          <div className="shareOutcome__color" style={outcomeColorStyle} />
         </td>
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
         <td>
@@ -170,12 +170,11 @@ class MarketMySharesForm extends Component {
             )}
         </td>
         <td>
-          <DecimalValue value={maximumWin.mul(probability).div(1e18)} />&nbsp;
+          <DecimalValue value={Decimal(share.value).div(1e18)} />&nbsp;
           <CurrencyName collateralToken={market.event.collateralToken} />
         </td>
         <td>
-          {/* eslint-disable no-script-url */}
-          {!resolved && (
+          {!resolvedOrClosed && (
             <a
               href="javascript:void(0);"
               className="marketMyShares__sellButton"
@@ -184,7 +183,6 @@ class MarketMySharesForm extends Component {
                 Sell
             </a>
           )}
-          {/* eslint-enable no-script-url */}
         </td>
       </tr>)
 
@@ -206,14 +204,13 @@ class MarketMySharesForm extends Component {
       submitting,
       submitFailed,
       selectedSellAmount,
-      sellLimitMargin,
       handleSubmit,
       marketShares,
       gasCosts,
       gasPrice,
     } = this.props
 
-    const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
+    const share = marketShares[extendedSellId]
     let newScalarPredictedValue // calculated only for scalar events
     let selectedSellAmountWei
     try {
@@ -246,8 +243,9 @@ class MarketMySharesForm extends Component {
       }
     }
 
-    const currentTokenCount = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
-    const newTokenCount = currentTokenCount.sub(new Decimal(selectedSellAmount || 0).mul(1e18))
+    const currentTokenBalance = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
+    const newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
+
     let earnings = new Decimal(0)
     if (share.balance && parseFloat(selectedSellAmount) < 1000) {
       earnings = weiToEth(calcLMSRProfit({
@@ -257,14 +255,14 @@ class MarketMySharesForm extends Component {
         outcomeTokenCount: selectedSellAmountWei,
         feeFactor: market.fee,
       })
-        .mul(new Decimal(100).sub(sellLimitMargin == null ? LIMIT_MARGIN_DEFAULT : sellLimitMargin))
+        .mul(new Decimal(100).sub(LIMIT_MARGIN_DEFAULT))
         .div(100))
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenCount.sub(newTokenCount.toString()).isZero()) {
+      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
         return Decimal(outcomeTokenAmount)
-          .sub(currentTokenCount.sub(newTokenCount.toString()).toString())
+          .sub(currentTokenBalance.sub(newTokenBalance))
           .floor()
           .toString()
       }
@@ -345,19 +343,10 @@ class MarketMySharesForm extends Component {
           </div>
           <div className="row">
             <div className="col-md-3 col-md-offset-3">
-              <label htmlFor="limitMargin">Limit Margin in %</label>
-              <Field
-                component={FormInput}
-                name="limitMargin"
-                placeholder={LIMIT_MARGIN_DEFAULT}
-                className="limitMarginField"
-              />
-            </div>
-            <div className="col-md-3">
               <label>Gas costs</label>
               <span>
                 <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
-                <CurrencyName collateralToken={market.event.collateralToken} />
+                {' ETH'}
               </span>
             </div>
           </div>
@@ -396,7 +385,7 @@ class MarketMySharesForm extends Component {
 
   render() {
     const { marketShares } = this.props
-    if (!marketShares || !marketShares.length) {
+    if (!marketShares || !Object.keys(marketShares).length) {
       return (
         <div className="marketMyShares">
           <h2 className="marketMyShares__heading">
@@ -432,8 +421,7 @@ MarketMySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
-  sellLimitMargin: PropTypes.string,
-  marketShares: PropTypes.arrayOf(PropTypes.object),
+  marketShares: PropTypes.objectOf(marketShareShape),
   sellShares: PropTypes.func,
 }
 

@@ -45,7 +45,7 @@ class App extends Component {
 
     return (
       <div className="appContainer">
-        <HeaderContainer version={process.env.VERSION} />
+        <HeaderContainer version={`${process.env.TRAVIS_BRANCH || 'development'}-${process.env.TRAVIS_BUILD_ID || 'snapshot'}`} />
         {provider && provider.account && <TransactionFloaterContainer />}
         <TransitionGroup>
           <CSSTransition key={currentKey} classNames="page-transition" timeout={timeout}>

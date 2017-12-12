@@ -13,24 +13,24 @@ const reducer = handleActions({
     [action.payload.entityType]: {
       ...state[action.payload.entityType],
       [action.payload.data.id]: {
-        ...get(state, `[${action.payload.entityType}][${action.payload.data.id}]`, {}),
+        ...get(Object.assign({}, state), `[${action.payload.entityType}][${action.payload.data.id}]`, {}),
         ...action.payload.data,
       },
     },
   }),
   [receiveEntities]: (state, action) => {
-    const result = { ...state }
+    const result = { ...(Object.assign({}, state)) }
     keys(action.payload.entities).forEach((entityType) => {
       // preserve old entities
-      const entitiesState = get(state, `${entityType}`, {})
+      const entitiesState = { ...(get(state, `${entityType}`, {})) }
       set(result, `${entityType}`, entitiesState)
 
       keys(action.payload.entities[entityType]).forEach((entityId) => {
         // preserve old entity (only update if not exists)
-        const entityState = get(state, `${entityType}.${entityId}`, {})
+        const entityState = get(Object.assign({}, state), `${entityType}.${entityId}`, {})
         set(result, `${entityType}.${entityId}`, {
           ...entityState,
-          ...action.payload.entities[entityType][entityId],
+          ...Object.assign({}, action.payload.entities[entityType][entityId]),
         })
       })
     })
@@ -40,7 +40,8 @@ const reducer = handleActions({
     const { ...rest } = state[action.payload.entityType]
     return {
       ...state,
-      [action.payload.entityType]: { ...rest } }
+      [action.payload.entityType]: { ...rest },
+    }
   },
 }, {})
 
