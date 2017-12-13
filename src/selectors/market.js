@@ -1,12 +1,13 @@
 import { values } from 'lodash'
 import Decimal from 'decimal.js'
-import { isMarketResolved, isMarketClosed } from 'utils/helpers'
+import { isMarketResolved, isMarketClosed, hexWithPrefix } from 'utils/helpers'
 import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
 
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
 import { getOracleByAddress } from './oracle'
 import { getEventDescriptionByAddress } from './eventDescription'
+import { getAccountShares } from './marketShares'
 
 export const getMarketById = state => (marketAddress) => {
   const marketEntities = entitySelector(state, 'markets')
@@ -111,48 +112,6 @@ export const sortMarkets = (markets = [], orderBy = null) => {
   }
 }
 
-/**
- * Returns the array of a markets participant's related trades
- * @param {*} state
- */
-export const getMarketParticipantsTrades = state => () => {
-  const tradesArray = []
-  const tradesObject = state.entities.trades
-  if (tradesObject) {
-    Object.keys(state.entities.trades).map(key => tradesArray.push(tradesObject[key]))
-  }
-  return tradesArray
-}
-
-/**
- * Returns the shares for the given account address
- * @param {*} state
- * @param {String} account, an address
- */
-export const getAccountShares = (state, account) => {
-  const marketShareEntities = entitySelector(state, 'marketShares')
-  if (!account) {
-    return marketShareEntities
-  }
-
-  return Object.keys(marketShareEntities)
-    .map(shareId => ({
-      id: shareId,
-      ...marketShareEntities[shareId],
-    }))
-    .filter(share => share.owner === account && Decimal(share.balance).gte(LOWEST_DISPLAYED_VALUE))
-}
-
-/**
- * Returns the trades for the given account address
- * @param {*} state
- * @param {String} account, an address
- */
-export const getAccountTrades = (state, account) => {
-  const accountTrades = entitySelector(state, 'accountTrades')
-  return accountTrades[account] ? accountTrades[account].trades : []
-}
-
 export const getAccountPredictiveAssets = (state, account) => {
   let predictiveAssets = new Decimal(0)
 
@@ -166,22 +125,4 @@ export const getAccountPredictiveAssets = (state, account) => {
     }
   }
   return predictiveAssets
-}
-
-export const getAccountParticipatingInEvents = (state, account) => {
-  const events = []
-
-  if (account) {
-    const shares = values(getAccountShares(state, account))
-
-    if (shares.length) {
-      shares.map((share) => {
-        if (events.indexOf(share.outcomeToken.event) === -1) {
-          events.push(share.outcomeToken.event)
-        }
-        return events
-      })
-    }
-  }
-  return events
 }

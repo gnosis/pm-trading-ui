@@ -50,6 +50,12 @@ export const marketShareShape = PropTypes.shape({
   owner: PropTypes.string,
 })
 
+export const marketTradeShape = PropTypes.shape({
+  id: PropTypes.string,
+  event: PropTypes.oneOfType([PropTypes.string, eventShape]),
+  owner: PropTypes.string,
+})
+
 export const transactionShape = PropTypes.shape({
   id: PropTypes.string,
   label: PropTypes.string,

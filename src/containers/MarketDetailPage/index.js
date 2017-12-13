@@ -10,7 +10,7 @@ import {
   requestMarketShares,
   requestMarket,
   requestMarketTrades,
-  requestMarketParticipantTrades,
+  requestMarketTradesForAccount,
   resolveMarket,
   redeemWinnings,
   withdrawFees,
@@ -18,11 +18,16 @@ import {
 } from 'actions/market'
 import {
   getMarketById,
-  getMarketParticipantsTrades,
 } from 'selectors/market'
+import {
+  getMarketTrades,
+} from 'selectors/marketTrades'
 import {
   getMarketShares,
 } from 'selectors/marketShares'
+import {
+  getMarketGraph,
+} from 'selectors/marketGraph'
 import {
   getCurrentAccount,
   getCurrentBalance,
@@ -41,10 +46,12 @@ const mapStateToProps = (state, ownProps) => {
     return { market }
   }
 
+  const marketGraph = getMarketGraph(market)(state)
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const marketShortSellSelector = formValueSelector('marketShortSell')
   const defaultAccount = getCurrentAccount(state)
+  const marketTrades = getMarketTrades(market.address)(state)
 
   return {
     market,
@@ -60,7 +67,8 @@ const mapStateToProps = (state, ownProps) => {
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
     creatorIsModerator: isModerator(getCurrentAccount(state)),
     moderators: getModerators(),
-    trades: getMarketParticipantsTrades(state)(),
+    marketTrades,
+    marketGraph,
     initialValues: {
       selectedOutcome: 0,
     },
@@ -75,8 +83,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarket: () => dispatch(requestMarket(ownProps.params.id)),
   fetchMarketShares: accountAddress => dispatch(requestMarketShares(ownProps.params.id, accountAddress)),
-  fetchMarketParticipantTrades: (marketAddress, accountAddress) =>
-    dispatch(requestMarketParticipantTrades(marketAddress, accountAddress)),
+  fetchMarketTradesForAccount: (marketAddress, accountAddress) =>
+    dispatch(requestMarketTradesForAccount(marketAddress, accountAddress)),
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
     dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),

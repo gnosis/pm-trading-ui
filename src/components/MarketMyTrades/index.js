@@ -6,7 +6,7 @@ import { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { RESOLUTION_TIME } from 'utils/constants'
 import { getOutcomeName, weiToEth } from 'utils/helpers'
-import { marketShape } from 'utils/shapes'
+import { marketShape, marketTradeShape } from 'utils/shapes'
 
 import './marketMyTrades.less'
 import { COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from '../../utils/constants'
@@ -14,15 +14,16 @@ import { COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from '../../
 class MarketMyTrades extends Component {
   static propTypes = {
     market: marketShape,
+    marketTrades: PropTypes.arrayOf(marketTradeShape),
     defaultAccount: PropTypes.string,
-    fetchMarketParticipantTrades: PropTypes.func,
+    fetchMarketTradesForAccount: PropTypes.func,
   }
 
   componentWillMount() {
-    const { market, defaultAccount } = this.props
-    if (!market.participantTrades || market.participantTrades.length === 0) {
+    const { market, marketTrades, defaultAccount } = this.props
+    if (!marketTrades || marketTrades.length === 0) {
       // Retrieve participant trades to state
-      this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
+      this.props.fetchMarketTradesForAccount(market.address, defaultAccount)
     }
   }
 
@@ -38,13 +39,14 @@ class MarketMyTrades extends Component {
   }
 
   renderTrades() {
-    const { market, market: { event: { type } } } = this.props
+    const { market, marketTrades, market: { event: { type } } } = this.props
     const colorScheme = type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
 
-    const tableRowElements = market.participantTrades.map((trade) => {
+    const tableRowElements = marketTrades.map((trade) => {
       const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.index] }
+
       return (
-        <tr className="marketMyTrades__share" key={trade._id}>
+        <tr className="marketMyTrades__share" key={trade.id}>
           <td>
             <div className="shareOutcome__color" style={outcomeColorStyle} />
           </td>
@@ -81,8 +83,8 @@ class MarketMyTrades extends Component {
   }
 
   render() {
-    const { market } = this.props
-    if (market.participantTrades && market.participantTrades.length > 0) {
+    const { marketTrades } = this.props
+    if (marketTrades && marketTrades.length > 0) {
       return (
         <div className="marketMyTrades">
           <h2 className="marketMyTrades__heading">My Trades</h2>
