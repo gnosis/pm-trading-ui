@@ -20,8 +20,8 @@ class MarketMyTrades extends Component {
   }
 
   componentWillMount() {
-    const { market, defaultAccount } = this.props
-    if (!market.participantTrades || market.participantTrades.length === 0) {
+    const { market, marketTrades, defaultAccount } = this.props
+    if (!marketTrades || marketTrades.length === 0) {
       // Retrieve participant trades to state
       this.props.fetchMarketTradesForAccount(market.address, defaultAccount)
     }

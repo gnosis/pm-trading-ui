@@ -103,7 +103,7 @@ class MarketBuySharesForm extends Component {
         // Fetch new trades
         this.props.fetchMarketTrades(market)
         // Fetch new market participant trades
-        this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
+        this.props.fetchMarketTradesForAccount(market.address, defaultAccount)
         // Fetch new shares
         this.props.fetchMarketShares(defaultAccount)
         return reset()
