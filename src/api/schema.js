@@ -11,6 +11,12 @@ const normalizeShareObject = share => ({
   outcomeToken: mapValues(share.outcomeToken, hexWithPrefix),
 })
 
+const normalizeTradeObject = trade => ({
+  ...trade,
+  outcomeToken: mapValues(trade.outcomeToken, hexWithPrefix),
+  owner: trade.owner ? hexWithPrefix(trade.owner) : undefined,
+})
+
 const shareMerge = (shareA, shareB) => {
   console.warn('merging', shareA, shareB)
   return {
@@ -73,21 +79,21 @@ export const eventSchema = new schema.Entity('events', {
   ...NORMALIZE_OPTIONS_DEFAULT,
 })
 
+export const marketSchema = new schema.Entity('markets', {
+  event: eventSchema,
+}, {
+  ...NORMALIZE_OPTIONS_DEFAULT,
+})
+
+export const marketTradesSchema = new schema.Entity('marketTrades', {}, {
+  ...NORMALIZE_OPTIONS_DEFAULT,
+  idAttribute: trade => sha1(`${trade.date}-${trade.owner}-${trade.market}`), // unique identifier for trades,
+  processStrategy: entity => normalizeTradeObject(mergeContract(normalizeHexValues(entity))),
+})
+
 export const marketSharesSchema = new schema.Entity('marketShares', {}, {
   ...NORMALIZE_OPTIONS_DEFAULT,
   idAttribute: share => sha1(`${share.owner}-${share.outcomeToken.event}-${share.outcomeToken.index}`), // unique identifier for shares,
   processStrategy: entity => normalizeShareObject(mergeContract(normalizeHexValues(entity))),
   mergeStrategy: (entityA, entityB) => shareMerge(entityA, entityB),
 })
-
-export const marketSchema = new schema.Entity('markets', {
-  event: eventSchema,
-  shares: [marketSharesSchema],
-}, {
-  ...NORMALIZE_OPTIONS_DEFAULT,
-})
-
-export const tradeSchema = new schema.Entity('trades', {}, {
-  idAttribute: '_id',
-})
-

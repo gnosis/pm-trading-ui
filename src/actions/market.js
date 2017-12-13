@@ -3,7 +3,7 @@ import Decimal from 'decimal.js'
 import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
 import * as api from 'api'
-import { values } from 'lodash'
+
 import { receiveEntities, updateEntity } from 'actions/entities'
 
 import { refreshTokenBalance } from 'actions/blockchain'
@@ -20,7 +20,7 @@ import { DEPOSIT, SELL, REVOKE_TOKENS } from 'utils/transactionExplanations'
 
 import { openModal, closeModal } from 'actions/modal'
 import gaSend from 'utils/analytics/gaSend'
-import { getMarkets } from 'selectors/market'
+
 import { MAX_ALLOWANCE_WEI } from '../utils/constants'
 import { SETTING_ALLOWANCE } from '../utils/transactionExplanations'
 
@@ -81,7 +81,7 @@ const TRANSACTION_EVENTS_GENERIC = [
  */
 export const requestMarket = marketAddress => async (dispatch) => {
   const payload = await api.requestMarket(marketAddress)
-  return await dispatch(receiveEntities(payload))
+  return dispatch(receiveEntities(payload))
 }
 
 /**
@@ -89,7 +89,7 @@ export const requestMarket = marketAddress => async (dispatch) => {
  */
 export const requestMarkets = () => async (dispatch) => {
   const payload = await api.requestMarkets()
-  return await dispatch(receiveEntities(payload))
+  return dispatch(receiveEntities(payload))
 }
 
 /**
@@ -99,7 +99,7 @@ export const requestMarkets = () => async (dispatch) => {
  */
 export const requestMarketShares = (marketAddress, accountAddress) => async (dispatch) => {
   const payload = await api.requestMarketShares(marketAddress, accountAddress)
-  return await dispatch(receiveEntities(payload))
+  return dispatch(receiveEntities(payload))
 }
 
 /**
@@ -108,39 +108,26 @@ export const requestMarketShares = (marketAddress, accountAddress) => async (dis
  */
 export const requestFactories = () => async (dispatch) => {
   const payload = await api.requestFactories()
-  return await dispatch(receiveEntities(payload))
+  return dispatch(receiveEntities(payload))
 }
 
 /**
- * Requests participating traders trades (tradehistory) for a specific account on a market from GnosisDB.
+ * Requests users trades (tradehistory) for a specific account on a market from GnosisDB.
  * @param {string} marketAddress - Market Address
  * @param {string} accountAddress - Tradeowner Address
  */
-export const requestMarketParticipantTrades = (marketAddress, accountAddress) => async (dispatch) => {
-  const trades = await api.requestMarketParticipantTrades(marketAddress, accountAddress)
-  return await dispatch(updateEntity({
-    entityType: 'markets',
-    data: {
-      id: marketAddress,
-      participantTrades: trades,
-    },
-  }))
+export const requestMarketTradesForAccount = (marketAddress, accountAddress) => async (dispatch) => {
+  const payload = await api.requestMarketTradesForAccount(marketAddress, accountAddress)
+  return dispatch(receiveEntities(payload))
 }
 
 /**
  * Requests all trades (tradehistory) on a market from GnosisDB.
  * @param {Market} market
  */
-export const requestMarketTrades = market => async (dispatch) => {
-  const trades = await api.requestMarketTrades(market)
-
-  return await dispatch(updateEntity({
-    entityType: 'markets',
-    data: {
-      id: market.address,
-      trades,
-    },
-  }))
+export const requestMarketTrades = marketAddress => async (dispatch) => {
+  const payload = await api.requestMarketTrades(marketAddress)
+  return dispatch(receiveEntities(payload))
 }
 
 /**
@@ -157,15 +144,8 @@ export const requestAccountShares = accountAddress => async (dispatch) => {
  * @param {String} accountAddress
  */
 export const requestAccountTrades = accountAddress => async (dispatch) => {
-  const trades = await api.requestAccountTrades(accountAddress)
-
-  return await dispatch(updateEntity({
-    entityType: 'accountTrades',
-    data: {
-      id: accountAddress,
-      trades,
-    },
-  }))
+  const payload = await api.requestAccountTrades(accountAddress)
+  return dispatch(receiveEntities(payload))
 }
 
 /**
