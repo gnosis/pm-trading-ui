@@ -343,7 +343,7 @@ class MarketMySharesForm extends Component {
             </div>
           </div>
           <div className="row marketMyShares__sellRow">
-            <div className="col-md-4 marketMyShares__sellColumn marketMyShares__sellColumn--earnings">
+            <div className="col-md-4 col-md-offset-6 marketMyShares__sellColumn">
               <div className="marketMyShares__sellColumn--info">
                 <label>Earnings</label>
                 <span>
@@ -351,21 +351,14 @@ class MarketMySharesForm extends Component {
                   <CurrencyName collateralToken={market.event.collateralToken} />
                 </span>
               </div>
-            </div>
-            <div className="col-md-4 marketMyShares__sellColumn marketMyShares__sellColumn--button">
               <InteractionButton
                 loading={submitting || market.local}
                 disabled={submitDisabled}
                 className="btn btn-block btn-primary"
                 type="submit"
               >
-                Sell Shares
+                Sell Tokens
               </InteractionButton>
-            </div>
-            <div className="col-md-4 marketMyShares__sellColumn marketMyShares__sellColumn--button">
-              <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>
-                Cancel
-              </button>
             </div>
           </div>
           {submitFailed && (
