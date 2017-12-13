@@ -63,8 +63,8 @@ const enhanceAndSortTrades = (markets, eventMarkets, trades) => Object.keys(trad
 
     return {
       id: tradeId,
-      market,
       ...trades[tradeId],
+      market,
     }
   })
   .filter(trade => trade.market && Object.keys(trade.market).length)
