@@ -391,17 +391,6 @@ class MarketBuySharesForm extends Component {
                     Buy Tokens
                   </InteractionButton>
                 </div>
-                <div className="col-md-6">
-                  <button
-                    className="btn btn-default col-md-12 marketBuySharesForm__cancel"
-                    type="button"
-                    onClick={() => {
-                      changeUrl(`/markets/${address}/`)
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
               </div>
             </div>
           </div>
