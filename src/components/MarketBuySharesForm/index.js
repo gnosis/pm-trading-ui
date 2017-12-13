@@ -76,7 +76,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getPercentageWin = (outcomeTokenCount, investment) => {
-    const validInvestment = /^-?\d+\.?\d*$/.test(investment) && investment
+    const validInvestment = /^-?\d+\.?\d*$/.test(investment)
     if (!validInvestment) {
       return '0'
     }
