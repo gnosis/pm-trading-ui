@@ -20,7 +20,6 @@ import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
-import FormSlider from 'components/FormSlider'
 
 import FormRadioButton from 'components/FormRadioButton'
 import FormBarChartRadioButton from 'components/FormBarChartRadioButton'
@@ -42,12 +41,16 @@ class MarketBuySharesForm extends Component {
   }
 
   getOutcomeTokenCount(investment, outcomeIndex, limitMargin) {
-    if (!investment || !(parseFloat(investment) > 0) || parseFloat(investment) >= 1000) {
+    const validInvestment =
+      /^-?\d+\.?\d*$/.test(investment) && investment && parseFloat(investment) > 0 && parseFloat(investment) < 1000
+    if (!validInvestment) {
       return new Decimal(0)
     }
 
-    const invest = new Decimal(investment).mul(1e18)
-      .div(new Decimal(100).add(limitMargin == null ? LIMIT_MARGIN_DEFAULT : limitMargin)).mul(100)
+    const invest = new Decimal(investment)
+      .mul(1e18)
+      .div(new Decimal(100).add(limitMargin == null ? LIMIT_MARGIN_DEFAULT : limitMargin))
+      .mul(100)
       .round()
     const { market: { funding, netOutcomeTokensSold, fee } } = this.props
 
@@ -70,7 +73,7 @@ class MarketBuySharesForm extends Component {
 
   getMaximumWin(outcomeTokenCount, investment) {
     if (/^-?\d+\.?\d*$/.test(investment)) {
-      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18)).div(1e18)
+      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
     }
     return '--'
   }
@@ -95,15 +98,17 @@ class MarketBuySharesForm extends Component {
 
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
 
-    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest).then(() => {
-      // Fetch new trades
-      this.props.fetchMarketTrades(market)
-      // Fetch new market participant trades
-      this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
-      // Fetch new shares
-      this.props.fetchMarketShares(defaultAccount)
-      return reset()
-    }).catch(e => console.error(e))
+    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
+      .then(() => {
+        // Fetch new trades
+        this.props.fetchMarketTrades(market)
+        // Fetch new market participant trades
+        this.props.fetchMarketTradesForAccount(market.address, defaultAccount)
+        // Fetch new shares
+        this.props.fetchMarketShares(defaultAccount)
+        return reset()
+      })
+      .catch(e => console.error(e))
   }
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
@@ -129,7 +134,7 @@ class MarketBuySharesForm extends Component {
     }
 
     if (decimalValue.gt(currentBalance)) {
-      return "You're trying to invest more ETH tokens than you have."
+      return "You're trying to invest more OLY tokens than you have."
     }
 
     return undefined
@@ -192,7 +197,6 @@ class MarketBuySharesForm extends Component {
     const {
       selectedBuyInvest,
       selectedOutcome,
-      limitMargin,
       market: {
         event: { lowerBound, upperBound },
         eventDescription: { decimals, unit },
@@ -201,17 +205,19 @@ class MarketBuySharesForm extends Component {
         marginalPrices,
       },
     } = this.props
+
+    const validInvestment = this.validateInvestment(selectedBuyInvest) === undefined || !selectedBuyInvest
     const isOutcomeSelected = selectedOutcome !== undefined
     const currentMarginalPrice = marginalPrices[1]
     // Get the amount of tokens to buy
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
     if (isOutcomeSelected) {
       newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome])
         .add(outcomeTokenCount.toString())
         .toString()
     }
-    const selectedMarginalPrice = isOutcomeSelected
+    const selectedMarginalPrice = isOutcomeSelected && validInvestment
       ? calcLMSRMarginalPrice({
         netOutcomeTokensSold: newNetOutcomeTokenSold,
         funding,
@@ -312,10 +318,7 @@ class MarketBuySharesForm extends Component {
       tokenCountField = (
         <span className="marketBuyWin__row marketBuyWin__max">
           <DecimalValue value={weiToEth(outcomeTokenCount)} />&nbsp;
-          <div
-            className="marketBuyWin__outcomeColor"
-            style={outcomeColorStyles}
-          />&nbsp;
+          <div className="marketBuyWin__outcomeColor" style={outcomeColorStyles} />&nbsp;
         </span>
       )
 
@@ -350,22 +353,6 @@ class MarketBuySharesForm extends Component {
                 </div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Limit Margin</div>
-                <div className="col-md-6">
-                  <Field
-                    name="limitMargin"
-                    component={FormSlider}
-                    className="limitMarginField"
-                    placeholder={LIMIT_MARGIN_DEFAULT}
-                    min={0}
-                    max={5}
-                    unit="%"
-                    step={0.5}
-                    showInput={false}
-                  />
-                </div>
-              </div>
-              <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Token Count</div>
                 <div className="col-md-6">{fieldError || tokenCountField}</div>
               </div>
@@ -376,8 +363,16 @@ class MarketBuySharesForm extends Component {
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} decimals={5} />{' '}
-                  <CurrencyName collateralToken={collateralToken} />
+                  <DecimalValue value={gasCostEstimation} decimals={5} />
+                  {' ETH'}
+                </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-12 text-center">
+                  <span>
+                    The actual cost you will pay might be less by 5% depending on the market price at the time of
+                    trading
+                  </span>
                 </div>
               </div>
               {submitFailed && (
@@ -422,10 +417,9 @@ MarketBuySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   buyShares: PropTypes.func,
-  marketShares: PropTypes.arrayOf(marketShareShape),
+  marketShares: PropTypes.objectOf(marketShareShape),
   selectedOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  limitMargin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool,
   currentBalance: PropTypes.string,
