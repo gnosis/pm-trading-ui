@@ -73,13 +73,14 @@ class MarketBuySharesForm extends Component {
 
   getMaximumWin(outcomeTokenCount, investment) {
     if (/^-?\d+\.?\d*$/.test(investment)) {
-      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
+      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18)).div(1e18)
     }
     return '--'
   }
 
-  getPercentageWin(outcomeTokenCount, investment) {
-    if (!investment || !(parseFloat(investment) > 0)) {
+  getPercentageWin = (outcomeTokenCount, investment) => {
+    const validInvestment = /^-?\d+\.?\d*$/.test(investment) && investment
+    if (!validInvestment) {
       return '0'
     }
 
@@ -113,22 +114,18 @@ class MarketBuySharesForm extends Component {
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
   validateInvestment = (investmentValue) => {
+    const { currentBalance = 0 } = this.props
     // check if investment is not undefined and test it against number regexp to prevent errors from decimal.js
-    const validInvestment = investmentValue || /^-?\d+\.?\d*$/.test(investmentValue)
-    if (!validInvestment) return false
+    if (!investmentValue) {
+      return false
+    }
 
-    const { currentBalance } = this.props
-    if (parseFloat(investmentValue) >= 1000) {
+    const validInvestment = /^-?\d+\.?\d*$/.test(investmentValue)
+    if (!validInvestment) {
       return 'Invalid amount'
     }
 
-    let decimalValue
-    try {
-      decimalValue = Decimal(investmentValue)
-    } catch (e) {
-      return 'Invalid Number value'
-    }
-
+    const decimalValue = Decimal(investmentValue)
     if (decimalValue.lte(0)) {
       return "Number can't be negative or equal to zero."
     }
@@ -217,13 +214,14 @@ class MarketBuySharesForm extends Component {
         .add(outcomeTokenCount.toString())
         .toString()
     }
-    const selectedMarginalPrice = isOutcomeSelected && validInvestment
-      ? calcLMSRMarginalPrice({
-        netOutcomeTokensSold: newNetOutcomeTokenSold,
-        funding,
-        outcomeTokenIndex: 1,
-      })
-      : new Decimal('0')
+    const selectedMarginalPrice =
+      isOutcomeSelected && validInvestment
+        ? calcLMSRMarginalPrice({
+          netOutcomeTokensSold: newNetOutcomeTokenSold,
+          funding,
+          outcomeTokenIndex: 1,
+        })
+        : new Decimal('0')
 
     const scalarOutcomes = [
       {
