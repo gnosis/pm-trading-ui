@@ -259,7 +259,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
 export const resolveEvent = async (event, selectedOutcomeIndex) => {
   const gnosis = await getGnosisConnection()
 
-  await gnosis.resolveEvent(event.address, parseInt(selectedOutcomeIndex, 10))
+  await gnosis.resolveEvent({ event: event.address, outcome: parseInt(selectedOutcomeIndex, 10) })
 }
 
 export const sellShares = async (
