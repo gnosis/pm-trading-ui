@@ -1,7 +1,7 @@
 @import url('../../less/vars.less');
 
 @indexWidth: 36px;
-@groupWidth: 20%;
+@groupWidth: 33%;
 
 .marketMyShares {
   &__shareTable {
@@ -36,6 +36,7 @@
     }
   }
   &__sellButton {
+    color: @link-color !important;
     text-transform: uppercase;
     letter-spacing: .5px;
   }
@@ -52,10 +53,23 @@
 
   &__sellColumn {
     padding: 0 8px;
+    &--button {
+      margin-top: 20px;
+    }
+    &--earnings {
+      display: flex;
+      flex-direction: row;
+    }
+    &--info {
+      background-color: white;
+      font-weight: bold;
+      padding: 0 20px 20px;
+      margin-left: -20px;      
+    }
   }
 
   &__sellRow {
-    margin: 0;
+    margin: 10px 0px 0px;
   }
 
   &__errorColumn {
