@@ -67,7 +67,7 @@ const enhanceAndSortTrades = (markets, eventMarkets, trades) => Object.keys(trad
       ...trades[tradeId],
     }
   })
-  .filter(trade => trade.market)
+  .filter(trade => trade.market && Object.keys(trade.market).length)
   .sort((a, b) => (moment(a.date).isBefore(b.date) ? 1 : -1))
 
 const getTradesForMarket = marketAddress => (state) => {
