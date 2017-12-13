@@ -1,6 +1,6 @@
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
-import MarketMySharesForm from 'components/MarketMySharesForm'
+import MarketMySharesForm, { MY_TOKENS } from 'components/MarketMySharesForm'
 import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 import Decimal from 'decimal.js'
@@ -38,7 +38,7 @@ const expandableViews = ({
       props.market.eventDescription.outcomes.length > 2,
   }, */
   [EXPAND_MY_SHARES]: {
-    label: 'My Tokens',
+    label: MY_TOKENS,
     className: 'btn btn-default',
     component: MarketMySharesForm,
     showCondition: props => props.market && props.defaultAccount,

@@ -25,6 +25,9 @@ import { marketShape, marketShareShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
+import { COLOR_SCHEME_SCALAR, OUTCOME_TYPES } from '../../utils/constants'
+
+export const MY_TOKENS = 'My Tokens'
 
 class MarketMySharesForm extends Component {
   constructor(props) {
@@ -151,13 +154,12 @@ class MarketMySharesForm extends Component {
 
     Object.keys(marketShares).forEach((shareId) => {
       const share = marketShares[shareId]
+      const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
+      const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
-          <div
-            className="shareOutcome__color"
-            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
-          />
+          <div className="shareOutcome__color" style={outcomeColorStyle} />
         </td>
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
         <td>
@@ -168,10 +170,6 @@ class MarketMySharesForm extends Component {
             ) : (
               `< ${LOWEST_DISPLAYED_VALUE}`
             )}
-        </td>
-        <td>
-          <DecimalValue value={Decimal(share.value).div(1e18)} />&nbsp;
-          <CurrencyName collateralToken={market.event.collateralToken} />
         </td>
         <td>
           {!resolvedOrClosed && (
@@ -260,10 +258,7 @@ class MarketMySharesForm extends Component {
     }
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (
-        outcomeTokenIndex === share.outcomeToken.index &&
-        !currentTokenBalance.sub(newTokenBalance).isZero()
-      ) {
+      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
         return Decimal(outcomeTokenAmount)
           .sub(currentTokenBalance.sub(newTokenBalance))
           .floor()
@@ -310,7 +305,7 @@ class MarketMySharesForm extends Component {
       <div className="marketMyShares__sellContainer">
         <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellId, selectedSellAmount, earnings))}>
           <div className="row marketMyShares__sellRow">
-            <div className="col-md-3 col-md-offset-3 marketMyShares__sellColumn">
+            <div className="col-md-4 marketMyShares__sellColumn">
               <label htmlFor="sellAmount">Amount to Sell</label>
               <Field
                 component={FormInput}
@@ -321,7 +316,7 @@ class MarketMySharesForm extends Component {
               />
             </div>
             {market.event.type === 'SCALAR' ? (
-              <div className="col-md-3 marketMyShares__sellColumn">
+              <div className="col-md-4 marketMyShares__sellColumn">
                 <label>New predicted value</label>
                 <span>
                   <DecimalValue value={newScalarPredictedValue} />&nbsp;
@@ -329,23 +324,14 @@ class MarketMySharesForm extends Component {
                 </span>
               </div>
             ) : (
-              <div className="col-md-3 marketMyShares__sellColumn">
+              <div className="col-md-4 marketMyShares__sellColumn">
                 <label>New Probability</label>
                 <span>
                   <DecimalValue value={newProbability.mul(100)} /> %
                 </span>
               </div>
             )}
-            <div className="col-md-3">
-              <label>Minimum Earnings</label>
-              <span>
-                <DecimalValue value={earnings} />&nbsp;
-                <CurrencyName collateralToken={market.event.collateralToken} />
-              </span>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-3 col-md-offset-3">
+            <div className="col-md-4 marketMyShares__sellColumn">
               <label>Gas costs</label>
               <span>
                 <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
@@ -353,30 +339,35 @@ class MarketMySharesForm extends Component {
               </span>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-6 col-md-offset-6 marketMyShares__sellColumn">
-              <div className="row">
-                <div className="col-md-6">
-                  <InteractionButton
-                    loading={submitting || market.local}
-                    disabled={submitDisabled}
-                    className="btn btn-block btn-primary"
-                    type="submit"
-                  >
-                    Sell Shares
-                  </InteractionButton>
-                </div>
-                <div className="col-md-6">
-                  <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>
-                    Cancel
-                  </button>
-                </div>
+          <div className="row marketMyShares__sellRow">
+            <div className="col-md-4 marketMyShares__sellColumn marketMyShares__sellColumn--earnings">
+              <div className="marketMyShares__sellColumn--info">
+                <label>Earnings</label>
+                <span>
+                  <DecimalValue value={earnings} />&nbsp;
+                  <CurrencyName collateralToken={market.event.collateralToken} />
+                </span>
               </div>
+            </div>
+            <div className="col-md-4 marketMyShares__sellColumn marketMyShares__sellColumn--button">
+              <InteractionButton
+                loading={submitting || market.local}
+                disabled={submitDisabled}
+                className="btn btn-block btn-primary"
+                type="submit"
+              >
+                Sell Shares
+              </InteractionButton>
+            </div>
+            <div className="col-md-4 marketMyShares__sellColumn marketMyShares__sellColumn--button">
+              <button type="button" className="btn btn-link" onClick={this.handleCloseSellView}>
+                Cancel
+              </button>
             </div>
           </div>
           {submitFailed && (
             <div className="row">
-              <div className="col-md-9 col-md-offset-3 marketMyShares__errorColumn">
+              <div className="col-md-9 marketMyShares__errorColumn">
                 Sorry - your share sell could not be processed. Please ensure you&apos;re on the right network.
               </div>
             </div>
@@ -402,14 +393,13 @@ class MarketMySharesForm extends Component {
 
     return (
       <div className="marketMyShares">
-        <h2 className="marketMyShares__heading">My Shares</h2>
+        <h2 className="marketMyShares__heading">{MY_TOKENS}</h2>
         <table className="table marketMyShares__shareTable">
           <thead>
             <tr>
               <th className="marketMyShares__tableHeading marketMyShares__tableHeading--index" />
               <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Outcome</th>
-              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Token Count</th>
-              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Current Value</th>
+              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Outcome Token Count</th>
               <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group" />
             </tr>
           </thead>

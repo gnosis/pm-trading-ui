@@ -17,18 +17,7 @@ const WinningOutcome = ({
 }) => {
   let outcomeText
   if (type === OUTCOME_TYPES.CATEGORICAL) {
-    const tokenDistribution = outcomes.map((outcome, outcomeIndex) => {
-      const marginalPrice = calcLMSRMarginalPrice({
-        netOutcomeTokensSold,
-        funding,
-        outcomeTokenIndex: outcomeIndex,
-      })
-
-      return marginalPrice.isNaN() ? 0 : marginalPrice.toFixed()
-    })
-
-    const tokenDistributionPercent = `${Math.round(tokenDistribution[winningOutcome] * 100).toFixed(0)}%`
-    outcomeText = `${outcomes[winningOutcome]} (${tokenDistributionPercent})`
+    outcomeText = `${outcomes[winningOutcome]}`
   } else if (type === OUTCOME_TYPES.SCALAR) {
     const outcomeValue = Decimal(winningOutcome)
       .div(10 ** decimals)

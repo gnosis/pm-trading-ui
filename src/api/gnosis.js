@@ -308,7 +308,7 @@ export const redeemWinnings = async (eventType, eventAddress) => {
       : await gnosis.contracts.ScalarEvent.at(eventAddress)
 
   if (eventContract) {
-    return eventContract.redeemWinnings()
+    return Gnosis.requireEventFromTXResult(await eventContract.redeemWinnings(), 'WinningsRedemption')
   }
   throw new Error("Invalid Event - can't find the specified Event, invalid Eventtype?")
 }
