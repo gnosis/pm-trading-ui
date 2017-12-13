@@ -116,7 +116,7 @@ CustomTooltip.propTypes = {
   itemSorter: PropTypes.func,
   labelStyle: PropTypes.object,
   wrapperStyle: PropTypes.object,
-  isScalar: PropTypes.boolean,
+  isScalar: PropTypes.bool,
   unit: PropTypes.string,
 }
 
