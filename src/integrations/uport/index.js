@@ -39,13 +39,17 @@ class Uport extends BaseIntegration {
     })
 
     this.uport = await initUportConnector(Uport.USE_NOTIFICATIONS)
-
     this.web3 = await this.uport.getWeb3()
     this.provider = await this.uport.getProvider()
     this.network = await this.getNetwork()
     this.networkId = await this.getNetworkId()
-    this.account = opts.uportDefaultAccount || (await this.getAccount())
-
+    this.account = null
+    console.log(this.uport)
+    const uPortIsSet = this.uport.cliendId !== null
+    if (uPortIsSet) {
+      this.account = opts.uportDefaultAccount || (await this.getAccount())
+    }
+    console.log(this.account)
     return this.runProviderUpdate(this, {
       available: true,
       network: this.network,
