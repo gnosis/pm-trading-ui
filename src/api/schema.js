@@ -87,7 +87,7 @@ export const marketSchema = new schema.Entity('markets', {
 
 export const marketTradesSchema = new schema.Entity('marketTrades', {}, {
   ...NORMALIZE_OPTIONS_DEFAULT,
-  idAttribute: trade => sha1(`${trade.date}-${trade.owner}-${trade.market}`), // unique identifier for trades,
+  idAttribute: trade => sha1(`${trade.date}-${trade.outcomeToken.index}-${trade.outcomeToken.event}-${trade.outcomeTokenCount}`), // unique identifier for trades,
   processStrategy: entity => normalizeTradeObject(mergeContract(normalizeHexValues(entity))),
 })
 
