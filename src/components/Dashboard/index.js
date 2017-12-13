@@ -120,7 +120,7 @@ class Dashboard extends Component {
     ))
   }
 
-  renderMyHoldings(holdings, markets) {
+  renderMyHoldings(holdings) {
     if (!Object.keys(holdings).length) {
       return <div>You aren&apos;t holding any share.</div>
     }
@@ -175,11 +175,10 @@ class Dashboard extends Component {
     })
   }
 
-  renderMyTrades(trades, markets) {
-    return trades.map((trade, index) => {
-      const eventAddress = add0xPrefix(trade.outcomeToken.event)
-      const filteredMarkets = markets.filter(market => market.event.address === eventAddress && process.env.WHITELIST[market.creator])
-      const market = filteredMarkets.length ? filteredMarkets[0] : {}
+  renderMyTrades(trades) {
+    return trades.slice(0, 20).map((trade, index) => {
+      const { market } = trade
+
       let averagePrice
       if (trade.orderType === 'BUY') {
         averagePrice = parseInt(trade.cost, 10) / parseInt(trade.outcomeTokenCount, 10)
@@ -193,7 +192,7 @@ class Dashboard extends Component {
           key={index}
           onClick={() => this.handleViewMarket(market)}
         >
-          <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
+          <div className="dashboardMarket__title">{market.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
               <div
@@ -269,7 +268,7 @@ class Dashboard extends Component {
         <div className="dashboardWidget dashboardWidget--onDark col-md-6" key={marketType}>
           <div className="dashboardWidget__market-title">My Tokens</div>
           <div className="dashboardWidget__container">
-            {this.renderMyHoldings(accountShares, markets, marketWinnings)}
+            {this.renderMyHoldings(accountShares)}
           </div>
         </div>
       )
@@ -280,7 +279,7 @@ class Dashboard extends Component {
         <div className="dashboardWidget dashboardWidget--onDark col-md-6" key={marketType}>
           <div className="dashboardWidget__market-title">My Trades</div>
           <div className="dashboardWidget__container">
-            {accountTrades.length ? this.renderMyTrades(accountTrades, markets) : "You haven't done any trade."}
+            {accountTrades.length ? this.renderMyTrades(accountTrades) : "You haven't done any trade."}
           </div>
         </div>
       )

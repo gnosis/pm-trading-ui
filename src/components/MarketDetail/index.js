@@ -23,7 +23,7 @@ import expandableViews, { EXPAND_MY_SHARES } from './ExpandableViews'
 
 import './marketDetail.less'
 import { weiToEth, isMarketClosed, isMarketResolved } from '../../utils/helpers'
-import { marketShareShape, gasCostsShape } from '../../utils/shapes'
+import { marketShareShape, marketTradeShape, gasCostsShape } from '../../utils/shapes'
 
 const ONE_WEEK_IN_HOURS = 168
 
@@ -96,7 +96,7 @@ class MarketDetail extends Component {
     }
 
     if (this.props.defaultAccount && this.props.params.id) {
-      this.props.fetchMarketParticipantTrades(this.props.params.id, this.props.defaultAccount)
+      this.props.fetchMarketTradesForAccount(this.props.params.id, this.props.defaultAccount)
     }
     this.props.requestGasPrice()
   }
@@ -297,7 +297,7 @@ class MarketDetail extends Component {
   }
 
   render() {
-    const { market } = this.props
+    const { market, marketGraph } = this.props
 
     const { marketFetchError } = this.state
     if (marketFetchError) {
@@ -336,7 +336,7 @@ class MarketDetail extends Component {
         >
           {this.renderExpandableContent()}
         </div>
-        {market.trades && <MarketGraph data={market.trades} market={market} />}
+        {marketGraph && <MarketGraph data={marketGraph} market={market} />}
       </div>
     )
   }
@@ -344,20 +344,21 @@ class MarketDetail extends Component {
 
 MarketDetail.propTypes = {
   hasWallet: PropTypes.bool,
-  fetchMarketParticipantTrades: PropTypes.func,
   params: PropTypes.shape({
     id: PropTypes.string,
     view: PropTypes.string,
   }),
   requestGasPrice: PropTypes.func,
   marketShares: PropTypes.objectOf(marketShareShape),
+  marketTrades: PropTypes.arrayOf(marketTradeShape),
+  marketGraph: PropTypes.arrayOf(PropTypes.object),
   defaultAccount: PropTypes.string,
   market: marketShape,
-  winningsByOutcome: PropTypes.objectOf(PropTypes.string),
   changeUrl: PropTypes.func,
   fetchMarket: PropTypes.func,
   fetchMarketShares: PropTypes.func,
   fetchMarketTrades: PropTypes.func,
+  fetchMarketTradesForAccount: PropTypes.func,
   redeemWinnings: PropTypes.func,
   requestGasCost: PropTypes.func,
   creatorIsModerator: PropTypes.bool,
