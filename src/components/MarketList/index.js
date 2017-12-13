@@ -25,7 +25,6 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
-import { MARKET_STAGES } from '../../utils/constants'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 const resolutionFilters = [
