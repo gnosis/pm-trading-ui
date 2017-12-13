@@ -1,10 +1,14 @@
-import { restFetch, hexWithoutPrefix, hexWithPrefix, addIdToObjectsInArray, getOutcomeName, normalizeScalarPoint } from 'utils/helpers'
+import {
+  restFetch,
+  hexWithoutPrefix,
+  addIdToObjectsInArray,
+  getOutcomeName,
+  normalizeScalarPoint,
+} from 'utils/helpers'
 import { normalize } from 'normalizr'
 import { OUTCOME_TYPES } from 'utils/constants'
-import { mapValues } from 'lodash'
-import sha1 from 'sha1'
 import qs from 'querystring'
-import { marketSchema, marketSharesSchema } from './schema'
+import { marketSchema, marketSharesSchema, marketTradesSchema } from './schema'
 
 const API_URL = `${process.env.GNOSISDB_URL}/api`
 
@@ -25,88 +29,28 @@ export const requestMarkets = async () => {
 
 export const requestFactories = async () => restFetch(`${API_URL}/factories`)
 
-export const requestMarketShares = async (marketAddress, accountAddress) =>
-  restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/shares/${hexWithoutPrefix(accountAddress)}/`)
-    // unfortunately we need to return the shares as a market entity to be able to index on it
-    // so we create an array for the market shares with the entities we receive here.
-    .then((response) => {
-      if (!response || (typeof response.count !== 'undefined' && response.count === 0)) {
-        return []
-      }
-
-      return normalize(
-        {
-          address: marketAddress,
-          shares: response.results.map(share => ({
-            id: sha1(`${accountAddress}-${share.outcomeToken.address}`), // unique identifier for shares
-            event: share.outcomeToken.event,
-            ...share,
-            outcomeToken: mapValues(share.outcomeToken, hexWithPrefix),
-          })),
-        },
-        marketSchema,
-      )
-    })
-
-export const requestMarketParticipantTrades = async (marketAddress, accountAddress) =>
-  restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`).then(response => addIdToObjectsInArray(response.results))
-
-const transformMarketTrades = (trade, market) =>
-  trade.marginalPrices.reduce(
-    (prev, current, outcomeIndex) => {
-      const toReturn = { ...prev }
-      toReturn[getOutcomeName(market, outcomeIndex)] = current
-      return toReturn
-    },
-    {
-      date: trade.date,
-      scalarPoint:
-        OUTCOME_TYPES.SCALAR === market.event.type ? normalizeScalarPoint(trade.marginalPrices, market) : undefined,
-    },
-  )
-
-const getFirstGraphPoint = (market) => {
-  let firstPoint
-  if (OUTCOME_TYPES.SCALAR === market.event.type) {
-    firstPoint = {
-      date: market.creationDate,
-      scalarPoint: normalizeScalarPoint(['0.5', '0.5'], market),
-    }
-  } else if (OUTCOME_TYPES.CATEGORICAL === market.event.type) {
-    firstPoint = {
-      date: market.creationDate,
-      scalarPoint: undefined,
-      ...market.eventDescription.outcomes.reduce((prev, current) => {
-        const toReturn = {
-          ...prev,
-        }
-        toReturn[current] = 1 / market.eventDescription.outcomes.length
-        return toReturn
-      }, {}),
-    }
-  }
-  return firstPoint
+export const requestMarketTradesForAccount = async (marketAddress, accountAddress) => {
+  const payload = await restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
+  return normalize(payload.results, [marketTradesSchema])
 }
 
-const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().toISOString() })
+export const requestMarketTrades = async (market) => {
+  const payload = await restFetch(`${API_URL}/markets/${hexWithoutPrefix(market.address)}/trades/`)
+  return normalize(payload.results, [marketTradesSchema])
+}
 
-export const requestMarketTrades = async market =>
-  restFetch(`${API_URL}/markets/${hexWithoutPrefix(market.address)}/trades/`).then((response) => {
-    const trades = response.results.map(result => transformMarketTrades(result, market))
-    const firstPoint = getFirstGraphPoint(market)
-    const lastPoint = trades.length ? getLastGraphPoint(trades) : { ...firstPoint, date: new Date().toISOString() }
-    return [firstPoint, ...trades, lastPoint]
-  })
+export const requestAccountTrades = async (accountAddress) => {
+  const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(accountAddress)}/trades/`)
+  return normalize(payload.results.map(trade => ({ ...trade, owner: accountAddress })), [marketTradesSchema])
+}
 
-export const requestAccountTrades = async address =>
-  restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/trades/`).then(response => response.results)
 
-export const requestAccountShares = async address =>
-  // restFetch(`${API_URL}/api/account/${hexWithoutPrefix(address)}/shares/`)
-  //   .then(response => response.results)
-  restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/shares/`).then(response =>
-    normalize(response.results.map(share => ({
-      ...share,
-      outcomeToken: mapValues(share.outcomeToken, hexWithPrefix),
-      id: sha1(`${share.address}-${share.outcomeToken.address}`),
-    })), [marketSharesSchema]))
+export const requestAccountShares = async (address) => {
+  const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/shares/`)
+  return normalize(payload.results, [marketSharesSchema])
+}
+
+export const requestMarketShares = async (marketAddress, accountAddress) => {
+  const payload = await restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/shares/${hexWithoutPrefix(accountAddress)}/`)
+  return normalize(payload.results, [marketSharesSchema])
+}

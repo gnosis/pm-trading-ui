@@ -5,7 +5,6 @@ import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
-import { calcLMSRProfit } from 'api'
 
 import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES, MIN_CONSIDER_VALUE } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
@@ -24,7 +23,7 @@ import expandableViews, { EXPAND_MY_SHARES } from './ExpandableViews'
 
 import './marketDetail.less'
 import { weiToEth, isMarketClosed, isMarketResolved } from '../../utils/helpers'
-import { marketShareShape, gasCostsShape } from '../../utils/shapes'
+import { marketShareShape, marketTradeShape, gasCostsShape } from '../../utils/shapes'
 
 const ONE_WEEK_IN_HOURS = 168
 
@@ -62,6 +61,8 @@ class MarketDetail extends Component {
     if (shouldScroll) {
       const y = this.divSharesNode.offsetTop
       window.scrollTo(0, y)
+    } else {
+      window.scrollTo(0, 0)
     }
   }
 
@@ -95,7 +96,7 @@ class MarketDetail extends Component {
     }
 
     if (this.props.defaultAccount && this.props.params.id) {
-      this.props.fetchMarketParticipantTrades(this.props.params.id, this.props.defaultAccount)
+      this.props.fetchMarketTradesForAccount(this.props.params.id, this.props.defaultAccount)
     }
     this.props.requestGasPrice()
   }
@@ -182,8 +183,8 @@ class MarketDetail extends Component {
       .utc(market.eventDescription.resolutionDate)
       .local()
       .diff(moment(), 'hours')
-    const { winningsByOutcome, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
-    const winningsTotal = Object.keys(winningsByOutcome).reduce((acc, outcomeIndex) => acc.add(Decimal(winningsByOutcome[outcomeIndex] || '0')), Decimal(0))
+    const { marketShares, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
+    const winningsTotal = Object.keys(marketShares).reduce((acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')), Decimal(0))
     const marketClosed = isMarketClosed(market)
     const marketResolved = isMarketResolved(market)
     const showWinning = marketResolved
@@ -296,7 +297,7 @@ class MarketDetail extends Component {
   }
 
   render() {
-    const { market } = this.props
+    const { market, marketGraph } = this.props
 
     const { marketFetchError } = this.state
     if (marketFetchError) {
@@ -335,7 +336,7 @@ class MarketDetail extends Component {
         >
           {this.renderExpandableContent()}
         </div>
-        {market.trades && <MarketGraph data={market.trades} market={market} />}
+        {marketGraph && <MarketGraph data={marketGraph} market={market} />}
       </div>
     )
   }
@@ -343,20 +344,21 @@ class MarketDetail extends Component {
 
 MarketDetail.propTypes = {
   hasWallet: PropTypes.bool,
-  fetchMarketParticipantTrades: PropTypes.func,
   params: PropTypes.shape({
     id: PropTypes.string,
     view: PropTypes.string,
   }),
   requestGasPrice: PropTypes.func,
-  marketShares: PropTypes.arrayOf(marketShareShape),
+  marketShares: PropTypes.objectOf(marketShareShape),
+  marketTrades: PropTypes.arrayOf(marketTradeShape),
+  marketGraph: PropTypes.arrayOf(PropTypes.object),
   defaultAccount: PropTypes.string,
   market: marketShape,
-  winningsByOutcome: PropTypes.objectOf(PropTypes.string),
   changeUrl: PropTypes.func,
   fetchMarket: PropTypes.func,
   fetchMarketShares: PropTypes.func,
   fetchMarketTrades: PropTypes.func,
+  fetchMarketTradesForAccount: PropTypes.func,
   redeemWinnings: PropTypes.func,
   requestGasCost: PropTypes.func,
   creatorIsModerator: PropTypes.bool,

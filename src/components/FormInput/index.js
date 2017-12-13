@@ -27,13 +27,14 @@ const Input = ({
     [bemifyClassName(className, 'input', 'error')]: className && showErrorMessage,
   })
   const placeholderClassName = `inputField__continuousPlaceholder ${bemifyClassName(className, 'continuousPlaceholder')}`
+  const errorClassName = `inputField__error ${bemifyClassName(className, 'error')}`
 
   return (
     <div className={containerClassName}>
       <label htmlFor={input.name} className={labelClassName}>
         {label}
       </label>
-      <input className={inputClassName} placeholder={placeholder} type={type} {...input} {...rest} />
+      <input className={inputClassName} autoComplete="off" placeholder={placeholder} type={type} {...input} {...rest} />
       {continuousPlaceholder && (
         <input
           className={placeholderClassName}
@@ -42,7 +43,7 @@ const Input = ({
           disabled
         />
       )}
-      {showErrorMessage && <span>{error}</span>}
+      {showErrorMessage && <span className={errorClassName}>{error}</span>}
     </div>
   )
 }

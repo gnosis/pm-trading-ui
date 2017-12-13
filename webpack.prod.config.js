@@ -59,12 +59,6 @@ module.exports = {
       },
     ],
   },
-  devServer: {
-    disableHostCheck: true,
-    historyApiFallback: true,
-    hot: false,
-    port: 5000,
-  },
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
@@ -84,6 +78,7 @@ module.exports = {
         yandex: false,
         windows: false,
       },
+      inject: true,
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),

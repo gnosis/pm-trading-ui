@@ -2,6 +2,7 @@ import 'babel-polyfill'
 import 'whatwg-fetch'
 import Raven from 'raven-js'
 import { initProviders } from 'actions/blockchain'
+import Decimal from 'decimal.js'
 import React from 'react'
 
 import ReactDOM from 'react-dom'
@@ -21,6 +22,7 @@ setMomentRelativeTime()
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 store.dispatch(initProviders())
+Decimal.set({ toExpPos: 9999 })
 
 initGoogleAnalytics()
 

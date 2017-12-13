@@ -22,7 +22,7 @@ const FormBarChartRadioButton = ({
 
   if (typeof selectedOutcome !== 'undefined') {
     outcomeTokensSold[selectedOutcome] = Decimal(market.netOutcomeTokensSold[selectedOutcome])
-      .add(outcomeTokenCount.toString())
+      .add(outcomeTokenCount)
       .toString()
   }
 
@@ -54,7 +54,7 @@ const FormBarChartRadioButton = ({
               value={value}
             />
             <label
-              className={'formBarChartRadioButton__text outcomes outcomes--categorical'}
+              className="formBarChartRadioButton__text outcomes outcomes--categorical"
               htmlFor={`formBarChartRadioButton_${input.name}_${value}`}
             >
               <div className="formBarChartRadioButton__outcome" style={{ width: `${probability}%` }}>
@@ -76,12 +76,10 @@ const FormBarChartRadioButton = ({
 
 FormBarChartRadioButton.propTypes = {
   ...fieldPropTypes,
-  radioValues: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.any,
-    }),
-  ),
+  radioValues: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.any,
+  })),
   className: PropTypes.string,
   highlightColor: PropTypes.string,
   selectedOutcome: PropTypes.number,

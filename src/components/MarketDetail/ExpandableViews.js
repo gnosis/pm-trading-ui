@@ -1,6 +1,6 @@
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
 import MarketResolveForm from 'components/MarketResolveForm'
-import MarketMySharesForm from 'components/MarketMySharesForm'
+import MarketMySharesForm, { MY_TOKENS } from 'components/MarketMySharesForm'
 import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 import MarketMyTrades from 'components/MarketMyTrades'
 import Decimal from 'decimal.js'
@@ -38,16 +38,16 @@ const expandableViews = ({
       props.market.eventDescription.outcomes.length > 2,
   }, */
   [EXPAND_MY_SHARES]: {
-    label: 'My Tokens',
+    label: MY_TOKENS,
     className: 'btn btn-default',
     component: MarketMySharesForm,
-    showCondition: props => props.market && props.defaultAccount && props.defaultAccount !== props.market.owner,
+    showCondition: props => props.market && props.defaultAccount,
   },
   [EXPAND_MY_TRADES]: {
     label: 'My Trades',
     className: 'btn btn-default',
     component: MarketMyTrades,
-    showCondition: props => props.market && props.defaultAccount && props.defaultAccount !== props.market.owner,
+    showCondition: props => props.market && props.defaultAccount,
   },
   [EXPAND_RESOLVE]: {
     label: 'Resolve',
@@ -57,7 +57,7 @@ const expandableViews = ({
       props.market &&
       props.defaultAccount &&
       props.defaultAccount === props.market.oracle.owner &&
-      !isMarketClosed(props.market),
+      !isMarketResolved(props.market),
   },
   [EXPAND_WITHDRAW_FEES]: {
     label: 'Withdraw fees',

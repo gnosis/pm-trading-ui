@@ -4,9 +4,14 @@ import Raven from 'raven-js'
 import createRavenMiddleware from 'raven-for-redux'
 import { getCurrentAccount } from 'selectors/blockchain'
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 const MIDDLEWARE_WITH_RAVEN = store => next => (action) => {
   const { type } = action
-  if (type === 'SET_ACTIVE_PROVIDER') {
+
+  // set_active_provider switches to a different provider with probably a different account id
+  // init_providers will be called right after localstorage has loaded everything, we probably have an account at this point
+  if (type === 'SET_ACTIVE_PROVIDER' || type === 'INIT_PROVIDERS') {
     (async () => {
       const state = store.getState()
       const accountId = getCurrentAccount(state)
@@ -26,8 +31,6 @@ const MIDDLEWARE_ERROR_LOG = () => next => (action) => {
   try {
     return next(action)
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err)
     throw err
   }
 }
@@ -44,7 +47,7 @@ let ENV = ENV_MAPPING[process.env.TRAVIS_BRANCH] ? ENV_MAPPING[process.env.TRAVI
 if (RELEASE_REGEX.test(process.env.TRAVIS_BRANCH)) {
   ENV = 'production'
 }
-Raven.config(process.env.RAVEN_ID, {
+Raven.config(isProduction ? process.env.RAVEN_ID : undefined, {
   maxBreadcrumbs: 20,
   release: process.env.TRAVIS_BUILD_ID,
   environment: ENV,
@@ -60,23 +63,46 @@ Raven.config(process.env.RAVEN_ID, {
   },
 }).install()
 
+const formatPromiseRejectionEvent = (event) => {
+  if (!event) {
+    return 'Unknown Promise Rejection Error'
+  }
+
+  if (event.message != null) {
+    return event.message
+  }
+
+  if (event.reason == null || (typeof event.reason === 'object' && !Object.keys(event.reason).length)) {
+    const isEmptyObject = !Object.keys(event).length
+
+    return isEmptyObject ? 'Unknown Promise Rejection Error' : JSON.stringify(event)
+  }
+
+  if (typeof event.reason !== 'string') {
+    const isEmptyObject = !Object.keys(event.reason).length
+
+    return isEmptyObject ? 'Unknown Promise Rejection Error' : JSON.stringify(event.reason)
+  }
+
+  return event.reason
+}
+
 class RavenIntegration {
   constructor() {
-    this.isProduction = process.env.NODE_ENV === 'production'
-    if (this.isProduction) {
+    if (isProduction) {
       window.onunhandledrejection = (evt) => {
-        Raven.captureException(evt.reason)
+        Raven.captureException(formatPromiseRejectionEvent(evt))
       }
     }
   }
 
   getMiddlewares() {
-    return this.isProduction ? [
+    return isProduction ? [
       MIDDLEWARE_WITH_RAVEN,
       createRavenMiddleware(Raven, {
         stateTransformer: (state) => {
-          // eslint-disable-next-line no-unused-vars
           const {
+            // eslint-disable-next-line no-unused-vars
             entities, olympia: { ranking }, ...newState
           } = state
           return newState
@@ -88,8 +114,18 @@ class RavenIntegration {
   }
 
   throwError(err) {
-    if (this.isProduction) {
+    if (isProduction) {
       Raven.captureException(err)
+    }
+  }
+
+  recordAction(message, category, data) {
+    if (isProduction) {
+      Raven.captureBreadcrumb({
+        message,
+        category,
+        data,
+      })
     }
   }
 }

@@ -3,9 +3,7 @@ import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
 import { hexWithPrefix, weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
-// import { normalize } from 'normalizr'
 
-import delay from 'await-delay'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
@@ -84,10 +82,6 @@ export const createEventDescription = async (eventDescription, eventType) => {
 
   const ipfsHash = await gnosis.publishEventDescription(eventDescriptionNormalized)
 
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
-
   return {
     ipfsHash,
     local: true,
@@ -107,10 +101,6 @@ export const createOracle = async (oracle) => {
     oracleContract = await gnosis.createUltimateOracle(oracle)
   } else {
     throw new Error('invalid oracle type')
-  }
-
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
   }
 
   return {
@@ -141,10 +131,6 @@ export const createEvent = async (event) => {
     throw new Error('invalid outcome/event type')
   }
 
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
-
   return {
     address: hexWithPrefix(eventContract.address),
     creator: await getCurrentAccount(),
@@ -168,10 +154,6 @@ export const createMarket = async (market) => {
     marketMaker: gnosis.lmsrMarketMaker,
     marketFactory: gnosis.standardMarketFactory,
   })
-
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
 
   return {
     ...market,
@@ -214,10 +196,6 @@ export const fundMarket = async (market) => {
     await collateralToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
   }
 
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
-
   await marketContract.fund(marketFundingWei.toString())
 
   return market
@@ -232,12 +210,13 @@ export const closeMarket = async (market) => {
   const marketContract = gnosis.contracts.Market.at(hexWithPrefix(market.address))
   requireEventFromTXResult(await marketContract.close(), 'MarketClosing')
 
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
-
   return market
 }
+
+const STEP_ONE_OF_ONE = '<span style="font-weight: bold">QR 1/1</span>'
+const STEP_ONE_OF_TWO = '<span style="font-weight: bold">QR 1/2</span>'
+const STEP_TWO_OF_TWO = '<span style="font-weight: bold">QR 2/2</span>'
+const APPROVE_TX_OPTS = 'Setting allowance'
 
 export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
@@ -253,6 +232,16 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   if ((await collateralToken.name()) === 'Ether Token') {
     await gnosis.etherToken.deposit({ value: collateralTokenWei })
   }
+  const BUY_TX_OPTS = `Investing ${cost} OLY`
+
+  const info = {
+    approveTxOpts: {
+      explanation: approvalResetAmount ? `${STEP_ONE_OF_TWO} ${APPROVE_TX_OPTS}` : undefined,
+    },
+    buyTxOpts: {
+      explanation: approvalResetAmount ? `${STEP_TWO_OF_TWO} ${BUY_TX_OPTS}` : `${STEP_ONE_OF_ONE} ${BUY_TX_OPTS}`,
+    },
+  }
 
   // buyOutComeTokens handles approving
   const collateralTokensPaid = await gnosis.buyOutcomeTokens({
@@ -261,6 +250,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
     outcomeTokenCount: outcomeTokenCount.toString(),
     cost: collateralTokenWei,
     approvalResetAmount,
+    ...info,
   })
 
   return collateralTokensPaid
@@ -269,7 +259,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
 export const resolveEvent = async (event, selectedOutcomeIndex) => {
   const gnosis = await getGnosisConnection()
 
-  await gnosis.resolveEvent(event.address, parseInt(selectedOutcomeIndex, 10))
+  await gnosis.resolveEvent({ event: event.address, outcome: parseInt(selectedOutcomeIndex, 10) })
 }
 
 export const sellShares = async (
@@ -286,12 +276,24 @@ export const sellShares = async (
     .toString()
   const minProfit = Decimal(earnings).mul(1e18).round().toString()
 
+  const SELL_TX_OPTS = `Selling ${outcomeTokenCount} outcome tokens`
+
+  const info = {
+    approveTxOpts: {
+      explanation: approvalResetAmount ? `${STEP_ONE_OF_TWO} ${APPROVE_TX_OPTS}` : undefined,
+    },
+    sellTxOpts: {
+      explanation: approvalResetAmount ? `${STEP_TWO_OF_TWO} ${SELL_TX_OPTS}` : `${STEP_ONE_OF_ONE} ${SELL_TX_OPTS}`,
+    },
+  }
+
   const collateralTokensReceived = await gnosis.sellOutcomeTokens({
     market: hexWithPrefix(marketAddress),
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCountWei,
     minProfit,
     approvalResetAmount,
+    ...info,
   })
 
   return collateralTokensReceived
@@ -306,7 +308,7 @@ export const redeemWinnings = async (eventType, eventAddress) => {
       : await gnosis.contracts.ScalarEvent.at(eventAddress)
 
   if (eventContract) {
-    await eventContract.redeemWinnings()
+    return Gnosis.requireEventFromTXResult(await eventContract.redeemWinnings(), 'WinningsRedemption')
   }
   throw new Error("Invalid Event - can't find the specified Event, invalid Eventtype?")
 }
@@ -317,7 +319,7 @@ export const withdrawFees = async (marketAddress) => {
   const marketContract = gnosis.contracts.Market.at(marketAddress)
 
   if (marketContract) {
-    await marketContract.withdrawFees()
+    return marketContract.withdrawFees()
   }
 
   throw new Error("Invalid Market - can't find the specified Market")

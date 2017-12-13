@@ -8,40 +8,69 @@ import Decimal from 'decimal.js'
 /**
  * Custom Rechart tooltip
  */
-const CustomTooltip = ({ payload = [], label, active, separator, itemStyle, itemSorter, labelStyle, wrapperStyle }) => {
+const CustomTooltip = ({
+  payload = [], label, active, separator, itemStyle, itemSorter, labelStyle, wrapperStyle, isScalar, unit,
+}) => {
   const isNumOrStr = value => (_.isNumber(value) && !_.isNaN(value)) || _.isString(value)
 
-  const renderContent = () => {
+  const renderContentCategorical = () => {
     if (payload && payload.length) {
       const listStyle = { padding: 0, margin: 0 }
 
       const items = payload.filter(entry => !_.isNil(entry.value))
-      .sort(itemSorter)
-      .map((entry, i) => {
-        const finalItemStyle = {
-          display: 'block',
-          paddingTop: 4,
-          paddingBottom: 4,
-          color: entry.color || '#000',
-          ...itemStyle,
-        }
-        const hasName = isNumOrStr(entry.name)
+        .sort(itemSorter)
+        .map((entry, i) => {
+          const finalItemStyle = {
+            display: 'block',
+            paddingTop: 4,
+            paddingBottom: 4,
+            color: entry.color || '#000',
+            ...itemStyle,
+          }
+          const hasName = isNumOrStr(entry.name)
 
-        return (
-          <li className="recharts-tooltip-item" key={`tooltip-item-${i}`} style={finalItemStyle}>
-            {hasName ? <span className="recharts-tooltip-item-name">{entry.name}</span> : null}
-            {
-              hasName ?
-                <span className="recharts-tooltip-item-separator">{separator}</span> :
-                null
-            }
-            <span className="recharts-tooltip-item-value">
-              {Decimal(entry.value).mul(100).toDP(4, 1).toString()}
-            </span>
-            <span className="recharts-tooltip-item-unit">{entry.unit || '%'}</span>
-          </li>
-        )
-      })
+          return (
+            <li className="recharts-tooltip-item" key={`tooltip-item-${i}`} style={finalItemStyle}>
+              {hasName && <span className="recharts-tooltip-item-name">{entry.name}</span>}
+              {hasName && <span className="recharts-tooltip-item-separator">{separator}</span>}
+              <span className="recharts-tooltip-item-value">
+                {Decimal(entry.value).mul(100).toDP(4, 1).toString()}
+              </span>
+              <span className="recharts-tooltip-item-unit">%</span>
+            </li>
+          )
+        })
+
+      return <ul className="recharts-tooltip-item-list" style={listStyle}>{items}</ul>
+    }
+
+    return null
+  }
+
+  const renderContentScalar = () => {
+    if (payload && payload.length) {
+      const listStyle = { padding: 0, margin: 0 }
+
+      const items = payload.filter(entry => !_.isNil(entry.value))
+        .sort(itemSorter)
+        .map((entry, i) => {
+          const finalItemStyle = {
+            display: 'block',
+            paddingTop: 4,
+            paddingBottom: 4,
+            color: entry.color || '#000',
+            ...itemStyle,
+          }
+
+          return (
+            <li className="recharts-tooltip-item" key={`tooltip-item-${i}`} style={finalItemStyle}>
+              <span className="recharts-tooltip-item-value">
+                {Decimal(entry.value).toDP(4, 1).toString()}
+              </span>
+              <span className="recharts-tooltip-item-unit"> {unit}</span>
+            </li>
+          )
+        })
 
       return <ul className="recharts-tooltip-item-list" style={listStyle}>{items}</ul>
     }
@@ -71,7 +100,7 @@ const CustomTooltip = ({ payload = [], label, active, separator, itemStyle, item
     return (
       <div className="recharts-default-tooltip" style={finalStyle}>
         <p className="recharts-tooltip-label" style={finalLabelStyle}>{finalLabel}</p>
-        {renderContent()}
+        {isScalar ? renderContentScalar() : renderContentCategorical()}
       </div>
     )
   }
@@ -87,6 +116,8 @@ CustomTooltip.propTypes = {
   itemSorter: PropTypes.func,
   labelStyle: PropTypes.object,
   wrapperStyle: PropTypes.object,
+  isScalar: PropTypes.bool,
+  unit: PropTypes.string,
 }
 
 export default CustomTooltip
