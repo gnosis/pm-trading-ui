@@ -1,4 +1,5 @@
 import { getOlympiaTokensByAccount } from 'api'
+import { setConnectionStatus } from 'actions/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
@@ -44,12 +45,12 @@ class Uport extends BaseIntegration {
     this.network = await this.getNetwork()
     this.networkId = await this.getNetworkId()
     this.account = null
-    console.log(this.uport)
-    const uPortIsSet = this.uport.cliendId !== null
+
+    const uPortIsSet = this.uport.address !== null
     if (uPortIsSet) {
       this.account = opts.uportDefaultAccount || (await this.getAccount())
     }
-    console.log(this.account)
+
     return this.runProviderUpdate(this, {
       available: true,
       network: this.network,
@@ -58,6 +59,7 @@ class Uport extends BaseIntegration {
     })
       .then(async () => {
         if (!this.account) {
+          opts.dispatch(setConnectionStatus({ connected: false }))
           return
         }
         await opts.initGnosis()
