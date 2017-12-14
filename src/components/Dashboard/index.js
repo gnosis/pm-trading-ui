@@ -181,7 +181,7 @@ class Dashboard extends Component {
 
       const colorScheme = market.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
       const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.index] }
-      
+
       let averagePrice
       if (trade.orderType === 'BUY') {
         averagePrice = parseInt(trade.cost, 10) / parseInt(trade.outcomeTokenCount, 10)
@@ -250,7 +250,7 @@ class Dashboard extends Component {
     if (marketType === 'closingMarkets') {
       return (
         <div className="dashboardWidget col-md-6" key={marketType}>
-          <div className="dashboardWidget__market-title">Next Markets</div>
+          <div className="dashboardWidget__market-title">Next Markets to be resolved</div>
           <div
             className={cn({
               dashboardWidget__container: true,
