@@ -148,5 +148,3 @@ export const initializedAllProviders = (state) => {
 
   return allProvidersLoaded
 }
-
-// export const getUportAvailability = state => get(state, )
