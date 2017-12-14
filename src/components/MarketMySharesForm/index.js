@@ -150,16 +150,9 @@ class MarketMySharesForm extends Component {
     const { marketShares, market } = this.props
     const { extendedSellId } = this.state
 
-    const marketSharesSorted = Object.keys(marketShares).sort((a, b) => {
-      const { outcomeToken: { index: firstOutcomeIndex } } = marketShares[a]
-      const { outcomeToken: { index: secondOutcomeIndex } } = marketShares[b]
-
-      return firstOutcomeIndex - secondOutcomeIndex
-    })
-
     const resolvedOrClosed = isMarketClosed(market) || isMarketResolved(market)
 
-    marketSharesSorted.forEach((shareId) => {
+    Object.keys(marketShares).forEach((shareId) => {
       const share = marketShares[shareId]
       const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
       const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }

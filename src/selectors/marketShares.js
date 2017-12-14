@@ -58,31 +58,27 @@ const eventMarketSelector = marketAddress => (state) => {
   return { [eventAddress]: market }
 }
 
-const eventSharesSelector = createSelector(
-  getCurrentAccount,
-  getShares,
-  (account, shares) => {
-    const eventShares = {}
+const eventSharesSelector = createSelector(getCurrentAccount, getShares, (account, shares) => {
+  const eventShares = {}
 
-    Object.keys(shares).forEach((shareId) => {
-      if (add0xPrefix(shares[shareId].owner) !== add0xPrefix(account)) {
-        return
-      }
+  Object.keys(shares).forEach((shareId) => {
+    if (add0xPrefix(shares[shareId].owner) !== add0xPrefix(account)) {
+      return
+    }
 
-      const eventAddress = add0xPrefix(shares[shareId].event)
+    const eventAddress = add0xPrefix(shares[shareId].event)
 
-      if (!eventShares[eventAddress]) {
-        eventShares[eventAddress] = []
-      }
-      eventShares[eventAddress].push({
-        ...shares[shareId],
-        id: shareId,
-      })
+    if (!eventShares[eventAddress]) {
+      eventShares[eventAddress] = []
+    }
+    eventShares[eventAddress].push({
+      ...shares[shareId],
+      id: shareId,
     })
+  })
 
-    return eventShares
-  },
-)
+  return eventShares
+})
 
 const enhanceShares = (oracles, events, eventMarkets, eventShares, account) => {
   const enhancedShares = {}
@@ -135,7 +131,19 @@ const enhanceShares = (oracles, events, eventMarkets, eventShares, account) => {
     })
   })
 
-  return enhancedShares
+  const enhancedSharesSorted = {}
+  Object.keys(enhancedShares)
+    .sort((a, b) => {
+      const { outcomeToken: { index: firstOutcomeIndex } } = enhancedShares[a]
+      const { outcomeToken: { index: secondOutcomeIndex } } = enhancedShares[b]
+
+      return firstOutcomeIndex - secondOutcomeIndex
+    })
+    .forEach((shareId) => {
+      enhancedSharesSorted[shareId] = { ...enhancedShares[shareId] }
+    })
+
+  return enhancedSharesSorted
 }
 
 export const getAccountShares = createSelector(
@@ -147,11 +155,12 @@ export const getAccountShares = createSelector(
   enhanceShares,
 )
 
-export const getMarketShares = marketAddress => createSelector(
-  getOracles,
-  getEvents,
-  eventMarketSelector(marketAddress),
-  eventSharesSelector,
-  getCurrentAccount,
-  enhanceShares,
-)
+export const getMarketShares = marketAddress =>
+  createSelector(
+    getOracles,
+    getEvents,
+    eventMarketSelector(marketAddress),
+    eventSharesSelector,
+    getCurrentAccount,
+    enhanceShares,
+  )
