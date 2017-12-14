@@ -10,8 +10,8 @@ import './scalarSlider.less'
 const ScalarSlider = ({
   lowerBound, upperBound, unit, marginalPriceCurrent, marginalPriceSelected, decimals,
 }) => {
-  const bigLowerBound = Decimal(lowerBound)
-  const bigUpperBound = Decimal(upperBound)
+  const bigLowerBound = new Decimal(lowerBound)
+  const bigUpperBound = new Decimal(upperBound)
 
   // for the value we show atleast 2 decimalplaces, so users can see a change when they enter an investment
   const displayDecimals = Math.max(decimals, 2)
@@ -19,15 +19,15 @@ const ScalarSlider = ({
   // current value
   const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
 
-  const value = Decimal(marginalPriceCurrent)
+  const value = new Decimal(marginalPriceCurrent)
     .mul(bounds.toString())
-    .add(bigLowerBound.div(10 ** decimals).toString())
-  const percentage = Decimal(marginalPriceCurrent).mul(100)
+    .add(bigLowerBound.div(10 ** displayDecimals).toString())
+  const percentage = new Decimal(marginalPriceCurrent).mul(100)
 
-  const selectedValue = Decimal(marginalPriceSelected)
+  const selectedValue = new Decimal(marginalPriceSelected)
     .mul(bounds.toString())
-    .add(bigLowerBound.div(10 ** decimals).toString())
-  const selectedPercentage = Decimal(marginalPriceSelected).mul(100)
+    .add(bigLowerBound.div(10 ** displayDecimals).toString())
+  const selectedPercentage = new Decimal(marginalPriceSelected).mul(100)
 
   const currentValueSliderStyle = { left: `${percentage.toFixed(4)}%` }
   const selectedValueSliderStyle = { left: `${selectedPercentage.toFixed(4)}%` }
@@ -43,7 +43,7 @@ const ScalarSlider = ({
           <div className="scalarSlider__handle scalarSlider__handle--current" style={currentValueSliderStyle}>
             <div className="scalarSlider__handleText">
               <div className="scalarSlider__handleTextLabel">Predicted Outcome</div>
-              <div className="scalarSlider__handleTextValue">{`${decimalToText(value.toFixed(displayDecimals))} ${unit}`}</div>
+              <div className="scalarSlider__handleTextValue">{`${decimalToText(value)} ${unit}`}</div>
             </div>
           </div>
           <div
@@ -55,7 +55,7 @@ const ScalarSlider = ({
           >
             <div className="scalarSlider__handleText">
               <div className="scalarSlider__handleTextLabel">Selected Trade</div>
-              <div className="scalarSlider__handleTextValue">{`${decimalToText(selectedValue.toFixed(displayDecimals))} ${unit}`}</div>
+              <div className="scalarSlider__handleTextValue">{`${decimalToText(selectedValue)} ${unit}`}</div>
             </div>
           </div>
         </div>
