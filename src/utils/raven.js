@@ -43,7 +43,8 @@ const ENV_MAPPING = {
   development: 'development',
 }
 
-let ENV = ENV_MAPPING[process.env.TRAVIS_BRANCH] ? ENV_MAPPING[process.env.TRAVIS_BRANCH] : 'other'
+const branch = (process.env.TRAVIS_BRANCH || '').toLowerCase()
+let ENV = ENV_MAPPING[branch] ? ENV_MAPPING[branch] : 'other'
 if (RELEASE_REGEX.test(process.env.TRAVIS_BRANCH)) {
   ENV = 'production'
 }
@@ -73,9 +74,7 @@ const formatPromiseRejectionEvent = (event) => {
   }
 
   if (event.reason == null || (typeof event.reason === 'object' && !Object.keys(event.reason).length)) {
-    const isEmptyObject = !Object.keys(event).length
-
-    return isEmptyObject ? 'Unknown Promise Rejection Error' : JSON.stringify(event)
+    return 'Unknown Promise Rejection Error'
   }
 
   if (typeof event.reason !== 'string') {
