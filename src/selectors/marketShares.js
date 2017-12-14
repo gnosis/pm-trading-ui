@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 import Decimal from 'decimal.js'
+import moment from 'moment'
 
 import { add0xPrefix, calcShareWinnings } from 'utils/helpers'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
@@ -7,6 +8,8 @@ import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 import { getCurrentAccount } from './blockchain'
 import { getEvents } from './event'
 import { getOracles } from './oracle'
+import { getEventDescriptions } from './eventDescription'
+import { MARKET_STAGES } from '../utils/constants'
 
 export const getShares = (state) => {
   if (!state.entities) {
@@ -84,7 +87,7 @@ const eventSharesSelector = createSelector(
   },
 )
 
-const enhanceShares = (oracles, events, eventMarkets, eventShares, account) => {
+const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventShares, account) => {
   const enhancedShares = {}
 
   Object.keys(eventShares).forEach((eventAddress) => {
@@ -97,12 +100,15 @@ const enhanceShares = (oracles, events, eventMarkets, eventShares, account) => {
     }
 
     const oracle = oracles[event.oracle]
+    const eventDescription = eventDescriptions[oracle.eventDescription]
+    const { resolutionDate } = eventDescription
     shares.forEach((share) => {
       if (Decimal(share.balance).eq(0)) {
         return
       }
 
       const isShareEventResolved = oracle.isOutcomeSet && event.isWinningOutcomeSet
+      const isShareMarketClosed = market.stage === MARKET_STAGES.MARKET_CLOSED || moment(resolutionDate).isBefore(moment().utc())
       const shareWinning = isShareEventResolved ? calcShareWinnings(share, market, event, account) : '0'
 
       if (isShareEventResolved && Decimal(shareWinning).eq(0)) {
@@ -130,7 +136,8 @@ const enhanceShares = (oracles, events, eventMarkets, eventShares, account) => {
         value: maximumWin.mul(probability).toString(),
         isResolved: isShareEventResolved,
         isRedeemable: isShareEventResolved,
-        isSellable: !isShareEventResolved,
+        isClosed: isShareMarketClosed,
+        isSellable: !isShareEventResolved && !isShareMarketClosed,
       }
     })
   })
@@ -141,6 +148,7 @@ const enhanceShares = (oracles, events, eventMarkets, eventShares, account) => {
 export const getAccountShares = createSelector(
   getOracles,
   getEvents,
+  getEventDescriptions,
   eventMarketsSelector,
   eventSharesSelector,
   getCurrentAccount,
@@ -150,6 +158,7 @@ export const getAccountShares = createSelector(
 export const getMarketShares = marketAddress => createSelector(
   getOracles,
   getEvents,
+  getEventDescriptions,
   eventMarketSelector(marketAddress),
   eventSharesSelector,
   getCurrentAccount,

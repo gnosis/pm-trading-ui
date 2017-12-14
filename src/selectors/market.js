@@ -1,7 +1,6 @@
 import { values } from 'lodash'
 import Decimal from 'decimal.js'
-import { isMarketResolved, isMarketClosed, hexWithPrefix } from 'utils/helpers'
-import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
+import { isMarketResolved, isMarketClosed } from 'utils/helpers'
 
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
