@@ -1,9 +1,21 @@
 @import url('../../less/vars.less');
+@import url("../FormSlider/slider.less");
+@import url("../FormSlider/thumb.less");
 
 @indexWidth: 36px;
 @groupWidth: 20%;
 
 .marketMyShares {
+
+  .formSlider {
+    padding-top: 15px;
+    &__input {
+      background: none;
+      .sliderCrossBrowser(#d6d8d8);
+      .thumbCrossBrowser(#1aa4c5, #1aa4c5);
+    }
+  }
+
   &__shareTable {
     margin-top: 20px;
     table-layout: fixed;
@@ -53,10 +65,35 @@
 
   &__sellColumn {
     padding: 0 8px;
+
+    &--limit label{
+      text-transform: none;
+      font-weight: bold;
+      color: @font-color-light;
+      margin: 0;
+    }
+
+    &--earnings {
+      font-weight: bold;
+      
+      & label {
+        margin: 0;
+      }
+    }
   }
 
   &__sellRow {
     margin: 0;
+
+    &--earnings {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      
+      & > * {
+        margin: 10px 0px;
+      }
+    }    
   }
 
   &__errorColumn {
