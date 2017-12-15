@@ -16,15 +16,7 @@ const DateAxisTick = ({ x, y, payload }) => (
   </g>
 )
 
-const PercentAxisTick = ({ x, y, payload: { value } }) => (
-  <g transform={`translate(${x}, ${y})`}>
-    {(value === 0 || value === 1) && (
-      <text x={0} y={0} dy={5} textAnchor="end" fill="white">
-        {(value * 100).toFixed(0)}%
-      </text>
-    )}
-  </g>
-)
+const percentageFormatter = val => (val * 100).toFixed(0)
 
 const renderCategoricalGraph = (data) => {
   const stacks = Object.keys(data[0]).slice(2)
@@ -55,7 +47,7 @@ const renderCategoricalGraph = (data) => {
               scale="time"
               tick={DateAxisTick}
             />
-            <YAxis className="axis axis--y" tickFormatter={val => (val * 100).toFixed(0)} unit="%" type="number" />
+            <YAxis className="axis axis--y" tickFormatter={percentageFormatter} unit="%" type="number" />
             <Tooltip className="tooltip" content={<CustomTooltip />} />
             <Legend />
             {stacks.map((key, keyIndex) => (
