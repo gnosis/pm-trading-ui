@@ -14,6 +14,7 @@ const UportStyle = {
 
 const TermsStyle = {
   textDecoration: 'underline',
+  color: '#333',
 }
 
 const LoginUport = () => (
@@ -24,9 +25,9 @@ const LoginUport = () => (
     </Paragraph>
     <Paragraph size="small">
       {'By logging in via uPort, you agree to Olympia\'s '}
-      <Bold style={TermsStyle}>
+      <Bold>
         {/* <Link>s rendered outside of a router context cannot navigate */}
-        <a href="uport-terms" target="_blank">
+        <a style={TermsStyle} href="uport-terms" target="_blank">
           {'terms of use'}
         </a>
       </Bold>
