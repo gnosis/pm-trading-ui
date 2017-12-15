@@ -15,6 +15,8 @@ const getCredentialsFromLocalStorage = () => {
   return cred ? JSON.parse(cred) : cred
 }
 
+export const isUserConnected = uportInstance => !!uportInstance.address
+
 const modifyUportLoginModal = (firstReq) => {
   if (!document && !firstReq) {
     return
