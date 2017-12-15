@@ -182,7 +182,7 @@ class MarketMySharesForm extends Component {
             </a>
           )}
         </td>
-      </tr>)
+                     </tr>)
 
       if (share.id === extendedSellId) {
         tableRows.push(<tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
