@@ -1,9 +1,10 @@
 import { Connect, SimpleSigner } from 'uport-connect'
+import { isValid as isValidPushNotificaiton } from './uportNotifications'
+import { isValid as isValidQrCredential } from './uportQr'
+import { notificationsEnabled } from './connector'
 
 const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
 const LOGIN_TEXT = 'Log into <b>Gnosis Olympia</b>'
-
-export const isValid = cred => !!cred
 
 const uport = new Connect('Gnosis', {
   clientId: '2ozUxc1QzFVo7b51giZsbkEsKw2nJ87amAf',
@@ -15,6 +16,11 @@ export const getCredentialsFromLocalStorage = () => {
   const cred = localStorage.getItem(UPORT_OLYMPIA_KEY)
 
   return cred ? JSON.parse(cred) : cred
+}
+
+export const areCredentialsValid = () => {
+  const cred = getCredentialsFromLocalStorage()
+  return notificationsEnabled ? isValidPushNotificaiton(cred) : isValidQrCredential(cred)
 }
 
 const modifyUportLoginModal = (firstReq) => {

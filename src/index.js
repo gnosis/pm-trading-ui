@@ -14,7 +14,7 @@ import 'less/style.less'
 import AppRouter from 'router'
 import initGoogleAnalytics from 'utils/analytics/init'
 import BackdropProvider from 'containers/BackdropProvider'
-import { isValid, getCredentialsFromLocalStorage } from 'integrations/uport/connector'
+import { areCredentialsValid } from 'integrations/uport/connector'
 import store from 'store'
 import { setMomentRelativeTime } from './setup'
 
@@ -23,7 +23,7 @@ setMomentRelativeTime()
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 
-const credentialsAreValid = isValid(getCredentialsFromLocalStorage())
+const credentialsAreValid = areCredentialsValid()
 if (credentialsAreValid) {
   store.dispatch(initProviders())
 }
