@@ -15,6 +15,8 @@ import {
   getOlympiaTokensByAccount,
 } from 'api'
 
+import { UPORT_OLYMPIA_KEY } from 'integrations/uport/connector'
+
 import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
@@ -30,6 +32,7 @@ export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
 export const registerProvider = createAction('REGISTER_PROVIDER')
 export const updateProvider = createAction('UPDATE_PROVIDER')
+export const logout = createAction('PROVIDER_LOGOUT')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
@@ -158,5 +161,22 @@ export const refreshTokenBalance = () => async (dispatch, getState) => {
     provider: providerName,
     ...provider,
     balance: weiToEth(balance),
+  }))
+}
+
+export const logoutProvider = () => async (dispatch, getState) => {
+  const state = getState()
+  const { name: providerName, ...provider } = getSelectedProvider(state)
+
+  localStorage.removeItem(UPORT_OLYMPIA_KEY)
+
+  await dispatch(logout(providerName))
+  await dispatch(updateProvider({
+    provider: providerName,
+    ...provider,
+    account: undefined,
+    balance: undefined,
+    network: undefined,
+    available: false,
   }))
 }

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { initProviders, logoutProvider } from 'actions/blockchain'
 import { openModal } from 'actions/modal'
 
 import Header from 'components/Header'
@@ -22,8 +23,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  openConnectWalletModal: () => dispatch(openModal({ modalName: 'ModalConnectWallet' })),
+  initProviders: () => dispatch(initProviders()),
   openNetworkCheckModal: () => dispatch(openModal({ modalName: 'ModalNetworkCheck' })),
+  logout: () => dispatch(logoutProvider()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)

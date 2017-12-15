@@ -93,6 +93,7 @@ class BaseIntegration {
     } catch (e) {
       if (this.walletEnabled) {
         this.walletEnabled = false
+        this[property] = undefined
         await this.runProviderUpdate(this, { available: false, [property]: undefined })
       }
 
@@ -112,6 +113,13 @@ class BaseIntegration {
     }
 
     this.runProviderUpdate(this, providerUpdate)
+  }
+
+  logout() {
+    this.balance = undefined
+    this.network = undefined
+    this.account = undefined
+    this.walletEnabled = false
   }
 }
 
