@@ -9,12 +9,12 @@ const getFirstGraphPoint = (market) => {
   let firstPoint
   if (OUTCOME_TYPES.SCALAR === market.event.type) {
     firstPoint = {
-      date: market.creationDate,
+      date: new Date(market.creationDate).valueOf(),
       scalarPoint: normalizeScalarPoint(['0.5', '0.5'], market),
     }
   } else if (OUTCOME_TYPES.CATEGORICAL === market.event.type) {
     firstPoint = {
-      date: market.creationDate,
+      date: new Date(market.creationDate).valueOf(),
       scalarPoint: undefined,
       ...market.eventDescription.outcomes.reduce((prev, current) => {
         const toReturn = {
@@ -28,26 +28,26 @@ const getFirstGraphPoint = (market) => {
   return firstPoint
 }
 
-const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().toISOString() })
+const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().valueOf() })
 
 export const getMarketGraph = market => createSelector(
   getMarketTrades(market.address),
   (trades) => {
     const firstPoint = getFirstGraphPoint(market)
 
-    const graphPoints = trades.map(trade => trade.marginalPrices.reduce(
+    const graphPoints = trades.reverse().map(trade => trade.marginalPrices.reduce(
       (prev, current, outcomeIndex) => {
         const toReturn = { ...prev }
         toReturn[getOutcomeName(market, outcomeIndex)] = current
         return toReturn
       },
       {
-        date: trade.date,
+        date: new Date(trade.date).valueOf(),
         scalarPoint:
           OUTCOME_TYPES.SCALAR === market.event.type ? normalizeScalarPoint(trade.marginalPrices, market) : undefined,
       },
     ))
-    const lastPoint = trades.length ? getLastGraphPoint(graphPoints) : { ...firstPoint, date: new Date().toISOString() }
+    const lastPoint = trades.length ? getLastGraphPoint(graphPoints) : { ...firstPoint, date: new Date().valueOf() }
 
     return [firstPoint, ...graphPoints, lastPoint]
   },

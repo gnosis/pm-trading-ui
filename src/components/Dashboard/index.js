@@ -227,9 +227,7 @@ class Dashboard extends Component {
   }
 
   renderWidget(marketType) {
-    const {
-      markets, marketWinnings, accountShares, accountTrades,
-    } = this.props
+    const { markets, accountShares, accountTrades } = this.props
 
     const whitelistedMarkets = markets.filter(market =>
       Object.keys(market).length &&
@@ -261,7 +259,7 @@ class Dashboard extends Component {
     if (marketType === 'closingMarkets') {
       return (
         <div className="dashboardWidget col-md-6" key={marketType}>
-          <div className="dashboardWidget__market-title">Next Markets</div>
+          <div className="dashboardWidget__market-title">Closing Next</div>
           <div
             className={cn({
               dashboardWidget__container: true,
@@ -354,9 +352,6 @@ Dashboard.propTypes = {
   hasWallet: PropTypes.bool,
   accountShares: PropTypes.objectOf(marketShareShape),
   accountTrades: PropTypes.array,
-  accountPredictiveAssets: PropTypes.string,
-  etherTokens: PropTypes.string,
-  winnings: PropTypes.objectOf(PropTypes.string),
   requestMarkets: PropTypes.func,
   requestGasPrice: PropTypes.func,
   requestAccountShares: PropTypes.func,
