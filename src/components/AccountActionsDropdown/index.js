@@ -14,7 +14,7 @@ const generateActionsList = actions => (
         </button>
       </li>
     ))}
-    <li className="accountActions__seperator"></li>
+    <li className="accountActions__seperator" />
   </ul>
 )
 
@@ -26,7 +26,7 @@ const AccountActionsDropdown = ({ onLogout }) => (
       { label: 'Logout', action: onLogout, icon: 'logout' },
     ])}
     align={{
-      offset: ['15%', 20]
+      offset: ['10%', 20],
     }}
     trigger={['click']}
   >
