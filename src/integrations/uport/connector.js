@@ -3,13 +3,15 @@ import { Connect, SimpleSigner } from 'uport-connect'
 const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
 const LOGIN_TEXT = 'Log into <b>Gnosis Olympia</b>'
 
+export const isValid = cred => !!cred
+
 const uport = new Connect('Gnosis', {
   clientId: '2ozUxc1QzFVo7b51giZsbkEsKw2nJ87amAf',
   network: 'rinkeby',
   signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
 })
 
-const getCredentialsFromLocalStorage = () => {
+export const getCredentialsFromLocalStorage = () => {
   const cred = localStorage.getItem(UPORT_OLYMPIA_KEY)
 
   return cred ? JSON.parse(cred) : cred

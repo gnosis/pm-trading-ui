@@ -1,4 +1,4 @@
-const isValid = cred => !!cred
+import { isValid } from './connector'
 
 const assignSessionProps = (uport, cred) => {
   // eslint-disable-next-line
