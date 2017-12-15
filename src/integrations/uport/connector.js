@@ -27,7 +27,7 @@ const LoginUport = () => (
       {'By logging in via uPort, you agree to Olympia\'s '}
       <Bold>
         {/* <Link>s rendered outside of a router context cannot navigate */}
-        <a style={TermsStyle} href="uport-terms" target="_blank">
+        <a style={TermsStyle} href="/uport-terms" target="_blank">
           {'terms of use'}
         </a>
       </Bold>
