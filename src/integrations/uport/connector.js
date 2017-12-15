@@ -1,6 +1,6 @@
 import { Connect, SimpleSigner } from 'uport-connect'
 
-const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
+export const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
 const LOGIN_TEXT = 'Log into <b>Gnosis Olympia</b>'
 
 const uport = new Connect('Gnosis', {

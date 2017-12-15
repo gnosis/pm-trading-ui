@@ -6,7 +6,7 @@ import { map } from 'lodash'
 export default store => next => (action) => {
   const handledAction = next(action)
   const { dispatch, getState } = store
-  const { type } = action
+  const { type, payload } = action
 
   if (type === 'INIT_PROVIDERS') {
     const providerOptions = {
@@ -18,6 +18,16 @@ export default store => next => (action) => {
     }
 
     Promise.all(map(walletIntegrations, integration => integration.initialize(providerOptions)))
+  }
+
+  if (type === 'PROVIDER_LOGOUT') {
+    Object.keys(walletIntegrations).forEach((providerName) => {
+      const integration = walletIntegrations[providerName]
+      
+      if (integration.constructor.providerName === payload) {
+        integration.logout()
+      }
+    })
   }
 
   return handledAction
