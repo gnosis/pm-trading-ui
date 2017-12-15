@@ -140,17 +140,13 @@ class Dashboard extends Component {
 
     return Object.keys(holdings).map((shareId) => {
       const share = holdings[shareId]
-      const market = this.props.markets.find(marketEntity => marketEntity.address === share.market.address)
-      if (!market) {
-        return null
-      }
-
       const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
       const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
 
       const viewMarketFunc = () => this.handleViewMarket(share.market)
-      const redeemWinningsFunc = e => this.handleRedeemWinnigs(e, market)
+      const redeemWinningsFunc = e => this.handleRedeemWinnigs(e, share.market)
       const showSellViewFunc = () => this.handleShowSellView(share.market, share)
+
       return (
         <div className="dashboardMarket dashboardMarket--onDark" key={share.id} onClick={viewMarketFunc}>
           <div className="dashboardMarket__title">{share.eventDescription.title}</div>
