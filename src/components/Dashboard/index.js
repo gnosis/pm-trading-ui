@@ -71,9 +71,9 @@ class Dashboard extends Component {
   }
 
   @autobind
-  handleRedeemWinnigs(event, marketAddress) {
+  handleRedeemWinnigs(event, market) {
     event.stopPropagation()
-    this.props.redeemWinnings(marketAddress)
+    this.props.redeemWinnings(market)
   }
 
   renderControls() {
