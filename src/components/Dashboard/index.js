@@ -181,7 +181,7 @@ class Dashboard extends Component {
 
       const colorScheme = market.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
       const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.index] }
-      
+
       let averagePrice
       if (trade.orderType === 'BUY') {
         averagePrice = parseInt(trade.cost, 10) / parseInt(trade.outcomeTokenCount, 10)
@@ -216,9 +216,7 @@ class Dashboard extends Component {
   }
 
   renderWidget(marketType) {
-    const {
-      markets, marketWinnings, accountShares, accountTrades,
-    } = this.props
+    const { markets, accountShares, accountTrades } = this.props
 
     const whitelistedMarkets = markets.filter(market =>
       Object.keys(market).length &&
@@ -250,7 +248,7 @@ class Dashboard extends Component {
     if (marketType === 'closingMarkets') {
       return (
         <div className="dashboardWidget col-md-6" key={marketType}>
-          <div className="dashboardWidget__market-title">Next Markets</div>
+          <div className="dashboardWidget__market-title">Closing Next</div>
           <div
             className={cn({
               dashboardWidget__container: true,
@@ -267,9 +265,7 @@ class Dashboard extends Component {
       return (
         <div className="dashboardWidget dashboardWidget--onDark col-md-6" key={marketType}>
           <div className="dashboardWidget__market-title">My Tokens</div>
-          <div className="dashboardWidget__container">
-            {this.renderMyHoldings(accountShares)}
-          </div>
+          <div className="dashboardWidget__container">{this.renderMyHoldings(accountShares)}</div>
         </div>
       )
     }
@@ -345,9 +341,6 @@ Dashboard.propTypes = {
   hasWallet: PropTypes.bool,
   accountShares: PropTypes.objectOf(marketShareShape),
   accountTrades: PropTypes.array,
-  accountPredictiveAssets: PropTypes.string,
-  etherTokens: PropTypes.string,
-  winnings: PropTypes.objectOf(PropTypes.string),
   requestMarkets: PropTypes.func,
   requestGasPrice: PropTypes.func,
   requestAccountShares: PropTypes.func,
