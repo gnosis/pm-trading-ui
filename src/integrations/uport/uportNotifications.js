@@ -1,6 +1,6 @@
 import { decodeToken } from 'jsontokens'
 
-const isValid = (cred) => {
+export const isValid = (cred) => {
   if (cred === null) {
     return false
   }

@@ -6,6 +6,8 @@ import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
 import initUportConnector, { isUserConnected } from './connector'
 
+export const notificationsEnabled = false
+
 class Uport extends BaseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
 
@@ -15,7 +17,7 @@ class Uport extends BaseIntegration {
    */
   static providerPriority = 100
   static watcherInterval = 5000
-  static USE_NOTIFICATIONS = false
+  static USE_NOTIFICATIONS = notificationsEnabled
 
   constructor() {
     super()
