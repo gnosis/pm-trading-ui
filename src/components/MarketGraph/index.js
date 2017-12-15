@@ -145,14 +145,6 @@ DateAxisTick.propTypes = {
   payload: PropTypes.string,
 }
 
-PercentAxisTick.propTypes = {
-  x: PropTypes.number,
-  y: PropTypes.number,
-  payload: PropTypes.shape({
-    value: PropTypes.number,
-  }),
-}
-
 MarketGraph.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
   market: PropTypes.shape({
