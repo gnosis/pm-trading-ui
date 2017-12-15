@@ -380,8 +380,8 @@ class MarketMySharesForm extends Component {
             </div>
           </div>
           {submitFailed && (
-            <div className="row">
-              <div className="col-md-9 col-md-offset-3 marketMyShares__errorColumn">
+            <div className="row marketMyShares__sellRow">
+              <div className="col-md-5 col-md-offset-7 marketMyShares__errorColumn">
                 Sorry - your share sell could not be processed. Please ensure you&apos;re on the right network.
               </div>
             </div>
