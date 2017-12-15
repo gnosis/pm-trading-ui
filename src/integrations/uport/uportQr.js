@@ -10,6 +10,7 @@ const assignSessionProps = (uport, cred) => {
 const init = async (uport, requestCredentials, getCredential) => {
   let credential = getCredential()
   if (!isValid(credential)) {
+    uport.firstReq = true
     credential = await requestCredentials()
   }
 

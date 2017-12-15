@@ -23,6 +23,8 @@ export const areCredentialsValid = () => {
   return notificationsEnabled ? isValidPushNotificaiton(cred) : isValidQrCredential(cred)
 }
 
+export const isUserConnected = uportInstance => !!uportInstance.address
+
 const modifyUportLoginModal = (firstReq) => {
   if (!document && !firstReq) {
     return
