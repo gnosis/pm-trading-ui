@@ -25,7 +25,6 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
-import { MARKET_STAGES } from '../../utils/constants'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 const resolutionFilters = [
@@ -45,10 +44,10 @@ const resolutionFilters = [
 
 const selectFilter = [
   { value: '---', label: '---' },
-  { value: 'RESOLUTION_DATE_ASC', label: 'RESOLUTION_DATE_ASC' },
-  { value: 'RESOLUTION_DATE_DESC', label: 'RESOLUTION_DATE_DESC' },
-  { value: 'TRADING_VOLUME_ASC', label: 'TRADING_VOLUME_ASC' },
-  { value: 'TRADING_VOLUME_DESC', label: 'TRADING_VOLUME_DESC' },
+  { value: 'RESOLUTION_DATE_ASC', label: 'RESOLUTION DATE ↑' },
+  { value: 'RESOLUTION_DATE_DESC', label: 'RESOLUTION DATE ↓' },
+  { value: 'TRADING_VOLUME_ASC', label: 'TRADING VOLUME ↑' },
+  { value: 'TRADING_VOLUME_DESC', label: 'TRADING VOLUME ↓' },
 ]
 
 class MarketList extends Component {

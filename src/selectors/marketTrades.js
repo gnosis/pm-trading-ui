@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { filter } from 'lodash'
+import { filter, mapValues } from 'lodash'
 import { hexWithPrefix } from 'utils/helpers'
 import moment from 'moment'
 
@@ -56,6 +56,36 @@ const eventMarketSelector = marketAddress => (state) => {
   return { [eventAddress]: market }
 }
 
+const tradesWithMarketsSelector = createSelector(
+  getTrades,
+  eventMarketsSelector,
+  (trades, eventMarkets) => mapValues(trades, (trade) => {
+    const market = eventMarkets[trade.outcomeToken.event]
+
+    if (market) {
+      return {
+        ...trade,
+        market: market.address,
+      }
+    }
+
+    return trade
+  }),
+)
+
+const getTradesForMarket = marketAddress => createSelector(
+  tradesWithMarketsSelector,
+  trades => filter(trades, trade => trade.market === marketAddress),
+)
+
+const getTradesForAccount = accountAddress => createSelector(
+  tradesWithMarketsSelector,
+  (trades) => {
+    const prefixedAccountAddress = hexWithPrefix(accountAddress)
+    return filter(trades, trade => trade.owner === prefixedAccountAddress)
+  },
+)
+
 const enhanceAndSortTrades = (markets, eventMarkets, trades) => Object.keys(trades)
   .map((tradeId) => {
     const eventAddress = trades[tradeId].outcomeToken.event
@@ -69,19 +99,6 @@ const enhanceAndSortTrades = (markets, eventMarkets, trades) => Object.keys(trad
   })
   .filter(trade => trade.market && Object.keys(trade.market).length)
   .sort((a, b) => (moment(a.date).isBefore(b.date) ? 1 : -1))
-
-const getTradesForMarket = marketAddress => (state) => {
-  const trades = getTrades(state)
-
-  return filter(trades, trade => trade.market === marketAddress)
-}
-
-const getTradesForAccount = accountAddress => (state) => {
-  const trades = getTrades(state)
-
-  const prefixedAccountAddress = hexWithPrefix(accountAddress)
-  return filter(trades, trade => trade.owner === prefixedAccountAddress)
-}
 
 export const getMarketTrades = marketAddress => createSelector(
   getMarkets,
