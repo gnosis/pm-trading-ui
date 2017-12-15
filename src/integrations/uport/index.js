@@ -4,7 +4,7 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
-import initUportConnector from './connector'
+import initUportConnector, { isUserConnected } from './connector'
 
 class Uport extends BaseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
@@ -46,8 +46,8 @@ class Uport extends BaseIntegration {
     this.networkId = await this.getNetworkId()
     this.account = null
 
-    const uPortIsSet = this.uport.address !== null
-    if (uPortIsSet) {
+    const userConnected = isUserConnected(this.uport)
+    if (userConnected) {
       this.account = opts.uportDefaultAccount || (await this.getAccount())
     }
 
@@ -58,7 +58,7 @@ class Uport extends BaseIntegration {
       account: this.account,
     })
       .then(async () => {
-        if (!this.account) {
+        if (!userConnected) {
           opts.dispatch(setConnectionStatus({ connected: false }))
           return
         }
