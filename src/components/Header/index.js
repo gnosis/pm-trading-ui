@@ -6,6 +6,7 @@ import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
+import AccountActionsDropdown from 'components/AccountActionsDropdown'
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
 import gaSend from 'utils/analytics/gaSend'
@@ -81,6 +82,7 @@ class Header extends Component {
                   <span className="headerContainer__account--text">{collateralTokenToText()}</span>
                   <ProviderIcon provider={currentProvider} />
                   <Identicon account={currentAccount} />
+                  <AccountActionsDropdown />
                 </div>
               )}
             {!hasWallet && (
