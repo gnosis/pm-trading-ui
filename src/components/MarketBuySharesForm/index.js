@@ -381,26 +381,15 @@ class MarketBuySharesForm extends Component {
                 </div>
               )}
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">
+                <div className="col-xs-10 col-xs-offset-1">
                   <InteractionButton
-                    className="btn btn-primary col-md-12"
+                    className="btn btn-primary col-xs-12"
                     disabled={submitDisabled}
                     loading={submitting || local}
                     type="submit"
                   >
                     Buy Tokens
                   </InteractionButton>
-                </div>
-                <div className="col-md-6">
-                  <button
-                    className="btn btn-default col-md-12 marketBuySharesForm__cancel"
-                    type="button"
-                    onClick={() => {
-                      changeUrl(`/markets/${address}/`)
-                    }}
-                  >
-                    Cancel
-                  </button>
                 </div>
               </div>
             </div>
