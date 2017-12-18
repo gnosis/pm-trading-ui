@@ -2,7 +2,6 @@ import * as React from 'react'
 import Block from 'components/layout/Block'
 import Subtitle from 'components/layout/Subtitle'
 import Paragraph from 'components/layout/Paragraph'
-import Bold from 'components/layout/Bold'
 
 const Eligibility = () => (
   <Block margin="xl">

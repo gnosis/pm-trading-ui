@@ -1,8 +1,6 @@
 import Block from 'components/layout/Block'
-import Bold from 'components/layout/Bold'
 import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
-import Subtitle from 'components/layout/Subtitle'
 import Title from 'components/layout/Title'
 import * as React from 'react'
 import ScopeOfTerms from './ScopeOfTerms'
