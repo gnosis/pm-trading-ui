@@ -1,5 +1,6 @@
 import * as walletIntegrations from 'integrations'
-import { runProviderRegister, runProviderUpdate, initGnosis } from 'actions/blockchain'
+import { initGnosis } from 'actions/blockchain'
+import { runProviderRegister, runProviderUpdate } from 'actions/providers'
 import { getUportDefaultAccount } from 'selectors/blockchain'
 import { map } from 'lodash'
 
@@ -23,7 +24,7 @@ export default store => next => (action) => {
   if (type === 'PROVIDER_LOGOUT') {
     Object.keys(walletIntegrations).forEach((providerName) => {
       const integration = walletIntegrations[providerName]
-      
+
       if (integration.constructor.providerName === payload) {
         integration.logout()
       }

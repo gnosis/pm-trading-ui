@@ -3,30 +3,23 @@ import { createAction } from 'redux-actions'
 import { UPORT_OLYMPIA_KEY } from 'integrations/uport/connector'
 import { isGnosisInitialized, getSelectedProvider, initializedAllProviders } from 'selectors/blockchain'
 
-import { initGnosis } from './blockchain'
+import { initGnosis } from './blockchain'
 
 export const registerProvider = createAction('REGISTER_PROVIDER')
 export const updateProvider = createAction('UPDATE_PROVIDER')
 export const logout = createAction('PROVIDER_LOGOUT')
 export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
+export const initProviders = createAction('INIT_PROVIDERS')
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
 export const logoutProvider = () => async (dispatch, getState) => {
   const state = getState()
-  const { name: providerName, ...provider } = getSelectedProvider(state)
+  const { name: providerName } = getSelectedProvider(state)
 
   localStorage.removeItem(UPORT_OLYMPIA_KEY)
 
   await dispatch(logout(providerName))
-  await dispatch(updateProvider({
-    provider: providerName,
-    ...provider,
-    account: undefined,
-    balance: undefined,
-    network: undefined,
-    available: false,
-  }))
 }
 
 export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
@@ -57,7 +50,7 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
     const providersLoaded = initializedAllProviders(state)
 
     if (providersLoaded) {
-      initGnosis()
+      await dispatch(initGnosis())
     }
   }
 }

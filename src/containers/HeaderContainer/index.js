@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { initProviders, logoutProvider } from 'actions/blockchain'
+import { initProviders, logoutProvider } from 'actions/providers'
 import { openModal } from 'actions/modal'
 
 import Header from 'components/Header'
