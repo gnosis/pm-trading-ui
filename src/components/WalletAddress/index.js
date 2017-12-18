@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import Span from 'components/layout/Span'
 
-import { getModerators, generateWalletName } from 'utils/helpers'
+import { getModerators, generateWalletName, hexWithPrefix } from 'utils/helpers'
 
 import * as css from './style.less'
 
@@ -29,7 +29,7 @@ class WalletAddress extends Component {
     const { showAddress } = this.state
 
     if (showAddress) {
-      return address
+      return hexWithPrefix(address)
     }
 
     if (moderators[address]) {
