@@ -127,7 +127,11 @@ const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventSh
       enhancedShares[share.id] = {
         ...share,
         event,
-        market,
+        market: {
+          ...market,
+          eventDescription,
+          event,
+        },
         oracle,
         winnings: shareWinning,
         value: maximumWin.mul(probability).toString(),

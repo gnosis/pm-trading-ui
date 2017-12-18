@@ -125,3 +125,16 @@ export const getAccountPredictiveAssets = (state, account) => {
   }
   return predictiveAssets
 }
+
+export const getRedeemedShares = (state, marketAddress) => {
+  const shares = getAccountShares(state)
+
+  const redeemedShares = {}
+  Object.keys(shares).forEach((shareId) => {
+    const share = shares[shareId]
+    if (share.market && share.market.address === marketAddress) {
+      redeemedShares[shareId] = share
+    }
+  })
+  return redeemedShares
+}

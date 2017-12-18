@@ -70,6 +70,12 @@ class Dashboard extends Component {
     this.props.changeUrl('/markets/new')
   }
 
+  @autobind
+  handleRedeemWinnigs(event, market) {
+    event.stopPropagation()
+    this.props.redeemWinnings(market)
+  }
+
   renderControls() {
     return (
       <div className="dashboardControls">
@@ -130,12 +136,13 @@ class Dashboard extends Component {
       const share = holdings[shareId]
       const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
       const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
+
+      const viewMarketFunc = () => this.handleViewMarket(share.market)
+      const redeemWinningsFunc = e => this.handleRedeemWinnigs(e, share.market)
+      const showSellViewFunc = () => this.handleShowSellView(share.market, share)
+
       return (
-        <div
-          className="dashboardMarket dashboardMarket--onDark"
-          key={share.id}
-          onClick={() => this.handleViewMarket(share.market)}
-        >
+        <div className="dashboardMarket dashboardMarket--onDark" key={share.id} onClick={viewMarketFunc}>
           <div className="dashboardMarket__title">{share.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
@@ -159,12 +166,12 @@ class Dashboard extends Component {
             </div>
             <div className="col-md-4 dashboardMarket--highlight">
               {share.isRedeemable && (
-                <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(share.market)}>
+                <a href="javascript:void(0);" onClick={redeemWinningsFunc}>
                   REDEEM WINNINGS
                 </a>
               )}
               {share.isSellable && (
-                <a href="javascript:void(0);" onClick={() => this.handleShowSellView(share.market, share)}>
+                <a href="javascript:void(0);" onClick={showSellViewFunc}>
                   SELL
                 </a>
               )}
