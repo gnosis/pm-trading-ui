@@ -120,6 +120,13 @@ class BaseIntegration {
     this.network = undefined
     this.account = undefined
     this.walletEnabled = false
+
+    this.runProviderUpdate(this, {
+      account: undefined,
+      balance: undefined,
+      network: undefined,
+      available: false,
+    })
   }
 }
 

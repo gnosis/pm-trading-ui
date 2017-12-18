@@ -1,6 +1,8 @@
 import 'babel-polyfill'
 import 'whatwg-fetch'
-
+import Raven from 'raven-js'
+import { initProviders } from 'actions/providers'
+import Decimal from 'decimal.js'
 import React from 'react'
 
 import ReactDOM from 'react-dom'
@@ -9,18 +11,20 @@ import { browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { AppContainer } from 'react-hot-loader'
 import 'less/style.less'
-
 import AppRouter from 'router'
+import initGoogleAnalytics from 'utils/analytics/init'
 import BackdropProvider from 'containers/BackdropProvider'
-import WalletIntegrationProvider from 'components/WalletIntegrationProvider'
 import store from 'store'
-import * as walletIntegrations from 'integrations'
 import { setMomentRelativeTime } from './setup'
 
 setMomentRelativeTime()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
+store.dispatch(initProviders())
+Decimal.set({ toExpPos: 9999 })
+
+initGoogleAnalytics()
 
 /* global document */
 const rootElement = document.getElementById('root')
@@ -33,21 +37,17 @@ const render = (App) => {
   ReactDOM.render(
     <AppContainer>
       <Provider store={store}>
-        <WalletIntegrationProvider store={store} integrations={walletIntegrations}>
-          <BackdropProvider>
-            <App history={history} />
-          </BackdropProvider>
-        </WalletIntegrationProvider>
+        <BackdropProvider>
+          <App history={history} />
+        </BackdropProvider>
       </Provider>
     </AppContainer>,
     rootElement,
   )
 }
 
-render(AppRouter)
+Raven.context(() => render(AppRouter))
 
 if (module.hot) {
-  module.hot.accept('./router', () =>
-    render(require('./router').default),
-  )
+  module.hot.accept('./router', () => Raven.context(() => render(require('./router').default)))
 }

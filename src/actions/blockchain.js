@@ -28,7 +28,6 @@ import {
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
-export const initProviders = createAction('INIT_PROVIDERS')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')

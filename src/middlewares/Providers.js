@@ -1,5 +1,6 @@
 import * as walletIntegrations from 'integrations'
-import { runProviderRegister, runProviderUpdate, initGnosis } from 'actions/blockchain'
+import { initGnosis } from 'actions/blockchain'
+import { runProviderRegister, runProviderUpdate } from 'actions/providers'
 import { getUportDefaultAccount } from 'selectors/blockchain'
 import { map } from 'lodash'
 
