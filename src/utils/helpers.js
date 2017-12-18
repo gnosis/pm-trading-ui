@@ -208,6 +208,12 @@ export const generateDeterministicRandomName = (seed) => {
   return `${adjectives[adjectiveIndex]} ${nouns[nounIndex]}`
 }
 
+export const generateWalletName = (account) => {
+  const accountAddressNormalized = hexWithPrefix(account).toLowerCase()
+
+  return generateDeterministicRandomName(accountAddressNormalized)
+}
+
 const isValidMarket = market =>
   !!(market &&
   market.event &&

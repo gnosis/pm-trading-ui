@@ -6,12 +6,14 @@ import * as css from './index.css'
 const cx = classNames.bind(css)
 
 class Paragraph extends PureComponent {
-
   render() {
-    const { children, color, center, nomargin, ...props } = this.props
+    const {
+      children, color, center, size, nomargin, ...props
+    } = this.props
     const noMargin = nomargin ? 'no-margin' : undefined
+
     return (
-      <p className={cx('default-paragraph', color, noMargin, { center })} {...props}>
+      <p className={cx('default-paragraph', color, noMargin, size, { center })} {...props}>
         { children }
       </p>
     )
@@ -19,10 +21,19 @@ class Paragraph extends PureComponent {
 }
 
 Paragraph.propTypes = {
+  size: PropTypes.oneOf(['normal', 'small']),
   nomargin: PropTypes.bool,
   center: PropTypes.bool,
-  color: PropTypes.string,
+  color: PropTypes.oneOf(['soft', 'medium', 'dark', 'primary']),
   children: PropTypes.node,
+}
+
+Paragraph.defaultProps = {
+  size: 'normal',
+  center: false,
+  color: undefined,
+  children: undefined,
+  nomargin: false,
 }
 
 export default Paragraph

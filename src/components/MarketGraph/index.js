@@ -11,26 +11,17 @@ import Decimal from 'decimal.js'
 const DateAxisTick = ({ x, y, payload }) => (
   <g transform={`translate(${x}, ${y})`}>
     <text x={0} y={0} dy={16} fill="white" textAnchor="middle">
-      {moment(payload).format('L')}
+      {moment(payload.value).format('L')}
     </text>
   </g>
 )
 
-const PercentAxisTick = ({ x, y, payload: { value } }) => (
-  <g transform={`translate(${x}, ${y})`}>
-    {(value === 0 || value === 1) && (
-      <text x={0} y={0} dy={5} textAnchor="end" fill="white">
-        {(value * 100).toFixed(0)}%
-      </text>
-    )}
-  </g>
-)
+const percentageFormatter = val => (val * 100).toFixed(0)
 
 const renderCategoricalGraph = (data) => {
   const stacks = Object.keys(data[0]).slice(2)
   const z = scaleOrdinal(schemeDark2)
   z.domain(stacks)
-
   return (
     <div className="marketGraph">
       <div className="container marketGraph__container">
@@ -49,8 +40,14 @@ const renderCategoricalGraph = (data) => {
                 </linearGradient>
               ))}
             </defs>
-            <XAxis className="axis axis--x" dataKey="date" minTickGap={150} tick={DateAxisTick} />
-            <YAxis className="axis axis--y" tick={PercentAxisTick} tickCount={5} />
+            <XAxis
+              className="axis axis--x"
+              dataKey="date"
+              tickSize={0}
+              scale="time"
+              tick={DateAxisTick}
+            />
+            <YAxis className="axis axis--y" tickFormatter={percentageFormatter} unit="%" type="number" />
             <Tooltip className="tooltip" content={<CustomTooltip />} />
             <Legend />
             {stacks.map((key, keyIndex) => (
@@ -61,6 +58,7 @@ const renderCategoricalGraph = (data) => {
                 stackId="1"
                 fill={COLOR_SCHEME_DEFAULT[keyIndex]}
                 stroke={COLOR_SCHEME_DEFAULT[keyIndex]}
+                dot={false}
               />
             ))}
           </LineChart>
@@ -93,9 +91,16 @@ const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) =
                 </linearGradient>
               ))}
             </defs>
-            <XAxis className="axis axis--x" dataKey="date" minTickGap={150} tick={DateAxisTick} />
+            <XAxis
+              className="axis axis--x"
+              dataKey="date"
+              scale="auto"
+              tick={DateAxisTick}
+              domain={[data[0].date, (new Date()).valueOf()]}
+            />
             <YAxis
               className="axis axis--y"
+              unit={eventDescription.unit}
               domain={[
                 Decimal(lowerBound)
                   .div(10 ** eventDescription.decimals)
@@ -114,6 +119,7 @@ const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) =
               dataKey="scalarPoint"
               fill={COLOR_SCHEME_DEFAULT[0]}
               stroke={COLOR_SCHEME_DEFAULT[0]}
+              dot={false}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -137,14 +143,6 @@ DateAxisTick.propTypes = {
   x: PropTypes.number,
   y: PropTypes.number,
   payload: PropTypes.string,
-}
-
-PercentAxisTick.propTypes = {
-  x: PropTypes.number,
-  y: PropTypes.number,
-  payload: PropTypes.shape({
-    value: PropTypes.number,
-  }),
 }
 
 MarketGraph.propTypes = {

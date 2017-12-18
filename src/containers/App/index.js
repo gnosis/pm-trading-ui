@@ -8,7 +8,6 @@ import Hairline from 'components/layout/Hairline'
 import PageFrame from 'components/layout/PageFrame'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
-import LoadingIndicator from 'components/LoadingIndicator'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 import { providerPropType } from 'utils/shapes'
@@ -29,16 +28,6 @@ class App extends Component {
 
   render() {
     const { provider } = this.props
-    if (!this.props.blockchainConnection) {
-      return (
-        <div className="appContainer">
-          <div className="loader-container">
-            <LoadingIndicator width={100} height={100} />
-            <h1>Connecting</h1>
-          </div>
-        </div>
-      )
-    }
 
     const currentKey = this.props.location.pathname.split('/')[2] || this.props.location.pathname.split('/')[1] || '/'
     const timeout = { enter: 200, exit: 200 }
@@ -62,7 +51,6 @@ class App extends Component {
 }
 
 App.propTypes = {
-  blockchainConnection: PropTypes.bool,
   children: PropTypes.node,
   location: PropTypes.object,
   provider: providerPropType,
@@ -70,7 +58,6 @@ App.propTypes = {
 
 const mapStateToProps = state => ({
   provider: getSelectedProvider(state),
-  blockchainConnection: state.blockchain.connectionTried,
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 
