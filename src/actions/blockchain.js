@@ -15,24 +15,23 @@ import {
   getOlympiaTokensByAccount,
 } from 'api'
 
-import { UPORT_OLYMPIA_KEY } from 'integrations/uport/connector'
-
 import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
+import { findDefaultProvider, getSelectedProvider } from 'selectors/blockchain'
 
-import { findDefaultProvider, isGnosisInitialized, getSelectedProvider } from 'selectors/blockchain'
+import {
+  updateProvider,
+  setActiveProvider,
+} from './providers'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
-export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
+export const initProviders = createAction('INIT_PROVIDERS')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
-export const registerProvider = createAction('REGISTER_PROVIDER')
-export const updateProvider = createAction('UPDATE_PROVIDER')
-export const logout = createAction('PROVIDER_LOGOUT')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
@@ -86,24 +85,30 @@ export const requestEtherTokens = account => async (dispatch) => {
  * (Re)-Initializes Gnosis.js connection according to current providers settings
  */
 export const initGnosis = () => async (dispatch, getState) => {
+  // initialize
   try {
     const state = getState()
 
     // determine new provider
     const newProvider = findDefaultProvider(state)
+
     if (newProvider) {
       await dispatch(setActiveProvider(newProvider.name))
-
       // init Gnosis connection
-      const opts = getGnosisJsOptions(newProvider)
-      await initGnosisConnection(opts)
+      if (newProvider.account) {
+        const opts = getGnosisJsOptions(newProvider)
+        await initGnosisConnection(opts)
+      } else {
+        throw new Error('No account found')
+      }
+
       await dispatch(setGnosisInitialized({ initialized: true }))
       await requestEtherTokens()
     }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)
     await dispatch(setConnectionStatus({ connected: false }))
-    return await dispatch(setGnosisInitialized({ initialized: false, error }))
+    return dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 
   // connect
@@ -117,38 +122,8 @@ export const initGnosis = () => async (dispatch, getState) => {
     await dispatch(setConnectionStatus({ connected: true }))
   } catch (error) {
     console.warn(`Gnosis.js connection Error: ${error}`)
-    return await dispatch(setConnectionStatus({ connected: false }))
+    return dispatch(setConnectionStatus({ connected: false }))
   }
-}
-
-export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
-  await dispatch(updateProvider({
-    provider: provider.constructor.providerName,
-    ...data,
-  }))
-
-  if (isGnosisInitialized(getState())) {
-    let requireGnosisReinit = false
-    GNOSIS_REINIT_KEYS.forEach((searchKey) => {
-      if (Object.keys(data).indexOf(searchKey) > -1) {
-        requireGnosisReinit = true
-      }
-    })
-
-    if (requireGnosisReinit) {
-      // Just in case any other provider is updated and the default one
-      // is UPORT we do not want to scan the code again
-      await dispatch(initGnosis())
-    }
-  }
-}
-
-export const runProviderRegister = (provider, data) => async (dispatch) => {
-  const providerData = { ...data }
-  await dispatch(registerProvider({
-    provider: provider.constructor.providerName,
-    ...providerData,
-  }))
 }
 
 export const refreshTokenBalance = () => async (dispatch, getState) => {
@@ -161,22 +136,5 @@ export const refreshTokenBalance = () => async (dispatch, getState) => {
     provider: providerName,
     ...provider,
     balance: weiToEth(balance),
-  }))
-}
-
-export const logoutProvider = () => async (dispatch, getState) => {
-  const state = getState()
-  const { name: providerName, ...provider } = getSelectedProvider(state)
-
-  localStorage.removeItem(UPORT_OLYMPIA_KEY)
-
-  await dispatch(logout(providerName))
-  await dispatch(updateProvider({
-    provider: providerName,
-    ...provider,
-    account: undefined,
-    balance: undefined,
-    network: undefined,
-    available: false,
   }))
 }
