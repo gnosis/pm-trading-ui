@@ -15,28 +15,25 @@ import {
   getOlympiaTokensByAccount,
 } from 'api'
 
-import { UPORT_OLYMPIA_KEY } from 'integrations/uport/connector'
-
 import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider, isGnosisInitialized, getSelectedProvider, initializedAllProviders } from 'selectors/blockchain'
+import { findDefaultProvider, getSelectedProvider } from 'selectors/blockchain'
+
+import {
+  updateProvider,
+  setActiveProvider,
+} from './providers'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
-export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
 export const initProviders = createAction('INIT_PROVIDERS')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
-export const registerProvider = createAction('REGISTER_PROVIDER')
-export const updateProvider = createAction('UPDATE_PROVIDER')
-export const logout = createAction('PROVIDER_LOGOUT')
 
 const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
-
-const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
 export const requestGasPrice = () => async (dispatch) => {
   const gasPrice = await getGasPrice()
@@ -129,47 +126,6 @@ export const initGnosis = () => async (dispatch, getState) => {
   }
 }
 
-export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
-  await dispatch(updateProvider({
-    provider: provider.constructor.providerName,
-    ...data,
-  }))
-
-  const state = getState()
-  const isInitialized = isGnosisInitialized(state)
-
-  if (isInitialized) {
-    let requireGnosisReinit = false
-    GNOSIS_REINIT_KEYS.forEach((searchKey) => {
-      if (Object.keys(data).indexOf(searchKey) > -1) {
-        requireGnosisReinit = true
-      }
-    })
-
-    if (requireGnosisReinit) {
-      // Just in case any other provider is updated and the default one
-      // is UPORT we do not want to scan the code again
-      await dispatch(initGnosis())
-    }
-  }
-
-  if (!isInitialized) {
-    const providersLoaded = initializedAllProviders(state)
-
-    if (providersLoaded) {
-      initGnosis()
-    }
-  }
-}
-
-export const runProviderRegister = (provider, data) => async (dispatch) => {
-  const providerData = { ...data }
-  await dispatch(registerProvider({
-    provider: provider.constructor.providerName,
-    ...providerData,
-  }))
-}
-
 export const refreshTokenBalance = () => async (dispatch, getState) => {
   const state = getState()
   const { name: providerName, ...provider } = getSelectedProvider(state)
@@ -180,22 +136,5 @@ export const refreshTokenBalance = () => async (dispatch, getState) => {
     provider: providerName,
     ...provider,
     balance: weiToEth(balance),
-  }))
-}
-
-export const logoutProvider = () => async (dispatch, getState) => {
-  const state = getState()
-  const { name: providerName, ...provider } = getSelectedProvider(state)
-
-  localStorage.removeItem(UPORT_OLYMPIA_KEY)
-
-  await dispatch(logout(providerName))
-  await dispatch(updateProvider({
-    provider: providerName,
-    ...provider,
-    account: undefined,
-    balance: undefined,
-    network: undefined,
-    available: false,
   }))
 }
