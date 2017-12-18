@@ -16,18 +16,10 @@ import {
   withdrawFees,
   closeMarket,
 } from 'actions/market'
-import {
-  getMarketById,
-} from 'selectors/market'
-import {
-  getMarketTrades,
-} from 'selectors/marketTrades'
-import {
-  getMarketShares,
-} from 'selectors/marketShares'
-import {
-  getMarketGraph,
-} from 'selectors/marketGraph'
+import { getMarketById } from 'selectors/market'
+import { getMarketTrades } from 'selectors/marketTrades'
+import { getMarketShares } from 'selectors/marketShares'
+import { getMarketGraph } from 'selectors/marketGraph'
 import {
   getCurrentAccount,
   getCurrentBalance,

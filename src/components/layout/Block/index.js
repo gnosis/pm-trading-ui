@@ -6,7 +6,6 @@ import * as css from './index.css'
 const cx = classNames.bind(css)
 
 class Block extends PureComponent {
-
   get blockStyle() {
     return {
       width: this.props.width,
@@ -14,10 +13,12 @@ class Block extends PureComponent {
   }
 
   render() {
-    const { margin, center, children, className } = this.props
+    const {
+      margin, center, children, className, ...props
+    } = this.props
 
     return (
-      <div className={cx(margin, className, { center })} style={this.blockStyle}>
+      <div className={cx(margin, className, { center })} style={this.blockStyle} {...props}>
         { children }
       </div>
     )

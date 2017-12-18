@@ -10,6 +10,8 @@ import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
 import gaSend from 'utils/analytics/gaSend'
 
+import MenuAccountDropdown from './MenuAccountDropdown'
+
 import './header.less'
 
 class Header extends Component {
@@ -21,7 +23,7 @@ class Header extends Component {
 
   render() {
     const {
-      version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider,
+      version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider, logout,
     } = this.props
     return (
       <div className="headerContainer">
@@ -81,6 +83,7 @@ class Header extends Component {
                   <span className="headerContainer__account--text">{collateralTokenToText()}</span>
                   <ProviderIcon provider={currentProvider} />
                   <Identicon account={currentAccount} />
+                  <MenuAccountDropdown />
                 </div>
               )}
             {!hasWallet && (
@@ -102,7 +105,16 @@ Header.propTypes = {
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
-  initProviders: PropTypes.func,
+  initProviders: PropTypes.func.isRequired,
+}
+
+Header.defaultProps = {
+  version: '',
+  currentNetwork: '',
+  hasWallet: false,
+  currentBalance: '0',
+  currentProvider: {},
+  currentAccount: '',
 }
 
 export default Header

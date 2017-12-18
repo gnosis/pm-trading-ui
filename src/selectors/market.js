@@ -1,7 +1,6 @@
 import { values } from 'lodash'
 import Decimal from 'decimal.js'
-import { isMarketResolved, isMarketClosed, hexWithPrefix } from 'utils/helpers'
-import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
+import { isMarketResolved, isMarketClosed } from 'utils/helpers'
 
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
@@ -125,4 +124,17 @@ export const getAccountPredictiveAssets = (state, account) => {
     }
   }
   return predictiveAssets
+}
+
+export const getRedeemedShares = (state, marketAddress) => {
+  const shares = getAccountShares(state)
+
+  const redeemedShares = {}
+  Object.keys(shares).forEach((shareId) => {
+    const share = shares[shareId]
+    if (share.market && share.market.address === marketAddress) {
+      redeemedShares[shareId] = share
+    }
+  })
+  return redeemedShares
 }

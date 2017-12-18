@@ -11,6 +11,7 @@ import DashboardPage from 'containers/DashboardPage'
 import ScoreBoardPage from 'routes/scoreboard/containers/ScoreBoard'
 import GameRulesPage from 'routes/gamerules/containers/GameRules'
 import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
+import OlympiaTermsPage from 'routes/terms/containers/TermsOfUse'
 
 const AppRouter = ({ history }) => (
   <Router key={Math.random()} history={history}>
@@ -20,6 +21,7 @@ const AppRouter = ({ history }) => (
       <Route path="transactions" component={TransactionsPage} />
       <Route path="scoreboard" component={ScoreBoardPage} />
       <Route path="gamerules" component={GameRulesPage} />
+      <Route path="olympia-terms" component={OlympiaTermsPage} />
       <Route path="markets">
         <IndexRedirect to="list" />
         <Route path="new" component={MarketCreateWizardPage} />

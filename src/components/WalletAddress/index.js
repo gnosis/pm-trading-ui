@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import Span from 'components/layout/Span'
 
-import { getModerators, generateDeterministicRandomName } from 'utils/helpers'
+import { getModerators, generateWalletName } from 'utils/helpers'
 
 import * as css from './style.less'
 
@@ -36,7 +36,7 @@ class WalletAddress extends Component {
       return moderators[address]
     }
 
-    return generateDeterministicRandomName(address)
+    return generateWalletName(address)
   }
 
   render() {

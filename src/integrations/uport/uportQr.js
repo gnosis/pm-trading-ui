@@ -1,4 +1,4 @@
-const isValid = cred => !!cred
+export const isValid = cred => !!cred
 
 const assignSessionProps = (uport, cred) => {
   // eslint-disable-next-line
@@ -10,6 +10,7 @@ const assignSessionProps = (uport, cred) => {
 const init = async (uport, requestCredentials, getCredential) => {
   let credential = getCredential()
   if (!isValid(credential)) {
+    uport.firstReq = true
     credential = await requestCredentials()
   }
 

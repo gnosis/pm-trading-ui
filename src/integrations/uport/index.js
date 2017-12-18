@@ -1,9 +1,12 @@
 import { getOlympiaTokensByAccount } from 'api'
+import { setConnectionStatus } from 'actions/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
-import initUportConnector from './connector'
+import initUportConnector, { isUserConnected } from './connector'
+
+export const notificationsEnabled = false
 
 class Uport extends BaseIntegration {
   static providerName = WALLET_PROVIDER.UPORT
@@ -14,7 +17,7 @@ class Uport extends BaseIntegration {
    */
   static providerPriority = 100
   static watcherInterval = 5000
-  static USE_NOTIFICATIONS = false
+  static USE_NOTIFICATIONS = notificationsEnabled
 
   constructor() {
     super()
@@ -39,12 +42,16 @@ class Uport extends BaseIntegration {
     })
 
     this.uport = await initUportConnector(Uport.USE_NOTIFICATIONS)
-
     this.web3 = await this.uport.getWeb3()
     this.provider = await this.uport.getProvider()
     this.network = await this.getNetwork()
     this.networkId = await this.getNetworkId()
-    this.account = opts.uportDefaultAccount || (await this.getAccount())
+    this.account = null
+
+    const userConnected = isUserConnected(this.uport)
+    if (userConnected) {
+      this.account = opts.uportDefaultAccount || (await this.getAccount())
+    }
 
     return this.runProviderUpdate(this, {
       available: true,
@@ -53,7 +60,8 @@ class Uport extends BaseIntegration {
       account: this.account,
     })
       .then(async () => {
-        if (!this.account) {
+        if (!userConnected) {
+          opts.dispatch(setConnectionStatus({ connected: false }))
           return
         }
         await opts.initGnosis()
