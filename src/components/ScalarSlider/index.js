@@ -19,14 +19,17 @@ const ScalarSlider = ({
   // current value
   const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
 
+
   const value = new Decimal(marginalPriceCurrent)
     .mul(bounds.toString())
-    .add(bigLowerBound.div(10 ** displayDecimals).toString())
+    .add(bigLowerBound.div(10 ** decimals).toString())
+
   const percentage = new Decimal(marginalPriceCurrent).mul(100)
 
   const selectedValue = new Decimal(marginalPriceSelected)
     .mul(bounds.toString())
-    .add(bigLowerBound.div(10 ** displayDecimals).toString())
+    .add(bigLowerBound.div(10 ** decimals).toString())
+
   const selectedPercentage = new Decimal(marginalPriceSelected).mul(100)
 
   const currentValueSliderStyle = { left: `${percentage.toFixed(4)}%` }
@@ -43,7 +46,7 @@ const ScalarSlider = ({
           <div className="scalarSlider__handle scalarSlider__handle--current" style={currentValueSliderStyle}>
             <div className="scalarSlider__handleText">
               <div className="scalarSlider__handleTextLabel">Predicted Outcome</div>
-              <div className="scalarSlider__handleTextValue">{`${decimalToText(value)} ${unit}`}</div>
+              <div className="scalarSlider__handleTextValue">{`${decimalToText(value.toFixed(displayDecimals))} ${unit}`}</div>
             </div>
           </div>
           <div
