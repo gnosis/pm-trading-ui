@@ -20,10 +20,7 @@ import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
 import { findDefaultProvider, getSelectedProvider } from 'selectors/blockchain'
 
-import {
-  updateProvider,
-  setActiveProvider,
-} from './providers'
+import { updateProvider, setActiveProvider } from './providers'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
