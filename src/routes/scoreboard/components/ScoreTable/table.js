@@ -73,9 +73,9 @@ export const rankCell = (props) => {
 export const olyCell = prop => (props) => {
   const value = props.row[prop]
   const result = Decimal(value)
-        .div(1e18)
-        .toDP(2, 1)
-        .toString()
+    .div(1e18)
+    .toDP(2, 1)
+    .toString()
   return <span>{ result }</span>
 }
 
@@ -91,47 +91,79 @@ export const rewardCell = (props) => {
   let result = ''
 
   if (position == 1) {
-    result = '15 GNO'
-  }
-
-  if (position == 2) {
-    result = '12 GNO'
-  }
-
-  if (position == 3) {
     result = '10 GNO'
   }
 
-  if (position == 4) {
+  if (position == 2) {
+    result = '9 GNO'
+  }
+
+  if (position == 3) {
     result = '8 GNO'
   }
 
-  if (position == 5) {
+  if (position == 4) {
     result = '7 GNO'
   }
 
-  if (position == 6) {
+  if (position == 5) {
     result = '6 GNO'
   }
 
-  if (position == 7) {
+  if (position == 6) {
     result = '5 GNO'
   }
 
-  if (position == 8) {
+  if (position == 7) {
     result = '4 GNO'
   }
 
-  if (position == 9) {
+  if (position == 8) {
     result = '3 GNO'
   }
 
-  if (position == 10) {
+  if (position == 9) {
     result = '2 GNO'
   }
 
-  if (position > 10 && position <= 100) {
+  if (position == 10) {
     result = '1 GNO'
+  }
+
+  if (position > 10 && position <= 20) {
+    result = '0.9 GNO'
+  }
+
+  if (position > 20 && position <= 30) {
+    result = '0.8 GNO'
+  }
+
+  if (position > 30 && position <= 40) {
+    result = '0.7 GNO'
+  }
+
+  if (position > 40 && position <= 50) {
+    result = '0.6 GNO'
+  }
+
+  if (position > 50 && position <= 60) {
+    result = '0.5 GNO'
+  }
+
+  if (position > 60 && position <= 70) {
+    result = '0.4 GNO'
+  }
+
+  if (position > 70 && position <= 80) {
+    result = '0.3 GNO'
+  }
+
+  if (position > 80 && position <= 90) {
+    result = '0.2 GNO'
+  }
+
+  if (position > 90 && position <= 100) {
+    result = '0.1 GNO'
   }
 
   const style = result ? { color: '#90712b', letterSpacing: '0.5px' } : undefined
