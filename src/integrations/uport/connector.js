@@ -8,7 +8,8 @@ import { isValid as isValidPushNotificaiton } from './uportNotifications'
 import { isValid as isValidQrCredential } from './uportQr'
 import { notificationsEnabled } from './connector'
 
-const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
+export const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
+
 const UPORT_QR_TEXT = 'uport-qr-text'
 
 const UportStyle = {
