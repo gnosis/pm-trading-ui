@@ -139,7 +139,19 @@ const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventSh
     })
   })
 
-  return enhancedShares
+  const enhancedSharesSorted = {}
+  Object.keys(enhancedShares)
+    .sort((a, b) => {
+      const { outcomeToken: { index: firstOutcomeIndex } } = enhancedShares[a]
+      const { outcomeToken: { index: secondOutcomeIndex } } = enhancedShares[b]
+
+      return firstOutcomeIndex - secondOutcomeIndex
+    })
+    .forEach((shareId) => {
+      enhancedSharesSorted[shareId] = { ...enhancedShares[shareId] }
+    })
+
+  return enhancedSharesSorted
 }
 
 export const getAccountShares = createSelector(
