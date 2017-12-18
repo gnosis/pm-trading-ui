@@ -18,6 +18,7 @@ export const logoutProvider = () => async (dispatch, getState) => {
   const { name: providerName } = getSelectedProvider(state)
 
   localStorage.removeItem(UPORT_OLYMPIA_KEY)
+  localStorage.removeItem(`GNOSIS_${process.env.VERSION}`)
 
   await dispatch(logout(providerName))
 }

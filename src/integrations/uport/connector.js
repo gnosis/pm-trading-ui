@@ -10,7 +10,6 @@ import { notificationsEnabled } from './connector'
 
 export const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
 
-const UPORT_OLYMPIA_KEY = 'GNOSIS_OLYMPIA_USER'
 const UPORT_QR_TEXT = 'uport-qr-text'
 
 const UportStyle = {
