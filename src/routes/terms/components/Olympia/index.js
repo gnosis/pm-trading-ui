@@ -23,7 +23,7 @@ const Olympia = () => (
       However, Gnosis reserves the right to revise or withdraw any GNO token rewards in our sole discretion.
     </Paragraph>
     <Paragraph color="medium">
-      <Bold>3.4</Bold> e do not guarantee that Olympia, or any content on it, will always be available or be
+      <Bold>3.4</Bold> We do not guarantee that Olympia, or any content on it, will always be available or be
       uninterrupted. We may suspend or withdraw or restrict the availability of all or any part of Olympia for whatever
       reason in our sole discretion. We will try to give you reasonable notice of any suspension or withdrawal.
     </Paragraph>

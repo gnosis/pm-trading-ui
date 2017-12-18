@@ -4,7 +4,7 @@ import Subtitle from 'components/layout/Subtitle'
 import Paragraph from 'components/layout/Paragraph'
 import Bold from 'components/layout/Bold'
 
-const Gnosis = () => (
+const LiabilityLimitation = () => (
   <Block margin="xl">
     <Subtitle>12. Limitation of Liability</Subtitle>
     <Paragraph color="medium">
@@ -24,4 +24,4 @@ const Gnosis = () => (
   </Block>
 )
 
-export default Gnosis
+export default LiabilityLimitation

@@ -16,6 +16,10 @@ import Disclaimers from './Disclaimers'
 import RegulatoryRisks from './RegulatoryRisks'
 import Warranties from './Warranties'
 import Indemnity from './Indemnity'
+import LiabilityLimitation from './LiabilityLimitation'
+import Termination from './Termination'
+import ForceMajeure from './ForceMajeure'
+import Miscellaneous from './Miscellaneous'
 
 const TermsOfUse = () => (
   <PageFrame width="750px">
@@ -34,6 +38,10 @@ const TermsOfUse = () => (
     <RegulatoryRisks />
     <Warranties />
     <Indemnity />
+    <LiabilityLimitation />
+    <Termination />
+    <ForceMajeure />
+    <Miscellaneous />
   </PageFrame>
 )
 
