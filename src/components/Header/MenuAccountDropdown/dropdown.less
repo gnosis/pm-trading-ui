@@ -1,4 +1,4 @@
-.accountActionsDropdown {
+.menuAccountDropdown {
   position: relative;
   margin-left: 12px;
 
@@ -6,7 +6,7 @@
   height: 32px;
 
   &:hover {
-    .accountActionsDropdown__arrow {
+    .menuAccountDropdown__arrow {
       &::after {
         border-color: lighten(black, 50%);
       }
@@ -37,9 +37,7 @@
       transform-origin: 50% 50%;
     }
   }
-}
 
-.accountActions {
   &.rc-tooltip {
     filter: drop-shadow(0 4px 4px rgba(0, 0, 0, .24));
   }
@@ -69,8 +67,9 @@
 
     z-index: 1;
   }
+}
 
-
+.menuAccountAction {
   &__list {
     list-style: none;
     margin: 0;
