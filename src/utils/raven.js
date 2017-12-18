@@ -36,7 +36,7 @@ const MIDDLEWARE_ERROR_LOG = () => next => (action) => {
 }
 
 const INFURA_REGEX = /infura\.io/i
-const RELEASE_REGEX = /release\-/i
+const RELEASE_REGEX = /release\//i
 
 const ENV_MAPPING = {
   master: 'staging',
