@@ -115,7 +115,7 @@ export const getAccountPredictiveAssets = (state, account) => {
   let predictiveAssets = new Decimal(0)
 
   if (account) {
-    const shares = values(getAccountShares(state, account))
+    const shares = values(getAccountShares(state))
     if (shares.length) {
       predictiveAssets = shares.reduce(
         (assets, share) => assets.add(new Decimal(share.balance).mul(share.marginalPrice)),
