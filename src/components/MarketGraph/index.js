@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { schemeDark2 } from 'd3-scale-chromatic'
-import { scaleOrdinal, scaleTime } from 'd3'
+import { scaleOrdinal } from 'd3'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import CustomTooltip from 'components/CustomTooltip'
 import { OUTCOME_TYPES, COLOR_SCHEME_DEFAULT } from 'utils/constants'
@@ -94,7 +94,7 @@ const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) =
             <XAxis
               className="axis axis--x"
               dataKey="date"
-              scale="time"
+              scale="auto"
               tick={DateAxisTick}
               domain={[data[0].date, (new Date()).valueOf()]}
             />
