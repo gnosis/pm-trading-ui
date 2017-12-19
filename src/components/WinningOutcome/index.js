@@ -7,13 +7,7 @@ import { eventDescriptionShape, marketShape } from '../../utils/shapes'
 import './WinningOutcome.less'
 
 const WinningOutcome = ({
-  market: {
-    eventDescription: { outcomes, unit, decimals },
-    oracle: { outcome: winningOutcome },
-    event: { type },
-    funding,
-    netOutcomeTokensSold,
-  },
+  market: { eventDescription: { outcomes, unit, decimals }, oracle: { outcome: winningOutcome }, event: { type } },
 }) => {
   let outcomeText
   if (type === OUTCOME_TYPES.CATEGORICAL) {
