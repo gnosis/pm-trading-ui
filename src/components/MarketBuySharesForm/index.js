@@ -78,8 +78,9 @@ class MarketBuySharesForm extends Component {
     return '--'
   }
 
-  getPercentageWin(outcomeTokenCount, investment) {
-    if (!investment || !(parseFloat(investment) > 0)) {
+  getPercentageWin = (outcomeTokenCount, investment) => {
+    const validInvestment = /^-?\d+\.?\d*$/.test(investment)
+    if (!validInvestment) {
       return '0'
     }
 
@@ -113,22 +114,18 @@ class MarketBuySharesForm extends Component {
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
   validateInvestment = (investmentValue) => {
+    const { currentBalance = 0 } = this.props
     // check if investment is not undefined and test it against number regexp to prevent errors from decimal.js
-    const validInvestment = investmentValue || /^-?\d+\.?\d*$/.test(investmentValue)
-    if (!validInvestment) return false
+    if (!investmentValue) {
+      return false
+    }
 
-    const { currentBalance } = this.props
-    if (parseFloat(investmentValue) >= 1000) {
+    const validInvestment = /^-?\d+\.?\d*$/.test(investmentValue)
+    if (!validInvestment) {
       return 'Invalid amount'
     }
 
-    let decimalValue
-    try {
-      decimalValue = Decimal(investmentValue)
-    } catch (e) {
-      return 'Invalid Number value'
-    }
-
+    const decimalValue = Decimal(investmentValue)
     if (decimalValue.lte(0)) {
       return "Number can't be negative or equal to zero."
     }
@@ -383,26 +380,15 @@ class MarketBuySharesForm extends Component {
                 </div>
               )}
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">
+                <div className="col-xs-10 col-xs-offset-1">
                   <InteractionButton
-                    className="btn btn-primary col-md-12"
+                    className="btn btn-primary col-xs-12"
                     disabled={submitDisabled}
                     loading={submitting || local}
                     type="submit"
                   >
                     Buy Tokens
                   </InteractionButton>
-                </div>
-                <div className="col-md-6">
-                  <button
-                    className="btn btn-default col-md-12 marketBuySharesForm__cancel"
-                    type="button"
-                    onClick={() => {
-                      changeUrl(`/markets/${address}/`)
-                    }}
-                  >
-                    Cancel
-                  </button>
                 </div>
               </div>
             </div>
