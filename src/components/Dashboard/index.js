@@ -388,11 +388,8 @@ Dashboard.propTypes = {
   hasWallet: PropTypes.bool,
   accountShares: PropTypes.array,
   accountTrades: PropTypes.array,
-<<<<<<< HEAD
   accountPredictiveAssets: PropTypes.string,
   etherTokens: PropTypes.string,
-=======
->>>>>>> da3cc56... change sorting labels PM-346
   requestMarkets: PropTypes.func,
   requestGasPrice: PropTypes.func,
   requestAccountShares: PropTypes.func,
