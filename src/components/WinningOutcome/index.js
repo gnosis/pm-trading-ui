@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { calcLMSRMarginalPrice } from 'api'
 import { OUTCOME_TYPES } from 'utils/constants'
 import Decimal from 'decimal.js'
 import { eventDescriptionShape, marketShape } from '../../utils/shapes'
