@@ -23,7 +23,7 @@ CurrencyName.propTypes = {
 }
 
 CurrencyName.defaultProps = {
-  collateralToken: 'OLY',
+  collateralToken: '',
   outcomeToken: '',
 }
 
