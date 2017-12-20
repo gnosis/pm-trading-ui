@@ -292,13 +292,13 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   )
 
   const currentAccount = await api.getCurrentAccount()
-  const marketAllowance = await gnosis.olympiaToken.allowance(currentAccount, market.address)
+  const marketAllowance = await gnosis.etherToken.allowance(currentAccount, market.address)
   const approvalResetAmount = transactionCost.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
   const transactions = [
     DEPOSIT(
       cost,
-      'OLY-Token',
+      'ETH',
       outcomeTokenCount
         .div(1e18)
         .toDP(2)
@@ -323,6 +323,7 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount)
+
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions succeeded'])
     await dispatch(closeModal())
@@ -335,6 +336,7 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   }
 
   const { netOutcomeTokensSold } = market
+
   const newOutcomeTokenAmount = parseInt(netOutcomeTokensSold[outcomeIndex], 10) + outcomeTokenCount.toNumber()
   netOutcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
 

@@ -131,7 +131,7 @@ class MarketBuySharesForm extends Component {
     }
 
     if (decimalValue.gt(currentBalance)) {
-      return "You're trying to invest more OLY tokens than you have."
+      return "You're trying to invest more than you have."
     }
 
     return undefined

@@ -1,4 +1,4 @@
-import { get, find, orderBy } from 'lodash'
+import { get, find, orderBy, mapValues } from 'lodash'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Decimal from 'decimal.js'
 
@@ -87,8 +87,14 @@ export const isGnosisInitialized = state => state.blockchain.gnosisInitialized
 
 export const getGasCosts = (state) => {
   const gasCosts = get(state, 'blockchain.gasCosts', {})
-  return Object.keys(gasCosts).reduce((acc, item) =>
-    ({ ...acc, [item]: gasCosts[item] ? gasCosts[item] : new Decimal(0) }), {})
+
+  return mapValues(gasCosts, (cost) => {
+    if (!cost) {
+      return 0
+    }
+
+    return cost
+  })
 }
 
 export const isGasCostFetched = (state, property) => get(state, `blockchain.gasCosts['${property}']`) !== undefined

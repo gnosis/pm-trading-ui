@@ -44,7 +44,7 @@ const renderCategoricalGraph = (data) => {
               className="axis axis--x"
               dataKey="date"
               tickSize={0}
-              scale="time"
+              scale="auto"
               tick={DateAxisTick}
             />
             <YAxis className="axis axis--y" tickFormatter={percentageFormatter} unit="%" type="number" />
@@ -94,7 +94,7 @@ const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) =
             <XAxis
               className="axis axis--x"
               dataKey="date"
-              scale="time"
+              scale="auto"
               tick={DateAxisTick}
               domain={[data[0].date, (new Date()).valueOf()]}
             />
