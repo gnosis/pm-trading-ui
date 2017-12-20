@@ -31,20 +31,20 @@ const resolutionFilters = [
   },
   {
     label: 'Open',
-    value: 'RESOLVED',
+    value: 'UNRESOLVED',
   },
   {
     label: 'Ended',
-    value: 'UNRESOLVED',
+    value: 'RESOLVED',
   },
 ]
 
 const selectFilter = [
   { value: '---', label: '---' },
-  { value: 'RESOLUTION_DATE_ASC', label: 'RESOLUTION_DATE_ASC' },
-  { value: 'RESOLUTION_DATE_DESC', label: 'RESOLUTION_DATE_DESC' },
-  { value: 'TRADING_VOLUME_ASC', label: 'TRADING_VOLUME_ASC' },
-  { value: 'TRADING_VOLUME_DESC', label: 'TRADING_VOLUME_DESC' },
+  { value: 'RESOLUTION_DATE_ASC', label: 'RESOLUTION DATE ↑' },
+  { value: 'RESOLUTION_DATE_DESC', label: 'RESOLUTION DATE ↓' },
+  { value: 'TRADING_VOLUME_ASC', label: 'TRADING VOLUME ↑' },
+  { value: 'TRADING_VOLUME_DESC', label: 'TRADING VOLUME ↓' },
 ]
 
 class MarketList extends Component {

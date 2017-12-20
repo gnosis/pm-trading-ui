@@ -39,8 +39,8 @@ const ScalarSlider = ({
         <div className="scalarSlider__bar" title="Please enter a value on the right!">
           <div className="scalarSlider__handle" style={currentValueSliderStyle}>
             <div className="scalarSlider__handleText">
-              <div className="scalarSlider__handleTextLabel">Current Trade</div>
-              <DecimalValue value={value} decimals={decimals} /> {unit}
+              <div className="scalarSlider__handleTextLabel">Predicted Outcome</div>
+              <div className="scalarSlider__handleTextValue">{`${decimalToText(value)} ${unit}`}</div>
             </div>
           </div>
           <div

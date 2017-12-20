@@ -1,34 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { calcLMSRMarginalPrice } from 'api'
 import { OUTCOME_TYPES } from 'utils/constants'
 import Decimal from 'decimal.js'
 import { eventDescriptionShape, marketShape } from '../../utils/shapes'
 import './WinningOutcome.less'
 
 const WinningOutcome = ({
-  market: {
-    eventDescription: { outcomes, unit, decimals },
-    oracle: { outcome: winningOutcome },
-    event: { type },
-    funding,
-    netOutcomeTokensSold,
-  },
+  market: { eventDescription: { outcomes, unit, decimals }, oracle: { outcome: winningOutcome }, event: { type } },
 }) => {
   let outcomeText
   if (type === OUTCOME_TYPES.CATEGORICAL) {
-    const tokenDistribution = outcomes.map((outcome, outcomeIndex) => {
-      const marginalPrice = calcLMSRMarginalPrice({
-        netOutcomeTokensSold,
-        funding,
-        outcomeTokenIndex: outcomeIndex,
-      })
-
-      return marginalPrice.toFixed()
-    })
-
-    const tokenDistributionPercent = `${Math.round(tokenDistribution[winningOutcome] * 100).toFixed(0)}%`
-    outcomeText = `${outcomes[winningOutcome]} (${tokenDistributionPercent})`
+    outcomeText = `${outcomes[winningOutcome]}`
   } else if (type === OUTCOME_TYPES.SCALAR) {
     const outcomeValue = Decimal(winningOutcome)
       .div(10 ** decimals)
