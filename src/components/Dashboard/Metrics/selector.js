@@ -1,8 +1,7 @@
-import { values } from 'lodash'
 import Decimal from 'decimal.js'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { getCurrentBalance } from 'selectors/blockchain'
-import { getAccountShares } from 'selectors/marketShares'
+import { getAccountPredictiveAssets } from 'selectors/market'
 import { meSelector } from 'routes/scoreboard/store/selectors'
 import { badgeOf } from 'routes/scoreboard/components/ScoreTable/table'
 
@@ -13,22 +12,7 @@ const tokenSelector = createSelector(
 
 const profitsSelector = createSelector(
   meSelector,
-  getAccountShares,
-  (account, accountShares) => {
-    const minProfit = Decimal(0)
-
-    if (!account) {
-      return minProfit
-    }
-
-    const shares = values(accountShares)
-    return shares.length
-      ? shares.reduce(
-        (assets, share) => assets.add(new Decimal(share.balance).mul(share.marginalPrice)),
-        minProfit,
-      )
-      : minProfit
-  },
+  account => (account ? Decimal(account.predictedProfit).div(1e18).toDP(2, 1).toString() : undefined),
 )
 
 const rankSelector = createSelector(
@@ -44,7 +28,7 @@ const badgeSelector = createSelector(
 
 export default createStructuredSelector({
   tokens: tokenSelector,
-  predictedProfit: profitsSelector,
+  predictedProfit: getAccountPredictiveAssets,
   rank: rankSelector,
   badge: badgeSelector,
 })

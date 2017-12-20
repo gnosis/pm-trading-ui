@@ -1,3 +1,4 @@
+import { values } from 'lodash'
 import Decimal from 'decimal.js'
 import { isMarketResolved, isMarketClosed } from 'utils/helpers'
 
@@ -108,6 +109,21 @@ export const sortMarkets = (markets = [], orderBy = null) => {
       return isFirstMarketEnded - isSecondMarketEnded
     })
   }
+}
+
+export const getAccountPredictiveAssets = (state, account) => {
+  let predictiveAssets = new Decimal(0)
+
+  if (account) {
+    const shares = values(getAccountShares(state))
+    if (shares.length) {
+      predictiveAssets = shares.reduce(
+        (assets, share) => assets.add(new Decimal(share.balance).mul(share.marginalPrice)),
+        new Decimal(0),
+      )
+    }
+  }
+  return predictiveAssets
 }
 
 export const getRedeemedShares = (state, marketAddress) => {
