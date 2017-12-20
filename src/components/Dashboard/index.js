@@ -214,7 +214,7 @@ class Dashboard extends Component {
 
   renderWidget(marketType) {
     const {
-      markets, marketWinnings, accountShares, accountTrades,
+      markets, accountShares, accountTrades,
     } = this.props
 
     const whitelistedMarkets = markets.filter(market =>
@@ -340,7 +340,6 @@ Dashboard.propTypes = {
   accountTrades: PropTypes.array,
   accountPredictiveAssets: PropTypes.string,
   etherTokens: PropTypes.string,
-  winnings: PropTypes.objectOf(PropTypes.string),
   requestMarkets: PropTypes.func,
   requestGasPrice: PropTypes.func,
   requestAccountShares: PropTypes.func,
