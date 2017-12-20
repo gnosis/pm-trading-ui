@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions'
 
-import { UPORT_OLYMPIA_KEY } from 'integrations/uport/connector'
 import { isGnosisInitialized, getSelectedProvider, initializedAllProviders } from 'selectors/blockchain'
 
 import { initGnosis } from './blockchain'
@@ -16,9 +15,6 @@ const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 export const logoutProvider = () => async (dispatch, getState) => {
   const state = getState()
   const { name: providerName } = getSelectedProvider(state)
-
-  localStorage.removeItem(UPORT_OLYMPIA_KEY)
-  localStorage.removeItem(`GNOSIS_${process.env.VERSION}`)
 
   await dispatch(logout(providerName))
 }

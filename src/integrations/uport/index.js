@@ -4,7 +4,7 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import BaseIntegration from 'integrations/baseIntegration'
 import { fetchOlympiaUserData } from 'routes/scoreboard/store/actions'
 import { weiToEth } from 'utils/helpers'
-import initUportConnector, { isUserConnected } from './connector'
+import initUportConnector, { connect, connectorLogOut, isUserConnected } from './connector'
 
 export const notificationsEnabled = false
 
@@ -21,7 +21,7 @@ class Uport extends BaseIntegration {
 
   constructor() {
     super()
-
+    connect()
     this.watcher = setInterval(() => {
       this.watch('balance', this.getBalance)
       this.watch('network', this.getNetwork)
@@ -88,6 +88,11 @@ class Uport extends BaseIntegration {
     }
 
     throw new Error('Invalid Balance')
+  }
+
+  async logout() {
+    await super.logout()
+    connectorLogOut()
   }
 }
 

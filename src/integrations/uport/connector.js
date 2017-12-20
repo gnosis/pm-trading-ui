@@ -39,11 +39,14 @@ const LoginUport = () => (
   </Block>
 )
 
-const uport = new Connect('Gnosis', {
-  clientId: '2ozUxc1QzFVo7b51giZsbkEsKw2nJ87amAf',
-  network: 'rinkeby',
-  signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
-})
+let uport = null
+export const connect = () => {
+  uport = new Connect('Gnosis', {
+    clientId: '2ozUxc1QzFVo7b51giZsbkEsKw2nJ87amAf',
+    network: 'rinkeby',
+    signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
+  })
+}
 
 export const getCredentialsFromLocalStorage = () => {
   const cred = localStorage.getItem(UPORT_OLYMPIA_KEY)
@@ -81,6 +84,13 @@ const requestCredentials = useNotifications => async () => {
     localStorage.removeItem(UPORT_OLYMPIA_KEY)
     return null
   }
+}
+
+export const connectorLogOut = () => {
+  // localStorage.removeItem(UPORT_OLYMPIA_KEY)
+  // localStorage.removeItem(`GNOSIS_${process.env.VERSION}`)
+  localStorage.clear()
+  connect()
 }
 
 const initUportConnector = async (useNotifications) => {
