@@ -3,10 +3,7 @@ import { push } from 'react-router-redux'
 
 
 import DashboardPage from 'components/Dashboard'
-import {
-  getAccountPredictiveAssets,
-  getMarkets,
-} from 'selectors/market'
+import { getMarkets } from 'selectors/market'
 import {
   getAccountTrades,
 } from 'selectors/marketTrades'
@@ -23,7 +20,6 @@ const mapStateToProps = (state) => {
   const markets = getMarkets(state)
   const defaultAccount = getCurrentAccount(state)
   const accountTrades = getAccountTrades(defaultAccount)(state)
-  const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
   let etherTokens = getEtherTokensAmount(state, defaultAccount)
@@ -41,7 +37,6 @@ const mapStateToProps = (state) => {
     etherTokens,
     accountShares,
     accountTrades,
-    accountPredictiveAssets,
     gnosisInitialized,
   }
 }
