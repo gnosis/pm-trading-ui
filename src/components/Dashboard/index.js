@@ -88,11 +88,12 @@ class Dashboard extends Component {
   renderNewMarkets(markets) {
     return markets.map((market) => {
       const viewMarket = () => this.handleViewMarket(market)
+      const outcomeOptions = { showOnlyTrendingOutcome: true, showDate: true, dateFormat: 'MMMM Y' }
 
       return (
         <div className="dashboardMarket dashboardMarket--new" key={market.address} onClick={viewMarket}>
           <div className="dashboardMarket__title">{market.eventDescription.title}</div>
-          <Outcome market={market} opts={{ showOnlyTrendingOutcome: true, showDate: true, dateFormat: 'MMMM Y' }} />
+          <Outcome market={market} opts={outcomeOptions} />
         </div>
       )
     })
@@ -101,6 +102,10 @@ class Dashboard extends Component {
   renderClosingMarkets(markets) {
     return markets.map((market) => {
       const viewMarket = () => this.handleViewMarket(market)
+      const outcomeOptions = {
+        showOnlyTrendingOutcome: true,
+      }
+
       return (
         <div
           className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns"
@@ -112,7 +117,7 @@ class Dashboard extends Component {
           </div>
           <div className="dashboardMarket__rightCol">
             <div className="dashboardMarket__title">{market.eventDescription.title}</div>
-            <Outcome market={market} opts={{ showOnlyTrendingOutcome: true }} />
+            <Outcome market={market} opts={outcomeOptions} />
           </div>
         </div>
       )
@@ -151,6 +156,8 @@ class Dashboard extends Component {
           cost: holding.balance,
         })
       }
+      const showSellViewFunc = () => this.handleShowSellView(market, holding)
+      const redeemWinningsFunc = () => this.props.redeemWinnings(market)
 
       if (market) {
         const viewMarket = () => this.handleViewMarket(market)
@@ -186,14 +193,14 @@ class Dashboard extends Component {
                 {market.event &&
                   market.oracle &&
                   !marketResolvedOrClosed && (
-                    <a href="javascript:void(0);" onClick={() => this.handleShowSellView(market, holding)}>
+                    <a href="javascript:void(0);" onClick={showSellViewFunc}>
                       SELL
                     </a>
                   )}
                 {market.event &&
                   market.oracle &&
                   marketResolved && (
-                    <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(market)}>
+                    <a href="javascript:void(0);" onClick={redeemWinningsFunc}>
                       REDEEM WINNINGS
                     </a>
                   )}
