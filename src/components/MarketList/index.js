@@ -134,7 +134,10 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--enddate" />
               <div className="info__field--label">
-                {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+                {moment
+                  .utc(market.eventDescription.resolutionDate)
+                  .local()
+                  .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
               </div>
             </div>
           </div>
