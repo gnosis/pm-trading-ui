@@ -23,14 +23,14 @@
 
  },
  "gnosisdb": {
-    "protocol": "http",
-    "host": "localhost",
-    "port": 8000
+    "protocol": "https",
+    "host": "gnosisdb-olympia.gnosis.pm",
+    "port": 443
   },
   "ethereum": {
-    "protocol": "http",
-    "host": "localhost",
-    "port": 8545
+    "protocol": "https",
+    "host": "rinkeby.infura.io",
+    "port": 443
   },
  "fetchMarketTimeInterval": 15000
 }

@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
-import PageFrame from 'components/layout/PageFrame'
-import Block from 'components/layout/Block'
-import Title from 'components/layout/Title'
+
 import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -21,7 +19,6 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import { EXPAND_MY_SHARES } from 'components/MarketDetail/ExpandableViews'
 
-import Metrics from './Metrics'
 import './dashboard.less'
 import { isMarketResolved, isMarketClosed } from '../../utils/helpers'
 
@@ -288,11 +285,8 @@ class Dashboard extends Component {
 
   render() {
     const { hasWallet } = this.props
-    let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     if (hasWallet) {
-      metricsSection = <Metrics />
-
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
           <div className="container">
@@ -308,16 +302,15 @@ class Dashboard extends Component {
     return (
       <div className="dashboardPage">
         <div className="dashboardPage__header">
-          <PageFrame>
+          <div className="pageFrame container">
             <div className="row">
               <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                <Block margin="md">
-                  <Title>Dashboard</Title>
-                </Block>
-                <Block margin="xl">{metricsSection}</Block>
+                <div>
+                  <h1>Dashboard</h1>
+                </div>
               </div>
             </div>
-          </PageFrame>
+          </div>
         </div>
         <div className="dashboardWidgets dashboardWidgets--markets">
           <div className="container">

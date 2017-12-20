@@ -25,6 +25,7 @@ export const {
 export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
+    console.log(GNOSIS_OPTIONS)
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
   } catch (err) {
     console.error('Gnosis Integration: connection failed') // eslint-disable-line no-console

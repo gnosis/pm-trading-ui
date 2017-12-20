@@ -23,10 +23,11 @@ class Metamask extends InjectedWeb3 {
   async initialize(opts) {
     super.initialize(opts)
     this.runProviderRegister(this, { priority: Metamask.providerPriority })
-
+    console.log('init metamask')
     this.walletEnabled = false
 
     try {
+      console.log(window.web3)
       if (typeof window.web3 !== 'undefined' && window.web3.currentProvider.constructor.name === 'MetamaskInpageProvider') {
         this.web3 = new Web3(window.web3.currentProvider)
         this.walletEnabled = true
@@ -53,7 +54,7 @@ class Metamask extends InjectedWeb3 {
         this.walletEnabled = false
       }
     }
-
+    console.log(this.walletEnabled, this.account)
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,
       networkId: this.networkId,

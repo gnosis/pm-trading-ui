@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import createIcon from 'blockies'
 import Tooltip from 'rc-tooltip'
-import Img from 'components/layout/Img'
 
 import { generateWalletName, hexWithoutPrefix } from 'utils/helpers'
 
@@ -21,7 +20,7 @@ const Identicon = ({ account }) => {
 
   return (
     <Tooltip placement="left" overlay={`"${generateWalletName(account)}" (${hexWithoutPrefix(account)})`}>
-      <Img src={canvas.toDataURL()} alt={account} />
+      <img src={canvas.toDataURL()} alt={account} />
     </Tooltip>
   )
 }

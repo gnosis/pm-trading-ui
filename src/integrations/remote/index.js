@@ -1,5 +1,4 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { promisify } from 'utils/helpers'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import Web3 from 'web3'
 

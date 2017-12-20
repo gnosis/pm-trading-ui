@@ -67,7 +67,7 @@ class MarketMySharesForm extends Component {
     if (sellAmountAndMarketSharesAreDefined) {
       // By default form is filled up with fill amount
       const share = marketShares.filter(_share => _share.id === extendedSellId)[0]
-      
+
       if (share) {
         const fullAmount = Decimal(share.balance)
           .div(1e18)
@@ -330,6 +330,9 @@ class MarketMySharesForm extends Component {
               <span>
                 <DecimalValue value={earnings} />&nbsp;
                 <CurrencyName collateralToken={market.event.collateralToken} />
+              </span>
+            </div>
+
             {market.event.type === 'SCALAR' ? (
               <div className="col-md-3 marketMyShares__sellColumn">
                 <label>New predicted value</label>

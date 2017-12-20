@@ -37,13 +37,6 @@ class Header extends Component {
             {version}
           </div>
           <div className="headerContainer__group headerContainer__group--left navLinks">
-            <Link
-              to="/markets/list"
-              activeClassName="headerContainer__navLink--active"
-              className="headerContainer__navLink"
-            >
-              Markets
-            </Link>
             {hasWallet && (
               <Link
                 to="/dashboard"
@@ -54,18 +47,11 @@ class Header extends Component {
               </Link>
             )}
             <Link
-              to="/scoreboard"
+              to="/markets/list"
               activeClassName="headerContainer__navLink--active"
               className="headerContainer__navLink"
             >
-              Scoreboard
-            </Link>
-            <Link
-              to="/gamerules"
-              activeClassName="headerContainer__navLink--active"
-              className="headerContainer__navLink"
-            >
-              Game Guide
+              Markets
             </Link>
           </div>
 

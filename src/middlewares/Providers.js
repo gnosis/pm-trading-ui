@@ -1,7 +1,6 @@
 import * as walletIntegrations from 'integrations'
 import { initGnosis } from 'actions/blockchain'
 import { runProviderRegister, runProviderUpdate } from 'actions/providers'
-import { getUportDefaultAccount } from 'selectors/blockchain'
 import { map } from 'lodash'
 
 export default store => next => (action) => {
@@ -13,7 +12,6 @@ export default store => next => (action) => {
     const providerOptions = {
       runProviderUpdate: (provider, data) => dispatch(runProviderUpdate(provider, data)),
       runProviderRegister: (provider, data) => dispatch(runProviderRegister(provider, data)),
-      uportDefaultAccount: getUportDefaultAccount(getState()),
       initGnosis: () => dispatch(initGnosis()),
       dispatch,
     }

@@ -12,7 +12,6 @@ import {
   calcRedeemWinningsGasCost,
   getGasPrice,
   getEtherTokens,
-  getOlympiaTokensByAccount,
 } from 'api'
 
 import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
@@ -20,7 +19,7 @@ import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
 import { findDefaultProvider, getSelectedProvider } from 'selectors/blockchain'
 
-import { updateProvider, setActiveProvider } from './providers'
+import { setActiveProvider } from './providers'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -120,17 +119,4 @@ export const initGnosis = () => async (dispatch, getState) => {
     console.warn(`Gnosis.js connection Error: ${error}`)
     return dispatch(setConnectionStatus({ connected: false }))
   }
-}
-
-export const refreshTokenBalance = () => async (dispatch, getState) => {
-  const state = getState()
-  const { name: providerName, ...provider } = getSelectedProvider(state)
-
-  const balance = await getOlympiaTokensByAccount(provider.account)
-
-  await dispatch(updateProvider({
-    provider: providerName,
-    ...provider,
-    balance: weiToEth(balance),
-  }))
 }
