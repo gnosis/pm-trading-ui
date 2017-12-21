@@ -37,8 +37,12 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
 
     return (
       <div className="outcomes outcomes--categorical">
-        <div className="entry__color" style={outcomeEntryStyle} />
-        <div className="outcome">{renderOutcomes[trendingOutcomeIndex]}</div>
+        <div className="outcome__wrapper">
+          <div className="entry__color" style={outcomeEntryStyle} />
+          <div className="outcome">
+            {renderOutcomes[trendingOutcomeIndex]}
+          </div>
+        </div>
         <div>{trendingMarginalPricePercent}%</div>
         <div className="date">{resolutionDateFormatted}</div>
       </div>
