@@ -1,0 +1,63 @@
+import { createAction } from 'redux-actions'
+
+import { isGnosisInitialized, getSelectedProvider, initializedAllProviders } from 'selectors/blockchain'
+
+import { initGnosis } from './blockchain'
+
+export const registerProvider = createAction('REGISTER_PROVIDER')
+export const updateProvider = createAction('UPDATE_PROVIDER')
+export const logout = createAction('PROVIDER_LOGOUT')
+export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
+export const initProviders = createAction('INIT_PROVIDERS')
+
+const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
+
+export const logoutProvider = () => async (dispatch, getState) => {
+  const state = getState()
+  const { name: providerName } = getSelectedProvider(state)
+
+  localStorage.removeItem(`GNOSIS_${process.env.VERSION}`)
+
+  await dispatch(logout(providerName))
+}
+
+export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
+  await dispatch(updateProvider({
+    provider: provider.constructor.providerName,
+    ...data,
+  }))
+
+  const state = getState()
+  const isInitialized = isGnosisInitialized(state)
+
+  if (isInitialized) {
+    let requireGnosisReinit = false
+    GNOSIS_REINIT_KEYS.forEach((searchKey) => {
+      if (Object.keys(data).indexOf(searchKey) > -1) {
+        requireGnosisReinit = true
+      }
+    })
+
+    if (requireGnosisReinit) {
+      // Just in case any other provider is updated and the default one
+      // is UPORT we do not want to scan the code again
+      await dispatch(initGnosis())
+    }
+  }
+
+  if (!isInitialized) {
+    const providersLoaded = initializedAllProviders(state)
+
+    if (providersLoaded) {
+      await dispatch(initGnosis())
+    }
+  }
+}
+
+export const runProviderRegister = (provider, data) => async (dispatch) => {
+  const providerData = { ...data }
+  await dispatch(registerProvider({
+    provider: provider.constructor.providerName,
+    ...providerData,
+  }))
+}

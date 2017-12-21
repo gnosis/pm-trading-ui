@@ -17,16 +17,6 @@ export const outcomeTokenShape = PropTypes.shape({
   totalSupply: PropTypes.string,
 })
 
-export const marketShareShape = PropTypes.shape({
-  balance: PropTypes.string,
-  event: PropTypes.string,
-  eventDescription: eventDescriptionShape,
-  id: PropTypes.string,
-  marginalPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  outcomeToken: outcomeTokenShape,
-  owner: PropTypes.string,
-})
-
 export const marketShape = PropTypes.shape({
   event: PropTypes.object,
   eventDescription: eventDescriptionShape,
@@ -48,6 +38,22 @@ export const eventShape = PropTypes.shape({
   event: PropTypes.string,
   label: PropTypes.string,
   status: PropTypes.string,
+})
+
+export const marketShareShape = PropTypes.shape({
+  balance: PropTypes.string,
+  event: PropTypes.oneOfType([PropTypes.string, eventShape]),
+  eventDescription: eventDescriptionShape,
+  id: PropTypes.string,
+  marginalPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  outcomeToken: outcomeTokenShape,
+  owner: PropTypes.string,
+})
+
+export const marketTradeShape = PropTypes.shape({
+  id: PropTypes.string,
+  event: PropTypes.oneOfType([PropTypes.string, eventShape]),
+  owner: PropTypes.string,
 })
 
 export const transactionShape = PropTypes.shape({

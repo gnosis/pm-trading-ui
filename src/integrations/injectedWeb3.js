@@ -1,15 +1,10 @@
-import autobind from 'autobind-decorator'
 import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 
 import { weiToEth, promisify } from 'utils/helpers'
 
-class InjectedWeb3 {
+class BaseIntegration {
   runProviderUpdate() {}
   runProviderRegister() {}
-
-  constructor() {
-    this.watcherInterval = setInterval(this.watcher, 1000)
-  }
 
   /**
    * Initializes the Integration
@@ -18,8 +13,10 @@ class InjectedWeb3 {
    * @param {function} opts.runProviderRegister - Function to run when this provider registers
    */
   async initialize(opts) {
-    this.runProviderUpdate = typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
-    this.runProviderRegister = typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
+    this.runProviderUpdate =
+      typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
+    this.runProviderRegister =
+      typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
   }
 
   /**
@@ -41,7 +38,7 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Network Identifier
    */
   async getNetworkId() {
-    return await promisify(this.web3.version.getNetwork, [], 10000)
+    return promisify(this.web3.version.getNetwork, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
   }
 
   /**
@@ -50,7 +47,11 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Accountaddress
    */
   async getAccount() {
-    const accounts = await promisify(this.web3.eth.getAccounts, [], 10000)
+    const accounts = await promisify(
+      this.web3.eth.getAccounts,
+      [],
+      this.defaultTimeout > 0 ? this.defaultTimeout : undefined,
+    )
 
     return accounts && accounts.length ? accounts[0] : null
   }
@@ -65,7 +66,11 @@ class InjectedWeb3 {
       throw new Error('No Account available')
     }
 
-    const balance = await promisify(this.web3.eth.getBalance, [this.account], 10000)
+    const balance = await promisify(
+      this.web3.eth.getBalance,
+      [this.account],
+      this.defaultTimeout > 0 ? this.defaultTimeout : undefined,
+    )
 
     if (typeof balance !== 'undefined') {
       return weiToEth(balance.toString())
@@ -75,43 +80,54 @@ class InjectedWeb3 {
   }
 
   /**
-   * Periodic updater to get all relevant information from this provider
+   * Add a new watcher to a property inside the integration
+   * @param {string} property - Property inside the integration that is holding the value for this watcher
+   * @param {function} getter - (async) function that returns the value for the watcher
    * @async
    */
-  @autobind
-  async watcher() {
+  watch = async (property, getter) => {
+    let value
+
     try {
-      const currentAccount = await this.getAccount()
-      if (this.account !== currentAccount) {
-        this.account = currentAccount
-        await this.runProviderUpdate(this, { account: this.account })
-      }
-
-      const currentNetworkId = await this.getNetworkId()
-      if (this.networkId !== currentNetworkId) {
-        this.networkId = currentNetworkId
-        this.network = await this.getNetwork()
-        await this.runProviderUpdate(this, { network: this.network, networkId: this.networkId })
-      }
-
-      const currentBalance = await this.getBalance()
-      if (this.balance !== currentBalance) {
-        this.balance = currentBalance
-        await this.runProviderUpdate(this, { balance: this.balance })
-      }
-
-      if (!this.walletEnabled && this.account) {
-        this.walletEnabled = true
-        await this.runProviderUpdate(this, { available: true })
-      }
-    } catch (err) {
+      value = await getter.call(this)
+    } catch (e) {
       if (this.walletEnabled) {
         this.walletEnabled = false
-        await this.runProviderUpdate(this, { available: false })
+        this[property] = undefined
+        await this.runProviderUpdate(this, { available: false, [property]: undefined })
       }
+
+      return
     }
+
+    const didPropertyChange = this[property] !== value
+    if (!didPropertyChange) {
+      return
+    }
+
+    const providerUpdate = { [property]: value }
+
+    if (!this.walletEnabled) {
+      this.walletEnabled = true
+      providerUpdate.available = true
+    }
+
+    this.runProviderUpdate(this, providerUpdate)
   }
 
+  logout() {
+    this.balance = undefined
+    this.network = undefined
+    this.account = undefined
+    this.walletEnabled = false
+
+    this.runProviderUpdate(this, {
+      account: undefined,
+      balance: undefined,
+      network: undefined,
+      available: false,
+    })
+  }
 }
 
-export default InjectedWeb3
+export default BaseIntegration

@@ -1,5 +1,4 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { promisify } from 'utils/helpers'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import Web3 from 'web3'
 
@@ -10,6 +9,17 @@ class Remote extends InjectedWeb3 {
    * This allows "fallback providers" like a remote etherium host to be used as a last resort.
    */
   static providerPriority = 1
+  static watcherInterval = 1000
+
+  constructor() {
+    super()
+
+    this.watcher = setInterval(() => {
+      this.watch('account', this.getAccount)
+      this.watch('balance', this.getBalance)
+      this.watch('network', this.getNetwork)
+    }, Remote.watcherInterval)
+  }
 
   /**
    * Tries to initialize and enable the current provider
@@ -41,6 +51,8 @@ class Remote extends InjectedWeb3 {
       account: this.account,
       balance: this.balance,
     })
+      .then(() => opts.initGnosis())
+      .catch(() => opts.initGnosis())
   }
 }
 export default new Remote()
