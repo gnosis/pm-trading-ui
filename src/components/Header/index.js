@@ -8,7 +8,6 @@ import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
-import gaSend from 'utils/analytics/gaSend'
 
 import MenuAccountDropdown from './MenuAccountDropdown'
 
@@ -17,8 +16,7 @@ import './header.less'
 class Header extends Component {
   @autobind
   handleConnectWalletClick() {
-    gaSend(['event', 'Connect a wallet', 'click', 'Connect a wallet click'])
-    this.props.initProviders()
+    this.props.openConnectWalletModal()
   }
 
   render() {
@@ -91,7 +89,7 @@ Header.propTypes = {
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
-  initProviders: PropTypes.func.isRequired,
+  openConnectWalletModal: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {
