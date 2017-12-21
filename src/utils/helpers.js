@@ -30,7 +30,7 @@ export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix
 export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
 
 export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) =>
-  stage === MARKET_STAGES.MARKET_CLOSED || moment(resolutionDate).isBefore(moment().utc())
+  stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
 
 export const toEntity = (data, entityType, idKey = 'address') => {
   const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
@@ -214,11 +214,7 @@ export const generateWalletName = (account) => {
   return generateDeterministicRandomName(accountAddressNormalized)
 }
 
-const isValidMarket = market =>
-  !!(market &&
-  market.event &&
-  market.oracle &&
-  market.eventDescription)
+const isValidMarket = market => !!(market && market.event && market.oracle && market.eventDescription)
 
 const marketCanRedeemWinnings = market => market.event.isWinningOutcomeSet
 
@@ -286,11 +282,16 @@ export const calcShareWinningsScalar = (share, market, event) => {
   const isShort = parseInt(share.outcomeToken.index, 10) === 0
   const isLong = parseInt(share.outcomeToken.index, 10)
   if (isShort) {
-    return Decimal(share.balance).mul(factorShort).div(outcomeRange)
+    return Decimal(share.balance)
+      .mul(factorShort)
+      .div(outcomeRange)
   }
 
   if (isLong) {
-    return Decimal(share.balance).mul(factorLong).div(outcomeRange).toString()
+    return Decimal(share.balance)
+      .mul(factorLong)
+      .div(outcomeRange)
+      .toString()
   }
 
   throw new Error(`Invalid Outcome for Scalar Event found: ${share.outcomeToken.index}`)
@@ -299,7 +300,7 @@ export const calcShareWinningsScalar = (share, market, event) => {
 export const calcShareWinnings = (share, market, event) => {
   const isCategorical = event.type === OUTCOME_TYPES.CATEGORICAL
 
-  return isCategorical ?
-    calcShareWinningsCategorical(share, market, event) :
-    calcShareWinningsScalar(share, market, event)
+  return isCategorical
+    ? calcShareWinningsCategorical(share, market, event)
+    : calcShareWinningsScalar(share, market, event)
 }
