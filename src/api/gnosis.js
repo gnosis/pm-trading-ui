@@ -6,7 +6,7 @@ import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
 import { hexWithPrefix, weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
-// import { normalize } from 'normalizr'
+import { NETWORK_TIMEOUT } from 'actions/blockchain'
 
 import delay from 'await-delay'
 import moment from 'moment'
@@ -36,11 +36,27 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
  * Returns an instance of the connection to GnosisJS
  */
 export const getGnosisConnection = async () => {
-  if (!gnosisInstance) {
-    throw new Error('GnosisJS not initialized yet')
+  if (gnosisInstance) {
+    return gnosisInstance
   }
 
-  return gnosisInstance
+  return new Promise((resolve, reject) => {
+    let stillRunning = true
+    const instanceCheck = setInterval(() => {
+      if (gnosisInstance) {
+        stillRunning = false
+        clearInterval(instanceCheck)
+        return resolve(gnosisInstance)
+      }
+    }, 50)
+
+    setTimeout(() => {
+      if (stillRunning) {
+        clearInterval(instanceCheck)
+        reject('Connection to Gnosis.js timed out')
+      }
+    }, NETWORK_TIMEOUT)
+  })
 }
 
 /**

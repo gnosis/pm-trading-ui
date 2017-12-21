@@ -1,4 +1,5 @@
 import {
+  getGnosisConnection,
   initGnosisConnection,
   getCurrentBalance,
   getCurrentAccount,
@@ -28,7 +29,7 @@ export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
 
-const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
+export const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
 export const requestGasPrice = () => async (dispatch) => {
   const gasPrice = await getGasPrice()
