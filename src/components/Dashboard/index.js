@@ -11,6 +11,8 @@ import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
 import { marketShareShape } from 'utils/shapes'
 import {
   COLOR_SCHEME_DEFAULT,
+  COLOR_SCHEME_SCALAR,
+  OUTCOME_TYPES,
   LOWEST_DISPLAYED_VALUE,
   TRANSACTION_DESCRIPTIONS,
   RESOLUTION_TIME,
@@ -64,6 +66,12 @@ class Dashboard extends Component {
   @autobind
   handleCreateMarket() {
     this.props.changeUrl('/markets/new')
+  }
+
+  @autobind
+  handleRedeemWinnigs(event, market) {
+    event.stopPropagation()
+    this.props.redeemWinnings(market)
   }
 
   renderControls() {
@@ -132,18 +140,21 @@ class Dashboard extends Component {
 
     return Object.keys(holdings).map((shareId) => {
       const share = holdings[shareId]
+      const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
+      const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
+
+      const viewMarketFunc = () => this.handleViewMarket(share.market)
+      const redeemWinningsFunc = e => this.handleRedeemWinnigs(e, share.market)
+      const showSellViewFunc = () => this.handleShowSellView(share.market, share)
+
       return (
-        <div
-          className="dashboardMarket dashboardMarket--onDark"
-          key={share.id}
-          onClick={() => this.handleViewMarket(share.market)}
-        >
+        <div className="dashboardMarket dashboardMarket--onDark" key={share.id} onClick={viewMarketFunc}>
           <div className="dashboardMarket__title">{share.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
               <div
                 className="entry__color"
-                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[share.outcomeToken.index] }}
+                style={outcomeColorStyle}
               />
               <div className="dashboardMarket--highlight">{getOutcomeName(share, share.outcomeToken.index)}</div>
             </div>
@@ -164,13 +175,13 @@ class Dashboard extends Component {
             </div>
             <div className="col-md-4 dashboardMarket--highlight">
               {share.isRedeemable && (
-                <a href="javascript:void(0);" onClick={() => this.props.redeemWinnings(share.market)}>
-                    REDEEM WINNINGS
+                <a href="javascript:void(0);" onClick={redeemWinningsFunc}>
+                  REDEEM WINNINGS
                 </a>
               )}
               {share.isSellable && (
-                <a href="javascript:void(0);" onClick={() => this.handleShowSellView(share.market, share)}>
-                    SELL
+                <a href="javascript:void(0);" onClick={showSellViewFunc}>
+                  SELL
                 </a>
               )}
             </div>
@@ -183,6 +194,9 @@ class Dashboard extends Component {
   renderMyTrades(trades) {
     return trades.slice(0, 20).map((trade, index) => {
       const { market } = trade
+
+      const colorScheme = market.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
+      const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.index] }
 
       let averagePrice
       if (trade.orderType === 'BUY') {
@@ -199,7 +213,7 @@ class Dashboard extends Component {
             <div className="col-md-3 outcome__wrapper">
               <div
                 className="entry__color"
-                style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
+                style={outcomeColorStyle}
               />
               <div className="dashboardMarket--highlight dashboardMarket__outcome">
                 {getOutcomeName(market, trade.outcomeToken.index)}
@@ -265,9 +279,7 @@ class Dashboard extends Component {
       return (
         <div className="dashboardWidget dashboardWidget--onDark col-md-6" key={marketType}>
           <div className="dashboardWidget__market-title">My Tokens</div>
-          <div className="dashboardWidget__container">
-            {this.renderMyHoldings(accountShares)}
-          </div>
+          <div className="dashboardWidget__container">{this.renderMyHoldings(accountShares)}</div>
         </div>
       )
     }
@@ -285,9 +297,34 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { hasWallet } = this.props
+    const { hasWallet, etherTokens, accountPredictiveAssets } = this.props
+    let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     if (hasWallet) {
+      metricsSection = (
+        <div className="dashboardPage__stats">
+          <div className="container">
+            <div className="row dashboardStats">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+                <div className="dashboardStats__icon icon icon--etherTokens" />
+                <span className="dashboardStats__value">
+                  <DecimalValue value={etherTokens} />
+                </span>
+                <div className="dashboardStats__label">Ether Tokens</div>
+              </div>
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+                <div className="dashboardStats__icon icon icon--outstandingPredictions" />
+                <span className="dashboardStats__value" style={{ color: 'green' }}>
+                  <DecimalValue value={accountPredictiveAssets} />
+                  &nbsp;ETH
+                </span>
+                <div className="dashboardStats__label">Outstanding predictions</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
           <div className="container">
@@ -313,6 +350,8 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
+        {metricsSection}
+        {this.renderControls()}
         <div className="dashboardWidgets dashboardWidgets--markets">
           <div className="container">
             <div className="row">
