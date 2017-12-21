@@ -24,7 +24,7 @@ store.dispatch({ type: 'INIT' })
 store.dispatch(initProviders())
 Decimal.set({ toExpPos: 9999 })
 
-initGoogleAnalytics()
+// initGoogleAnalytics()
 
 /* global document */
 const rootElement = document.getElementById('root')
