@@ -17,7 +17,6 @@ import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, MARKET_STAGES } from 'utils
 import { DEPOSIT, SELL, REVOKE_TOKENS } from 'utils/transactionExplanations'
 
 import { openModal, closeModal } from 'actions/modal'
-import gaSend from 'utils/analytics/gaSend'
 
 import { MAX_ALLOWANCE_WEI } from '../utils/constants'
 import { SETTING_ALLOWANCE } from '../utils/transactionExplanations'
@@ -317,15 +316,12 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
     return await dispatch(receiveEntities(payload))
   }
 
-  gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions start'])
-
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount)
 
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
-    gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions succeeded'])
     await dispatch(closeModal())
   } catch (e) {
     console.error(e)
@@ -384,7 +380,6 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
 
   // Reset the allowance if the cost of current transaction is greater than the current allowance
   // TODO: Calculate transaction cost
-  gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions start'])
   const transactions = [
     SELL(Decimal(outcomeTokenCount)
       .toDP(2)
@@ -396,7 +391,6 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
   try {
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, earnings, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
-    gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions succeeded'])
     await dispatch(closeModal())
   } catch (e) {
     console.error(e)

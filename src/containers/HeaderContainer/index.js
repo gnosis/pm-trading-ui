@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { initProviders } from 'actions/providers'
 import { openModal } from 'actions/modal'
 
 import Header from 'components/Header'
@@ -23,7 +22,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  initProviders: () => dispatch(initProviders()),
+  openConnectWalletModal: () => dispatch(openModal({ modalName: 'ModalConnectWallet' })),
   openNetworkCheckModal: () => dispatch(openModal({ modalName: 'ModalNetworkCheck' })),
 })
 
