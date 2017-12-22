@@ -41,8 +41,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getOutcomeTokenCount(investment, outcomeIndex, limitMargin) {
-    const validInvestment =
-      /^-?\d+\.?\d*$/.test(investment) && investment && parseFloat(investment) > 0 && parseFloat(investment) < 1000
+    const validInvestment = /^-?\d+\.?\d*$/.test(investment) && investment && parseFloat(investment) > 0
     if (!validInvestment) {
       return new Decimal(0)
     }
@@ -203,7 +202,7 @@ class MarketBuySharesForm extends Component {
       },
     } = this.props
 
-    const validInvestment = this.validateInvestment(selectedBuyInvest) === undefined || !selectedBuyInvest
+    const validInvestment = /^-?\d+\.?\d*$/.test(selectedBuyInvest) || !selectedBuyInvest
     const isOutcomeSelected = selectedOutcome !== undefined
     const currentMarginalPrice = marginalPrices[1]
     // Get the amount of tokens to buy
