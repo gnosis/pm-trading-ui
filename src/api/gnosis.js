@@ -8,7 +8,6 @@ import { hexWithPrefix, weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
 import { NETWORK_TIMEOUT } from 'actions/blockchain'
 
-import delay from 'await-delay'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
@@ -102,10 +101,6 @@ export const createEventDescription = async (eventDescription, eventType) => {
 
   const ipfsHash = await gnosis.publishEventDescription(eventDescriptionNormalized)
 
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
-
   return {
     ipfsHash,
     local: true,
@@ -125,10 +120,6 @@ export const createOracle = async (oracle) => {
     oracleContract = await gnosis.createUltimateOracle(oracle)
   } else {
     throw new Error('invalid oracle type')
-  }
-
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
   }
 
   return {
@@ -159,10 +150,6 @@ export const createEvent = async (event) => {
     throw new Error('invalid outcome/event type')
   }
 
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
-
   return {
     address: hexWithPrefix(eventContract.address),
     creator: await getCurrentAccount(),
@@ -183,10 +170,6 @@ export const createMarket = async (market) => {
     marketMaker: gnosis.lmsrMarketMaker,
     marketFactory: gnosis.standardMarketFactory,
   })
-
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
 
   return {
     ...market,
@@ -229,10 +212,6 @@ export const fundMarket = async (market) => {
     await collateralToken.approve(hexWithPrefix(marketContract.address), MAX_ALLOWANCE_WEI)
   }
 
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
-
   await marketContract.fund(marketFundingWei.toString())
 
   return market
@@ -246,10 +225,6 @@ export const closeMarket = async (market) => {
   const gnosis = await getGnosisConnection()
   const marketContract = gnosis.contracts.Market.at(hexWithPrefix(market.address))
   requireEventFromTXResult(await marketContract.close(), 'MarketClosing')
-
-  if (process.env.NODE_ENV !== 'production') {
-    await delay(5000)
-  }
 
   return market
 }
