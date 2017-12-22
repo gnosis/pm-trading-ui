@@ -164,7 +164,7 @@ class Dashboard extends Component {
               <DecimalValue value={weiToEth(share.isResolved ? share.winnings : share.value)} />&nbsp;
               <CurrencyName collateralToken={share.event.collateralToken} />
             </div>
-            <div className="col-md-4 dashboardMarket--highlight dashboardMarket--action">
+            <div className="col-md-4 dashboardMarket--highlight">
               {share.isRedeemable && (
                 <a href="javascript:void(0);" onClick={redeemWinningsFunc}>
                   REDEEM WINNINGS
