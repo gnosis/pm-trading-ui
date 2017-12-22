@@ -1,15 +1,10 @@
-import autobind from 'autobind-decorator'
-import { ETHEREUM_NETWORK } from 'integrations/constants'
+import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 
-import { weiToEth } from 'utils/helpers'
+import { weiToEth, promisify } from 'utils/helpers'
 
-class InjectedWeb3 {
+class BaseIntegration {
   runProviderUpdate() {}
   runProviderRegister() {}
-
-  constructor() {
-    this.watcherInterval = setInterval(this.watcher, 1000)
-  }
 
   /**
    * Initializes the Integration
@@ -18,51 +13,32 @@ class InjectedWeb3 {
    * @param {function} opts.runProviderRegister - Function to run when this provider registers
    */
   async initialize(opts) {
-    this.runProviderUpdate = typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
-    this.runProviderRegister = typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
+    this.runProviderUpdate =
+      typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
+    this.runProviderRegister =
+      typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
   }
 
   /**
    * Returns the current Networks Name
    * @async
    * @see src/integrations/constants ETHEREUM_NETWORK constants
-   * @returns {Promise<string>} - Network Identifier
+   * @returns {Promise<string>} - Network Name Constant
    */
   async getNetwork() {
-    return new Promise((resolve, reject) => {
-      this.web3.version.getNetwork((err, netId) => {
-        if (err) {
-          reject(err)
-        } else {
-          switch (netId) {
-            case '1': {
-              resolve(ETHEREUM_NETWORK.MAIN)
-              break
-            }
-            case '2': {
-              resolve(ETHEREUM_NETWORK.MORDEN)
-              break
-            }
-            case '3': {
-              resolve(ETHEREUM_NETWORK.ROPSTEN)
-              break
-            }
-            case '4': {
-              resolve(ETHEREUM_NETWORK.RINKEBY)
-              break
-            }
-            case '42': {
-              resolve(ETHEREUM_NETWORK.KOVAN)
-              break
-            }
-            default: {
-              resolve(ETHEREUM_NETWORK.UNKNOWN)
-              break
-            }
-          }
-        }
-      })
-    })
+    const networkId = await this.getNetworkId()
+
+    const networkName = ETHEREUM_NETWORK_IDS[networkId]
+    return networkName || ETHEREUM_NETWORK.UNKNOWN
+  }
+
+  /**
+   * Returns the current Networks ID
+   * @async
+   * @returns {Promise<string>} - Network Identifier
+   */
+  async getNetworkId() {
+    return promisify(this.web3.version.getNetwork, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
   }
 
   /**
@@ -71,16 +47,13 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Accountaddress
    */
   async getAccount() {
-    return new Promise((resolve, reject) => {
-      this.web3.eth.getAccounts(
-        (e, accounts) => {
-          if (e) {
-            reject(e)
-          }
-          resolve(accounts && accounts.length ? accounts[0] : null)
-        },
-      )
-    })
+    const accounts = await promisify(
+      this.web3.eth.getAccounts,
+      [],
+      this.defaultTimeout > 0 ? this.defaultTimeout : undefined,
+    )
+
+    return accounts && accounts.length ? accounts[0] : null
   }
 
   /**
@@ -89,55 +62,72 @@ class InjectedWeb3 {
    * @returns {Promise<string>} - Accountbalance in WEI for current account
    */
   async getBalance() {
-    return new Promise((resolve, reject) => {
-      if (this.account) {
-        this.web3.eth.getBalance(
-          this.account,
-          (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString()))),
-        )
-      } else {
-        return reject(new Error('No Account available'))
-      }
-    })
+    if (!this.account) {
+      throw new Error('No Account available')
+    }
+
+    const balance = await promisify(
+      this.web3.eth.getBalance,
+      [this.account],
+      this.defaultTimeout > 0 ? this.defaultTimeout : undefined,
+    )
+
+    if (typeof balance !== 'undefined') {
+      return weiToEth(balance.toString())
+    }
+
+    throw new Error('Invalid Balance')
   }
 
   /**
-   * Periodic updater to get all relevant information from this provider
+   * Add a new watcher to a property inside the integration
+   * @param {string} property - Property inside the integration that is holding the value for this watcher
+   * @param {function} getter - (async) function that returns the value for the watcher
    * @async
    */
-  @autobind
-  async watcher() {
+  watch = async (property, getter) => {
+    let value
+
     try {
-      const currentAccount = await this.getAccount()
-      if (this.account !== currentAccount) {
-        this.account = currentAccount
-        await this.runProviderUpdate(this, { account: this.account })
-      }
-
-      const currentNetwork = await this.getNetwork()
-      if (this.network !== currentNetwork) {
-        this.network = currentNetwork
-        await this.runProviderUpdate(this, { network: this.network })
-      }
-
-      const currentBalance = await this.getBalance()
-      if (this.balance !== currentBalance) {
-        this.balance = currentBalance
-        await this.runProviderUpdate(this, { balance: this.balance })
-      }
-
-      if (!this.walletEnabled && currentAccount) {
-        this.walletEnabled = true
-        await this.runProviderUpdate(this, { available: true })
-      }
-    } catch (err) {
+      value = await getter.call(this)
+    } catch (e) {
       if (this.walletEnabled) {
         this.walletEnabled = false
-        await this.runProviderUpdate(this, { available: false })
+        this[property] = undefined
+        await this.runProviderUpdate(this, { available: false, [property]: undefined })
       }
+
+      return
     }
+
+    const didPropertyChange = this[property] !== value
+    if (!didPropertyChange) {
+      return
+    }
+
+    const providerUpdate = { [property]: value }
+
+    if (!this.walletEnabled) {
+      this.walletEnabled = true
+      providerUpdate.available = true
+    }
+
+    this.runProviderUpdate(this, providerUpdate)
   }
 
+  logout() {
+    this.balance = undefined
+    this.network = undefined
+    this.account = undefined
+    this.walletEnabled = false
+
+    this.runProviderUpdate(this, {
+      account: undefined,
+      balance: undefined,
+      network: undefined,
+      available: false,
+    })
+  }
 }
 
-export default InjectedWeb3
+export default BaseIntegration

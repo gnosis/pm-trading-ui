@@ -8,7 +8,6 @@
   }
 
   .radioButton {
-
     &__text {
       text-transform: none;
       display: table-cell;
@@ -20,7 +19,7 @@
       vertical-align: middle;
       padding-left: 6px;
     }
-    
+
     &__input[type="radio"] {
       margin: 0;
       appearance: none;
@@ -42,11 +41,13 @@
         border-width: 4px;
       }
 
-      &:checked+.radioButton__text {
+      &:checked + .radioButton__text {
         font-weight: 800;
       }
 
-      &:checked, &:hover, &:focus {
+      &:checked,
+      &:hover,
+      &:focus {
         outline: none;
         box-shadow: 0 0 4px 1px currentColor;
       }

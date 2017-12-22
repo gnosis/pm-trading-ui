@@ -5,9 +5,11 @@ import moment from 'moment'
 import autobind from 'autobind-decorator'
 
 import { OUTCOME_TYPES, RESOLUTION_TIME, COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { isModerator } from 'utils/helpers'
+
+import InteractionButton from 'containers/InteractionButton'
 
 import CurrencyName from 'components/CurrencyName'
-import Checkbox from 'components/FormCheckbox'
 import DecimalValue from 'components/DecimalValue'
 
 import './marketCreateReview.less'
@@ -29,6 +31,10 @@ class MarketCreateReview extends Component {
   componentDidMount() {
     if (!this.props.hasValues) {
       this.props.changeUrl('/markets/new')
+    }
+
+    if (!isModerator(this.props.currentAccount)) {
+      this.props.changeUrl('/markets')
     }
   }
 
@@ -117,8 +123,7 @@ class MarketCreateReview extends Component {
           <div className="col-md-12">
             <div className="marketReviewDetails__label">Funding</div>
             <div className="marketReviewDetails__value">
-              <DecimalValue value={funding} />{' '}
-              <CurrencyName collateralToken={collateralToken} />
+              <DecimalValue value={funding} /> <CurrencyName collateralToken={collateralToken} />
             </div>
           </div>
         </div>
@@ -127,7 +132,9 @@ class MarketCreateReview extends Component {
   }
 
   renderCheckout() {
-    const { createMarketCost, formValues: { funding, collateralToken } } = this.props
+    const { createMarketCost, formValues: { funding, collateralToken }, currentBalance } = this.props
+    const totalAmount = Decimal(funding || 0).add(Decimal(createMarketCost || 0))
+    const isFundingCorrect = Decimal(currentBalance || 0).gte(totalAmount)
 
     return (
       <div className="checkout">
@@ -148,7 +155,7 @@ class MarketCreateReview extends Component {
           <li className="checkout__listItem checkout__listItem--total">
             <span className="listItem__label">Total</span>
             <span className="listItem__value">
-              <DecimalValue value={Decimal(funding || 0).add(Decimal(createMarketCost || 0))} />
+              <DecimalValue value={totalAmount} />
             </span>
           </li>
         </ul>
@@ -170,9 +177,16 @@ class MarketCreateReview extends Component {
         </div>
         */}
         <div className="checkout__paymentSubmit">
-          <button className="btn btn-primary" type="button" onClick={this.handleCreateMarket}>
+          <InteractionButton
+            className="btn btn-primary"
+            type="button"
+            onClick={this.handleCreateMarket}
+            disabled={!isFundingCorrect}
+            whitelistRequired
+          >
             Pay & Create Market
-          </button>
+          </InteractionButton>
+          {!isFundingCorrect && <span>You don&apos;t have suffiecient funds to create this market.</span>}
         </div>
       </div>
     )
@@ -285,9 +299,11 @@ MarketCreateReview.propTypes = {
   createMarketCost: PropTypes.string,
   hasValues: PropTypes.bool,
   changeUrl: PropTypes.func,
+  currentAccount: PropTypes.string,
   submitForm: PropTypes.func,
   reset: PropTypes.func,
   submitting: PropTypes.bool,
+  currentBalance: PropTypes.string,
 }
 
 export default MarketCreateReview

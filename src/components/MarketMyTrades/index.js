@@ -5,23 +5,24 @@ import moment from 'moment'
 import { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { COLOR_SCHEME_DEFAULT, RESOLUTION_TIME } from 'utils/constants'
-import { getOutcomeName } from 'utils/helpers'
-import { marketShape } from 'utils/shapes'
+import { getOutcomeName, weiToEth } from 'utils/helpers'
+import { marketShape, marketTradeShape } from 'utils/shapes'
 
 import './marketMyTrades.less'
 
 class MarketMyTrades extends Component {
   static propTypes = {
     market: marketShape,
+    marketTrades: PropTypes.arrayOf(marketTradeShape),
     defaultAccount: PropTypes.string,
-    fetchMarketParticipantTrades: PropTypes.func,
+    fetchMarketTradesForAccount: PropTypes.func,
   }
 
   componentWillMount() {
-    const { market, defaultAccount } = this.props
-    if (!market.participantTrades || market.participantTrades.length === 0) {
+    const { market, marketTrades, defaultAccount } = this.props
+    if (!marketTrades || marketTrades.length === 0) {
       // Retrieve participant trades to state
-      this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
+      this.props.fetchMarketTradesForAccount(market.address, defaultAccount)
     }
   }
 
@@ -36,11 +37,12 @@ class MarketMyTrades extends Component {
       return undefined
     }
   }
-  renderTrades() {
-    const { market } = this.props
 
-    const tableRowElements = market.participantTrades.map(trade => (
-      <tr className="marketMyTrades__share" key={trade._id}>
+  renderTrades() {
+    const { market, marketTrades } = this.props
+
+    const tableRowElements = marketTrades.map(trade => (
+      <tr className="marketMyTrades__share" key={trade.id}>
         <td>
           <div
             className={'shareOutcome__color'}
@@ -60,6 +62,18 @@ class MarketMyTrades extends Component {
             .local()
             .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
         </td>
+        <td>
+          {trade.cost !== 'None' ? (
+            <div>
+              {Decimal(weiToEth(trade.cost))
+                .toDP(2, 1)
+                .toString()}&nbsp;
+              <CurrencyName collateralToken={market.event.collateralToken} />
+            </div>
+          ) : (
+            '0'
+          )}
+        </td>
       </tr>
     ))
 
@@ -67,8 +81,8 @@ class MarketMyTrades extends Component {
   }
 
   render() {
-    const { market } = this.props
-    if (market.participantTrades && market.participantTrades.length > 0) {
+    const { marketTrades } = this.props
+    if (marketTrades && marketTrades.length > 0) {
       return (
         <div className="marketMyTrades">
           <h2 className="marketMyTrades__heading">My Trades</h2>
@@ -83,6 +97,7 @@ class MarketMyTrades extends Component {
                 </th>
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Avg. Price</th>
                 <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Date</th>
+                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Cost</th>
               </tr>
             </thead>
             <tbody>{this.renderTrades()}</tbody>
@@ -93,7 +108,7 @@ class MarketMyTrades extends Component {
       return (
         <div className="marketMyTrades">
           <h2 className="marketMyTrades__heading">You haven&apos;t interacted with this market yet.</h2>
-          <h3>Every transaction that happens on this market will be shown here.</h3>
+          <h2><small>Every transaction that happens on this market will be shown here.</small></h2>
         </div>
       )
     }

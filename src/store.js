@@ -7,6 +7,8 @@ import CrashReporter from 'middlewares/CrashReporter'
 import LocalStorageDump from 'middlewares/LocalStorageDump'
 import LocalStorageLoad from 'middlewares/LocalStorageLoad'
 import Notifications from 'middlewares/Notifications'
+import Blockchain from 'middlewares/Blockchain'
+import Providers from 'middlewares/Providers'
 
 import reducer from 'reducers'
 
@@ -14,15 +16,15 @@ const middlewares = [
   thunk,
   routerMiddleware(browserHistory),
   Notifications,
+  Blockchain,
+  Providers,
   LocalStorageLoad,
   LocalStorageDump,
   CrashReporter,
 ]
 
 const enhancers = [
-  applyMiddleware(
-    ...middlewares,
-  ),
+  applyMiddleware(...middlewares),
 ]
 
 /* global window */

@@ -3,7 +3,7 @@ import Decimal from 'decimal.js'
 export const RESOLUTION_TIME = {
   RELATIVE_FORMAT: 'y[Y] M[M] D[D] h[hrs] m[mins]',
   RELATIVE_LONG_FORMAT: 'y[ years] M[ months] D[ days] h[ hours] m[ minutes and] s[ seconds left]',
-  ABSOLUTE_FORMAT: 'ddd, L LT',
+  ABSOLUTE_FORMAT: 'L LT',
 }
 
 export const OUTCOME_TYPES = {
@@ -32,8 +32,7 @@ export const COLOR_SCHEME_DEFAULT = [
   '#73472c', // brown
 ]
 
-export const SCALAR_SHORT_COLOR = COLOR_SCHEME_DEFAULT[0]
-export const SCALAR_LONG_COLOR = COLOR_SCHEME_DEFAULT[2]
+export const COLOR_SCHEME_SCALAR = ['#e01563', '#0be1b1']
 
 export const TRANSACTION_STATUS = {
   RUNNING: 'RUNNING',
@@ -46,6 +45,7 @@ export const TRANSACTION_COMPLETE_STATUS = {
   NO_ERROR: 'NO_ERROR',
   ERROR: 'ERROR',
   TIMEOUT: 'TIMEOUT',
+  LOST: 'LOST',
 }
 
 export const GAS_COST = {
@@ -72,4 +72,14 @@ export const LOWEST_DISPLAYED_VALUE = 0.001
 
 export const MIN_CONSIDER_VALUE = 0.001
 
-export const MAX_ALLOWANCE_WEI = Decimal(2).pow(256).sub(1).toString()
+export const MAX_ALLOWANCE_WEI = Decimal(2)
+  .pow(256)
+  .sub(1)
+  .toString()
+
+export const TRANSACTION_DESCRIPTIONS = {
+  BUY: 'BOUGHT',
+  SELL: 'SOLD',
+}
+
+export const LIMIT_MARGIN_DEFAULT = '5'

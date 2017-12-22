@@ -1,4 +1,5 @@
 import {
+  getGnosisConnection,
   initGnosisConnection,
   getCurrentBalance,
   getCurrentAccount,
@@ -9,33 +10,33 @@ import {
   calcScalarEventGasCost,
   calcCentralizedOracleGasCost,
   calcFundingGasCost,
+  calcRedeemWinningsGasCost,
   getGasPrice,
   getEtherTokens,
 } from 'api'
 
-import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
+import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider } from 'selectors/blockchain'
+import { findDefaultProvider, getSelectedProvider } from 'selectors/blockchain'
+
+import { setActiveProvider } from './providers'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
-export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
 export const setGasCost = createAction('SET_GAS_COST')
 export const setGasPrice = createAction('SET_GAS_PRICE')
-export const registerProvider = createAction('REGISTER_PROVIDER')
-export const updateProvider = createAction('UPDATE_PROVIDER')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
 
-const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
+export const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
 export const requestGasPrice = () => async (dispatch) => {
   const gasPrice = await getGasPrice()
   dispatch(setGasPrice({ entityType: 'gasPrice', gasPrice }))
 }
 
-export const requestGasCost = contractType => async (dispatch) => {
+export const requestGasCost = (contractType, opts) => async (dispatch) => {
   if (contractType === GAS_COST.MARKET_CREATION) {
     calcMarketGasCost().then((gasCost) => {
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
@@ -64,6 +65,10 @@ export const requestGasCost = contractType => async (dispatch) => {
     calcFundingGasCost().then((gasCost) => {
       dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
     })
+  } else if (contractType === GAS_COST.REDEEM_WINNINGS) {
+    calcRedeemWinningsGasCost(opts).then((gasCost) => {
+      dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
+    })
   }
 }
 
@@ -85,16 +90,21 @@ export const initGnosis = () => async (dispatch, getState) => {
 
     if (newProvider) {
       await dispatch(setActiveProvider(newProvider.name))
-
       // init Gnosis connection
-      const opts = getGnosisJsOptions(newProvider)
-      await initGnosisConnection(opts)
+      if (newProvider.account) {
+        const opts = getGnosisJsOptions(newProvider)
+        await initGnosisConnection(opts)
+      } else {
+        throw new Error('No account found')
+      }
+
       await dispatch(setGnosisInitialized({ initialized: true }))
       await requestEtherTokens()
     }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)
-    return await dispatch(setGnosisInitialized({ initialized: false, error }))
+    await dispatch(setConnectionStatus({ connected: false }))
+    return dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 
   // connect
@@ -105,9 +115,9 @@ export const initGnosis = () => async (dispatch, getState) => {
       await getCurrentBalance(account)
     }
     await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
-    return await dispatch(setConnectionStatus({ connected: true }))
+    await dispatch(setConnectionStatus({ connected: true }))
   } catch (error) {
     console.warn(`Gnosis.js connection Error: ${error}`)
-    return await dispatch(setConnectionStatus({ connected: false }))
+    return dispatch(setConnectionStatus({ connected: false }))
   }
 }

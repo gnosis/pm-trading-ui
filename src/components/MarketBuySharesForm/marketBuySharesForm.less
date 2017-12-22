@@ -1,10 +1,14 @@
-@import url('../../less/vars.less');
+@import url("../../less/vars.less");
+@import url("../FormSlider/slider.less");
+@import url("../FormSlider/thumb.less");
 
 .marketBuySharesForm {
   &__row {
     margin: 20px 0;
     display: flex;
+    margin-bottom: 10px;
     flex-direction: row;
+    align-items: center;
 
     &:first-child {
       margin-top: 0;
@@ -14,6 +18,14 @@
   &__cancel {
     &::before {
       background: @bg-color-muted !important;
+    }
+  }
+  .formSlider {
+    padding-top: 15px;
+    &__input {
+      background: none;
+      .sliderCrossBrowser(#d6d8d8);
+      .thumbCrossBrowser(#1aa4c5, #1aa4c5);
     }
   }
 }
@@ -48,7 +60,7 @@
 .marketBuyInvest {
   &__input {
     font-size: 32px;
-    text-align: center;
+    text-align: right;
     padding-bottom: 10px !important;
     font-weight: 300;
 
@@ -62,9 +74,14 @@
   }
 }
 
+.limitMarginField {
+  margin: 0;
+}
+
 .marketBuyCurrency {
   height: 100%;
   font-size: 32px;
+  padding-bottom: 33px;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -74,10 +91,10 @@
 .marketBuyWin {
   &__row {
     display: block;
-    margin-bottom: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 30px;
   }
 
   &__min {
@@ -101,7 +118,10 @@
   &__invalidParam {
     color: @font-color-muted;
     font-weight: 500;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
+    margin-bottom: 10px;
+    height: 20px;
+    line-height: 30px;
   }
 }

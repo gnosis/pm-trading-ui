@@ -17,6 +17,7 @@
     text-transform: uppercase;
     font-size: 10px;
     letter-spacing: 0.5px;
+    white-space: nowrap;
   }
 
   &__value {
@@ -51,25 +52,29 @@
   }
 
   &__stats {
-    margin: 50px 0;
+    margin: 42px 0;
   }
 }
 
-.dashboardControls__button {
-  margin-right: 20px;
+.dashboardControls {
+  margin-bottom: 42px;
+  
+  &__button {
+    margin-right: 20px;
 
-  &--active {
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -@expandable-margin;
-      left: 50%;
-      margin-left: -@expandable-arrow-size;
-      width: 0;
-      height: 0;
-      border-left: @expandable-arrow-size solid transparent;
-      border-right: @expandable-arrow-size solid transparent;
-      border-bottom: @expandable-arrow-size solid @bg-color-muted;
+    &--active {
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -@expandable-margin;
+        left: 50%;
+        margin-left: -@expandable-arrow-size;
+        width: 0;
+        height: 0;
+        border-left: @expandable-arrow-size solid transparent;
+        border-right: @expandable-arrow-size solid transparent;
+        border-bottom: @expandable-arrow-size solid @bg-color-muted;
+      }
     }
   }
 }
@@ -164,6 +169,14 @@
     // }
   }
 
+
+  &__outcome {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 76%;
+  }
+
   &:first-child {
     border-top-left-radius: @market-border-radius;
     border-top-right-radius: @market-border-radius;
@@ -179,10 +192,22 @@
       display: flex;
       align-items: center;
     }
+
+    .entry__color {
+      margin-bottom: 0;
+    }
   }
 
   .outcome {
     margin-right: 10px;
+    display: flex;
+    align-items: center;
+
+    &__wrapper {
+      display: flex;
+      align-items: center;
+    }
+    
     &__bar {
       display: inline-block;
       position: relative;
@@ -339,6 +364,7 @@
   &--highlight {
     color: #ffffff;
     margin-top: 6px;
+    display: inline-block;
   }
 
   &--top-6 {
@@ -368,6 +394,7 @@
     display: inline-block;
     width: 20px;
     height: 20px;
+    margin-bottom: -5px;
     margin-right: 5px;
 
     border-radius: 4px;

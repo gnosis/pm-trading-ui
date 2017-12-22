@@ -4,16 +4,15 @@ import autobind from 'autobind-decorator'
 import moment from 'moment'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
+import { Link } from 'react-router'
 import 'moment-duration-format'
-import Tooltip from 'rc-tooltip'
-import 'rc-tooltip/assets/bootstrap.css'
 import { reduxForm, Field } from 'redux-form'
+
+import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
-
 import Outcome from 'components/Outcome'
-
 import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
 import FormSelect from 'components/FormSelect'
@@ -23,6 +22,7 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
 import './marketList.less'
+import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 const resolutionFilters = [
   {
@@ -30,21 +30,21 @@ const resolutionFilters = [
     value: '',
   },
   {
-    label: 'Resolved',
-    value: 'RESOLVED',
+    label: 'Open',
+    value: 'UNRESOLVED',
   },
   {
-    label: 'Unresolved',
-    value: 'UNRESOLVED',
+    label: 'Ended',
+    value: 'RESOLVED',
   },
 ]
 
 const selectFilter = [
   { value: '---', label: '---' },
-  { value: 'RESOLUTION_DATE_ASC', label: 'RESOLUTION_DATE_ASC' },
-  { value: 'RESOLUTION_DATE_DESC', label: 'RESOLUTION_DATE_DESC' },
-  { value: 'TRADING_VOLUME_ASC', label: 'TRADING_VOLUME_ASC' },
-  { value: 'TRADING_VOLUME_DESC', label: 'TRADING_VOLUME_DESC' },
+  { value: 'RESOLUTION_DATE_ASC', label: 'RESOLUTION DATE ↑' },
+  { value: 'RESOLUTION_DATE_DESC', label: 'RESOLUTION DATE ↓' },
+  { value: 'TRADING_VOLUME_ASC', label: 'TRADING VOLUME ↑' },
+  { value: 'TRADING_VOLUME_DESC', label: 'TRADING VOLUME ↓' },
 ]
 
 class MarketList extends Component {
@@ -55,72 +55,74 @@ class MarketList extends Component {
   @autobind
   handleViewMarket(market) {
     this.props.changeUrl(`/markets/${market.address}`)
+    window.scroll(0, 0)
   }
 
   @autobind
-  handleViewMarketResolve(event, resolveUrl) {
-    event.preventDefault()
+  handleViewMarketResolve(event) {
     event.stopPropagation()
-
-    this.props.changeUrl(resolveUrl)
   }
 
   @autobind
   handleCreateMarket() {
     if (this.props.defaultAccount) {
       this.props.changeUrl('/markets/new')
+      window.scroll(0, 0)
     }
   }
 
   @autobind
   renderMarket(market) {
-    const isResolved = market.oracle && market.oracle.isOutcomeSet
+    const isResolved = isMarketResolved(market)
+    const isClosed = isMarketClosed(market)
+    const isResolvedOrClosed = isResolved || isClosed
     const isOwner = this.props.defaultAccount && market.creator === this.props.defaultAccount
+    const showResolveButton = isOwner && !isResolved
 
-    const resolveUrl = `/markets/${market.address}/resolve`
+    let marketStatusInfoField = (
+      <div className="info_field">
+        <div className="info__field--icon icon icon--countdown" />
+        <div className="info__field--label">
+          <Countdown target={market.eventDescription.resolutionDate} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
+        </div>
+      </div>
+    )
 
-    const outcomes = <Outcome market={market} />
+    if (isResolvedOrClosed) {
+      const marketStatus = isResolved ? 'resolved' : 'closed'
+      marketStatusInfoField = (
+        <div className="info_field">
+          <div className="info__field--icon icon icon--checkmark" />
+          <div className="info__field--label">{marketStatus}</div>
+        </div>
+      )
+    }
 
     return (
       <button
         type="button"
         className={cn({
           market,
-          'market--resolved': isResolved,
+          'market--resolved': isResolved || isClosed,
         })}
         key={market.address}
         onClick={() => this.handleViewMarket(market)}
       >
         <div className="market__header">
           <h2 className="market__title">{market.eventDescription.title}</h2>
-          {isOwner &&
-            !isResolved && (
-              <div className="market__control">
-                <a href="javascript:void(0)" onClick={e => this.handleViewMarketResolve(e, resolveUrl)}>
-                  Resolve
-                </a>
-              </div>
-            )}
-        </div>
-        {outcomes}
-        <div className="market__info row">
-          {isResolved ? (
-            <div className="info__group col-md-3">
-              <div className="info_field">
-                <div className="info__field--icon icon icon--checkmark" />
-                <div className="info__field--label">Resolved</div>
-              </div>
-            </div>
-          ) : (
-            <div className="info__group col-md-3">
-              <div className="info__field">
-                <div className="info__field--icon icon icon--countdown" />
-                <div className="info__field--label">
-                  <Countdown target={market.eventDescription.resolutionDate} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
-                </div>
-              </div>
+          {showResolveButton && (
+            <div className="market__control">
+              <Link to={`/markets/${market.address}/resolve`} onClick={this.handleViewMarketResolve}>
+                Resolve
+              </Link>
             </div>
           )}
+        </div>
+        <Outcome market={market} />
+        <div className="market__info row">
+          <div className="info__group col-md-3">
+            <div className="info__field">{marketStatusInfoField}</div>
+          </div>
           <div className="info__group col-md-3">
             <div className="info__field">
               <div className="info__field--icon icon icon--enddate" />
@@ -203,31 +205,15 @@ class MarketList extends Component {
   }
 
   render() {
-    const { markets } = this.props
+    const { markets, defaultAccount } = this.props
 
-    let createMarketButton = (
-      <div
-        className={cn({
-          'marketStats__control--container': true,
-          disabled: !this.props.hasWallet,
-        })}
-      >
-        <button
-          type="button"
-          onClick={this.props.hasWallet ? this.handleCreateMarket : false}
-          className="marketStats__control btn btn-default"
-          disabled={!this.props.hasWallet}
-        >
-          Create Market
-        </button>
-      </div>
-    )
-
-    if (!this.props.hasWallet) {
-      createMarketButton = (
-        <Tooltip overlay="You need a wallet connected in order to create a market">{createMarketButton}</Tooltip>
-      )
-    }
+    const threeDayMSeconds = 3 * 24 * 60 * 60 * 1000
+    const now = new Date()
+    const openMarkets = markets.filter(market => !isMarketClosed(market) && !isMarketResolved(market))
+    const openMarketsAmount = openMarkets.length
+    const endingSoonMarketsAmount = openMarkets.filter(({ eventDescription: { resolutionDate } }) => new Date(resolutionDate) - now < threeDayMSeconds).length
+    const newMarketsAmount = openMarkets.filter(({ creationDate }) => now - new Date(creationDate) < threeDayMSeconds)
+      .length
 
     return (
       <div className="marketListPage">
@@ -241,29 +227,39 @@ class MarketList extends Component {
             <div className="row marketStats">
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market" />
-                <span className="marketStats__value">{markets.length}</span>
+                <span className="marketStats__value">{openMarketsAmount}</span>
                 <div className="marketStats__label">Open Markets</div>
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--market--countdown" />
-                <span className="marketStats__value">{markets.length}</span>
-                <div className="marketStats__label">Closing Soon</div>
+                <span className="marketStats__value">{endingSoonMarketsAmount}</span>
+                <div className="marketStats__label">Ending Soon</div>
               </div>
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
                 <div className="marketStats__icon icon icon--new" />
-                <span className="marketStats__value">{markets.length}</span>
+                <span className="marketStats__value">{newMarketsAmount}</span>
                 <div className="marketStats__label">New Markets</div>
               </div>
             </div>
           </div>
         </div>
-        <div className="marketListPage__controls">
-          <div className="container">
-            <div className="row">
-              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">{createMarketButton}</div>
+        {process.env.WHITELIST[defaultAccount] && (
+          <div className="marketListPage__controls">
+            <div className="container">
+              <div className="row">
+                <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
+                  <InteractionButton
+                    onClick={this.handleCreateMarket}
+                    className="marketStats__control btn btn-default"
+                    whitelistRequired
+                  >
+                    Create Market
+                  </InteractionButton>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
         <div className="marketListPage__markets">
           <div className="container">
             <div className="row">
@@ -284,7 +280,6 @@ MarketList.propTypes = {
   changeUrl: PropTypes.func,
   handleSubmit: PropTypes.func,
   isModerator: PropTypes.bool,
-  hasWallet: PropTypes.bool,
 }
 
 export default reduxForm({

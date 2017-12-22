@@ -61,6 +61,8 @@
 .svgIcon("cross");
 .svgIcon("user");
 .svgIcon("gear");
+.svgIcon("outstandingPredictions");
+.svgIcon("logout");
 
 .icon--checkbox {
   background: @active-highlight-success;
@@ -72,4 +74,10 @@
   mask-image: url("@{url}");
   
   background: @active-highlight-error;
+}
+
+.icon--logout {
+  mask-image: none !important;
+  display: inline;
+  padding-right: (16px + 4px); // icon size + side padding
 }

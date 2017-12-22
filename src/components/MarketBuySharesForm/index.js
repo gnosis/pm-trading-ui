@@ -8,12 +8,14 @@ import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 import { weiToEth } from 'utils/helpers'
 import {
   COLOR_SCHEME_DEFAULT,
+  COLOR_SCHEME_SCALAR,
   OUTCOME_TYPES,
   GAS_COST,
-  SCALAR_SHORT_COLOR,
-  SCALAR_LONG_COLOR,
+  LIMIT_MARGIN_DEFAULT,
 } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
+
+import InteractionButton from 'containers/InteractionButton'
 
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -27,7 +29,9 @@ import './marketBuySharesForm.less'
 
 class MarketBuySharesForm extends Component {
   componentWillMount() {
-    const { requestGasCost, requestGasPrice, isGasCostFetched, isGasPriceFetched } = this.props
+    const {
+      requestGasCost, requestGasPrice, isGasCostFetched, isGasPriceFetched,
+    } = this.props
     if (!isGasCostFetched(GAS_COST.BUY_SHARES)) {
       requestGasCost(GAS_COST.BUY_SHARES)
     }
@@ -36,12 +40,18 @@ class MarketBuySharesForm extends Component {
     }
   }
 
-  getOutcomeTokenCount(investment, outcomeIndex) {
-    if (!investment || !(parseFloat(investment) > 0)) {
+  getOutcomeTokenCount(investment, outcomeIndex, limitMargin) {
+    const validInvestment =
+      /^-?\d+\.?\d*$/.test(investment) && investment && parseFloat(investment) > 0 && parseFloat(investment) < 1000
+    if (!validInvestment) {
       return new Decimal(0)
     }
 
-    const invest = new Decimal(investment).mul(1e18)
+    const invest = new Decimal(investment)
+      .mul(1e18)
+      .div(new Decimal(100).add(limitMargin == null ? LIMIT_MARGIN_DEFAULT : limitMargin))
+      .mul(100)
+      .round()
     const { market: { funding, netOutcomeTokensSold, fee } } = this.props
 
     let outcomeTokenCount
@@ -62,11 +72,15 @@ class MarketBuySharesForm extends Component {
   }
 
   getMaximumWin(outcomeTokenCount, investment) {
-    return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
+    if (/^-?\d+\.?\d*$/.test(investment)) {
+      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
+    }
+    return '--'
   }
 
-  getPercentageWin(outcomeTokenCount, investment) {
-    if (!investment || !(parseFloat(investment) > 0)) {
+  getPercentageWin = (outcomeTokenCount, investment) => {
+    const validInvestment = /^-?\d+\.?\d*$/.test(investment)
+    if (!validInvestment) {
       return '0'
     }
 
@@ -79,19 +93,83 @@ class MarketBuySharesForm extends Component {
 
   @autobind
   handleBuyShares() {
-    const { market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome } = this.props
+    const {
+      market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome, limitMargin,
+    } = this.props
 
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
 
-    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest).then(() => {
-      // Fetch new trades
-      this.props.fetchMarketTrades(market)
-      // Fetch new market participant trades
-      this.props.fetchMarketParticipantTrades(market.address, defaultAccount)
-      // Fetch new shares
-      this.props.fetchMarketShares(defaultAccount)
-      return reset()
-    })
+    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
+      .then(() => {
+        // Fetch new trades
+        this.props.fetchMarketTrades(market)
+        // Fetch new market participant trades
+        this.props.fetchMarketTradesForAccount(market.address, defaultAccount)
+        // Fetch new shares
+        this.props.fetchMarketShares(defaultAccount)
+        return reset()
+      })
+      .catch(e => console.error(e))
+  }
+
+  // redux-form validate field function. Return undefined if it is ok or a string with an error.
+  validateInvestment = (investmentValue) => {
+    const { currentBalance = 0 } = this.props
+    // check if investment is not undefined and test it against number regexp to prevent errors from decimal.js
+    if (!investmentValue) {
+      return false
+    }
+
+    const validInvestment = /^-?\d+\.?\d*$/.test(investmentValue)
+    if (!validInvestment) {
+      return 'Invalid amount'
+    }
+
+    const decimalValue = Decimal(investmentValue)
+    if (decimalValue.lte(0)) {
+      return "Number can't be negative or equal to zero."
+    }
+
+    if (decimalValue.gt(currentBalance)) {
+      return "You're trying to invest more than you have."
+    }
+
+    return undefined
+  }
+
+  renderCategorical() {
+    const {
+      selectedBuyInvest, selectedOutcome, limitMargin, market, market: { eventDescription },
+    } = this.props
+
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
+
+    return (
+      <div className="col-md-7">
+        <div className="row">
+          <div className="col-md-12">
+            <h2 className="marketBuyHeading">Your Trade</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <Field
+              component={FormBarChartRadioButton}
+              name="selectedOutcome"
+              className="marketBuyOutcome"
+              market={market}
+              selectedOutcome={selectedOutcome}
+              outcomeTokenCount={outcomeTokenCount}
+              radioValues={eventDescription.outcomes.map((label, index) => ({
+                value: index,
+                label: eventDescription.outcomes[index],
+                highlightColor: COLOR_SCHEME_DEFAULT[index],
+              }))}
+            />
+          </div>
+        </div>
+      </div>
+    )
   }
 
   renderOutcomes() {
@@ -112,26 +190,6 @@ class MarketBuySharesForm extends Component {
     )
   }
 
-  renderCategorical() {
-    const { market, market: { eventDescription } } = this.props
-
-    return (
-      <div className="col-md-7">
-        <Field
-          component={FormBarChartRadioButton}
-          name="selectedOutcome"
-          className="marketBuyOutcome"
-          market={market}
-          radioValues={eventDescription.outcomes.map((label, index) => ({
-            value: index,
-            label: eventDescription.outcomes[index],
-            highlightColor: COLOR_SCHEME_DEFAULT[index],
-          }))}
-        />
-      </div>
-    )
-  }
-
   renderScalar() {
     const {
       selectedBuyInvest,
@@ -144,6 +202,8 @@ class MarketBuySharesForm extends Component {
         marginalPrices,
       },
     } = this.props
+
+    const validInvestment = this.validateInvestment(selectedBuyInvest) === undefined || !selectedBuyInvest
     const isOutcomeSelected = selectedOutcome !== undefined
     const currentMarginalPrice = marginalPrices[1]
     // Get the amount of tokens to buy
@@ -151,10 +211,10 @@ class MarketBuySharesForm extends Component {
     const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
     if (isOutcomeSelected) {
       newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome])
-        .add(outcomeTokenCount)
+        .add(outcomeTokenCount.toString())
         .toString()
     }
-    const selectedMarginalPrice = isOutcomeSelected
+    const selectedMarginalPrice = isOutcomeSelected && validInvestment
       ? calcLMSRMarginalPrice({
         netOutcomeTokensSold: newNetOutcomeTokenSold,
         funding,
@@ -166,12 +226,12 @@ class MarketBuySharesForm extends Component {
       {
         value: 0,
         label: 'Short',
-        highlightColor: SCALAR_SHORT_COLOR,
+        highlightColor: COLOR_SCHEME_SCALAR[0],
       },
       {
         value: 1,
         label: 'Long',
-        highlightColor: SCALAR_LONG_COLOR,
+        highlightColor: COLOR_SCHEME_SCALAR[1],
       },
     ]
 
@@ -181,7 +241,7 @@ class MarketBuySharesForm extends Component {
           <div className="col-md-6">
             <div className="row">
               <div className="col-md-12">
-                <h2 className="marketBuyHeading">Your Bet</h2>
+                <h2 className="marketBuyHeading">Your Trade</h2>
               </div>
             </div>
             <div className="row">
@@ -195,20 +255,18 @@ class MarketBuySharesForm extends Component {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="row">
-              <div className="col-md-12">
-                <ScalarSlider
-                  lowerBound={parseInt(lowerBound, 10)}
-                  upperBound={parseInt(upperBound, 10)}
-                  unit={unit}
-                  decimals={decimals}
-                  marginalPriceCurrent={currentMarginalPrice}
-                  marginalPriceSelected={selectedMarginalPrice.toNumber()}
-                  selectedCost={outcomeTokenCount}
-                />
-              </div>
-            </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <ScalarSlider
+              lowerBound={parseInt(lowerBound, 10)}
+              upperBound={parseInt(upperBound, 10)}
+              unit={unit}
+              decimals={decimals}
+              marginalPriceCurrent={currentMarginalPrice}
+              marginalPriceSelected={selectedMarginalPrice.toNumber()}
+              selectedCost={outcomeTokenCount}
+            />
           </div>
         </div>
       </div>
@@ -217,45 +275,47 @@ class MarketBuySharesForm extends Component {
 
   render() {
     const {
+      changeUrl,
+      gasCosts,
+      gasPrice,
+      invalid,
       handleSubmit,
+      market: { event: { collateralToken, type }, address, local },
       selectedBuyInvest,
       submitFailed,
       submitting,
-      market: { event: { collateralToken } },
+      limitMargin,
       selectedOutcome,
-      gasCosts,
-      gasPrice,
-      changeUrl,
-      market: { address },
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
     // Get the amount of tokens to buy
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
-
-    const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest !== undefined ? selectedBuyInvest : 0)
+    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
+    const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest || '0')
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
-    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares))
+    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares || 0))
 
-    let submitEnabled = false
+    const submitDisabled = invalid || !selectedBuyInvest
     let fieldError
     let tokenCountField
     let maxReturnField
 
     if (noOutcomeSelected) {
-      fieldError = <span className="marketBuyWin__invalidParam">Select an outcome</span>
+      fieldError = <span className="marketBuyWin__invalidParam">--</span>
     } else if (Decimal(percentageWin.toString()).isZero()) {
-      fieldError = <span className="marketBuyWin__invalidParam">Enter investment</span>
+      fieldError = <span className="marketBuyWin__invalidParam">--</span>
     } else if (Decimal(outcomeTokenCount.toString()).isZero()) {
       fieldError = <span className="marketBuyWin__invalidParam">Invalid investment</span>
     } else {
+      const colorSource = type === OUTCOME_TYPES.CATEGORICAL ? COLOR_SCHEME_DEFAULT : COLOR_SCHEME_SCALAR
+      const outcomeColorStyles = {
+        backgroundColor: colorSource[selectedOutcome],
+      }
+
       tokenCountField = (
         <span className="marketBuyWin__row marketBuyWin__max">
           <DecimalValue value={weiToEth(outcomeTokenCount)} />&nbsp;
-          <div
-            className={'marketBuyWin__outcomeColor'}
-            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[selectedOutcome] }}
-          />&nbsp;
+          <div className="marketBuyWin__outcomeColor" style={outcomeColorStyles} />&nbsp;
         </span>
       )
 
@@ -265,8 +325,6 @@ class MarketBuySharesForm extends Component {
           <CurrencyName collateralToken={collateralToken} />)
         </span>
       )
-
-      submitEnabled = !Decimal(selectedBuyInvest).isZero()
     }
 
     return (
@@ -277,7 +335,13 @@ class MarketBuySharesForm extends Component {
             <div className="col-md-5">
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-8">
-                  <Field name="invest" component={Input} className="marketBuyInvest" placeholder="Investment" />
+                  <Field
+                    name="invest"
+                    component={Input}
+                    className="marketBuyInvest"
+                    placeholder="Investment"
+                    validate={this.validateInvestment}
+                  />
                 </div>
                 <div className="col-md-4">
                   <div className="marketBuyCurrency">
@@ -290,14 +354,22 @@ class MarketBuySharesForm extends Component {
                 <div className="col-md-6">{fieldError || tokenCountField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">Maximum return in %</div>
+                <div className="col-md-6">Maximum return</div>
                 <div className="col-md-6">{fieldError || maxReturnField}</div>
               </div>
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} decimals={5} />{' '}
-                  <CurrencyName collateralToken={collateralToken} />
+                  <DecimalValue value={gasCostEstimation} decimals={5} />
+                  {' ETH'}
+                </div>
+              </div>
+              <div className="row marketBuySharesForm__row">
+                <div className="col-md-12 text-center">
+                  <span>
+                    The actual cost you will pay might be less by 5% depending on the market price at the time of
+                    trading
+                  </span>
                 </div>
               </div>
               {submitFailed && (
@@ -308,24 +380,15 @@ class MarketBuySharesForm extends Component {
                 </div>
               )}
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-6">
-                  <button
-                    className={`btn btn-primary col-md-12 ${!submitEnabled ? 'disabled' : ''}`}
-                    disabled={!submitEnabled}
+                <div className="col-xs-10 col-xs-offset-1">
+                  <InteractionButton
+                    className="btn btn-primary col-xs-12"
+                    disabled={submitDisabled}
+                    loading={submitting || local}
+                    type="submit"
                   >
-                    {submitting ? 'Loading...' : 'Buy Tokens'}
-                  </button>
-                </div>
-                <div className="col-md-6">
-                  <button
-                    className="btn btn-default col-md-12 marketBuySharesForm__cancel"
-                    type="button"
-                    onClick={() => {
-                      changeUrl(`/markets/${address}/`)
-                    }}
-                  >
-                    Cancel
-                  </button>
+                    Buy Tokens
+                  </InteractionButton>
                 </div>
               </div>
             </div>
@@ -340,11 +403,12 @@ MarketBuySharesForm.propTypes = {
   ...propTypes,
   market: marketShape,
   buyShares: PropTypes.func,
-  marketShares: PropTypes.arrayOf(marketShareShape),
+  marketShares: PropTypes.objectOf(marketShareShape),
   selectedOutcome: PropTypes.number,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool,
+  currentBalance: PropTypes.string,
 }
 
 const form = {

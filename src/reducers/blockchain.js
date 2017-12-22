@@ -5,11 +5,15 @@ import {
   setGnosisInitialized,
   setGasCost,
   setGasPrice,
+  setEtherTokens,
+} from 'actions/blockchain'
+
+import {
   setActiveProvider,
   registerProvider,
   updateProvider,
-  setEtherTokens,
-} from 'actions/blockchain'
+} from 'actions/providers'
+
 import { GAS_COST } from 'utils/constants'
 
 const INITIAL_PROVIDER_STATE = {
@@ -94,7 +98,7 @@ const reducer = handleActions({
   connection: undefined,
   connectionTried: false,
   providers: {},
-  activeProvider: null,
+  activeProvider: undefined,
   etherTokens: undefined,
 })
 

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import { map } from 'lodash'
 import { registerProvider, updateProvider, initGnosis } from 'actions/blockchain'
-import { isGnosisInitialized } from 'selectors/blockchain'
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
@@ -17,12 +16,11 @@ class WalletIntegrationProvider extends Component {
       runProviderUpdate: this.handleProviderUpdate,
       runProviderRegister: this.handleProviderRegister,
     }
-
-    window.addEventListener('load', () =>
+    window.addEventListener('load', () => {
       Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
-        .then(this.props.initGnosis)
-        .catch(this.props.initGnosis),
-    )
+        .then(this.props.initGnosis, this.props.initGnosis)
+        .catch(this.props.initGnosis)
+    })
   }
 
   @autobind
@@ -32,17 +30,15 @@ class WalletIntegrationProvider extends Component {
       ...data,
     })
 
-    if (this.props.gnosisInitialized) {
-      let requireGnosisReinit = false
-      GNOSIS_REINIT_KEYS.forEach((searchKey) => {
-        if (Object.keys(data).indexOf(searchKey) > -1) {
-          requireGnosisReinit = true
-        }
-      })
-
-      if (requireGnosisReinit) {
-        await this.props.initGnosis()
+    let requireGnosisReinit = false
+    GNOSIS_REINIT_KEYS.forEach((searchKey) => {
+      if (Object.keys(data).indexOf(searchKey) > -1) {
+        requireGnosisReinit = true
       }
+    })
+
+    if (requireGnosisReinit) {
+      await this.props.initGnosis()
     }
   }
 
@@ -64,17 +60,12 @@ class WalletIntegrationProvider extends Component {
 WalletIntegrationProvider.propTypes = {
   children: PropTypes.element,
   integrations: PropTypes.objectOf(PropTypes.object),
-  gnosisInitialized: PropTypes.bool,
   registerProvider: PropTypes.func.isRequired,
   updateProvider: PropTypes.func.isRequired,
   initGnosis: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
-  gnosisInitialized: isGnosisInitialized(state),
-})
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   registerProvider,
   updateProvider,
   initGnosis,

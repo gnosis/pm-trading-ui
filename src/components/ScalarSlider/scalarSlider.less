@@ -2,14 +2,25 @@
 
 @slider-stroke-size: 2px;
 @slider-handle-size: 16px;
-@slider-handle-text-width: 200px;
+@slider-handle-text-width: 150px;
 
-.slider {
-  margin-top: 100px;
+@scalarSliderBackground: #d6d8d8;
+
+.scalarSlider {
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 10px;
+
+  &__inner {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+
   &__bar {
-    display: table-cell;
+    width: 100%;
     vertical-align: middle;
-    width: 60%;
     position: relative;
     height: 100%;
 
@@ -17,7 +28,7 @@
       content: '';
       position: absolute;
       width: 100%;
-      border: @slider-stroke-size solid @font-color-dark;
+      border: @slider-stroke-size solid @scalarSliderBackground;
       border-radius: 20px;
       height: 0;
     }
@@ -27,6 +38,7 @@
     position: absolute;
     height: 100%;
     cursor: not-allowed;
+    transition: left 1s ease-in-out;
 
     &::after {
       content: '';
@@ -40,15 +52,52 @@
       z-index: 2;
     }
 
-    &--below {
-      .slider__handleText {
-        top: 100%;
+    &--selected {
+      &::after {
+        background-color: @active-highlight;
+      }
+
+      .scalarSlider__handleText {
+        top: 50px;
+        padding: 5px 4px;
+        background-color: @active-highlight;
+        color: white;
+
+        &Label {
+          color: white;
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: -15px;
+          height: 15px;
+          width: 20px;
+          margin-left: -10px;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-bottom: 10px solid #00a6c4;
+        }
+      }
+
+      &--pinRight {
+        .scalarSlider__handleText {
+          text-align: right;
+          padding-right: (@slider-handle-text-width/2);
+        }
+      }
+      &--pinLeft {
+        .scalarSlider__handleText {
+          text-align: left;
+          padding-left: (@slider-handle-text-width/2);
+        }
       }
     }
 
+
     &Text {
-      position: absolute;
-      top: -100%;
+      position: relative;
+      top: -30px;
       text-align: center;
       left: (@slider-handle-size / 2);
       width: @slider-handle-text-width;
@@ -61,6 +110,14 @@
       font-size: 12px;
       color: @font-color-dark;
       white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &TextValue {
+      white-space: nowrap;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -69,14 +126,12 @@
   }
 
   &__upperBound {
-    &Label {
-      text-align: right;
-    }
+    text-align: left;
   }
 
   &__lowerBound, &__upperBound {
-    display: table-cell;
     width: 20%;
+    min-width: 120px;
     padding: 0 12px;
 
     &Label {
@@ -84,6 +139,20 @@
       font-size: 12px;
       color: @font-color-dark;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &Value {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &Value {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
-ESLINT="$(git rev-parse --show-toplevel)/node_modules/.bin/eslint --fix"
+ESLINT="$(git rev-parse --show-toplevel)/node_modules/.bin/eslint"
 ADD_FILES_TO_COMMIT="git add ."
 
 if [[ "$STAGED_FILES" = "" ]]; then
@@ -20,7 +20,7 @@ fi
 
 for FILE in $STAGED_FILES
 do
-  "$ESLINT" "$FILE"
+  "$ESLINT" "$FILE" "--fix"
 
   if [[ "$?" == 0 ]]; then
     echo -e "\t\033[32mESLint Passed: $FILE\033[0m"

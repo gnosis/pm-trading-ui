@@ -1,6 +1,7 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -15,10 +16,10 @@ const config = require('./src/config.json')
 const whitelist = config.productionWhitelist
 
 const gnosisDbUrl =
-  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}:${config.gnosisdb.port}`
+  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.host}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
 
 const ethereumUrl =
-  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.host}:${config.ethereum.port}`
+  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.host}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -26,6 +27,7 @@ module.exports = {
   output: {
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
+    publicPath: '/',
   },
   resolve: {
     symlinks: false,
@@ -39,7 +41,7 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, use: 'babel-loader' },
+      { test: /\.(js|jsx)$/, exclude: /(node_modules)/, loader: 'babel-loader' },
       {
         test: /\.(jpe?g|png|svg)$/i,
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
@@ -105,5 +107,6 @@ module.exports = {
         WHITELIST: whitelist,
       },
     }),
+    new UglifyJsWebpackPlugin(),
   ],
 }
