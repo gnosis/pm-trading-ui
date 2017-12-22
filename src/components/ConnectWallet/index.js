@@ -12,14 +12,14 @@ const ConnectWallet = ({ closeModal }) => (
     <ul className="connectWallet__provider-list">
       <li>
         <a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
-          <ProviderIcon provider={{ name: 'metamask' }} />
+          <ProviderIcon provider={{ name: 'METAMASK' }} />
           MetaMask
         </a>
       </li>
       <li>
-        <a href="https://github.com/ethereum/mist" target="_blank" rel="noopener noreferrer">
-          <ProviderIcon provider={{ name: 'mist' }} />
-          Mist
+        <a href="https://www.parity.io/" target="_blank" rel="noopener noreferrer">
+          <ProviderIcon provider={{ name: 'PARITY' }} />
+          Parity
         </a>
       </li>
     </ul>

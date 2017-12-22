@@ -1,7 +1,6 @@
 import { values } from 'lodash'
 import Decimal from 'decimal.js'
-import { isMarketResolved, isMarketClosed, hexWithPrefix } from 'utils/helpers'
-import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
+import { isMarketResolved, isMarketClosed } from 'utils/helpers'
 
 import { entitySelector } from './entities'
 import { getEventByAddress } from './event'
@@ -83,22 +82,22 @@ export const sortMarkets = (markets = [], orderBy = null) => {
     case 'TRADING_VOLUME_DESC':
       return markets.sort((a, b) => {
         const tradingA = Decimal(a.tradingVolume)
-        .div(1e18)
-        .toDP(2, 1)
+          .div(1e18)
+          .toDP(2, 1)
         const tradingB = Decimal(b.tradingVolume)
-        .div(1e18)
-        .toDP(2, 1)
+          .div(1e18)
+          .toDP(2, 1)
 
         return tradingB.comparedTo(tradingA)
       })
     case 'TRADING_VOLUME_ASC':
       return markets.sort((a, b) => {
         const tradingA = Decimal(a.tradingVolume)
-        .div(1e18)
-        .toDP(2, 1)
+          .div(1e18)
+          .toDP(2, 1)
         const tradingB = Decimal(b.tradingVolume)
-        .div(1e18)
-        .toDP(2, 1)
+          .div(1e18)
+          .toDP(2, 1)
 
         return tradingA.comparedTo(tradingB)
       })
@@ -125,4 +124,17 @@ export const getAccountPredictiveAssets = (state, account) => {
     }
   }
   return predictiveAssets
+}
+
+export const getRedeemedShares = (state, marketAddress) => {
+  const shares = getAccountShares(state)
+
+  const redeemedShares = {}
+  Object.keys(shares).forEach((shareId) => {
+    const share = shares[shareId]
+    if (share.market && share.market.address === marketAddress) {
+      redeemedShares[shareId] = share
+    }
+  })
+  return redeemedShares
 }

@@ -170,6 +170,7 @@ export const getGnosisJsOptions = (provider) => {
     // Default remote node
     opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
   }
+  opts.logger = 'console'
 
   return opts
 }
