@@ -1,11 +1,6 @@
-import {
-  openModal,
-} from 'actions/modal'
+import { openModal } from 'actions/modal'
 
-import {
-  shouldOpenNetworkModal,
-  isConnectedToCorrectNetwork,
-} from 'selectors/blockchain'
+import { shouldOpenNetworkModal, isConnectedToCorrectNetwork } from 'selectors/blockchain'
 
 let lastConnectedToCorrectNetwork
 
@@ -20,7 +15,7 @@ export default store => next => (action) => {
 
     const connectedToCorrectNetwork = isConnectedToCorrectNetwork(state)
     const shouldOpen = shouldOpenNetworkModal(state)
-    
+
     if (connectedToCorrectNetwork !== lastConnectedToCorrectNetwork && shouldOpen) {
       store.dispatch(openModal({ modalName: 'ModalNetworkCheck' }))
     }
