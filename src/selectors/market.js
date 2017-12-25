@@ -76,9 +76,11 @@ export const filterMarkets = state => (opts) => {
 export const sortMarkets = (markets = [], orderBy = null) => {
   switch (orderBy) {
   case 'RESOLUTION_DATE_ASC':
-    return markets.sort((a, b) => new Date(a.eventDescription.resolutionDate) - new Date(b.eventDescription.resolutionDate))
+    return markets.sort((a, b) =>
+      new Date(a.eventDescription.resolutionDate) - new Date(b.eventDescription.resolutionDate))
   case 'RESOLUTION_DATE_DESC':
-    return markets.sort((a, b) => new Date(b.eventDescription.resolutionDate) - new Date(a.eventDescription.resolutionDate))
+    return markets.sort((a, b) =>
+      new Date(b.eventDescription.resolutionDate) - new Date(a.eventDescription.resolutionDate))
   case 'TRADING_VOLUME_DESC':
     return markets.sort((a, b) => {
       const tradingA = Decimal(a.tradingVolume)
