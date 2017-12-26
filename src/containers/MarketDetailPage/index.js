@@ -17,7 +17,7 @@ import {
   closeMarket,
 } from 'actions/market'
 import { getMarketById } from 'selectors/market'
-import { getMarketTrades } from 'selectors/marketTrades'
+import { getMarketTradesForAccount } from 'selectors/marketTrades'
 import { getMarketShares } from 'selectors/marketShares'
 import { getMarketGraph } from 'selectors/marketGraph'
 import {
@@ -43,7 +43,7 @@ const mapStateToProps = (state, ownProps) => {
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const marketShortSellSelector = formValueSelector('marketShortSell')
   const defaultAccount = getCurrentAccount(state)
-  const marketTrades = getMarketTrades(market.address)(state)
+  const marketTrades = getMarketTradesForAccount(market.address, defaultAccount)(state)
 
   return {
     market,

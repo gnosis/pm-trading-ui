@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect'
 import { getCurrentAccount } from 'selectors/blockchain'
-import { hexWithoutPrefix } from 'utils/helpers'
 
 const olympiaUsersSelectorAsList = (state) => {
   if (!state.olympia) {
@@ -35,13 +34,8 @@ export const firstOlympiaUsersSelectorAsList = createSelector(
     : undefined),
 )
 
-export const nomalizedCurrentAccount = createSelector(
-  getCurrentAccount,
-  account => (account ? hexWithoutPrefix(account) : account),
-)
-
 export const meSelector = createSelector(
   olympiaUsersSelectorAsList,
-  nomalizedCurrentAccount,
+  getCurrentAccount,
   (users, account) => (users ? users.find(user => user.account === account) : undefined),
 )

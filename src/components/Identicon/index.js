@@ -4,7 +4,7 @@ import createIcon from 'blockies'
 import Tooltip from 'rc-tooltip'
 import Img from 'components/layout/Img'
 
-import { generateWalletName, hexWithoutPrefix } from 'utils/helpers'
+import { generateWalletName, hexWithPrefix, hexWithoutPrefix } from 'utils/helpers'
 
 const Identicon = ({ account }) => {
   const canvas = createIcon({
@@ -20,7 +20,7 @@ const Identicon = ({ account }) => {
   })
 
   return (
-    <Tooltip placement="left" overlay={`"${generateWalletName(account)}" (${hexWithoutPrefix(account)})`}>
+    <Tooltip placement="left" overlay={`"${generateWalletName(account)}" (${hexWithPrefix(account)})`}>
       <Img src={canvas.toDataURL()} alt={account} />
     </Tooltip>
   )

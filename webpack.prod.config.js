@@ -100,6 +100,10 @@ module.exports = {
     }),
     new UglifyJsWebpackPlugin({
       sourceMap: true,
+      parallel: true,
+      uglifyOptions: {
+        compress: false,
+      },
     }),
   ],
 }

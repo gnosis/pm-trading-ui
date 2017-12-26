@@ -1,11 +1,11 @@
 {
   "name": "@gnosis.pm/gnosis-management",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "GnosisInc Admin Interface",
   "main": "src/index.js",
   "scripts": {
     "build-dev": "NODE_ENV=development ./node_modules/.bin/webpack -p --config webpack.dev.config.js",
-    "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack -p --config webpack.prod.config.js",
+    "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack -p --progress --config webpack.prod.config.js",
     "build": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
     "clean": "rm -rf dist",
     "start-dev": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
@@ -38,7 +38,7 @@
     "precommit"
   ],
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "0.7.0-rc4",
+    "@gnosis.pm/gnosisjs": "github:gnosis/gnosis.js#testing",
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
@@ -129,7 +129,7 @@
     "storybook-router": "^0.3.1",
     "style-loader": "^0.13.2",
     "truffle-hdwallet-provider": "0.0.3",
-    "uglifyjs-webpack-plugin": "^1.0.1",
+    "uglifyjs-webpack-plugin": "^1.1.4",
     "url-loader": "^0.5.9",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
