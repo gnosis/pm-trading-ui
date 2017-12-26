@@ -5,7 +5,7 @@ import autobind from 'autobind-decorator'
 
 import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
-import { weiToEth, NUMBER_REGEXP } from 'utils/helpers'
+import { weiToEth } from 'utils/helpers'
 import {
   COLOR_SCHEME_DEFAULT,
   COLOR_SCHEME_SCALAR,
@@ -26,6 +26,8 @@ import FormBarChartRadioButton from 'components/FormBarChartRadioButton'
 import Input from 'components/FormInput'
 
 import './marketBuySharesForm.less'
+
+export const NUMBER_REGEXP = /^-?\d+\.?\d*$/
 
 class MarketBuySharesForm extends Component {
   componentWillMount() {

@@ -26,11 +26,11 @@ import {
   getOutcomeName,
   weiToEth,
   normalizeScalarPoint,
-  NUMBER_REGEXP,
   isMarketClosed,
   isMarketResolved,
 } from 'utils/helpers'
 import { marketShape, marketShareShape } from 'utils/shapes'
+import { NUMBER_REGEXP } from 'components/MarketBuySharesForm'
 
 import './marketMySharesForm.less'
 
