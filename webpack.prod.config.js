@@ -107,6 +107,13 @@ module.exports = {
         WHITELIST: whitelist,
       },
     }),
+    new UglifyJsWebpackPlugin({
+      sourceMap: true,
+      parallel: true,
+      uglifyOptions: {
+        compress: false,
+      },
+    }),
     new UglifyJsWebpackPlugin(),
   ],
 }
