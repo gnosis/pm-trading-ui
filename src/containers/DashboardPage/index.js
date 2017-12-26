@@ -17,6 +17,7 @@ import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized, checkWall
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
+import { areCredentialsValid } from 'integrations/uport/connector'
 
 
 const mapStateToProps = (state) => {
@@ -26,6 +27,7 @@ const mapStateToProps = (state) => {
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
+  const validCredentials = areCredentialsValid()
   let etherTokens = getEtherTokensAmount(state, defaultAccount)
 
   if (etherTokens !== undefined) {
@@ -35,7 +37,7 @@ const mapStateToProps = (state) => {
   }
 
   return {
-    hasWallet: checkWalletConnection(state),
+    hasWallet: validCredentials,
     defaultAccount,
     markets,
     etherTokens,
