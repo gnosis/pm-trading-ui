@@ -5,7 +5,7 @@ import autobind from 'autobind-decorator'
 
 import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
 
-import { weiToEth } from 'utils/helpers'
+import { weiToEth, NUMBER_REGEXP } from 'utils/helpers'
 import {
   COLOR_SCHEME_DEFAULT,
   COLOR_SCHEME_SCALAR,
@@ -41,7 +41,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getOutcomeTokenCount(investment, outcomeIndex, limitMargin) {
-    const validInvestment = /^-?\d+\.?\d*$/.test(investment) && investment && parseFloat(investment) > 0
+    const validInvestment = NUMBER_REGEXP.test(investment) && investment && parseFloat(investment) > 0
     if (!validInvestment) {
       return new Decimal(0)
     }
@@ -71,14 +71,14 @@ class MarketBuySharesForm extends Component {
   }
 
   getMaximumWin(outcomeTokenCount, investment) {
-    if (/^-?\d+\.?\d*$/.test(investment)) {
+    if (NUMBER_REGEXP.test(investment)) {
       return outcomeTokenCount.sub(new Decimal(investment).mul(1e18)).div(1e18)
     }
     return '--'
   }
 
   getPercentageWin = (outcomeTokenCount, investment) => {
-    const validInvestment = /^-?\d+\.?\d*$/.test(investment)
+    const validInvestment = NUMBER_REGEXP.test(investment)
     if (!validInvestment) {
       return '0'
     }
@@ -119,7 +119,7 @@ class MarketBuySharesForm extends Component {
       return false
     }
 
-    const validInvestment = /^-?\d+\.?\d*$/.test(investmentValue)
+    const validInvestment = NUMBER_REGEXP.test(investmentValue)
     if (!validInvestment) {
       return 'Invalid amount'
     }
@@ -202,7 +202,7 @@ class MarketBuySharesForm extends Component {
       },
     } = this.props
 
-    const validInvestment = /^-?\d+\.?\d*$/.test(selectedBuyInvest) || !selectedBuyInvest
+    const validInvestment = NUMBER_REGEXP.test(selectedBuyInvest) || !selectedBuyInvest
     const isOutcomeSelected = selectedOutcome !== undefined
     const currentMarginalPrice = marginalPrices[1]
     // Get the amount of tokens to buy
@@ -275,12 +275,11 @@ class MarketBuySharesForm extends Component {
 
   render() {
     const {
-      changeUrl,
       gasCosts,
       gasPrice,
       invalid,
       handleSubmit,
-      market: { event: { collateralToken, type }, address, local },
+      market: { event: { collateralToken, type }, local },
       selectedBuyInvest,
       submitFailed,
       submitting,

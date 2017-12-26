@@ -320,3 +320,5 @@ export const calcShareWinnings = (share, market, event) => {
     ? calcShareWinningsCategorical(share, market, event)
     : calcShareWinningsScalar(share, market, event)
 }
+
+export const NUMBER_REGEXP = /^-?\d+\.?\d*$/
