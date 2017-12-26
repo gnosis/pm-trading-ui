@@ -156,9 +156,7 @@ class Dashboard extends Component {
                   <DecimalValue value={weiToEth(share.balance)} />
                 ) : (
                   `< ${LOWEST_DISPLAYED_VALUE}`
-                )}&nbsp;
-              {share.event &&
-                share.event.type === 'SCALAR' && <CurrencyName outcomeToken={share.eventDescription.unit} />}
+                )}
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
               <DecimalValue value={weiToEth(share.isResolved ? share.winnings : share.value)} />&nbsp;
