@@ -1,24 +1,15 @@
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-
 import DashboardPage from 'components/Dashboard'
-import {
-  getAccountPredictiveAssets,
-  getMarkets,
-} from 'selectors/market'
-import {
-  getAccountTrades,
-} from 'selectors/marketTrades'
-import {
-  getAccountShares,
-} from 'selectors/marketShares'
-import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized, checkWalletConnection } from 'selectors/blockchain'
+import { getAccountPredictiveAssets, getMarkets } from 'selectors/market'
+import { getAccountTrades } from 'selectors/marketTrades'
+import { getAccountShares } from 'selectors/marketShares'
+import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
 import { areCredentialsValid } from 'integrations/uport/connector'
-
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
