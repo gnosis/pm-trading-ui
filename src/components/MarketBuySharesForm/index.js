@@ -41,7 +41,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getOutcomeTokenCount(investment, outcomeIndex, limitMargin) {
-    const validInvestment = NUMBER_REGEXP.test(investment) && investment && parseFloat(investment) > 0
+    const validInvestment = investment && NUMBER_REGEXP.test(investment) && parseFloat(investment) > 0
     if (!validInvestment) {
       return new Decimal(0)
     }
