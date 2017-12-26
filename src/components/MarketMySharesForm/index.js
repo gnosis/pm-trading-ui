@@ -4,7 +4,7 @@ import { reduxForm, Field, propTypes } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 
-import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount, calcLMSRProfit } from 'api'
+import { calcLMSRMarginalPrice, calcLMSRProfit } from 'api'
 
 import InteractionButton from 'containers/InteractionButton'
 
@@ -15,17 +15,24 @@ import FormInput from 'components/FormInput'
 
 import {
   COLOR_SCHEME_DEFAULT,
+  COLOR_SCHEME_SCALAR,
   GAS_COST,
   LOWEST_DISPLAYED_VALUE,
   MIN_CONSIDER_VALUE,
   LIMIT_MARGIN_DEFAULT,
+  OUTCOME_TYPES,
 } from 'utils/constants'
-import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
+import {
+  getOutcomeName,
+  weiToEth,
+  normalizeScalarPoint,
+  isMarketClosed,
+  isMarketResolved,
+} from 'utils/helpers'
 import { marketShape, marketShareShape } from 'utils/shapes'
+import { NUMBER_REGEXP } from 'components/MarketBuySharesForm'
 
 import './marketMySharesForm.less'
-import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
-import { COLOR_SCHEME_SCALAR, OUTCOME_TYPES } from '../../utils/constants'
 
 export const MY_TOKENS = 'My Tokens'
 
@@ -51,9 +58,9 @@ class MarketMySharesForm extends Component {
     }
 
     if (this.props.params.shareId) {
-      this.state = {
+      this.setState({
         extendedSellId: this.props.params.shareId,
-      }
+      })
     }
 
     if (this.props.defaultAccount) {
@@ -118,26 +125,17 @@ class MarketMySharesForm extends Component {
 
   @autobind
   validateTokenCount(val, values, props) {
-    if (parseFloat(val) >= 1000 || !/^-?\d+\.?\d*$/.test(val)) {
+    const share = props.marketShares[this.state.extendedSellId]
+    if (!val || !NUMBER_REGEXP.test(val)) {
       return 'Invalid amount'
     }
 
-    let decimalValue
-    try {
-      decimalValue = Decimal(val || 0)
-    } catch (e) {
-      return 'Invalid Number value'
-    }
-
+    const decimalValue = Decimal(val)
     if (decimalValue.lt(0)) {
       return "Number can't be negative."
     }
 
-    if (
-      decimalValue.gt(Decimal(props.marketShares[this.state.extendedSellId].balance)
-        .div(1e18)
-        .toString())
-    ) {
+    if (decimalValue.gt(Decimal(share.balance).div(1e18))) {
       return "You're trying to sell more than you invested."
     }
 
@@ -182,7 +180,7 @@ class MarketMySharesForm extends Component {
             </a>
           )}
         </td>
-                     </tr>)
+      </tr>)
 
       if (share.id === extendedSellId) {
         tableRows.push(<tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
@@ -245,7 +243,7 @@ class MarketMySharesForm extends Component {
     const newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
 
     let earnings = new Decimal(0)
-    if (share.balance && parseFloat(selectedSellAmount) < 1000) {
+    if (share.balance && NUMBER_REGEXP.test(selectedSellAmount) && parseFloat(selectedSellAmount) > 0) {
       earnings = weiToEth(calcLMSRProfit({
         netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
         funding: market.funding,
