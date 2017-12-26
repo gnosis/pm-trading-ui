@@ -1,6 +1,6 @@
 {
   "name": "@gnosis.pm/gnosis-management",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "GnosisInc Admin Interface",
   "main": "src/index.js",
   "scripts": {
@@ -38,7 +38,7 @@
     "precommit"
   ],
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "github:gnosis/gnosis.js#testing",
+    "@gnosis.pm/gnosisjs": "0.7.0-rc5-frontier",
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
