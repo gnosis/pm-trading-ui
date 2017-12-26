@@ -149,7 +149,7 @@ class Dashboard extends Component {
               <div className="entry__color" style={outcomeColorStyle} />
               <div className="dashboardMarket--highlight">{getOutcomeName(share, share.outcomeToken.index)}</div>
             </div>
-            <div className="col-md-3 dashboardMarket--highlight">
+            <div className="col-md-2 dashboardMarket--highlight">
               {Decimal(share.balance)
                 .div(1e18)
                 .gte(LOWEST_DISPLAYED_VALUE) ? (
@@ -158,7 +158,7 @@ class Dashboard extends Component {
                   `< ${LOWEST_DISPLAYED_VALUE}`
                 )}
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">
+            <div className="col-md-3 dashboardMarket--highlight">
               <DecimalValue value={weiToEth(share.isResolved ? share.winnings : share.value)} />&nbsp;
               <CurrencyName collateralToken={share.event.collateralToken} />
             </div>
@@ -210,10 +210,10 @@ class Dashboard extends Component {
               {new Decimal(averagePrice).toFixed(4)}{' '}
               {market.event && <CurrencyName collateralToken={market.event.collateralToken} />}
             </div>
-            <div className="col-md-3 dashboardMarket--highlight">
+            <div className="col-md-4 dashboardMarket--highlight">
               {moment.utc(trade.date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
-            <div className="col-md-3 dashboardMarket--highlight">{TRANSACTION_DESCRIPTIONS[trade.orderType]}</div>
+            <div className="col-md-2 dashboardMarket--highlight">{TRANSACTION_DESCRIPTIONS[trade.orderType]}</div>
           </div>
         </div>
       )
