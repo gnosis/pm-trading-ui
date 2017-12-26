@@ -103,13 +103,13 @@ export const sortMarkets = (markets = [], orderBy = null) => {
 
       return tradingA.comparedTo(tradingB)
     })
-  default:
-    return markets.sort((a, b) => {
-      const isFirstMarketEnded = isMarketClosed(a) || isMarketResolved(a)
-      const isSecondMarketEnded = isMarketClosed(b) || isMarketResolved(b)
-
-      return isFirstMarketEnded - isSecondMarketEnded
-    })
+  default: {
+    const openMarketsSorted = markets
+      .filter(market => !isMarketClosed(market) && !isMarketResolved(market))
+      .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+    const endedMarkets = markets.filter(market => isMarketClosed(market) || isMarketResolved(market))
+    return [...openMarketsSorted, ...endedMarkets]
+  }
   }
 }
 
