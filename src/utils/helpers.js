@@ -194,6 +194,8 @@ export const promisify = (func, params, timeout) =>
     })
   })
 
+const BLOCKED_WORD_LIST = ['sexual', 'african', 'american', 'european', 'asian', 'israeli']
+
 export const generateDeterministicRandomName = (seed) => {
   const rng = seedrandom(seed.toLowerCase(), { state: true })
 
@@ -203,10 +205,23 @@ export const generateDeterministicRandomName = (seed) => {
 
   const { adjectives, nouns } = dictionary
 
-  const adjectiveIndex = Math.floor(r1 * adjectives.length)
-  const nounIndex = Math.floor(r2 * nouns.length)
+  let adjectiveIndex = Math.floor(r1 * adjectives.length)
+  let nounIndex = Math.floor(r2 * nouns.length)
 
-  return `${adjectives[adjectiveIndex]} ${nouns[nounIndex]}`
+  let adjective = adjectives[adjectiveIndex]
+  let noun = nouns[nounIndex]
+
+  while (BLOCKED_WORD_LIST.indexOf(adjective) > -1) {
+    adjective = adjectives[adjectiveIndex]
+    adjectiveIndex = (adjectiveIndex + 1) % (adjectives.length - 1)
+  }
+
+  while (BLOCKED_WORD_LIST.indexOf(noun) > -1) {
+    noun = nouns[nounIndex]
+    nounIndex = (nounIndex + 1) % (nounIndex.length - 1)
+  }
+
+  return `${adjective} ${noun}`
 }
 
 export const generateWalletName = (account) => {
