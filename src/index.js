@@ -28,7 +28,7 @@ if (credentialsAreValid) {
   store.dispatch(initProviders())
 }
 
-Decimal.set({ toExpPos: 9999 })
+Decimal.set({ toExpPos: 9999, precision: 50 })
 
 initGoogleAnalytics()
 
