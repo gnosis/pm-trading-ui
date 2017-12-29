@@ -114,6 +114,5 @@ module.exports = {
         compress: false,
       },
     }),
-    new UglifyJsWebpackPlugin(),
   ],
 }
