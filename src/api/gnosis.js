@@ -325,55 +325,37 @@ export const calcFundingGasCost = async () => {
 
 export const calcCategoricalEventGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  const gasCost = await gnosis.createCategoricalEvent.estimateGas({
-    marketFactory: gnosis.contracts.StandardMarketFactory,
-    using: 'stats',
-  })
+  const gasCost = await gnosis.createCategoricalEvent.estimateGas({ using: 'stats' })
   return gasCost
 }
 
 export const calcScalarEventGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  const gasCost = await gnosis.createScalarEvent.estimateGas({
-    marketFactory: gnosis.contracts.StandardMarketFactory,
-    using: 'stats',
-  })
+  const gasCost = await gnosis.createScalarEvent.estimateGas({ using: 'stats' })
   return gasCost
 }
 
 export const calcCentralizedOracleGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  const gasCost = await gnosis.createCentralizedOracle.estimateGas({
-    marketFactory: gnosis.contracts.StandardMarketFactory,
-    using: 'stats',
-  })
+  const gasCost = await gnosis.createCentralizedOracle.estimateGas({ using: 'stats' })
   return gasCost
 }
 
 export const calcMarketGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  const gasCost = await gnosis.createMarket.estimateGas({
-    marketFactory: gnosis.contracts.StandardMarketFactory,
-    using: 'stats',
-  })
+  const gasCost = await gnosis.createMarket.estimateGas({ using: 'stats' })
   return gasCost
 }
 
 export const calcBuySharesGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  const gasCost = await gnosis.buyOutcomeTokens.estimateGas({
-    marketFactory: gnosis.contracts.StandardMarketFactory,
-    using: 'stats',
-  })
+  const gasCost = await gnosis.buyOutcomeTokens.estimateGas({ using: 'stats' })
   return gasCost
 }
 
 export const calcSellSharesGasCost = async () => {
   const gnosis = await getGnosisConnection()
-  const gasCost = await gnosis.sellOutcomeTokens.estimateGas({
-    marketFactory: gnosis.contracts.StandardMarketFactory,
-    using: 'stats',
-  })
+  const gasCost = await gnosis.sellOutcomeTokens.estimateGas({ using: 'stats' })
   return gasCost
 }
 
@@ -390,12 +372,9 @@ export const calcRedeemWinningsGasCost = async (opts) => {
   }
 
   const gnosis = await getGnosisConnection()
-  const Event = await gnosis.contracts.Event.at(eventAddress)
+  const event = await gnosis.contracts.Event.at(eventAddress)
 
-  const gasGost = await Event.redeemWinnings.estimateGas({
-    marketFactory: gnosis.contracts.StandardMarketFactory,
-    using: 'stats',
-  })
+  const gasGost = await event.redeemWinnings.estimateGas()
   return gasGost
 }
 
