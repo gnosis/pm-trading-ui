@@ -21,7 +21,8 @@ setMomentRelativeTime()
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 store.dispatch(initProviders())
-Decimal.set({ toExpPos: 9999 })
+
+Decimal.set({ toExpPos: 9999, precision: 50 })
 
 /* global document */
 const rootElement = document.getElementById('root')
