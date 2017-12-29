@@ -5,7 +5,7 @@ import { map } from 'lodash'
 
 export default store => next => (action) => {
   const handledAction = next(action)
-  const { dispatch, getState } = store
+  const { dispatch } = store
   const { type, payload } = action
 
   if (type === 'INIT_PROVIDERS') {

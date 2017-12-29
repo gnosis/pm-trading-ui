@@ -112,6 +112,7 @@ class BaseIntegration {
       providerUpdate.available = true
     }
 
+    this[property] = value
     this.runProviderUpdate(this, providerUpdate)
   }
 
