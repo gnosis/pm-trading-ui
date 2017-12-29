@@ -21,7 +21,7 @@ class Header extends Component {
 
   render() {
     const {
-      version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider, logout,
+      version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider,
     } = this.props
     return (
       <div className="headerContainer">
