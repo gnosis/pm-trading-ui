@@ -1,21 +1,22 @@
 {
   "developmentWhitelist": {
-    "0xb2e87b8ce41184e0688027f370a972a436abe77e": "Giacomo",
-    "0xb00a24c899f88e5514583cfa8c40e4cdab6c473e": "Andre Metamask",
-    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",
-    "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Adolfo Metamask"
+    "0x7b2e78d4dfaaba045a167a70da285e30e8fca196": "Martin",
+    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama",
+    "0x72e7780a3b3927d5784843ce1e58c1593bbaaf49": "Stefan",
+    "0x9eab578556de5782445ec036f25a41902ba19eeb": "Gnosis",
+    "0xd94CC0Ea00050D430b8a60bdF2a5e413d85066cC": "Adolfo Metamask"
  },
   "productionWhitelist": {
  },
- "gnosisdb": {
+  "gnosisdb": {
     "protocol": "https",
-    "host": "gnosisdb-olympia.gnosis.pm",
+    "host": "gnosisdb-prod.gnosis.pm",
     "port": 443
   },
   "ethereum": {
     "protocol": "https",
-    "host": "rinkeby.infura.io",
+    "host": "mainnet.infura.io",
     "port": 443
   },
- "fetchMarketTimeInterval": 15000
+  "fetchMarketTimeInterval": 15000
 }
