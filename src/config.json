@@ -4,10 +4,10 @@
     "0xb00a24c899f88e5514583cfa8c40e4cdab6c473e": "Andre Metamask",
     "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",
     "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Adolfo Metamask"
- },
+  },
   "productionWhitelist": {
- },
- "gnosisdb": {
+  },
+  "gnosisdb": {
     "protocol": "https",
     "host": "gnosisdb-olympia.gnosis.pm",
     "port": 443
@@ -17,5 +17,5 @@
     "host": "rinkeby.infura.io",
     "port": 443
   },
- "fetchMarketTimeInterval": 15000
+  "fetchMarketTimeInterval": 15000
 }

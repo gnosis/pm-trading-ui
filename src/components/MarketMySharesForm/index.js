@@ -144,7 +144,8 @@ class MarketMySharesForm extends Component {
 
     const resolvedOrClosed = isMarketClosed(market) || isMarketResolved(market)
 
-    marketShares.forEach((share) => {
+    Object.keys(marketShares).forEach((shareKey) => {
+      const share = marketShares[shareKey]
       const probability = calcLMSRMarginalPrice({
         netOutcomeTokensSold: market.netOutcomeTokensSold.slice(0),
         funding: market.funding,
@@ -406,7 +407,7 @@ class MarketMySharesForm extends Component {
 
   render() {
     const { marketShares } = this.props
-    if (!marketShares || !marketShares.length) {
+    if (!marketShares || Object.keys(marketShares).length === 0) {
       return (
         <div className="marketMyShares">
           <h2 className="marketMyShares__heading">
