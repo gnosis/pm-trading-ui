@@ -134,19 +134,20 @@ export const restFetchPage = async (url, page, pageSize) => {
 
 export const restFetchAllPages = async (url, pageSize) => {
   let page = 0
-  const payload = await restFetchPage(url, page, pageSize)
+  const request = restFetchPage(url, page, pageSize)
+  const payload = await request
 
-  const extraRequests = []
+  const allPageRequests = [request]
 
   let processedCount = payload.results.length
 
   while (processedCount < payload.count) {
     page += 1
     processedCount += payload.results.length
-    extraRequests.push(restFetchPage(url, page, pageSize))
+    allPageRequests.push(restFetchPage(url, page, pageSize))
   }
 
-  const results = [].concat(...((await Promise.all(extraRequests)).map(requestPayload => requestPayload.results)))
+  const results = [].concat(...((await Promise.all(allPageRequests)).map(requestPayload => requestPayload.results)))
 
   return {
     results,
