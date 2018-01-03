@@ -1,12 +1,9 @@
 import {
   restFetch,
+  restFetchAllPages,
   hexWithoutPrefix,
-  addIdToObjectsInArray,
-  getOutcomeName,
-  normalizeScalarPoint,
 } from 'utils/helpers'
 import { normalize } from 'normalizr'
-import { OUTCOME_TYPES } from 'utils/constants'
 import qs from 'querystring'
 import { marketSchema, marketSharesSchema, marketTradesSchema } from './schema'
 
@@ -35,7 +32,7 @@ export const requestMarketTradesForAccount = async (marketAddress, accountAddres
 }
 
 export const requestMarketTrades = async (market) => {
-  const payload = await restFetch(`${API_URL}/markets/${hexWithoutPrefix(market.address)}/trades/`)
+  const payload = await restFetchAllPages(`${API_URL}/markets/${hexWithoutPrefix(market.address)}/trades/`, 200)
   return normalize(payload.results, [marketTradesSchema])
 }
 

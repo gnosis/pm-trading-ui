@@ -7,6 +7,7 @@ import moment from 'moment'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES, MARKET_STAGES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
+import URLParse from 'url-parse'
 import Uport from 'integrations/uport'
 
 import dictionary from 'randomNames.json'
@@ -119,6 +120,39 @@ export const restFetch = url =>
         console.warn(`Gnosis DB: ${err}`)
         reject(err)
       }))
+
+export const restFetchPage = async (url, page, pageSize) => {
+  const urlParams = new URLParse(url, null, true)
+  urlParams.query = {
+    limit: pageSize,
+    size: pageSize,
+    offset: page * pageSize,
+  }
+
+  return restFetch(urlParams.toString())
+}
+
+export const restFetchAllPages = async (url, pageSize) => {
+  let page = 0
+  const payload = await restFetchPage(url, page, pageSize)
+
+  const extraRequests = []
+
+  let processedCount = payload.results.length
+
+  while (processedCount < payload.count) {
+    page += 1
+    processedCount += payload.results.length
+    extraRequests.push(restFetchPage(url, page, pageSize))
+  }
+
+  const results = [].concat(...((await Promise.all(extraRequests)).map(requestPayload => requestPayload.results)))
+
+  return {
+    results,
+    count: results.length,
+  }
+}
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
