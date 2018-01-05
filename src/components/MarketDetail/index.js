@@ -13,6 +13,7 @@ import InteractionButton from 'containers/InteractionButton'
 
 import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue, { decimalToText } from 'components/DecimalValue'
+import LoadingIndicator from 'components/LoadingIndicator'
 
 import Countdown from 'components/Countdown'
 import Outcome from 'components/Outcome'
@@ -74,6 +75,7 @@ class MarketDetail extends Component {
       .then(() => {
         this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
         this.props.fetchMarketTrades(this.props.market)
+
         if (this.props.defaultAccount) {
           this.props.fetchMarketShares(this.props.defaultAccount)
         }
@@ -296,8 +298,23 @@ class MarketDetail extends Component {
     )
   }
 
-  render() {
+  renderMarketGraph() {
     const { market, marketGraph } = this.props
+    if (!marketGraph.length) {
+      return (
+        <div className="container">
+          <LoadingIndicator className="marketGraph__spinner" />
+        </div>
+      )
+    }
+
+    return (
+      <MarketGraph data={marketGraph} market={market} />
+    )
+  }
+
+  render() {
+    const { market } = this.props
 
     const { marketFetchError } = this.state
     if (marketFetchError) {
@@ -336,7 +353,9 @@ class MarketDetail extends Component {
         >
           {this.renderExpandableContent()}
         </div>
-        {marketGraph && <MarketGraph data={marketGraph} market={market} />}
+        <div>
+          {this.renderMarketGraph()}
+        </div>
       </div>
     )
   }
