@@ -28,20 +28,12 @@ import { marketShareShape, marketTradeShape, gasCostsShape } from '../../utils/s
 
 const ONE_WEEK_IN_HOURS = 168
 
-const LOADING_STATE = {
-  UNKNOWN: 'unknown',
-  RUNNING: 'running',
-  SUCCESS: 'success',
-  FAILURE: 'failure',
-}
-
 class MarketDetail extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
       marketFetchError: undefined,
-      marketGraphLoading: LOADING_STATE.UNKNOWN,
     }
   }
 
@@ -75,20 +67,6 @@ class MarketDetail extends Component {
     }
   }
 
-  async fetchMarketGraph(firstFetch) {
-    if (firstFetch) {
-      await this.setState({ marketGraphLoading: LOADING_STATE.RUNNING })
-    }
-
-    await this.props.fetchMarketTrades(this.props.market)
-
-    try {
-      await this.setState({ marketGraphLoading: LOADING_STATE.SUCCESS })
-    } catch (e) {
-      await this.setState({ marketGraphLoading: LOADING_STATE.FAILURE })
-    }
-  }
-
   // Check available views on first fetch
   @autobind
   fetchEssentialData(firstFetch = false) {
@@ -96,7 +74,7 @@ class MarketDetail extends Component {
       .fetchMarket()
       .then(() => {
         this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
-        this.fetchMarketGraph()
+        this.props.fetchMarketTrades(this.props.market)
 
         if (this.props.defaultAccount) {
           this.props.fetchMarketShares(this.props.defaultAccount)
@@ -322,16 +300,16 @@ class MarketDetail extends Component {
 
   renderMarketGraph() {
     const { market, marketGraph } = this.props
-    const canRenderMarketGraph = marketGraph && this.state.marketGraphLoading === LOADING_STATE.SUCCESS
-
-    if (canRenderMarketGraph) {
-      return <MarketGraph data={marketGraph} market={market} />
+    if (!marketGraph.length) {
+      return (
+        <div className="container">
+          <LoadingIndicator className="marketGraph__spinner" />
+        </div>
+      )
     }
 
     return (
-      <div className="container">
-        <LoadingIndicator className="marketGraph__spinner" />
-      </div>
+      <MarketGraph data={marketGraph} market={market} />
     )
   }
 

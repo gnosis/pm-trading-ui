@@ -1,5 +1,3 @@
-/* globals fetch */
-
 import { mapValues, startsWith, isArray, range } from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
@@ -109,50 +107,6 @@ export const addIdToObjectsInArray = (arrayData) => {
     item._id = index
   })
   return arrayData
-}
-
-export const restFetch = url =>
-  fetch(url)
-    .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
-    .then(res => res.json())
-    .catch(err =>
-      new Promise((resolve, reject) => {
-        console.warn(`Gnosis DB: ${err}`)
-        reject(err)
-      }))
-
-export const restFetchPage = async (url, page, pageSize) => {
-  const urlParams = new URLParse(url, null, true)
-  urlParams.query = {
-    limit: pageSize,
-    size: pageSize,
-    offset: page * pageSize,
-  }
-
-  return restFetch(urlParams.toString())
-}
-
-export const restFetchAllPages = async (url, pageSize) => {
-  let page = 0
-  const request = restFetchPage(url, page, pageSize)
-  const payload = await request
-
-  const allPageRequests = [request]
-
-  let processedCount = payload.results.length
-
-  while (processedCount < payload.count) {
-    page += 1
-    processedCount += payload.results.length
-    allPageRequests.push(restFetchPage(url, page, pageSize))
-  }
-
-  const results = [].concat(...((await Promise.all(allPageRequests)).map(requestPayload => requestPayload.results)))
-
-  return {
-    results,
-    count: results.length,
-  }
 }
 
 export const bemifyClassName = (className, element, modifier) => {
