@@ -80,7 +80,6 @@
     "sha1": "^1.1.1",
     "truffle-contract": "^3.0.0",
     "uport-connect": "gnosis/uport-connect#testing",
-    "url-parse": "^1.2.0",
     "uuid": "^3.1.0",
     "web3": "0.18.4"
   },
