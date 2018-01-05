@@ -5,7 +5,6 @@ import moment from 'moment'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES, MARKET_STAGES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
-import URLParse from 'url-parse'
 import Uport from 'integrations/uport'
 
 import dictionary from 'randomNames.json'
@@ -172,7 +171,7 @@ export const getGnosisJsOptions = (provider) => {
 export const promisify = (func, params, timeout) =>
   new Promise((resolve, reject) => {
     if (timeout) {
-      setTimeout(() => reject('Promise timed out'), timeout)
+      setTimeout(() => reject(new Error('Promise timed out')), timeout)
     }
 
     func(...params, (err, res) => {
