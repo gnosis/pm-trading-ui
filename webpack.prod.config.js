@@ -9,10 +9,24 @@ const pkg = require('./package.json')
 
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
+const branch = process.env.TRAVIS_BRANCH || 'development'
 
 const config = require('./src/config.json')
 
-const whitelist = config.productionWhitelist
+const isProductionEnv = branch.indexOf('release/') > -1
+const isStagingEnv = branch === 'master'
+let whitelist
+
+if (isProductionEnv) {
+  console.log('Using Production Whitelist')
+  whitelist = config.productionWhitelist
+} else if (isStagingEnv) {
+  console.log('Using Staging Whitelist')
+  whitelist = config.stagingWhitelist
+} else {
+  console.log('Using Development Whitelist')
+  whitelist = config.developmentWhitelist
+}
 
 module.exports = {
   devtool: 'source-map',
