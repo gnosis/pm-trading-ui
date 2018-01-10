@@ -37,7 +37,6 @@ export const requestMarketTrades = async (market) => {
 }
 
 export const requestAccountTrades = async (accountAddress) => {
-  console.log(accountAddress)
   const payload = await requestFromRestAPI(`account/${hexWithoutPrefix(accountAddress)}/trades/`)
   return normalize(payload.results.map(trade => ({ ...trade, owner: accountAddress })), [marketTradesSchema])
 }
