@@ -74,11 +74,14 @@ class MarketDetail extends Component {
       .fetchMarket()
       .then(() => {
         this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
-        this.props.fetchMarketTrades(this.props.market)
-
         if (this.props.defaultAccount) {
-          this.props.fetchMarketShares(this.props.defaultAccount)
+          this.props.fetchMarketShares(this.props.defaultAccount).then(() => {
+            this.props.fetchMarketTrades(this.props.market)
+          })
+        } else {
+          this.props.fetchMarketTrades(this.props.market)
         }
+
         if (firstFetch) {
           const availableView = this.getAvailableView()
           if (availableView) {
@@ -186,7 +189,10 @@ class MarketDetail extends Component {
       .local()
       .diff(moment(), 'hours')
     const { marketShares, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
-    const winningsTotal = Object.keys(marketShares).reduce((acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')), Decimal(0))
+    const winningsTotal = Object.keys(marketShares).reduce(
+      (acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')),
+      Decimal(0),
+    )
     const marketClosed = isMarketClosed(market)
     const marketResolved = isMarketResolved(market)
     const showWinning = marketResolved
@@ -240,7 +246,8 @@ class MarketDetail extends Component {
                 <div className="redeemWinning__icon icon icon--achievementBadge" />
                 <div className="redeemWinning__details">
                   <div className="redeemWinning__heading">
-                    <DecimalValue value={weiToEth(winningsTotal)} /> {collateralTokenToText(market.event.collateralToken)}
+                    <DecimalValue value={weiToEth(winningsTotal)} />{' '}
+                    {collateralTokenToText(market.event.collateralToken)}
                   </div>
                   <div className="redeemWinning__label">Your Winnings</div>
                 </div>
@@ -308,9 +315,7 @@ class MarketDetail extends Component {
       )
     }
 
-    return (
-      <MarketGraph data={marketGraph} market={market} />
-    )
+    return <MarketGraph data={marketGraph} market={market} />
   }
 
   render() {
@@ -353,9 +358,7 @@ class MarketDetail extends Component {
         >
           {this.renderExpandableContent()}
         </div>
-        <div>
-          {this.renderMarketGraph()}
-        </div>
+        <div>{this.renderMarketGraph()}</div>
       </div>
     )
   }

@@ -31,7 +31,7 @@ export const requestFromRestAPIPage = async (endpoint, queryparams = {}, page = 
     offset: page * pageSize,
   })
 
-export const requestFromRestAPIAllPages = async (endpoint, queryparams, pageSize) => {
+export const requestFromRestAPIAllPages = async (endpoint, queryparams, pageSize, limit = 100000) => {
   let page = 0
   const request = requestFromRestAPIPage(endpoint, queryparams, page, pageSize)
   const payload = await request
@@ -40,7 +40,7 @@ export const requestFromRestAPIAllPages = async (endpoint, queryparams, pageSize
 
   let processedCount = payload.results.length
 
-  while (processedCount < payload.count) {
+  while (processedCount < payload.count && processedCount < limit) {
     page += 1
     processedCount += payload.results.length
     allPageRequests.push(requestFromRestAPIPage(endpoint, queryparams, page, pageSize))
