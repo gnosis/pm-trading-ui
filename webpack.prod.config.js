@@ -14,10 +14,20 @@ const branch = process.env.TRAVIS_BRANCH || 'development'
 
 const config = require('./src/config.json')
 
-const isProductionEnv = branch === 'master' || branch.indexOf('release/') > -1
-const whitelist = isProductionEnv ? config.productionWhitelist : config.developmentWhitelist
+const isProductionEnv = branch.indexOf('release/') > -1
+const isStagingEnv = branch === 'master'
+let whitelist
 
-console.log(isProductionEnv ? 'Using Production Whitelist' : 'Using Development Whitelist')
+if (isProductionEnv) {
+  console.log('Using Production Whitelist')
+  whitelist = config.productionWhitelist
+} else if (isStagingEnv) {
+  console.log('Using Staging Whitelist')
+  whitelist = config.stagingWhitelist
+} else {
+  console.log('Using Development Whitelist')
+  whitelist = config.developmentWhitelist
+}
 
 module.exports = {
   devtool: 'source-map',
