@@ -97,7 +97,7 @@ class Dashboard extends Component {
   renderNewMarkets(markets) {
     return markets.map((market) => {
       const viewMarket = () => this.handleViewMarket(market)
-      const outcomeOptions = { showOnlyTrendingOutcome: true, showDate: true, dateFormat: 'MMMM Y' }
+      const outcomeOptions = { showOnlyTrendingOutcome: true, showDate: true, dateFormat: 'D MMMM Y' }
 
       return (
         <div className="dashboardMarket dashboardMarket--new" key={market.address} onClick={viewMarket}>
