@@ -74,7 +74,7 @@ export const olyCell = prop => (props) => {
   const value = props.row[prop]
   const result = Decimal(value)
     .div(1e18)
-    .toDP(2, 1)
+    .toDP(4, 1)
     .toString()
   return <span>{ result }</span>
 }
