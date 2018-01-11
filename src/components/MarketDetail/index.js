@@ -155,13 +155,11 @@ class MarketDetail extends Component {
       market.oracle.owner === this.props.defaultAccount &&
       new Decimal(market.collectedFees).gt(0)
 
-    if (this.props.creatorIsModerator) {
+    if (this.props.isOnWhitelist) {
       // Show creator String
-      infos.creator = this.props.moderators[market.creator]
-    } else {
-      // Show address
-      infos.creator = market.creator
+      infos.creator = this.props.moderators[market.creator] || market.creator
     }
+
     if (showWithdrawFees) {
       infos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenToText(market.event.collateralToken)}`
     }
