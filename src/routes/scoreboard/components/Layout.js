@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
+import Hairline from 'components/layout/Hairline'
 import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
@@ -8,6 +9,7 @@ import PropTypes from 'prop-types'
 import * as React from 'react'
 import * as css from './index.css'
 import ScoreTable from './ScoreTable'
+import RewardClaim from './RewardClaim'
 
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
@@ -34,12 +36,16 @@ const NoRows = () => (
 
 class Layout extends React.PureComponent {
   render() {
-    const { data, myAccount } = this.props
+    const {
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal,
+    } = this.props
     const hasRows = data && data.size > 1
 
     return (
       <Block>
         <PageFrame>
+          {myAccount && <RewardClaim mainnetAddress={mainnetAddress} openSetMainnetAddressModal={openSetMainnetAddressModal} />}
+          {myAccount && <Hairline />}
           <Block className={cx('trophy')}>
             <Img src={trophy} width="100" />
             <Paragraph>Scoreboard</Paragraph>
@@ -70,12 +76,16 @@ const types = {
     predictedProfit: PropTypes.string.isRequired,
     predictions: PropTypes.string.number,
   })),
+  openSetMainnetAddressModal: PropTypes.func,
   myAccount: PropTypes.string,
+  mainnetAddress: PropTypes.string,
 }
 
 const defaultProps = {
   data: [],
-  myAccount: 'Unknown',
+  openSetMainnetAddressModal: () => {},
+  myAccount: '',
+  mainnetAddress: undefined,
 }
 
 Layout.propTypes = types

@@ -1,6 +1,10 @@
 import { createSelector, createStructuredSelector } from 'reselect'
 import { getCurrentAccount } from 'selectors/blockchain'
-import { firstOlympiaUsersSelectorAsList, meSelector } from '../store/selectors'
+import {
+  firstOlympiaUsersSelectorAsList,
+  meSelector,
+  olympiaMainnetRegistryAddress,
+} from '../store/selectors'
 
 const usersSelector = createSelector(
   firstOlympiaUsersSelectorAsList,
@@ -23,5 +27,6 @@ const usersSelector = createSelector(
 
 export default createStructuredSelector({
   data: usersSelector,
+  mainnetAddress: olympiaMainnetRegistryAddress,
   myAccount: getCurrentAccount,
 })

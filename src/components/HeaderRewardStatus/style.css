@@ -1,0 +1,18 @@
+.headerReward {
+  background-color: #f0f1f1;
+}
+
+.headerRewardStatus {
+  padding: 18px 0;
+}
+
+.headerReward__link {
+  /* link-color */
+  color: #00a6c4;
+  text-decoration: underline;
+}
+
+.headerReward__link:link, .headerReward__link:visited {
+  /* link-color */
+  color: #00a6c4;
+}

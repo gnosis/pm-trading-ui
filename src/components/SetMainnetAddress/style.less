@@ -1,0 +1,80 @@
+@import '../../less/vars.less';
+
+.setMainnetAddress {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.setMainnetAddressModal {
+  width: 480px;
+  background-color: white;
+  border-radius: 9px;
+  padding: 14px 26px;
+
+  &__header {
+    font-size: 21px;
+    text-align: center;
+    color: black;
+    font-weight: 500;
+  }
+
+  &__close {
+    .closeButton(32px, 5px);
+    top: 20px;
+    right: 10px;
+  }
+
+  &__error {
+    color: @active-highlight-error;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  &__disclaimer {
+    font-size: 14px;
+    font-weight: 300;
+    text-align: center;
+    color: @font-color-dark;
+
+    em {
+      text-decoration: underline;
+      font-style: normal;
+    }
+
+    padding-bottom: 20px;
+  }
+}
+
+.setMainnetAddressModalInput {
+  &__input {
+    border: solid 2px #b7bfc4;
+    border-radius: 2px;
+    padding-left: 31px;
+    position: relative;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: (24px + 10px); // size + side padding
+
+
+    background-image: url('../../assets/img/icons/icon_wallet.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 18px;
+  }
+}
+
+.setMainnetAddressModalSubmit {
+  display: block;
+  margin: auto;
+}

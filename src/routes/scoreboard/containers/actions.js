@@ -1,3 +1,9 @@
+import { openModal } from 'actions/modal'
+
 import { fetchOlympiaUsers, addUsers } from '../store/actions'
 
-export default { fetchOlympiaUsers, addUsers }
+const openSetMainnetAddressModal = () => openModal({ modalName: 'ModalSetMainnetAddress' })
+
+export default {
+  fetchOlympiaUsers, addUsers, openSetMainnetAddressModal,
+}

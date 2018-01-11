@@ -12,9 +12,16 @@ class ScoreBoard extends React.Component {
   }
 
   render() {
-    const { data, myAccount } = this.props
+    const {
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal,
+    } = this.props
 
-    return <Layout data={data} myAccount={myAccount} />
+    return (<Layout
+      data={data}
+      myAccount={myAccount}
+      mainnetAddress={mainnetAddress}
+      openSetMainnetAddressModal={openSetMainnetAddressModal}
+    />)
   }
 }
 
@@ -30,12 +37,15 @@ ScoreBoard.propTypes = {
     predictions: PropTypes.string.number,
   })),
   myAccount: PropTypes.string,
+  mainnetAddress: PropTypes.string,
   fetchOlympiaUsers: PropTypes.func.isRequired,
+  openSetMainnetAddressModal: PropTypes.func.isRequired,
 }
 
 ScoreBoard.defaultProps = {
   data: [],
-  myAccount: 'Unknown',
+  myAccount: '',
+  mainnetAddress: undefined,
 }
 
 export default connect(selector, actions)(ScoreBoard)
