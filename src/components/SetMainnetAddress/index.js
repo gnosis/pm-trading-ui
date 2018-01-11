@@ -2,7 +2,7 @@ import React from 'react'
 import { reduxForm, Field, propTypes as reduxFormPropTypes } from 'redux-form'
 import PropTypes from 'prop-types'
 
-import { updateMainnetAddress } from 'actions/blockchain'
+import { updateMainnetAddress } from 'routes/scoreboard/store/actions/mainnetRegistry'
 import { closeModal as closeModalAction } from 'actions/modal'
 
 import { HEX_VALUE_REGEX } from 'utils/constants'
@@ -25,7 +25,7 @@ const SetMainnetAddress = ({
         <Field component={TextField} className="setMainnetAddressModalInput" name="mainnetAddress" placeholder="Ethereum address" />
         <InteractionButton type="submit" className="btn btn-primary setMainnetAddressModalSubmit" loading={submitting}>Save Address</InteractionButton>
         {error && <p className="setMainnetAddressModal__error">{error}</p>}
-        {submitFailed && <p className="setMainnetAddressModal__error">Sorry, the transaction failed. Please try again later or contact us!</p>}
+        {(submitFailed && !submitting) && <p className="setMainnetAddressModal__error">Sorry, the transaction failed. Please try again later or contact us!</p>}
       </form>
     </div>
   </div>
