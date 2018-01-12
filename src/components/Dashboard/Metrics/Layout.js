@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind'
+import Tooltip from 'rc-tooltip'
 import DecimalValue from 'components/DecimalValue'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
@@ -12,9 +13,9 @@ const group = require('./assets/group.png')
 const shape = require('./assets/shape.svg')
 
 const Metric = ({
-  img, title, explanation, children, width = 37, height = 37,
+  img, title, explanation, children, width = 37, height = 37, ...props
 }) => (
-  <Block className={cx('ol-db-metric')}>
+  <Block className={cx('ol-db-metric')} {...props}>
     <Img
       className={cx('ol-db-icon')}
       src={img}
@@ -35,9 +36,11 @@ const Metrics = ({
     <Metric img={group} explanation="OLY TOKENS">
       <DecimalValue value={tokens} className={cx('ol-db-title')} />
     </Metric>
-    <Metric img={shape} width={45} height={45} explanation="PREDICTED PROFITS">
-      <Block className={cx('ol-db-title')}>{ predictedProfit ? predictedProfit.div(1e18).toDP(4, 1).toString() : '--' }</Block>
-    </Metric>
+    <Tooltip placement="bottom" overlay="Updates every hour">
+      <Metric img={shape} width={45} height={45} explanation="PREDICTED PROFITS">
+        <Block className={cx('ol-db-title')}>{ predictedProfit ? predictedProfit.div(1e18).toDP(4, 1).toString() : '--' }</Block>
+      </Metric>
+    </Tooltip>
     <Metric img={arrows} explanation="YOUR RANK">
       <Block className={cx('ol-db-title')}>{ rank || '--' }</Block>
     </Metric>
