@@ -361,7 +361,7 @@ class MarketBuySharesForm extends Component {
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} decimals={5} />
+                  <DecimalValue value={gasCostEstimation} decimals={4} />
                   {' ETH'}
                 </div>
               </div>
