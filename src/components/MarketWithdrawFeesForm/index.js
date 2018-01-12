@@ -11,14 +11,15 @@ import InteractionButton from 'containers/InteractionButton'
 import './marketWithdrawFeesForm.less'
 
 class MarketWithdrawFeesForm extends Component {
-
   @autobind
   handleWithdrawFees() {
     this.props.withdrawFees(this.props.market)
   }
 
   render() {
-    const { handleSubmit, submitting, market, market: { withdrawnFees, collectedFees } } = this.props
+    const {
+      handleSubmit, submitting, market, market: { withdrawnFees, collectedFees },
+    } = this.props
     const remainingFees = new Decimal(collectedFees).sub(new Decimal(withdrawnFees))
     const submitEnabled = remainingFees.gt(0)
 
@@ -44,11 +45,11 @@ class MarketWithdrawFeesForm extends Component {
         <div className="row marketWithdrawFeesForm__row">
           <div className="col-md-6">
             <form onSubmit={handleSubmit(this.handleWithdrawFees)}>
-              
               <InteractionButton
                 className="marketWithdrawFeesForm--submit btn btn-primary"
                 disabled={!submitEnabled}
                 loading={submitting || market.local}
+                type="submit"
               >
                 Withdraw
               </InteractionButton>
@@ -63,6 +64,10 @@ class MarketWithdrawFeesForm extends Component {
 MarketWithdrawFeesForm.propTypes = {
   ...propTypes,
   handleSubmit: PropTypes.func,
+}
+
+MarketWithdrawFeesForm.defaultProps = {
+  handleSubmit: () => {},
 }
 
 const form = {
