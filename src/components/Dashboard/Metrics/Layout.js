@@ -36,7 +36,7 @@ const Metrics = ({
       <DecimalValue value={tokens} className={cx('ol-db-title')} />
     </Metric>
     <Metric img={shape} width={45} height={45} explanation="PREDICTED PROFITS">
-      <Block className={cx('ol-db-title')}>{ predictedProfit ? predictedProfit.div(1e18).toDP(4, 1).toString() : '--' }</Block>
+      <Block className={cx('ol-db-title')}>{ predictedProfit || '--'}</Block>
     </Metric>
     <Metric img={arrows} explanation="YOUR RANK">
       <Block className={cx('ol-db-title')}>{ rank || '--' }</Block>
