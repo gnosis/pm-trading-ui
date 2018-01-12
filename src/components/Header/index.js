@@ -51,6 +51,15 @@ class Header extends Component {
             >
               Markets
             </Link>
+            {hasWallet && (
+              <Link
+                to="transactions"
+                activeClassName="headerContainer__navLink--active"
+                className="headerContainer__navLink"
+              >
+                Transactions
+              </Link>
+            )}
           </div>
 
           <div className="headerContainer__group headerContainer__group--right">
