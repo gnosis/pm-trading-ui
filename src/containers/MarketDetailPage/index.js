@@ -29,13 +29,14 @@ import {
   getMarketGraph,
 } from 'selectors/marketGraph'
 import {
+  checkWalletConnection,
   getCurrentAccount,
   getCurrentBalance,
   getGasCosts,
   getGasPrice,
   isGasCostFetched,
   isGasPriceFetched,
-  checkWalletConnection,
+  isOnWhitelist,
 } from 'selectors/blockchain'
 import { isModerator, getModerators } from 'utils/helpers'
 
@@ -77,6 +78,7 @@ const mapStateToProps = (state, ownProps) => {
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
     currentBalance: getCurrentBalance(state),
+    isOnWhitelist: isOnWhitelist(state),
   }
 }
 
