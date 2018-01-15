@@ -1,7 +1,6 @@
 import Decimal from 'decimal.js'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { getCurrentBalance } from 'selectors/blockchain'
-import { getAccountPredictiveAssets } from 'selectors/market'
 import { meSelector } from 'routes/scoreboard/store/selectors'
 import { badgeOf } from 'routes/scoreboard/components/ScoreTable/table'
 
@@ -28,7 +27,7 @@ const badgeSelector = createSelector(
 
 export default createStructuredSelector({
   tokens: tokenSelector,
-  predictedProfit: getAccountPredictiveAssets,
+  predictedProfit: profitsSelector,
   rank: rankSelector,
   badge: badgeSelector,
 })

@@ -38,7 +38,7 @@ const Metrics = ({
     </Metric>
     <Tooltip placement="bottom" overlay="Updates every hour">
       <Metric img={shape} width={45} height={45} explanation="PREDICTED PROFITS">
-        <Block className={cx('ol-db-title')}>{ predictedProfit ? predictedProfit.div(1e18).toDP(4, 1).toString() : '--' }</Block>
+        <Block className={cx('ol-db-title')}>{ predictedProfit || '--' }</Block>
       </Metric>
     </Tooltip>
     <Metric img={arrows} explanation="YOUR RANK">
