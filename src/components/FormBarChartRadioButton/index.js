@@ -40,26 +40,30 @@ const FormBarChartRadioButton = ({
     <div className={`formBarChartRadioButtons ${touched && error ? 'formBarChartRadioButton--error' : ''}`}>
       {label && <label>{label}</label>}
       {radioValues.map(({ label: radioLabel, value, highlightColor }) => {
+        const id = `formBarChartRadioButton_${input.name}_${value}`
         const probability = tokenDistribution[value] * 100
         const style = { color: highlightColor, backgroundColor: COLOR_SCHEME_DEFAULT[value] }
+        const lineStyle = { width: `${probability}%` }
+        const isInputChecked = input && input.value.toString() === value.toString()
+        const onChangeFunc = () => input.onChange(value)
         return (
           <div key={value} className="formBarChartRadioButton">
-            <div className="outcome">{radioLabel}&nbsp;</div>
+            <div className="outcome">{radioLabel}</div>
             <div className="formBarChartRadioButton__wrapper">
               <input
                 type="radio"
                 className="formBarChartRadioButton__input"
                 style={style}
-                id={`formBarChartRadioButton_${input.name}_${value}`}
-                onChange={() => input.onChange(value)}
-                checked={input && input.value.toString() === value.toString()}
+                id={id}
+                onChange={onChangeFunc}
+                checked={isInputChecked}
                 value={value}
               />
               <label
                 className="formBarChartRadioButton__text outcomes outcomes--categorical"
-                htmlFor={`formBarChartRadioButton_${input.name}_${value}`}
+                htmlFor={id}
               >
-                <div className="formBarChartRadioButton__outcome" style={{ width: `${probability}%` }}>
+                <div className="formBarChartRadioButton__outcome" style={lineStyle}>
                   <div className="outcome__bar--inner pull-left" style={style} />
                 </div>
                 <DecimalValue value={probability} decimals={2} />%
