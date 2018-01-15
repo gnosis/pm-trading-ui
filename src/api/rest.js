@@ -1,6 +1,7 @@
 import { hexWithoutPrefix } from 'utils/helpers'
 import { normalize } from 'normalizr'
 import { requestFromRestAPI, requestFromRestAPIAllPages } from 'utils/fetch'
+import moment from 'moment'
 
 import { marketSchema, marketSharesSchema, marketTradesSchema } from './schema'
 
@@ -26,7 +27,12 @@ export const requestMarketTradesForAccount = async (marketAddress, accountAddres
 }
 
 export const requestMarketTrades = async (market) => {
-  const payload = await requestFromRestAPIAllPages(`markets/${hexWithoutPrefix(market.address)}/trades/`, {}, 200)
+  const requestParameters = {
+    creation_date_time_0: moment(market.creationDate).format('YYYY-MM-DD hh:mm:ss'),
+    creation_date_time_1: moment(market.eventDescription.resolutionDate).format('YYYY-MM-DD hh:mm:ss'),
+    ordering: '-creation_date_order',
+  }
+  const payload = await requestFromRestAPIAllPages(`markets/${hexWithoutPrefix(market.address)}/trades/`, requestParameters, 200, 500)
   return normalize(payload.results, [marketTradesSchema])
 }
 
