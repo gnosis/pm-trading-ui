@@ -1,5 +1,3 @@
-/* globals fetch */
-
 import { mapValues, startsWith, isArray, range } from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
@@ -110,16 +108,6 @@ export const addIdToObjectsInArray = (arrayData) => {
   return arrayData
 }
 
-export const restFetch = url =>
-  fetch(url)
-    .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
-    .then(res => res.json())
-    .catch(err =>
-      new Promise((resolve, reject) => {
-        console.warn(`Gnosis DB: ${err}`)
-        reject(err)
-      }))
-
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
   const classNames = isArray(classNameDefined) ? classNameDefined : classNameDefined.split(' ')
@@ -183,7 +171,7 @@ export const getGnosisJsOptions = (provider) => {
 export const promisify = (func, params, timeout) =>
   new Promise((resolve, reject) => {
     if (timeout) {
-      setTimeout(() => reject('Promise timed out'), timeout)
+      setTimeout(() => reject(new Error('Promise timed out')), timeout)
     }
 
     func(...params, (err, res) => {

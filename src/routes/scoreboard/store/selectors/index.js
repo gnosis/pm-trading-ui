@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { getCurrentAccount } from 'selectors/blockchain'
+import { getSelectedProvider, getCurrentAccount } from 'selectors/blockchain'
 
 const olympiaUsersSelectorAsList = (state) => {
   if (!state.olympia) {
@@ -33,6 +33,12 @@ export const firstOlympiaUsersSelectorAsList = createSelector(
       .take(100)
     : undefined),
 )
+
+export const olympiaMainnetRegistryAddress = (state) => {
+  const provider = getSelectedProvider(state)
+
+  return provider ? provider.mainnetAddress : undefined
+}
 
 export const meSelector = createSelector(
   olympiaUsersSelectorAsList,

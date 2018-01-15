@@ -1,11 +1,8 @@
-import { restFetch } from 'utils/helpers'
+import { requestFromRestAPI } from 'utils/fetch'
 import addUsers from './addUsers'
 
-const API_URL = `${process.env.GNOSISDB_URL}/api`
-const url = `${API_URL}/scoreboard/`
-
 export default account => dispatch =>
-  restFetch(url + account)
+  requestFromRestAPI(`scoreboard/${account}`)
     .then((response) => {
       if (!response) {
         dispatch(addUsers([]))

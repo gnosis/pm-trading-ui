@@ -11,6 +11,8 @@ const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 const branch = process.env.TRAVIS_BRANCH || 'development'
 
+const branch = process.env.TRAVIS_BRANCH || 'development'
+
 const config = require('./src/config.json')
 
 const isProductionEnv = branch.indexOf('release/') > -1

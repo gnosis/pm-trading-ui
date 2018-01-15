@@ -7,6 +7,8 @@ import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
+const NETWORK_TIMEOUT = 15000
+
 let gnosisInstance
 
 export const {
@@ -437,4 +439,16 @@ export const getOlympiaTokensByAccount = async (account) => {
   const gnosis = await getGnosisConnection()
   const balance = await gnosis.olympiaToken.balanceOf(account)
   return new Decimal(balance.toFixed(0)).toString()
+}
+
+export const getMainnetAddressForRinkebyAccount = async (account) => {
+  const gnosis = await getGnosisConnection()
+  const address = await gnosis.olympiaAddressRegistry.mainnetAddressFor(hexWithPrefix(account))
+
+  return address
+}
+
+export const setMainnetAddressForRinkebyAccount = async (mainnetAddress) => {
+  const gnosis = await getGnosisConnection()
+  return Gnosis.requireEventFromTXResult(await gnosis.olympiaAddressRegistry.register(mainnetAddress), 'AddressRegistration')
 }

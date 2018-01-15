@@ -13,6 +13,7 @@ import InteractionButton from 'containers/InteractionButton'
 
 import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue, { decimalToText } from 'components/DecimalValue'
+import LoadingIndicator from 'components/LoadingIndicator'
 
 import Countdown from 'components/Countdown'
 import Outcome from 'components/Outcome'
@@ -74,9 +75,7 @@ class MarketDetail extends Component {
       .then(() => {
         this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
         this.props.fetchMarketTrades(this.props.market)
-        if (this.props.defaultAccount) {
-          this.props.fetchMarketShares(this.props.defaultAccount)
-        }
+
         if (firstFetch) {
           const availableView = this.getAvailableView()
           if (availableView) {
@@ -184,7 +183,10 @@ class MarketDetail extends Component {
       .local()
       .diff(moment(), 'hours')
     const { marketShares, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
-    const winningsTotal = Object.keys(marketShares).reduce((acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')), Decimal(0))
+    const winningsTotal = Object.keys(marketShares).reduce(
+      (acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')),
+      Decimal(0),
+    )
     const marketClosed = isMarketClosed(market)
     const marketResolved = isMarketResolved(market)
     const showWinning = marketResolved
@@ -238,7 +240,8 @@ class MarketDetail extends Component {
                 <div className="redeemWinning__icon icon icon--achievementBadge" />
                 <div className="redeemWinning__details">
                   <div className="redeemWinning__heading">
-                    <DecimalValue value={weiToEth(winningsTotal)} /> {collateralTokenToText(market.event.collateralToken)}
+                    <DecimalValue value={weiToEth(winningsTotal)} />{' '}
+                    {collateralTokenToText(market.event.collateralToken)}
                   </div>
                   <div className="redeemWinning__label">Your Winnings</div>
                 </div>
@@ -296,8 +299,21 @@ class MarketDetail extends Component {
     )
   }
 
-  render() {
+  renderMarketGraph() {
     const { market, marketGraph } = this.props
+    if (!marketGraph.length) {
+      return (
+        <div className="container">
+          <LoadingIndicator className="marketGraph__spinner" />
+        </div>
+      )
+    }
+
+    return <MarketGraph data={marketGraph} market={market} />
+  }
+
+  render() {
+    const { market } = this.props
 
     const { marketFetchError } = this.state
     if (marketFetchError) {
@@ -336,7 +352,7 @@ class MarketDetail extends Component {
         >
           {this.renderExpandableContent()}
         </div>
-        {marketGraph && <MarketGraph data={marketGraph} market={market} />}
+        <div>{this.renderMarketGraph()}</div>
       </div>
     )
   }

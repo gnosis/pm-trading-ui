@@ -12,6 +12,7 @@ export default store => next => (action) => {
 
     PERSIST_PATHS.forEach((path) => {
       storage = {
+        ...storage,
         ...pick(state, path),
       }
     })

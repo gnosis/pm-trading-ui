@@ -117,8 +117,8 @@ const renderScalarGraph = (data, { eventDescription, lowerBound, upperBound }) =
             <Line
               type="stepAfter"
               dataKey="scalarPoint"
-              fill={COLOR_SCHEME_DEFAULT[0]}
-              stroke={COLOR_SCHEME_DEFAULT[0]}
+              fill={COLOR_SCHEME_DEFAULT[2]}
+              stroke={COLOR_SCHEME_DEFAULT[2]}
               dot={false}
             />
           </LineChart>
