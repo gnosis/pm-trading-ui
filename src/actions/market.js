@@ -119,21 +119,8 @@ export const requestMarketTradesForAccount = (marketAddress, accountAddress) => 
  * Requests all trades (tradehistory) on a market from GnosisDB.
  * @param {Market} market
  */
-export const requestMarketTrades = market => async (dispatch, getState) => {
+export const requestMarketTrades = market => async (dispatch) => {
   const payload = await api.requestMarketTrades(market)
-
-  const state = getState()
-  const newTrades = payload.entities.marketTrades
-  const storedTrades = state.entities.marketTrades
-
-  if (storedTrades) {
-    Object.keys(storedTrades).forEach((id) => {
-      const ownerNeedsToBeFixed = newTrades[id] && !newTrades[id].owner && storedTrades[id].owner
-      if (ownerNeedsToBeFixed) {
-        newTrades[id].owner = storedTrades[id].owner
-      }
-    })
-  }
   return dispatch(receiveEntities(payload))
 }
 

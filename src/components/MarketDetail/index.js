@@ -74,13 +74,7 @@ class MarketDetail extends Component {
       .fetchMarket()
       .then(() => {
         this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
-        if (this.props.defaultAccount) {
-          this.props.fetchMarketShares(this.props.defaultAccount).then(() => {
-            this.props.fetchMarketTrades(this.props.market)
-          })
-        } else {
-          this.props.fetchMarketTrades(this.props.market)
-        }
+        this.props.fetchMarketTrades(this.props.market)
 
         if (firstFetch) {
           const availableView = this.getAvailableView()
