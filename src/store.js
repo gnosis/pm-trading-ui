@@ -2,13 +2,14 @@ import { browserHistory } from 'react-router'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
+import RavenIntegration from 'utils/raven'
 
-import CrashReporter from 'middlewares/CrashReporter'
+import Blockchain from 'middlewares/Blockchain'
+import Providers from 'middlewares/Providers'
+import Intercom from 'middlewares/Intercom'
 import LocalStorageDump from 'middlewares/LocalStorageDump'
 import LocalStorageLoad from 'middlewares/LocalStorageLoad'
 import Notifications from 'middlewares/Notifications'
-import Blockchain from 'middlewares/Blockchain'
-import Providers from 'middlewares/Providers'
 
 import reducer from 'reducers'
 
@@ -20,7 +21,9 @@ const middlewares = [
   Providers,
   LocalStorageLoad,
   LocalStorageDump,
-  CrashReporter,
+  ...RavenIntegration.getMiddlewares(),
+  Intercom,
+  Providers,
 ]
 
 const enhancers = [
