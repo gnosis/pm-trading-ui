@@ -22,7 +22,7 @@ const FormBarChartRadioButton = ({
 
   if (typeof selectedOutcome !== 'undefined') {
     outcomeTokensSold[selectedOutcome] = Decimal(market.netOutcomeTokensSold[selectedOutcome])
-      .add(outcomeTokenCount.toString())
+      .add(outcomeTokenCount)
       .toString()
   }
 
@@ -40,32 +40,35 @@ const FormBarChartRadioButton = ({
     <div className={`formBarChartRadioButtons ${touched && error ? 'formBarChartRadioButton--error' : ''}`}>
       {label && <label>{label}</label>}
       {radioValues.map(({ label: radioLabel, value, highlightColor }) => {
+        const id = `formBarChartRadioButton_${input.name}_${value}`
         const probability = tokenDistribution[value] * 100
         const style = { color: highlightColor, backgroundColor: COLOR_SCHEME_DEFAULT[value] }
+        const lineStyle = { width: `${probability}%` }
+        const isInputChecked = input && input.value.toString() === value.toString()
+        const onChangeFunc = () => input.onChange(value)
         return (
           <div key={value} className="formBarChartRadioButton">
-            <input
-              type="radio"
-              className="formBarChartRadioButton__input"
-              style={style}
-              id={`formBarChartRadioButton_${input.name}_${value}`}
-              onChange={() => input.onChange(value)}
-              checked={input && input.value.toString() === value.toString()}
-              value={value}
-            />
-            <label
-              className={'formBarChartRadioButton__text outcomes outcomes--categorical'}
-              htmlFor={`formBarChartRadioButton_${input.name}_${value}`}
-            >
-              <div className="formBarChartRadioButton__outcome" style={{ width: `${probability}%` }}>
-                <div
-                  className="outcome__bar--inner pull-left"
-                  style={style}
-                />
-              </div>
-              {radioLabel}&nbsp;
-              <DecimalValue value={probability} decimals={2} />%
-            </label>
+            <div className="outcome">{radioLabel}</div>
+            <div className="formBarChartRadioButton__wrapper">
+              <input
+                type="radio"
+                className="formBarChartRadioButton__input"
+                style={style}
+                id={id}
+                onChange={onChangeFunc}
+                checked={isInputChecked}
+                value={value}
+              />
+              <label
+                className="formBarChartRadioButton__text outcomes outcomes--categorical"
+                htmlFor={id}
+              >
+                <div className="formBarChartRadioButton__outcome" style={lineStyle}>
+                  <div className="outcome__bar--inner pull-left" style={style} />
+                </div>
+                <DecimalValue value={probability} decimals={2} />%
+              </label>
+            </div>
           </div>
         )
       })}
@@ -76,12 +79,10 @@ const FormBarChartRadioButton = ({
 
 FormBarChartRadioButton.propTypes = {
   ...fieldPropTypes,
-  radioValues: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.any,
-    }),
-  ),
+  radioValues: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.any,
+  })),
   className: PropTypes.string,
   highlightColor: PropTypes.string,
   selectedOutcome: PropTypes.number,
