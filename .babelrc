@@ -25,6 +25,11 @@
           }
         ]
       ]
+    },
+    "test": {
+      "plugins": [
+        "dynamic-import-node"
+      ]
     }
   }
 }
