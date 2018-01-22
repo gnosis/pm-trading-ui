@@ -5,11 +5,10 @@ import DashboardPage from 'components/Dashboard'
 import { getMarkets, getAccountPredictiveAssets } from 'selectors/market'
 import { getAccountTrades } from 'selectors/marketTrades'
 import { getAccountShares } from 'selectors/marketShares'
-import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized } from 'selectors/blockchain'
+import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized, checkWalletConnection } from 'selectors/blockchain'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
-import { areCredentialsValid } from 'integrations/uport/connector'
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
@@ -18,8 +17,8 @@ const mapStateToProps = (state) => {
   const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
-  const validCredentials = areCredentialsValid()
   let etherTokens = getEtherTokensAmount(state, defaultAccount)
+  const hasWallet = checkWalletConnection(state)
 
   if (etherTokens !== undefined) {
     etherTokens = weiToEth(etherTokens.toString())
@@ -28,7 +27,7 @@ const mapStateToProps = (state) => {
   }
 
   return {
-    hasWallet: validCredentials,
+    hasWallet,
     defaultAccount,
     markets,
     etherTokens,
