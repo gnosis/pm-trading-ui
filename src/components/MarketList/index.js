@@ -12,9 +12,6 @@ import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
-import Block from 'components/layout/Block'
-import PageFrame from 'components/layout/PageFrame'
-import Title from 'components/layout/Title'
 import Outcome from 'components/Outcome'
 import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
@@ -226,13 +223,11 @@ class MarketList extends Component {
     return (
       <div className="marketListPage">
         <div className="marketListPage__header">
-          <PageFrame>
-            <Block margin="md">
-              <Title>Market overview</Title>
-            </Block>
-          </PageFrame>
+          <div className="container">
+            <h1>Market overview</h1>
+          </div>
         </div>
-        <Block margin="md">
+        <div className="marketListPage__stats">
           <div className="container">
             <div className="row marketStats">
               <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 marketStats__stat">
@@ -252,7 +247,7 @@ class MarketList extends Component {
               </div>
             </div>
           </div>
-        </Block>
+        </div>
         <div className="marketListPage__controls">
           <div className="container">
             <div className="row">
@@ -267,7 +262,7 @@ class MarketList extends Component {
               </div>
             </div>
           </div>
-        )}
+          )}
           <div className="marketListPage__markets">
             <div className="container">
               <div className="row">
