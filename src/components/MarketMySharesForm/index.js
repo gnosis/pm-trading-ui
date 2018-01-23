@@ -444,7 +444,7 @@ MarketMySharesForm.propTypes = {
   market: marketShape,
   selectedSellAmount: PropTypes.string,
   limitMargin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  marketShares: PropTypes.arrayOf(PropTypes.object),
+  marketShares: PropTypes.object,
   sellShares: PropTypes.func,
 }
 
