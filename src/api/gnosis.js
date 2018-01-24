@@ -49,7 +49,7 @@ export const getGnosisConnection = async () => {
     setTimeout(() => {
       if (stillRunning) {
         clearInterval(instanceCheck)
-        reject('Connection to Gnosis.js timed out')
+        reject(new Error('Connection to Gnosis.js timed out'))
       }
     }, NETWORK_TIMEOUT)
   })
@@ -60,7 +60,9 @@ export const getGnosisConnection = async () => {
  */
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
-  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts((e, accounts) => (e ? reject(e) : resolve(accounts[0]))))
+  const account = await new Promise((resolve, reject) =>
+    gnosis.web3.eth.getAccounts((e, accounts) => (e ? reject(e) : resolve(accounts[0]))))
+  return account
 }
 
 /**
@@ -230,18 +232,15 @@ export const closeMarket = async (market) => {
   return market
 }
 
-const STEP_ONE_OF_ONE = '<span style="font-weight: bold">QR 1/1</span>'
-const STEP_ONE_OF_TWO = '<span style="font-weight: bold">QR 1/2</span>'
-const STEP_TWO_OF_TWO = '<span style="font-weight: bold">QR 2/2</span>'
-const APPROVE_TX_OPTS = 'Setting allowance'
-
 export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, cost, approvalResetAmount) => {
   const gnosis = await getGnosisConnection()
 
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
-  const collateralTokenWei = Decimal(cost).mul(1e18).toString()
+  const collateralTokenWei = Decimal(cost)
+    .mul(1e18)
+    .toString()
 
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
   const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
@@ -258,7 +257,6 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
     outcomeTokenCount: outcomeTokenCount.toString(),
     cost: collateralTokenWei,
     approvalResetAmount,
-    ...info,
   })
 
   return collateralTokensPaid
@@ -282,7 +280,10 @@ export const sellShares = async (
   const outcomeTokenCountWei = Decimal(outcomeTokenCount)
     .mul(1e18)
     .toString()
-  const minProfit = Decimal(earnings).mul(1e18).round().toString()
+  const minProfit = Decimal(earnings)
+    .mul(1e18)
+    .round()
+    .toString()
 
   const collateralTokensReceived = await gnosis.sellOutcomeTokens({
     market: hexWithPrefix(marketAddress),
@@ -290,7 +291,6 @@ export const sellShares = async (
     outcomeTokenCount: outcomeTokenCountWei,
     minProfit,
     approvalResetAmount,
-    ...info,
   })
 
   return collateralTokensReceived
@@ -424,5 +424,8 @@ export const getMainnetAddressForRinkebyAccount = async (account) => {
 
 export const setMainnetAddressForRinkebyAccount = async (mainnetAddress) => {
   const gnosis = await getGnosisConnection()
-  return Gnosis.requireEventFromTXResult(await gnosis.olympiaAddressRegistry.register(mainnetAddress), 'AddressRegistration')
+  return Gnosis.requireEventFromTXResult(
+    await gnosis.olympiaAddressRegistry.register(mainnetAddress),
+    'AddressRegistration',
+  )
 }
