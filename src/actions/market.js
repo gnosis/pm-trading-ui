@@ -6,7 +6,6 @@ import * as api from 'api'
 
 import { receiveEntities, updateEntity } from 'actions/entities'
 import { openModal, closeModal } from 'actions/modal'
-import { refreshTokenBalance } from 'actions/blockchain'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'actions/transactions'
 
 import { createEventDescriptionModel, createOracleModel, createEventModel, createMarketModel } from 'api/models'
@@ -263,8 +262,6 @@ export const createMarket = options => async (dispatch) => {
     throw e
   }
 
-  dispatch(refreshTokenBalance())
-
   await dispatch(closeLog(transactionId))
   return marketContractData
 }
@@ -315,14 +312,14 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
     return await dispatch(receiveEntities(payload))
   }
 
-  gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions start'])
+  gaSend(['event', 'Transactions', 'trading-interface', 'Buy shares transactions start'])
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
-    gaSend(['event', 'Transactions', 'uport', 'Buy shares transactions succeeded'])
+    gaSend(['event', 'Transactions', 'trading-interface', 'Buy shares transactions succeeded'])
     await dispatch(closeModal())
   } catch (e) {
     console.error(e)
@@ -343,8 +340,6 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
       netOutcomeTokensSold,
     },
   }))
-
-  dispatch(refreshTokenBalance())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
@@ -382,7 +377,7 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
 
   // Reset the allowance if the cost of current transaction is greater than the current allowance
   // TODO: Calculate transaction cost
-  gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions start'])
+  gaSend(['event', 'Transactions', 'trading-interface', 'Sell shares transactions start'])
   const transactions = [
     SELL(Decimal(outcomeTokenCount)
       .toDP(2)
@@ -394,7 +389,7 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
   try {
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, earnings, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
-    gaSend(['event', 'Transactions', 'uport', 'Sell shares transactions succeeded'])
+    gaSend(['event', 'Transactions', 'trading-interface', 'Sell shares transactions succeeded'])
     await dispatch(closeModal())
   } catch (e) {
     console.error(e)
@@ -413,7 +408,7 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
         .toString(),
     },
   }))
-  dispatch(refreshTokenBalance())
+
   return dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
@@ -445,8 +440,6 @@ export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
     data: { id: market.oracle.address, isOutcomeSet: true, outcome: outcomeIndex },
   }))
   await dispatch(updateEntity({ entityType: 'events', data: { id: market.event.address, isWiningOutcomeSet: true } }))
-
-  dispatch(refreshTokenBalance())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
@@ -481,7 +474,6 @@ export const redeemWinnings = market => async (dispatch, getState) => {
   }
 
   dispatch(closeModal())
-  dispatch(refreshTokenBalance())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
@@ -506,8 +498,6 @@ export const withdrawFees = market => async (dispatch) => {
 
     throw e
   }
-
-  dispatch(refreshTokenBalance())
 
   // TODO: Update market so we can't withdraw again
 
@@ -543,8 +533,6 @@ export const closeMarket = market => async (dispatch) => {
       stage,
     },
   }))
-
-  dispatch(refreshTokenBalance())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
