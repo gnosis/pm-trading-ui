@@ -8,8 +8,6 @@ import { NETWORK_TIMEOUT } from 'actions/blockchain'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 
-const NETWORK_TIMEOUT = 15000
-
 let gnosisInstance
 
 export const {
