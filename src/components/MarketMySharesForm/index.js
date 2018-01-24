@@ -13,6 +13,7 @@ import CurrencyName from 'components/CurrencyName'
 import FormSlider from 'components/FormSlider'
 import FormInput from 'components/FormInput'
 import { NUMBER_REGEXP } from 'components/MarketBuySharesForm'
+import Hairline from 'components/layout/Hairline'
 
 import {
   COLOR_SCHEME_DEFAULT,
@@ -23,13 +24,7 @@ import {
   LIMIT_MARGIN_DEFAULT,
   OUTCOME_TYPES,
 } from 'utils/constants'
-import {
-  getOutcomeName,
-  weiToEth,
-  normalizeScalarPoint,
-  isMarketClosed,
-  isMarketResolved,
-} from 'utils/helpers'
+import { getOutcomeName, weiToEth, normalizeScalarPoint, isMarketClosed, isMarketResolved } from 'utils/helpers'
 import { marketShape, marketShareShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
@@ -164,30 +159,30 @@ class MarketMySharesForm extends Component {
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
         <td>
           {Decimal(share.balance)
-            .div(1e18)
-            .gte(LOWEST_DISPLAYED_VALUE) ? (
-              <DecimalValue value={Decimal(share.balance).div(1e18)} />
+              .div(1e18)
+              .gte(LOWEST_DISPLAYED_VALUE) ? (
+                <DecimalValue value={Decimal(share.balance).div(1e18)} />
             ) : (
               `< ${LOWEST_DISPLAYED_VALUE}`
             )}
         </td>
         <td>
           {!resolvedOrClosed && (
-            <a
-              href="javascript:void(0);"
-              className="marketMyShares__sellButton"
-              onClick={e => this.handleShowSellView(e, share.id)}
-            >
+          <a
+            href="javascript:void(0);"
+            className="marketMyShares__sellButton"
+            onClick={e => this.handleShowSellView(e, share.id)}
+          >
                 Sell
-            </a>
-          )}
+          </a>
+            )}
         </td>
       </tr>)
 
       if (share.id === extendedSellId) {
         tableRows.push(<tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
           <td colSpan={5}>{this.renderSellShareView()}</td>
-        </tr>)
+                       </tr>)
       }
     })
 
@@ -315,13 +310,6 @@ class MarketMySharesForm extends Component {
                 validate={this.validateTokenCount}
               />
             </div>
-            <div className="col-md-1 col-md-offset-2 marketMyShares__sellColumn--earnings">
-              <label>Earnings</label>
-              <span>
-                <DecimalValue value={earnings} />&nbsp;
-                <CurrencyName collateralToken={market.event.collateralToken} />
-              </span>
-            </div>
 
             {market.event.type === 'SCALAR' ? (
               <div className="col-md-4 marketMyShares__sellColumn">
@@ -339,6 +327,16 @@ class MarketMySharesForm extends Component {
                 </span>
               </div>
             )}
+            <div className="col-md-3 marketMyShares__sellColumn">
+              <label>Gas costs</label>
+              <span>
+                <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
+                <CurrencyName collateralToken={market.event.collateralToken} />
+              </span>
+            </div>
+          </div>
+          <Hairline />
+          <div className="row marketMyShares__sellRow">
             <div className="col-md-2 marketMyShares__sellColumn--limit">
               <label htmlFor="limitMargin">Limit Margin</label>
             </div>
@@ -355,25 +353,7 @@ class MarketMySharesForm extends Component {
                 showInput={false}
               />
             </div>
-            <div className="col-md-3 marketMyShares__sellColumn">
-              <label>Gas costs</label>
-              <span>
-                <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
-                <CurrencyName collateralToken={market.event.collateralToken} />
-              </span>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-3 col-md-offset-3">
-              <label>Gas costs</label>
-              <span>
-                <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
-                {' ETH'}
-              </span>
-            </div>
-          </div>
-          <div className="row marketMyShares__sellRow">
-            <div className="col-md-4 col-md-offset-6 marketMyShares__sellColumn">
+            <div className="col-md-4 marketMyShares__sellColumn">
               <div className="marketMyShares__sellColumn--info">
                 <label>Earnings</label>
                 <span>
