@@ -76,9 +76,11 @@ export const filterMarkets = state => (opts) => {
 export const sortMarkets = (markets = [], orderBy = null) => {
   switch (orderBy) {
     case 'RESOLUTION_DATE_ASC':
-      return markets.sort((a, b) => a.eventDescription.resolutionDate > b.eventDescription.resolutionDate)
+      return markets.sort((a, b) =>
+        new Date(a.eventDescription.resolutionDate) - new Date(b.eventDescription.resolutionDate))
     case 'RESOLUTION_DATE_DESC':
-      return markets.sort((a, b) => a.eventDescription.resolutionDate < b.eventDescription.resolutionDate)
+      return markets.sort((a, b) =>
+        new Date(b.eventDescription.resolutionDate) - new Date(a.eventDescription.resolutionDate))
     case 'TRADING_VOLUME_DESC':
       return markets.sort((a, b) => {
         const tradingA = Decimal(a.tradingVolume)
@@ -101,13 +103,13 @@ export const sortMarkets = (markets = [], orderBy = null) => {
 
         return tradingA.comparedTo(tradingB)
       })
-    default:
-      return markets.sort((a, b) => {
-        const isFirstMarketEnded = isMarketClosed(a) || isMarketResolved(a)
-        const isSecondMarketEnded = isMarketClosed(b) || isMarketResolved(b)
-
-        return isFirstMarketEnded - isSecondMarketEnded
-      })
+    default: {
+      const openMarketsSorted = markets
+        .filter(market => !isMarketClosed(market) && !isMarketResolved(market))
+        .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+      const endedMarkets = markets.filter(market => isMarketClosed(market) || isMarketResolved(market))
+      return [...openMarketsSorted, ...endedMarkets]
+    }
   }
 }
 

@@ -3,7 +3,7 @@
 @import url("../FormSlider/thumb.less");
 
 @indexWidth: 36px;
-@groupWidth: 20%;
+@groupWidth: 33%;
 
 .marketMyShares {
 
@@ -66,35 +66,26 @@
   &__sellColumn {
     padding: 0 8px;
 
-    &--limit label{
-      text-transform: none;
+    &--info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: bold;
-      color: @font-color-light;
-      margin: 0;
-    }
+      padding: 7px 0px;
 
-    &--earnings {
-      font-weight: bold;
-      
       & label {
+        display: inline;
         margin: 0;
+        font-size: 14px;
+        padding: 0px 7px;
+        font-weight: bold;
       }
+
     }
   }
 
   &__sellRow {
-    margin: 0;
-
-    &--earnings {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      
-      & > * {
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
-    }    
+    margin: 10px 0px 0px;
   }
 
   &__errorColumn {

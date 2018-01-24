@@ -1,5 +1,3 @@
-/* globals fetch */
-
 import { mapValues, startsWith, isArray, range } from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
@@ -29,7 +27,7 @@ export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix
 export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
 
 export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) =>
-  stage === MARKET_STAGES.MARKET_CLOSED || moment(resolutionDate).isBefore(moment().utc())
+  stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
 
 export const toEntity = (data, entityType, idKey = 'address') => {
   const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
@@ -166,6 +164,10 @@ export const getGnosisJsOptions = (provider) => {
   } else if (provider && provider === WALLET_PROVIDER.PARITY) {
     // Inject window.web3
     opts.ethereum = window.web3.currentProvider
+  } else if (provider && provider.name === WALLET_PROVIDER.UPORT) {
+    const { uport } = Uport
+    opts.ethereum = uport.getProvider()
+    opts.defaultAccount = provider.account
   } else {
     // Default remote node
     opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
@@ -178,7 +180,7 @@ export const getGnosisJsOptions = (provider) => {
 export const promisify = (func, params, timeout) =>
   new Promise((resolve, reject) => {
     if (timeout) {
-      setTimeout(() => reject('Promise timed out'), timeout)
+      setTimeout(() => reject(new Error('Promise timed out')), timeout)
     }
 
     func(...params, (err, res) => {
@@ -189,6 +191,8 @@ export const promisify = (func, params, timeout) =>
     })
   })
 
+const BLOCKED_WORD_LIST = ['sexual', 'african', 'american', 'european', 'asian', 'israeli']
+
 export const generateDeterministicRandomName = (seed) => {
   const rng = seedrandom(seed.toLowerCase(), { state: true })
 
@@ -198,10 +202,23 @@ export const generateDeterministicRandomName = (seed) => {
 
   const { adjectives, nouns } = dictionary
 
-  const adjectiveIndex = Math.floor(r1 * adjectives.length)
-  const nounIndex = Math.floor(r2 * nouns.length)
+  let adjectiveIndex = Math.floor(r1 * adjectives.length)
+  let nounIndex = Math.floor(r2 * nouns.length)
 
-  return `${adjectives[adjectiveIndex]} ${nouns[nounIndex]}`
+  let adjective = adjectives[adjectiveIndex]
+  let noun = nouns[nounIndex]
+
+  while (BLOCKED_WORD_LIST.indexOf(adjective) > -1) {
+    adjective = adjectives[adjectiveIndex]
+    adjectiveIndex = (adjectiveIndex + 1) % (adjectives.length - 1)
+  }
+
+  while (BLOCKED_WORD_LIST.indexOf(noun) > -1) {
+    noun = nouns[nounIndex]
+    nounIndex = (nounIndex + 1) % (nounIndex.length - 1)
+  }
+
+  return `${adjective} ${noun}`
 }
 
 export const generateWalletName = (account) => {
@@ -210,11 +227,7 @@ export const generateWalletName = (account) => {
   return generateDeterministicRandomName(accountAddressNormalized)
 }
 
-const isValidMarket = market =>
-  !!(market &&
-  market.event &&
-  market.oracle &&
-  market.eventDescription)
+const isValidMarket = market => !!(market && market.event && market.oracle && market.eventDescription)
 
 const marketCanRedeemWinnings = market => market.event.isWinningOutcomeSet
 
@@ -282,11 +295,16 @@ export const calcShareWinningsScalar = (share, market, event) => {
   const isShort = parseInt(share.outcomeToken.index, 10) === 0
   const isLong = parseInt(share.outcomeToken.index, 10)
   if (isShort) {
-    return Decimal(share.balance).mul(factorShort).div(outcomeRange)
+    return Decimal(share.balance)
+      .mul(factorShort)
+      .div(outcomeRange)
   }
 
   if (isLong) {
-    return Decimal(share.balance).mul(factorLong).div(outcomeRange).toString()
+    return Decimal(share.balance)
+      .mul(factorLong)
+      .div(outcomeRange)
+      .toString()
   }
 
   throw new Error(`Invalid Outcome for Scalar Event found: ${share.outcomeToken.index}`)
@@ -295,7 +313,7 @@ export const calcShareWinningsScalar = (share, market, event) => {
 export const calcShareWinnings = (share, market, event) => {
   const isCategorical = event.type === OUTCOME_TYPES.CATEGORICAL
 
-  return isCategorical ?
-    calcShareWinningsCategorical(share, market, event) :
-    calcShareWinningsScalar(share, market, event)
+  return isCategorical
+    ? calcShareWinningsCategorical(share, market, event)
+    : calcShareWinningsScalar(share, market, event)
 }

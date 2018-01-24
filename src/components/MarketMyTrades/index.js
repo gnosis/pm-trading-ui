@@ -4,11 +4,12 @@ import Decimal from 'decimal.js'
 import moment from 'moment'
 import { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import { COLOR_SCHEME_DEFAULT, RESOLUTION_TIME } from 'utils/constants'
+import { RESOLUTION_TIME } from 'utils/constants'
 import { getOutcomeName, weiToEth } from 'utils/helpers'
 import { marketShape, marketTradeShape } from 'utils/shapes'
 
 import './marketMyTrades.less'
+import { COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from '../../utils/constants'
 
 class MarketMyTrades extends Component {
   static propTypes = {
@@ -33,49 +34,50 @@ class MarketMyTrades extends Component {
       return new Decimal(order.profit).div(order.outcomeTokenCount).toString()
     } else if (order.orderType === 'SHORT SELL') {
       return new Decimal(order.cost).div(order.outcomeTokenCount).toString()
-    } else {
-      return undefined
     }
+    return undefined
   }
 
   renderTrades() {
-    const { market, marketTrades } = this.props
+    const { market, marketTrades, market: { event: { type } } } = this.props
+    const colorScheme = type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
 
-    const tableRowElements = marketTrades.map(trade => (
-      <tr className="marketMyTrades__share" key={trade.id}>
-        <td>
-          <div
-            className={'shareOutcome__color'}
-            style={{ backgroundColor: COLOR_SCHEME_DEFAULT[trade.outcomeToken.index] }}
-          />
-        </td>
-        <td>{trade.orderType}</td>
-        <td>{getOutcomeName(market, trade.outcomeToken.index)}</td>
-        <td>{decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}</td>
-        <td>
-          {decimalToText(this.getAverageCost(trade))}
-          <CurrencyName collateralToken={market.event.collateralToken} />
-        </td>
-        <td>
-          {moment
-            .utc(trade.date)
-            .local()
-            .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-        </td>
-        <td>
-          {trade.cost !== 'None' ? (
-            <div>
-              {Decimal(weiToEth(trade.cost))
-                .toDP(2, 1)
-                .toString()}&nbsp;
-              <CurrencyName collateralToken={market.event.collateralToken} />
-            </div>
-          ) : (
-            '0'
-          )}
-        </td>
-      </tr>
-    ))
+    const tableRowElements = marketTrades.map((trade) => {
+      const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.index] }
+
+      return (
+        <tr className="marketMyTrades__share" key={trade.id}>
+          <td>
+            <div className="shareOutcome__color" style={outcomeColorStyle} />
+          </td>
+          <td>{trade.orderType}</td>
+          <td>{getOutcomeName(market, trade.outcomeToken.index)}</td>
+          <td>{decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}</td>
+          <td>
+            {decimalToText(this.getAverageCost(trade))}
+            <CurrencyName collateralToken={market.event.collateralToken} />
+          </td>
+          <td>
+            {moment
+              .utc(trade.date)
+              .local()
+              .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+          </td>
+          <td>
+            {trade.cost !== 'None' ? (
+              <div>
+                {Decimal(weiToEth(trade.cost))
+                  .toDP(2, 1)
+                  .toString()}&nbsp;
+                <CurrencyName collateralToken={market.event.collateralToken} />
+              </div>
+            ) : (
+              '0'
+            )}
+          </td>
+        </tr>
+      )
+    })
 
     return tableRowElements
   }
@@ -104,14 +106,16 @@ class MarketMyTrades extends Component {
           </table>
         </div>
       )
-    } else {
-      return (
-        <div className="marketMyTrades">
-          <h2 className="marketMyTrades__heading">You haven&apos;t interacted with this market yet.</h2>
-          <h2><small>Every transaction that happens on this market will be shown here.</small></h2>
-        </div>
-      )
     }
+
+    return (
+      <div className="marketMyTrades">
+        <h2 className="marketMyTrades__heading">You haven&apos;t interacted with this market yet.</h2>
+        <h2>
+          <small>Every transaction that happens on this market will be shown here.</small>
+        </h2>
+      </div>
+    )
   }
 }
 
