@@ -61,6 +61,8 @@ class MarketList extends Component {
   @autobind
   handleViewMarketResolve(event) {
     event.stopPropagation()
+    this.props.changeUrl(resolveUrl)
+    window.scroll(0, 0)
   }
 
   @autobind
@@ -127,11 +129,14 @@ class MarketList extends Component {
             <div className="info__field">
               <div className="info__field--icon icon icon--enddate" />
               <div className="info__field--label">
-                {moment(market.eventDescription.resolutionDate).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+                {moment
+                  .utc(market.eventDescription.resolutionDate)
+                  .local()
+                  .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
               </div>
             </div>
           </div>
-          <div className="info__group col-md-3">
+          <div className="info__group col-md-4">
             <div className="info__field">
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
@@ -243,28 +248,27 @@ class MarketList extends Component {
             </div>
           </div>
         </div>
-        {process.env.WHITELIST[defaultAccount] && (
-          <div className="marketListPage__controls">
-            <div className="container">
-              <div className="row">
-                <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                  <InteractionButton
-                    onClick={this.handleCreateMarket}
-                    className="marketStats__control btn btn-default"
-                    whitelistRequired
-                  >
-                    Create Market
-                  </InteractionButton>
-                </div>
+        <div className="marketListPage__controls">
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
+                <InteractionButton
+                  onClick={this.handleCreateMarket}
+                  className="marketStats__control btn btn-default"
+                  whitelistRequired
+                >
+                  Create Market
+                </InteractionButton>
               </div>
             </div>
           </div>
-        )}
-        <div className="marketListPage__markets">
-          <div className="container">
-            <div className="row">
-              {this.renderMarkets()}
-              {this.renderMarketFilter()}
+          )}
+          <div className="marketListPage__markets">
+            <div className="container">
+              <div className="row">
+                {this.renderMarkets()}
+                {this.renderMarketFilter()}
+              </div>
             </div>
           </div>
         </div>
