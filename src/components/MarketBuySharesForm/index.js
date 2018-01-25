@@ -27,6 +27,8 @@ import Input from 'components/FormInput'
 
 import './marketBuySharesForm.less'
 
+export const NUMBER_REGEXP = /^-?\d+\.?\d*$/
+
 class MarketBuySharesForm extends Component {
   componentWillMount() {
     const {
@@ -41,8 +43,7 @@ class MarketBuySharesForm extends Component {
   }
 
   getOutcomeTokenCount(investment, outcomeIndex, limitMargin) {
-    const validInvestment =
-      /^-?\d+\.?\d*$/.test(investment) && investment && parseFloat(investment) > 0 && parseFloat(investment) < 1000
+    const validInvestment = investment && NUMBER_REGEXP.test(investment) && parseFloat(investment) > 0
     if (!validInvestment) {
       return new Decimal(0)
     }
@@ -72,14 +73,14 @@ class MarketBuySharesForm extends Component {
   }
 
   getMaximumWin(outcomeTokenCount, investment) {
-    if (/^-?\d+\.?\d*$/.test(investment)) {
-      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18).toString()).div(1e18)
+    if (NUMBER_REGEXP.test(investment)) {
+      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18)).div(1e18)
     }
     return '--'
   }
 
   getPercentageWin = (outcomeTokenCount, investment) => {
-    const validInvestment = /^-?\d+\.?\d*$/.test(investment)
+    const validInvestment = NUMBER_REGEXP.test(investment)
     if (!validInvestment) {
       return '0'
     }
@@ -120,7 +121,7 @@ class MarketBuySharesForm extends Component {
       return false
     }
 
-    const validInvestment = /^-?\d+\.?\d*$/.test(investmentValue)
+    const validInvestment = NUMBER_REGEXP.test(investmentValue)
     if (!validInvestment) {
       return 'Invalid amount'
     }
@@ -203,7 +204,7 @@ class MarketBuySharesForm extends Component {
       },
     } = this.props
 
-    const validInvestment = this.validateInvestment(selectedBuyInvest) === undefined || !selectedBuyInvest
+    const validInvestment = NUMBER_REGEXP.test(selectedBuyInvest) || !selectedBuyInvest
     const isOutcomeSelected = selectedOutcome !== undefined
     const currentMarginalPrice = marginalPrices[1]
     // Get the amount of tokens to buy
@@ -214,13 +215,14 @@ class MarketBuySharesForm extends Component {
         .add(outcomeTokenCount.toString())
         .toString()
     }
-    const selectedMarginalPrice = isOutcomeSelected && validInvestment
-      ? calcLMSRMarginalPrice({
-        netOutcomeTokensSold: newNetOutcomeTokenSold,
-        funding,
-        outcomeTokenIndex: 1,
-      })
-      : new Decimal('0')
+    const selectedMarginalPrice =
+      isOutcomeSelected && validInvestment
+        ? calcLMSRMarginalPrice({
+          netOutcomeTokensSold: newNetOutcomeTokenSold,
+          funding,
+          outcomeTokenIndex: 1,
+        })
+        : new Decimal('0')
 
     const scalarOutcomes = [
       {
@@ -275,12 +277,11 @@ class MarketBuySharesForm extends Component {
 
   render() {
     const {
-      changeUrl,
       gasCosts,
       gasPrice,
       invalid,
       handleSubmit,
-      market: { event: { collateralToken, type }, address, local },
+      market: { event: { collateralToken, type }, local },
       selectedBuyInvest,
       submitFailed,
       submitting,
@@ -360,7 +361,7 @@ class MarketBuySharesForm extends Component {
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-6">Gas Costs</div>
                 <div className="col-md-6">
-                  <DecimalValue value={gasCostEstimation} decimals={5} />
+                  <DecimalValue value={gasCostEstimation} decimals={4} />
                   {' ETH'}
                 </div>
               </div>

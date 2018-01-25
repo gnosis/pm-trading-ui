@@ -53,7 +53,7 @@ class Header extends Component {
             </Link>
             {hasWallet && (
               <Link
-                to="transactions"
+                to="/transactions"
                 activeClassName="headerContainer__navLink--active"
                 className="headerContainer__navLink"
               >
