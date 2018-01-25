@@ -5,22 +5,17 @@ import uuid from 'uuid/v4'
 import * as api from 'api'
 
 import { receiveEntities, updateEntity } from 'actions/entities'
-
+import { openModal, closeModal } from 'actions/modal'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'actions/transactions'
 
 import { createEventDescriptionModel, createOracleModel, createEventModel, createMarketModel } from 'api/models'
-
 import { eventDescriptionSchema, eventSchema, oracleSchema, marketSchema } from 'api/schema'
 
-import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, MARKET_STAGES } from 'utils/constants'
+import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, MARKET_STAGES, MAX_ALLOWANCE_WEI } from 'utils/constants'
+import { DEPOSIT, SELL, REVOKE_TOKENS, SETTING_ALLOWANCE } from 'utils/transactionExplanations'
+import gaSend from 'utils/analytics/gaSend'
 
-import { DEPOSIT, SELL, REVOKE_TOKENS } from 'utils/transactionExplanations'
-
-import { openModal } from 'actions/modal'
-
-import { MAX_ALLOWANCE_WEI } from '../utils/constants'
-import { SETTING_ALLOWANCE } from '../utils/transactionExplanations'
-import { getRedeemedShares } from '../selectors/market'
+import { getRedeemedShares } from 'selectors/market'
 
 /**
  * Constant names for marketcreation stages
@@ -123,8 +118,8 @@ export const requestMarketTradesForAccount = (marketAddress, accountAddress) => 
  * Requests all trades (tradehistory) on a market from GnosisDB.
  * @param {Market} market
  */
-export const requestMarketTrades = marketAddress => async (dispatch) => {
-  const payload = await api.requestMarketTrades(marketAddress)
+export const requestMarketTrades = market => async (dispatch) => {
+  const payload = await api.requestMarketTrades(market)
   return dispatch(receiveEntities(payload))
 }
 
@@ -282,7 +277,6 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   const transactionId = uuid()
   const gnosis = await api.getGnosisConnection()
 
-  // Reset the allowance if the cost of current transaction is greater than the current allowance
   const transactionCost = api.calcLMSRCost(
     market.netOutcomeTokensSold,
     market.funding,
@@ -291,6 +285,7 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
     market.fee,
   )
 
+  // Reset the allowance if the cost of current transaction is greater than the current allowance
   const currentAccount = await api.getCurrentAccount()
   const marketAllowance = await gnosis.etherToken.allowance(currentAccount, market.address)
   const approvalResetAmount = transactionCost.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
@@ -317,15 +312,20 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
     return await dispatch(receiveEntities(payload))
   }
 
+  gaSend(['event', 'Transactions', 'trading-interface', 'Buy shares transactions start'])
+
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
     await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
+    gaSend(['event', 'Transactions', 'trading-interface', 'Buy shares transactions succeeded'])
+    await dispatch(closeModal())
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    await dispatch(closeModal())
     throw e
   }
 
@@ -357,13 +357,14 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
 
   const { outcomeToken: { index: outcomeIndex } } = share
 
+  // Reset the allowance if the cost of current transaction is greater than the current allowance
   const marketAllowance = await gnosis.contracts.Token
     .at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex))
     .allowance(currentAccount, market.address)
   const outcomeCountWei = Decimal(outcomeTokenCount).mul(1e18)
   const approvalResetAmount = outcomeCountWei.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
-  const payload = (await api.requestMarket(market.address))
+  const payload = await api.requestMarket(market.address)
   const updatedMarket = payload.entities.markets[market.address]
   const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
   const oldPrice = market.marginalPrices[outcomeIndex]
@@ -375,8 +376,7 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
 
-  // Reset the allowance if the cost of current transaction is greater than the current allowance
-  // TODO: Calculate transaction cost
+  gaSend(['event', 'Transactions', 'trading-interface', 'Sell shares transactions start'])
   const transactions = [
     SELL(Decimal(outcomeTokenCount)
       .toDP(2)
@@ -388,10 +388,13 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
   try {
     await api.sellShares(market.address, outcomeIndex, outcomeTokenCount, earnings, approvalResetAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
+    gaSend(['event', 'Transactions', 'trading-interface', 'Sell shares transactions succeeded'])
+    await dispatch(closeModal())
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+    await dispatch(closeModal())
     throw e
   }
 
@@ -459,8 +462,8 @@ export const redeemWinnings = market => async (dispatch, getState) => {
     console.log('winnings: ', await api.redeemWinnings(market.event.type, market.event.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
 
-    Object.keys(redeemedShares)
-      .forEach(shareId => dispatch(updateEntity({ entityType: 'marketShares', data: { id: shareId, balance: '0' } })))
+    Object.keys(redeemedShares).forEach(shareId =>
+      dispatch(updateEntity({ entityType: 'marketShares', data: { id: shareId, balance: '0' } })))
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
@@ -468,6 +471,8 @@ export const redeemWinnings = market => async (dispatch, getState) => {
 
     throw e
   }
+
+  dispatch(closeModal())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
