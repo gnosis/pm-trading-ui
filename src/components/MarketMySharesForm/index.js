@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { reduxForm, Field, propTypes } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
+import Hairline from 'components/layout/Hairline'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount, calcLMSRProfit } from 'api'
 
 import InteractionButton from 'containers/InteractionButton'
@@ -20,7 +21,7 @@ import {
   LIMIT_MARGIN_DEFAULT,
 } from 'utils/constants'
 import { getOutcomeName, weiToEth, normalizeScalarPoint } from 'utils/helpers'
-import { marketShape, marketShareShape } from 'utils/shapes'
+import { marketShape } from 'utils/shapes'
 
 import './marketMySharesForm.less'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
@@ -443,7 +444,7 @@ MarketMySharesForm.propTypes = {
   market: marketShape,
   selectedSellAmount: PropTypes.string,
   limitMargin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  marketShares: PropTypes.objectOf(marketShareShape),
+  marketShares: PropTypes.arrayOf(PropTypes.object),
   sellShares: PropTypes.func,
 }
 
