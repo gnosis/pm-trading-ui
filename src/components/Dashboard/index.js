@@ -179,7 +179,7 @@ class Dashboard extends Component {
         <div
           className="dashboardMarket dashboardMarket--onDark"
           key={index}
-          onClick={() => this.handleViewMarket(market)}
+          onClick={viewMarket}
         >
           <div className="dashboardMarket__title">{market.eventDescription.title}</div>
           <div className="outcome row">
@@ -270,7 +270,7 @@ class Dashboard extends Component {
 
   render() {
     const { hasWallet } = this.props
-    
+
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     if (hasWallet) {
       tradesHoldingsSection = (

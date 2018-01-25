@@ -277,7 +277,6 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   const transactionId = uuid()
   const gnosis = await api.getGnosisConnection()
 
-  // Reset the allowance if the cost of current transaction is greater than the current allowance
   const transactionCost = api.calcLMSRCost(
     market.netOutcomeTokensSold,
     market.funding,
@@ -286,6 +285,7 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
     market.fee,
   )
 
+  // Reset the allowance if the cost of current transaction is greater than the current allowance
   const currentAccount = await api.getCurrentAccount()
   const marketAllowance = await gnosis.etherToken.allowance(currentAccount, market.address)
   const approvalResetAmount = transactionCost.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
@@ -357,6 +357,7 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
 
   const { outcomeToken: { index: outcomeIndex } } = share
 
+  // Reset the allowance if the cost of current transaction is greater than the current allowance
   const marketAllowance = await gnosis.contracts.Token
     .at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex))
     .allowance(currentAccount, market.address)
@@ -375,8 +376,6 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
 
-  // Reset the allowance if the cost of current transaction is greater than the current allowance
-  // TODO: Calculate transaction cost
   gaSend(['event', 'Transactions', 'trading-interface', 'Sell shares transactions start'])
   const transactions = [
     SELL(Decimal(outcomeTokenCount)
