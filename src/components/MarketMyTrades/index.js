@@ -4,12 +4,11 @@ import Decimal from 'decimal.js'
 import moment from 'moment'
 import { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import { RESOLUTION_TIME } from 'utils/constants'
+import { RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 import { getOutcomeName, weiToEth } from 'utils/helpers'
 import { marketShape, marketTradeShape } from 'utils/shapes'
 
 import './marketMyTrades.less'
-import { COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from '../../utils/constants'
 
 class MarketMyTrades extends Component {
   static propTypes = {
