@@ -75,41 +75,41 @@ export const filterMarkets = state => (opts) => {
  */
 export const sortMarkets = (markets = [], orderBy = null) => {
   switch (orderBy) {
-    case 'RESOLUTION_DATE_ASC':
-      return markets.sort((a, b) =>
-        new Date(a.eventDescription.resolutionDate) - new Date(b.eventDescription.resolutionDate))
-    case 'RESOLUTION_DATE_DESC':
-      return markets.sort((a, b) =>
-        new Date(b.eventDescription.resolutionDate) - new Date(a.eventDescription.resolutionDate))
-    case 'TRADING_VOLUME_DESC':
-      return markets.sort((a, b) => {
-        const tradingA = Decimal(a.tradingVolume)
-          .div(1e18)
-          .toDP(2, 1)
-        const tradingB = Decimal(b.tradingVolume)
-          .div(1e18)
-          .toDP(2, 1)
+  case 'RESOLUTION_DATE_ASC':
+    return markets.sort((a, b) =>
+      new Date(a.eventDescription.resolutionDate) - new Date(b.eventDescription.resolutionDate))
+  case 'RESOLUTION_DATE_DESC':
+    return markets.sort((a, b) =>
+      new Date(b.eventDescription.resolutionDate) - new Date(a.eventDescription.resolutionDate))
+  case 'TRADING_VOLUME_DESC':
+    return markets.sort((a, b) => {
+      const tradingA = Decimal(a.tradingVolume)
+        .div(1e18)
+        .toDP(2, 1)
+      const tradingB = Decimal(b.tradingVolume)
+        .div(1e18)
+        .toDP(2, 1)
 
-        return tradingB.comparedTo(tradingA)
-      })
-    case 'TRADING_VOLUME_ASC':
-      return markets.sort((a, b) => {
-        const tradingA = Decimal(a.tradingVolume)
-          .div(1e18)
-          .toDP(2, 1)
-        const tradingB = Decimal(b.tradingVolume)
-          .div(1e18)
-          .toDP(2, 1)
+      return tradingB.comparedTo(tradingA)
+    })
+  case 'TRADING_VOLUME_ASC':
+    return markets.sort((a, b) => {
+      const tradingA = Decimal(a.tradingVolume)
+        .div(1e18)
+        .toDP(2, 1)
+      const tradingB = Decimal(b.tradingVolume)
+        .div(1e18)
+        .toDP(2, 1)
 
-        return tradingA.comparedTo(tradingB)
-      })
-    default: {
-      const openMarketsSorted = markets
-        .filter(market => !isMarketClosed(market) && !isMarketResolved(market))
-        .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
-      const endedMarkets = markets.filter(market => isMarketClosed(market) || isMarketResolved(market))
-      return [...openMarketsSorted, ...endedMarkets]
-    }
+      return tradingA.comparedTo(tradingB)
+    })
+  default: {
+    const openMarketsSorted = markets
+      .filter(market => !isMarketClosed(market) && !isMarketResolved(market))
+      .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+    const endedMarkets = markets.filter(market => isMarketClosed(market) || isMarketResolved(market))
+    return [...openMarketsSorted, ...endedMarkets]
+  }
   }
 }
 
@@ -125,6 +125,7 @@ export const getAccountPredictiveAssets = (state, account) => {
       )
     }
   }
+
   return predictiveAssets
 }
 

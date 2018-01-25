@@ -39,8 +39,6 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
     })
 
     if (requireGnosisReinit) {
-      // Just in case any other provider is updated and the default one
-      // is UPORT we do not want to scan the code again
       await dispatch(initGnosis())
     }
   }
