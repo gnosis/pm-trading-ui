@@ -8,8 +8,8 @@ after_success:
   - if [ ${TRAVIS_BRANCH} = "master" ]; then export NODE_ENV=production; else export NODE_ENV=development; fi
   - npm run build
 env:
-  ETHEREUM_URL: https://kovan.infura.io:443
-  GNOSISDB_URL: https://gnosisdb-kovan.gnosis.pm:443
+  ETHEREUM_URL: https://mainnet.infura.io:443
+  GNOSISDB_URL: https://gnosisdb-prod.gnosis.pm:443
   NODE_ENV: development
 deploy:
 - provider: s3
