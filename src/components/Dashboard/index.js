@@ -107,6 +107,24 @@ class Dashboard extends Component {
     })
   }
 
+  renderClosingMarkets(markets) {
+    return markets.map(market => (
+      <div
+        className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns"
+        key={market.address}
+        onClick={() => this.handleViewMarket(market)}
+      >
+        <div className="dashboardMarket__leftCol">
+          <div className="value">{moment.utc(market.eventDescription.resolutionDate).fromNow()}</div>
+        </div>
+        <div className="dashboardMarket__rightCol">
+          <div className="dashboardMarket__title">{market.eventDescription.title}</div>
+          <Outcome market={market} opts={{ showOnlyTrendingOutcome: true }} />
+        </div>
+      </div>
+    ))
+  }
+
   renderMyHoldings(holdings) {
     if (!Object.keys(holdings).length) {
       return <div>You aren&apos;t holding any share.</div>
