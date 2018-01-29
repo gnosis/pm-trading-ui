@@ -9,12 +9,14 @@
   },
   "gnosisdb": {
     "protocol": "https",
-    "host": "gnosisdb-olympia.gnosis.pm",
+    "hostDev": "gnosisdb.staging.gnosisdev.com",
+    "hostProd": "gnosisdb-prod.gnosis.pm",
     "port": 443
   },
   "ethereum": {
     "protocol": "https",
-    "host": "rinkeby.infura.io",
+    "hostDev": "rinkeby.infura.io",
+    "hostProd": "mainnet.infura.io",
     "port": 443
   },
   "fetchMarketTimeInterval": 15000
