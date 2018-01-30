@@ -29,6 +29,12 @@ if (isProductionEnv) {
   whitelist = config.developmentWhitelist
 }
 
+const gnosisDbUrl =
+  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.hostProd}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
+
+const ethereumUrl =
+  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.hostProd}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
+
 module.exports = {
   devtool: 'source-map',
   context: path.join(__dirname, 'src'),

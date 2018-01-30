@@ -3,8 +3,8 @@ import React from 'react'
 const hairlineStyle = {
   width: '100%',
   height: '2px',
-  backgroundColor: '#f0f1f1',
-  marginBottom: '20px',
+  backgroundColor: '#d5d4d6',
+  margin: '20px 0px',
 }
 
 const Hairline = () => (
