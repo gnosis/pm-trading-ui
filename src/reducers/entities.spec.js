@@ -1,101 +1,131 @@
-import entityReducer from './entities'
 import { updateEntity, receiveEntities } from 'actions/entities'
+import { getMarkets } from 'selectors/market'
 
-describe('entityReducer', () => {
-  describe('updateEntity', () => {
-    const currentEntityState = {
-      testEntity: {
-        'test-2': {
-          id: 'test-2',
-          deeplyNestedData: {
-            deeplyNestedKey: 'moreNestedData',
-          },
-        },
+import entityReducer from './entities'
+
+const TEST_MARKET = {
+  address: '0x003',
+  creationBlock: 1436571,
+  creator: '0x123',
+  creationDate: '2017-12-18T14:52:24',
+  event: '0x002',
+  marketMaker: '0x00',
+  fee: 0,
+  funding: '500000000000000000000',
+  netOutcomeTokensSold: [
+    '4766300647641683073234',
+    '2761779498301361020355',
+  ],
+  stage: 2,
+  tradingVolume: '4538095922090484836044',
+  withdrawnFees: '0',
+  collectedFees: '0',
+  marginalPrices: [
+    '0.9415',
+    '0.0585',
+  ],
+}
+const TEST_EVENT_DESCRIPTION = {
+  outcomes: [
+    'Yes',
+    'No',
+  ],
+  ipfsHash: 'testhash',
+  description: 'This is a testmarket',
+  resolutionDate: '2017-12-22T00:00:00',
+  title: 'Testmarket',
+}
+const TEST_ORACLE = {
+  address: '0x001',
+  creationBlock: 1436567,
+  creator: '0x9035490075f40fab4f040fd42bc0d7cd3429a32d',
+  creationDate: '2017-12-18T14:51:24',
+  isOutcomeSet: true,
+  outcome: 0,
+  owner: '0x9035490075f40fab4f040fd42bc0d7cd3429a32d',
+  eventDescription: 'testhash',
+  type: 'CENTRALIZED',
+}
+const TEST_EVENT = {
+  address: '0x002',
+  creationBlock: 1436569,
+  creator: '0x9035490075f40fab4f040fd42bc0d7cd3429a32d',
+  creationDate: '2017-12-18T14:51:54',
+  collateralToken: '0xa0c107db0e9194c18359d3265289239453b56cf2',
+  oracle: '0x001',
+  isWinningOutcomeSet: true,
+  outcome: '0',
+  type: 'CATEGORICAL',
+}
+
+describe.only('Add a Market', () => {
+  test('Add a market in an empty store', () => {
+    // GIVEN
+    const emptyEntityReducer = {}
+    const receiveMarketAction = receiveEntities({
+      entities: {
+        eventDescriptions: { [TEST_EVENT_DESCRIPTION.ipfsHash]: TEST_EVENT_DESCRIPTION },
+        oracles: { [TEST_ORACLE.address]: TEST_ORACLE },
+        events: { [TEST_EVENT.address]: TEST_EVENT },
+        markets: { [TEST_MARKET.address]: TEST_MARKET },
       },
-    }
-    const updateAction = updateEntity({ entityType: 'testEntity', data: { id: 'test-1', testObject: { deeplyNested: 'aNestedVaue' } } })
-
-    const newEntityState = entityReducer(currentEntityState, updateAction)
-
-    test('no mutating on existing entities', () => {
-      expect(currentEntityState.testEntity['test-2'].deeplyNestedData).toMatchObject(newEntityState.testEntity['test-2'].deeplyNestedData)
-      expect(currentEntityState.testEntity['test-2'].deeplyNestedData).not.toBe(newEntityState.testEntity['test-2'].deeplyNestedData)
     })
 
-    test('no mutating on new entities', () => {
-      expect(updateAction.payload.data.testObject).toMatchObject(newEntityState.testEntity['test-1'].testObject)
-      expect(updateAction.payload.data.testObject).not.toBe(newEntityState.testEntity['test-1'].testObject)
-    })
+    // WHEN
+    const entityReducerWithMarket = entityReducer(emptyEntityReducer, receiveMarketAction)
 
-    test('added the entity correctly', () => {
-      expect(newEntityState.testEntity).toMatchObject({
-        'test-2': {
-          id: 'test-2',
-          deeplyNestedData: {
-            deeplyNestedKey: 'moreNestedData',
-          },
-        },
-        'test-1': {
-          id: 'test-1',
-          testObject: { deeplyNested: 'aNestedVaue' },
-        },
-      })
-    })
+    // THEN
+    const state = { entities: entityReducerWithMarket }
+    const markets = getMarkets(state)
+    expect(markets.length).toBe(1)
+
+    const market = markets[0]
+    expect(market).toBeDefined()
+
+    expect(market.oracle).toMatchObject(TEST_ORACLE)
+    expect(market.eventDescription).toMatchObject(TEST_EVENT_DESCRIPTION)
+    expect(market.event).toMatchObject(TEST_EVENT)
+
+    expect(market.oracle).not.toBe(TEST_ORACLE) // no mutation check
+    expect(market.eventDescription).not.toBe(TEST_EVENT_DESCRIPTION) // no mutation check
+    expect(market.event).not.toBe(TEST_EVENT) // no mutation check
   })
 
-  describe.only('receiveEntities', () => {
-    const currentEntityState = {
-      testEntityA: {
-        foo: {
-          id: 'foo',
-          deeplyNestedData: {
-            deeplyNestedKey: 'moreNestedData',
-          },
-        },
-      },
+  test('Update an existing market', () => {
+    // GIVEN
+    const entityReducerWithMarket = {
+      eventDescriptions: { [TEST_EVENT_DESCRIPTION.ipfsHash]: TEST_EVENT_DESCRIPTION },
+      oracles: { [TEST_ORACLE.address]: TEST_ORACLE },
+      events: { [TEST_EVENT.address]: TEST_EVENT },
+      markets: { [TEST_MARKET.address]: TEST_MARKET },
     }
-    const receiveAction = receiveEntities({
-      entities: {
-        testEntityA: {
-          bar: {
-            id: 'bar',
-            testObject: {
-              dontShallowCopyMe: 'please',
-            },
-          },
-        },
-        testEntityB: {
-          baz: {
-            id: 'baz',
-            testObject: {
-              more: 'values',
-              needed: 'here',
-            },
-          },
-        },
+    const updateMarketAction = updateEntity({
+      entityType: 'oracles',
+      data: {
+        id: TEST_ORACLE.address,
+        creator: '0xf00',
       },
     })
-    const newEntityState = entityReducer(currentEntityState, receiveAction)
 
-    test('no mutation on previous entity types', () => {
-      expect(newEntityState.testEntityA.foo.deeplyNestedData).toMatchObject(currentEntityState.testEntityA.foo.deeplyNestedData)
-      expect(newEntityState.testEntityA.foo.deeplyNestedData).not.toBe(currentEntityState.testEntityA.foo.deeplyNestedData)
-    })
-    test('no mutation on new entity type', () => {
-      expect(newEntityState.testEntityB.baz.testObject).toMatchObject(receiveAction.payload.entities.testEntityB.baz.testObject)
-      expect(newEntityState.testEntityB.baz.testObject).not.toBe(receiveAction.payload.entities.testEntityB.baz.testObject)
-    })
+    // WHEN
+    const entityReducerWithUpdatedMarket = entityReducer(entityReducerWithMarket, updateMarketAction)
 
-    test('added new entity correctly', () => {
-      expect(newEntityState.testEntityB).toMatchObject({
-        baz: {
-          id: 'baz',
-          testObject: {
-            more: 'values',
-            needed: 'here',
-          },
-        },
-      })
-    })
+    // THEN
+    const state = { entities: entityReducerWithUpdatedMarket }
+    const markets = getMarkets(state)
+    expect(markets.length).toBe(1)
+
+    const market = markets[0]
+    expect(market).toBeDefined()
+
+    expect(market.eventDescription).toMatchObject(TEST_EVENT_DESCRIPTION)
+    expect(market.event).toMatchObject(TEST_EVENT)
+
+    expect(market.oracle.creator).toMatch('0xf00')
+    expect(market.oracle.creationDate).toMatch(TEST_ORACLE.creationDate)
+    expect(market.oracle).not.toBe(updateMarketAction.payload.data) // no mutation check
+
+    expect(market.eventDescription).not.toBe(TEST_EVENT_DESCRIPTION) // no mutation check
+    expect(market.event).not.toBe(TEST_EVENT) // no mutation check
   })
 })
