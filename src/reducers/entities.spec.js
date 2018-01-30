@@ -58,7 +58,7 @@ const TEST_EVENT = {
   type: 'CATEGORICAL',
 }
 
-describe.only('Add a Market', () => {
+describe('Add a Market', () => {
   test('Add a market in an empty store', () => {
     // GIVEN
     const emptyEntityReducer = {}
