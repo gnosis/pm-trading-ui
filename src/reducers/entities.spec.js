@@ -93,7 +93,7 @@ describe('Add a Market', () => {
 
   test('Update an existing market', () => {
     // GIVEN
-    const entityReducerWithMarket = {
+    const currentState = {
       eventDescriptions: { [TEST_EVENT_DESCRIPTION.ipfsHash]: TEST_EVENT_DESCRIPTION },
       oracles: { [TEST_ORACLE.address]: TEST_ORACLE },
       events: { [TEST_EVENT.address]: TEST_EVENT },
@@ -108,10 +108,10 @@ describe('Add a Market', () => {
     })
 
     // WHEN
-    const entityReducerWithUpdatedMarket = entityReducer(entityReducerWithMarket, updateMarketAction)
+    const updatedState = entityReducer(currentState, updateMarketAction)
 
     // THEN
-    const state = { entities: entityReducerWithUpdatedMarket }
+    const state = { entities: updatedState }
     const markets = getMarkets(state)
     expect(markets.length).toBe(1)
 
