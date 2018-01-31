@@ -112,12 +112,8 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       VERSION: `${version}#${build}`,
       NODE_ENV: 'development',
-      GNOSISDB_URL: `${config.gnosisdb.protocol}://${config.gnosisdb.host}${config.gnosisdb.port
-        ? `:${config.gnosisdb.port}`
-        : ''}`,
-      ETHEREUM_URL: `${config.ethereum.protocol}://${config.ethereum.host}${config.ethereum.port
-        ? `:${config.ethereum.port}`
-        : ''}`,
+      GNOSISDB_URL: gnosisDbUrl,
+      ETHEREUM_URL: ethereumUrl,
       WHITELIST: whitelist,
       INTERCOM_ID: null,
       RAVEN_ID: null,
