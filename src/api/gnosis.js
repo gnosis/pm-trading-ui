@@ -138,7 +138,7 @@ export const createEvent = async (event) => {
 
   const eventData = {
     ...event,
-    collateralToken: hexWithPrefix(gnosis.olympiaToken.address),
+    collateralToken: hexWithPrefix(gnosis.etherToken.address),
   }
 
   if (event.type === OUTCOME_TYPES.CATEGORICAL) {
@@ -154,7 +154,7 @@ export const createEvent = async (event) => {
     creator: await getCurrentAccount(),
     creationDate: moment().format(),
     ...event,
-    collateralToken: hexWithPrefix(gnosis.olympiaToken.address),
+    collateralToken: hexWithPrefix(gnosis.etherToken.address),
   }
 }
 
@@ -206,7 +206,7 @@ export const fundMarket = async (market) => {
     await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
   }
 
-  const marketAllowance = await gnosis.olympiaToken.allowance(
+  const marketAllowance = await collateralToken.allowance(
     hexWithPrefix(market.creator),
     hexWithPrefix(marketContract.address),
   )
