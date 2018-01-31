@@ -78,8 +78,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarket: () => dispatch(requestMarket(ownProps.params.id)),
   fetchMarketShares: accountAddress => dispatch(requestMarketShares(ownProps.params.id, accountAddress)),
-  fetchMarketTradesForAccount: (marketAddress, accountAddress) =>
-    dispatch(requestMarketTradesForAccount(marketAddress, accountAddress)),
+  fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(ownProps.params.id, accountAddress)),
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
     dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),

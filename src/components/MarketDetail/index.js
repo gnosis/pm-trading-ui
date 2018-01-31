@@ -94,9 +94,11 @@ class MarketDetail extends Component {
       this.props.requestGasCost(GAS_COST.SELL_SHARES)
     }
 
-    if (this.props.defaultAccount && this.props.params.id) {
-      this.props.fetchMarketTradesForAccount(this.props.params.id, this.props.defaultAccount)
+    if (this.props.defaultAccount && this.props.params.id !== undefined) {
+      this.props.fetchMarketTradesForAccount(this.props.defaultAccount)
+      this.props.fetchMarketShares(this.props.defaultAccount)
     }
+
     this.props.requestGasPrice()
   }
 
