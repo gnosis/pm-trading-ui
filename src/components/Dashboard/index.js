@@ -287,10 +287,35 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { hasWallet } = this.props
+    const { hasWallet, etherTokens, accountPredictiveAssets } = this.props
 
+    let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     if (hasWallet) {
+      metricsSection = (
+        <div className="dashboardPage__stats">
+          <div className="container">
+            <div className="row dashboardStats">
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+                <div className="dashboardStats__icon icon icon--etherTokens" />
+                <span className="dashboardStats__value">
+                  <DecimalValue value={etherTokens} />
+                </span>
+                <div className="dashboardStats__label">Ether Tokens</div>
+              </div>
+              <div className="col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0 dashboardStats__stat">
+                <div className="dashboardStats__icon icon icon--outstandingPredictions" />
+                <span className="dashboardStats__value" style={{ color: 'green' }}>
+                  <DecimalValue value={accountPredictiveAssets} />
+                  &nbsp;ETH
+                </span>
+                <div className="dashboardStats__label">Outstanding predictions</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
           <div className="container">
@@ -316,6 +341,8 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
+        {metricsSection}
+        {this.renderControls()}
         <div className="dashboardWidgets dashboardWidgets--markets">
           <div className="container">
             <div className="row">
@@ -338,6 +365,8 @@ Dashboard.propTypes = {
   hasWallet: PropTypes.bool,
   accountShares: PropTypes.objectOf(marketShareShape),
   accountTrades: PropTypes.array,
+  accountPredictiveAssets: PropTypes.string,
+  etherTokens: PropTypes.string,
   requestMarkets: PropTypes.func,
   requestGasPrice: PropTypes.func,
   requestAccountShares: PropTypes.func,
