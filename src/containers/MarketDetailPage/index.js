@@ -16,18 +16,11 @@ import {
   withdrawFees,
   closeMarket,
 } from 'actions/market'
-import {
-  getMarketById,
-} from 'selectors/market'
-import {
-  getMarketTradesForAccount,
-} from 'selectors/marketTrades'
-import {
-  getMarketShares,
-} from 'selectors/marketShares'
-import {
-  getMarketGraph,
-} from 'selectors/marketGraph'
+import { getMarketById } from 'selectors/market'
+import { getMarketTradesForAccount } from 'selectors/marketTrades'
+import { getMarketShares } from 'selectors/marketShares'
+import { getMarketGraph } from 'selectors/marketGraph'
+
 import {
   checkWalletConnection,
   getCurrentAccount,
@@ -85,8 +78,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarket: () => dispatch(requestMarket(ownProps.params.id)),
   fetchMarketShares: accountAddress => dispatch(requestMarketShares(ownProps.params.id, accountAddress)),
-  fetchMarketTradesForAccount: (marketAddress, accountAddress) =>
-    dispatch(requestMarketTradesForAccount(marketAddress, accountAddress)),
+  fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(ownProps.params.id, accountAddress)),
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
     dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),

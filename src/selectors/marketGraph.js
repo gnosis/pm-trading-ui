@@ -35,6 +35,10 @@ export const getMarketGraph = market => createSelector(
   (trades) => {
     const firstPoint = getFirstGraphPoint(market)
 
+    if (!trades.length) {
+      return []
+    }
+
     const graphPoints = trades.reverse().map(trade => trade.marginalPrices.reduce(
       (prev, current, outcomeIndex) => {
         const toReturn = { ...prev }

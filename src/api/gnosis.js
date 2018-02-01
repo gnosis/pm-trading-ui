@@ -1,7 +1,4 @@
-/* globals process.env */
-import Web3 from 'web3'
-
-import Gnosis from '@gnosis.pm/gnosisjs'
+import Gnosis from '@gnosis.pm/gnosisjs/'
 import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
 import { hexWithPrefix, weiToEth } from 'utils/helpers'
@@ -52,7 +49,7 @@ export const getGnosisConnection = async () => {
     setTimeout(() => {
       if (stillRunning) {
         clearInterval(instanceCheck)
-        reject('Connection to Gnosis.js timed out')
+        reject(new Error('Connection to Gnosis.js timed out'))
       }
     }, NETWORK_TIMEOUT)
   })
@@ -63,7 +60,9 @@ export const getGnosisConnection = async () => {
  */
 export const getCurrentAccount = async () => {
   const gnosis = await getGnosisConnection()
-  return await new Promise((resolve, reject) => gnosis.web3.eth.getAccounts((e, accounts) => (e ? reject(e) : resolve(accounts[0]))))
+  const account = await new Promise((resolve, reject) =>
+    gnosis.web3.eth.getAccounts((e, accounts) => (e ? reject(e) : resolve(accounts[0]))))
+  return account
 }
 
 /**
@@ -162,7 +161,10 @@ export const createEvent = async (event) => {
 export const createMarket = async (market) => {
   console.log('market', market)
   const gnosis = await getGnosisConnection()
-  const fee = Decimal(market.fee).mul(10000).trunc().toString() // fee times 10000 as uint24
+  const fee = Decimal(market.fee)
+    .mul(10000)
+    .trunc()
+    .toString() // fee times 10000 as uint24
 
   const marketContract = await gnosis.createMarket({
     ...market,
@@ -204,7 +206,7 @@ export const fundMarket = async (market) => {
     await gnosis.etherToken.deposit({ value: marketFundingWei.toString() })
   }
 
-  const marketAllowance = await gnosis.etherToken.allowance(
+  const marketAllowance = await collateralToken.allowance(
     hexWithPrefix(market.creator),
     hexWithPrefix(marketContract.address),
   )
@@ -236,7 +238,9 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
   // Markets on Gnosis has by default Ether Token as collateral Token, that has 18 decimals
   // Outcome tokens have also 18 decimals
   // The decimal values represent an offset of 18 positions on the integer value
-  const collateralTokenWei = Decimal(cost).mul(1e18).toString()
+  const collateralTokenWei = Decimal(cost)
+    .mul(1e18)
+    .toString()
 
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
   const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
@@ -261,7 +265,7 @@ export const buyShares = async (market, outcomeTokenIndex, outcomeTokenCount, co
 export const resolveEvent = async (event, selectedOutcomeIndex) => {
   const gnosis = await getGnosisConnection()
 
-  await gnosis.resolveEvent(event.address, parseInt(selectedOutcomeIndex, 10))
+  await gnosis.resolveEvent({ event: event.address, outcome: parseInt(selectedOutcomeIndex, 10) })
 }
 
 export const sellShares = async (
@@ -276,7 +280,10 @@ export const sellShares = async (
   const outcomeTokenCountWei = Decimal(outcomeTokenCount)
     .mul(1e18)
     .toString()
-  const minProfit = Decimal(earnings).mul(1e18).round().toString()
+  const minProfit = Decimal(earnings)
+    .mul(1e18)
+    .round()
+    .toString()
 
   const collateralTokensReceived = await gnosis.sellOutcomeTokens({
     market: hexWithPrefix(marketAddress),
@@ -292,14 +299,15 @@ export const sellShares = async (
 export const redeemWinnings = async (eventType, eventAddress) => {
   const gnosis = await getGnosisConnection()
 
-  const eventContract = eventType === OUTCOME_TYPES.CATEGORICAL ?
-    await gnosis.contracts.CategoricalEvent.at(eventAddress) :
-    await gnosis.contracts.ScalarEvent.at(eventAddress)
+  const eventContract =
+    eventType === OUTCOME_TYPES.CATEGORICAL
+      ? await gnosis.contracts.CategoricalEvent.at(eventAddress)
+      : await gnosis.contracts.ScalarEvent.at(eventAddress)
 
   if (eventContract) {
     return Gnosis.requireEventFromTXResult(await eventContract.redeemWinnings(), 'WinningsRedemption')
   }
-  throw new Error('Invalid Event - can\'t find the specified Event, invalid Eventtype?')
+  throw new Error("Invalid Event - can't find the specified Event, invalid Eventtype?")
 }
 
 export const withdrawFees = async (marketAddress) => {
@@ -311,9 +319,8 @@ export const withdrawFees = async (marketAddress) => {
     await marketContract.withdrawFees()
   }
 
-  throw new Error('Invalid Market - can\'t find the specified Market')
+  throw new Error("Invalid Market - can't find the specified Market")
 }
-
 
 /*
 * Gas Calculation functions
@@ -400,4 +407,25 @@ export const getEtherTokens = async (account) => {
     return new Decimal(balance.toFixed(0))
   }
   return undefined
+}
+
+export const getOlympiaTokensByAccount = async (account) => {
+  const gnosis = await getGnosisConnection()
+  const balance = await gnosis.olympiaToken.balanceOf(account)
+  return new Decimal(balance.toFixed(0)).toString()
+}
+
+export const getMainnetAddressForRinkebyAccount = async (account) => {
+  const gnosis = await getGnosisConnection()
+  const address = await gnosis.olympiaAddressRegistry.mainnetAddressFor(hexWithPrefix(account))
+
+  return address
+}
+
+export const setMainnetAddressForRinkebyAccount = async (mainnetAddress) => {
+  const gnosis = await getGnosisConnection()
+  return Gnosis.requireEventFromTXResult(
+    await gnosis.olympiaAddressRegistry.register(mainnetAddress),
+    'AddressRegistration',
+  )
 }

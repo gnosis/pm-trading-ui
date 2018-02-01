@@ -7,13 +7,27 @@ const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
 
-const nodeEnv = process.env.NODE_ENV || 'production'
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
+const branch = process.env.TRAVIS_BRANCH || 'development'
+
 const config = require('./src/config.json')
 
-const whitelist = config.productionWhitelist
+const isProductionEnv = branch.indexOf('release/') > -1
+const isStagingEnv = branch === 'master'
+let whitelist
+
+if (isProductionEnv) {
+  console.log('Using Production Whitelist')
+  whitelist = config.productionWhitelist
+} else if (isStagingEnv) {
+  console.log('Using Staging Whitelist')
+  whitelist = config.stagingWhitelist
+} else {
+  console.log('Using Development Whitelist')
+  whitelist = config.developmentWhitelist
+}
 
 const gnosisDbUrl =
   process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.hostProd}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
@@ -22,12 +36,13 @@ const ethereumUrl =
   process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.hostProd}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
+  devtool: 'source-map',
   context: path.join(__dirname, 'src'),
   entry: ['bootstrap-loader', 'index.js'],
   output: {
+    publicPath: '/',
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
-    publicPath: '/',
   },
   resolve: {
     symlinks: false,
@@ -65,16 +80,6 @@ module.exports = {
       },
     ],
   },
-  devServer: {
-    disableHostCheck: true,
-    contentBase: false,
-    historyApiFallback: true,
-    hot: false,
-    port: 5000,
-    watchOptions: {
-      ignored: /node_modules/,
-    },
-  },
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
@@ -94,18 +99,21 @@ module.exports = {
         yandex: false,
         windows: false,
       },
+      inject: true,
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/html/index.html'),
     }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        VERSION: JSON.stringify(`${version}#${build}`),
-        NODE_ENV: JSON.stringify(nodeEnv),
-        GNOSISDB_URL: JSON.stringify(gnosisDbUrl),
-        ETHEREUM_URL: JSON.stringify(ethereumUrl),
-        WHITELIST: JSON.strinfigy(whitelist),
-      },
+    new webpack.EnvironmentPlugin({
+      VERSION: `${version}#${build}`,
+      NODE_ENV: 'production',
+      GNOSISDB_URL: gnosisDbUrl,
+      ETHEREUM_URL: ethereumUrl,
+      WHITELIST: whitelist,
+      INTERCOM_ID: undefined,
+      RAVEN_ID: config.ravenPublicDSN,
+      TRAVIS_BUILD_ID: undefined,
+      TRAVIS_BRANCH: undefined,
     }),
     new UglifyJsWebpackPlugin({
       sourceMap: true,
