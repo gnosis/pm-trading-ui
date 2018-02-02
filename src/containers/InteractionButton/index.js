@@ -15,7 +15,7 @@ import {
   isOnWhitelist,
 } from 'selectors/blockchain'
 
-import './interactionButton.less'
+import './interactionButton.scss'
 
 class InteractionButton extends Component {
   constructor() {

@@ -1,7 +1,7 @@
 @import "../../less/vars.less";
 
 .appContainer {
-  background-color: @bg-color;
+  background-color: $bg-color;
   height: 100vh;
 
   & > .loader-container {
