@@ -12,7 +12,7 @@ import InteractionButton from 'containers/InteractionButton'
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 
-import './marketCreateReview.less'
+import './marketCreateReview.scss'
 
 class MarketCreateReview extends Component {
   constructor(props) {
@@ -211,7 +211,11 @@ class MarketCreateReview extends Component {
     }
 
     if (outcomeType === OUTCOME_TYPES.SCALAR) {
-      const { formValues: { unit, upperBound, lowerBound, decimals } } = this.props
+      const {
+        formValues: {
+          unit, upperBound, lowerBound, decimals,
+        },
+      } = this.props
       return (
         <div className="outcomes__scalar">
           <h3>Outcome Settings</h3>

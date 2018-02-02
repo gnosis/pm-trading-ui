@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 
-import './progressSpinner.less'
+import './progressSpinner.scss'
 
 const ProgressSpinner = ({
   width,
@@ -23,9 +23,9 @@ const ProgressSpinner = ({
     <div
       className={`progressSpinner ${modifier
         ? modifier
-            .split(' ')
-            .map(mod => `progressSpinner--${mod}`)
-            .join(' ')
+          .split(' ')
+          .map(mod => `progressSpinner--${mod}`)
+          .join(' ')
         : ''}`}
       style={{ width: `${width}px`, height: `${height}px` }}
     >

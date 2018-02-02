@@ -25,7 +25,7 @@ import FormRadioButton from 'components/FormRadioButton'
 import FormBarChartRadioButton from 'components/FormBarChartRadioButton'
 import Input from 'components/FormInput'
 
-import './marketBuySharesForm.less'
+import './marketBuySharesForm.scss'
 
 export const NUMBER_REGEXP = /^-?\d+\.?\d*$/
 

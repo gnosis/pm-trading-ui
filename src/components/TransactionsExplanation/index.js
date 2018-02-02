@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './TransactionExplanation.less'
+import './TransactionExplanation.scss'
 
 const TransactionsExplanation = ({ transactions, closeModal }) => (
   <div className="transactionsExplanation">

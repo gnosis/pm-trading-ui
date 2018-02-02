@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
-import * as css from './index.css'
+import * as css from './index.scss'
 
 const cx = classNames.bind(css)
 

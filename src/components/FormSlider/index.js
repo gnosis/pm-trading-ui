@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import { fieldPropTypes } from 'redux-form'
 
-import './formSlider.less'
+import './formSlider.scss'
 
 const Slider = ({
   input, label, min, max, showInput = true, step = '0.01', showDefaultUnit = false, unit = '%',

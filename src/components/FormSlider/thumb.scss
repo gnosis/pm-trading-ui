@@ -1,0 +1,26 @@
+@mixin thumb($bg-color, $border-color) {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: $bg-color;
+  line-height: 0;
+  vertical-align: middle;
+  margin-top: -6px;
+  border: 4px solid $border-color;
+  border-radius: 9999px;
+}
+
+@mixin thumbCrossBrowser($bg-color, $border-color) {
+  &::slider-thumb {
+    @include thumb($bg-color, $border-color);
+  }
+  &::-webkit-slider-thumb {
+    @include thumb($bg-color, $border-color);
+  }
+  &::-moz-range-thumb {
+    @include thumb($bg-color, $border-color);
+  }
+  &::-ms-thumb {
+    @include thumb($bg-color, $border-color);
+  }
+}
