@@ -16,7 +16,7 @@ import HeaderContainer from 'containers/HeaderContainer'
 
 import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
 
-import './app.less'
+import './app.scss'
 
 class App extends Component {
   state = {
