@@ -1,6 +1,6 @@
-@import url("../../less/vars.scss");
-@import url("./slider.scss");
-@import url("./thumb.scss");
+@import "../../scss/vars.scss";
+@import "./slider.scss";
+@import "./thumb.scss";
 
 .formSlider {
   display: inline-block;

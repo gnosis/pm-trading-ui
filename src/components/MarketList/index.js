@@ -21,7 +21,7 @@ import FormCheckbox from 'components/FormCheckbox'
 import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 
-import './marketList.less'
+import './marketList.scss'
 import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 const resolutionFilters = [

@@ -1,4 +1,4 @@
-@import "../../less/vars.scss";
+@import "../../scss/vars.scss";
 
 $navbarHeight: 40px;
 
@@ -129,7 +129,7 @@ $navbarHeight: 40px;
     }
   }
 
-  &&--right {
+  &--right {
     margin-left: auto;
   }
 

@@ -1,4 +1,4 @@
-@import url('../../less/vars.less');
+@import '../../scss/vars.scss';
 
 .networkCheck {
   display: flex;
@@ -12,7 +12,7 @@
   }
 
   &__close {
-    .closeButton(32px, 5px);
+    @include closeButton(32px, 5px);
     top: 20px;
     right: 10px;
   }

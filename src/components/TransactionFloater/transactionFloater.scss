@@ -1,4 +1,4 @@
-@import url('../../less/vars.less');
+@import '../../scss/vars.scss';
 
 $expandable-arrow-size: 4px;
 $expandable-arrow-margin: 12px;
@@ -80,7 +80,7 @@ $shadow-color: #828282;
 
   }
 
-  &__popover&--notifications {
+  &--notifications {
     padding-bottom: 0;
     background-color: transparent;
   }

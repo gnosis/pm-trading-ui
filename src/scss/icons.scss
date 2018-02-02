@@ -1,9 +1,11 @@
+@import "./vars.scss";
+
 @mixin svgIcon($iconName) {
-  $iconClass: 'icon--#{iconName}';
-  .icon.#{iconClass} {
-    $url: '../assets/img/icons/icon_#{iconName}.svg';
-    background-image: url('#{url}');
-    mask-image: url('#{url}');
+  $iconClass: 'icon--#{$iconName}';
+  .icon.#{$iconClass} {
+    $url: '../assets/img/icons/icon_#{$iconName}.svg';
+    background-image: url('#{$url}');
+    mask-image: url('#{$url}');
   }
 }
 
@@ -45,23 +47,23 @@
 }
 
 // Add Icons here from /assets/img/icons/icon_<name>.svg
-@mixin svgIcon('countdown');
-@mixin svgIcon('enddate');
-@mixin svgIcon('oracle');
-@mixin svgIcon('currency');
-@mixin svgIcon('checkmark');
-@mixin svgIcon('market');
-@mixin svgIcon('market--countdown');
-@mixin svgIcon('new');
-@mixin svgIcon('etherTokens');
-@mixin svgIcon('achievementBadge');
-@mixin svgIcon('incomeForecast');
-@mixin svgIcon('earnedTokens');
-@mixin svgIcon('cross');
-@mixin svgIcon('user');
-@mixin svgIcon('gear');
-@mixin svgIcon('outstandingPredictions');
-@mixin svgIcon('logout');
+@include svgIcon('countdown');
+@include svgIcon('enddate');
+@include svgIcon('oracle');
+@include svgIcon('currency');
+@include svgIcon('checkmark');
+@include svgIcon('market');
+@include svgIcon('market--countdown');
+@include svgIcon('new');
+@include svgIcon('etherTokens');
+@include svgIcon('achievementBadge');
+@include svgIcon('incomeForecast');
+@include svgIcon('earnedTokens');
+@include svgIcon('cross');
+@include svgIcon('user');
+@include svgIcon('gear');
+@include svgIcon('outstandingPredictions');
+@include svgIcon('logout');
 
 .icon--checkbox {
   background: $active-highlight-success;
@@ -69,8 +71,8 @@
 
 .icon--error {
   $url: '../assets/img/icons/icon_cross.svg';
-  background-image: url('#{url}');
-  mask-image: url('#{url}');
+  background-image: url('#{$url}');
+  mask-image: url('#{$url}');
 
   background: $active-highlight-error;
 }
