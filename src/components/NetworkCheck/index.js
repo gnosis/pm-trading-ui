@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './networkCheck.less'
+import './networkCheck.scss'
 
 const NetworkCheck = ({ closeModal, targetNetwork, targetNetworkURL }) => (
   <div className="networkCheck">

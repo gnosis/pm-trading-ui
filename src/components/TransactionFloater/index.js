@@ -9,7 +9,7 @@ import ProgressSpinner from 'components/ProgressSpinner'
 import Notifications from 'components/Notifications'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 
-import './transactionFloater.less'
+import './transactionFloater.scss'
 
 const TransactionFloater = ({
   progress,

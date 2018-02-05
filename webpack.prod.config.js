@@ -30,10 +30,12 @@ if (isProductionEnv) {
 }
 
 const gnosisDbUrl =
-  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.hostProd}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
+  process.env.GNOSISDB_URL ||
+  `${config.gnosisdb.protocol}://${config.gnosisdb.hostProd}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
 
 const ethereumUrl =
-  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.hostProd}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
+  process.env.ETHEREUM_URL ||
+  `${config.ethereum.protocol}://${config.ethereum.hostProd}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
   devtool: 'source-map',
@@ -62,7 +64,7 @@ module.exports = {
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
       },
       {
-        test: /\.(less|css)$/,
+        test: /\.(scss|css)$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
@@ -70,7 +72,7 @@ module.exports = {
             {
               loader: 'postcss-loader',
             },
-            { loader: 'less-loader', options: { strictMath: true } },
+            { loader: 'sass-loader' },
           ],
         }),
       },

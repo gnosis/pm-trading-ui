@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './marketSidebar.less'
+import './marketSidebar.scss'
 
 const MarketSidebar = ({ fields }) => (
   <div className="marketSidebar">

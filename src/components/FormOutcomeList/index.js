@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import AddOutcome from './AddOutcome'
 import Outcome from './Outcome'
 
-import './formOutcomeList.less'
+import './formOutcomeList.scss'
 
 class FormOutcomeList extends Component {
   addOutcome = (event) => {

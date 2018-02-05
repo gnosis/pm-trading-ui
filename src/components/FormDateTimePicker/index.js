@@ -5,9 +5,11 @@ import { fieldPropTypes } from 'redux-form'
 import moment from 'moment'
 
 import 'react-datetime/css/react-datetime.css'
-import './formDateTimePicker.less'
+import './formDateTimePicker.scss'
 
-const FormDateTimePicker = ({ label, input, validDateCheck, meta: { touched, error } }) => {
+const FormDateTimePicker = ({
+  label, input, validDateCheck, meta: { touched, error },
+}) => {
   let isValidDate = validDateCheck
   if (typeof validDateCheck !== 'function') {
     const yesterday = moment().subtract(1, 'day').endOf('day')

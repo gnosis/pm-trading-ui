@@ -8,7 +8,7 @@ import { marketShape } from 'utils/shapes'
 
 import { calcLMSRMarginalPrice } from 'api'
 
-import './outcomeScalar.less'
+import './outcomeScalar.scss'
 
 const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
   let marginalPrice = calcLMSRMarginalPrice({

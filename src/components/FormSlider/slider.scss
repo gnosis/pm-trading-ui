@@ -1,0 +1,24 @@
+@mixin slider($color) {
+    border: none;
+    border-radius: 3px;
+    width: 100%;
+    height: 5px;
+    margin: 10px 0;
+    background-color: $color;
+    line-height: 12px;
+  }
+
+@mixin sliderCrossBrowser($color) {
+  &::slider-runnable-track {
+    @include slider($color);
+  }
+  &::-webkit-slider-runnable-track {
+    @include slider($color);
+  }
+  &::-moz-range-track {
+    @include slider($color);
+  }
+  &::-ms-track {
+    @include slider($color);
+  }
+}

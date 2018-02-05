@@ -1,0 +1,23 @@
+@import '../../scss/vars.scss';
+
+.networkCheck {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+
+  h3 {
+    text-align: center;
+  }
+
+  &__close {
+    @include closeButton(32px, 5px);
+    top: 20px;
+    right: 10px;
+  }
+
+  code {
+    display: block;
+  }
+}

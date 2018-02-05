@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './progressSpinner.less'
+import './progressSpinner.scss'
 
 const ProgressSpinner = ({
   width,

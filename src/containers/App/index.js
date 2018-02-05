@@ -14,7 +14,7 @@ import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
 
-import './app.less'
+import './app.scss'
 
 class App extends Component {
   state = {

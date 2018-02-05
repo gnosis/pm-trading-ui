@@ -8,7 +8,7 @@ import { RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYP
 import { getOutcomeName, weiToEth } from 'utils/helpers'
 import { marketShape, marketTradeShape } from 'utils/shapes'
 
-import './marketMyTrades.less'
+import './marketMyTrades.scss'
 
 class MarketMyTrades extends Component {
   static propTypes = {

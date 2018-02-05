@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './Notifications.less'
+import './Notifications.scss'
 
 const Notifications = ({ notifications, onClick }) => (
   <div className="notifications">

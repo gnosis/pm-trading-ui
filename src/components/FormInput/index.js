@@ -5,7 +5,7 @@ import cn from 'classnames'
 
 import { bemifyClassName } from 'utils/helpers'
 
-import './formInput.less'
+import './formInput.scss'
 
 const Input = ({
   input,

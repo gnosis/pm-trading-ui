@@ -4,9 +4,11 @@ import { fieldPropTypes } from 'redux-form'
 
 import { bemifyClassName } from 'utils/helpers'
 
-import './formRadioButton.less'
+import './formRadioButton.scss'
 
-const FormRadioButton = ({ input, radioValues, label, className, meta: { error, touched } }) => (
+const FormRadioButton = ({
+  input, radioValues, label, className, meta: { error, touched },
+}) => (
   <div className={`formRadioButton ${touched && error ? 'formRadioButton--error' : ''}`}>
     {label && <label>{label}</label>}
     {radioValues.map(({ label: radioLabel, value, highlightColor }) => (
@@ -20,15 +22,15 @@ const FormRadioButton = ({ input, radioValues, label, className, meta: { error, 
           checked={input && input.value.toString() === value.toString()}
           value={value}
         />
-        <label className={`radioButton__text ${bemifyClassName(className, 'text')}`} htmlFor={`radioButton_${input.name}_${value}`}>
+        <label
+          className={`radioButton__text ${bemifyClassName(className, 'text')}`}
+          htmlFor={`radioButton_${input.name}_${value}`}
+        >
           {radioLabel}
         </label>
       </div>
     ))}
-    {touched && error &&
-      <span>
-        {error}
-      </span>}
+    {touched && error && <span>{error}</span>}
   </div>
 )
 

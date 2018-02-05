@@ -26,7 +26,7 @@
   "jest": {
     "transform": {
       "^.+\\.js$": "babel-jest",
-      "^.+\\.(css|less)$": "<rootDir>/node_modules/jest-css-modules"
+      "^.+\\.(css|scss)$": "<rootDir>/node_modules/jest-css-modules"
     },
     "modulePaths": [
       "<rootDir>/src/"
@@ -110,8 +110,6 @@
     "jest": "^22.1.4",
     "jest-css-modules": "^1.1.0",
     "json-loader": "^0.5.7",
-    "less": "^2.7.2",
-    "less-loader": "^4.0.5",
     "node-sass": "^4.5.3",
     "postcss-loader": "^2.0.6",
     "pre-commit": "^1.2.2",
