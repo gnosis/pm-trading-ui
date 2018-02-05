@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import { Field } from 'redux-form'
 
@@ -22,9 +23,13 @@ const OutcomeScalar = ({ unit }) => (
       <div className="col-md-12">
         <Field
           continuousPlaceholder={unit}
-          name="lowerBound" component={Input} label="Lower Bound"
-          validate={validators.all(validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
-          validators.lowerThanProperty({ formProp: 'LowerBound', validateAgainstProp: 'upperBound' }))}
+          name="lowerBound"
+          component={Input}
+          label="Lower Bound"
+          validate={validators.all(
+            validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
+            validators.lowerThanProperty({ formProp: 'LowerBound', validateAgainstProp: 'upperBound' }),
+          )}
         />
       </div>
     </div>
@@ -32,9 +37,13 @@ const OutcomeScalar = ({ unit }) => (
       <div className="col-md-12">
         <Field
           continuousPlaceholder={unit}
-          name="upperBound" component={Input} label="Upper Bound"
-          validate={validators.all(validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
-          validators.greaterThanProperty({ formProp: 'UpperBound', validateAgainstProp: 'lowerBound' }))}
+          name="upperBound"
+          component={Input}
+          label="Upper Bound"
+          validate={validators.all(
+            validators.required, validators.isNumber({ decimalsProp: 'decimals' }),
+            validators.greaterThanProperty({ formProp: 'UpperBound', validateAgainstProp: 'lowerBound' }),
+          )}
         />
       </div>
     </div>

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { marketShape } from 'utils/shapes'

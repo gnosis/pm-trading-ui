@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
 import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
@@ -27,38 +27,38 @@ class Header extends Component {
       <div className="headerContainer">
         <div className="container">
           <div className="headerContainer__group headerContainer__group--logo">
-            <Link to="/">
+            <NavLink to="/">
               <div className="headerLogo beta" />
-            </Link>
+            </NavLink>
           </div>
           <div className="headerContainer__group headerContainer__group--left headerContainer__group--version">
             {version}
           </div>
           <div className="headerContainer__group headerContainer__group--left navLinks">
             {hasWallet && (
-              <Link
+              <NavLink
                 to="/dashboard"
                 activeClassName="headerContainer__navLink--active"
                 className="headerContainer__navLink"
               >
                 Dashboard
-              </Link>
+              </NavLink>
             )}
-            <Link
+            <NavLink
               to="/markets/list"
               activeClassName="headerContainer__navLink--active"
               className="headerContainer__navLink"
             >
               Markets
-            </Link>
+            </NavLink>
             {hasWallet && (
-              <Link
+              <NavLink
                 to="/transactions"
                 activeClassName="headerContainer__navLink--active"
                 className="headerContainer__navLink"
               >
                 Transactions
-              </Link>
+              </NavLink>
             )}
           </div>
 

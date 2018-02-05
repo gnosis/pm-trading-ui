@@ -1,5 +1,6 @@
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
 import { reduxForm, propTypes } from 'redux-form'
+import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
