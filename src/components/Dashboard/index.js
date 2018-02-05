@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
-
 import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -97,7 +96,7 @@ class Dashboard extends Component {
   renderNewMarkets(markets) {
     return markets.map((market) => {
       const viewMarket = () => this.handleViewMarket(market)
-      const outcomeOptions = { showOnlyTrendingOutcome: true, showDate: true, dateFormat: 'MMMM Y' }
+      const outcomeOptions = { showOnlyTrendingOutcome: true, showDate: true, dateFormat: 'D MMMM Y' }
 
       return (
         <div className="dashboardMarket dashboardMarket--new" key={market.address} onClick={viewMarket}>
@@ -109,28 +108,21 @@ class Dashboard extends Component {
   }
 
   renderClosingMarkets(markets) {
-    return markets.map((market) => {
-      const viewMarket = () => this.handleViewMarket(market)
-      const outcomeOptions = {
-        showOnlyTrendingOutcome: true,
-      }
-
-      return (
-        <div
-          className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns"
-          key={market.address}
-          onClick={viewMarket}
-        >
-          <div className="dashboardMarket__leftCol">
-            <div className="value">{moment.utc(market.eventDescription.resolutionDate).fromNow()}</div>
-          </div>
-          <div className="dashboardMarket__rightCol">
-            <div className="dashboardMarket__title">{market.eventDescription.title}</div>
-            <Outcome market={market} opts={outcomeOptions} />
-          </div>
+    return markets.map(market => (
+      <div
+        className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns"
+        key={market.address}
+        onClick={() => this.handleViewMarket(market)}
+      >
+        <div className="dashboardMarket__leftCol">
+          <div className="value">{moment.utc(market.eventDescription.resolutionDate).fromNow()}</div>
         </div>
-      )
-    })
+        <div className="dashboardMarket__rightCol">
+          <div className="dashboardMarket__title">{market.eventDescription.title}</div>
+          <Outcome market={market} opts={{ showOnlyTrendingOutcome: true }} />
+        </div>
+      </div>
+    ))
   }
 
   renderMyHoldings(holdings) {
@@ -152,24 +144,19 @@ class Dashboard extends Component {
           <div className="dashboardMarket__title">{share.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
-              <div
-                className="entry__color"
-                style={outcomeColorStyle}
-              />
+              <div className="entry__color" style={outcomeColorStyle} />
               <div className="dashboardMarket--highlight">{getOutcomeName(share, share.outcomeToken.index)}</div>
             </div>
-            <div className="col-md-3 dashboardMarket--highlight">
+            <div className="col-md-2 dashboardMarket--highlight">
               {Decimal(share.balance)
                 .div(1e18)
                 .gte(LOWEST_DISPLAYED_VALUE) ? (
                   <DecimalValue value={weiToEth(share.balance)} />
                 ) : (
                   `< ${LOWEST_DISPLAYED_VALUE}`
-                )}&nbsp;
-              {share.event &&
-                share.event.type === 'SCALAR' && <CurrencyName outcomeToken={share.eventDescription.unit} />}
+                )}
             </div>
-            <div className="col-md-2 dashboardMarket--highlight">
+            <div className="col-md-3 dashboardMarket--highlight">
               <DecimalValue value={weiToEth(share.isResolved ? share.winnings : share.value)} />&nbsp;
               <CurrencyName collateralToken={share.event.collateralToken} />
             </div>
@@ -207,23 +194,22 @@ class Dashboard extends Component {
       const viewMarket = () => this.handleViewMarket(market)
 
       return (
-        <div className="dashboardMarket dashboardMarket--onDark" key={index} onClick={viewMarket}>
-          <div className="dashboardMarket__title">{trade.eventDescription.title}</div>
+        <div
+          className="dashboardMarket dashboardMarket--onDark"
+          key={index}
+          onClick={viewMarket}
+        >
+          <div className="dashboardMarket__title">{market.eventDescription.title}</div>
           <div className="outcome row">
-            <div className="col-md-3 outcome__wrapper">
-              <div
-                className="entry__color"
-                style={outcomeColorStyle}
-              />
-              <div className="dashboardMarket--highlight dashboardMarket__outcome">
-                {getOutcomeName(market, trade.outcomeToken.index)}
-              </div>
+            <div className="col-md-3">
+              <div className="entry__color" style={outcomeColorStyle} />
+              <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               {new Decimal(averagePrice).toFixed(4)}{' '}
               {market.event && <CurrencyName collateralToken={market.event.collateralToken} />}
             </div>
-            <div className="col-md-3 dashboardMarket--highlight">
+            <div className="col-md-4 dashboardMarket--highlight">
               {moment.utc(trade.date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
             </div>
             <div className="col-md-3 dashboardMarket--highlight">{TRANSACTION_DESCRIPTIONS[trade.orderType]}</div>
@@ -234,11 +220,15 @@ class Dashboard extends Component {
   }
 
   renderWidget(marketType) {
-    const {
-      markets, accountShares, accountTrades,
-    } = this.props
+    const { markets, accountShares, accountTrades } = this.props
 
-    const whitelistedMarkets = markets.filter(market => process.env.WHITELIST[market.creator] && !isMarketResolved(market) && !isMarketClosed(market))
+    const whitelistedMarkets = markets.filter(market =>
+      Object.keys(market).length &&
+        market.oracle &&
+        market.event &&
+        process.env.WHITELIST[market.creator] &&
+        !isMarketResolved(market) &&
+        !isMarketClosed(market))
     const newMarkets = getNewMarkets(whitelistedMarkets, 5)
 
     const closingMarkets = getSoonClosingMarkets(whitelistedMarkets, 5)
@@ -262,7 +252,7 @@ class Dashboard extends Component {
     if (marketType === 'closingMarkets') {
       return (
         <div className="dashboardWidget col-md-6" key={marketType}>
-          <div className="dashboardWidget__market-title">Next Markets</div>
+          <div className="dashboardWidget__market-title">Closing Next</div>
           <div
             className={cn({
               dashboardWidget__container: true,
@@ -298,6 +288,7 @@ class Dashboard extends Component {
 
   render() {
     const { hasWallet, etherTokens, accountPredictiveAssets } = this.props
+
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     if (hasWallet) {

@@ -1,11 +1,11 @@
 {
   "name": "@gnosis.pm/gnosis-management",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "GnosisInc Admin Interface",
   "main": "src/index.js",
   "scripts": {
     "build-dev": "NODE_ENV=development ./node_modules/.bin/webpack -p --config webpack.dev.config.js",
-    "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack -p --config webpack.prod.config.js",
+    "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack -p --progress --config webpack.prod.config.js",
     "build": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
     "clean": "rm -rf dist",
     "start-dev": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
@@ -14,7 +14,7 @@
     "start:standalone": "cross-env GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' npm start",
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix --quiet",
-    "test": "jest",
+    "test": "jest --no-cache",
     "precommit": "./precommit.sh"
   },
   "repository": {
@@ -24,6 +24,10 @@
   "author": "Gnosis",
   "license": "ISC",
   "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      "^.+\\.(css|less)$": "<rootDir>/node_modules/jest-css-modules"
+    },
     "modulePaths": [
       "<rootDir>/src/"
     ]
@@ -32,7 +36,7 @@
     "precommit"
   ],
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "gnosis/gnosis.js#testing",
+    "@gnosis.pm/gnosisjs": "1.1.0",
     "autobind-decorator": "^1.4.1",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
@@ -48,6 +52,7 @@
     "normalizr": "^3.2.2",
     "prop-types": "^15.6.0",
     "raven-js": "^3.21.0",
+    "raven-for-redux": "^1.1.1",
     "rc-tooltip": "^3.5.0",
     "react": "15.6.1",
     "react-autosize-textarea": "^0.4.7",
@@ -58,6 +63,7 @@
     "react-router": "3.0.2",
     "react-router-redux": "^4.0.8",
     "react-select": "^1.0.0-rc.10",
+    "react-textarea-autosize": "^4.0.7",
     "react-transition-group": "^2.2.0",
     "recharts": "^1.0.0-alpha.1",
     "redux": "^3.6.0",
@@ -79,6 +85,7 @@
     "babel-core": "6.26.0",
     "babel-eslint": "^8.0.2",
     "babel-loader": "7.1.2",
+    "babel-plugin-dynamic-import-node": "^1.2.0",
     "babel-plugin-lodash": "^3.2.11",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.8",
@@ -100,6 +107,7 @@
     "file-loader": "^0.10.1",
     "html-webpack-plugin": "^2.28.0",
     "jest": "^20.0.4",
+    "jest-css-modules": "^1.1.0",
     "json-loader": "0.5.4",
     "less": "^2.7.2",
     "less-loader": "^3.0.0",
@@ -111,7 +119,7 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.13.2",
     "truffle-hdwallet-provider": "0.0.3",
-    "uglifyjs-webpack-plugin": "^1.0.1",
+    "uglifyjs-webpack-plugin": "^1.1.4",
     "url-loader": "^0.5.9",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"

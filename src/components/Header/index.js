@@ -21,7 +21,7 @@ class Header extends Component {
 
   render() {
     const {
-      version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider, logout,
+      version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider,
     } = this.props
     return (
       <div className="headerContainer">
@@ -51,6 +51,15 @@ class Header extends Component {
             >
               Markets
             </Link>
+            {hasWallet && (
+              <Link
+                to="/transactions"
+                activeClassName="headerContainer__navLink--active"
+                className="headerContainer__navLink"
+              >
+                Transactions
+              </Link>
+            )}
           </div>
 
           <div className="headerContainer__group headerContainer__group--right">

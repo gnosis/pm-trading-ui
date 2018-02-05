@@ -12,6 +12,7 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import { AppContainer } from 'react-hot-loader'
 import 'less/style.less'
 import AppRouter from 'router'
+import initGoogleAnalytics from 'utils/analytics/init'
 import BackdropProvider from 'containers/BackdropProvider'
 import store from 'store'
 import { setMomentRelativeTime } from './setup'
@@ -21,7 +22,10 @@ setMomentRelativeTime()
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 store.dispatch(initProviders())
-Decimal.set({ toExpPos: 9999 })
+
+Decimal.set({ toExpPos: 9999, precision: 50 })
+
+initGoogleAnalytics()
 
 /* global document */
 const rootElement = document.getElementById('root')
