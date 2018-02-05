@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Router, Route, IndexRedirect } from 'react-router'
 
 import App from 'containers/App'
-import MarketListPage from 'containers/MarketListPage'
+import MarketListPage from 'components/Form/test'
 import MarketCreateWizardPage from 'containers/MarketCreateWizardPage'
 import MarketDetailPage from 'containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
