@@ -6,7 +6,7 @@ import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import InteractionButton from 'containers/InteractionButton'
-import { add0xPrefix, weiToEth, getOutcomeName } from 'utils/helpers'
+import { add0xPrefix, weiToEth, getOutcomeName, isMarketResolved, isMarketClosed } from 'utils/helpers'
 import { marketShareShape } from 'utils/shapes'
 import {
   COLOR_SCHEME_DEFAULT,
@@ -20,8 +20,7 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import { EXPAND_MY_SHARES } from 'components/MarketDetail/ExpandableViews'
 
-import './dashboard.less'
-import { isMarketResolved, isMarketClosed } from '../../utils/helpers'
+import './dashboard.scss'
 
 const getNewMarkets = (markets = [], limit) =>
   markets.sort((a, b) => a.creationDate < b.creationDate).slice(0, limit || markets.length)

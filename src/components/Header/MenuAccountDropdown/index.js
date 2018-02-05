@@ -4,7 +4,7 @@ import Tooltip from 'rc-tooltip'
 
 import MenuActions from './MenuActions'
 
-import './dropdown.less'
+import './dropdown.scss'
 
 const MenuAccountDropdown = () => (
   <Tooltip

@@ -11,7 +11,7 @@ import { upperFirst } from 'lodash'
 
 import MenuAccountDropdown from './MenuAccountDropdown'
 
-import './header.less'
+import './header.scss'
 
 class Header extends Component {
   @autobind

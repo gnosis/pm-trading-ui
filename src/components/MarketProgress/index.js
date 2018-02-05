@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import ProgressSpinner from 'components/ProgressSpinner'
 
-import './marketProgress.less'
+import './marketProgress.scss'
 
 const MarketProgress = ({
   progress,

@@ -7,14 +7,14 @@ import cn from 'classnames'
 import Decimal from 'decimal.js'
 
 import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES, MIN_CONSIDER_VALUE } from 'utils/constants'
-import { marketShape } from 'utils/shapes'
+import { marketShape, marketShareShape, marketTradeShape, gasCostsShape } from 'utils/shapes'
+import { weiToEth, isMarketClosed, isMarketResolved } from 'utils/helpers'
 
 import InteractionButton from 'containers/InteractionButton'
 
 import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue, { decimalToText } from 'components/DecimalValue'
 import LoadingIndicator from 'components/LoadingIndicator'
-
 import Countdown from 'components/Countdown'
 import Outcome from 'components/Outcome'
 import MarketGraph from 'components/MarketGraph'
@@ -22,9 +22,7 @@ import MarketGraph from 'components/MarketGraph'
 import config from 'config.json'
 import expandableViews, { EXPAND_MY_SHARES } from './ExpandableViews'
 
-import './marketDetail.less'
-import { weiToEth, isMarketClosed, isMarketResolved } from '../../utils/helpers'
-import { marketShareShape, marketTradeShape, gasCostsShape } from '../../utils/shapes'
+import './marketDetail.scss'
 
 const ONE_WEEK_IN_HOURS = 168
 

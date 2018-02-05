@@ -2,7 +2,7 @@ import classNames from 'classnames/bind'
 import Block from 'components/layout/Block'
 import PropTypes from 'prop-types'
 import React from 'react'
-import * as css from './index.css'
+import * as css from './index.scss'
 
 const cx = classNames.bind(css)
 

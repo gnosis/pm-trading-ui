@@ -5,7 +5,7 @@ import cn from 'classnames'
 
 import { decimalToText } from 'components/DecimalValue'
 
-import './scalarSlider.less'
+import './scalarSlider.scss'
 
 const ScalarSlider = ({
   lowerBound, upperBound, unit, marginalPriceCurrent, marginalPriceSelected, decimals,

@@ -4,9 +4,11 @@ import { fieldInputPropTypes } from 'redux-form'
 import { omit } from 'lodash'
 import { bemifyClassName } from 'utils/helpers'
 
-import './formCheckbox.less'
+import './formCheckbox.scss'
 
-const Checkbox = ({ input, label, text, className }) => (
+const Checkbox = ({
+  input, label, text, className,
+}) => (
   <div className={`checkboxField ${bemifyClassName(className)}`}>
     <label htmlFor={`formCheckbox_${input.name}`} className={`checkboxField__label ${bemifyClassName(className, 'label')}`}>{ label }</label>
     <label htmlFor={`formCheckbox_${input.name}`} className={`checkboxField__text ${bemifyClassName(className, 'text')}`}>

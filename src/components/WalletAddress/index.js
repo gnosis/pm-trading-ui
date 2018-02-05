@@ -6,7 +6,7 @@ import Span from 'components/layout/Span'
 
 import { getModerators, generateWalletName } from 'utils/helpers'
 
-import * as css from './style.less'
+import * as css from './style.scss'
 
 const cx = classNames.bind(css)
 

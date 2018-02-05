@@ -13,10 +13,12 @@ const config = require('./src/config.json')
 const whitelist = config.developmentWhitelist
 
 const gnosisDbUrl =
-  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.hostDev}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
+  process.env.GNOSISDB_URL ||
+  `${config.gnosisdb.protocol}://${config.gnosisdb.hostDev}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
 
 const ethereumUrl =
-  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.hostDev}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
+  process.env.ETHEREUM_URL ||
+  `${config.ethereum.protocol}://${config.ethereum.hostDev}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -49,13 +51,16 @@ module.exports = {
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
       },
       {
-        test: /\.(less|css)$/,
+        test: /\.(scss|css)$/,
         use: [
           {
             loader: 'style-loader',
           },
           {
             loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
           },
           {
             loader: 'postcss-loader',
@@ -63,7 +68,7 @@ module.exports = {
               sourceMap: true,
             },
           },
-          { loader: 'less-loader', options: { strictMath: true } },
+          { loader: 'sass-loader', options: { sourceMap: true } },
         ],
       },
       {

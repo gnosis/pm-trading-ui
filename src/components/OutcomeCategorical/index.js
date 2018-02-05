@@ -6,7 +6,7 @@ import moment from 'moment'
 
 import { calcLMSRMarginalPrice } from 'api'
 
-import './outcomeCategorical.less'
+import './outcomeCategorical.scss'
 
 const OutcomeCategorical = ({ market, opts = {} }) => {
   const renderOutcomes = market.eventDescription.outcomes

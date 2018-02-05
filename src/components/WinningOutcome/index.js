@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { OUTCOME_TYPES } from 'utils/constants'
 import Decimal from 'decimal.js'
 import { eventDescriptionShape, marketShape } from '../../utils/shapes'
-import './WinningOutcome.less'
+import './WinningOutcome.scss'
 
 const WinningOutcome = ({
   market: { eventDescription: { outcomes, unit, decimals }, oracle: { outcome: winningOutcome }, event: { type } },

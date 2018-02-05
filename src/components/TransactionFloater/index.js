@@ -6,10 +6,10 @@ import moment from 'moment'
 
 import ProgressSpinner from 'components/ProgressSpinner'
 import Notifications from 'components/Notifications'
-
-import './transactionFloater.less'
-
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
+
+import './transactionFloater.scss'
+
 
 const TransactionFloater = ({
   progress,
@@ -21,7 +21,7 @@ const TransactionFloater = ({
   showTransactionLog,
 }) => (
   <div className="transactionFloater">
-    <div className="transactionFloater__spinner" onClick={() => showLogs ? hideTransactionLog() : showTransactionLog()}>
+    <div className="transactionFloater__spinner" onClick={() => (showLogs ? hideTransactionLog() : showTransactionLog())}>
       <ProgressSpinner
         width={32}
         height={32}
@@ -36,20 +36,20 @@ const TransactionFloater = ({
       />
     </div>
     {!showLogs && notifications.length > 0 && (
-    <div className="transactionFloater__popover transactionFloater--notifications">
-      <Notifications notifications={takeRight(notifications, 5)} onClick={showTransactionLog} />
-    </div>
-  )}
+      <div className="transactionFloater__popover transactionFloater--notifications">
+        <Notifications notifications={takeRight(notifications, 5)} onClick={showTransactionLog} />
+      </div>
+    )}
     <div className={`transactionFloater__popover ${showLogs ? 'transactionFloater__popover--visible' : 'transactionFloater__popover--hidden'}`}>
       <div className="transactionFloater__heading">Transactions</div>
       <div className="transactionFloater__close" onClick={() => hideTransactionLog()} />
       <div className="transactionFloater__logs">
         {!runningTransactions.length && !completedTransactions.length && (
-        <div className="transactionLog transactionLog--empty">
-          <div className="transactionLog__label">You have no active or past transactions.</div>
-          <div className="transactionLog__hint">When you interact with markets, all transactions will show up down here so you can keep track of all your purchases, investments and market interactions.</div>
-        </div>
-      )}
+          <div className="transactionLog transactionLog--empty">
+            <div className="transactionLog__label">You have no active or past transactions.</div>
+            <div className="transactionLog__hint">When you interact with markets, all transactions will show up down here so you can keep track of all your purchases, investments and market interactions.</div>
+          </div>
+        )}
         {runningTransactions.map((transaction) => {
           const startTime = transaction.startTime ? moment(transaction.startTime).format('LLL') : ''
 

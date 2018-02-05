@@ -6,7 +6,7 @@ import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { calcLMSRMarginalPrice } from 'api'
 import DecimalValue from 'components/DecimalValue'
 
-import './formBarChartRadioButton.less'
+import './formBarChartRadioButton.scss'
 
 const FormBarChartRadioButton = ({
   input,

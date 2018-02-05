@@ -14,7 +14,7 @@ import FormRadioButton from 'components/FormRadioButton'
 import FormSlider from 'components/FormSlider'
 import FormInput from 'components/FormInput'
 
-import './marketCreateWizard.less'
+import './marketCreateWizard.scss'
 
 export default class MarketCreateWizard extends Component {
   componentDidMount() {

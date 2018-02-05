@@ -7,7 +7,7 @@ import { closeModal } from 'actions/modal'
 
 import * as modals from 'containers/modals'
 
-import './backdrop.less'
+import './backdrop.scss'
 
 class BackdropProvider extends Component {
   renderBackdropContent() {

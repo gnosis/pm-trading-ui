@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { reduxForm, Field, propTypes } from 'redux-form'
 import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
-import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount, calcLMSRProfit } from 'api'
+import { calcLMSRMarginalPrice, calcLMSRProfit } from 'api'
 
 import InteractionButton from 'containers/InteractionButton'
 
@@ -25,9 +25,9 @@ import {
 } from 'utils/constants'
 
 import { getOutcomeName, weiToEth, normalizeScalarPoint, isMarketClosed, isMarketResolved } from 'utils/helpers'
-import { marketShape, marketShareShape } from 'utils/shapes'
+import { marketShape } from 'utils/shapes'
 
-import './marketMySharesForm.less'
+import './marketMySharesForm.scss'
 
 export const MY_TOKENS = 'My Tokens'
 
@@ -159,23 +159,23 @@ class MarketMySharesForm extends Component {
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
         <td>
           {Decimal(share.balance)
-              .div(1e18)
-              .gte(LOWEST_DISPLAYED_VALUE) ? (
-                <DecimalValue value={Decimal(share.balance).div(1e18)} />
+            .div(1e18)
+            .gte(LOWEST_DISPLAYED_VALUE) ? (
+              <DecimalValue value={Decimal(share.balance).div(1e18)} />
             ) : (
               `< ${LOWEST_DISPLAYED_VALUE}`
             )}
         </td>
         <td>
           {!resolvedOrClosed && (
-          <a
-            href="javascript:void(0);"
-            className="marketMyShares__sellButton"
-            onClick={e => this.handleShowSellView(e, share.id)}
-          >
+            <a
+              href="javascript:void(0);"
+              className="marketMyShares__sellButton"
+              onClick={e => this.handleShowSellView(e, share.id)}
+            >
                 Sell
-          </a>
-            )}
+            </a>
+          )}
         </td>
       </tr>)
 

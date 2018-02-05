@@ -12,7 +12,7 @@ import InteractionButton from 'containers/InteractionButton'
 import FormRadioButton from 'components/FormRadioButton'
 import FormInput from 'components/FormInput'
 
-import './marketResolveForm.less'
+import './marketResolveForm.scss'
 
 class MarketResolveForm extends Component {
   @autobind

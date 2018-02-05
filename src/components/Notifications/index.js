@@ -1,10 +1,12 @@
 import React, { PropTypes } from 'react'
 
-import './Notifications.less'
+import './Notifications.scss'
 
 const Notifications = ({ notifications, onClick }) => (
   <div className="notifications">
-    {notifications.map(({ id, title, icon, message }) => (
+    {notifications.map(({
+      id, title, icon, message,
+    }) => (
       <div key={id} className="notification" onClick={() => onClick()}>
         <div className="notification__title">
           {title}
@@ -16,9 +18,9 @@ const Notifications = ({ notifications, onClick }) => (
           {message}
         </div>
       </div>
-      ))}
+    ))}
   </div>
-  )
+)
 
 Notifications.propTypes = {
   notifications: PropTypes.arrayOf(PropTypes.object),

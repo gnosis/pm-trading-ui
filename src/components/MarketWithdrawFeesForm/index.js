@@ -8,7 +8,7 @@ import { weiToEth } from 'utils/helpers'
 
 import InteractionButton from 'containers/InteractionButton'
 
-import './marketWithdrawFeesForm.less'
+import './marketWithdrawFeesForm.scss'
 
 class MarketWithdrawFeesForm extends Component {
   @autobind
