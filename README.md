@@ -1,13 +1,9 @@
 gnosis-management
 ------
 
-Start with:
-```
-npm install
-npm start
-```
+[![Join the chat at https://gitter.im/gnosis/gnosis-management](https://badges.gitter.im/gnosis/gnosis-management.svg)](https://gitter.im/gnosis/gnosis-management?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Server will be available under `http://localhost:5000/`
+Start with `npm start`, server available under `http://localhost:8000/`
 
 Installing gnosis.js
 ------
