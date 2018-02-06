@@ -8,10 +8,11 @@ import { ConnectedRouter } from 'react-router-redux'
 
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { AppContainer } from 'react-hot-loader'
+import { AppContainer as AppHOC } from 'react-hot-loader'
 import 'scss/style.scss'
 import AppRouter from 'routes'
 import initGoogleAnalytics from 'utils/analytics/init'
+import AppContainer from 'containers/App'
 import BackdropProvider from 'containers/BackdropProvider'
 import store, { history } from 'store'
 import { setMomentRelativeTime } from './setup'
@@ -31,15 +32,17 @@ const rootElement = document.getElementById('root')
 
 const render = (App) => {
   ReactDOM.render(
-    <AppContainer>
+    <AppHOC>
       <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <BackdropProvider>
-            <App />
-          </BackdropProvider>
-        </ConnectedRouter>
+        <BackdropProvider>
+          <ConnectedRouter history={history}>
+            <AppContainer>
+              <App />
+            </AppContainer>
+          </ConnectedRouter>
+        </BackdropProvider>
       </Provider>
-    </AppContainer>,
+    </AppHOC>,
     rootElement,
   )
 }

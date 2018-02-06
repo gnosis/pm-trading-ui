@@ -52,9 +52,9 @@ class MarketMySharesForm extends Component {
       requestGasPrice()
     }
 
-    if (this.props.params.shareId) {
+    if (this.props.match.params.shareId) {
       this.setState({
-        extendedSellId: this.props.params.shareId,
+        extendedSellId: this.props.match.params.shareId,
       })
     }
 

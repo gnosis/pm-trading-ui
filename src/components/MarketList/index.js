@@ -4,7 +4,7 @@ import autobind from 'autobind-decorator'
 import moment from 'moment'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router-dom'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
 
@@ -112,9 +112,9 @@ class MarketList extends Component {
           <h2 className="market__title">{market.eventDescription.title}</h2>
           {showResolveButton && (
             <div className="market__control">
-              <Link to={`/markets/${market.address}/resolve`} onClick={this.handleViewMarketResolve}>
+              <NavLink to={`/markets/${market.address}/resolve`} onClick={this.handleViewMarketResolve}>
                 Resolve
-              </Link>
+              </NavLink>
             </div>
           )}
         </div>
