@@ -1,19 +1,18 @@
 /* global __VERSION__ */
 
 import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
-import { providerPropType } from 'utils/shapes'
 
 import { connectBlockchain } from 'actions/blockchain'
-
 import LoadingIndicator from 'components/LoadingIndicator'
+import { providerPropType } from 'utils/shapes'
 
-import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
-
+import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
 
 import './app.scss'
@@ -28,7 +27,7 @@ class App extends Component {
     const newTransitionKey = nextProps.location.pathname.split('/')[1]
 
     if (newTransitionKey !== prevTransitionKey) {
-      this.setState({ transition: true, transitionKey: newTransitionKey })
+      this.setState({ transition: true })
     } else {
       this.setState({ transition: false })
     }
@@ -86,6 +85,6 @@ const mapStateToProps = state => ({
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   connectBlockchain,
-})(App)
+})(App))

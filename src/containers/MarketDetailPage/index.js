@@ -33,8 +33,11 @@ import {
 } from 'selectors/blockchain'
 import { isModerator, getModerators } from 'utils/helpers'
 
+let marketId
+
 const mapStateToProps = (state, ownProps) => {
-  const market = getMarketById(state)(ownProps.params.id)
+  marketId = ownProps.match.params.id
+  const market = getMarketById(state)(marketId)
 
   if (!Object.keys(market).length) {
     return { market }
@@ -75,10 +78,10 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchMarket: () => dispatch(requestMarket(ownProps.params.id)),
-  fetchMarketShares: accountAddress => dispatch(requestMarketShares(ownProps.params.id, accountAddress)),
-  fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(ownProps.params.id, accountAddress)),
+const mapDispatchToProps = dispatch => ({
+  fetchMarket: () => dispatch(requestMarket(marketId)),
+  fetchMarketShares: accountAddress => dispatch(requestMarketShares(marketId, accountAddress)),
+  fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(marketId, accountAddress)),
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
     dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
