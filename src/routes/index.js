@@ -1,16 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import MarketListPage from 'containers/MarketListPage'
-import MarketCreateWizardPage from 'containers/MarketCreateWizardPage'
+// import MarketCreateWizardPage from 'containers/MarketCreateWizardPage'
 import MarketDetailPage from 'containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
 import DashboardPage from 'containers/DashboardPage'
-import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
+// import MarketCreateReviewPage from 'containers/MarketCreateReviewPage'
 
 const AppRouter = () => (
   <Switch>
+    <Redirect exact from="/" to="/markets/list" />
     <Route exact path="/dashboard" component={DashboardPage} />
     <Route exact path="/transactions" component={TransactionsPage} />
     <Route exact path="/markets/list" component={MarketListPage} />
@@ -18,7 +18,8 @@ const AppRouter = () => (
   </Switch>
 )
 
-{ /* <Route path="markets">
+{
+  /* <Route path="markets">
       <IndexRedirect to="list" />
       <Route path="new" component={MarketCreateWizardPage} />
       <Route path="review" component={MarketCreateReviewPage} />
@@ -28,6 +29,7 @@ const AppRouter = () => (
           <Route path=":shareId" />
         </Route>
       </Route>
-    </Route> */ }
+    </Route> */
+}
 
 export default AppRouter
