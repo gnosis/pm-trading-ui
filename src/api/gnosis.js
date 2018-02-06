@@ -1,11 +1,9 @@
 import Gnosis from '@gnosis.pm/gnosisjs/'
-import { requireEventFromTXResult } from '@gnosis.pm/gnosisjs/dist/utils'
 
 import { hexWithPrefix, weiToEth } from 'utils/helpers'
-import { OUTCOME_TYPES, ORACLE_TYPES, MAX_ALLOWANCE_WEI } from 'utils/constants'
+import { OUTCOME_TYPES } from 'utils/constants'
 import { NETWORK_TIMEOUT } from 'actions/blockchain'
 
-import moment from 'moment'
 import Decimal from 'decimal.js'
 
 let gnosisInstance

@@ -8,7 +8,6 @@ import { NavLink } from 'react-router-dom'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
 
-import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
@@ -205,7 +204,7 @@ class MarketList extends Component {
   }
 
   render() {
-    const { markets, defaultAccount } = this.props
+    const { markets } = this.props
 
     const threeDayMSeconds = 3 * 24 * 60 * 60 * 1000
     const now = new Date()

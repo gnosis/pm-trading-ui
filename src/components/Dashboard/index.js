@@ -5,7 +5,6 @@ import cn from 'classnames'
 import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import InteractionButton from 'containers/InteractionButton'
 import { add0xPrefix, weiToEth, getOutcomeName, isMarketResolved, isMarketClosed } from 'utils/helpers'
 import { marketShareShape } from 'utils/shapes'
 import {
