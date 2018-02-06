@@ -3,6 +3,10 @@
 .formCheckbox {
   display: inline-block;
 
+  label {
+    margin: 0;
+  }
+
   input {
     display: inline-block;
     position: relative;
