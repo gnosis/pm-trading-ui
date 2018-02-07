@@ -5,7 +5,6 @@ import cn from 'classnames'
 import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import InteractionButton from 'containers/InteractionButton'
 import { add0xPrefix, weiToEth, getOutcomeName, isMarketResolved, isMarketClosed } from 'utils/helpers'
 import { marketShareShape } from 'utils/shapes'
 import {
@@ -74,21 +73,7 @@ class Dashboard extends Component {
 
   renderControls() {
     return (
-      <div className="dashboardControls">
-        <div className="container">
-          <div className="row">
-            <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-              <InteractionButton
-                onClick={this.handleCreateMarket}
-                className="dashboardControls__button btn btn-default"
-                whitelistRequired
-              >
-                Create Market
-              </InteractionButton>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div />
     )
   }
 
