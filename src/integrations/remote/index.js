@@ -15,6 +15,8 @@ class Remote extends InjectedWeb3 {
     super()
 
     this.watcher = setInterval(() => {
+      if (!this.connectionTried) return
+
       this.watch('account', this.getAccount)
       this.watch('balance', this.getBalance)
       this.watch('network', this.getNetwork)
@@ -43,6 +45,8 @@ class Remote extends InjectedWeb3 {
       // remote not available
       this.walletEnabled = false
     }
+
+    this.connectionTried = true
 
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,

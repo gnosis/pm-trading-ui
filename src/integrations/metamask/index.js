@@ -18,6 +18,8 @@ class Metamask extends InjectedWeb3 {
   constructor() {
     super()
     this.watcher = setInterval(() => {
+      if (!this.connectionTried) return
+
       this.watch('account', this.getAccount)
       this.watch('balance', this.getBalance)
     }, Metamask.watcherInterval)
@@ -49,6 +51,8 @@ class Metamask extends InjectedWeb3 {
     } catch (err) {
       this.walletEnabled = false
     }
+
+    this.connectionTried = true
 
     if (this.walletEnabled) {
       const checks = async () => {
