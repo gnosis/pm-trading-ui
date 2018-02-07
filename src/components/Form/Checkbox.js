@@ -5,6 +5,7 @@ import classNames from 'classnames/bind'
 import { fieldPropTypes } from 'redux-form'
 import { omit } from 'lodash'
 
+import InputError from './InputError'
 import styles from './Checkbox.scss'
 
 const cx = classNames.bind(styles)
@@ -17,7 +18,6 @@ const Checkbox = ({
   muted,
   meta: { touched, error },
 }) => {
-  const showErrorMessage = touched && error
   const inputId = `formCheckbox_${input.name}`
 
   return (
@@ -25,8 +25,8 @@ const Checkbox = ({
       muted,
     })}
     >
-      <label htmlFor={inputId} style={styles.label}>{ label }</label>
-      <label htmlFor={inputId} style={styles.inputLabel}>
+      <label htmlFor={inputId}>{ label }</label>
+      <label htmlFor={inputId} className={cx('formCheckboxLabel')}>
         <input
           id={inputId}
           type="checkbox"
@@ -35,6 +35,7 @@ const Checkbox = ({
         />
         <span className={cx('formCheckboxText')}>{children}</span>
       </label>
+      <InputError error={touched && error} />
     </div>
   )
 }
@@ -53,8 +54,6 @@ Checkbox.defaultProps = {
   children: undefined,
   className: '',
   muted: false,
-  startAdornment: undefined,
-  endAdornment: undefined,
 }
 
 export default Checkbox

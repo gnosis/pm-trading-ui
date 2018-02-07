@@ -18,7 +18,7 @@ const TextInputAdornment = ({ children, position }) => (
 
 TextInputAdornment.propTypes = {
   children: PropTypes.node,
-  position: PropTypes.oneOf('end', 'start'),
+  position: PropTypes.oneOf(['end', 'start']),
 }
 
 TextInputAdornment.defaultProps = {

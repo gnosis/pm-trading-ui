@@ -46,7 +46,7 @@ $page-heading-margins: 60px 0;
 $font-size-inputs: 16px;
 $letter-spacing-inputs: .5px;
 $font-weight-inputs: 400;
-$paddings-inputs: 5px 0;
+$paddings-inputs: 5px 10px;
 
 // styles for inputs
 @mixin inputStyles() {

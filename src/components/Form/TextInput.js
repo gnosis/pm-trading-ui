@@ -4,6 +4,7 @@ import classNames from 'classnames/bind'
 
 import { fieldPropTypes } from 'redux-form'
 
+import InputError from './InputError'
 import styles from './TextInput.scss'
 
 const cx = classNames.bind(styles)
@@ -18,7 +19,6 @@ const TextInput = ({
   startAdornment,
   endAdornment,
 }) => {
-  const showErrorMessage = touched && error
   const inputId = `formTextInput_${input.name}`
 
   return (
@@ -37,7 +37,7 @@ const TextInput = ({
         />
         {endAdornment}
       </div>
-      {showErrorMessage && <span>{error}</span>}
+      <InputError error={touched && error} />
     </div>
   )
 }
