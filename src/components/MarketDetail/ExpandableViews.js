@@ -1,5 +1,4 @@
 import MarketBuySharesForm from 'components/MarketBuySharesForm'
-import MarketResolveForm from 'components/MarketResolveForm'
 import MarketMySharesForm, { MY_TOKENS } from 'components/MarketMySharesForm'
 import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
 import MarketMyTrades from 'components/MarketMyTrades'
@@ -9,7 +8,6 @@ import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 export const EXPAND_BUY_SHARES = 'buy-shares'
 export const EXPAND_MY_TRADES = 'my-trades'
 export const EXPAND_MY_SHARES = 'my-shares'
-export const EXPAND_RESOLVE = 'resolve'
 export const EXPAND_WITHDRAW_FEES = 'withdraw-fees'
 
 const expandableViews = ({
@@ -48,16 +46,6 @@ const expandableViews = ({
     className: 'btn btn-default',
     component: MarketMyTrades,
     showCondition: props => props.market && props.defaultAccount,
-  },
-  [EXPAND_RESOLVE]: {
-    label: 'Resolve',
-    className: 'btn btn-default',
-    component: MarketResolveForm,
-    showCondition: props =>
-      props.market &&
-      props.defaultAccount &&
-      props.defaultAccount === props.market.oracle.owner &&
-      !isMarketResolved(props.market),
   },
   [EXPAND_WITHDRAW_FEES]: {
     label: 'Withdraw fees',

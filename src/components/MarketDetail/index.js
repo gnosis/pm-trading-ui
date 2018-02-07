@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
 
-import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES, MIN_CONSIDER_VALUE } from 'utils/constants'
+import { RESOLUTION_TIME, GAS_COST, MIN_CONSIDER_VALUE } from 'utils/constants'
 import { marketShape, marketShareShape, marketTradeShape, gasCostsShape } from 'utils/shapes'
 import { weiToEth, isMarketClosed, isMarketResolved } from 'utils/helpers'
 
@@ -82,7 +82,6 @@ class MarketDetail extends Component {
         }
       })
       .catch((err) => {
-        console.log(err)
         this.setState({
           marketFetchError: err,
         })
@@ -258,7 +257,6 @@ class MarketDetail extends Component {
   }
 
   renderControls() {
-    const { market, closeMarket, defaultAccount } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
@@ -280,19 +278,6 @@ class MarketDetail extends Component {
                 {expandableViews[view].label}
               </button>
             ))}
-          {market.stage !== MARKET_STAGES.MARKET_CLOSED &&
-            market.creator === defaultAccount && (
-              <InteractionButton
-                key="close-market"
-                type="button"
-                className="marketControls__button btn btn-default"
-                loading={market.local}
-                onClick={() => closeMarket(market)}
-                requiresWhitelist
-              >
-                Close Market
-              </InteractionButton>
-            )}
         </div>
       </div>
     )
@@ -312,7 +297,7 @@ class MarketDetail extends Component {
   }
 
   render() {
-    const { market, marketGraph } = this.props
+    const { market } = this.props
 
     const { marketFetchError } = this.state
     if (marketFetchError) {
@@ -380,7 +365,6 @@ MarketDetail.propTypes = {
   moderators: PropTypes.shape({
     address: PropTypes.string,
   }),
-  closeMarket: PropTypes.func,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),
