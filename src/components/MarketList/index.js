@@ -8,6 +8,7 @@ import { NavLink } from 'react-router-dom'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
 
+import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
@@ -204,7 +205,7 @@ class MarketList extends Component {
   }
 
   render() {
-    const { markets } = this.props
+    const { markets, defaultAccount } = this.props
 
     const threeDayMSeconds = 3 * 24 * 60 * 60 * 1000
     const now = new Date()
@@ -242,6 +243,23 @@ class MarketList extends Component {
             </div>
           </div>
         </div>
+        {process.env.WHITELIST[defaultAccount] && (
+          <div className="marketListPage__controls">
+            <div className="container">
+              <div className="row">
+                <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
+                  <InteractionButton
+                    onClick={this.handleCreateMarket}
+                    className="marketStats__control btn btn-default"
+                    whitelistRequired
+                  >
+                    Create Market
+                  </InteractionButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="marketListPage__markets">
           <div className="container">
             <div className="row">

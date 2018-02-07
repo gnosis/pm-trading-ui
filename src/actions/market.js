@@ -1,11 +1,15 @@
 import allowedRangePrice from 'utils/marginPrice'
 import Decimal from 'decimal.js'
+import { normalize } from 'normalizr'
 import uuid from 'uuid/v4'
 import * as api from 'api'
 
 import { receiveEntities, updateEntity } from 'actions/entities'
 import { openModal, closeModal } from 'actions/modal'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'actions/transactions'
+
+import { createEventDescriptionModel, createOracleModel, createEventModel, createMarketModel } from 'api/models'
+import { eventDescriptionSchema, eventSchema, oracleSchema, marketSchema } from 'api/schema'
 
 import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, MARKET_STAGES, MAX_ALLOWANCE_WEI } from 'utils/constants'
 import { DEPOSIT, SELL, REVOKE_TOKENS, SETTING_ALLOWANCE } from 'utils/transactionExplanations'
@@ -27,6 +31,32 @@ const TRANSACTION_STAGES = {
   // Others
   GENERIC: 'generic',
 }
+
+/**
+ * Stages for marketcreation
+ */
+const TRANSACTION_EVENTS = [
+  {
+    event: TRANSACTION_STAGES.EVENT_DESCRIPTION,
+    label: 'Create Event Description',
+  },
+  {
+    event: TRANSACTION_STAGES.ORACLE,
+    label: 'Create Oracle',
+  },
+  {
+    event: TRANSACTION_STAGES.EVENT,
+    label: 'Create Event',
+  },
+  {
+    event: TRANSACTION_STAGES.MARKET,
+    label: 'Create Market',
+  },
+  {
+    event: TRANSACTION_STAGES.FUNDING,
+    label: 'Fund Market',
+  },
+]
 
 /**
  * Generic Stage for single-event transactions
@@ -109,6 +139,131 @@ export const requestAccountShares = accountAddress => async (dispatch) => {
 export const requestAccountTrades = accountAddress => async (dispatch) => {
   const payload = await api.requestAccountTrades(accountAddress)
   return dispatch(receiveEntities(payload))
+}
+
+/**
+ * This function also has a sideeffect of adding to the TransactionLog.
+ * Creates a market by running transaction in order for:
+ *  - eventDescription
+ *  - oracle
+ *  - event
+ *  - market
+ * @param {object} options
+ * @param {string} options.transactionId - ID to be used for transaction log
+ * @param {object} options.eventDescription
+ * @param {string} options.eventDescription.title - Markettitle
+ * @param {string} options.eventDescription.description - Marketdescription Text
+ * @param {object} options.oracle
+ * @param {string} options.oracle.type - Type of Oracle to be used @see src/utils/constants ORACLE_TYPES
+ * @param {object} options.event
+ * @param {string} options.event.type - Type of Outcomes to be used @see src/utils/constants OUTCOME_TYPES
+ * @param {number|string|BigNumber} options.event.lowerBound - Lower bound for OUTCOME_TYPES.SCALAR_OUTCOME
+ * @param {number|string|BigNumber} options.event.upperBound - Upper bound for OUTCOME_TYPES.SCALAR_OUTCOME
+ * @param {object} options.market
+ * @param {number|string|BigNumber} options.market.funding - Initial funding for market in Ether
+ * @param {number|string|BigNumber} options.market.fee - Marketfee in percentage (0 - 100, max 10 allowed in UI)
+ */
+export const createMarket = options => async (dispatch) => {
+  const {
+    eventDescription, oracle, event, market, transactionId,
+  } = options
+
+  // Start a new transaction log
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS, `Creating Market "${eventDescription.title}"`))
+
+  // Create Event Description
+  let eventDescriptionContractData
+  try {
+    eventDescriptionContractData = await api.createEventDescription(eventDescription, event.type)
+
+    await dispatch(receiveEntities(normalize(createEventDescriptionModel(eventDescriptionContractData), eventDescriptionSchema)))
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.EVENT_DESCRIPTION))
+  } catch (e) {
+    console.error(e)
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.EVENT_DESCRIPTION, e))
+    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+  }
+
+  // Create Oracle
+  let oracleContractData
+  try {
+    // Take from EventDescription
+    oracle.eventDescription = eventDescriptionContractData.ipfsHash
+
+    oracleContractData = await api.createOracle(oracle)
+    await dispatch(receiveEntities(normalize(createOracleModel(oracleContractData), oracleSchema)))
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.ORACLE))
+  } catch (e) {
+    console.error(e)
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.ORACLE, e))
+    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+  }
+
+  // Create Event
+  let eventContractData
+  try {
+    // Take from Oracle
+    event.oracle = oracleContractData.address
+
+    if (event.type === OUTCOME_TYPES.CATEGORICAL) {
+      event.outcomeCount = (eventDescription.outcomes || []).length
+    } else if (event.type === OUTCOME_TYPES.SCALAR) {
+      event.lowerBound = Decimal(event.lowerBound)
+        .times(10 ** event.decimals)
+        .toString()
+      event.upperBound = Decimal(event.upperBound)
+        .times(10 ** event.decimals)
+        .toString()
+    }
+
+    eventContractData = await api.createEvent(event)
+    await dispatch(receiveEntities(normalize(createEventModel(eventContractData), eventSchema)))
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.EVENT))
+  } catch (e) {
+    console.error(e)
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.EVENT, e))
+    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+  }
+
+  let marketContractData
+  try {
+    // Take from Event
+    market.event = eventContractData.address
+
+    if (event.type === OUTCOME_TYPES.CATEGORICAL) {
+      market.outcomes = eventDescription.outcomes
+    } else if (event.type === OUTCOME_TYPES.SCALAR) {
+      market.outcomes = [0, 1] // short, long
+    }
+
+    // Create Market
+    marketContractData = await api.createMarket(market)
+    await dispatch(receiveEntities(normalize(createMarketModel(marketContractData), marketSchema)))
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.MARKET))
+  } catch (e) {
+    console.error(e)
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.MARKET, e))
+    return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+  }
+
+  // Fund Market
+  try {
+    await api.fundMarket({
+      ...marketContractData,
+      funding: market.funding,
+    })
+
+    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.FUNDING))
+  } catch (e) {
+    console.error(e)
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.FUNDING, e))
+    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
+
+    throw e
+  }
+
+  await dispatch(closeLog(transactionId))
+  return marketContractData
 }
 
 /**
