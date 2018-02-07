@@ -82,7 +82,6 @@ class MarketDetail extends Component {
         }
       })
       .catch((err) => {
-        console.log(err)
         this.setState({
           marketFetchError: err,
         })
@@ -298,7 +297,7 @@ class MarketDetail extends Component {
   }
 
   render() {
-    const { market, marketGraph } = this.props
+    const { market } = this.props
 
     const { marketFetchError } = this.state
     if (marketFetchError) {

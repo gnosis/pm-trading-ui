@@ -7,7 +7,7 @@ import { receiveEntities, updateEntity } from 'actions/entities'
 import { openModal, closeModal } from 'actions/modal'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'actions/transactions'
 
-import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, MARKET_STAGES, MAX_ALLOWANCE_WEI } from 'utils/constants'
+import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, MAX_ALLOWANCE_WEI } from 'utils/constants'
 import { DEPOSIT, SELL, REVOKE_TOKENS, SETTING_ALLOWANCE } from 'utils/transactionExplanations'
 import gaSend from 'utils/analytics/gaSend'
 

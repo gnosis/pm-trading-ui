@@ -1,6 +1,6 @@
 import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 
-import { weiToEth, promisify } from 'utils/helpers'
+import { weiToEth } from 'utils/helpers'
 
 class BaseIntegration {
   runProviderUpdate() {}
