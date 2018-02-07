@@ -22,11 +22,11 @@ const TextInput = ({
   const inputId = `formTextInput_${input.name}`
 
   return (
-    <div className={cx('textInput', className)}>
+    <div className={cx('formTextInput', className)}>
       <label htmlFor={inputId}>
         {label}
       </label>
-      <div className={cx('inputWrapper')}>
+      <div className={cx('wrapper')}>
         {startAdornment}
         <input
           id={inputId}

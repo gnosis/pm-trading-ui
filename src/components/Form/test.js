@@ -8,6 +8,7 @@ import {
   Select,
   TextInputAdornment,
   RadioButtonGroup,
+  Slider,
 } from './'
 
 const FAV_COLOR_VALUES = [
@@ -40,6 +41,8 @@ class FormTest extends Component {
         <Field name="favColor" component={Select} label="What's your favorite color?" options={FAV_COLOR_VALUES} />
 
         <Field name="favTransport" component={RadioButtonGroup} label="What's your favorite transportation method?" options={FAV_TRANSPORT_METHODS} />
+
+        <Field name="awesomeness" component={Slider} label="How awesome is this?" />
       </form>
     )
   }
