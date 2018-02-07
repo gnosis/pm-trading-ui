@@ -1,4 +1,4 @@
-import { requestFromRestAPI } from 'api/fetch'
+import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
 import addMarkets from './addMarkets'
 
