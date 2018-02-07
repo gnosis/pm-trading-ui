@@ -1,6 +1,6 @@
 import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 
-import { weiToEth, promisify } from 'utils/helpers'
+import { weiToEth } from 'utils/helpers'
 
 class BaseIntegration {
   runProviderUpdate() {}
@@ -38,7 +38,8 @@ class BaseIntegration {
    * @returns {Promise<string>} - Network Identifier
    */
   async getNetworkId() {
-    return promisify(this.web3.version.getNetwork, [], this.defaultTimeout > 0 ? this.defaultTimeout : undefined)
+    const networkId = await this.web3.eth.net.getId()
+    return networkId
   }
 
   /**
@@ -47,11 +48,7 @@ class BaseIntegration {
    * @returns {Promise<string>} - Accountaddress
    */
   async getAccount() {
-    const accounts = await promisify(
-      this.web3.eth.getAccounts,
-      [],
-      this.defaultTimeout > 0 ? this.defaultTimeout : undefined,
-    )
+    const accounts = await this.web3.eth.getAccounts()
 
     return accounts && accounts.length ? accounts[0] : null
   }
@@ -66,11 +63,7 @@ class BaseIntegration {
       throw new Error('No Account available')
     }
 
-    const balance = await promisify(
-      this.web3.eth.getBalance,
-      [this.account],
-      this.defaultTimeout > 0 ? this.defaultTimeout : undefined,
-    )
+    const balance = await this.web3.eth.getBalance(this.account)
 
     if (typeof balance !== 'undefined') {
       return weiToEth(balance.toString())

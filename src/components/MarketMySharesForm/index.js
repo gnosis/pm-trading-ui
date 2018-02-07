@@ -52,9 +52,9 @@ class MarketMySharesForm extends Component {
       requestGasPrice()
     }
 
-    if (this.props.params.shareId) {
+    if (this.props.match.params.shareId) {
       this.setState({
-        extendedSellId: this.props.params.shareId,
+        extendedSellId: this.props.match.params.shareId,
       })
     }
 
@@ -182,7 +182,7 @@ class MarketMySharesForm extends Component {
       if (share.id === extendedSellId) {
         tableRows.push(<tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
           <td colSpan={5}>{this.renderSellShareView()}</td>
-                       </tr>)
+        </tr>)
       }
     })
 

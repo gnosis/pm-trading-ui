@@ -11,10 +11,8 @@ import {
   requestMarket,
   requestMarketTrades,
   requestMarketTradesForAccount,
-  resolveMarket,
   redeemWinnings,
   withdrawFees,
-  closeMarket,
 } from 'actions/market'
 import { getMarketById } from 'selectors/market'
 import { getMarketTradesForAccount } from 'selectors/marketTrades'
@@ -33,8 +31,11 @@ import {
 } from 'selectors/blockchain'
 import { isModerator, getModerators } from 'utils/helpers'
 
+let marketId
+
 const mapStateToProps = (state, ownProps) => {
-  const market = getMarketById(state)(ownProps.params.id)
+  marketId = ownProps.match.params.id
+  const market = getMarketById(state)(marketId)
 
   if (!Object.keys(market).length) {
     return { market }
@@ -75,22 +76,20 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchMarket: () => dispatch(requestMarket(ownProps.params.id)),
-  fetchMarketShares: accountAddress => dispatch(requestMarketShares(ownProps.params.id, accountAddress)),
-  fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(ownProps.params.id, accountAddress)),
+const mapDispatchToProps = dispatch => ({
+  fetchMarket: () => dispatch(requestMarket(marketId)),
+  fetchMarketShares: accountAddress => dispatch(requestMarketShares(marketId, accountAddress)),
+  fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(marketId, accountAddress)),
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
     dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
   sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) =>
     dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
-  resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   withdrawFees: market => dispatch(withdrawFees(market)),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
-  closeMarket: market => dispatch(closeMarket(market)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)

@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
 
-import { RESOLUTION_TIME, GAS_COST, MARKET_STAGES, MIN_CONSIDER_VALUE } from 'utils/constants'
+import { RESOLUTION_TIME, GAS_COST, MIN_CONSIDER_VALUE } from 'utils/constants'
 import { marketShape, marketShareShape, marketTradeShape, gasCostsShape } from 'utils/shapes'
 import { weiToEth, isMarketClosed, isMarketResolved } from 'utils/helpers'
 
@@ -36,7 +36,7 @@ class MarketDetail extends Component {
   }
 
   componentWillMount() {
-    this.fetchEssentialData(!this.props.params.view)
+    this.fetchEssentialData(!this.props.match.params.view)
     this.fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
   }
 
@@ -77,7 +77,7 @@ class MarketDetail extends Component {
         if (firstFetch) {
           const availableView = this.getAvailableView()
           if (availableView) {
-            this.props.changeUrl(`/markets/${this.props.params.id}/${availableView}`)
+            this.props.changeUrl(`/markets/${this.props.match.params.id}/${availableView}`)
           }
         }
       })
@@ -92,7 +92,7 @@ class MarketDetail extends Component {
       this.props.requestGasCost(GAS_COST.SELL_SHARES)
     }
 
-    if (this.props.defaultAccount && this.props.params.id !== undefined) {
+    if (this.props.defaultAccount && this.props.match.params.id !== undefined) {
       this.props.fetchMarketTradesForAccount(this.props.defaultAccount)
       this.props.fetchMarketShares(this.props.defaultAccount)
     }
@@ -102,10 +102,10 @@ class MarketDetail extends Component {
 
   @autobind
   handleExpand(view) {
-    if (this.props.params.view !== view) {
-      this.props.changeUrl(`/markets/${this.props.params.id}/${view}`)
+    if (this.props.match.params.view !== view) {
+      this.props.changeUrl(`/markets/${this.props.match.params.id}/${view}`)
     } else {
-      this.props.changeUrl(`/markets/${this.props.params.id}/`)
+      this.props.changeUrl(`/markets/${this.props.match.params.id}/`)
     }
   }
 
@@ -123,7 +123,7 @@ class MarketDetail extends Component {
   }
 
   renderExpandableContent() {
-    const currentView = this.props.params.view || false
+    const currentView = this.props.match.params.view || false
     if (currentView && expandableViews[currentView] && expandableViews[currentView].component) {
       const view = expandableViews[currentView]
 
@@ -257,7 +257,6 @@ class MarketDetail extends Component {
   }
 
   renderControls() {
-    const { market, closeMarket, defaultAccount } = this.props
     return (
       <div className="marketControls container">
         <div className="row">
@@ -271,27 +270,14 @@ class MarketDetail extends Component {
                 type="button"
                 className={cn({
                   marketControls__button: true,
-                  'marketControls__button--active btn btn-primary': view === this.props.params.view,
-                  [expandableViews[view].className]: view !== this.props.params.view,
+                  'marketControls__button--active btn btn-primary': view === this.props.match.params.view,
+                  [expandableViews[view].className]: view !== this.props.match.params.view,
                 })}
                 onClick={() => this.handleExpand(view)}
               >
                 {expandableViews[view].label}
               </button>
             ))}
-          {market.stage !== MARKET_STAGES.MARKET_CLOSED &&
-            market.creator === defaultAccount && (
-              <InteractionButton
-                key="close-market"
-                type="button"
-                className="marketControls__button btn btn-default"
-                loading={market.local}
-                onClick={() => closeMarket(market)}
-                requiresWhitelist
-              >
-                Close Market
-              </InteractionButton>
-            )}
         </div>
       </div>
     )
@@ -311,7 +297,7 @@ class MarketDetail extends Component {
   }
 
   render() {
-    const { market, marketGraph } = this.props
+    const { market } = this.props
 
     const { marketFetchError } = this.state
     if (marketFetchError) {
@@ -379,7 +365,6 @@ MarketDetail.propTypes = {
   moderators: PropTypes.shape({
     address: PropTypes.string,
   }),
-  closeMarket: PropTypes.func,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),

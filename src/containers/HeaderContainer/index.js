@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { openModal } from 'actions/modal'
+import { withRouter } from 'react-router-dom'
 
 import Header from 'components/Header'
 
@@ -26,4 +27,4 @@ const mapDispatchToProps = dispatch => ({
   openNetworkCheckModal: () => dispatch(openModal({ modalName: 'ModalNetworkCheck' })),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header))

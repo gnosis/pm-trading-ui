@@ -4,17 +4,17 @@ import Raven from 'raven-js'
 import { initProviders } from 'actions/providers'
 import Decimal from 'decimal.js'
 import React from 'react'
+import { ConnectedRouter } from 'react-router-redux'
 
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { browserHistory } from 'react-router'
-import { syncHistoryWithStore } from 'react-router-redux'
-import { AppContainer } from 'react-hot-loader'
+import { AppContainer as AppHOC } from 'react-hot-loader'
 import 'scss/style.scss'
-import AppRouter from 'router'
+import AppRouter from 'routes'
 import initGoogleAnalytics from 'utils/analytics/init'
+import AppContainer from 'containers/App'
 import BackdropProvider from 'containers/BackdropProvider'
-import store from 'store'
+import store, { history } from 'store'
 import { setMomentRelativeTime } from './setup'
 
 setMomentRelativeTime()
@@ -30,19 +30,19 @@ initGoogleAnalytics()
 /* global document */
 const rootElement = document.getElementById('root')
 
-// changed to browserHistory because for some reason with hashHistory render() of App
-// component is triggered twice and this breaks page transition animations
-const history = syncHistoryWithStore(browserHistory, store)
-
 const render = (App) => {
   ReactDOM.render(
-    <AppContainer>
+    <AppHOC>
       <Provider store={store}>
         <BackdropProvider>
-          <App history={history} />
+          <ConnectedRouter history={history}>
+            <AppContainer>
+              <App />
+            </AppContainer>
+          </ConnectedRouter>
         </BackdropProvider>
       </Provider>
-    </AppContainer>,
+    </AppHOC>,
     rootElement,
   )
 }
@@ -50,5 +50,5 @@ const render = (App) => {
 Raven.context(() => render(AppRouter))
 
 if (module.hot) {
-  module.hot.accept('./router', () => Raven.context(() => render(require('./router').default)))
+  module.hot.accept('./routes', () => Raven.context(() => render(require('./routes').default)))
 }
