@@ -13,6 +13,7 @@ export const requestMarket = async marketAddress =>
   restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/`).then(response =>
     normalize({ ...response, local: false }, marketSchema))
 
+// TODO delete when src/routes/marketlist is fully operative
 export const requestMarkets = async () => {
   const url = `${API_URL}/markets/?${whitelistedAddressesFilter}`
 
