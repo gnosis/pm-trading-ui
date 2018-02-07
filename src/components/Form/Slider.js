@@ -8,7 +8,7 @@ import TextInput from './TextInput'
 import styles from './Slider.scss'
 
 const cx = classNames.bind(styles)
-console.log(styles)
+
 const Slider = ({
   input,
   label,
