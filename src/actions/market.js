@@ -257,38 +257,6 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
 }
 
 /**
- * Resolve a markets oracle
- * @param {Market} market - Market to resolve the oracle of
- * @param {number|string} outcomeIndex - Winning Outcomes Index
- */
-export const resolveMarket = (market, outcomeIndex) => async (dispatch) => {
-  const transactionId = uuid()
-
-  // Start a new transaction log
-  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Resolving Oracle for "${market.eventDescription.title}"`))
-
-  try {
-    await api.resolveEvent(market.event, outcomeIndex)
-    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
-  } catch (e) {
-    console.error(e)
-    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
-    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
-
-    throw e
-  }
-
-  // optimistically update oracle outcome and event outcome
-  await dispatch(updateEntity({
-    entityType: 'oracles',
-    data: { id: market.oracle.address, isOutcomeSet: true, outcome: outcomeIndex },
-  }))
-  await dispatch(updateEntity({ entityType: 'events', data: { id: market.event.address, isWiningOutcomeSet: true } }))
-
-  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
-}
-
-/**
  * Redeem winnings of a market
  * @param {Market} market - Market to redeem winnings of
  */
@@ -348,35 +316,3 @@ export const withdrawFees = market => async (dispatch) => {
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
 
-/**
- * Close a market
- * @param {Market} market - Market to close
- */
-export const closeMarket = market => async (dispatch) => {
-  const transactionId = uuid()
-
-  // Start a new transaction log
-  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Closing market "${market.eventDescription.title}"`))
-
-  try {
-    await api.closeMarket(market)
-    await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
-  } catch (e) {
-    console.error(e)
-    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
-    await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
-
-    throw e
-  }
-
-  const stage = MARKET_STAGES.MARKET_CLOSED
-  await dispatch(updateEntity({
-    entityType: 'markets',
-    data: {
-      id: market.address,
-      stage,
-    },
-  }))
-
-  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
-}

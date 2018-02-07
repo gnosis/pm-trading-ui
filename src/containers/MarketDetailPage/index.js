@@ -11,10 +11,8 @@ import {
   requestMarket,
   requestMarketTrades,
   requestMarketTradesForAccount,
-  resolveMarket,
   redeemWinnings,
   withdrawFees,
-  closeMarket,
 } from 'actions/market'
 import { getMarketById } from 'selectors/market'
 import { getMarketTradesForAccount } from 'selectors/marketTrades'
@@ -87,13 +85,11 @@ const mapDispatchToProps = dispatch => ({
     dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
   sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) =>
     dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
-  resolveMarket: (market, outcomeIndex) => dispatch(resolveMarket(market, outcomeIndex)),
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   withdrawFees: market => dispatch(withdrawFees(market)),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
-  closeMarket: market => dispatch(closeMarket(market)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)
