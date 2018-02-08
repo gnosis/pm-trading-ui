@@ -18,6 +18,7 @@ const TextInput = ({
   meta: { touched, error },
   startAdornment,
   endAdornment,
+  ...props
 }) => {
   const inputId = `formTextInput_${input.name}`
 
@@ -34,6 +35,7 @@ const TextInput = ({
           placeholder={placeholder}
           type={type}
           {...input}
+          {...props}
         />
         {endAdornment}
       </div>

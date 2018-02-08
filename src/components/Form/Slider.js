@@ -11,6 +11,7 @@ const cx = classNames.bind(styles)
 
 const Slider = ({
   input,
+  meta,
   label,
   min,
   max,
@@ -20,7 +21,7 @@ const Slider = ({
   unit,
 }) => {
   const valueElement = showInput ? (
-    <TextInput className="formSliderValueInput" {...input} type="number" min={min} max={max} step={step} />
+    <TextInput className="formSliderValueInput" input={input} meta={meta} type="number" min={min} max={max} step={step} />
   ) : (
     <span>{input.value} {unit}</span>
   )
@@ -53,6 +54,7 @@ const Slider = ({
 
 Slider.propTypes = {
   input: PropTypes.shape(fieldPropTypes.input).isRequired,
+  meta: PropTypes.shape(fieldPropTypes.meta).isRequired,
   label: PropTypes.string,
   min: PropTypes.number,
   max: PropTypes.number,
