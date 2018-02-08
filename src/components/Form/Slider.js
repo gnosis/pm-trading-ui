@@ -4,6 +4,7 @@ import { fieldPropTypes } from 'redux-form'
 
 import classNames from 'classnames'
 
+import InputError from './InputError'
 import TextInput from './TextInput'
 import styles from './Slider.scss'
 
@@ -12,6 +13,7 @@ const cx = classNames.bind(styles)
 const Slider = ({
   input,
   meta,
+  meta: { touched, error },
   label,
   min,
   max,
@@ -21,7 +23,15 @@ const Slider = ({
   unit,
 }) => {
   const valueElement = showInput ? (
-    <TextInput className="formSliderValueInput" input={input} meta={meta} type="number" min={min} max={max} step={step} />
+    <TextInput
+      className="formSliderValueInput"
+      input={input}
+      meta={{}} // avoid double error message
+      type="number"
+      min={min}
+      max={max}
+      step={step}
+    />
   ) : (
     <span>{input.value} {unit}</span>
   )
@@ -29,7 +39,10 @@ const Slider = ({
   const inputId = `formSlider_${input.name}`
 
   return (
-    <div className={cx('formSlider')}>
+    <div className={cx('formSlider', {
+      error: (touched && error) !== false,
+    })}
+    >
       <label htmlFor={inputId} className={cx('formSliderLabel')}>
         {label}
       </label>
@@ -48,6 +61,7 @@ const Slider = ({
       <div className={cx('formSliderContainer', { showDefaultUnit })}>
         {valueElement}
       </div>
+      <InputError error={touched && error} />
     </div>
   )
 }

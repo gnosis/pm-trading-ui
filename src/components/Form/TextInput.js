@@ -23,7 +23,10 @@ const TextInput = ({
   const inputId = `formTextInput_${input.name}`
 
   return (
-    <div className={cx('formTextInput', className)}>
+    <div className={cx('formTextInput', className, {
+      error: (touched && error) !== false,
+    })}
+    >
       <label htmlFor={inputId}>
         {label}
       </label>

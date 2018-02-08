@@ -43,4 +43,10 @@
       box-shadow: 0 0 4px 1px currentColor;
     }
   }
+  
+  &.error {
+    label {
+      color: $active-highlight-error;
+    }
+  }
 }

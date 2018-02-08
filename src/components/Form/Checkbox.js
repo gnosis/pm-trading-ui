@@ -23,6 +23,7 @@ const Checkbox = ({
   return (
     <div className={cx('formCheckbox', className, {
       muted,
+      error: (error && touched) !== false,
     })}
     >
       <label htmlFor={inputId}>{ label }</label>

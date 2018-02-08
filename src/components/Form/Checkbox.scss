@@ -44,6 +44,16 @@
       background-color: $bg-color;
     }
   }
+
+  &.error {
+    input::before {
+      background-color: lighten($color: $active-highlight-error, $amount: 30);
+    }
+
+    label, .formCheckboxText {
+      color: $active-highlight-error;
+    }
+  }
 }
 
 .formCheckboxLabel {

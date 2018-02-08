@@ -17,7 +17,10 @@ const TextArea = ({
   className,
   meta: { touched, error },
 }) => (
-  <div className={cx('formTextArea', className)}>
+  <div className={cx('formTextArea', className, {
+    error: (touched && error) !== false,
+  })}
+  >
     <label htmlFor={input.name}>
       {label}
     </label>

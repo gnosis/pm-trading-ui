@@ -19,12 +19,16 @@ const Select = ({
   options,
   className,
   defaultValue,
-  meta: { error, touched },
+  loading,
+  meta: { error },
 }) => {
   const inputId = `formSelect_${input.name}`
 
   return (
-    <div className={cx('formSelect', className)}>
+    <div className={cx('formSelect', className, {
+      error: !!error,
+    })}
+    >
       <label htmlFor={inputId}>
         {label}
       </label>
@@ -35,8 +39,9 @@ const Select = ({
         value={input.value ? input.value : defaultValue}
         options={options}
         onBlur={undefined}
+        isLoading={loading}
       />
-      <InputError error={touched && error} />
+      <InputError error={error} />
     </div>
   )
 }
@@ -51,6 +56,7 @@ Select.propTypes = {
   })),
   className: PropTypes.string,
   defaultValue: PropTypes.string,
+  loading: PropTypes.bool,
 }
 
 Select.defaultProps = {
@@ -58,6 +64,7 @@ Select.defaultProps = {
   defaultValue: undefined,
   className: '',
   options: [],
+  loading: false,
 }
 
 export default Select

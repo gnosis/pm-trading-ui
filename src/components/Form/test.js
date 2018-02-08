@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { reduxForm, Field } from 'redux-form'
+import { mapValues } from 'lodash'
 
 import {
   Checkbox,
@@ -66,4 +67,10 @@ class FormTest extends Component {
 }
 /* eslint-enable */
 
-export default reduxForm({ form: 'Test' })(FormTest)
+export default reduxForm({
+  form: 'Test',
+  validate: (values) => {
+    console.log(values)
+    return mapValues(values, () => 'all wrong')
+  },
+})(FormTest)

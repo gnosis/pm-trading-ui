@@ -7,15 +7,26 @@ import classNames from 'classnames/bind'
 import RadioButton from './RadioButton'
 import InputError from './InputError'
 
-const cx = classNames.bind()
+import styles from './RadioButtonGroup.scss'
+
+const cx = classNames.bind(styles)
 
 const RadioButtonGroup = ({
-  options, input, className, label, meta: { error, touched },
+  options, input, className, label, meta, meta: { error, touched },
 }) => (
-  <div className={cx(className)}>
+  <div className={cx('formRadioButtonGroup', className, {
+    error: (touched && error) !== false,
+  })}
+  >
     <label>{label}</label>
     {options.map(option => (
-      <RadioButton key={option.value} value={option.value} label={option.label} input={input} />
+      <RadioButton
+        key={option.value}
+        value={option.value}
+        label={option.label}
+        input={input}
+        meta={meta}
+      />
     ))}
     <InputError error={touched && error} />
   </div>

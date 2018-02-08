@@ -26,11 +26,19 @@
       outline: 0;
     }
   }
-}
 
-.error {
-  input {
-    border-bottom-color: $active-highlight-error;
-    color: $active-highlight-error;
+  &.error {
+    input {
+      color: $active-highlight-error;
+    }
+
+    .wrapper {
+      border-bottom-color: lighten($color: $active-highlight-error, $amount: 30);
+      margin-bottom: 5px;
+    }
+
+    label {
+      color: $active-highlight-error;
+    }
   }
 }

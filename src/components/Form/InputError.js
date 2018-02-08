@@ -12,7 +12,7 @@ const InputError = ({ error }) => (
 )
 
 InputError.propTypes = {
-  error: PropTypes.oneOf([false, PropTypes.string]),
+  error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 }
 
 InputError.defaultProps = {

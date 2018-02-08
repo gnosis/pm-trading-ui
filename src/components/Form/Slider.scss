@@ -66,6 +66,13 @@
 
     @include thumbCrossBrowser($active-highlight, $bg-color-muted);
   }
+
+  &.error {
+    .formSliderLabel {
+      color: $active-highlight-error;
+    }
+    color: $active-highlight-error;
+  }
 }
 
 .formSliderValueInput {
