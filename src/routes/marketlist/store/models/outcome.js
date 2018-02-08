@@ -1,8 +1,8 @@
 import { Record } from 'immutable'
 
-const Outcome = Record({
+const OutcomeRecord = Record({
   name: undefined, // string
   marginalPrice: undefined, // decimal
 }, 'Outcome')
 
-export default Outcome
+export default OutcomeRecord
