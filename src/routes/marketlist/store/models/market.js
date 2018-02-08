@@ -1,6 +1,9 @@
 import { Record } from 'immutable'
 
-const Market = Record({
+export const MARKET_SCALAR = 'SCALAR'
+export const MARKET_CATEGORICAL = 'CATEGORICAL'
+
+const MarketRecord = Record({
   title: undefined, // string
   date: undefined, // ts
   volume: undefined, // decimal
@@ -9,4 +12,4 @@ const Market = Record({
   bounds: undefined, // BoundRecord
 }, 'Market')
 
-export default Market
+export default MarketRecord

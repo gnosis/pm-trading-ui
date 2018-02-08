@@ -1,9 +1,9 @@
 import { Record } from 'immutable'
 
-const Bound = Record({
+const BoundsRecord = Record({
   lower: undefined,
   upper: undefined,
   unit: undefined,
 }, 'Bound')
 
-export default Bound
+export default BoundsRecord
