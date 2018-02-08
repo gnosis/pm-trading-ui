@@ -1,22 +1,36 @@
+import { combineReducers, createStore, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
 import { List } from 'immutable'
-import marketReducer from './market'
-import { MarketListRecord } from '../models'
-import { emptyMarkets } from './market.builder'
-import addMarkets from '../actions/addMarkets'
+import { processMarketResponse } from '../actions/fetchMarkets'
+import marketReducer, { REDUCER_ID } from './market'
 
 describe('Market List Actions', () => {
-  it('should return the initial state when no markets are loaded', () => {
-    // GIVEN
-    const initialState = undefined
-    const marketAction = addMarkets(emptyMarkets())
-    const reduxState = marketReducer(initialState, marketAction)
+  let store
+  beforeEach(() => {
+    const reducers = combineReducers({
+      [REDUCER_ID]: marketReducer,
+    })
+    const middlewares = [
+      thunk,
+    ]
+    const enhancers = [
+      applyMiddleware(...middlewares),
+    ]
+    store = createStore(reducers, compose(...enhancers))
+  })
 
-    const emptyListOfMarkets = List(emptyMarkets())
+
+  it('should return empty Immutable list when no markets are loaded', () => {
+    // GIVEN
+    const emptyResponse = { }
 
     // WHEN
-    const emptyMarketListRecord = new MarketListRecord(emptyListOfMarkets)
+    processMarketResponse(store.dispatch, emptyResponse)
+
     // THEN
-    expect(reduxState).toEqual(emptyMarketListRecord)
+    const emptyList = List([])
+    const marketListState = store.getState().marketList
+    expect(marketListState).toEqual(emptyList)
   })
 
   it('store Market records in store ', () => {

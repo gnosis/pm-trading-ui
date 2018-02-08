@@ -1,8 +1,4 @@
-import { List, Record } from 'immutable'
-
-export const MarketListRecord = Record({
-  marketList: List([]), // Immutable.List<Market>
-})
+import { Record } from 'immutable'
 
 const Market = Record({
   title: undefined, // string
