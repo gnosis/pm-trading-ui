@@ -17,12 +17,10 @@ class Metamask extends InjectedWeb3 {
 
   constructor() {
     super()
-    this.watcher = setInterval(() => {
-      if (!this.connectionTried) return
-
+    this.watcher = () => {
       this.watch('account', this.getAccount)
       this.watch('balance', this.getBalance)
-    }, Metamask.watcherInterval)
+    }
   }
 
   /**
@@ -52,7 +50,9 @@ class Metamask extends InjectedWeb3 {
       this.walletEnabled = false
     }
 
-    this.connectionTried = true
+    if (this.watcher) {
+      setInterval(this.watcher, Metamask.watcherInterval)
+    }
 
     if (this.walletEnabled) {
       const checks = async () => {

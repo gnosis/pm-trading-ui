@@ -14,13 +14,11 @@ class Remote extends InjectedWeb3 {
   constructor() {
     super()
 
-    this.watcher = setInterval(() => {
-      if (!this.connectionTried) return
-
+    this.watcher = () => {
       this.watch('account', this.getAccount)
       this.watch('balance', this.getBalance)
       this.watch('network', this.getNetwork)
-    }, Remote.watcherInterval)
+    }
   }
 
   /**
@@ -46,7 +44,9 @@ class Remote extends InjectedWeb3 {
       this.walletEnabled = false
     }
 
-    this.connectionTried = true
+    if (this.watcher) {
+      setInterval(this.watcher, Remote.watcherInterval)
+    }
 
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,
