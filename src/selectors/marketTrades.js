@@ -3,7 +3,7 @@ import { filter, mapValues } from 'lodash'
 import { hexWithPrefix } from 'utils/helpers'
 import moment from 'moment'
 
-import { getMarkets, getMarketById } from 'selectors/market'
+import { getMarkets, getMarketById } from './market'
 
 export const getTrades = (state) => {
   if (!state.entities) {

@@ -24,8 +24,7 @@
     "import/extensions": 0,
     "import/prefer-default-export": 0,
     "jsx-a11y/label-has-for": 0,
-    "indent": ["error", 2],
-    "no-console": ["error", { "allow": ["warn", "error"] }]
+    "indent": ["error", 2]
   },
   "env": {
     "jest/globals": true,

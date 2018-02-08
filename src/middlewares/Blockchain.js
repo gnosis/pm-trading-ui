@@ -1,6 +1,6 @@
 import { openModal } from 'actions/modal'
 
-import { shouldOpenNetworkModal, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
+import { shouldOpenNetworkModal, isConnectedToCorrectNetwork } from 'integrations/selectors'
 
 let lastConnectedToCorrectNetwork
 

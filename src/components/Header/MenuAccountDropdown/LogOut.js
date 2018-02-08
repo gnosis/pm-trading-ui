@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import {
   logoutProvider,
-} from 'integrations/store/actions'
+} from 'actions/providers'
 
 const LogOut = ({ logout }) => (
   <li key="action-logout" className="menuAccountAction__action">

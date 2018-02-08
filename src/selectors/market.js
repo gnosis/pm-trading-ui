@@ -2,11 +2,11 @@ import { values } from 'lodash'
 import Decimal from 'decimal.js'
 import { isMarketResolved, isMarketClosed } from 'utils/helpers'
 
-import { entitySelector } from 'selectors/entities'
-import { getEventByAddress } from 'selectors/event'
-import { getOracleByAddress } from 'selectors/oracle'
-import { getEventDescriptionByAddress } from 'selectors/eventDescription'
-import { getAccountShares } from 'selectors/marketShares'
+import { entitySelector } from './entities'
+import { getEventByAddress } from './event'
+import { getOracleByAddress } from './oracle'
+import { getEventDescriptionByAddress } from './eventDescription'
+import { getAccountShares } from './marketShares'
 
 export const getMarketById = state => (marketAddress) => {
   const marketEntities = entitySelector(state, 'markets')

@@ -1,7 +1,7 @@
 import 'babel-polyfill'
 import 'whatwg-fetch'
 import Raven from 'raven-js'
-import { initProviders } from 'integrations/store/actions'
+import { initProviders } from 'actions/providers'
 import Decimal from 'decimal.js'
 import React from 'react'
 import { ConnectedRouter } from 'react-router-redux'

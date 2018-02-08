@@ -1,4 +1,4 @@
-import { findDefaultProvider } from 'selectors/blockchain'
+import { findDefaultProvider } from './blockchain'
 
 describe('Blockchain selectors', () => {
   describe('findDefaultProvider', () => {

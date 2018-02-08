@@ -1,4 +1,4 @@
-import { getEventDescriptionByAddress } from 'selectors/eventDescription'
+import { getEventDescriptionByAddress } from './eventDescription'
 
 describe('eventDescriptionSelector', () => {
   describe('getEventDescriptionByAddress', () => {

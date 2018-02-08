@@ -1,4 +1,4 @@
-import { getMarkets, getMarketById } from 'selectors/market'
+import { getMarkets, getMarketById, getMarketSharesByMarket } from './market'
 
 describe('marketSelector', () => {
   describe('getMarketById', () => {

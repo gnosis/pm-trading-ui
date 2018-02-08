@@ -1,4 +1,4 @@
-import { getOracleByAddress } from 'selectors/oracle'
+import { getOracleByAddress } from './oracle'
 
 describe('oracleSelector', () => {
   describe('getOracleByAddress', () => {

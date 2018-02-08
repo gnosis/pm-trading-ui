@@ -10,7 +10,7 @@ import LoadingIndicator from 'components/LoadingIndicator'
 
 import { isGnosisInitialized } from 'selectors/blockchain'
 
-import { isConnectedToCorrectNetwork, isOnWhitelist, checkWalletConnection } from 'integrations/store/selectors'
+import { isConnectedToCorrectNetwork, isOnWhitelist, checkWalletConnection } from 'integrations/selectors'
 
 import './interactionButton.scss'
 

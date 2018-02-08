@@ -13,7 +13,7 @@ import { providerPropType } from 'utils/shapes'
 
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
-import { getSelectedProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
+import { getSelectedProvider, isConnectedToCorrectNetwork } from 'integrations/selectors'
 
 import './app.scss'
 
