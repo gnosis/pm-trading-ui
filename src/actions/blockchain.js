@@ -17,9 +17,9 @@ import {
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider } from 'integrations/selectors'
+import { findDefaultProvider } from 'integrations/store/selectors'
 
-import { setActiveProvider } from './providers'
+import { setActiveProvider } from 'integrations/store/actions'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
