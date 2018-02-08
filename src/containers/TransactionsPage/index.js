@@ -3,7 +3,7 @@ import { push } from 'react-router-redux'
 
 import { getRunningTransactions, getCompletedTransactions } from 'selectors/transactions'
 
-import { getCurrentAccount } from 'integrations/selectors'
+import { getCurrentAccount } from 'selectors/blockchain'
 
 import Transactions from 'components/Transactions'
 

@@ -11,7 +11,7 @@ import {
   getSelectedProvider,
   checkWalletConnection,
   isConnectedToCorrectNetwork,
-} from 'integrations/selectors'
+} from 'selectors/blockchain'
 
 const mapStateToProps = state => ({
   hasWallet: checkWalletConnection(state),

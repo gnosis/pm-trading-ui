@@ -18,8 +18,17 @@ import { getMarketById } from 'selectors/market'
 import { getMarketTradesForAccount } from 'selectors/marketTrades'
 import { getMarketShares } from 'selectors/marketShares'
 import { getMarketGraph } from 'selectors/marketGraph'
-import { getGasCosts, getGasPrice, isGasCostFetched, isGasPriceFetched } from 'selectors/blockchain'
-import { checkWalletConnection, getCurrentAccount, getCurrentBalance, isOnWhitelist } from 'integrations/selectors'
+
+import {
+  checkWalletConnection,
+  getCurrentAccount,
+  getCurrentBalance,
+  getGasCosts,
+  getGasPrice,
+  isGasCostFetched,
+  isGasPriceFetched,
+  isOnWhitelist,
+} from 'selectors/blockchain'
 import { isModerator, getModerators } from 'utils/helpers'
 
 let marketId

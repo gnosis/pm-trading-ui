@@ -5,7 +5,7 @@ import moment from 'moment'
 import { add0xPrefix, calcShareWinnings } from 'utils/helpers'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 
-import { getCurrentAccount } from 'integrations/selectors'
+import { getCurrentAccount } from './blockchain'
 import { getEvents } from './event'
 import { getOracles } from './oracle'
 import { getEventDescriptions } from './eventDescription'

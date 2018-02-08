@@ -1,7 +1,6 @@
 import { createAction } from 'redux-actions'
 
-import { isGnosisInitialized } from 'selectors/blockchain'
-import { getSelectedProvider, initializedAllProviders } from 'integrations/selectors'
+import { isGnosisInitialized, getSelectedProvider, initializedAllProviders } from 'selectors/blockchain'
 
 import { initGnosis } from './blockchain'
 
