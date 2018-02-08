@@ -1,5 +1,4 @@
 import {
-  getGnosisConnection,
   initGnosisConnection,
   getCurrentBalance,
   getCurrentAccount,
@@ -15,10 +14,10 @@ import {
   getEtherTokens,
 } from 'api'
 
-import { timeoutCondition, getGnosisJsOptions, weiToEth } from 'utils/helpers'
+import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { GAS_COST } from 'utils/constants'
 import { createAction } from 'redux-actions'
-import { findDefaultProvider, getSelectedProvider } from 'selectors/blockchain'
+import { findDefaultProvider } from 'integrations/selectors'
 
 import { setActiveProvider } from './providers'
 

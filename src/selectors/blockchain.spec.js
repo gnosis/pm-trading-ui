@@ -2,7 +2,7 @@ import { findDefaultProvider } from './blockchain'
 
 describe('Blockchain selectors', () => {
   describe('findDefaultProvider', () => {
-    test('Works with no providers registered', () => {
+    test('Returns undefined with no providers registered', () => {
       const state = {
         blockchain: {
           providers: {},
