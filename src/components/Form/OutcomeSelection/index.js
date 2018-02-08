@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { fieldPropTypes } from 'redux-form'
+import Decimal from 'decimal.js'
 
 import classNames from 'classnames/bind'
 
@@ -31,14 +32,17 @@ class OutcomeSelection extends PureComponent {
 OutcomeSelection.propTypes = {
   input: PropTypes.shape(fieldPropTypes.input).isRequired,
   outcomes: PropTypes.arrayOf(PropTypes.shape({
-
+    probability: PropTypes.instanceOf(Decimal).isRequired,
+    index: PropTypes.number.isRequired,
+    color: PropTypes.string,
+    label: PropTypes.string,
   })),
   label: PropTypes.string,
 }
 
 OutcomeSelection.defaultProps = {
   outcomes: [],
-
+  label: '',
 }
 
 export default OutcomeSelection

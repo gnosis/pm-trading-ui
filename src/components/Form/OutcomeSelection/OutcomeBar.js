@@ -52,9 +52,11 @@ Outcome.propTypes = {
   index: PropTypes.number.isRequired,
   selected: PropTypes.bool,
   color: PropTypes.string,
+  label: PropTypes.string,
 }
 
 Outcome.defaultProps = {
+  label: 'Outcome',
   selected: false,
   color: '#fff',
 }
