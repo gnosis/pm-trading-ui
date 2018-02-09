@@ -14,8 +14,10 @@ const buildOutcomesFrom = (outcomes, marginalPrices) => {
     return List([])
   }
 
-  const outcomesRecords = outcomes.map((outcome, index) =>
-    new OutcomeRecord({ outcome, marginalPrice: marginalPrices[index] }))
+  const outcomesRecords = outcomes.map((outcome, index) => new OutcomeRecord({
+    name: outcome,
+    marginalPrice: marginalPrices[index],
+  }))
 
   return List(outcomesRecords)
 }
