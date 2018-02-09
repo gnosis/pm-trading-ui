@@ -106,6 +106,7 @@ class BaseIntegration {
     }
 
     this[property] = value
+
     this.runProviderUpdate(this, providerUpdate)
   }
 

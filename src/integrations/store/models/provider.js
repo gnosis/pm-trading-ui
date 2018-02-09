@@ -5,8 +5,9 @@ const ProviderRecord = Record({
   available: false,
   loaded: false,
   network: undefined,
-  account: null,
-  priority: undefined,
+  balance: undefined,
+  account: undefined,
+  priority: 1,
   networkId: 0,
 }, 'Provider')
 

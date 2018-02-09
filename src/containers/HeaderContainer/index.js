@@ -8,7 +8,7 @@ import {
   getCurrentBalance,
   getCurrentNetwork,
   getCurrentAccount,
-  getSelectedProvider,
+  getActiveProvider,
   checkWalletConnection,
   isConnectedToCorrectNetwork,
 } from 'integrations/store/selectors'
@@ -18,7 +18,7 @@ const mapStateToProps = state => ({
   currentAccount: getCurrentAccount(state),
   currentBalance: getCurrentBalance(state),
   currentNetwork: getCurrentNetwork(state),
-  currentProvider: getSelectedProvider(state),
+  currentProvider: getActiveProvider(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 

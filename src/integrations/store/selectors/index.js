@@ -1,30 +1,30 @@
-import { get, find, orderBy } from 'lodash'
 import { WALLET_PROVIDER } from 'integrations/constants'
-import Decimal from 'decimal.js'
 
 /**
  * Finds a default provider from all currently available providers. Determined by provider integrations `priority`
  * @param {*} state - redux state
  */
 export const findDefaultProvider = (state) => {
-  const providers = orderBy(state.blockchain.providers, ['priority'], ['desc'])
-
-  return find(providers, {
-    loaded: true,
-    available: true,
-  })
+  const providers = state.providers.get('providers')
+  const providersSorted = providers.sort((a, b) => b - a)
+  return providersSorted.find(({ available, loaded }) => available && loaded)
 }
 
-export const getSelectedProvider = state => get(state, `blockchain.providers['${state.blockchain.activeProvider}']`)
+export const getActiveProviderName = state => state.providers.get('activeProvider')
 
-export const getSelectedProviderName = state => get(state, 'blockchain.activeProvider')
+export const getActiveProvider = (state) => {
+  const activeProviderName = getActiveProviderName(state)
+  const activeProvider = state.providers.getIn(['providers', activeProviderName])
+
+  return activeProvider
+}
 
 /**
  * Returns the currently selected account for the current provider
  * @param {*} state - redux state
  */
 export const getCurrentAccount = (state) => {
-  const provider = getSelectedProvider(state)
+  const provider = getActiveProvider(state)
 
   if (provider) {
     return provider.account
@@ -32,7 +32,7 @@ export const getCurrentAccount = (state) => {
 }
 
 export const checkWalletConnection = (state) => {
-  const provider = getSelectedProvider(state)
+  const provider = getActiveProvider(state)
 
   if (provider && provider.account) {
     return true
@@ -46,7 +46,7 @@ export const checkWalletConnection = (state) => {
  * @param {*} state - redux state
  */
 export const getCurrentBalance = (state) => {
-  const provider = getSelectedProvider(state)
+  const provider = getActiveProvider(state)
 
   if (provider) {
     return provider.balance
@@ -59,7 +59,7 @@ export const getCurrentBalance = (state) => {
  * @param {*} state - redux state
  */
 export const getCurrentNetwork = (state) => {
-  const provider = getSelectedProvider(state)
+  const provider = getActiveProvider(state)
 
   if (provider) {
     return provider.network
@@ -72,7 +72,7 @@ export const getCurrentNetwork = (state) => {
  * @param {*} state - redux state
  */
 export const getCurrentNetworkId = (state) => {
-  const provider = getSelectedProvider(state)
+  const provider = getActiveProvider(state)
 
   if (provider) {
     return provider.networkId
@@ -81,24 +81,23 @@ export const getCurrentNetworkId = (state) => {
 }
 
 export const initializedAllProviders = (state) => {
-  const providerNames = Object.keys(state.blockchain.providers)
+  const providers = state.providers.get('providers')
 
-  if (!providerNames.length) {
-    return false
-  }
-
-  const allProvidersLoaded = providerNames.every(providerName => state.blockchain.providers[providerName].loaded)
+  const allProvidersLoaded = providers.every(({ loaded }) => loaded)
 
   return allProvidersLoaded
 }
 
-export const getEtherTokensAmount = (state, account) =>
-  new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))
+export const getTargetNetworkId = (state) => {
+  const remoteProvider = state.providers.getIn(['providers', WALLET_PROVIDER.REMOTE])
 
-export const getTargetNetworkId = state => get(state, `blockchain.providers['${WALLET_PROVIDER.REMOTE}'].networkId`)
+  return remoteProvider.networkId
+}
 
-export const isRemoteConnectionEstablished = state =>
-  get(state, `blockchain.providers['${WALLET_PROVIDER.REMOTE}'].available`, false)
+export const isRemoteConnectionEstablished = (state) => {
+  const remoteProvider = state.providers.getIn(['providers', WALLET_PROVIDER.REMOTE])
+  return remoteProvider.available
+}
 
 export const isConnectedToCorrectNetwork = (state) => {
   const targetNetworkId = getTargetNetworkId(state)

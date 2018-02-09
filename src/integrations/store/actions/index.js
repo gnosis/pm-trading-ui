@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions'
 
 import { isGnosisInitialized } from 'selectors/blockchain'
-import { getSelectedProvider, initializedAllProviders } from 'integrations/store/selectors'
+import { getActiveProvider, initializedAllProviders } from 'integrations/store/selectors'
 
 import { initGnosis } from 'actions/blockchain'
 
@@ -15,7 +15,7 @@ const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
 export const logoutProvider = () => async (dispatch, getState) => {
   const state = getState()
-  const { name: providerName } = getSelectedProvider(state)
+  const { name: providerName } = getActiveProvider(state)
 
   localStorage.removeItem(`GNOSIS_${process.env.VERSION}`)
 

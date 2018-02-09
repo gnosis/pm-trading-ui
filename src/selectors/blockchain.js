@@ -21,6 +21,9 @@ export const getGasCosts = (state) => {
 
 export const isGasCostFetched = (state, property) => get(state, `blockchain.gasCosts['${property}']`) !== undefined
 
+export const getEtherTokensAmount = (state, account) =>
+  new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))
+
 export const getGasPrice = state => (
   state.blockchain.gasPrice ? new Decimal(parseInt(state.blockchain.gasPrice, 10)) : new Decimal(0)
 )
