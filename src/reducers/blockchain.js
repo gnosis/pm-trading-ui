@@ -1,54 +1,30 @@
 import { handleActions } from 'redux-actions'
-
+import { Map } from 'immutable'
 import { setConnectionStatus, setGnosisInitialized, setGasCost, setGasPrice, setEtherTokens } from 'actions/blockchain'
 
 import { GAS_COST } from 'utils/constants'
+import Decimal from 'decimal.js'
 
 const reducer = handleActions(
   {
-    [setConnectionStatus]: (state, action) => {
-      const { connection } = action.payload
-      return {
-        ...state,
-        connection,
-        connectionTried: true,
-      }
-    },
-    [setGnosisInitialized]: (state, action) => {
-      const { initialized } = action.payload
-      return {
-        ...state,
-        gnosisInitialized: initialized,
-      }
-    },
-    [setGasCost]: (state, action) => ({
-      ...state,
-      [action.payload.entityType]: {
-        ...state[action.payload.entityType],
-        [action.payload.contractType]: action.payload.gasCost,
-      },
-    }),
-    [setGasPrice]: (state, action) => ({
-      ...state,
-      [action.payload.entityType]: action.payload.gasPrice,
-    }),
-    [setEtherTokens]: (state, action) => ({
-      ...state,
-      [action.payload.entityType]: {
-        ...state[action.payload.entityType],
-        [action.payload.account]: action.payload.etherTokens,
-      },
-    }),
+    [setConnectionStatus]: (state, { payload: { connection } }) =>
+      state.withMutations((stateMap) => {
+        stateMap.set('connection', connection)
+        stateMap.set('connectionTried', true)
+      }),
+    [setGnosisInitialized]: (state, { payload: { initialized } }) => state.set('gnosisInitialized', initialized),
+    [setGasCost]: (state, { payload: { entityType, gasCost } }) => state.setIn(['gasCosts', entityType], gasCost),
+    [setGasPrice]: (state, { payload: { entityType, gasPrice } }) => state.set(entityType, gasPrice),
+    [setEtherTokens]: (state, { payload: { entityType, account, etherTokens } }) =>
+      state.setIn([entityType, account], etherTokens),
   },
-  {
-    gasCosts: Object.keys(GAS_COST).reduce((acc, item) => ({ ...acc, [GAS_COST[item]]: undefined }), {}),
-    gasPrice: undefined,
+  Map({
+    gasCosts: Object.keys(GAS_COST).reduce((acc, item) => acc.set(GAS_COST[item], undefined), Map()),
+    gasPrice: Decimal(0),
     connection: undefined,
     connectionTried: false,
-    providers: {},
-    activeProvider: undefined,
-    etherTokens: undefined,
-  },
+    etherTokens: Map(),
+  }),
 )
 
 export default reducer
