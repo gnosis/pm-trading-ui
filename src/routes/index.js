@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import web3 from 'web3'
 
 import MarketListPage from 'containers/MarketListPage'
 import MarketDetailPage from 'containers/MarketDetailPage'
@@ -12,7 +13,16 @@ const AppRouter = () => (
     <Route exact path="/dashboard" component={DashboardPage} />
     <Route exact path="/transactions" component={TransactionsPage} />
     <Route exact path="/markets/list" component={MarketListPage} />
-    <Route exact path="/markets/:id/:view?/:shareId?" component={MarketDetailPage} />
+    <Route
+      exact
+      path="/markets/:id/:view?/:shareId?"
+      render={(props) => {
+        if (web3.utils.isAddress(props.match.params.id)) {
+          return <MarketDetailPage {...props} />
+        }
+        return <Redirect to="/markets/list" />
+      }}
+    />
   </Switch>
 )
 

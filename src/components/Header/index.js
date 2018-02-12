@@ -27,7 +27,7 @@ class Header extends Component {
       <div className="headerContainer">
         <div className="container">
           <div className="headerContainer__group headerContainer__group--logo">
-            <NavLink to="/">
+            <NavLink to="/markets/list">
               <div className="headerLogo beta" />
             </NavLink>
           </div>
