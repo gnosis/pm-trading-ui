@@ -135,17 +135,29 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   const marketAllowance = await gnosis.etherToken.allowance(currentAccount, market.address)
   const approvalResetAmount = transactionCost.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
-  const transactions = [
-    DEPOSIT(
-      cost,
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
+  const userCollateralTokenBalance = (await collateralToken.balanceOf(currentAccount)).toString()
+  const neededDepositAmount = Decimal(cost)
+    .mul(1e18)
+    .sub(userCollateralTokenBalance)
+
+  const transactions = []
+
+  if (neededDepositAmount.gt(0)) {
+    const neededDepositFormatted = neededDepositAmount
+      .div(1e18)
+      .toDP(4, 1)
+      .toString()
+
+    transactions.push(DEPOSIT(
+      neededDepositFormatted,
       'ETH',
       outcomeTokenCount
         .div(1e18)
         .toDP(2)
         .toNumber(),
-    ),
-  ]
-
+    ))
+  }
   if (approvalResetAmount) transactions.unshift(SETTING_ALLOWANCE)
 
   const payload = await api.requestMarket(market.address)
@@ -162,7 +174,7 @@ export const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) =
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
   try {
-    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount)
+    await api.buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount, neededDepositAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)
     gaSend(['event', 'Transactions', 'trading-interface', 'Buy shares transactions succeeded'])
     await dispatch(closeModal())
@@ -203,9 +215,7 @@ export const sellMarketShares = (market, share, outcomeTokenCount, earnings) => 
   const { outcomeToken: { index: outcomeIndex } } = share
 
   // Reset the allowance if the cost of current transaction is greater than the current allowance
-  const marketAllowance = await gnosis.contracts.Token
-    .at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex))
-    .allowance(currentAccount, market.address)
+  const marketAllowance = await gnosis.contracts.Token.at(await gnosis.contracts.Event.at(market.event.address).outcomeTokens(outcomeIndex)).allowance(currentAccount, market.address)
   const outcomeCountWei = Decimal(outcomeTokenCount).mul(1e18)
   const approvalResetAmount = outcomeCountWei.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
@@ -315,4 +325,3 @@ export const withdrawFees = market => async (dispatch) => {
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
-

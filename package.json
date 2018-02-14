@@ -45,7 +45,7 @@
     "cross-env": "^5.0.5",
     "d3": "^4.9.1",
     "d3-scale-chromatic": "^1.1.1",
-    "decimal.js": "^9.0.1",
+    "decimal.js": "^7.3.0",
     "history": "^4.7.2",
     "lodash": "^4.17.5",
     "moment": "^2.19.2",
