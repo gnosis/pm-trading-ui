@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form'
-import providers from 'integrations/store/reducers'
+import integrations from 'integrations/store/reducers'
 import entities from './entities'
 import modal from './modal'
 import transactions from './transactions'
@@ -16,7 +16,7 @@ const reducers = combineReducers({
   transactions,
   blockchain,
   notifications,
-  providers,
+  integrations,
 })
 
 const rootReducer = (state, action) => {

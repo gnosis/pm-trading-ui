@@ -5,16 +5,20 @@ import { WALLET_PROVIDER } from 'integrations/constants'
  * @param {*} state - redux state
  */
 export const findDefaultProvider = (state) => {
-  const providers = state.providers.get('providers')
-  const providersSorted = providers.sort((a, b) => b - a)
+  const providers = state.integrations.get('providers')
+  const providersSorted = providers.sort((a, b) => b.priority - a.priority)
   return providersSorted.find(({ available, loaded }) => available && loaded)
 }
 
-export const getActiveProviderName = state => state.providers.get('activeProvider')
+export const getActiveProviderName = state => state.integrations.get('activeProvider')
 
 export const getActiveProvider = (state) => {
   const activeProviderName = getActiveProviderName(state)
-  const activeProvider = state.providers.getIn(['providers', activeProviderName])
+
+  let activeProvider
+  if (activeProviderName) {
+    activeProvider = state.integrations.getIn(['providers', activeProviderName])
+  }
 
   return activeProvider
 }
@@ -29,6 +33,8 @@ export const getCurrentAccount = (state) => {
   if (provider) {
     return provider.account
   }
+
+  return undefined
 }
 
 export const checkWalletConnection = (state) => {
@@ -81,22 +87,28 @@ export const getCurrentNetworkId = (state) => {
 }
 
 export const initializedAllProviders = (state) => {
-  const providers = state.providers.get('providers')
+  const providers = state.integrations.get('providers')
 
   const allProvidersLoaded = providers.every(({ loaded }) => loaded)
+  const providersAreRegistered = !!providers.size
 
-  return allProvidersLoaded
+  return providersAreRegistered && allProvidersLoaded
 }
 
 export const getTargetNetworkId = (state) => {
-  const remoteProvider = state.providers.getIn(['providers', WALLET_PROVIDER.REMOTE])
+  const remoteProvider = state.integrations.getIn(['providers', WALLET_PROVIDER.REMOTE])
 
-  return remoteProvider.networkId
+  if (remoteProvider) {
+    return remoteProvider.networkId
+  }
+  return undefined
 }
 
 export const isRemoteConnectionEstablished = (state) => {
-  const remoteProvider = state.providers.getIn(['providers', WALLET_PROVIDER.REMOTE])
-  return remoteProvider.available
+  const remoteProvider = state.integrations.getIn(['providers', WALLET_PROVIDER.REMOTE])
+  const remoteProviderRegistered = !!remoteProvider
+
+  return remoteProviderRegistered && remoteProvider.available
 }
 
 export const isConnectedToCorrectNetwork = (state) => {
