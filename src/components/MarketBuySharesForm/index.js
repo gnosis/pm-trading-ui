@@ -321,9 +321,11 @@ class MarketBuySharesForm extends Component {
         </span>
       )
 
+      const returnSign = maximumWin > 0 ? '' : '+'
       maxReturnField = (
         <span className="marketBuyWin__row marketBuyWin__max">
-          +<DecimalValue value={percentageWin} /> %&nbsp; (<DecimalValue value={maximumWin} />&nbsp;
+          {returnSign}
+          <DecimalValue value={percentageWin} /> %&nbsp; (<DecimalValue value={maximumWin} />&nbsp;
           <CurrencyName collateralToken={collateralToken} />)
         </span>
       )
