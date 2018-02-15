@@ -22,14 +22,9 @@ class Remote extends InjectedWeb3 {
   }
 
   /**
-   * Tries to initialize and enable the current provider
-   * @param {object} opts - Integration Options
-   * @param {function} opts.runProviderUpdate - Function to run when this provider updates
-   * @param {function} opts.runProviderRegister - Function to run when this provider registers
+   * Tries to set connection to the blockchain
    */
-  async initialize(opts) {
-    super.initialize(opts)
-    this.runProviderRegister(this, { priority: Remote.providerPriority })
+  async initWeb3() {
     try {
       this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
 
@@ -38,10 +33,27 @@ class Remote extends InjectedWeb3 {
       this.account = await this.getAccount()
       this.balance = await this.getBalance()
 
-      this.walletEnabled = true
+      return true
     } catch (err) {
       // remote not available
-      this.walletEnabled = false
+      return false
+    }
+  }
+
+  /**
+   * Tries to initialize and enable the current provider
+   * @param {object} opts - Integration Options
+   * @param {function} opts.runProviderUpdate - Function to run when this provider updates
+   * @param {function} opts.runProviderRegister - Function to run when this provider registers
+   */
+  async initialize(opts) {
+    super.initialize(opts)
+    this.runProviderRegister(this, { priority: Remote.providerPriority })
+
+    this.walletEnabled = this.initWeb3()
+
+    if (this.watcher) {
+      setInterval(this.watcher, Remote.watcherInterval)
     }
 
     if (this.watcher) {

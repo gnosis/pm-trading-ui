@@ -24,6 +24,25 @@ class Metamask extends InjectedWeb3 {
   }
 
   /**
+   * Tries to set connection to the blockchain
+   */
+  initWeb3() {
+    try {
+      if (
+        typeof window.web3 !== 'undefined' &&
+        window.web3.currentProvider.constructor.name === 'MetamaskInpageProvider'
+      ) {
+        this.web3 = new Web3(window.web3.currentProvider)
+        window.web3 = this.web3
+        return true
+      }
+      return false
+    } catch (err) {
+      return false
+    }
+  }
+
+  /**
    * Tries to initialize and enable the current provider
    * @param {object} opts - Integration Options
    * @param {function} opts.runProviderUpdate - Function to run when this provider updates
@@ -33,21 +52,10 @@ class Metamask extends InjectedWeb3 {
     super.initialize(opts)
     this.runProviderRegister(this, { priority: Metamask.providerPriority })
 
-    this.walletEnabled = false
+    this.walletEnabled = this.initWeb3()
 
-    try {
-      if (
-        typeof window.web3 !== 'undefined' &&
-        window.web3.currentProvider.constructor.name === 'MetamaskInpageProvider'
-      ) {
-        this.web3 = new Web3(window.web3.currentProvider)
-        window.web3 = this.web3
-        this.walletEnabled = true
-      } else {
-        this.walletEnabled = false
-      }
-    } catch (err) {
-      this.walletEnabled = false
+    if (this.watcher) {
+      setInterval(this.watcher, Metamask.watcherInterval)
     }
 
     if (this.watcher) {
