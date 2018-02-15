@@ -64,9 +64,9 @@ const eventMarketSelector = marketAddress => (state) => {
 
 const eventSharesSelector = createSelector(getCurrentAccount, getShares, (account, shares) => {
   const eventShares = {}
-
+  console.log(shares)
   Object.keys(shares).forEach((shareId) => {
-    if (add0xPrefix(shares[shareId].owner) !== add0xPrefix(account)) {
+    if (add0xPrefix(shares[shareId].owner) !== add0xPrefix(account.toLowerCase())) {
       return
     }
 
