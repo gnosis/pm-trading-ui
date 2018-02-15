@@ -84,7 +84,7 @@ const eventSharesSelector = createSelector(getCurrentAccount, getShares, (accoun
   return eventShares
 })
 
-const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventShares, account) => {
+const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventShares) => {
   const enhancedShares = {}
 
   Object.keys(eventShares).forEach((eventAddress) => {
