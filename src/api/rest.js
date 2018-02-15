@@ -1,12 +1,8 @@
 import {
   restFetch,
   hexWithoutPrefix,
-  addIdToObjectsInArray,
-  getOutcomeName,
-  normalizeScalarPoint,
 } from 'utils/helpers'
 import { normalize } from 'normalizr'
-import { OUTCOME_TYPES } from 'utils/constants'
 import qs from 'querystring'
 import { marketSchema, marketSharesSchema, marketTradesSchema } from './schema'
 
