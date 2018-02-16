@@ -56,7 +56,6 @@ class Remote extends InjectedWeb3 {
       setInterval(this.watcher, Remote.watcherInterval)
     }
 
-
     return this.runProviderUpdate(this, {
       available: this.walletEnabled && this.account != null,
       networkId: this.networkId,

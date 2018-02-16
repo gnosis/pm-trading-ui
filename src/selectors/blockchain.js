@@ -1,94 +1,17 @@
-import { get, find, orderBy, mapValues } from 'lodash'
-import { WALLET_PROVIDER } from 'integrations/constants'
 import Decimal from 'decimal.js'
-
-/**
- * Finds a default provider from all currently available providers. Determined by provider integrations `priority`
- * @param {*} state - redux state
- */
-export const findDefaultProvider = (state) => {
-  const providers = orderBy(state.blockchain.providers, ['priority'], ['desc'])
-
-  return find(providers, {
-    loaded: true, available: true,
-  })
-}
-
-export const getSelectedProvider = state => get(state, `blockchain.providers['${state.blockchain.activeProvider}']`)
-
-export const getSelectedProviderName = state => get(state, 'blockchain.activeProvider')
-
-/**
- * Returns the currently selected account for the current provider
- * @param {*} state - redux state
- */
-export const getCurrentAccount = (state) => {
-  const provider = getSelectedProvider(state)
-
-  if (provider) {
-    return provider.account.toLowerCase()
-  }
-}
-
-export const checkWalletConnection = (state) => {
-  const provider = getSelectedProvider(state)
-
-  if (provider && provider.account) {
-    return true
-  }
-
-  return false
-}
-
-/**
- * Returns the balance of the currently selected provider, network and account
- * @param {*} state - redux state
- */
-export const getCurrentBalance = (state) => {
-  const provider = getSelectedProvider(state)
-
-  if (provider) {
-    return provider.balance
-  }
-  return undefined
-}
-
-/**
- * Returns the current network id the selected provider is connected to
- * @param {*} state - redux state
- */
-export const getCurrentNetwork = (state) => {
-  const provider = getSelectedProvider(state)
-
-  if (provider) {
-    return provider.network
-  }
-  return undefined
-}
-
-/**
- * Returns the current network the selected provider is connected to
- * @param {*} state - redux state
- */
-export const getCurrentNetworkId = (state) => {
-  const provider = getSelectedProvider(state)
-
-  if (provider) {
-    return provider.networkId
-  }
-  return undefined
-}
 
 /**
  * Returns if gnosis.js is initialized or not
  * @param {*} state - redux state
  */
-export const isGnosisInitialized = state => state.blockchain.gnosisInitialized
+export const isGnosisInitialized = state => !!state.blockchain.get('gnosisInitialized')
+
+export const triedToConnect = state => !!state.blockchain.get('connectionTried')
 
 export const getGasCosts = (state) => {
-  const gasCosts = get(state, 'blockchain.gasCosts', {})
+  const gasCosts = state.blockchain.get('gasCosts')
 
-  return mapValues(gasCosts, (cost) => {
+  return gasCosts.map((cost) => {
     if (!cost) {
       return 0
     }
@@ -97,50 +20,30 @@ export const getGasCosts = (state) => {
   })
 }
 
-export const isGasCostFetched = (state, property) => get(state, `blockchain.gasCosts['${property}']`) !== undefined
+export const isGasCostFetched = (state, property) => state.blockchain.getIn(['gasCosts', property]) !== undefined
 
-export const getGasPrice = state => (
-  state.blockchain.gasPrice ? new Decimal(parseInt(state.blockchain.gasPrice, 10)) : new Decimal(0)
-)
-
-export const isGasPriceFetched = state => state.blockchain.gasPrice !== undefined
-
-export const getEtherTokensAmount = (state, account) => new Decimal(get(state, `blockchain.etherTokens['${account}']`, 0))
-
-export const getTargetNetworkId = state => get(state, `blockchain.providers['${WALLET_PROVIDER.REMOTE}'].networkId`)
-
-export const isRemoteConnectionEstablished = state => get(state, `blockchain.providers['${WALLET_PROVIDER.REMOTE}'].available`, false)
-
-export const isConnectedToCorrectNetwork = (state) => {
-  const targetNetworkId = getTargetNetworkId(state)
-  const currentNetworkId = getCurrentNetworkId(state)
-
-  return targetNetworkId === currentNetworkId
-}
-
-export const shouldOpenNetworkModal = state =>
-  isRemoteConnectionEstablished(state) &&
-  checkWalletConnection(state) &&
-  !isConnectedToCorrectNetwork(state)
-
-export const isOnWhitelist = (state) => {
-  const account = getCurrentAccount(state)
-
-  if (account) {
-    return process.env.WHITELIST[account] !== undefined
+export const getEtherTokensAmount = (state, account) => {
+  const etherTokensAmount = state.blockchain.getIn(['etherTokens', account], 0)
+  let etherTokensDecimal
+  try {
+    etherTokensDecimal = Decimal(etherTokensAmount)
+  } catch (e) {
+    etherTokensDecimal = Decimal(0)
   }
 
-  return false
+  return etherTokensDecimal
 }
 
-export const initializedAllProviders = (state) => {
-  const providerNames = Object.keys(state.blockchain.providers)
-
-  if (!providerNames.length) {
-    return false
+export const getGasPrice = (state) => {
+  const gasPrice = state.blockchain.get('gasPrice', 0)
+  let gasPriceDecimal
+  try {
+    gasPriceDecimal = Decimal(gasPrice.toString())
+  } catch (e) {
+    gasPriceDecimal = Decimal(0)
   }
 
-  const allProvidersLoaded = providerNames.every(providerName => state.blockchain.providers[providerName].loaded)
-
-  return allProvidersLoaded
+  return gasPriceDecimal
 }
+
+export const isGasPriceFetched = state => state.blockchain.get('gasPrice') !== undefined

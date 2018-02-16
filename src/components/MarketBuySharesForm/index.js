@@ -295,7 +295,7 @@ class MarketBuySharesForm extends Component {
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
     const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest || '0')
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
-    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares || 0))
+    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.get('buyShares') || 0))
 
     const submitDisabled = invalid || !selectedBuyInvest
     let fieldError

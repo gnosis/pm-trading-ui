@@ -1,4 +1,4 @@
-import { entitySelector } from './entities'
+import { entitySelector } from 'selectors/entities'
 
 describe('entitySelector', () => {
   test('works without any entities available', () => {

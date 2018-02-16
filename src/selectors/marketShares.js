@@ -6,11 +6,11 @@ import { add0xPrefix } from 'utils/helpers'
 import { calcShareWinnings } from 'containers/DashboardPage/store/selectors/utils'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 
-import { getCurrentAccount } from './blockchain'
-import { getEvents } from './event'
-import { getOracles } from './oracle'
-import { getEventDescriptions } from './eventDescription'
-import { MARKET_STAGES } from '../utils/constants'
+import { getCurrentAccount } from 'integrations/store/selectors'
+import { getEvents } from 'selectors/event'
+import { getOracles } from 'selectors/oracle'
+import { getEventDescriptions } from 'selectors/eventDescription'
+import { MARKET_STAGES } from 'utils/constants'
 
 export const getShares = (state) => {
   if (!state.entities) {
