@@ -5,7 +5,7 @@ import { formValueSelector } from 'redux-form'
 import MarketList from 'components/MarketList'
 
 import { filterMarkets, sortMarkets } from 'selectors/market'
-import { getCurrentAccount } from 'selectors/blockchain'
+import { getCurrentAccount } from 'integrations/store/selectors'
 
 import { requestMarkets } from 'actions/market'
 

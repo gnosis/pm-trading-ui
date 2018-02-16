@@ -13,7 +13,8 @@ import { providerPropType } from 'utils/shapes'
 
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
-import { getSelectedProvider, isConnectedToCorrectNetwork } from 'selectors/blockchain'
+import { triedToConnect } from 'selectors/blockchain'
+import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
 
 import './app.scss'
 
@@ -79,9 +80,16 @@ App.propTypes = {
   provider: providerPropType,
 }
 
+App.defaultProps = {
+  blockchainConnection: false,
+  children: <div />,
+  location: {},
+  provider: {},
+}
+
 const mapStateToProps = state => ({
-  provider: getSelectedProvider(state),
-  blockchainConnection: state.blockchain.connectionTried,
+  provider: getActiveProvider(state),
+  blockchainConnection: triedToConnect(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 

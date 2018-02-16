@@ -58,6 +58,10 @@ class Metamask extends InjectedWeb3 {
       setInterval(this.watcher, Metamask.watcherInterval)
     }
 
+    if (this.watcher) {
+      setInterval(this.watcher, Metamask.watcherInterval)
+    }
+
     if (this.walletEnabled) {
       const checks = async () => {
         this.networkId = await this.getNetworkId()

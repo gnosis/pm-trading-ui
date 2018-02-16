@@ -180,11 +180,12 @@ class MarketDetail extends Component {
       .utc(market.eventDescription.resolutionDate)
       .local()
       .diff(moment(), 'hours')
-    const { marketShares, gasCosts: { redeemWinnings: redeemWinningsGasCost }, gasPrice } = this.props
+    const { marketShares, gasCosts, gasPrice } = this.props
     const winningsTotal = Object.keys(marketShares).reduce(
       (acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')),
       Decimal(0),
     )
+    const redeemWinningsGasCost = gasCosts.get('redeemWinnings')
     const marketClosed = isMarketClosed(market)
     const marketResolved = isMarketResolved(market)
     const showWinning = marketResolved
