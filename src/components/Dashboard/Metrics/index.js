@@ -15,7 +15,6 @@ class Metrics extends React.PureComponent {
 
   render() {
     const { tokens, predictedProfit } = this.props
-    console.log(tokens)
     return <Layout tokens={tokens} predictedProfit={predictedProfit} />
   }
 }

@@ -13,7 +13,5 @@ export const profitsSelector = createSelector(getCurrentAccount, getAccountShare
   }
 
   const shares = values(accountShares)
-  return shares.length
-    ? shares.reduce((assets, share) => assets.add(calculateProfit(share)), minProfit)
-    : minProfit
+  return shares.length ? shares.reduce((assets, share) => assets.add(calculateProfit(share)), minProfit) : minProfit
 })

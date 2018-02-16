@@ -275,8 +275,9 @@ class Dashboard extends Component {
     const { hasWallet, etherTokens, accountPredictiveAssets } = this.props
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
+    const predictedProfitFormatted = Decimal(accountPredictiveAssets).toDP(4, 1).toString()
     if (hasWallet) {
-      metricsSection = <Metrics tokens={etherTokens} predictedProfits={accountPredictiveAssets} />
+      metricsSection = <Metrics tokens={etherTokens} predictedProfit={predictedProfitFormatted} />
 
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">

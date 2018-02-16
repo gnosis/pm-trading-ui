@@ -26,7 +26,7 @@ export const getCurrentAccount = (state) => {
   const provider = getSelectedProvider(state)
 
   if (provider) {
-    return provider.account
+    return provider.account.toLowerCase()
   }
 }
 

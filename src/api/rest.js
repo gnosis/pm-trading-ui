@@ -23,7 +23,7 @@ export const requestMarkets = async () => {
 export const requestFactories = async () => restFetch(`${API_URL}/factories`)
 
 export const requestMarketTradesForAccount = async (marketAddress, accountAddress) => {
-  const payload = await restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress.toLowerCase())}`)
+  const payload = await restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
   return normalize(payload.results, [marketTradesSchema])
 }
 
@@ -33,7 +33,7 @@ export const requestMarketTrades = async (market) => {
 }
 
 export const requestAccountTrades = async (accountAddress) => {
-  const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(accountAddress.toLowerCase())}/trades/`)
+  const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(accountAddress)}/trades/`)
   return normalize(payload.results.map(trade => ({ ...trade, owner: accountAddress })), [marketTradesSchema])
 }
 
@@ -43,6 +43,6 @@ export const requestAccountShares = async (address) => {
 }
 
 export const requestMarketShares = async (marketAddress, accountAddress) => {
-  const payload = await restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/shares/${hexWithoutPrefix(accountAddress).toLowerCase()}/`)
+  const payload = await restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/shares/${hexWithoutPrefix(accountAddress)}/`)
   return normalize(payload.results, [marketSharesSchema])
 }
