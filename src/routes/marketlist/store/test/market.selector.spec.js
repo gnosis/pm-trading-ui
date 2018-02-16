@@ -1,18 +1,20 @@
 import { List } from 'immutable'
 import { REDUCER_ID } from '../reducers/market'
-import { marketSelector } from './index'
+import { marketSelector } from '../selectors'
 
 const marketTests = () => {
-  it('get empty immutable List when they are not loaded', () => {
-    // GIVEN
-    const emptyList = List([])
-    const reduxStore = { [REDUCER_ID]: emptyList }
+  describe('Market List Selector[marketSelector]', () => {
+    it('should get empty immutable List when they are not loaded', () => {
+      // GIVEN
+      const emptyList = List([])
+      const reduxStore = { [REDUCER_ID]: emptyList }
 
-    // WHEN
-    const marketListState = marketSelector(reduxStore)
+      // WHEN
+      const marketListState = marketSelector(reduxStore)
 
-    // THEN
-    expect(marketListState).toEqual(emptyList)
+      // THEN
+      expect(marketListState).toEqual(emptyList)
+    })
   })
 }
 

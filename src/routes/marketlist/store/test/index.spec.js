@@ -1,8 +1,10 @@
-import marketTests from './market.spec'
-import openMarketTests from './openMarkets.spec'
+import marketReducerTests from './market.reducer.spec'
+import marketTests from './market.selector.spec'
+import openMarketTests from './openMarkets.selector.spec'
 
-describe('Market List Selectors', () => {
+describe('Market List Test suite', () => {
   // ACTIONS AND REDUCERS
+  marketReducerTests()
 
   // SELECTORS
   marketTests()
