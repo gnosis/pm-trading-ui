@@ -24,7 +24,7 @@ const Slider = ({
 }) => {
   const valueElement = showInput ? (
     <TextInput
-      className="formSliderValueInput"
+      className={cx('formSliderValueInput')}
       input={input}
       meta={{}} // avoid double error message
       type="number"
@@ -37,12 +37,12 @@ const Slider = ({
   )
 
   const inputId = `formSlider_${input.name}`
+  const sliderClasses = cx('formSlider', {
+    error: (touched && error) !== false,
+  })
 
   return (
-    <div className={cx('formSlider', {
-      error: (touched && error) !== false,
-    })}
-    >
+    <div className={sliderClasses}>
       <label htmlFor={inputId} className={cx('formSliderLabel')}>
         {label}
       </label>
