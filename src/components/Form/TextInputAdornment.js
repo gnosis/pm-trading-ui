@@ -6,15 +6,18 @@ import styles from './TextInputAdornment.scss'
 
 const cx = className.bind(styles)
 
-const TextInputAdornment = ({ children, position }) => (
-  <p className={cx('adornment', {
+const TextInputAdornment = ({ children, position }) => {
+  const textInputAdornmentClasses = cx('adornment', {
     end: position === 'end',
     start: position === 'start',
-  })}
-  >
-    {children}
-  </p>
-)
+  })
+
+  return (
+    <p className={textInputAdornmentClasses}>
+      {children}
+    </p>
+  )
+}
 
 TextInputAdornment.propTypes = {
   children: PropTypes.node,
