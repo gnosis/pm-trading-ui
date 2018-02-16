@@ -1,6 +1,7 @@
 import marketReducerTests from './market.reducer.spec'
 import marketTests from './market.selector.spec'
 import openMarketTests from './openMarkets.selector.spec'
+import endingSoonTests from './endingSoon.selector.spec'
 
 describe('Market List Test suite', () => {
   // ACTIONS AND REDUCERS
@@ -9,4 +10,5 @@ describe('Market List Test suite', () => {
   // SELECTORS
   marketTests()
   openMarketTests()
+  endingSoonTests()
 })

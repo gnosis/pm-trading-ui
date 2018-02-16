@@ -20,7 +20,6 @@ const openMarketTests = () => {
 
       const aOpenMarketViaDate = aMarket()
         .withDate(moment().add(1, 'M'))
-        .withStage(1)
         .get()
 
       const markets = List([aClosedMarket, aOpenMarketViaStage, aOpenMarketViaDate])
