@@ -2,7 +2,7 @@ import { createSelector } from 'reselect'
 import { Decimal } from 'decimal.js'
 import { values } from 'lodash'
 import { getAccountShares } from 'selectors/marketShares'
-import { getCurrentAccount } from 'selectors/blockchain'
+import { getCurrentAccount } from 'integrations/store/selectors/'
 import { calculateProfit } from 'containers/DashboardPage/store/selectors/utils'
 
 export const profitsSelector = createSelector(getCurrentAccount, getAccountShares, (account, accountShares) => {
