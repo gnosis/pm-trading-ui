@@ -16,18 +16,21 @@ const TextArea = ({
   label,
   className,
   meta: { touched, error },
-}) => (
-  <div className={cx('formTextArea', className, {
+}) => {
+  const textAreaClasses = cx('formTextArea', className, {
     error: (touched && error) !== false,
-  })}
-  >
-    <label htmlFor={input.name}>
-      {label}
-    </label>
-    <TextareaAutosize {...input} />
-    <InputError error={touched && error} />
-  </div>
-)
+  })
+
+  return (
+    <div className={textAreaClasses}>
+      <label htmlFor={input.name}>
+        {label}
+      </label>
+      <TextareaAutosize {...input} />
+      <InputError error={touched && error} />
+    </div>
+  )
+}
 
 TextArea.propTypes = {
   input: PropTypes.shape(fieldPropTypes.input).isRequired,
