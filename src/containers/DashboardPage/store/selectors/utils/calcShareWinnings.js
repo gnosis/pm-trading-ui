@@ -50,10 +50,12 @@ const calcShareWinningsScalar = (share, market, event) => {
   throw new Error(`Invalid Outcome for Scalar Event found: ${share.outcomeToken.index}`)
 }
 
-export const calcShareWinnings = (share, market, event) => {
+const calcShareWinnings = (share, market, event) => {
   const isCategorical = event.type === OUTCOME_TYPES.CATEGORICAL
 
   return isCategorical
     ? calcShareWinningsCategorical(share, market, event)
     : calcShareWinningsScalar(share, market, event)
 }
+
+export default calcShareWinnings
