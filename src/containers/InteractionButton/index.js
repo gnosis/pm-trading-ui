@@ -8,12 +8,9 @@ import 'rc-tooltip/assets/bootstrap.css'
 
 import LoadingIndicator from 'components/LoadingIndicator'
 
-import {
-  checkWalletConnection,
-  isGnosisInitialized,
-  isConnectedToCorrectNetwork,
-  isOnWhitelist,
-} from 'selectors/blockchain'
+import { isGnosisInitialized } from 'selectors/blockchain'
+
+import { isConnectedToCorrectNetwork, isOnWhitelist, checkWalletConnection } from 'integrations/store/selectors'
 
 import './interactionButton.scss'
 

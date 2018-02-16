@@ -1,5 +1,5 @@
 import { get } from 'lodash'
-import { entitySelector } from './entities'
+import { entitySelector } from 'selectors/entities'
 
 export const getEventDescriptionByAddress = state => (oracleEventDescriptionAddress) => {
   if (oracleEventDescriptionAddress) {

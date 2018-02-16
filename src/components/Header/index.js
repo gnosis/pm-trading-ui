@@ -30,7 +30,7 @@ class Header extends Component {
       <div className={cx('headerContainer')}>
         <div className={cx('container')}>
           <div className={cx('group', 'logo')}>
-            <NavLink to="/">
+            <NavLink to="/markets/list">
               <div className={cx('headerLogo', 'beta')} />
             </NavLink>
           </div>
