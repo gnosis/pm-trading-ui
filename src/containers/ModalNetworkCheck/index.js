@@ -4,7 +4,7 @@ import { upperFirst } from 'lodash'
 import { connect } from 'react-redux'
 import NetworkCheck from 'components/NetworkCheck'
 
-import { getTargetNetworkId } from 'selectors/blockchain'
+import { getTargetNetworkId } from 'integrations/store/selectors'
 
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 
