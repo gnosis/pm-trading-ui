@@ -24,11 +24,13 @@ class RadioButton extends PureComponent {
 
     const inputId = `formRadioButton_${input.name}_${JSON.stringify(value)}`
     const isChecked = input && input.value.toString() === value.toString()
+
+    const radioButtonClasses = cx('formRadioButton', className, {
+      error: (touched && error) !== false,
+    })
+
     return (
-      <div className={cx('formRadioButton', className, {
-        error: (touched && error) !== false,
-      })}
-      >
+      <div className={radioButtonClasses}>
         <label htmlFor={inputId}>
           <input
             type="radio"
