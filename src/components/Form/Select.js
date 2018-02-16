@@ -24,11 +24,12 @@ const Select = ({
 }) => {
   const inputId = `formSelect_${input.name}`
 
+  const selectClasses = cx('formSelect', className, {
+    error: !!error,
+  })
+
   return (
-    <div className={cx('formSelect', className, {
-      error: !!error,
-    })}
-    >
+    <div className={selectClasses}>
       <label htmlFor={inputId}>
         {label}
       </label>
