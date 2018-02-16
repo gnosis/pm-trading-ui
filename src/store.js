@@ -25,7 +25,6 @@ const middlewares = [
   LocalStorageDump,
   // ...RavenIntegration.getMiddlewares(),
   // Intercom,
-  Providers,
 ]
 
 const enhancers = [
