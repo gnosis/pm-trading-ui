@@ -36,7 +36,7 @@
     "precommit"
   ],
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "1.1.1",
+    "@gnosis.pm/gnosisjs": "^1.1.1",
     "autobind-decorator": "^2.1.0",
     "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
@@ -82,7 +82,7 @@
     "@storybook/addon-knobs": "^3.3.12",
     "@storybook/addon-links": "^3.3.12",
     "@storybook/react": "^3.3.12",
-    "autoprefixer": "^7.1.6",
+    "autoprefixer": "^8.0.0",
     "babel-core": "6.26.0",
     "babel-eslint": "^8.0.2",
     "babel-loader": "7.1.2",
