@@ -67,6 +67,7 @@ const Slider = ({
 
 Slider.propTypes = {
   input: PropTypes.shape(fieldPropTypes.input).isRequired,
+  meta: PropTypes.shape(fieldPropTypes.meta).isRequired,
   label: PropTypes.string,
   min: PropTypes.number,
   max: PropTypes.number,
