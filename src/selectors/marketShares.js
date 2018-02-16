@@ -2,7 +2,8 @@ import { createSelector } from 'reselect'
 import Decimal from 'decimal.js'
 import moment from 'moment'
 
-import { add0xPrefix, calcShareWinnings } from 'utils/helpers'
+import { add0xPrefix } from 'utils/helpers'
+import { calcShareWinnings } from 'containers/DashboardPage/store/selectors/utils'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 
 import { getCurrentAccount } from 'integrations/store/selectors'
@@ -83,7 +84,7 @@ const eventSharesSelector = createSelector(getCurrentAccount, getShares, (accoun
   return eventShares
 })
 
-const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventShares, account) => {
+const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventShares) => {
   const enhancedShares = {}
 
   Object.keys(eventShares).forEach((eventAddress) => {
@@ -106,7 +107,7 @@ const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventSh
       const isShareEventResolved = oracle.isOutcomeSet && event.isWinningOutcomeSet
       const isShareMarketClosed =
         market.stage === MARKET_STAGES.MARKET_CLOSED || moment(resolutionDate).isBefore(moment().utc())
-      const shareWinning = isShareEventResolved ? calcShareWinnings(share, market, event, account) : '0'
+      const shareWinning = isShareEventResolved ? calcShareWinnings(share, market, event) : '0'
 
       if (isShareEventResolved && Decimal(shareWinning).eq(0)) {
         return
