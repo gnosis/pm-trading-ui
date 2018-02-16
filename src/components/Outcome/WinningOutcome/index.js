@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { OUTCOME_TYPES } from 'utils/constants'
+import cn from 'classnames'
 import Decimal from 'decimal.js'
-import { eventDescriptionShape, marketShape } from '../../utils/shapes'
-import './WinningOutcome.scss'
+import { eventDescriptionShape, marketShape } from 'utils/shapes'
+import style from './WinningOutcome.scss'
+
+const cx = cn.bind(style)
 
 const WinningOutcome = ({
   market: { eventDescription: { outcomes, unit, decimals }, oracle: { outcome: winningOutcome }, event: { type } },
@@ -16,21 +19,19 @@ const WinningOutcome = ({
       .div(10 ** decimals)
       .toString()
     outcomeText = (
-      <span>
-        {outcomeValue} <span className="outcome__winning--unit">{unit}</span>
-      </span>
+      <Fragment>
+        {outcomeValue} <span className={cx('unit')}>{unit}</span>
+      </Fragment>
     )
   }
 
   return (
-    <div className="outcome__winning">
-      <div className="outcome__winning--container">
-        <div className="outcome__winning--icon" />
-        <span className="outcome__winning--label">
-          Winning<br />outcome
-        </span>
-        <div className="outcome__winning--box">{outcomeText}</div>
-      </div>
+    <div className={cx('outcome')}>
+      <div className={cx('icon')} />
+      <span className={cx('label')}>
+        Winning<br />outcome
+      </span>
+      <div className={cx('textBox')}>{outcomeText}</div>
     </div>
   )
 }
