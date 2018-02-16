@@ -20,12 +20,13 @@ const Checkbox = ({
 }) => {
   const inputId = `formCheckbox_${input.name}`
 
+  const checkboxClasses = cx('formCheckbox', className, {
+    muted,
+    error: (error && touched) !== false,
+  })
+
   return (
-    <div className={cx('formCheckbox', className, {
-      muted,
-      error: (error && touched) !== false,
-    })}
-    >
+    <div className={checkboxClasses}>
       <label htmlFor={inputId}>{ label }</label>
       <label htmlFor={inputId} className={cx('formCheckboxLabel')}>
         <input
