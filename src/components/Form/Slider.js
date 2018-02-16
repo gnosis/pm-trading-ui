@@ -12,7 +12,6 @@ const cx = classNames.bind(styles)
 
 const Slider = ({
   input,
-  meta,
   meta: { touched, error },
   label,
   min,
@@ -68,7 +67,6 @@ const Slider = ({
 
 Slider.propTypes = {
   input: PropTypes.shape(fieldPropTypes.input).isRequired,
-  meta: PropTypes.shape(fieldPropTypes.meta).isRequired,
   label: PropTypes.string,
   min: PropTypes.number,
   max: PropTypes.number,
