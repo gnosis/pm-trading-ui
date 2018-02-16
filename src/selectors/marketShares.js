@@ -66,7 +66,7 @@ const eventSharesSelector = createSelector(getCurrentAccount, getShares, (accoun
   const eventShares = {}
 
   Object.keys(shares).forEach((shareId) => {
-    if (add0xPrefix(shares[shareId].owner) !== add0xPrefix(account.toLowerCase())) {
+    if (add0xPrefix(shares[shareId].owner) !== add0xPrefix(account)) {
       return
     }
 
