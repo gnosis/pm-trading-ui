@@ -100,8 +100,8 @@ export const buyShares = async (
   const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
 
   const collateralTokenName = await collateralToken.name()
-  // const userCollateralTokenBalance = await collateralToken
-  if (collateralTokenName === 'Ether Token' || (collateralTokenName === 'Wrapped Ether' && neededDepositAmount.gt(0))) {
+
+  if ((collateralTokenName === 'Ether Token' || collateralTokenName === 'Wrapped Ether') && neededDepositAmount.gt(0)) {
     await gnosis.etherToken.deposit({ value: neededDepositAmount.toString() })
   }
 
