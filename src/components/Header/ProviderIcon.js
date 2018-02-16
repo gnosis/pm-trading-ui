@@ -1,18 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import className from 'classnames'
 
+import { providerPropType } from 'utils/shapes'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { upperFirst } from 'lodash'
+
+import styles from './ProviderIcon.scss'
+
+const cx = className.bind(styles)
 
 const providerIconClasses = {
   [WALLET_PROVIDER.METAMASK]: 'metamask',
   [WALLET_PROVIDER.PARITY]: 'parity',
 }
 
-const ProviderIcon = ({ provider = {} }) => (
+const ProviderIcon = ({ provider }) => (
   <div
-    className={cn([
+    className={cx([
       'headerIcon',
       `headerIcon--${providerIconClasses[provider.name] || 'default'}`,
     ])}
@@ -21,7 +26,11 @@ const ProviderIcon = ({ provider = {} }) => (
 )
 
 ProviderIcon.propTypes = {
-  provider: PropTypes.shape({}),
+  provider: providerPropType,
+}
+
+ProviderIcon.defaultProps = {
+  provider: {},
 }
 
 export default ProviderIcon
