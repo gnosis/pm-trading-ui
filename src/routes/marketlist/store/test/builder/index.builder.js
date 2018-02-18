@@ -21,8 +21,8 @@ class MarketBuilder {
     return this
   }
 
-  withDate(date) {
-    this.market = this.market.set('date', date)
+  withResolution(resolution) {
+    this.market = this.market.set('resolution', resolution)
     return this
   }
 
@@ -31,8 +31,18 @@ class MarketBuilder {
     return this
   }
 
+  withResolved(resolved) {
+    this.market = this.market.set('resolved', resolved)
+    return this
+  }
+
   withType(type) {
     this.market = this.market.set('type', type)
+    return this
+  }
+
+  withCreation(creation) {
+    this.market = this.market.set('creation', creation)
     return this
   }
 
@@ -61,9 +71,11 @@ const aMarket = () => new MarketBuilder()
 export class MarketFactory {
   static aKittiesMarket = aMarket()
     .withTitle('How much will Cryptokitties transactions make up of the entire Ethereum network transactions by December 29th, in the last 1500 blocks?')
-    .withDate('2017-12-30T00:00:00')
+    .withResolution('2017-12-30T00:00:00')
     .withVolume('9523809523809680')
     .withStage(1)
+    .withCreation('2017-12-29T13:39:44')
+    .withResolved(false)
     .withType(MARKET_SCALAR)
     .withOutcomes()
     .withBounds('1', '20', '%')
@@ -71,7 +83,9 @@ export class MarketFactory {
 
   static aEthereumMarket = aMarket()
     .withTitle('What will the number of Ethereum transactions be on January 3rd, 2018?')
-    .withDate('2018-01-03T12:00:00')
+    .withResolution('2018-01-03T12:00:00')
+    .withCreation('2017-12-31T13:12:51')
+    .withResolved(false)
     .withVolume('857142857142872776')
     .withStage(1)
     .withType(MARKET_SCALAR)
@@ -81,9 +95,11 @@ export class MarketFactory {
 
   static aGasPriceMarket = aMarket()
     .withTitle('What will be the median gas price on Feb. 1st, 2018?')
-    .withDate('2018-02-01T12:00:00')
+    .withResolution('2018-02-01T12:00:00')
     .withVolume('342952380952380954')
     .withStage(1)
+    .withCreation('2017-12-31T13:58:13')
+    .withResolved(false)
     .withType(MARKET_CATEGORICAL)
     .withOutcomes(
       new OutcomeRecord({ name: '<20 GWei', marginalPrice: '0.2287' }),

@@ -5,16 +5,40 @@ import { MARKET_STAGES } from '../models/market'
 export const marketSelector = state => state.marketList
 
 // TODO find a better place for this helper
-const isMarketClosed = (stage, resolutionDate) =>
-  stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
+const isMarketClosed = (stage, resolutionDate, resolved) => {
+  const stageClosed = stage === MARKET_STAGES.MARKET_CLOSED
+  const marketExpired = moment.utc(resolutionDate).isBefore(moment().utc())
+  const marketResolved = resolved === true
 
-const isMarketEndingSoon = (stage, resolutionDate) => {
-  const threeDays = moment().add(3, 'D').utc()
-  const marketNotClosed = stage !== MARKET_STAGES.MARKET_CLOSED
-  const lessThanThreeDays = moment.utc(resolutionDate).isBefore(threeDays)
-
-  return marketNotClosed && lessThanThreeDays
+  const marketClosed = stageClosed || marketExpired || marketResolved
+  return marketClosed
 }
+
+const isMarketEndingSoon = (resolutionDate) => {
+  const threeDays = moment().add(3, 'days').utc()
+
+  return moment.utc(resolutionDate).isBefore(threeDays)
+}
+
+const isNewMarket = (creation) => {
+  const threeDaysAgo = moment().subtract(3, 'days').utc()
+
+  return threeDaysAgo.isBefore(creation)
+}
+
+export const newMarketsSelector = createSelector(
+  marketSelector,
+  (markets) => {
+    if (!markets) {
+      return 0
+    }
+
+    const openMarkets = markets.filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
+    const newMarkets = openMarkets.filter(market => isNewMarket(market.creation))
+
+    return newMarkets ? newMarkets.size : 0
+  },
+)
 
 export const endingSoonMarketSelector = createSelector(
   marketSelector,
@@ -23,7 +47,8 @@ export const endingSoonMarketSelector = createSelector(
       return 0
     }
 
-    const endingSoonMarkets = markets.filter(market => isMarketEndingSoon(market.stage, market.date))
+    const openMarkets = markets.filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
+    const endingSoonMarkets = openMarkets.filter(market => isMarketEndingSoon(market.resoution))
     return endingSoonMarkets ? endingSoonMarkets.size : 0
   },
 )
@@ -35,7 +60,7 @@ export const openMarketSelector = createSelector(
       return 0
     }
 
-    const openMarkets = markets.filter(market => !isMarketClosed(market.stage, market.date))
+    const openMarkets = markets.filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
     return openMarkets ? openMarkets.size : 0
   },
 )

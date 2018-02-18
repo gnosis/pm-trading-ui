@@ -11,12 +11,15 @@ export const MARKET_STAGES = {
 
 const MarketRecord = Record({
   title: undefined, // string
-  date: undefined, // ts
+  resolution: undefined, // moment
   volume: undefined, // decimal
-  stage: undefined,
   type: undefined, // enum {CATEGORICAL, SCALAR}
   outcomes: undefined, // List<Outcome>
   bounds: undefined, // BoundRecord
+  // Proerties needed for selectors filtering markets
+  creation: undefined, // moment
+  stage: undefined,
+  resolved: undefined, // boolean
 }, 'Market')
 
 export default MarketRecord
