@@ -1,7 +1,7 @@
 import { List } from 'immutable'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
-import { BoundsRecord, MarketRecord, OutcomeRecord } from '../models'
+import { BoundsRecord, MarketRecord, OutcomeRecord } from 'store/models'
 import addMarkets from './addMarkets'
 
 // TODO The default assignment is because JEST test do not work out of the box

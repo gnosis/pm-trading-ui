@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { createSelector } from 'reselect'
-import { MARKET_STAGES } from '../models/market'
+import { MARKET_STAGES } from 'store/models'
 
 export const marketSelector = state => state.marketList
 

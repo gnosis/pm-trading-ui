@@ -5,7 +5,7 @@ import {
   OutcomeRecord,
   MARKET_CATEGORICAL,
   MARKET_SCALAR,
-} from '../../models'
+} from 'store/models'
 
 export { default as oneMarketData } from './oneMarket'
 export { default as twoMarketData } from './twoMarket'

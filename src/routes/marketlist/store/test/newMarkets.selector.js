@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { List } from 'immutable'
-import { MARKET_STAGES } from '../models/market'
+import { MARKET_STAGES } from 'store/models'
 import { REDUCER_ID } from '../reducers/market'
 import { newMarketsSelector } from '../selectors'
 import aMarket from './builder/index.builder'
