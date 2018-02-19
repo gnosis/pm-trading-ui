@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ProviderIcon from 'components/ProviderIcon'
+import ProviderIcon from 'components/Header/ProviderIcon'
 import './connectWallet.scss'
 
 const ConnectWallet = ({ closeModal }) => (
