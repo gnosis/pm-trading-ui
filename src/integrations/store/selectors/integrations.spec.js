@@ -178,7 +178,7 @@ describe('Integrations selectors', () => {
       expect(isRemoteConnectionEstablished(state)).toEqual(true)
     })
 
-    it('Should return falsy if remote connection is not established', () => {
+    it('Should return false if remote connection is not established', () => {
       const state = generateState({
         providers: Map({
           [WALLET_PROVIDER.REMOTE]: {
@@ -190,7 +190,7 @@ describe('Integrations selectors', () => {
       expect(isRemoteConnectionEstablished(state)).toEqual(false)
     })
 
-    it('Should return falsy if there are no registered providers', () => {
+    it('Should return false if there are no registered providers', () => {
       const state = generateState({
         providers: Map({}),
       })
