@@ -1,5 +1,5 @@
 import { List } from 'immutable'
-import { REDUCER_ID } from '../reducers/market'
+import { REDUCER_ID } from 'store/reducers/market'
 import { marketSelector } from '../selectors'
 
 const marketTests = () => {

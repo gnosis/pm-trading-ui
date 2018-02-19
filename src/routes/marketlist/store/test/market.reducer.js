@@ -1,8 +1,8 @@
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { List } from 'immutable'
+import marketReducer, { REDUCER_ID } from 'store/reducers/market'
 import { processMarketResponse } from '../actions/fetchMarkets'
-import marketReducer, { REDUCER_ID } from '../reducers/market'
 import { oneMarketData, twoMarketData, realData, MarketFactory } from './builder/index.builder'
 
 const marketReducerTests = () => {
