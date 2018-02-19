@@ -20,13 +20,15 @@ class RadioButton extends PureComponent {
       value,
       label,
       className,
+      light,
     } = this.props
 
     const inputId = `formRadioButton_${input.name}_${JSON.stringify(value)}`
     const isChecked = input && input.value.toString() === value.toString()
 
     const radioButtonClasses = cx('formRadioButton', className, {
-      error: (touched && error) !== false,
+      error: (touched && error),
+      light,
     })
 
     return (
@@ -52,10 +54,12 @@ RadioButton.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   label: PropTypes.node.isRequired,
   className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  light: PropTypes.bool,
 }
 
 RadioButton.defaultProps = {
   className: undefined,
+  light: false,
 }
 
 export default RadioButton

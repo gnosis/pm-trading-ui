@@ -49,4 +49,17 @@
       color: $active-highlight-error;
     }
   }
+
+  &.light {
+    input[type="radio"] {
+      background-color: $bg-color;
+      border-color: $bg-color;
+
+      // for use with currentColor:
+      color: $active-highlight;
+      &:checked {
+        background-color: currentColor;
+      }
+    }
+  }
 }

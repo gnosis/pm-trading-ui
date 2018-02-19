@@ -12,10 +12,12 @@ import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
 import Outcome from 'components/Outcome'
-import FormRadioButton from 'components/FormRadioButton'
-import FormInput from 'components/FormInput'
-import FormSelect from 'components/FormSelect'
-import FormCheckbox from 'components/FormCheckbox'
+import {
+  Checkbox,
+  Select,
+  TextInput,
+  RadioButtonGroup,
+} from 'components/Form'
 
 import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
@@ -173,7 +175,7 @@ class MarketList extends Component {
         <form onSubmit={handleSubmit}>
           <div className="marketFilter__group">
             <Field
-              component={FormInput}
+              component={TextInput}
               name="search"
               label="Search"
               placeholder="Title, Description"
@@ -181,19 +183,20 @@ class MarketList extends Component {
             />
           </div>
           <div className="marketFilter__group">
-            <Field name="orderBy" label="Order by" component={FormSelect} values={selectFilter} defaultValue="---" />
+            <Field name="orderBy" label="Order by" component={Select} options={selectFilter} defaultValue="---" />
           </div>
           <div className="marketFilter__group">
             <Field
               name="resolved"
               label="Resolution Date"
-              component={FormRadioButton}
-              radioValues={resolutionFilters}
+              component={RadioButtonGroup}
+              options={resolutionFilters}
+              light
             />
           </div>
           {isModerator ? (
             <div className="marketFilter__group">
-              <Field name="myMarkets" label="Show only" text="My markets" component={FormCheckbox} />
+              <Field name="myMarkets" label="Show only" text="My markets" component={Checkbox} />
             </div>
           ) : (
             <div />

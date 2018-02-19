@@ -37,7 +37,7 @@ const Slider = ({
 
   const inputId = `formSlider_${input.name}`
   const sliderClasses = cx('formSlider', {
-    error: (touched && error) !== false,
+    error: (touched && error),
   })
 
   return (

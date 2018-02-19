@@ -23,7 +23,7 @@ const TextInput = ({
   const inputId = `formTextInput_${input.name}`
 
   const textInputClasses = cx('formTextInput', className, {
-    error: (touched && error) !== false,
+    error: (touched && error),
   })
 
   return (

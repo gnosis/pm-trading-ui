@@ -12,10 +12,10 @@ import styles from './RadioButtonGroup.scss'
 const cx = classNames.bind(styles)
 
 const RadioButtonGroup = ({
-  options, input, className, label, meta, meta: { error, touched },
+  options, input, className, label, meta, meta: { error, touched }, ...props
 }) => (
   <div className={cx('formRadioButtonGroup', className, {
-    error: (touched && error) !== false,
+    error: (touched && error),
   })}
   >
     <label>{label}</label>
@@ -26,6 +26,7 @@ const RadioButtonGroup = ({
         label={option.label}
         input={input}
         meta={meta}
+        {...props}
       />
     ))}
     <InputError error={touched && error} />
@@ -41,10 +42,12 @@ RadioButtonGroup.propTypes = {
   })),
   label: PropTypes.node,
   className: PropTypes.string,
+  props: PropTypes.objectOf(PropTypes.any),
 }
 
 RadioButtonGroup.defaultProps = {
   options: [],
+  props: [],
   label: '',
   className: '',
 }
