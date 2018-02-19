@@ -128,6 +128,7 @@ describe('Integrations selectors related to network', () => {
       const state = generateState({
         providers: Map({
           [WALLET_PROVIDER.REMOTE]: new ProviderRecord({
+            network: 'RINKEBY',
             networkId: 4,
             available: true,
           }),
