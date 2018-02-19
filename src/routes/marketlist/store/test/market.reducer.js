@@ -3,6 +3,7 @@ import thunk from 'redux-thunk'
 import { List } from 'immutable'
 import marketReducer, { REDUCER_ID } from 'store/reducers/market'
 import { processMarketResponse } from '../actions/fetchMarkets'
+import { marketSelector } from '../selectors'
 import { oneMarketData, twoMarketData, realData, MarketFactory } from './builder/index.builder'
 
 const marketReducerTests = () => {
@@ -31,7 +32,7 @@ const marketReducerTests = () => {
 
       // THEN
       const emptyList = List([])
-      const marketListState = store.getState().marketList
+      const marketListState = marketSelector(store.getState())
       expect(marketListState).toEqual(emptyList)
     })
 
@@ -43,9 +44,11 @@ const marketReducerTests = () => {
       processMarketResponse(store.dispatch, threeMarketsResponse)
 
       // THEN
-      const firstMarketRecord = store.getState().marketList.get(0)
-      const secondMarketRecord = store.getState().marketList.get(1)
-      const thirdMarketRecord = store.getState().marketList.get(2)
+      const markets = marketSelector(store.getState())
+
+      const firstMarketRecord = markets.get(0)
+      const secondMarketRecord = markets.get(1)
+      const thirdMarketRecord = markets.get(2)
 
       expect(firstMarketRecord).toEqual(MarketFactory.aKittiesMarket)
       expect(secondMarketRecord).toEqual(MarketFactory.aEthereumMarket)
@@ -62,12 +65,13 @@ const marketReducerTests = () => {
       processMarketResponse(store.dispatch, etherAndGasMarketsResponse)
 
       // THEN
-      const firstMarketRecord = store.getState().marketList.get(0)
-      const secondMarketRecord = store.getState().marketList.get(1)
+      const markets = marketSelector(store.getState())
+      const firstMarketRecord = markets.get(0)
+      const secondMarketRecord = markets.get(1)
 
       expect(store.getState().marketList.size).toEqual(2)
-      expect(firstMarketRecord).toEqual(MarketFactory.aEthereumMarket)
-      expect(secondMarketRecord).toEqual(MarketFactory.aGasPriceMarket)
+      expect(firstMarketRecord).toEqual(MarketFactory.aGasPriceMarket)
+      expect(secondMarketRecord).toEqual(MarketFactory.aEthereumMarket)
     })
   })
 }

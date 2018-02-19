@@ -1,8 +1,9 @@
+import { List } from 'immutable'
 import moment from 'moment'
 import { createSelector } from 'reselect'
 import { MARKET_STAGES } from 'store/models'
 
-export const marketSelector = state => state.marketList
+export const marketSelector = state => List(state.marketList.values())
 
 // TODO find a better place for this helper
 const isMarketClosed = (stage, resolutionDate, resolved) => {

@@ -21,6 +21,7 @@ export const OutcomeRecord = Record({
 }, 'Outcome')
 
 const MarketRecord = Record({
+  address: undefined,
   title: undefined, // string
   resolution: undefined, // moment
   volume: undefined, // decimal

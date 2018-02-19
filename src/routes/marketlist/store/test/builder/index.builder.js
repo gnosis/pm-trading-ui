@@ -16,6 +16,11 @@ class MarketBuilder {
     this.market = new MarketRecord()
   }
 
+  withAddress(address) {
+    this.market = this.market.set('address', address)
+    return this
+  }
+
   withTitle(title) {
     this.market = this.market.set('title', title)
     return this
@@ -70,6 +75,7 @@ const aMarket = () => new MarketBuilder()
 
 export class MarketFactory {
   static aKittiesMarket = aMarket()
+    .withAddress('0xa625c9ccf5860e9709a31cbac1ffd6fc557558f6')
     .withTitle('How much will Cryptokitties transactions make up of the entire Ethereum network transactions by December 29th, in the last 1500 blocks?')
     .withResolution('2017-12-30T00:00:00')
     .withVolume('9523809523809680')
@@ -82,6 +88,7 @@ export class MarketFactory {
     .get()
 
   static aEthereumMarket = aMarket()
+    .withAddress('0xedb69ab6fa7a1740f91f7dec0c667873269bea96')
     .withTitle('What will the number of Ethereum transactions be on January 3rd, 2018?')
     .withResolution('2018-01-03T12:00:00')
     .withCreation('2017-12-31T13:12:51')
@@ -94,6 +101,7 @@ export class MarketFactory {
     .get()
 
   static aGasPriceMarket = aMarket()
+    .withAddress('0xa8d84fc1fc77c87203c1448587ebdb5ee845f26b')
     .withTitle('What will be the median gas price on Feb. 1st, 2018?')
     .withResolution('2018-02-01T12:00:00')
     .withVolume('342952380952380954')

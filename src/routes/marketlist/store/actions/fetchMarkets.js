@@ -27,7 +27,7 @@ const buildBoundsFrom = (lower, upper, unit) => BoundsRecord({ lower, upper, uni
 const extractMarkets = markets => markets.map((market) => {
   const {
     stage,
-    contract: { creationDate: creation },
+    contract: { address, creationDate: creation },
     tradingVolume,
     event: { type },
   } = market
@@ -43,7 +43,7 @@ const extractMarkets = markets => markets.map((market) => {
   const bounds = buildBoundsFrom(market.event.lowerBound, market.event.upperBound, unit)
 
   const marketRecord = new MarketRecord({
-    title, resolution, creation, stage, volume: tradingVolume, resolved, type, outcomes, bounds,
+    title, address, resolution, creation, stage, volume: tradingVolume, resolved, type, outcomes, bounds,
   })
 
   return marketRecord
