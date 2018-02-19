@@ -9,6 +9,17 @@ export const MARKET_STAGES = {
   MARKET_CLOSED: 2,
 }
 
+export const BoundsRecord = Record({
+  lower: undefined,
+  upper: undefined,
+  unit: undefined,
+}, 'Bound')
+
+export const OutcomeRecord = Record({
+  name: undefined, // string
+  marginalPrice: undefined, // decimal
+}, 'Outcome')
+
 const MarketRecord = Record({
   title: undefined, // string
   resolution: undefined, // moment
