@@ -45,7 +45,7 @@ class MarketMySharesForm extends Component {
       gasCosts, gasPrice, requestGasCost, requestGasPrice,
     } = this.props
 
-    if (gasCosts.sellShares === undefined) {
+    if (gasCosts.get('sellShares') === undefined) {
       requestGasCost(GAS_COST.SELL_SHARES)
     }
     if (gasPrice === undefined) {
@@ -294,7 +294,8 @@ class MarketMySharesForm extends Component {
     }
 
     const submitDisabled = invalid || submitting
-    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.sellShares))
+    const sellSharesGasCost = gasCosts.get('sellShares')
+    const gasCostEstimation = weiToEth(gasPrice.mul(sellSharesGasCost))
 
     return (
       <div className="marketMyShares__sellContainer">
