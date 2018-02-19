@@ -1,20 +1,8 @@
-.headerIcon {
+.providerIcon {
   height: 30px;
   width: 35px;
   margin-left: 15px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;
-
-  &--metamask {
-    background-image: url("../../assets/img/icons/icon_metamask.svg");
-  }
-
-  &--parity {
-    background-image: url("../../assets/img/icons/icon_parity.svg");
-  }
-
-  &--default {
-    background-image: url("../../assets/img/icons/icon_etherTokens.svg");
-  }
 }

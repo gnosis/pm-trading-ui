@@ -75,7 +75,7 @@ class Header extends Component {
                         Network: {upperFirst(currentNetwork.toLowerCase())}
                       </span>
                     )}
-                  <DecimalValue value={currentBalance} className={cx('network', 'test')} />&nbsp;
+                  <DecimalValue value={currentBalance} className={cx('balance', 'test')} />&nbsp;
                   <span className={cx('account', 'text')}>{collateralTokenToText()}</span>
                   <ProviderIcon provider={currentProvider} />
                   <Identicon account={currentAccount} />
