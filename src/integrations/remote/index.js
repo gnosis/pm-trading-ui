@@ -50,11 +50,7 @@ class Remote extends InjectedWeb3 {
     super.initialize(opts)
     this.runProviderRegister(this, { priority: Remote.providerPriority })
 
-    this.walletEnabled = this.initWeb3()
-
-    if (this.watcher) {
-      setInterval(this.watcher, Remote.watcherInterval)
-    }
+    this.walletEnabled = await this.initWeb3()
 
     if (this.watcher) {
       setInterval(this.watcher, Remote.watcherInterval)

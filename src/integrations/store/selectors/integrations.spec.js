@@ -170,7 +170,7 @@ describe('Integrations selectors', () => {
       const state = generateState({
         providers: Map({
           [WALLET_PROVIDER.REMOTE]: {
-            available: true,
+            network: 'RINKEBY',
           },
         }),
       })
@@ -182,7 +182,7 @@ describe('Integrations selectors', () => {
       const state = generateState({
         providers: Map({
           [WALLET_PROVIDER.REMOTE]: {
-            available: false,
+            network: undefined,
           },
         }),
       })
