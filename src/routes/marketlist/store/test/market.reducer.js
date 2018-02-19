@@ -70,8 +70,8 @@ const marketReducerTests = () => {
       const secondMarketRecord = markets.get(1)
 
       expect(store.getState().marketList.size).toEqual(2)
-      expect(firstMarketRecord).toEqual(MarketFactory.aGasPriceMarket)
-      expect(secondMarketRecord).toEqual(MarketFactory.aEthereumMarket)
+      expect(firstMarketRecord).toEqual(MarketFactory.aEthereumMarket)
+      expect(secondMarketRecord).toEqual(MarketFactory.aGasPriceMarket)
     })
   })
 }

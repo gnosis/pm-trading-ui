@@ -13,7 +13,7 @@ export default handleActions({
 
 export default handleActions({
   [ADD_MARKET_LIST]: (state, { payload }) =>
-    state.withMutations((map) => {
+    Map().withMutations((map) => {
       payload.forEach(market =>
         map.set(market.address, market))
     }),

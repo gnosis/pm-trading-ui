@@ -7,7 +7,7 @@ import aMarket from './builder/index.builder'
 
 const newMarketsTests = () => {
   describe('Market List Selector[newMarketsSelector]', () => {
-    it('should return 1 ending soon markets', () => {
+    it('should return 1 new market if only one of three is new', () => {
       // GIVEN
       const aEndingSoonMarket = aMarket()
         .withCreation(moment().subtract(1, 'days'))
@@ -35,7 +35,7 @@ const newMarketsTests = () => {
       expect(newMarkets).toEqual(1)
     })
 
-    it('should return 0 open markets if there is there is one market but no open', () => {
+    it('should return 0 new markets if there is there is one market but no open', () => {
       // GIVEN
       const aClosedMarket = aMarket()
         .withResolution(moment().subtract(1, 'M'))
@@ -52,7 +52,7 @@ const newMarketsTests = () => {
       expect(0).toEqual(newMarkets)
     })
 
-    it('should return 0 open markets if there is no open markets loaded in store', () => {
+    it('should return 0 new markets if there is no new markets loaded in store', () => {
       // GIVEN
       const markets = List([])
       const reduxStore = { [REDUCER_ID]: markets }
