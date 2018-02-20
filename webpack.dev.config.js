@@ -72,7 +72,7 @@ module.exports = {
           },
           {
             loader: 'sass-loader',
-            options: { sourceMap: true, localIdentName: '[path][name]__[local]--[hash:base64:5]' },
+            options: { sourceMap: true },
           },
         ],
       },
