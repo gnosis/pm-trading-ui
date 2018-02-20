@@ -1,12 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
 import { marketShape } from 'utils/shapes'
 import { calcLMSRMarginalPrice } from 'api'
 import TrendingOutcomeScalar from './TredingOutcomeScalar'
 
-import './outcomeScalar.scss'
+import style from './outcomeScalar.scss'
+
+const cx = cn.bind(style)
 
 const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
   let marginalPrice = calcLMSRMarginalPrice({
@@ -42,20 +45,20 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
   }
 
   return (
-    <div className="outcomes outcomes--scalar">
-      <div className="outcome">
-        <div className="outcome__bound outcome__bound--lower">
+    <div>
+      <div className={cx('scalarOutcome')}>
+        <div className={cx('outcomeBound', 'lower')}>
           <DecimalValue value={lowerBound} decimals={market.eventDescription.decimals} />
           &nbsp;{market.eventDescription.unit}
         </div>
-        <div className="outcome__currentPrediction">
-          <div className="outcome__currentPrediction--line" />
-          <div className="outcome__currentPrediction--value" style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>
+        <div className={cx('currentPrediction')}>
+          <div className={cx('currentPredictionLine')} />
+          <div className={cx('currentPredictionValue')} style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>
             <DecimalValue value={value} decimals={market.eventDescription.decimals} />
             &nbsp;{market.eventDescription.unit}
           </div>
         </div>
-        <div className="outcome__bound outcome__bound--upper">
+        <div className={cx('outcomeBound', 'upper')}>
           <DecimalValue value={upperBound} decimals={market.eventDescription.decimals} />
           &nbsp;{market.eventDescription.unit}
         </div>
