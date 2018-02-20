@@ -5,14 +5,18 @@ import cn from 'classnames'
 
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-
 import LoadingIndicator from 'components/LoadingIndicator'
-
 import { isGnosisInitialized } from 'selectors/blockchain'
+import {
+  isConnectedToCorrectNetwork,
+  isOnWhitelist,
+  checkWalletConnection,
+  getTargetNetworkId,
+} from 'integrations/store/selectors'
+import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
+import style from './interactionButton.scss'
 
-import { isConnectedToCorrectNetwork, isOnWhitelist, checkWalletConnection } from 'integrations/store/selectors'
-
-import './interactionButton.scss'
+const cx = cn.bind(style)
 
 class InteractionButton extends Component {
   constructor() {
@@ -41,6 +45,7 @@ class InteractionButton extends Component {
       children,
       type,
       disabled,
+      targetNetworkId,
       loading,
     } = this.props
 
@@ -60,35 +65,32 @@ class InteractionButton extends Component {
     // disabled from props or wallet error or network error
     const isDisabled = disabled || walletError || networkError
 
-    const classNames = cn('interactionButton', className, { disabled: isDisabled }, { loading: isLoading })
+    const classNames = cx('interactionButton', className, { disabled: isDisabled }, { loading: isLoading })
+
+    const onClickHandler = (e) => {
+      if (isDisabled) {
+        e.preventDefault()
+        return
+      }
+
+      if (typeof onClick === 'function') {
+        const ret = onClick()
+
+        if (typeof ret === 'object' && ret.constructor.name === 'Promise') {
+          this.setState({ loading: true })
+          ret
+            .then(() => {
+              if (this.mounted) this.setState({ loading: false })
+            })
+            .catch(() => {
+              if (this.mounted) this.setState({ loading: false })
+            })
+        }
+      }
+    }
 
     const btn = (
-      <button
-        className={classNames}
-        type={type || 'button'}
-        onClick={(e) => {
-          if (isDisabled) {
-            e.preventDefault()
-            return
-          }
-
-          if (typeof onClick === 'function') {
-            const ret = onClick()
-
-            if (typeof ret === 'object' && ret.constructor.name === 'Promise') {
-              this.setState({ loading: true })
-              ret
-                .then(() => {
-                  if (this.mounted) this.setState({ loading: false })
-                })
-                .catch(() => {
-                  if (this.mounted) this.setState({ loading: false })
-                })
-            }
-          }
-        }}
-        disabled={isDisabled}
-      >
+      <button className={classNames} type={type || 'button'} onClick={onClickHandler} disabled={isDisabled}>
         <div className="interactionButton__inner">{children}</div>
       </button>
     )
@@ -97,7 +99,7 @@ class InteractionButton extends Component {
       return (
         <button className={classNames} type="button" disabled>
           <div className="interactionButton__inner">{children}</div>
-          <LoadingIndicator width={28} height={28} className="interactionButtonLoading" />
+          <LoadingIndicator width={28} height={28} className={cx('interactionButtonLoading')} />
         </button>
       )
     }
@@ -108,7 +110,11 @@ class InteractionButton extends Component {
 
     if (networkError) {
       return (
-        <Tooltip overlay="You are connected to the wrong chain. You can only interact with Gnosis when you're on the same chain as us.">
+        <Tooltip
+          overlay={`You are connected to the wrong chain. You can only interact using ${
+            ETHEREUM_NETWORK_IDS[targetNetworkId]
+          } network.`}
+        >
           {btn}
         </Tooltip>
       )
@@ -130,11 +136,28 @@ InteractionButton.propTypes = {
   type: PropTypes.oneOf(['button', 'submit']),
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
+  targetNetworkId: PropTypes.string,
+}
+
+InteractionButton.defaultProps = {
+  className: '',
+  onClick: () => {},
+  hasWallet: false,
+  correctNetwork: false,
+  gnosisInitialized: false,
+  whitelisted: false,
+  whitelistRequired: false,
+  children: <div />,
+  type: 'button',
+  disabled: true,
+  loading: true,
+  targetNetworkId: 0,
 }
 
 export default connect(state => ({
   hasWallet: checkWalletConnection(state),
   gnosisInitialized: isGnosisInitialized(state),
   correctNetwork: isConnectedToCorrectNetwork(state),
+  targetNetworkId: getTargetNetworkId(state),
   whitelisted: isOnWhitelist(state),
 }))(InteractionButton)
