@@ -2,11 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import moment from 'moment'
-
+import { calcLMSRMarginalPrice } from 'api'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
-import TrendingOutcome from './TrendingOutcome'
-import { calcLMSRMarginalPrice } from 'api'
+import TrendingOutcomeCategorical from './TrendingOutcomeCategorical'
 
 import style from './outcomeCategorical.scss'
 
@@ -40,7 +39,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     const resolutionDateFormatted = showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''
 
     return (
-      <TrendingOutcome
+      <TrendingOutcomeCategorical
         entryStyle={outcomeEntryStyle}
         outcome={renderOutcomes[trendingOutcomeIndex]}
         percentage={trendingMarginalPricePercent}

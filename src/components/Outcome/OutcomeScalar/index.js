@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
-
 import DecimalValue from 'components/DecimalValue'
-
 import { marketShape } from 'utils/shapes'
-
 import { calcLMSRMarginalPrice } from 'api'
+import TrendingOutcomeScalar from './TredingOutcomeScalar'
 
 import './outcomeScalar.scss'
 
@@ -35,16 +33,11 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
 
   if (showOnlyTrendingOutcome) {
     return (
-      <div className="row">
-        <div className="col-md-6">
-          <DecimalValue
-            value={value}
-            decimals={market.eventDescription.decimals}
-            className="outcome__currentPrediction--value"
-          />
-          &nbsp;{market.eventDescription.unit}
-        </div>
-      </div>
+      <TrendingOutcomeScalar
+        predictedValue={value}
+        decimals={market.eventDescription.decimals}
+        unit={market.eventDescription.unit}
+      />
     )
   }
 

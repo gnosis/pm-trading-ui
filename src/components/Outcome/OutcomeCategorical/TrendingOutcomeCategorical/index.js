@@ -5,7 +5,7 @@ import style from '../outcomeCategorical.scss'
 
 const cx = cn.bind(style)
 
-const TrendingOutcome = ({
+const TrendingOutcomeCategorical = ({
   entryStyle, outcome, percentage, resolutionDate,
 }) => (
   <div className="outcomes outcomes--categorical">
@@ -18,18 +18,18 @@ const TrendingOutcome = ({
   </div>
 )
 
-TrendingOutcome.propTypes = {
+TrendingOutcomeCategorical.propTypes = {
   entryStyle: PropTypes.object,
   outcome: PropTypes.string,
   percentage: PropTypes.string,
   resolutionDate: PropTypes.string,
 }
 
-TrendingOutcome.defaultProps = {
+TrendingOutcomeCategorical.defaultProps = {
   entryStyle: {},
   outcome: '',
   percentage: '',
   resolutionDate: '',
 }
 
-export default TrendingOutcome
+export default TrendingOutcomeCategorical
