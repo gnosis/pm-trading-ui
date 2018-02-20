@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import { hot } from 'react-hot-loader'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
@@ -93,6 +94,6 @@ const mapStateToProps = state => ({
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 
-export default withRouter(connect(mapStateToProps, {
+export default hot(module)(withRouter(connect(mapStateToProps, {
   connectBlockchain,
-})(App))
+})(App)))

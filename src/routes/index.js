@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import web3 from 'web3'
 
 import MarketListPage from 'containers/MarketListPage'
-import MarketDetailPage from 'containers/MarketDetailPage'
+import MarketDetailPage from 'routes/MarketDetails/containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
 import DashboardPage from 'containers/DashboardPage'
 
