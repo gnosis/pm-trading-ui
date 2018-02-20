@@ -69,7 +69,20 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
 
 OutcomeScalar.propTypes = {
   market: marketShape,
-  opts: PropTypes.object,
+  opts: PropTypes.shape({
+    showOnlyTrendingOutcome: PropTypes.bool,
+  }),
+}
+
+OutcomeScalar.defaultProps = {
+  market: {
+    event: {},
+    eventDescription: {},
+    oracle: {},
+  },
+  opts: {
+    showOnlyTrendingOutcome: false,
+  },
 }
 
 export default OutcomeScalar

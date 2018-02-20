@@ -85,4 +85,18 @@ OutcomeCategorical.propTypes = {
   }),
 }
 
+OutcomeCategorical.defaultProps = {
+  market: {
+    event: {},
+    oracle: {},
+    eventDescription: {},
+  },
+  opts: {
+    className: '',
+    showOnlyTrendingOutcome: false,
+    showDate: false,
+    dateFormat: '',
+  },
+}
+
 export default OutcomeCategorical
