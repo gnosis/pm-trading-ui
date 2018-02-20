@@ -1,4 +1,4 @@
-.outcome {
+.winningOutcomeContainer {
   display: flex;
   margin: 10px 0 10px 3px;
   align-items: center;
@@ -7,7 +7,7 @@
   font-weight: 500;
 }
 
-.icon {
+.winningOutcomeIcon {
   background: url('../../../assets/img/icons/icon_winningOutcome.svg');
   background-size: contain;
   width: 40px;
@@ -15,12 +15,12 @@
   margin-left: -10px;
 }
 
-.label {
+.winningOutcomeLabel {
   color: #87949c;
   font-size: 12px;
 }
 
-.textBox {
+.winningOutcomeText {
   margin-left: 10px;
   background-color: #87949c;
   color: #fff;
@@ -28,6 +28,6 @@
   padding: 5px 10px;
 }
 
-.unit {
+.winningOutcomeUnit {
   text-transform: none;
 }

@@ -1,13 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames'
+import moment from 'moment'
 
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
-import moment from 'moment'
-
+import TrendingOutcome from './TrendingOutcome'
 import { calcLMSRMarginalPrice } from 'api'
 
-import './outcomeCategorical.scss'
+import style from './outcomeCategorical.scss'
+
+const cx = cn.bind(style)
 
 const OutcomeCategorical = ({ market, opts = {} }) => {
   const renderOutcomes = market.eventDescription.outcomes
@@ -37,26 +40,19 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     const resolutionDateFormatted = showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''
 
     return (
-      <div className="outcomes outcomes--categorical">
-        <div className="outcome__wrapper">
-          <div className="entry__color" style={outcomeEntryStyle} />
-          <div className="outcome">
-            {renderOutcomes[trendingOutcomeIndex]}
-          </div>
-        </div>
-        <div>{trendingMarginalPricePercent}%</div>
-        <div className="date">{resolutionDateFormatted}</div>
-      </div>
+      <TrendingOutcome
+        entryStyle={outcomeEntryStyle}
+        outcome={renderOutcomes[trendingOutcomeIndex]}
+        percentage={trendingMarginalPricePercent}
+        resolutionDate={resolutionDateFormatted}
+      />
     )
   }
 
   // show all outcomes
   return (
-    <div className={`${className} outcomes outcomes--categorical`}>
+    <div className={className}>
       {renderOutcomes.map((outcome, outcomeIndex) => {
-        if (market.oracle.isOutcomeSet && market.oracle.outcome !== outcomeIndex) {
-          return <div key={outcomeIndex} className="outcome" />
-        }
         const outcomeBarStyle = {
           width: `${tokenDistribution[outcomeIndex] * 100}%`,
           backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex],
@@ -64,12 +60,12 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
         const tokenDistributionPercent = `${Math.round(tokenDistribution[outcomeIndex] * 100).toFixed(0)}%`
 
         return (
-          <div key={outcomeIndex} className="outcome">
-            <div className="outcome__bar">
-              <div className="outcome__bar--inner" style={outcomeBarStyle}>
-                <div className="outcome__bar--label">
+          <div key={outcome} className={cx('outcome')}>
+            <div className={cx('outcomeBar')}>
+              <div className={cx('outcomeBarInner')} style={outcomeBarStyle}>
+                <div className={cx('outcomeBarLabel')}>
                   {renderOutcomes[outcomeIndex]}
-                  <div className="outcome__bar--value">{tokenDistributionPercent}</div>
+                  <div className={cx('outcomeBarValue')}>{tokenDistributionPercent}</div>
                 </div>
               </div>
             </div>

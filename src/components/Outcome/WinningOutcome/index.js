@@ -20,18 +20,18 @@ const WinningOutcome = ({
       .toString()
     outcomeText = (
       <Fragment>
-        {outcomeValue} <span className={cx('unit')}>{unit}</span>
+        {outcomeValue} <span className={cx('winningOutcomeUnit')}>{unit}</span>
       </Fragment>
     )
   }
 
   return (
-    <div className={cx('outcome')}>
-      <div className={cx('icon')} />
-      <span className={cx('label')}>
+    <div className={cx('winningOutcomeContainer')}>
+      <div className={cx('winningOutcomeIcon')} />
+      <span className={cx('winningOutcomeLabel')}>
         Winning<br />outcome
       </span>
-      <div className={cx('textBox')}>{outcomeText}</div>
+      <div className={cx('winningOutcomeText')}>{outcomeText}</div>
     </div>
   )
 }
@@ -48,6 +48,22 @@ WinningOutcome.propTypes = {
   market: marketShape,
   unit: PropTypes.string,
   decimals: PropTypes.string,
+}
+
+WinningOutcome.defaultProps = {
+  market: {
+    event: {
+      type: '',
+    },
+    eventDescription: {
+      outcomes: [],
+      unit: '',
+      decimals: '',
+    },
+    oracle: {
+      outcome: '',
+    },
+  },
 }
 
 export default WinningOutcome
