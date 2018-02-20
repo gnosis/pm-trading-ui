@@ -3,7 +3,7 @@ import moment from 'moment'
 import { createSelector } from 'reselect'
 import { MARKET_STAGES } from 'store/models'
 
-export const marketSelector = state => List(state.marketList.values())
+export const marketListSelector = state => List(state.marketList.values())
 
 // TODO find a better place for this helper
 const isMarketClosed = (stage, resolutionDate, resolved) => {
@@ -28,7 +28,7 @@ const isNewMarket = (creation) => {
 }
 
 export const newMarketsSelector = createSelector(
-  marketSelector,
+  marketListSelector,
   (markets) => {
     if (!markets) {
       return 0
@@ -42,7 +42,7 @@ export const newMarketsSelector = createSelector(
 )
 
 export const endingSoonMarketSelector = createSelector(
-  marketSelector,
+  marketListSelector,
   (markets) => {
     if (!markets) {
       return 0
@@ -55,7 +55,7 @@ export const endingSoonMarketSelector = createSelector(
 )
 
 export const openMarketSelector = createSelector(
-  marketSelector,
+  marketListSelector,
   (markets) => {
     if (!markets) {
       return 0

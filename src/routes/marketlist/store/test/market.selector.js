@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import { REDUCER_ID } from 'store/reducers/market'
-import { marketSelector } from '../selectors'
+import { marketListSelector } from '../selectors'
 
 const marketTests = () => {
   describe('Market List Selector[marketSelector]', () => {
@@ -10,7 +10,7 @@ const marketTests = () => {
       const reduxStore = { [REDUCER_ID]: emptyList }
 
       // WHEN
-      const marketListState = marketSelector(reduxStore)
+      const marketListState = marketListSelector(reduxStore)
 
       // THEN
       expect(marketListState).toEqual(emptyList)

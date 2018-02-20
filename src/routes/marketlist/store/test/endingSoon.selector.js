@@ -36,7 +36,7 @@ const endingSoonTests = () => {
       expect(endingSoonMarkets).toEqual(1)
     })
 
-    it('should return 0 open markets if there is there is one market but no open', () => {
+    it('should return 0 ending soon markets if there is one market but not ending soon', () => {
       // GIVEN
       const aClosedMarket = aMarket()
         .withResolution(moment().subtract(1, 'M'))
@@ -50,10 +50,10 @@ const endingSoonTests = () => {
       const endingSoonMarkets = endingSoonMarketSelector(reduxStore)
 
       // THEN
-      expect(0).toEqual(endingSoonMarkets)
+      expect(endingSoonMarkets).toEqual(0)
     })
 
-    it('should return 0 open markets if there is no open markets loaded in store', () => {
+    it('should return 0 ending soon markets if there is no ending soon markets loaded in store', () => {
       // GIVEN
       const markets = List([])
       const reduxStore = { [REDUCER_ID]: markets }

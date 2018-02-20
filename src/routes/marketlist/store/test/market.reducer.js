@@ -3,7 +3,7 @@ import thunk from 'redux-thunk'
 import { List } from 'immutable'
 import marketReducer, { REDUCER_ID } from 'store/reducers/market'
 import { processMarketResponse } from '../actions/fetchMarkets'
-import { marketSelector } from '../selectors'
+import { marketListSelector } from '../selectors'
 import { oneMarketData, twoMarketData, realData, MarketFactory } from './builder/index.builder'
 
 const marketReducerTests = () => {
@@ -32,7 +32,7 @@ const marketReducerTests = () => {
 
       // THEN
       const emptyList = List([])
-      const marketListState = marketSelector(store.getState())
+      const marketListState = marketListSelector(store.getState())
       expect(marketListState).toEqual(emptyList)
     })
 
@@ -44,7 +44,7 @@ const marketReducerTests = () => {
       processMarketResponse(store.dispatch, threeMarketsResponse)
 
       // THEN
-      const markets = marketSelector(store.getState())
+      const markets = marketListSelector(store.getState())
 
       const firstMarketRecord = markets.get(0)
       const secondMarketRecord = markets.get(1)
@@ -65,7 +65,7 @@ const marketReducerTests = () => {
       processMarketResponse(store.dispatch, etherAndGasMarketsResponse)
 
       // THEN
-      const markets = marketSelector(store.getState())
+      const markets = marketListSelector(store.getState())
       const firstMarketRecord = markets.get(0)
       const secondMarketRecord = markets.get(1)
 
