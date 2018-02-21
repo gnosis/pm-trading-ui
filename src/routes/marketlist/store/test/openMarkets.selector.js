@@ -54,9 +54,15 @@ const openMarketTests = () => {
       expect(0).toEqual(openMarkets)
     })
 
-    it('should return 0 open markets if there is no open markets loaded in store', () => {
+    it('should be closed if a market has stage 0 -> MARKET_CREATED', () => {
       // GIVEN
-      const markets = List([])
+      const aClosedMarket = aMarket()
+        .withResolution(moment().add(1, 'M'))
+        .withStage(MARKET_STAGES.MARKET_CREATED)
+        .withResolved(false)
+        .get()
+
+      const markets = List([aClosedMarket])
       const reduxStore = { [REDUCER_ID]: markets }
 
       // WHEN
