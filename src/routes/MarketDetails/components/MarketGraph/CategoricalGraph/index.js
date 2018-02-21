@@ -6,12 +6,19 @@ import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import DateAxisTick from '../DateAxisTick'
 import style from '../MarketGraph.scss'
-import { DateAxisTick } from '../'
 
 const cx = cn.bind(style)
 
 const percentageFormatter = val => (val * 100).toFixed(0)
+
+const lineChartMargins = {
+  top: 10,
+  right: 50,
+  left: 50,
+  bottom: 0,
+}
 
 const CategoricalGraph = ({ data }) => {
   const stacks = Object.keys(data[0]).slice(2)
@@ -21,15 +28,7 @@ const CategoricalGraph = ({ data }) => {
     <div className={cx('marketGraph')}>
       <div className={cx('marketGraphContainer')}>
         <ResponsiveContainer>
-          <LineChart
-            data={data}
-            margin={{
-              top: 10,
-              right: 50,
-              left: 50,
-              bottom: 0,
-            }}
-          >
+          <LineChart data={data} margin={lineChartMargins}>
             <defs>
               {stacks.map((key, keyIndex) => (
                 <linearGradient key={key} id={`gradient_${key}`} x1="0" y1="0" x2="0" y2="1">

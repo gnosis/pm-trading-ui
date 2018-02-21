@@ -1,27 +1,37 @@
 import React from 'react'
+import cn from 'classnames'
+import PropTypes from 'prop-types'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import CustomTooltip from 'components/CustomTooltip'
+import Decimal from 'decimal.js'
+import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
+import { eventDescriptionShape } from 'utils/shapes'
+import DateAxisTick from '../DateAxisTick'
+import style from '../MarketGraph.scss'
 
-const ScalarGraph = (data, { eventDescription, lowerBound, upperBound }) => {
+const cx = cn.bind(style)
+
+const lineChartMargins = {
+  top: 10,
+  right: 50,
+  left: 50,
+  bottom: 0,
+}
+
+const ScalarGraph = ({
+  data, eventDescription, lowerBound, upperBound,
+}) => {
   const stacks = [`Current ${eventDescription.unit}`]
   const z = scaleOrdinal(schemeDark2)
   z.domain(stacks)
 
   return (
-    <div className="marketGraph">
-      <div className="container marketGraph__container">
+    <div className={cx('marketGraph')}>
+      <div className={cx('marketGraphContainer')}>
         <ResponsiveContainer>
-          <LineChart
-            data={data}
-            margin={{
-              top: 10,
-              right: 50,
-              left: 50,
-              bottom: 0,
-            }}
-          >
+          <LineChart data={data} margin={lineChartMargins}>
             <defs>
               {stacks.map((key, keyIndex) => (
                 <linearGradient key={key} id={`gradient_${key}`} x1="0" y1="0" x2="0" y2="1">
@@ -65,6 +75,20 @@ const ScalarGraph = (data, { eventDescription, lowerBound, upperBound }) => {
       </div>
     </div>
   )
+}
+
+ScalarGraph.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object),
+  eventDescription: eventDescriptionShape,
+  lowerBound: PropTypes.string,
+  upperBound: PropTypes.string,
+}
+
+ScalarGraph.defaultProps = {
+  data: [],
+  eventDescription: {},
+  lowerBound: '',
+  upperBound: '',
 }
 
 export default ScalarGraph

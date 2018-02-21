@@ -8,6 +8,8 @@ export const eventDescriptionShape = PropTypes.shape({
   outcomes: PropTypes.arrayOf(PropTypes.string),
   resolutionDate: PropTypes.string,
   title: PropTypes.string,
+  decimals: PropTypes.number,
+  unit: PropTypes.string,
 })
 
 export const outcomeTokenShape = PropTypes.shape({
@@ -15,14 +17,6 @@ export const outcomeTokenShape = PropTypes.shape({
   event: PropTypes.string,
   index: PropTypes.number,
   totalSupply: PropTypes.string,
-})
-
-export const marketShape = PropTypes.shape({
-  event: PropTypes.object,
-  eventDescription: eventDescriptionShape,
-  oracle: PropTypes.object,
-  netOutcomeTokensSold: PropTypes.arrayOf(PropTypes.string),
-  address: PropTypes.string,
 })
 
 export const providerPropType = PropTypes.shape({
@@ -38,6 +32,17 @@ export const eventShape = PropTypes.shape({
   event: PropTypes.string,
   label: PropTypes.string,
   status: PropTypes.string,
+  type: PropTypes.string,
+  lowerBound: PropTypes.string,
+  upperBound: PropTypes.string,
+})
+
+export const marketShape = PropTypes.shape({
+  event: eventShape,
+  eventDescription: eventDescriptionShape,
+  oracle: PropTypes.object,
+  netOutcomeTokensSold: PropTypes.arrayOf(PropTypes.string),
+  address: PropTypes.string,
 })
 
 export const marketShareShape = PropTypes.shape({
