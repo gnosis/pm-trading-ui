@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import PropTypes from 'prop-types'
-import * as React from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import Layout from '../components/Layout'
 import actions from './actions'
@@ -26,7 +26,7 @@ class MarketList extends React.Component {
 }
 
 MarketList.propTypes = {
-  markets: React.PropTypes.instanceOf(List),
+  markets: PropTypes.instanceOf(List),
   openMarkets: PropTypes.number.isRequired,
   newMarkets: PropTypes.number.isRequired,
   endingSoonMarkets: PropTypes.number.isRequired,
