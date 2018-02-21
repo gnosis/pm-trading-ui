@@ -49,7 +49,7 @@ export const endingSoonMarketSelector = createSelector(
     }
 
     const openMarkets = markets.filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
-    const endingSoonMarkets = openMarkets.filter(market => isMarketEndingSoon(market.resoution))
+    const endingSoonMarkets = openMarkets.filter(market => isMarketEndingSoon(market.resolution))
     return endingSoonMarkets ? endingSoonMarkets.size : 0
   },
 )
