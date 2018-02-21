@@ -1,16 +1,16 @@
-import MarketBuySharesForm from 'components/MarketBuySharesForm'
-import MarketMySharesForm, { MY_TOKENS } from 'components/MarketMySharesForm'
-import MarketWithdrawFeesForm from 'components/MarketWithdrawFeesForm'
-import MarketMyTrades from 'components/MarketMyTrades'
 import Decimal from 'decimal.js'
-import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
+import { isMarketClosed, isMarketResolved } from 'utils/helpers'
+import MarketBuySharesForm from './MarketBuySharesForm'
+import MarketMySharesForm, { MY_TOKENS } from './MarketMySharesForm'
+import MarketWithdrawFeesForm from './MarketWithdrawFeesForm'
+import MarketMyTrades from './MarketMyTrades'
 
 export const EXPAND_BUY_SHARES = 'buy-shares'
 export const EXPAND_MY_TRADES = 'my-trades'
 export const EXPAND_MY_SHARES = 'my-shares'
 export const EXPAND_WITHDRAW_FEES = 'withdraw-fees'
 
-const expandableViews = ({
+const expandableViews = {
   [EXPAND_BUY_SHARES]: {
     label: 'Buy Tokens',
     className: 'btn btn-default',
@@ -23,18 +23,6 @@ const expandableViews = ({
       !isMarketClosed(props.market) &&
       !isMarketResolved(props.market),
   },
-  /* HIDDEN
-  [EXPAND_SHORT_SELL]: {
-    label: 'Short Sell',
-    className: 'btn btn-primary',
-    component: MarketShortSellForm,
-    showCondition: props =>
-      props.market &&
-      props.defaultAccount &&
-      !props.market.oracle.isOutcomeSet &&
-      props.market.eventDescription.outcomes &&
-      props.market.eventDescription.outcomes.length > 2,
-  }, */
   [EXPAND_MY_SHARES]: {
     label: MY_TOKENS,
     className: 'btn btn-default',
@@ -57,6 +45,6 @@ const expandableViews = ({
       props.market.oracle.owner === props.defaultAccount &&
       new Decimal(props.market.collectedFees).gt(0),
   },
-})
+}
 
 export default expandableViews

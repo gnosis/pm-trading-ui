@@ -20,7 +20,7 @@ import {
 } from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
-import { EXPAND_MY_SHARES } from 'components/MarketDetail/ExpandableViews'
+import { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
 
 import Metrics from './Metrics'
 import './dashboard.scss'

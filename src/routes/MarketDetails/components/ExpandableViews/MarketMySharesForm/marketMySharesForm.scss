@@ -1,6 +1,6 @@
-@import '../../scss/vars.scss';
-@import "../FormSlider/slider.scss";
-@import "../FormSlider/thumb.scss";
+@import "../../../../../scss/vars";
+@import "../../../../../components/FormSlider/slider.scss";
+@import "../../../../../components/FormSlider/thumb.scss";
 
 $indexWidth: 36px;
 $groupWidth: 33%;

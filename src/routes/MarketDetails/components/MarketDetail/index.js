@@ -17,10 +17,10 @@ import DecimalValue, { decimalToText } from 'components/DecimalValue'
 import LoadingIndicator from 'components/LoadingIndicator'
 import Countdown from 'components/Countdown'
 import Outcome from 'components/Outcome'
-import MarketGraph from 'components/MarketGraph'
+import MarketGraph from 'routes/MarketDetails/components/MarketGraph'
+import expandableViews, { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
 
 import config from 'config.json'
-import expandableViews, { EXPAND_MY_SHARES } from './ExpandableViews'
 
 import './marketDetail.scss'
 

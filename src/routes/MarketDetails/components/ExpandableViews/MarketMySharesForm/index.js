@@ -11,7 +11,7 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import FormSlider from 'components/FormSlider'
 import FormInput from 'components/FormInput'
-import { NUMBER_REGEXP } from 'components/MarketBuySharesForm'
+import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
 
 import {

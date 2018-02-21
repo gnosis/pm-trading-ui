@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
 import { replace } from 'react-router-redux'
 import { requestGasCost, requestGasPrice } from 'actions/blockchain'
-import MarketDetail from 'components/MarketDetail'
+import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
 import {
   buyMarketShares,
