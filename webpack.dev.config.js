@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -93,6 +94,7 @@ module.exports = {
     },
   },
   plugins: [
+    new CaseSensitivePathsPlugin(),
     new FaviconsWebpackPlugin({
       logo: 'assets/img/gnosis_logo_favicon.png',
       // Generate a cache file with control hashes and
