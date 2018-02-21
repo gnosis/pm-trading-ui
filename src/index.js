@@ -1,7 +1,7 @@
 import 'babel-polyfill'
 import 'whatwg-fetch'
 import Raven from 'raven-js'
-import RootComponent from 'RootComponent'
+import RootComponent from 'components/root'
 import { initProviders } from 'integrations/store/actions'
 import Decimal from 'decimal.js'
 import React from 'react'
