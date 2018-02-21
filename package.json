@@ -95,6 +95,7 @@
     "babel-preset-stage-0": "6.24.1",
     "bootstrap-loader": "^2.1.0",
     "bootstrap-sass": "^3.3.7",
+    "case-sensitive-paths-webpack-plugin": "^2.1.1",
     "css-loader": "^0.28.9",
     "eslint": "^4.17.0",
     "eslint-config-airbnb": "^16.1.0",
