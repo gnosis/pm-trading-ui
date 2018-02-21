@@ -22,7 +22,7 @@ const ethereumUrl =
 
 module.exports = {
   context: path.join(__dirname, 'src'),
-  entry: ['react-hot-loader/patch', 'bootstrap-loader', 'index.js'],
+  entry: ['bootstrap-loader', 'index.js'],
   devtool: 'eval-source-map',
   output: {
     publicPath: '/',
@@ -80,6 +80,7 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
     historyApiFallback: true,
+    hot: true,
     port: 5000,
     proxy: {
       '/api': {
