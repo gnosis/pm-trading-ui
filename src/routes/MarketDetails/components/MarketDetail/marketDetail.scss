@@ -127,25 +127,6 @@ $expandable-margin: 40px;
   }
 }
 
-.marketGraph__container {
-  width: 100%;
-  height: 100%;
-}
-.marketGraph {
-  width: 100%;
-  min-height: 400px;
-  padding: 60px 0;
-  height: 60vh;
-  background-color: $bg-color-dark;
-  color: $font-color-dark;
-
-  &__spinner {
-    margin: auto;
-    display: block;
-    padding: 60px 0;
-  }
-}
-
 
 .expandable {
   position: relative;

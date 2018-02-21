@@ -14,7 +14,6 @@ import InteractionButton from 'containers/InteractionButton'
 
 import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue, { decimalToText } from 'components/DecimalValue'
-import LoadingIndicator from 'components/LoadingIndicator'
 import Countdown from 'components/Countdown'
 import Outcome from 'components/Outcome'
 import MarketGraph from 'routes/MarketDetails/components/MarketGraph'
@@ -289,13 +288,6 @@ class MarketDetail extends Component {
 
   renderMarketGraph() {
     const { market, marketGraph } = this.props
-    if (!marketGraph.length) {
-      return (
-        <div className="container">
-          <LoadingIndicator className="marketGraph__spinner" />
-        </div>
-      )
-    }
 
     return <MarketGraph data={marketGraph} market={market} />
   }
