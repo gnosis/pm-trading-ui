@@ -12,7 +12,7 @@ import Identicon from './Identicon'
 import ProviderIcon from './ProviderIcon'
 import MenuAccountDropdown from './MenuAccountDropdown'
 
-import css from './Header.mod.scss'
+import css from './Header.scss'
 
 const cx = className.bind(css)
 
