@@ -144,10 +144,49 @@ class MarketBuySharesForm extends Component {
 
   renderCategorical() {
     const {
-      selectedBuyInvest, selectedOutcome, limitMargin, market, market: { eventDescription },
+      selectedBuyInvest,
+      selectedOutcome,
+      market: {
+        funding,
+        netOutcomeTokensSold,
+        eventDescription: { outcomes },
+      },
     } = this.props
 
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
+    const isOutcomeSelected = selectedOutcome !== undefined
+    const isInvestmentValid = NUMBER_REGEXP.test(selectedBuyInvest) || !selectedBuyInvest
+
+    const isMarketSimulation = isOutcomeSelected && isInvestmentValid
+
+    const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
+    const marketTokenCountsWithSimulation = marketTokenCounts.slice()
+
+    let marginalPricesWithSimulation
+
+    if (isMarketSimulation) {
+      const investmentOutcomeTokens = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
+
+      marketTokenCountsWithSimulation[selectedOutcome] = marketTokenCountsWithSimulation[selectedOutcome].add(investmentOutcomeTokens)
+
+      marginalPricesWithSimulation = marketTokenCountsWithSimulation.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+        netOutcomeTokensSold: marketTokenCountsWithSimulation,
+        outcomeTokenIndex,
+        funding,
+      }))
+    } else {
+      marginalPricesWithSimulation = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+        netOutcomeTokensSold: marketTokenCounts,
+        outcomeTokenIndex,
+        funding,
+      }))
+    }
+
+    const categoricalOutcomes = outcomes.map((label, index) => ({
+      index,
+      label,
+      color: COLOR_SCHEME_DEFAULT[index],
+      probability: marginalPricesWithSimulation[index].mul(100),
+    }))
 
     return (
       <div className="col-md-7">
@@ -162,35 +201,10 @@ class MarketBuySharesForm extends Component {
               component={OutcomeSelection}
               name="selectedOutcome"
               className="marketBuyOutcome"
-              market={market}
-              selectedOutcome={selectedOutcome}
-              outcomeTokenCount={outcomeTokenCount}
-              radioValues={eventDescription.outcomes.map((label, index) => ({
-                value: index,
-                label: eventDescription.outcomes[index],
-                highlightColor: COLOR_SCHEME_DEFAULT[index],
-              }))}
+              outcomes={categoricalOutcomes}
             />
           </div>
         </div>
-      </div>
-    )
-  }
-
-  renderOutcomes() {
-    const { market: { event } } = this.props
-
-    if (event.type === OUTCOME_TYPES.CATEGORICAL) {
-      return this.renderCategorical()
-    }
-
-    if (event.type === OUTCOME_TYPES.SCALAR) {
-      return this.renderScalar()
-    }
-
-    return (
-      <div className="col-md-6">
-        <span>Invalid Outcomes...</span>
       </div>
     )
   }
@@ -215,7 +229,12 @@ class MarketBuySharesForm extends Component {
     const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
     const marketTokenCountsWithSimulation = marketTokenCounts.slice()
 
-    let marginalPricesWithSimulation
+    const marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+      netOutcomeTokensSold: marketTokenCounts,
+      outcomeTokenIndex,
+      funding,
+    }))
+    let marginalPricesWithSimulation = marginalPrices.slice()
 
     if (isMarketSimulation) {
       const investmentOutcomeTokens = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
@@ -229,24 +248,18 @@ class MarketBuySharesForm extends Component {
       }))
     }
 
-    const marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
-      netOutcomeTokensSold: marketTokenCounts,
-      outcomeTokenIndex,
-      funding,
-    }))
-
     const scalarOutcomes = [
       {
         index: 0,
         label: 'Short',
         color: COLOR_SCHEME_SCALAR[0],
-        probability: Decimal(marginalPricesWithSimulation[0]).mul(100),
+        probability: marginalPricesWithSimulation[0].mul(100),
       },
       {
         index: 1,
         label: 'Long',
         color: COLOR_SCHEME_SCALAR[1],
-        probability: Decimal(marginalPricesWithSimulation[1]).mul(100),
+        probability: marginalPricesWithSimulation[1].mul(100),
       },
     ]
 
@@ -275,6 +288,24 @@ class MarketBuySharesForm extends Component {
             />
           </div>
         </div>
+      </div>
+    )
+  }
+
+  renderOutcomes() {
+    const { market: { event } } = this.props
+
+    if (event.type === OUTCOME_TYPES.CATEGORICAL) {
+      return this.renderCategorical()
+    }
+
+    if (event.type === OUTCOME_TYPES.SCALAR) {
+      return this.renderScalar()
+    }
+
+    return (
+      <div className="col-md-6">
+        <span>Invalid Outcomes...</span>
       </div>
     )
   }
