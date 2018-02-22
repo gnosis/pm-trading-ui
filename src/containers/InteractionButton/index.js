@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import { upperFirst } from 'lodash'
 
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -109,15 +110,8 @@ class InteractionButton extends Component {
     }
 
     if (networkError) {
-      return (
-        <Tooltip
-          overlay={`You are connected to the wrong chain. You can only interact using ${
-            ETHEREUM_NETWORK_IDS[targetNetworkId]
-          } network.`}
-        >
-          {btn}
-        </Tooltip>
-      )
+      const wrongNetworkText = `You are connected to the wrong chain. You can only interact using ${upperFirst(ETHEREUM_NETWORK_IDS[targetNetworkId].toLowerCase())} network.`
+      return <Tooltip overlay={wrongNetworkText}>{btn}</Tooltip>
     }
 
     return btn
