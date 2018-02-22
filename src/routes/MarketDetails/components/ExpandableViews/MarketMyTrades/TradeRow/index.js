@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getOutcomeName } from 'utils/helpers'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
+import { marketTradeShape } from 'utils/shapes'
 import Decimal from 'decimal.js'
 
 const getAverageCost = (order) => {
@@ -33,5 +33,25 @@ const TradeRow = ({
     <td>{tradeCost}</td>
   </tr>
 )
+
+TradeRow.propTypes = {
+  trade: marketTradeShape,
+  outcomeColorStyle: PropTypes.shape({
+    backgroundColor: PropTypes.string,
+  }),
+  collateralToken: PropTypes.string,
+  tradeDate: PropTypes.string,
+  outcomeName: PropTypes.string,
+  tradeCost: PropTypes.string,
+}
+
+TradeRow.defaultProps = {
+  trade: {},
+  outcomeColorStyle: {},
+  collateralToken: '',
+  tradeDate: '',
+  outcomeName: '',
+  tradeCost: '',
+}
 
 export default TradeRow
