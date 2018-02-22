@@ -9,12 +9,11 @@ import InteractionButton from 'containers/InteractionButton'
 
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import FormSlider from 'components/FormSlider'
 
 import { NUMBER_REGEXP } from 'components/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
 
-import { TextInput } from 'components/Form'
+import { TextInput, Slider } from 'components/Form'
 
 import {
   COLOR_SCHEME_DEFAULT,
@@ -346,7 +345,7 @@ class MarketMySharesForm extends Component {
             <div className="col-md-3">
               <Field
                 name="limitMargin"
-                component={FormSlider}
+                component={Slider}
                 className="limitMarginField"
                 placeholder={LIMIT_MARGIN_DEFAULT}
                 min={0}
