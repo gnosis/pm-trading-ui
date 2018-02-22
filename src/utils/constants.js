@@ -62,6 +62,7 @@ export const GAS_COST = {
 }
 export const DEFAULT_NOTIFICATION_FADEOUT = 60000
 
+// TODO delete it
 export const MARKET_STAGES = {
   MARKET_CREATED: 0,
   MARKET_FUNDED: 1,
