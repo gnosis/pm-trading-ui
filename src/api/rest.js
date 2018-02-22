@@ -1,12 +1,5 @@
-import {
-  restFetch,
-  hexWithoutPrefix,
-  addIdToObjectsInArray,
-  getOutcomeName,
-  normalizeScalarPoint,
-} from 'utils/helpers'
+import { restFetch, hexWithoutPrefix } from 'utils/helpers'
 import { normalize } from 'normalizr'
-import { OUTCOME_TYPES } from 'utils/constants'
 import qs from 'querystring'
 import { marketSchema, marketSharesSchema, marketTradesSchema } from './schema'
 
@@ -20,6 +13,7 @@ export const requestMarket = async marketAddress =>
   restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/`).then(response =>
     normalize({ ...response, local: false }, marketSchema))
 
+// TODO delete when src/routes/marketlist is fully operative
 export const requestMarkets = async () => {
   const url = `${API_URL}/markets/?${whitelistedAddressesFilter}`
 
@@ -43,7 +37,6 @@ export const requestAccountTrades = async (accountAddress) => {
   const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(accountAddress)}/trades/`)
   return normalize(payload.results.map(trade => ({ ...trade, owner: accountAddress })), [marketTradesSchema])
 }
-
 
 export const requestAccountShares = async (address) => {
   const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/shares/`)

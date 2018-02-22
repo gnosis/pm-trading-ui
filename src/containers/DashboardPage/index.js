@@ -2,10 +2,12 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import DashboardPage from 'components/Dashboard'
-import { getMarkets, getAccountPredictiveAssets } from 'selectors/market'
+import { getMarkets } from 'selectors/market'
+import { profitsSelector } from 'containers/DashboardPage/store/selectors'
 import { getAccountTrades } from 'selectors/marketTrades'
 import { getAccountShares } from 'selectors/marketShares'
-import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized, checkWalletConnection } from 'selectors/blockchain'
+import { isGnosisInitialized, getEtherTokensAmount } from 'selectors/blockchain'
+import { getCurrentAccount, checkWalletConnection } from 'integrations/store/selectors'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
@@ -14,7 +16,7 @@ const mapStateToProps = (state) => {
   const markets = getMarkets(state)
   const defaultAccount = getCurrentAccount(state)
   const accountTrades = getAccountTrades(defaultAccount)(state)
-  const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
+  const accountPredictiveAssets = weiToEth(profitsSelector(state, defaultAccount))
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
   let etherTokens = getEtherTokensAmount(state, defaultAccount)

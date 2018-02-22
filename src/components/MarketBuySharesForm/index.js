@@ -295,7 +295,7 @@ class MarketBuySharesForm extends Component {
     const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome, limitMargin)
     const maximumWin = this.getMaximumWin(outcomeTokenCount, selectedBuyInvest || '0')
     const percentageWin = this.getPercentageWin(outcomeTokenCount, selectedBuyInvest)
-    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.buyShares || 0))
+    const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.get('buyShares') || 0))
 
     const submitDisabled = invalid || !selectedBuyInvest
     let fieldError
@@ -321,9 +321,11 @@ class MarketBuySharesForm extends Component {
         </span>
       )
 
+      const returnSign = maximumWin > 0 ? '' : '+'
       maxReturnField = (
         <span className="marketBuyWin__row marketBuyWin__max">
-          +<DecimalValue value={percentageWin} /> %&nbsp; (<DecimalValue value={maximumWin} />&nbsp;
+          {returnSign}
+          <DecimalValue value={percentageWin} /> %&nbsp; (<DecimalValue value={maximumWin} />&nbsp;
           <CurrencyName collateralToken={collateralToken} />)
         </span>
       )

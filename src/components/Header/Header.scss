@@ -10,7 +10,7 @@ $navbarHeight: 40px;
     .navLinks {
       min-width: 450px;
 
-      .headerContainer__navLink {
+      .navLink {
         font-size: 13px;
       }
     }
@@ -20,19 +20,15 @@ $navbarHeight: 40px;
     .navLinks {
       min-width: 420px;
 
-      .headerContainer__navLink {
+      .navLink {
         font-size: 12px;
       }
     }
   }
 
-  &__connect-wallet {
+  .connect-wallet {
     cursor: pointer;
     font-size: 16px;
-  }
-
-  &__inner {
-    position: relative;
   }
 
   .container {
@@ -40,7 +36,7 @@ $navbarHeight: 40px;
     align-items: center;
   }
 
-  &__network {
+  .network {
     margin-right: 5px;
     display: flex;
     flex-direction: column;
@@ -64,7 +60,10 @@ $navbarHeight: 40px;
     }
   }
 
-  &__account {
+  .account {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
     vertical-align: middle;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -83,79 +82,73 @@ $navbarHeight: 40px;
       margin-left: 10px;
     }
   }
-}
 
-.headerContainer__navLink {
-  margin-left: 15px;
-  line-height: $navbarHeight;
-  text-transform: uppercase;
-  font-weight: 500;
-  padding-bottom: 2px;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid transparent;
-  color: black !important;
-  font-size: 11px;
-
-  @media (min-width: $screen-sm) {
-    font-size: 14px;
-    margin-left: 20px;
-  }
-
-  &:hover,
-  &--active {
-    border-color: $link-color;
-  }
-}
-
-.headerContainer__group {
-  &--version {
-    line-height: $navbarHeight;
-    color: white !important;
-    font-size: 12px;
-    display: none;
-    letter-spacing: 0.5px;
-  }
-
-  &--logo {
-    width: 70px;
-    padding-right: 0;
-    height: $navbarHeight;
-
-    @media (min-width: $screen-sm) {
-      width: 200px;
-      padding-right: 70px;
-      position: relative;
-      height: $navbarHeight;
-    }
-  }
-
-  &--right {
-    margin-left: auto;
-  }
-
-  &--logo {
-    width: 70px;
-    padding-right: 0;
-    height: $navbarHeight;
-
-    @media (min-width: $screen-sm) {
-      width: 200px;
-      padding-right: 70px;
-      position: relative;
-      height: $navbarHeight;
+  .group {
+    &.version {
+      line-height: $navbarHeight;
+      color: white !important;
+      font-size: 12px;
+      display: none;
+      letter-spacing: 0.5px;
     }
 
-    @media only screen and (min-width: 768px) and (max-width: 1199px) {
+    &.logo {
+      width: 70px;
       padding-right: 0;
-      width: 134px;
+      height: $navbarHeight;
+
+      @media (min-width: $screen-sm) {
+        width: 200px;
+        padding-right: 70px;
+        position: relative;
+        height: $navbarHeight;
+      }
+    }
+
+    &.right {
+      margin-left: auto;
+    }
+
+    &.logo {
+      width: 70px;
+      padding-right: 0;
+      height: $navbarHeight;
+
+      @media (min-width: $screen-sm) {
+        width: 200px;
+        padding-right: 70px;
+        position: relative;
+        height: $navbarHeight;
+      }
+
+      @media only screen and (min-width: 768px) and (max-width: 1199px) {
+        padding-right: 0;
+        width: 134px;
+      }
+    }
+
+    .navLink {
+      margin-left: 15px;
+      line-height: $navbarHeight;
+      text-transform: uppercase;
+      font-weight: 500;
+      padding-bottom: 2px;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid transparent;
+      color: black !important;
+      font-size: 11px;
+    
+      @media (min-width: $screen-sm) {
+        font-size: 14px;
+        margin-left: 20px;
+      }
+    
+      &:hover,
+      &.active {
+        border-color: $link-color;
+      }
     }
   }
-}
-
-.headerContainer__account {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
 }
 
 .headerLogo {
@@ -186,26 +179,5 @@ $navbarHeight: 40px;
       right: 0;
       bottom: 0;
     }
-  }
-}
-
-.headerIcon {
-  height: 30px;
-  width: 35px;
-  margin-left: 15px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: left center;
-
-  &--metamask {
-    background-image: url("../../assets/img/icons/icon_metamask.svg");
-  }
-
-  &--parity {
-    background-image: url("../../assets/img/icons/icon_parity.svg");
-  }
-
-  &--default {
-    background-image: url("../../assets/img/icons/icon_etherTokens.svg");
   }
 }

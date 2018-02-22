@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -22,7 +23,7 @@ const ethereumUrl =
 
 module.exports = {
   context: path.join(__dirname, 'src'),
-  entry: ['react-hot-loader/patch', 'bootstrap-loader', 'index.js'],
+  entry: ['bootstrap-loader', 'index.js'],
   devtool: 'eval-source-map',
   output: {
     publicPath: '/',
@@ -80,6 +81,7 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
     historyApiFallback: true,
+    hot: true,
     port: 5000,
     proxy: {
       '/api': {
@@ -92,6 +94,7 @@ module.exports = {
     },
   },
   plugins: [
+    new CaseSensitivePathsPlugin(),
     new FaviconsWebpackPlugin({
       logo: 'assets/img/gnosis_logo_favicon.png',
       // Generate a cache file with control hashes and

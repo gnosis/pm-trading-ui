@@ -29,4 +29,8 @@ Identicon.propTypes = {
   account: PropTypes.string,
 }
 
+Identicon.defaultProps = {
+  account: '',
+}
+
 export default Identicon

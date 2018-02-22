@@ -14,11 +14,30 @@ class Remote extends InjectedWeb3 {
   constructor() {
     super()
 
-    this.watcher = setInterval(() => {
+    this.watcher = () => {
       this.watch('account', this.getAccount)
       this.watch('balance', this.getBalance)
       this.watch('network', this.getNetwork)
-    }, Remote.watcherInterval)
+    }
+  }
+
+  /**
+   * Tries to set connection to the blockchain
+   */
+  async initWeb3() {
+    try {
+      this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
+
+      this.networkId = await this.getNetworkId()
+      this.network = await this.getNetwork()
+      this.account = await this.getAccount()
+      this.balance = await this.getBalance()
+
+      return true
+    } catch (err) {
+      // remote not available
+      return false
+    }
   }
 
   /**
@@ -30,18 +49,11 @@ class Remote extends InjectedWeb3 {
   async initialize(opts) {
     super.initialize(opts)
     this.runProviderRegister(this, { priority: Remote.providerPriority })
-    try {
-      this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
 
-      this.networkId = await this.getNetworkId()
-      this.network = await this.getNetwork()
-      this.account = await this.getAccount()
-      this.balance = await this.getBalance()
+    this.walletEnabled = await this.initWeb3()
 
-      this.walletEnabled = true
-    } catch (err) {
-      // remote not available
-      this.walletEnabled = false
+    if (this.watcher) {
+      setInterval(this.watcher, Remote.watcherInterval)
     }
 
     return this.runProviderUpdate(this, {

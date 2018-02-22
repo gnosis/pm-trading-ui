@@ -4,14 +4,17 @@ import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
 import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
-import Identicon from 'components/Identicon'
-import ProviderIcon from 'components/ProviderIcon'
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
+import className from 'classnames'
 
+import Identicon from './Identicon'
+import ProviderIcon from './ProviderIcon'
 import MenuAccountDropdown from './MenuAccountDropdown'
 
-import './header.scss'
+import styles from './Header.scss'
+
+const cx = className.bind(styles)
 
 class Header extends Component {
   @autobind
@@ -24,63 +27,63 @@ class Header extends Component {
       version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider,
     } = this.props
     return (
-      <div className="headerContainer">
-        <div className="container">
-          <div className="headerContainer__group headerContainer__group--logo">
-            <NavLink to="/">
-              <div className="headerLogo beta" />
+      <div className={cx('headerContainer')}>
+        <div className={cx('container')}>
+          <div className={cx('group', 'logo')}>
+            <NavLink to="/markets/list">
+              <div className={cx('headerLogo', 'beta')} />
             </NavLink>
           </div>
-          <div className="headerContainer__group headerContainer__group--left headerContainer__group--version">
+          <div className={cx('group', 'left', 'version')}>
             {version}
           </div>
-          <div className="headerContainer__group headerContainer__group--left navLinks">
+          <div className={cx('group', 'left', 'navLinks')}>
             {hasWallet && (
               <NavLink
                 to="/dashboard"
-                activeClassName="headerContainer__navLink--active"
-                className="headerContainer__navLink"
+                activeClassName={cx('navLink', 'active')}
+                className={cx('navLink')}
               >
                 Dashboard
               </NavLink>
             )}
             <NavLink
               to="/markets/list"
-              activeClassName="headerContainer__navLink--active"
-              className="headerContainer__navLink"
+              activeClassName={cx('navLink', 'active')}
+              className={cx('navLink')}
             >
               Markets
             </NavLink>
             {hasWallet && (
               <NavLink
                 to="/transactions"
-                activeClassName="headerContainer__navLink--active"
-                className="headerContainer__navLink"
+                activeClassName={cx('navLink', 'active')}
+                className={cx('navLink')}
               >
                 Transactions
               </NavLink>
             )}
           </div>
 
-          <div className="headerContainer__group headerContainer__group--right">
+          <div className={cx('group', 'right')}>
             {hasWallet &&
               currentProvider && (
-                <div className="headerContainer__account">
+                <div className={cx('account')}>
                   {currentNetwork &&
                     currentNetwork !== 'MAIN' && (
-                      <span className="headerContainer__network--text">
+                      <span className={cx('network', 'text')}>
                         Network: {upperFirst(currentNetwork.toLowerCase())}
                       </span>
                     )}
-                  <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
-                  <span className="headerContainer__account--text">{collateralTokenToText()}</span>
+                  <DecimalValue value={currentBalance} className={cx('balance', 'test')} />&nbsp;
+                  <span className={cx('account', 'text')}>{collateralTokenToText()}</span>
                   <ProviderIcon provider={currentProvider} />
                   <Identicon account={currentAccount} />
                   <MenuAccountDropdown />
                 </div>
               )}
             {!hasWallet && (
-              <a className="headerContainer__connect-wallet" onClick={this.handleConnectWalletClick}>
+              <a className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
                 Connect a wallet
               </a>
             )}
