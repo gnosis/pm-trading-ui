@@ -215,20 +215,22 @@ class MarketBuySharesForm extends Component {
     const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
     const marketTokenCountsWithSimulation = marketTokenCounts.slice()
 
+    let marginalPricesWithSimulation
+
     if (isMarketSimulation) {
       const investmentOutcomeTokens = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
 
       marketTokenCountsWithSimulation[selectedOutcome] = marketTokenCountsWithSimulation[selectedOutcome].add(investmentOutcomeTokens)
+
+      marginalPricesWithSimulation = marketTokenCountsWithSimulation.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+        netOutcomeTokensSold: marketTokenCountsWithSimulation,
+        outcomeTokenIndex,
+        funding,
+      }))
     }
 
     const marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
       netOutcomeTokensSold: marketTokenCounts,
-      outcomeTokenIndex,
-      funding,
-    }))
-
-    const marginalPricesWithSimulation = marketTokenCountsWithSimulation.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
-      netOutcomeTokensSold: marketTokenCountsWithSimulation,
       outcomeTokenIndex,
       funding,
     }))
