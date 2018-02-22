@@ -1,18 +1,18 @@
-@import "../../../../../scss/vars";
+@import '../../../../../scss/vars';
 
 $indexWidth: 36px;
 $groupWidth: 20%;
 
 .marketMyTrades {
-  &__shareTable {
+  .shareTable {
     margin-top: 20px;
     table-layout: fixed;
   }
 
-  &__share {
+  .shareTableRow {
     vertical-align: middle;
 
-    td {      
+    td {
       vertical-align: middle !important;
       border-top: 1px solid #ddd;
 
@@ -21,65 +21,14 @@ $groupWidth: 20%;
       }
     }
   }
-
-  &__sell {
-    border-top: 0 !important;
-
-    &--heading {
-      th {
-        font-weight: 400;
-        text-transform: uppercase;
-        color: $font-color-muted;
-      }
-    }
-
-    td, th {
-      border-top: 0 !important;
-    }
-  }
-
-  &__tableHeading {
-    font-weight: 400;
-    text-transform: uppercase;
-    color: $font-color-muted;
-    border-bottom: none !important;
-
-    &--group {
-      width: $groupWidth;
-    }
-
-    &--index {
-      width: $indexWidth;
-
-      border-bottom: 0 !important;
-    }
-  }  
-
-  &__diff {
-    &--positive {
-      color: $active-highlight-success !important;
-    }
-
-    &--negative {
-      color: $active-highlight-error !important;
-    }
-  }
 }
 
-.shareOutcome {
-  &__color {
-    display: inline-block;
-    vertical-align: middle;
+.shareOutcomeColor {
+  display: inline-block;
+  vertical-align: middle;
 
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 
-    border-radius: 4px;
-  }
-}
-
-.marketMyTradesSellAmount {
-  &__input {
-    font-size: 14px;
-  }
+  border-radius: 4px;
 }

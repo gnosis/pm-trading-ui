@@ -1,9 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
 import { marketTradeShape } from 'utils/shapes'
 import Decimal from 'decimal.js'
+import style from '../marketMyTrades.scss'
+
+const cx = cn.bind(style)
 
 const getAverageCost = (order) => {
   if (order.orderType === 'BUY') {
@@ -18,9 +22,9 @@ const getAverageCost = (order) => {
 const TradeRow = ({
   trade, outcomeColorStyle, collateralToken, tradeDate, outcomeName, tradeCost,
 }) => (
-  <tr className="marketMyTrades__share">
+  <tr className={cx('shareTableRow')}>
     <td>
-      <div className="shareOutcome__color" style={outcomeColorStyle} />
+      <div className={cx('shareOutcomeColor')} style={outcomeColorStyle} />
     </td>
     <td>{trade.orderType}</td>
     <td>{outcomeName}</td>
