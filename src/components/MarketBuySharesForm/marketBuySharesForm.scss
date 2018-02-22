@@ -58,12 +58,18 @@
 }
 
 .marketBuyInvest {
-  &__input {
+  input, .adornment {
     font-size: 32px;
     text-align: right;
     padding-bottom: 10px !important;
     font-weight: 300;
+  }
 
+  .adornment {
+    margin-left: 5px;
+  }
+
+  input {
     &:placeholder {
       font-weight: 300;
     }

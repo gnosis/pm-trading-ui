@@ -30,16 +30,18 @@ const Outcome = ({
           value={index}
           style={{ backgroundColor: color }}
         />
-        <div
-          className={cx('outcomeBar')}
-          style={{
-            width: `${probability.toFixed(2)}%`,
-            backgroundColor: color,
-          }}
-        />
-        <div className={cx('outcomeDescription')}>
-          <span className={cx('outcomeLabel')}>{label}</span>
-          <span className={cx('outcomeProbability')}>{decimalToText(probability, 2)}%</span>
+        <div className={cx('wrapper')}>
+          <div
+            className={cx('outcomeBar')}
+            style={{
+              width: `${probability.toFixed(2)}%`,
+              backgroundColor: color,
+            }}
+          />
+          <div className={cx('outcomeDescription')}>
+            <span className={cx('outcomeLabel')}>{label}</span>
+            <span className={cx('outcomeProbability')}>{decimalToText(probability, 2)}%</span>
+          </div>
         </div>
       </label>
     </div>

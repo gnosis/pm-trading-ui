@@ -73,7 +73,7 @@ ScalarSlider.propTypes = {
   upperBound: PropTypes.number,
   unit: PropTypes.string,
   marginalPriceCurrent: PropTypes.string,
-  marginalPriceSelected: PropTypes.number,
+  marginalPriceSelected: PropTypes.string,
   decimals: PropTypes.number,
 }
 

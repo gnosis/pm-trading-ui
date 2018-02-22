@@ -10,9 +10,11 @@ import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import FormSlider from 'components/FormSlider'
-import FormInput from 'components/FormInput'
+
 import { NUMBER_REGEXP } from 'components/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
+
+import { TextInput } from 'components/Form'
 
 import {
   COLOR_SCHEME_DEFAULT,
@@ -304,7 +306,7 @@ class MarketMySharesForm extends Component {
             <div className="col-md-4 marketMyShares__sellColumn">
               <label htmlFor="sellAmount">Amount to Sell</label>
               <Field
-                component={FormInput}
+                component={TextInput}
                 name="sellAmount"
                 placeholder="Enter Token Amount"
                 className="marketMySharesSellAmount"

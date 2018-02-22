@@ -22,9 +22,12 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
 
-import FormRadioButton from 'components/FormRadioButton'
-import FormBarChartRadioButton from 'components/FormBarChartRadioButton'
-import Input from 'components/FormInput'
+import {
+  RadioButtonGroup,
+  OutcomeSelection,
+  TextInput,
+  TextInputAdornment,
+} from 'components/Form'
 
 import './marketBuySharesForm.scss'
 
@@ -75,7 +78,7 @@ class MarketBuySharesForm extends Component {
 
   getMaximumWin(outcomeTokenCount, investment) {
     if (NUMBER_REGEXP.test(investment)) {
-      return outcomeTokenCount.sub(new Decimal(investment).mul(1e18)).div(1e18)
+      return outcomeTokenCount.sub(new Decimal(investment.toString()).mul(1e18)).div(1e18)
     }
     return '--'
   }
@@ -156,7 +159,7 @@ class MarketBuySharesForm extends Component {
         <div className="row">
           <div className="col-md-12">
             <Field
-              component={FormBarChartRadioButton}
+              component={OutcomeSelection}
               name="selectedOutcome"
               className="marketBuyOutcome"
               market={market}
@@ -201,62 +204,61 @@ class MarketBuySharesForm extends Component {
         eventDescription: { decimals, unit },
         netOutcomeTokensSold,
         funding,
-        marginalPrices,
       },
     } = this.props
 
-    const validInvestment = NUMBER_REGEXP.test(selectedBuyInvest) || !selectedBuyInvest
     const isOutcomeSelected = selectedOutcome !== undefined
-    const currentMarginalPrice = marginalPrices[1]
-    // Get the amount of tokens to buy
-    const outcomeTokenCount = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
-    const newNetOutcomeTokenSold = netOutcomeTokensSold.slice()
-    if (isOutcomeSelected) {
-      newNetOutcomeTokenSold[selectedOutcome] = new Decimal(newNetOutcomeTokenSold[selectedOutcome])
-        .add(outcomeTokenCount.toString())
-        .toString()
+    const isInvestmentValid = NUMBER_REGEXP.test(selectedBuyInvest) || !selectedBuyInvest
+
+    const isMarketSimulation = isOutcomeSelected && isInvestmentValid
+
+    const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
+    const marketTokenCountsWithSimulation = marketTokenCounts.slice()
+
+    if (isMarketSimulation) {
+      const investmentOutcomeTokens = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
+
+      marketTokenCountsWithSimulation[selectedOutcome] = marketTokenCountsWithSimulation[selectedOutcome].add(investmentOutcomeTokens)
     }
-    const selectedMarginalPrice =
-      isOutcomeSelected && validInvestment
-        ? calcLMSRMarginalPrice({
-          netOutcomeTokensSold: newNetOutcomeTokenSold,
-          funding,
-          outcomeTokenIndex: 1,
-        })
-        : new Decimal('0')
+
+    const marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+      netOutcomeTokensSold: marketTokenCounts,
+      outcomeTokenIndex,
+      funding,
+    }))
+
+    const marginalPricesWithSimulation = marketTokenCountsWithSimulation.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+      netOutcomeTokensSold: marketTokenCountsWithSimulation,
+      outcomeTokenIndex,
+      funding,
+    }))
 
     const scalarOutcomes = [
       {
-        value: 0,
+        index: 0,
         label: 'Short',
-        highlightColor: COLOR_SCHEME_SCALAR[0],
+        color: COLOR_SCHEME_SCALAR[0],
+        probability: Decimal(marginalPricesWithSimulation[0]).mul(100),
       },
       {
-        value: 1,
+        index: 1,
         label: 'Long',
-        highlightColor: COLOR_SCHEME_SCALAR[1],
+        color: COLOR_SCHEME_SCALAR[1],
+        probability: Decimal(marginalPricesWithSimulation[1]).mul(100),
       },
     ]
 
     return (
       <div className="col-md-6">
         <div className="row">
-          <div className="col-md-6">
-            <div className="row">
-              <div className="col-md-12">
-                <h2 className="marketBuyHeading">Your Trade</h2>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12">
-                <Field
-                  component={FormRadioButton}
-                  name="selectedOutcome"
-                  className="marketBuyOutcome"
-                  radioValues={scalarOutcomes}
-                />
-              </div>
-            </div>
+          <div className="col-md-12">
+            <h2 className="marketBuyHeading">Your Trade</h2>
+            <Field
+              component={OutcomeSelection}
+              name="selectedOutcome"
+              className="marketBuyOutcome"
+              outcomes={scalarOutcomes}
+            />
           </div>
         </div>
         <div className="row">
@@ -266,9 +268,8 @@ class MarketBuySharesForm extends Component {
               upperBound={parseInt(upperBound, 10)}
               unit={unit}
               decimals={decimals}
-              marginalPriceCurrent={currentMarginalPrice}
-              marginalPriceSelected={selectedMarginalPrice.toNumber()}
-              selectedCost={outcomeTokenCount}
+              marginalPriceCurrent={marginalPrices[0].toString()}
+              marginalPriceSelected={marginalPricesWithSimulation[1].toString()}
             />
           </div>
         </div>
@@ -338,19 +339,19 @@ class MarketBuySharesForm extends Component {
             {this.renderOutcomes()}
             <div className="col-md-5">
               <div className="row marketBuySharesForm__row">
-                <div className="col-md-8">
+                <div className="col-md-12">
                   <Field
                     name="invest"
-                    component={Input}
+                    component={TextInput}
                     className="marketBuyInvest"
                     placeholder="Investment"
                     validate={this.validateInvestment}
+                    endAdornment={
+                      <TextInputAdornment>
+                        <CurrencyName collateralToken={collateralToken} />
+                      </TextInputAdornment>
+                    }
                   />
-                </div>
-                <div className="col-md-4">
-                  <div className="marketBuyCurrency">
-                    <CurrencyName collateralToken={collateralToken} />
-                  </div>
                 </div>
               </div>
               <div className="row marketBuySharesForm__row">
@@ -408,7 +409,7 @@ MarketBuySharesForm.propTypes = {
   market: marketShape,
   buyShares: PropTypes.func,
   marketShares: PropTypes.objectOf(marketShareShape),
-  selectedOutcome: PropTypes.number,
+  selectedOutcome: PropTypes.string,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool,

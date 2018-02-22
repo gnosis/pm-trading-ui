@@ -2,6 +2,7 @@
 
 .outcome {
   margin: 5px 0;
+  width: 100%;
   
   padding: $paddings-inputs;
 
@@ -12,11 +13,19 @@
     position: relative;
   }
 
+  .wrapper {
+    position: relative;
+    width: 100%;
+  }
+
   input[type="radio"] {
     margin: 0;
     appearance: none;
     width: 33.68px;
     height: 32px;
+
+    flex-shrink: 0;
+
     border-radius: 9999px;
     background-color: $bg-color-muted;
     border: 0px solid $bg-color-muted;
