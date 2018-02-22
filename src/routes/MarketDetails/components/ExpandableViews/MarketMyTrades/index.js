@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import moment from 'moment'
 import CurrencyName from 'components/CurrencyName'
-import TradeRow from './TradeRow'
 import { RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 import { getOutcomeName, weiToEth } from 'utils/helpers'
 import { marketShape, marketTradeShape } from 'utils/shapes'
+import TableHeader from './TableHeader'
+import TradeRow from './TradeRow'
 
 import './marketMyTrades.scss'
 
@@ -16,6 +17,16 @@ class MarketMyTrades extends Component {
     marketTrades: PropTypes.arrayOf(marketTradeShape),
     defaultAccount: PropTypes.string,
     fetchMarketTradesForAccount: PropTypes.func,
+  }
+
+  static defaultProps = {
+    market: {
+      event: {},
+      eventDescription: {},
+    },
+    marketTrades: [],
+    defaultAccount: '',
+    fetchMarketTradesForAccount: () => {},
   }
 
   componentDidMount() {
@@ -71,20 +82,8 @@ class MarketMyTrades extends Component {
       return (
         <div className="marketMyTrades">
           <h2 className="marketMyTrades__heading">My Trades</h2>
+          <TableHeader />
           <table className="table marketMyTrades__shareTable">
-            <thead>
-              <tr>
-                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--index" />
-                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Order Type</th>
-                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Outcome</th>
-                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">
-                  Outcome token count
-                </th>
-                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Avg. Price</th>
-                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Date</th>
-                <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Cost</th>
-              </tr>
-            </thead>
             <tbody>{this.renderTrades()}</tbody>
           </table>
         </div>
