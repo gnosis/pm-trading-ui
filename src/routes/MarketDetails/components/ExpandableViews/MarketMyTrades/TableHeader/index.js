@@ -1,15 +1,19 @@
 import React from 'react'
+import cn from 'classnames'
+import style from '../marketMyTrades.scss'
+
+const cx = cn.bind(style)
 
 const TableHeader = () => (
   <thead>
     <tr>
-      <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--index" />
-      <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Order Type</th>
-      <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Outcome</th>
-      <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Outcome token count</th>
-      <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Avg. Price</th>
-      <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Date</th>
-      <th className="marketMyTrades__tableHeading marketMyTrades__tableHeading--group">Cost</th>
+      <th className={cx('tableHeading', 'first')} />
+      <th className={cx('tableHeading')}>Order Type</th>
+      <th className={cx('tableHeading')}>Outcome</th>
+      <th className={cx('tableHeading')}>Outcome token count</th>
+      <th className={cx('tableHeading')}>Avg. Price</th>
+      <th className={cx('tableHeading')}>Date</th>
+      <th className={cx('tableHeading')}>Cost</th>
     </tr>
   </thead>
 )

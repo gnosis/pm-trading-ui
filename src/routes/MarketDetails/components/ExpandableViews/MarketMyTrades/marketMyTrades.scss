@@ -32,3 +32,14 @@ $groupWidth: 20%;
 
   border-radius: 4px;
 }
+
+.tableHeading {
+  &.first {
+    width: 36px;
+  }
+
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #a3adb3;
+  border-bottom: none !important;
+}

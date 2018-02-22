@@ -85,8 +85,8 @@ class MarketMyTrades extends Component {
       return (
         <div className={cx('marketMyTrades')}>
           <h2>My Trades</h2>
-          <TableHeader />
-          <table className={cx('shareTable')}>
+          <table className={cx('shareTable', 'table')}>
+            <TableHeader />
             <tbody>{this.renderTrades()}</tbody>
           </table>
         </div>
