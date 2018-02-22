@@ -69,7 +69,19 @@ const openMarketTests = () => {
       const openMarkets = openMarketSelector(reduxStore)
 
       // THEN
-      expect(0).toEqual(openMarkets)
+      expect(openMarkets).toEqual(0)
+    })
+
+    it('should return 0 open markets if there is no open markets loaded in store', () => {
+      // GIVEN
+      const markets = List([])
+      const reduxStore = { [REDUCER_ID]: markets }
+
+      // WHEN
+      const openMarkets = openMarketSelector(reduxStore)
+
+      // THEN
+      expect(openMarkets).toEqual(0)
     })
   })
 }
