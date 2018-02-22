@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
+
+import OutcomeColorBox from 'components/OutcomeColorBox'
 import style from '../outcomeCategorical.scss'
 
 const cx = cn.bind(style)
@@ -8,9 +10,9 @@ const cx = cn.bind(style)
 const TrendingOutcomeCategorical = ({
   entryStyle, outcome, percentage, resolutionDate,
 }) => (
-  <div className="outcomes outcomes--categorical">
+  <div className={cx('trendingOutcomeCategoricalContainer')}>
     <div className={cx('outcomeWrapper')}>
-      <div className="entry__color" style={entryStyle} />
+      <OutcomeColorBox style={entryStyle} />
       <div className={cx('outcome')}>{outcome}</div>
     </div>
     <div>{percentage}%</div>
@@ -19,7 +21,9 @@ const TrendingOutcomeCategorical = ({
 )
 
 TrendingOutcomeCategorical.propTypes = {
-  entryStyle: PropTypes.object,
+  entryStyle: PropTypes.shape({
+    backgroundColor: PropTypes.string,
+  }),
   outcome: PropTypes.string,
   percentage: PropTypes.string,
   resolutionDate: PropTypes.string,
