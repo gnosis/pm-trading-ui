@@ -41,6 +41,14 @@ class MarketMySharesForm extends Component {
   }
 
   componentWillMount() {
+    if (this.props.match.params.shareId) {
+      this.setState({
+        extendedSellId: this.props.match.params.shareId,
+      })
+    }
+  }
+
+  componentDidMount() {
     const {
       gasCosts, gasPrice, requestGasCost, requestGasPrice,
     } = this.props
@@ -50,12 +58,6 @@ class MarketMySharesForm extends Component {
     }
     if (gasPrice === undefined) {
       requestGasPrice()
-    }
-
-    if (this.props.match.params.shareId) {
-      this.setState({
-        extendedSellId: this.props.match.params.shareId,
-      })
     }
 
     if (this.props.defaultAccount) {
@@ -92,7 +94,7 @@ class MarketMySharesForm extends Component {
     initialize({
       limitMargin: LIMIT_MARGIN_DEFAULT,
     })
-    this.setState({ extendedSellId: shareId === this.state.extendedSellId ? undefined : shareId })
+    this.setState({ extendedSellId: shareId })
   }
 
   @autobind
