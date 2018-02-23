@@ -1,3 +1,4 @@
+import { getCurrentAccount } from 'integrations/store/selectors'
 import { createStructuredSelector } from 'reselect'
 
 import {
@@ -12,4 +13,5 @@ export default createStructuredSelector({
   openMarkets: openMarketSelector,
   newMarkets: newMarketsSelector,
   endingSoonMarkets: endingSoonMarketSelector,
+  userAccount: getCurrentAccount,
 })

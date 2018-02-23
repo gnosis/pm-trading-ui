@@ -26,6 +26,16 @@ class MarketBuilder {
     return this
   }
 
+  withCreator(creator) {
+    this.market = this.market.set('creator', creator)
+    return this
+  }
+
+  withCollateralToken(collateralToken) {
+    this.market = this.market.set('collateralToken', collateralToken)
+    return this
+  }
+
   withResolution(resolution) {
     this.market = this.market.set('resolution', resolution)
     return this
@@ -84,6 +94,8 @@ export class MarketFactory {
     .withResolved(false)
     .withType(MARKET_SCALAR)
     .withOutcomes()
+    .withCollateralToken('c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2')
+    .withCreator('0x9eab578556de5782445ec036f25a41902ba19eeb')
     .withBounds('1', '20', '%')
     .get()
 
@@ -97,6 +109,8 @@ export class MarketFactory {
     .withStage(1)
     .withType(MARKET_SCALAR)
     .withOutcomes()
+    .withCollateralToken('c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2')
+    .withCreator('0x9eab578556de5782445ec036f25a41902ba19eeb')
     .withBounds('500000', '1250000', 'Txs')
     .get()
 
@@ -107,6 +121,8 @@ export class MarketFactory {
     .withVolume('342952380952380954')
     .withStage(1)
     .withCreation('2017-12-31T13:58:13')
+    .withCollateralToken('c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2')
+    .withCreator('0x9eab578556de5782445ec036f25a41902ba19eeb')
     .withResolved(false)
     .withType(MARKET_CATEGORICAL)
     .withOutcomes(

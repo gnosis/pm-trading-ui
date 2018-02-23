@@ -32,6 +32,8 @@ const MarketRecord = Record({
   creation: undefined, // moment
   stage: undefined,
   resolved: undefined, // boolean
+  creator: undefined, // string
+  collateralToken: undefined, // string
 }, 'Market')
 
 export default MarketRecord

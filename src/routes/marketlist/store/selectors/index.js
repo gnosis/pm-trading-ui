@@ -1,31 +1,8 @@
 import { List } from 'immutable'
-import moment from 'moment'
 import { createSelector } from 'reselect'
-import { MARKET_STAGES } from 'store/models'
+import { isMarketClosed, isMarketEndingSoon, isNewMarket } from './marketStatus'
 
 export const marketListSelector = state => List(state.marketList.values())
-
-// TODO find a better place for this helper
-const isMarketClosed = (stage, resolutionDate, resolved) => {
-  const stageClosed = stage !== MARKET_STAGES.MARKET_FUNDED
-  const marketExpired = moment.utc(resolutionDate).isBefore(moment().utc())
-  const marketResolved = resolved === true
-
-  const marketClosed = stageClosed || marketExpired || marketResolved
-  return marketClosed
-}
-
-const isMarketEndingSoon = (resolutionDate) => {
-  const threeDays = moment().add(3, 'days').utc()
-
-  return moment.utc(resolutionDate).isBefore(threeDays)
-}
-
-const isNewMarket = (creation) => {
-  const threeDaysAgo = moment().subtract(3, 'days').utc()
-
-  return threeDaysAgo.isBefore(creation)
-}
 
 export const newMarketsSelector = createSelector(
   marketListSelector,

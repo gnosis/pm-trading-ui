@@ -13,7 +13,7 @@ class MarketList extends React.Component {
 
   render() {
     const {
-      markets, openMarkets, newMarkets, endingSoonMarkets,
+      markets, openMarkets, newMarkets, endingSoonMarkets, userAccount,
     } = this.props
 
     return (<Layout
@@ -21,12 +21,14 @@ class MarketList extends React.Component {
       openMarkets={openMarkets}
       newMarkets={newMarkets}
       endingSoonMarkets={endingSoonMarkets}
+      userAccount={userAccount}
     />)
   }
 }
 
 MarketList.propTypes = {
   markets: PropTypes.instanceOf(List),
+  userAccount: PropTypes.string,
   openMarkets: PropTypes.number.isRequired,
   newMarkets: PropTypes.number.isRequired,
   endingSoonMarkets: PropTypes.number.isRequired,
@@ -35,6 +37,7 @@ MarketList.propTypes = {
 
 MarketList.defaultProps = {
   markets: List([]),
+  userAccount: undefined,
 }
 
 export default connect(selector, actions)(MarketList)
