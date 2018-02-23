@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import { createSelector } from 'reselect'
-import { isMarketClosed, isMarketEndingSoon, isNewMarket } from './marketStatus'
+import { isMarketClosed, isMarketEndingSoon, isNewMarket } from 'store/utils/marketStatus'
 
 export const marketListSelector = state => List(state.marketList.values())
 
