@@ -7,7 +7,7 @@ export const marketListSelector = state => List(state.marketList.values())
 
 // TODO find a better place for this helper
 const isMarketClosed = (stage, resolutionDate, resolved) => {
-  const stageClosed = stage === MARKET_STAGES.MARKET_CLOSED
+  const stageClosed = stage !== MARKET_STAGES.MARKET_FUNDED
   const marketExpired = moment.utc(resolutionDate).isBefore(moment().utc())
   const marketResolved = resolved === true
 
@@ -49,7 +49,7 @@ export const endingSoonMarketSelector = createSelector(
     }
 
     const openMarkets = markets.filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
-    const endingSoonMarkets = openMarkets.filter(market => isMarketEndingSoon(market.resoution))
+    const endingSoonMarkets = openMarkets.filter(market => isMarketEndingSoon(market.resolution))
     return endingSoonMarkets ? endingSoonMarkets.size : 0
   },
 )
