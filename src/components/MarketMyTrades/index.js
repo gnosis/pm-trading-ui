@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import moment from 'moment'
+import OutcomeColorBox from 'components/OutcomeColorBox'
 import { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
@@ -47,7 +48,7 @@ class MarketMyTrades extends Component {
       return (
         <tr className="marketMyTrades__share" key={trade.id}>
           <td>
-            <div className="shareOutcome__color" style={outcomeColorStyle} />
+            <OutcomeColorBox style={outcomeColorStyle} />
           </td>
           <td>{trade.orderType}</td>
           <td>{getOutcomeName(market, trade.outcomeToken.index)}</td>
