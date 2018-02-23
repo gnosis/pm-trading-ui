@@ -22,7 +22,7 @@ const Checkbox = ({
 
   const checkboxClasses = cx('formCheckbox', className, {
     muted,
-    error: (error && touched) !== false,
+    error: (error && touched),
   })
 
   return (

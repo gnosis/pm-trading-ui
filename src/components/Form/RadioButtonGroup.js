@@ -42,12 +42,10 @@ RadioButtonGroup.propTypes = {
   })),
   label: PropTypes.node,
   className: PropTypes.string,
-  props: PropTypes.objectOf(PropTypes.any),
 }
 
 RadioButtonGroup.defaultProps = {
   options: [],
-  props: [],
   label: '',
   className: '',
 }

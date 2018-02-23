@@ -196,7 +196,7 @@ class MarketList extends Component {
           </div>
           {isModerator ? (
             <div className="marketFilter__group">
-              <Field name="myMarkets" label="Show only" text="My markets" component={Checkbox} />
+              <Field name="myMarkets" label="Show only" component={Checkbox} muted>My Markets</Field>
             </div>
           ) : (
             <div />
