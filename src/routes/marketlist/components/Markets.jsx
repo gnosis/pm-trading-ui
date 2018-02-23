@@ -1,7 +1,7 @@
 import { List } from 'immutable'
 import PropTypes from 'prop-types'
 import React from 'react'
-import Market from './Market.jsx'
+import Market from './Market/index.jsx'
 import { isMarketClosed } from '../store/selectors/marketStatus'
 
 const Markets = ({ markets, userAccount }) => (

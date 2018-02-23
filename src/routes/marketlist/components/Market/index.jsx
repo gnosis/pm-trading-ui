@@ -3,15 +3,24 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import { decimalToText } from 'components/DecimalValue'
 // import Outcome from 'components/Outcome'
-import CurrencyName from 'components/CurrencyName'
 import Decimal from 'decimal.js'
 import moment from 'moment'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { RESOLUTION_TIME } from 'utils/constants'
+import MarketResolution from './MarketResolution.jsx'
 import MarketStatus from './MarketStatus.jsx'
+import MarketTrading from './MarketTrading.jsx'
 
 const onResolve = event => event.stopPropagation()
+
+const ResolveButton = ({ url, show }) => show && (
+  <div className="market__control">
+    <NavLink to={url} onClick={onResolve}>
+      Resolve
+    </NavLink>
+  </div>
+)
 
 class Market extends React.PureComponent {
   render() {
@@ -28,56 +37,36 @@ class Market extends React.PureComponent {
     } = this.props
 
     const showResolveButton = isOwner && !resolved
-    const viewUrl = `/markets/${address}/resolve`
+    const viewUrl = `/markets/${address}`
     const resolveUrl = `/markets/${address}/resolve`
     const resolutionDate = moment(resolution).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)
     const tradingVolume = decimalToText(new Decimal(volume).div(1e18))
+    const buttonClass = resolved || closed ? 'market--resolved' : ''
 
     return (
       <NavLink
         to={viewUrl}
         onClick={onResolve}
-        className={cn('market', {
-          'market--resolved': resolved || closed,
-        })}
+        className={cn('market', buttonClass)}
       >
         <div className="market__header">
           <h2 className="market__title">{title}</h2>
-          {showResolveButton && (
-            <div className="market__control">
-              <NavLink to={resolveUrl} onClick={onResolve}>
-                Resolve
-              </NavLink>
-            </div>
-          )}
+          <ResolveButton show={showResolveButton} url={resolveUrl} />
         </div>
         {/* <Outcome market={market} /> */}
         <div className="market__info row">
           <div className="info__group col-md-3">
-            <div className="info__field">
-              <MarketStatus
-                resolved={resolved}
-                closed={closed}
-                resolution={resolution}
-              />
-            </div>
+            <MarketStatus
+              resolved={resolved}
+              closed={closed}
+              resolution={resolution}
+            />
           </div>
           <div className="info__group col-md-3">
-            <div className="info__field">
-              <div className="info__field--icon icon icon--enddate" />
-              <div className="info__field--label">
-                {resolutionDate}
-              </div>
-            </div>
+            <MarketResolution resolution={resolutionDate} />
           </div>
           <div className="info__group col-md-3">
-            <div className="info__field">
-              <div className="info__field--icon icon icon--currency" />
-              <div className="info__field--label">
-                {tradingVolume}&nbsp;
-                <CurrencyName collateralToken={collateralToken} />&nbsp; Volume
-              </div>
-            </div>
+            <MarketTrading volume={tradingVolume} collateralToken={collateralToken} />
           </div>
         </div>
       </NavLink>
