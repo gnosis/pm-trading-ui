@@ -14,7 +14,7 @@
   },
   "gnosisdb": {
     "protocol": "https",
-    "hostDev": "gnosisdb.staging.gnosisdev.com",
+    "hostDev": "gnosisdb.dev.gnosisdev.com",
     "hostProd": "gnosisdb-prod.gnosis.pm",
     "port": 443
   },

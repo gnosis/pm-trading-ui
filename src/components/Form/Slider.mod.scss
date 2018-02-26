@@ -53,9 +53,18 @@
 }
 
 .formSlider {
+  &.muted {
+    input[type="range"] {
+      @include sliderCrossBrowser($bg-color);
+  
+      @include thumbCrossBrowser($active-highlight, $bg-color);
+    }
+  }
+
   input[type="range"] {
     width: auto;
     display: inline-block;
+    background-color: transparent;
 
     margin: 0 8px;
 

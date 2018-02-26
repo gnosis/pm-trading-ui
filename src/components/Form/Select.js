@@ -9,7 +9,7 @@ import { fieldPropTypes } from 'redux-form'
 import 'react-select/dist/react-select.css'
 
 import InputError from './InputError'
-import styles from './Select.scss'
+import styles from './Select.mod.scss'
 
 const cx = classNames.bind(styles)
 

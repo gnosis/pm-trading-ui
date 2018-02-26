@@ -2,13 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { fieldPropTypes } from 'redux-form'
 
-import classNames from 'classnames'
+import classNames from 'classnames/bind'
 
 import InputError from './InputError'
 import TextInput from './TextInput'
-import styles from './Slider.scss'
+import css from './Slider.mod.scss'
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(css)
 
 const Slider = ({
   input,
@@ -20,6 +20,7 @@ const Slider = ({
   showDefaultUnit,
   step,
   unit,
+  muted,
 }) => {
   const valueElement = showInput ? (
     <TextInput
@@ -38,6 +39,7 @@ const Slider = ({
   const inputId = `formSlider_${input.name}`
   const sliderClasses = cx('formSlider', {
     error: (touched && error),
+    muted,
   })
 
   return (
@@ -76,6 +78,7 @@ Slider.propTypes = {
   unit: PropTypes.string,
   showDefaultUnit: PropTypes.bool,
   showInput: PropTypes.bool,
+  muted: PropTypes.bool,
 }
 
 Slider.defaultProps = {
@@ -87,6 +90,7 @@ Slider.defaultProps = {
   unit: '%',
   showInput: false,
   showDefaultUnit: false,
+  muted: false,
 }
 
 export default Slider

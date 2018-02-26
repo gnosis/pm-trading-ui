@@ -7,9 +7,9 @@ import classNames from 'classnames/bind'
 
 import OutcomeBar from './OutcomeBar'
 
-import styles from './style.scss'
+import css from './style.mod.scss'
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(css)
 
 class OutcomeSelection extends PureComponent {
   render() {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { fieldPropTypes } from 'redux-form'
 import classNames from 'classnames/bind'
 
-import styles from './RadioButton.scss'
+import styles from './RadioButton.mod.scss'
 
 const cx = classNames.bind(styles)
 

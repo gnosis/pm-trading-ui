@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import className from 'classnames/bind'
 
-import styles from './InputError.scss'
+import styles from './InputError.mod.scss'
 
 const cx = className.bind(styles)
 

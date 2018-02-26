@@ -45,6 +45,12 @@ $groupWidth: 33%;
     td {
       border-top: 0 !important;
     }
+
+    input[type='text'] {
+      border-color: $bg-color-dark;
+      border-bottom-style: dotted;
+      border-bottom-width: 2px;
+    }
   }
 
   &__sellContainer {

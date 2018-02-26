@@ -6,7 +6,7 @@ import { fieldPropTypes } from 'redux-form'
 import { omit } from 'lodash'
 
 import InputError from './InputError'
-import styles from './Checkbox.scss'
+import styles from './Checkbox.mod.scss'
 
 const cx = classNames.bind(styles)
 

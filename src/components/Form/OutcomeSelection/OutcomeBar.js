@@ -5,9 +5,9 @@ import classNames from 'classnames/bind'
 import { decimalToText } from 'components/DecimalValue'
 import Decimal from 'decimal.js'
 
-import styles from './OutcomeBar.scss'
+import css from './OutcomeBar.mod.scss'
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(css)
 
 const Outcome = ({
   onSelect,

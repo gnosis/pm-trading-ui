@@ -179,12 +179,12 @@ class MarketMySharesForm extends Component {
             </a>
           )}
         </td>
-      </tr>)
+                     </tr>)
 
       if (share.id === extendedSellId) {
         tableRows.push(<tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
           <td colSpan={5}>{this.renderSellShareView()}</td>
-        </tr>)
+                       </tr>)
       }
     })
 
@@ -347,13 +347,12 @@ class MarketMySharesForm extends Component {
               <Field
                 name="limitMargin"
                 component={Slider}
-                className="limitMarginField"
                 placeholder={LIMIT_MARGIN_DEFAULT}
                 min={0}
                 max={5}
                 unit="%"
                 step={0.5}
-                showInput={false}
+                muted
               />
             </div>
             <div className="col-md-4 marketMyShares__sellColumn">

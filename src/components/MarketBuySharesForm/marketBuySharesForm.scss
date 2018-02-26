@@ -48,14 +48,19 @@
 }
 
 .marketBuyInvest {
-  input, .adornment {
+  input {
     font-size: 32px;
     text-align: right;
     padding-bottom: 10px !important;
     font-weight: 300;
   }
 
-  .adornment {
+  // .adornment
+  p {
+    font-size: 32px;
+    text-align: right;
+    padding-bottom: 10px !important;
+    font-weight: 300;
     margin-left: 5px;
   }
 

@@ -23,7 +23,6 @@ import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
 
 import {
-  RadioButtonGroup,
   OutcomeSelection,
   TextInput,
   TextInputAdornment,
