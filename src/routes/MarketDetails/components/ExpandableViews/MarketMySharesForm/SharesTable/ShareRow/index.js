@@ -1,10 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
 import OutcomeColorBox from 'components/OutcomeColorBox'
 import { marketShareShape } from 'utils/shapes'
 import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
+import style from './ShareRow.scss'
+
+const cx = cn.bind(style)
 
 const ShareRow = ({
   outcomeColorStyle, ableToSell, share, outcomeName,
@@ -19,7 +23,7 @@ const ShareRow = ({
   const onClickHandler = e => this.props.onSellClick(e, share.id)
 
   return (
-    <tr className="marketMyShares__share">
+    <tr>
       <td>
         <OutcomeColorBox style={outcomeColorStyle} />
       </td>
@@ -27,7 +31,7 @@ const ShareRow = ({
       <td>{shareBalance}</td>
       <td>
         {ableToSell && (
-          <button className="marketMyShares__sellButton" onClick={onClickHandler}>
+          <button className={cx('ShareSellButton')} onClick={onClickHandler}>
             Sell
           </button>
         )}

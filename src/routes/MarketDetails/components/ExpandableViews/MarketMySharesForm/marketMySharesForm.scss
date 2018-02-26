@@ -47,11 +47,6 @@ $groupWidth: 33%;
       color: $active-highlight-error !important;
     }
   }
-  &__sellButton {
-    color: $link-color !important;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-  }
 
   &__sellView {
     td {
@@ -98,13 +93,5 @@ $groupWidth: 33%;
   &__input {
     font-size: 14px;
     border-bottom-color: darken($bg-color-muted, 10%) !important;
-  }
-}
-
-.marketMySharesSellButton {
-  display: inline-block;
-  margin-right: 10px;
-  &__input {
-    background-color: darken($bg-color-muted, 10%) !important;
   }
 }
