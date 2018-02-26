@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { OUTCOME_TYPES } from 'utils/constants'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import { eventDescriptionShape, marketShape } from 'utils/shapes'
 import style from './WinningOutcome.scss'

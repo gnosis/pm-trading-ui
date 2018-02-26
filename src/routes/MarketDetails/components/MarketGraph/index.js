@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import LoadingIndicator from 'components/LoadingIndicator'
 import { OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'

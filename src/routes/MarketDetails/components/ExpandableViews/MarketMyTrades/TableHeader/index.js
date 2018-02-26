@@ -1,5 +1,5 @@
 import React from 'react'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import style from '../marketMyTrades.scss'
 
 const cx = cn.bind(style)

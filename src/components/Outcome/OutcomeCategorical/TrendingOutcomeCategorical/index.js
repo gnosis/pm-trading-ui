@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 
 import OutcomeColorBox from 'components/OutcomeColorBox'
 import style from '../outcomeCategorical.scss'
