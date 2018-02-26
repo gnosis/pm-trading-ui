@@ -43,7 +43,6 @@ WinningOutcome.propTypes = {
   funding: PropTypes.string,
   oracle: PropTypes.object,
   outcome: PropTypes.string,
-  type: PropTypes.string,
   netOutcomeTokensSold: PropTypes.string,
   market: marketShape,
   unit: PropTypes.string,
