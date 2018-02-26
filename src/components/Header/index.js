@@ -6,15 +6,15 @@ import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
-import className from 'classnames'
+import className from 'classnames/bind'
 
 import Identicon from './Identicon'
 import ProviderIcon from './ProviderIcon'
 import MenuAccountDropdown from './MenuAccountDropdown'
 
-import styles from './Header.scss'
+import css from './Header.scss'
 
-const cx = className.bind(styles)
+const cx = className.bind(css)
 
 class Header extends Component {
   @autobind
