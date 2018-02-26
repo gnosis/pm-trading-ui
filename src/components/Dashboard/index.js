@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
+import OutcomeColorBox from 'components/OutcomeColorBox'
 import PageFrame from 'components/layout/PageFrame'
 import Block from 'components/layout/Block'
 import Title from 'components/layout/Title'
@@ -133,7 +134,7 @@ class Dashboard extends Component {
           <div className="dashboardMarket__title">{share.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
-              <div className="entry__color" style={outcomeColorStyle} />
+              <OutcomeColorBox style={outcomeColorStyle} />
               <div className="dashboardMarket--highlight">{getOutcomeName(share, share.outcomeToken.index)}</div>
             </div>
             <div className="col-md-2 dashboardMarket--highlight">
@@ -187,7 +188,7 @@ class Dashboard extends Component {
           <div className="dashboardMarket__title">{market.eventDescription.title}</div>
           <div className="outcome row">
             <div className="col-md-3">
-              <div className="entry__color" style={outcomeColorStyle} />
+              <OutcomeColorBox style={outcomeColorStyle} />
               <div className="dashboardMarket--highlight">{getOutcomeName(market, trade.outcomeToken.index)}</div>
             </div>
             <div className="col-md-3 dashboardMarket--highlight">

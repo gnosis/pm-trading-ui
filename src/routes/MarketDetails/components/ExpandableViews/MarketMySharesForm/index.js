@@ -7,6 +7,7 @@ import { calcLMSRMarginalPrice, calcLMSRProfit } from 'api'
 
 import InteractionButton from 'containers/InteractionButton'
 
+import OutcomeColorBox from 'components/OutcomeColorBox'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import FormSlider from 'components/FormSlider'
@@ -156,7 +157,7 @@ class MarketMySharesForm extends Component {
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
-          <div className="shareOutcome__color" style={outcomeColorStyle} />
+          <OutcomeColorBox style={outcomeColorStyle} />
         </td>
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
         <td>
