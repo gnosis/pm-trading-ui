@@ -53,7 +53,7 @@
 }
 
 .formSlider {
-  &.muted {
+  &.light {
     input[type="range"] {
       @include sliderCrossBrowser($bg-color);
   

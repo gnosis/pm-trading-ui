@@ -20,7 +20,7 @@ const Slider = ({
   showDefaultUnit,
   step,
   unit,
-  muted,
+  light,
 }) => {
   const valueElement = showInput ? (
     <TextInput
@@ -39,7 +39,7 @@ const Slider = ({
   const inputId = `formSlider_${input.name}`
   const sliderClasses = cx('formSlider', {
     error: (touched && error),
-    muted,
+    light,
   })
 
   return (
@@ -78,7 +78,7 @@ Slider.propTypes = {
   unit: PropTypes.string,
   showDefaultUnit: PropTypes.bool,
   showInput: PropTypes.bool,
-  muted: PropTypes.bool,
+  light: PropTypes.bool,
 }
 
 Slider.defaultProps = {
@@ -90,7 +90,7 @@ Slider.defaultProps = {
   unit: '%',
   showInput: false,
   showDefaultUnit: false,
-  muted: false,
+  light: false,
 }
 
 export default Slider

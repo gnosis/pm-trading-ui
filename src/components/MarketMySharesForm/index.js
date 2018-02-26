@@ -352,7 +352,7 @@ class MarketMySharesForm extends Component {
                 max={5}
                 unit="%"
                 step={0.5}
-                muted
+                light
               />
             </div>
             <div className="col-md-4 marketMyShares__sellColumn">
