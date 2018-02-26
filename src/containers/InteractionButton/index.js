@@ -49,7 +49,6 @@ class InteractionButton extends Component {
       targetNetworkId,
       loading,
     } = this.props
-
     if (whitelistRequired && !whitelisted) {
       return null
     }
@@ -130,7 +129,7 @@ InteractionButton.propTypes = {
   type: PropTypes.oneOf(['button', 'submit']),
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
-  targetNetworkId: PropTypes.string,
+  targetNetworkId: PropTypes.number,
 }
 
 InteractionButton.defaultProps = {
