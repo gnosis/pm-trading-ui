@@ -7,26 +7,20 @@ import { calcLMSRMarginalPrice, calcLMSRProfit } from 'api'
 
 import InteractionButton from 'containers/InteractionButton'
 
-import OutcomeColorBox from 'components/OutcomeColorBox'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import FormSlider from 'components/FormSlider'
 import FormInput from 'components/FormInput'
 import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
-
 import {
-  COLOR_SCHEME_DEFAULT,
-  COLOR_SCHEME_SCALAR,
   GAS_COST,
-  LOWEST_DISPLAYED_VALUE,
   MIN_CONSIDER_VALUE,
   LIMIT_MARGIN_DEFAULT,
-  OUTCOME_TYPES,
 } from 'utils/constants'
-
-import { getOutcomeName, weiToEth, normalizeScalarPoint, isMarketClosed, isMarketResolved } from 'utils/helpers'
+import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { marketShape } from 'utils/shapes'
+import SharesTable from './SharesTable'
 
 import './marketMySharesForm.scss'
 
@@ -140,56 +134,6 @@ class MarketMySharesForm extends Component {
     }
 
     return undefined
-  }
-
-  generateTableRows() {
-    const tableRows = []
-
-    const { marketShares, market } = this.props
-    const { extendedSellId } = this.state
-
-    const resolvedOrClosed = isMarketClosed(market) || isMarketResolved(market)
-
-    Object.keys(marketShares).forEach((shareId) => {
-      const share = marketShares[shareId]
-      const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
-      const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
-
-      tableRows.push(<tr className="marketMyShares__share" key={share.id}>
-        <td>
-          <OutcomeColorBox style={outcomeColorStyle} />
-        </td>
-        <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
-        <td>
-          {Decimal(share.balance)
-            .div(1e18)
-            .gte(LOWEST_DISPLAYED_VALUE) ? (
-              <DecimalValue value={Decimal(share.balance).div(1e18)} />
-            ) : (
-              `< ${LOWEST_DISPLAYED_VALUE}`
-            )}
-        </td>
-        <td>
-          {!resolvedOrClosed && (
-            <a
-              href="javascript:void(0);"
-              className="marketMyShares__sellButton"
-              onClick={e => this.handleShowSellView(e, share.id)}
-            >
-                Sell
-            </a>
-          )}
-        </td>
-      </tr>)
-
-      if (share.id === extendedSellId) {
-        tableRows.push(<tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
-          <td colSpan={5}>{this.renderSellShareView()}</td>
-        </tr>)
-      }
-    })
-
-    return tableRows
   }
 
   renderSellShareView() {
@@ -388,7 +332,8 @@ class MarketMySharesForm extends Component {
   }
 
   render() {
-    const { marketShares } = this.props
+    const { marketShares, market } = this.props
+    const { extendedSellId } = this.state
     if (!marketShares || !Object.keys(marketShares).length) {
       return (
         <div className="marketMyShares">
@@ -404,17 +349,7 @@ class MarketMySharesForm extends Component {
     return (
       <div className="marketMyShares">
         <h2 className="marketMyShares__heading">{MY_TOKENS}</h2>
-        <table className="table marketMyShares__shareTable">
-          <thead>
-            <tr>
-              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--index" />
-              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Outcome</th>
-              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Outcome Token Count</th>
-              <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group" />
-            </tr>
-          </thead>
-          <tbody>{this.generateTableRows()}</tbody>
-        </table>
+        <SharesTable extendedSellId={extendedSellId} marketShares={marketShares} market={market} />
       </div>
     )
   }
