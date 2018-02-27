@@ -6,7 +6,7 @@ import { upperFirst } from 'lodash'
 
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
-import LoadingIndicator from 'components/LoadingIndicator'
+import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { isGnosisInitialized } from 'selectors/blockchain'
 import {
   isConnectedToCorrectNetwork,
@@ -100,7 +100,7 @@ class InteractionButton extends Component {
       return (
         <button className={classNames} type="button" disabled>
           <div className="interactionButton__inner">{children}</div>
-          <LoadingIndicator width={28} height={28} className={cx('interactionButtonLoading')} />
+          <IndefiniteSpinner width={28} height={28} centered />
         </button>
       )
     }

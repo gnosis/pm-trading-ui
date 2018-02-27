@@ -14,7 +14,7 @@ import InteractionButton from 'containers/InteractionButton'
 
 import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue, { decimalToText } from 'components/DecimalValue'
-import LoadingIndicator from 'components/LoadingIndicator'
+import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import Countdown from 'components/Countdown'
 import Outcome from 'components/Outcome'
 import MarketGraph from 'components/MarketGraph'
@@ -292,7 +292,7 @@ class MarketDetail extends Component {
     if (!marketGraph.length) {
       return (
         <div className="container">
-          <LoadingIndicator className="marketGraph__spinner" />
+          <IndefiniteSpinner />
         </div>
       )
     }
