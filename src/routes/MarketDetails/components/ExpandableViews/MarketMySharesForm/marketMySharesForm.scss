@@ -48,16 +48,6 @@ $groupWidth: 33%;
     }
   }
 
-  &__sellView {
-    td {
-      border-top: 0 !important;
-    }
-  }
-
-  &__sellContainer {
-    padding-left: $indexWidth;
-  }
-
   &__sellColumn {
     padding: 0 8px;
 
@@ -77,10 +67,6 @@ $groupWidth: 33%;
       }
 
     }
-  }
-
-  &__sellRow {
-    margin: 10px 0px 0px;
   }
 
   &__errorColumn {

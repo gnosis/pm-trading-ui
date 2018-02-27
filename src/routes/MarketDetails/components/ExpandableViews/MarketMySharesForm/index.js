@@ -59,8 +59,4 @@ MarketMySharesForm.propTypes = {
   sellShares: PropTypes.func,
 }
 
-const FORM = {
-  form: 'marketMyShares',
-}
-
-export default reduxForm(FORM)(MarketMySharesForm)
+export default MarketMySharesForm
