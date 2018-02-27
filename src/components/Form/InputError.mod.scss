@@ -1,0 +1,7 @@
+@import "../../scss/vars.scss";
+
+.inputError {
+  font-weight: 800;
+  color: $active-highlight-error;
+  padding: $paddings-inputs;
+}
