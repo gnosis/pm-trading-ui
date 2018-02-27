@@ -2,7 +2,7 @@
 import { upperFirst } from 'lodash'
 
 import { connect } from 'react-redux'
-import NetworkCheck from 'components/NetworkCheck'
+import NetworkCheck from 'components/ModalContent/NetworkCheck'
 
 import { getTargetNetworkId } from 'integrations/store/selectors'
 
