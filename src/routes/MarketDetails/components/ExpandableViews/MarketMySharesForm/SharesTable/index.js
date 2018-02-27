@@ -4,9 +4,16 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import { reduxForm, propTypes } from 'redux-form'
 import { isMarketClosed, isMarketResolved, getOutcomeName, weiToEth } from 'utils/helpers'
-import { LIMIT_MARGIN_DEFAULT, OUTCOME_TYPES, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, MIN_CONSIDER_VALUE } from 'utils/constants'
+import {
+  LIMIT_MARGIN_DEFAULT,
+  OUTCOME_TYPES,
+  COLOR_SCHEME_SCALAR,
+  COLOR_SCHEME_DEFAULT,
+  MIN_CONSIDER_VALUE,
+} from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import ShareRow from './ShareRow'
+import ShareSellView from './ShareSellView'
 
 class ShareTable extends Component {
   state = {
@@ -65,7 +72,9 @@ class ShareTable extends Component {
   }
 
   generateTableRows() {
-    const { marketShares, market } = this.props
+    const {
+      marketShares, market, gasCosts, gasPrice, handleSubmit,
+    } = this.props
     const { extendedSellId } = this.state
     const tableRows = []
 
@@ -85,7 +94,19 @@ class ShareTable extends Component {
         ableToSell={ableToSell}
         share={share}
         outcomeName={outcomeName}
+        onSellClick={this.handleShowSellView}
       />)
+
+      if (extendedSellId === shareId && ableToSell) {
+        tableRows.push(<ShareSellView
+          key={`${share.id}-sellView`}
+          share={share}
+          market={market}
+          gasCosts={gasCosts}
+          gasPrice={gasPrice}
+          handleSubmit={handleSubmit}
+        />)
+      }
     })
 
     return tableRows
@@ -113,6 +134,8 @@ ShareTable.propTypes = {
   extendedSellId: PropTypes.string,
   market: marketShape,
   marketShares: PropTypes.arrayOf(PropTypes.object),
+  gasCost: PropTypes.string,
+  gasPrice: PropTypes.instanceOf(Decimal),
 }
 
 const FORM = {

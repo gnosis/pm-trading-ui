@@ -10,13 +10,13 @@ import FormSlider from 'components/FormSlider'
 import FormInput from 'components/FormInput'
 import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
-import { LIMIT_MARGIN_DEFAULT } from 'utils/constants'
+import { LIMIT_MARGIN_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
 
 class ShareSellView extends Component {
   @autobind
-  validateTokenCount(val, values, props) {
-    const share = props.marketShares[this.state.extendedSellId]
+  validateTokenCount(val) {
+    const { share } = this.props
     if (!val || !NUMBER_REGEXP.test(val)) {
       return 'Invalid amount'
     }
@@ -34,7 +34,6 @@ class ShareSellView extends Component {
   }
 
   render() {
-    const { extendedSellId } = this.state
     const {
       market,
       invalid,
@@ -42,12 +41,11 @@ class ShareSellView extends Component {
       submitFailed,
       selectedSellAmount,
       handleSubmit,
-      marketShares,
+      share,
       gasCosts,
       gasPrice,
     } = this.props
 
-    const share = marketShares[extendedSellId]
     let newScalarPredictedValue // calculated only for scalar events
     let selectedSellAmountWei
     try {
@@ -108,7 +106,7 @@ class ShareSellView extends Component {
     })
 
     let newProbability
-    if (market.event.type === 'SCALAR') {
+    if (market.event.type === OUTCOME_TYPES.SCALAR) {
       try {
         newProbability = calcLMSRMarginalPrice({
           netOutcomeTokensSold: newNetOutcomeTokensSold,
@@ -133,7 +131,7 @@ class ShareSellView extends Component {
       }
     }
 
-    if (market.event.type === 'SCALAR') {
+    if (market.event.type === OUTCOME_TYPES.SCALAR) {
       newScalarPredictedValue = normalizeScalarPoint(market.marginalPrices, market)
     }
 
@@ -143,7 +141,7 @@ class ShareSellView extends Component {
 
     return (
       <div className="marketMyShares__sellContainer">
-        <form onSubmit={handleSubmit(() => this.handleSellShare(extendedSellId, selectedSellAmount, earnings))}>
+        <form onSubmit={handleSubmit(() => this.handleSellShare(share.id, selectedSellAmount, earnings))}>
           <div className="row marketMyShares__sellRow">
             <div className="col-md-4 marketMyShares__sellColumn">
               <label htmlFor="sellAmount">Amount to Sell</label>

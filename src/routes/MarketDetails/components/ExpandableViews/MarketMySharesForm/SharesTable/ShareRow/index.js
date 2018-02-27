@@ -6,12 +6,12 @@ import DecimalValue from 'components/DecimalValue'
 import OutcomeColorBox from 'components/OutcomeColorBox'
 import { marketShareShape } from 'utils/shapes'
 import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
-import style from './ShareRow.scss'
+import style from './ShareRow.mod.scss'
 
 const cx = cn.bind(style)
 
 const ShareRow = ({
-  outcomeColorStyle, ableToSell, share, outcomeName,
+  outcomeColorStyle, ableToSell, share, outcomeName, onSellClick,
 }) => {
   const shareBalance = Decimal(share.balance)
     .div(1e18)
@@ -20,7 +20,7 @@ const ShareRow = ({
     ) : (
       `< ${LOWEST_DISPLAYED_VALUE}`
     )
-  const onClickHandler = e => this.props.onSellClick(e, share.id)
+  const onClickHandler = e => onSellClick(e, share.id)
 
   return (
     <tr>
@@ -47,6 +47,7 @@ ShareRow.propTypes = {
   ableToSell: PropTypes.bool,
   share: marketShareShape,
   outcomeName: PropTypes.string,
+  onSellClick: PropTypes.func,
 }
 
 ShareRow.defaultProps = {
@@ -56,6 +57,7 @@ ShareRow.defaultProps = {
   outcomeName: '',
   ableToSell: false,
   share: {},
+  onSellClick: () => {},
 }
 
 export default ShareRow
