@@ -20,14 +20,6 @@
       background: $bg-color-muted !important;
     }
   }
-  .formSlider {
-    padding-top: 15px;
-    &__input {
-      background: none;
-      @include sliderCrossBrowser(#d6d8d8);
-      @include thumbCrossBrowser(#1aa4c5, #1aa4c5);
-    }
-  }
 }
 
 .marketBuyCheckbox {
@@ -58,12 +50,23 @@
 }
 
 .marketBuyInvest {
-  &__input {
+  input {
     font-size: 32px;
     text-align: right;
     padding-bottom: 10px !important;
     font-weight: 300;
+  }
 
+  // .adornment
+  p {
+    font-size: 32px;
+    text-align: right;
+    padding-bottom: 10px !important;
+    font-weight: 300;
+    margin-left: 5px;
+  }
+
+  input {
     &:placeholder {
       font-weight: 300;
     }

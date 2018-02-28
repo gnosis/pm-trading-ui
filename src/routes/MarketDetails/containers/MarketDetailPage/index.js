@@ -55,9 +55,6 @@ const mapStateToProps = (state, ownProps) => {
     moderators: getModerators(),
     marketTrades,
     marketGraph,
-    initialValues: {
-      selectedOutcome: 0,
-    },
     isGasCostFetched: property => isGasCostFetched(state, property),
     isGasPriceFetched: isGasPriceFetched(state),
     gasCosts: getGasCosts(state),
