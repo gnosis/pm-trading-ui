@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
 import cn from 'classnames/bind'
-import { calcLMSRMarginalPrice } from 'api'
-import { Field } from 'redux-form'
+import { reduxForm, propTypes, Field } from 'redux-form'
 import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -14,12 +13,27 @@ import Hairline from 'components/layout/Hairline'
 import { LIMIT_MARGIN_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
 import web3 from 'web3'
 import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
-import { calculateCurrentProbability, calculateEarnings } from './utils'
+import { calculateCurrentProbability, calculateEarnings, calculateNewProbability } from './utils'
 import style from './ShareSellView.mod.scss'
 
 const cx = cn.bind(style)
 
 class ShareSellView extends Component {
+  componentDidUpdate() {
+    const { selectedSellAmount, share, initialize } = this.props
+    const newShareSellOpened = selectedSellAmount === undefined && share.id !== undefined
+
+    if (newShareSellOpened) {
+      this.props.reset()
+      // Form reset / reinitialization when switching among shares
+      const fullAmount = Decimal(share.balance)
+        .div(1e18)
+        .toDP(4, 1)
+        .toString()
+      initialize({ sellAmount: fullAmount, limitMargin: LIMIT_MARGIN_DEFAULT })
+    }
+  }
+
   @autobind
   validateTokenCount(val) {
     const { share } = this.props
@@ -52,7 +66,9 @@ class ShareSellView extends Component {
       gasPrice,
     } = this.props
 
-    let newScalarPredictedValue // calculated only for scalar events
+    const sellSharesGasCost = gasCosts.get('sellShares')
+    const submitDisabled = invalid || submitting
+
     let selectedSellAmountWei
     try {
       selectedSellAmountWei = web3.utils.toWei(selectedSellAmount)
@@ -60,12 +76,12 @@ class ShareSellView extends Component {
       selectedSellAmountWei = '0'
     }
 
+    const gasCostEstimation = weiToEth(gasPrice.mul(sellSharesGasCost))
     const currentProbability = calculateCurrentProbability(market, share)
-
     const currentTokenBalance = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
     const newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
-
     const earnings = calculateEarnings(market, share, selectedSellAmountWei)
+    const submitHandler = handleSubmit(() => this.props.handleSellShare(share.id, selectedSellAmount, earnings))
 
     const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
       if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
@@ -79,35 +95,18 @@ class ShareSellView extends Component {
     })
 
     let newProbability
-    if (market.event.type === OUTCOME_TYPES.SCALAR) {
-      try {
-        newProbability = calcLMSRMarginalPrice({
-          netOutcomeTokensSold: newNetOutcomeTokensSold,
-          funding: market.funding,
-          outcomeTokenIndex: 1, // long
-        })
-      } catch (e) {
-        newProbability = currentProbability
-      }
-      const newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
-      newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
-    } else {
-      // Categorical events
-      try {
-        newProbability = calcLMSRMarginalPrice({
-          netOutcomeTokensSold: newNetOutcomeTokensSold,
-          funding: market.funding,
-          outcomeTokenIndex: share.outcomeToken.index,
-        })
-      } catch (e) {
-        newProbability = currentProbability
-      }
+    try {
+      newProbability = calculateNewProbability(market, share, newNetOutcomeTokensSold)
+    } catch (e) {
+      newProbability = currentProbability
     }
 
-    const submitDisabled = invalid || submitting
-    const sellSharesGasCost = gasCosts.get('sellShares')
-    const gasCostEstimation = weiToEth(gasPrice.mul(sellSharesGasCost))
-    const submitHandler = handleSubmit(() => this.handleSellShare(share.id, selectedSellAmount, earnings))
+    let newMarginalPrices
+    let newScalarPredictedValue
+    if (market.event.type === OUTCOME_TYPES.SCALAR) {
+      newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
+      newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
+    }
 
     return (
       <tr className={cx('sellView')}>
@@ -201,4 +200,12 @@ class ShareSellView extends Component {
   }
 }
 
-export default ShareSellView
+ShareSellView.propTypes = {
+  ...propTypes,
+}
+
+const FORM = {
+  form: 'marketMyShares',
+}
+
+export default reduxForm(FORM)(ShareSellView)

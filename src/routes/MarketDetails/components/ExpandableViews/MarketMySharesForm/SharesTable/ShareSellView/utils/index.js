@@ -65,9 +65,30 @@ const calculateEarnings = (market, share, selectedSellAmount) => {
 
   return earnings
 }
-
+/**
+ *
+ * @param {Object} market
+ * @param {Array} netOutcomeTokensSold - amount of outcome tokens sold including the amount user is going to sell
+ * @param {Object} [share] - user's share, needed only for categorical markets
+ * @returns {Decimal}
+ */
 const calculateNewProbability = (market, share, netOutcomeTokensSold) => {
+  const categoricalMarketWithoutShare = !share && market.event && market.event.type === OUTCOME_TYPES.CATEGORCAL
+  if (!market || categoricalMarketWithoutShare) {
+    throw new Error()
+  }
 
+  const { event: { type } } = market
+
+  // When calculating for SCALAR markets, we need to always calculate for long outcome
+  // For categorical we should calculate for share's outcome
+  const outcomeTokenIndex = type === OUTCOME_TYPES.SCALAR ? 1 : share.outcomeToken.index
+
+  return calcLMSRMarginalPrice({
+    netOutcomeTokensSold,
+    funding: market.funding,
+    outcomeTokenIndex,
+  })
 }
 
-export { calculateCurrentProbability, calculateEarnings }
+export { calculateCurrentProbability, calculateEarnings, calculateNewProbability }

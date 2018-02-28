@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm, propTypes } from 'redux-form'
 import { marketShape } from 'utils/shapes'
 import { GAS_COST } from 'utils/constants'
 import SharesTable from './SharesTable'
@@ -51,7 +50,6 @@ class MarketMySharesForm extends Component {
 }
 
 MarketMySharesForm.propTypes = {
-  ...propTypes,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
   limitMargin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

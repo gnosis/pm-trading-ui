@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
+import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
-import { reduxForm, propTypes } from 'redux-form'
 import { isMarketClosed, isMarketResolved, getOutcomeName, weiToEth } from 'utils/helpers'
 import {
-  LIMIT_MARGIN_DEFAULT,
   OUTCOME_TYPES,
   COLOR_SCHEME_SCALAR,
   COLOR_SCHEME_DEFAULT,
   MIN_CONSIDER_VALUE,
+  LIMIT_MARGIN_DEFAULT,
 } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import ShareRow from './ShareRow'
@@ -18,26 +17,6 @@ import ShareSellView from './ShareSellView'
 class ShareTable extends Component {
   state = {
     extendedSellId: this.props.match.params.shareId,
-  }
-
-  componentDidUpdate() {
-    const { extendedSellId } = this.state
-    const { selectedSellAmount, marketShares, initialize } = this.props
-    const sellAmountAndMarketSharesAreDefined =
-      selectedSellAmount === undefined && extendedSellId !== undefined && Object.keys(marketShares).length
-
-    if (sellAmountAndMarketSharesAreDefined) {
-      // By default form is filled up with fill amount
-      const share = marketShares[extendedSellId]
-
-      if (share) {
-        const fullAmount = Decimal(share.balance)
-          .div(1e18)
-          .toDP(4, 1)
-          .toString()
-        initialize({ sellAmount: fullAmount })
-      }
-    }
   }
 
   @autobind
@@ -55,25 +34,17 @@ class ShareTable extends Component {
     } catch (e) {
       console.error(e)
     }
-    return this.props.reset()
   }
 
   @autobind
   handleShowSellView(e, shareId) {
-    const { initialize } = this.props
     const { extendedSellId } = this.state
-    e.preventDefault()
-    this.props.reset()
-    // Form reset / reinitialization when switching among shares
-    initialize({
-      limitMargin: LIMIT_MARGIN_DEFAULT,
-    })
     this.setState({ extendedSellId: extendedSellId === shareId ? undefined : shareId })
   }
 
   generateTableRows() {
     const {
-      marketShares, market, gasCosts, gasPrice, handleSubmit,
+      marketShares, market, gasCosts, gasPrice, selectedSellAmount,
     } = this.props
     const { extendedSellId } = this.state
     const tableRows = []
@@ -104,7 +75,8 @@ class ShareTable extends Component {
           market={market}
           gasCosts={gasCosts}
           gasPrice={gasPrice}
-          handleSubmit={handleSubmit}
+          selectedSellAmount={selectedSellAmount}
+          handleSellShare={this.handleSellShare}
         />)
       }
     })
@@ -130,16 +102,21 @@ class ShareTable extends Component {
 }
 
 ShareTable.propTypes = {
-  ...propTypes,
-  extendedSellId: PropTypes.string,
   market: marketShape,
   marketShares: PropTypes.arrayOf(PropTypes.object),
-  gasCost: PropTypes.string,
+  gasCosts: PropTypes.object,
   gasPrice: PropTypes.instanceOf(Decimal),
+  selectedSellAmount: PropTypes.string,
+  sellShares: PropTypes.func,
 }
 
-const FORM = {
-  form: 'marketMyShares',
+ShareTable.defaultProps = {
+  market: undefined,
+  marketShares: [],
+  gasCosts: undefined,
+  gasPrice: Decimal(0),
+  selectedSellAmount: undefined,
+  sellShares: () => {},
 }
 
-export default reduxForm(FORM)(ShareTable)
+export default ShareTable
