@@ -83,3 +83,10 @@ export const gasCostsShape = PropTypes.shape({
   centralizedOracle: PropTypes.number,
   funding: PropTypes.number,
 })
+
+export const ReactRouterMatchShape = PropTypes.shape({
+  isExact: PropTypes.bool,
+  path: PropTypes.string,
+  url: PropTypes.string,
+  params: PropTypes.object,
+})

@@ -64,6 +64,7 @@ class ShareSellView extends Component {
       share,
       gasCosts,
       gasPrice,
+      valid,
     } = this.props
 
     const sellSharesGasCost = gasCosts.get('sellShares')
@@ -79,34 +80,46 @@ class ShareSellView extends Component {
     const gasCostEstimation = weiToEth(gasPrice.mul(sellSharesGasCost))
     const currentProbability = calculateCurrentProbability(market, share)
     const currentTokenBalance = share && share.balance ? new Decimal(share.balance) : new Decimal(0)
-    const newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
-    const earnings = calculateEarnings(market, share, selectedSellAmountWei)
-    const submitHandler = handleSubmit(() => this.props.handleSellShare(share.id, selectedSellAmount, earnings))
 
-    const newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
-      if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
-        return Decimal(outcomeTokenAmount)
-          .sub(currentTokenBalance.sub(newTokenBalance))
-          .floor()
-          .toString()
-      }
-
-      return Decimal(outcomeTokenAmount).toString()
-    })
-
-    let newProbability
-    try {
-      newProbability = calculateNewProbability(market, share, newNetOutcomeTokensSold)
-    } catch (e) {
-      newProbability = currentProbability
-    }
-
+    let newTokenBalance = currentTokenBalance
+    let earnings = 0
+    let newProbability = currentProbability
+    let newNetOutcomeTokensSold = market.netOutcomeTokensSold
     let newMarginalPrices
     let newScalarPredictedValue
+
     if (market.event.type === OUTCOME_TYPES.SCALAR) {
-      newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
       newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
+      newMarginalPrices = [new Decimal(1).sub(currentProbability), newProbability]
     }
+
+    // Run the calculations only if the form is valid
+    if (valid) {
+      newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
+      earnings = calculateEarnings(market, share, selectedSellAmountWei)
+      newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
+        if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
+          return Decimal(outcomeTokenAmount)
+            .sub(currentTokenBalance.sub(newTokenBalance))
+            .floor()
+            .toString()
+        }
+
+        return outcomeTokenAmount
+      })
+
+      try {
+        newProbability = calculateNewProbability(market, share, newNetOutcomeTokensSold)
+      } catch (e) {
+        console.error(e)
+      }
+
+      if (market.event.type === OUTCOME_TYPES.SCALAR) {
+        newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
+        newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
+      }
+    }
+    const submitHandler = handleSubmit(() => this.props.handleSellShare(share.id, selectedSellAmount, earnings))
 
     return (
       <tr className={cx('sellView')}>

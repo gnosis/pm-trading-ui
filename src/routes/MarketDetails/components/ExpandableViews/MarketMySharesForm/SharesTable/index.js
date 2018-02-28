@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import cn from 'classnames/bind'
 import autobind from 'autobind-decorator'
 import PropTypes from 'prop-types'
+import { Map } from 'immutable'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import Decimal from 'decimal.js'
 import { isMarketClosed, isMarketResolved, getOutcomeName, weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, MIN_CONSIDER_VALUE } from 'utils/constants'
-import { marketShape } from 'utils/shapes'
+import { marketShape, ReactRouterMatchShape } from 'utils/shapes'
 import ShareRow from './ShareRow'
 import ShareSellView from './ShareSellView'
 import style from './SharesTable.mod.scss'
@@ -102,19 +104,21 @@ class ShareTable extends Component {
 ShareTable.propTypes = {
   market: marketShape,
   marketShares: PropTypes.arrayOf(PropTypes.object),
-  gasCosts: PropTypes.object,
+  gasCosts: ImmutablePropTypes.map,
   gasPrice: PropTypes.instanceOf(Decimal),
   selectedSellAmount: PropTypes.string,
   sellShares: PropTypes.func,
+  match: ReactRouterMatchShape,
 }
 
 ShareTable.defaultProps = {
-  market: undefined,
+  market: {},
   marketShares: [],
-  gasCosts: undefined,
+  gasCosts: Map({}),
   gasPrice: Decimal(0),
   selectedSellAmount: undefined,
   sellShares: () => {},
+  match: {},
 }
 
 export default ShareTable
