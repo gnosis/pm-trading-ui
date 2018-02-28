@@ -1,21 +1,9 @@
 @import '../../scss/vars.scss';
-@import "../FormSlider/slider.scss";
-@import "../FormSlider/thumb.scss";
 
 $indexWidth: 36px;
 $groupWidth: 33%;
 
 .marketMyShares {
-
-  .formSlider {
-    padding-top: 15px;
-    &__input {
-      background: none;
-      @include sliderCrossBrowser(#d6d8d8);
-      @include thumbCrossBrowser(#1aa4c5, #1aa4c5);
-    }
-  }
-
   &__shareTable {
     margin-top: 20px;
     table-layout: fixed;
@@ -56,6 +44,12 @@ $groupWidth: 33%;
   &__sellView {
     td {
       border-top: 0 !important;
+    }
+
+    input[type='text'] {
+      border-color: $bg-color-dark;
+      border-bottom-style: dotted;
+      border-bottom-width: 2px;
     }
   }
 
