@@ -1,18 +1,16 @@
 import React, { Component } from 'react'
+import cn from 'classnames/bind'
 import autobind from 'autobind-decorator'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import { isMarketClosed, isMarketResolved, getOutcomeName, weiToEth } from 'utils/helpers'
-import {
-  OUTCOME_TYPES,
-  COLOR_SCHEME_SCALAR,
-  COLOR_SCHEME_DEFAULT,
-  MIN_CONSIDER_VALUE,
-  LIMIT_MARGIN_DEFAULT,
-} from 'utils/constants'
+import { OUTCOME_TYPES, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, MIN_CONSIDER_VALUE } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import ShareRow from './ShareRow'
 import ShareSellView from './ShareSellView'
+import style from './SharesTable.mod.scss'
+
+const cx = cn.bind(style)
 
 class ShareTable extends Component {
   state = {
@@ -86,13 +84,13 @@ class ShareTable extends Component {
 
   render() {
     return (
-      <table className="table marketMyShares__shareTable">
+      <table className={cx('table', 'sharesTable')}>
         <thead>
           <tr>
-            <th className="marketMyShares__tableHeading marketMyShares__tableHeading--index" />
-            <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Outcome</th>
-            <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group">Outcome Token Count</th>
-            <th className="marketMyShares__tableHeading marketMyShares__tableHeading--group" />
+            <th className={cx('sharesTableHeading', 'index')} />
+            <th className={cx('sharesTableHeading', 'group')}>Outcome</th>
+            <th className={cx('sharesTableHeading', 'group')}>Outcome Token Count</th>
+            <th className={cx('sharesTableHeading', 'group')} />
           </tr>
         </thead>
         <tbody>{this.generateTableRows()}</tbody>

@@ -1,0 +1,13 @@
+@import "../../../../../scss/vars";
+
+.marketMyShares {
+  &__diff {
+    &--positive {
+      color: $active-highlight-success !important;
+    }
+
+    &--negative {
+      color: $active-highlight-error !important;
+    }
+  }
+}

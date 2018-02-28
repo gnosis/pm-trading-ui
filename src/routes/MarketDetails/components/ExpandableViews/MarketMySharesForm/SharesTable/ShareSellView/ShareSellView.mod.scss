@@ -1,6 +1,19 @@
+@import '../../../../../../../components/FormSlider/slider.scss';
+@import '../../../../../../../components/FormSlider/thumb.scss';
+@import '../../../../../../../scss/vars';
+
 .sellView {
   td {
     border-top: 0 !important;
+  }
+
+  .formSlider {
+    padding-top: 15px;
+    &__input {
+      background: none;
+      @include sliderCrossBrowser(#d6d8d8);
+      @include thumbCrossBrowser(#1aa4c5, #1aa4c5);
+    }
   }
 }
 
@@ -9,5 +22,37 @@
 }
 
 .sellRow {
-    margin: 10px 0px 0px;
+  margin: 10px 0px 0px;
+}
+
+.sellColumn {
+  padding: 0 8px;
+}
+
+.sellColumnInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  padding: 7px 0px;
+
+  label {
+    display: inline;
+    margin: 0;
+    font-size: 14px;
+    padding: 0px 7px;
+    font-weight: bold;
   }
+}
+
+.sellErrorField {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.sellAmount {
+  input {
+    font-size: 14px;
+    border-bottom-color: darken($bg-color-muted, 10%) !important;
+  }
+}

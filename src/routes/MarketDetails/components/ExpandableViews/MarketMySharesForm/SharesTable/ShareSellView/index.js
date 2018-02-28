@@ -114,19 +114,19 @@ class ShareSellView extends Component {
           <div className={cx('sellViewContainer')}>
             <form onSubmit={submitHandler}>
               <div className={cx('row', 'sellRow')}>
-                <div className="col-md-4 marketMyShares__sellColumn">
+                <div className={cx('col-md-4', 'sellColumn')}>
                   <label htmlFor="sellAmount">Amount to Sell</label>
                   <Field
                     component={FormInput}
                     name="sellAmount"
                     placeholder="Enter Token Amount"
-                    className="marketMySharesSellAmount"
+                    className={cx('marketMySharesSellAmount')}
                     validate={this.validateTokenCount}
                   />
                 </div>
 
                 {market.event.type === 'SCALAR' ? (
-                  <div className="col-md-4 marketMyShares__sellColumn">
+                  <div className={cx('col-md-4', 'sellColumn')}>
                     <label>New predicted value</label>
                     <span>
                       <DecimalValue value={newScalarPredictedValue} />&nbsp;
@@ -134,14 +134,14 @@ class ShareSellView extends Component {
                     </span>
                   </div>
                 ) : (
-                  <div className="col-md-4 marketMyShares__sellColumn">
+                  <div className={cx('col-md-4', 'sellColumn')}>
                     <label>New Probability</label>
                     <span>
                       <DecimalValue value={newProbability.mul(100)} /> %
                     </span>
                   </div>
                 )}
-                <div className="col-md-3 marketMyShares__sellColumn">
+                <div className={cx('col-md-3', 'sellColumn')}>
                   <label>Gas costs</label>
                   <span>
                     <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
@@ -150,15 +150,15 @@ class ShareSellView extends Component {
                 </div>
               </div>
               <Hairline />
-              <div className="row marketMyShares__sellRow">
-                <div className="col-md-2 marketMyShares__sellColumn--limit">
+              <div className={cx('row', 'sellRow')}>
+                <div className={cx('col-md-2')}>
                   <label htmlFor="limitMargin">Limit Margin</label>
                 </div>
-                <div className="col-md-3">
+                <div className={cx('col-md-3')}>
                   <Field
                     name="limitMargin"
                     component={FormSlider}
-                    className="limitMarginField"
+                    className={cx('formSlider')}
                     placeholder={LIMIT_MARGIN_DEFAULT}
                     min={0}
                     max={5}
@@ -167,8 +167,8 @@ class ShareSellView extends Component {
                     showInput={false}
                   />
                 </div>
-                <div className="col-md-4 marketMyShares__sellColumn">
-                  <div className="marketMyShares__sellColumn--info">
+                <div className={cx('col-md-4', 'sellColumn')}>
+                  <div className={cx('sellColumnInfo')}>
                     <label>Earnings</label>
                     <span>
                       <DecimalValue value={earnings} />&nbsp;
@@ -178,7 +178,7 @@ class ShareSellView extends Component {
                   <InteractionButton
                     loading={submitting || market.local}
                     disabled={submitDisabled}
-                    className="btn btn-block btn-primary"
+                    className={cx('btn', 'btn-block', 'btn-primary')}
                     type="submit"
                   >
                     Sell Tokens
@@ -186,8 +186,8 @@ class ShareSellView extends Component {
                 </div>
               </div>
               {submitFailed && (
-                <div className="row">
-                  <div className="col-md-9 marketMyShares__errorColumn">
+                <div className={cx('row')}>
+                  <div className={cx('col-md-9', 'sellErrorField')}>
                     Sorry - your share sell could not be processed. Please ensure you&apos;re on the right network.
                   </div>
                 </div>
