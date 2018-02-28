@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import Decimal from 'decimal.js'
+import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
+import web3 from 'web3'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import { reduxForm, propTypes, Field } from 'redux-form'
 import InteractionButton from 'containers/InteractionButton'
@@ -10,8 +13,8 @@ import FormSlider from 'components/FormSlider'
 import FormInput from 'components/FormInput'
 import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
+import { marketShape, marketShareShape } from 'utils/shapes'
 import { LIMIT_MARGIN_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
-import web3 from 'web3'
 import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { calculateCurrentProbability, calculateEarnings, calculateNewProbability } from './utils'
 import style from './ShareSellView.mod.scss'
@@ -215,6 +218,21 @@ class ShareSellView extends Component {
 
 ShareSellView.propTypes = {
   ...propTypes,
+  gasCosts: ImmutablePropTypes.map,
+  gasPrice: PropTypes.instanceOf(Decimal),
+  market: marketShape,
+  selectedSellAmount: PropTypes.string,
+  handleSellShare: PropTypes.func,
+  share: marketShareShape,
+}
+
+ShareSellView.defaultProps = {
+  market: {},
+  gasCosts: Map({}),
+  gasPrice: Decimal(0),
+  selectedSellAmount: undefined,
+  handleSellShare: () => {},
+  share: {},
 }
 
 const FORM = {
