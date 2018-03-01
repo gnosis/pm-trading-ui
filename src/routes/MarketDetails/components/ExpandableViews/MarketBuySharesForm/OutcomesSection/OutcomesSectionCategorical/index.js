@@ -12,6 +12,7 @@ const OutcomesSectionCategorical = (props) => {
     selectedOutcome,
     market: { funding, netOutcomeTokensSold, eventDescription: { outcomes } },
     valid: isInvestmentValid,
+    outcomeTokenCount,
   } = props
 
   const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
@@ -24,9 +25,8 @@ const OutcomesSectionCategorical = (props) => {
 
   // Run the calculations only if the amount user wants to invest isvalid, by default values are set to current
   // Market's paramteters
-  if (isInvestmentValid) {
-    const investmentOutcomeTokens = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
-    marketTokenCounts[selectedOutcome].add(investmentOutcomeTokens)
+  if (isInvestmentValid && selectedBuyInvest) {
+    marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
     marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
       calcLMSRMarginalPrice({
         netOutcomeTokensSold: marketTokenCounts,

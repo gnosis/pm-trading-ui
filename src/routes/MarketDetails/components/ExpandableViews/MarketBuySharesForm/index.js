@@ -288,6 +288,7 @@ class MarketBuySharesForm extends Component {
               valid={valid}
               selectedBuyInvest={selectedBuyInvest}
               selectedOutcome={selectedOutcome}
+              outcomeTokenCount={outcomeTokenCount}
             />
             <div className="col-md-5">
               <div className="row marketBuySharesForm__row">
