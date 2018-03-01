@@ -7,12 +7,14 @@ import { calcLMSRMarginalPrice, calcLMSRProfit } from 'api'
 
 import InteractionButton from 'containers/InteractionButton'
 
+import OutcomeColorBox from 'components/OutcomeColorBox'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import FormSlider from 'components/FormSlider'
-import FormInput from 'components/FormInput'
+
 import { NUMBER_REGEXP } from 'components/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
+
+import { TextInput, Slider } from 'components/Form'
 
 import {
   COLOR_SCHEME_DEFAULT,
@@ -154,7 +156,7 @@ class MarketMySharesForm extends Component {
 
       tableRows.push(<tr className="marketMyShares__share" key={share.id}>
         <td>
-          <div className="shareOutcome__color" style={outcomeColorStyle} />
+          <OutcomeColorBox style={outcomeColorStyle} />
         </td>
         <td className="">{getOutcomeName(market, share.outcomeToken.index)}</td>
         <td>
@@ -177,12 +179,12 @@ class MarketMySharesForm extends Component {
             </a>
           )}
         </td>
-      </tr>)
+                     </tr>)
 
       if (share.id === extendedSellId) {
         tableRows.push(<tr className="marketMyShares__sellView" key={`${share.id}__sell`}>
           <td colSpan={5}>{this.renderSellShareView()}</td>
-        </tr>)
+                       </tr>)
       }
     })
 
@@ -304,7 +306,7 @@ class MarketMySharesForm extends Component {
             <div className="col-md-4 marketMyShares__sellColumn">
               <label htmlFor="sellAmount">Amount to Sell</label>
               <Field
-                component={FormInput}
+                component={TextInput}
                 name="sellAmount"
                 placeholder="Enter Token Amount"
                 className="marketMySharesSellAmount"
@@ -344,14 +346,13 @@ class MarketMySharesForm extends Component {
             <div className="col-md-3">
               <Field
                 name="limitMargin"
-                component={FormSlider}
-                className="limitMarginField"
+                component={Slider}
                 placeholder={LIMIT_MARGIN_DEFAULT}
                 min={0}
                 max={5}
                 unit="%"
                 step={0.5}
-                showInput={false}
+                light
               />
             </div>
             <div className="col-md-4 marketMyShares__sellColumn">

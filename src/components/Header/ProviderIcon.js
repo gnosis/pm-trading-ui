@@ -1,5 +1,5 @@
 import React from 'react'
-import className from 'classnames'
+import className from 'classnames/bind'
 
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
@@ -8,9 +8,9 @@ import IconMetamask from 'assets/img/icons/icon_metamask.svg'
 import IconParity from 'assets/img/icons/icon_parity.svg'
 import IconEtherToken from 'assets/img/icons/icon_etherTokens.svg'
 
-import styles from './ProviderIcon.scss'
+import css from './ProviderIcon.mod.scss'
 
-const cx = className.bind(styles)
+const cx = className.bind(css)
 
 const PROVIDER_METAMASK = 'METAMASK'
 const PROVIDER_PARITY = 'PARITY'

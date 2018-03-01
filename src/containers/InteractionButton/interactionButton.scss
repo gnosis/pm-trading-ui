@@ -11,11 +11,11 @@
       visibility: hidden;
     }
   }
+}
 
-  &Loading {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
+.interactionButtonLoading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
