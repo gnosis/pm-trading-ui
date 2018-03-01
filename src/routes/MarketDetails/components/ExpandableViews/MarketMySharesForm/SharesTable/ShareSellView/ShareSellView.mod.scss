@@ -1,19 +1,9 @@
-@import '../../../../../../../components/FormSlider/slider.scss';
-@import '../../../../../../../components/FormSlider/thumb.scss';
-@import '../../../../../../../scss/vars';
+@import '../../../../../../../components/Form/Slider.mod.scss';
+@import '../../../../../../../scss/vars.scss';
 
 .sellView {
   td {
     border-top: 0 !important;
-  }
-
-  .formSlider {
-    padding-top: 15px;
-    &__input {
-      background: none;
-      @include sliderCrossBrowser(#d6d8d8);
-      @include thumbCrossBrowser(#1aa4c5, #1aa4c5);
-    }
   }
 }
 
@@ -35,13 +25,20 @@
   justify-content: center;
   font-weight: bold;
   padding: 7px 0px;
-
   label {
     display: inline;
     margin: 0;
     font-size: 14px;
     padding: 0px 7px;
     font-weight: bold;
+  }
+}
+
+.sharesSellAmount {
+  input {
+    border-bottom-color: #d5d4d6;
+    border-bottom-width: 1px;
+    border-bottom-style: inset;
   }
 }
 

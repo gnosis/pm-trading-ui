@@ -21,12 +21,8 @@ import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import ScalarSlider from 'components/ScalarSlider'
-
-import {
-  OutcomeSelection,
-  TextInput,
-  TextInputAdornment,
-} from 'components/Form'
+import { OutcomeSelection, TextInput, TextInputAdornment } from 'components/Form'
+import OutcomeSection from './OutcomesSection'
 
 import './marketBuySharesForm.scss'
 
@@ -141,73 +137,6 @@ class MarketBuySharesForm extends Component {
     return undefined
   }
 
-  renderCategorical() {
-    const {
-      selectedBuyInvest,
-      selectedOutcome,
-      market: {
-        funding,
-        netOutcomeTokensSold,
-        eventDescription: { outcomes },
-      },
-    } = this.props
-
-    const isOutcomeSelected = selectedOutcome !== undefined
-    const isInvestmentValid = NUMBER_REGEXP.test(selectedBuyInvest) || !selectedBuyInvest
-
-    const isMarketSimulation = isOutcomeSelected && isInvestmentValid
-
-    const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-    const marketTokenCountsWithSimulation = marketTokenCounts.slice()
-
-    let marginalPricesWithSimulation
-
-    if (isMarketSimulation) {
-      const investmentOutcomeTokens = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
-
-      marketTokenCountsWithSimulation[selectedOutcome] = marketTokenCountsWithSimulation[selectedOutcome].add(investmentOutcomeTokens)
-
-      marginalPricesWithSimulation = marketTokenCountsWithSimulation.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
-        netOutcomeTokensSold: marketTokenCountsWithSimulation,
-        outcomeTokenIndex,
-        funding,
-      }))
-    } else {
-      marginalPricesWithSimulation = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
-        netOutcomeTokensSold: marketTokenCounts,
-        outcomeTokenIndex,
-        funding,
-      }))
-    }
-
-    const categoricalOutcomes = outcomes.map((label, index) => ({
-      index,
-      label,
-      color: COLOR_SCHEME_DEFAULT[index],
-      probability: marginalPricesWithSimulation[index].mul(100),
-    }))
-
-    return (
-      <div className="col-md-7">
-        <div className="row">
-          <div className="col-md-12">
-            <h2 className="marketBuyHeading">Your Trade</h2>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-            <Field
-              component={OutcomeSelection}
-              name="selectedOutcome"
-              className="marketBuyOutcome"
-              outcomes={categoricalOutcomes}
-            />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   renderScalar() {
     const {
       selectedBuyInvest,
@@ -228,11 +157,12 @@ class MarketBuySharesForm extends Component {
     const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
     const marketTokenCountsWithSimulation = marketTokenCounts.slice()
 
-    const marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
-      netOutcomeTokensSold: marketTokenCounts,
-      outcomeTokenIndex,
-      funding,
-    }))
+    const marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
+      calcLMSRMarginalPrice({
+        netOutcomeTokensSold: marketTokenCounts,
+        outcomeTokenIndex,
+        funding,
+      }))
     let marginalPricesWithSimulation = marginalPrices.slice()
 
     if (isMarketSimulation) {
@@ -240,11 +170,12 @@ class MarketBuySharesForm extends Component {
 
       marketTokenCountsWithSimulation[selectedOutcome] = marketTokenCountsWithSimulation[selectedOutcome].add(investmentOutcomeTokens)
 
-      marginalPricesWithSimulation = marketTokenCountsWithSimulation.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
-        netOutcomeTokensSold: marketTokenCountsWithSimulation,
-        outcomeTokenIndex,
-        funding,
-      }))
+      marginalPricesWithSimulation = marketTokenCountsWithSimulation.map((value, outcomeTokenIndex) =>
+        calcLMSRMarginalPrice({
+          netOutcomeTokensSold: marketTokenCountsWithSimulation,
+          outcomeTokenIndex,
+          funding,
+        }))
     }
 
     const scalarOutcomes = [
@@ -291,24 +222,6 @@ class MarketBuySharesForm extends Component {
     )
   }
 
-  renderOutcomes() {
-    const { market: { event } } = this.props
-
-    if (event.type === OUTCOME_TYPES.CATEGORICAL) {
-      return this.renderCategorical()
-    }
-
-    if (event.type === OUTCOME_TYPES.SCALAR) {
-      return this.renderScalar()
-    }
-
-    return (
-      <div className="col-md-6">
-        <span>Invalid Outcomes...</span>
-      </div>
-    )
-  }
-
   render() {
     const {
       gasCosts,
@@ -321,6 +234,8 @@ class MarketBuySharesForm extends Component {
       submitting,
       limitMargin,
       selectedOutcome,
+      market,
+      valid,
     } = this.props
 
     const noOutcomeSelected = typeof selectedOutcome === 'undefined'
@@ -368,7 +283,12 @@ class MarketBuySharesForm extends Component {
       <div className="marketBuySharesForm">
         <form onSubmit={handleSubmit(this.handleBuyShares)}>
           <div className="row">
-            {this.renderOutcomes()}
+            <OutcomeSection
+              market={market}
+              valid={valid}
+              selectedBuyInvest={selectedBuyInvest}
+              selectedOutcome={selectedOutcome}
+            />
             <div className="col-md-5">
               <div className="row marketBuySharesForm__row">
                 <div className="col-md-12">

@@ -1,20 +1,29 @@
 import React from 'react'
-import { OUTCOME_TYPES } from 'utils/contants'
+import { marketShape } from 'utils/shapes'
+import { OUTCOME_TYPES } from 'utils/constants'
+import OutcomesSectionCategorical from './OutcomesSectionCategorical'
 
-const BuySharesOutcomeSection = ({ market: { event: { type } } }) => {
-  if (event.type === OUTCOME_TYPES.CATEGORICAL) {
-    return this.renderCategorical()
+const BuySharesOutcomeSection = (props) => {
+  const { market: { event: { type } } } = props
+  if (type === OUTCOME_TYPES.CATEGORICAL) {
+    return <OutcomesSectionCategorical {...props} />
   }
 
-  if (event.type === OUTCOME_TYPES.SCALAR) {
-    return this.renderScalar()
+  if (type === OUTCOME_TYPES.SCALAR) {
+    return <div />
   }
 
-  return (
-    <div className="col-md-6">
-      <span>Invalid Outcomes...</span>
-    </div>
-  )
+  return <div />
+}
+
+BuySharesOutcomeSection.propTypes = {
+  market: marketShape,
+}
+
+BuySharesOutcomeSection.defaultProps = {
+  market: {
+    event: {},
+  },
 }
 
 export default BuySharesOutcomeSection

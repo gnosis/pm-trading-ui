@@ -6,11 +6,11 @@ import web3 from 'web3'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import { reduxForm, propTypes, Field } from 'redux-form'
+import { Map } from 'immutable'
 import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import FormSlider from 'components/FormSlider'
-import FormInput from 'components/FormInput'
+import { Slider, TextInput } from 'components/Form'
 import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
 import { marketShape, marketShareShape } from 'utils/shapes'
@@ -92,8 +92,8 @@ class ShareSellView extends Component {
     let newScalarPredictedValue
 
     if (market.event.type === OUTCOME_TYPES.SCALAR) {
-      newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
       newMarginalPrices = [new Decimal(1).sub(currentProbability), newProbability]
+      newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
     }
 
     // Run the calculations only if the form is valid
@@ -133,10 +133,10 @@ class ShareSellView extends Component {
                 <div className={cx('col-md-4', 'sellColumn')}>
                   <label htmlFor="sellAmount">Amount to Sell</label>
                   <Field
-                    component={FormInput}
+                    component={TextInput}
                     name="sellAmount"
                     placeholder="Enter Token Amount"
-                    className={cx('marketMySharesSellAmount')}
+                    className={cx('sharesSellAmount')}
                     validate={this.validateTokenCount}
                   />
                 </div>
@@ -173,7 +173,7 @@ class ShareSellView extends Component {
                 <div className={cx('col-md-3')}>
                   <Field
                     name="limitMargin"
-                    component={FormSlider}
+                    component={Slider}
                     className={cx('formSlider')}
                     placeholder={LIMIT_MARGIN_DEFAULT}
                     min={0}
@@ -181,6 +181,7 @@ class ShareSellView extends Component {
                     unit="%"
                     step={0.5}
                     showInput={false}
+                    light
                   />
                 </div>
                 <div className={cx('col-md-4', 'sellColumn')}>
