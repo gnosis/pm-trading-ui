@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
-import cn from 'classnames'
-
+import cn from 'classnames/bind'
 import { decimalToText } from 'components/DecimalValue'
+import style from './scalarSlider.mod.scss'
 
-import './scalarSlider.scss'
+const cx = cn.bind(style)
 
 const ScalarSlider = ({
   lowerBound, upperBound, unit, marginalPriceCurrent, marginalPriceSelected, decimals,
@@ -19,31 +19,29 @@ const ScalarSlider = ({
   // current value
   const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
 
-  const value = new Decimal(marginalPriceCurrent)
-    .mul(bounds)
-    .add(bigLowerBound.div(10 ** displayDecimals))
+  const value = new Decimal(marginalPriceCurrent).mul(bounds).add(bigLowerBound.div(10 ** displayDecimals))
   const percentage = new Decimal(marginalPriceCurrent).mul(100)
 
-  const selectedValue = new Decimal(marginalPriceSelected)
-    .mul(bounds)
-    .add(bigLowerBound.div(10 ** displayDecimals))
+  const selectedValue = new Decimal(marginalPriceSelected).mul(bounds).add(bigLowerBound.div(10 ** displayDecimals))
   const selectedPercentage = new Decimal(marginalPriceSelected).mul(100)
 
   const currentValueSliderStyle = { left: `${percentage.toFixed(4)}%` }
   const selectedValueSliderStyle = { left: `${selectedPercentage.toFixed(4)}%` }
 
   return (
-    <div className="scalarSlider">
-      <div className="scalarSlider__inner">
-        <div className="scalarSlider__lowerBound">
-          <div className="scalarSlider__lowerBoundValue">{`${bigLowerBound.div(10 ** decimals).toFixed(0)} ${unit}`}</div>
-          <div className="scalarSlider__lowerBoundLabel">Lower Bound</div>
+    <div className={cx('scalarSlider')}>
+      <div className={cx('inner')}>
+        <div className={cx('lowerBound')}>
+          <div className={cx('boundValue')}>{`${bigLowerBound.div(10 ** decimals).toFixed(0)} ${unit}`}</div>
+          <div className={cx('boundLabel')}>Lower Bound</div>
         </div>
-        <div className="scalarSlider__bar" title="Please enter a value on the right!">
-          <div className="scalarSlider__handle scalarSlider__handle--current" style={currentValueSliderStyle}>
-            <div className="scalarSlider__handleText">
-              <div className="scalarSlider__handleTextLabel">Predicted Outcome</div>
-              <div className="scalarSlider__handleTextValue">{`${decimalToText(value.toFixed(displayDecimals))} ${unit}`}</div>
+        <div className={cx('bar')} title="Please enter a value on the right!">
+          <div className={cx('sliderHandle')} style={currentValueSliderStyle}>
+            <div className={cx('handleText')}>
+              <div className={cx('handleTextLabel')}>Predicted Outcome</div>
+              <div className={cx('handleTextValue')}>
+                {`${decimalToText(value.toFixed(displayDecimals))} ${unit}`}
+              </div>
             </div>
           </div>
           <div
@@ -53,15 +51,15 @@ const ScalarSlider = ({
             })}
             style={selectedValueSliderStyle}
           >
-            <div className="scalarSlider__handleText">
-              <div className="scalarSlider__handleTextLabel">Selected Trade</div>
-              <div className="scalarSlider__handleTextValue">{`${decimalToText(selectedValue)} ${unit}`}</div>
+            <div className={cx('handleText')}>
+              <div className={cx('handleTextLabel')}>Selected Trade</div>
+              <div className={cx('handleTextValue')}>{`${decimalToText(selectedValue)} ${unit}`}</div>
             </div>
           </div>
         </div>
-        <div className="scalarSlider__upperBound">
-          <div className="scalarSlider__upperBoundValue">{`${bigUpperBound.div(10 ** decimals).toFixed(0)} ${unit}`}</div>
-          <div className="scalarSlider__upperBoundLabel">Upper Bound</div>
+        <div className={cx('upperBound')}>
+          <div className={cx('boundValue')}>{`${bigUpperBound.div(10 ** decimals).toFixed(0)} ${unit}`}</div>
+          <div className={cx('boundLabel')}>Upper Bound</div>
         </div>
       </div>
     </div>

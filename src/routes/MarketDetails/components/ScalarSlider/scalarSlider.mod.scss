@@ -3,7 +3,6 @@
 $slider-stroke-size: 2px;
 $slider-handle-size: 16px;
 $slider-handle-text-width: 150px;
-
 $scalarSliderBackground: #d6d8d8;
 
 .scalarSlider {
@@ -11,14 +10,14 @@ $scalarSliderBackground: #d6d8d8;
   margin-top: 40px;
   margin-bottom: 10px;
 
-  &__inner {
+  .inner {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
   }
 
 
-  &__bar {
+  .bar {
     width: 100%;
     vertical-align: middle;
     position: relative;
@@ -34,7 +33,7 @@ $scalarSliderBackground: #d6d8d8;
     }
   }
 
-  &__handle {
+  .sliderHandle {
     position: absolute;
     height: 100%;
     cursor: not-allowed;
@@ -52,7 +51,7 @@ $scalarSliderBackground: #d6d8d8;
       z-index: 2;
     }
 
-    &--selected {
+    &.selected {
       &::after {
         background-color: $active-highlight;
       }
@@ -95,7 +94,7 @@ $scalarSliderBackground: #d6d8d8;
     }
 
 
-    &Text {
+    .handleText {
       position: relative;
       top: -30px;
       text-align: center;
@@ -105,7 +104,7 @@ $scalarSliderBackground: #d6d8d8;
       margin-top: -20px;
     }
 
-    &TextLabel {
+    .handleTextLabel {
       text-transform: uppercase;
       font-size: 12px;
       color: $font-color-dark;
@@ -113,7 +112,7 @@ $scalarSliderBackground: #d6d8d8;
       text-overflow: ellipsis;
     }
 
-    &TextValue {
+    .handleTextValue {
       white-space: nowrap;
       width: 100%;
       overflow: hidden;
@@ -121,20 +120,20 @@ $scalarSliderBackground: #d6d8d8;
     }
   }
 
-  &__lowerBound {
+  .lowerBound {
     text-align: right;
   }
 
-  &__upperBound {
+  .upperBound {
     text-align: left;
   }
 
-  &__lowerBound, &__upperBound {
+  .lowerBound, .upperBound {
     width: 20%;
     min-width: 120px;
     padding: 0 12px;
 
-    &Label {
+    .boundLabel {
       text-transform: uppercase;
       font-size: 12px;
       color: $font-color-dark;
@@ -143,19 +142,7 @@ $scalarSliderBackground: #d6d8d8;
       text-overflow: ellipsis;
     }
 
-    &Value {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    &Value {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    &Value {
+    .boundValue {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
