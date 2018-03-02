@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import CustomTooltip from 'components/CustomTooltip'
 import Decimal from 'decimal.js'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { eventDescriptionShape } from 'utils/shapes'
+import CustomTooltip from '../CustomTooltip'
 import DateAxisTick from '../DateAxisTick'
-import style from '../MarketGraph.scss'
+import style from '../MarketGraph.mod.scss'
 
 const cx = cn.bind(style)
 

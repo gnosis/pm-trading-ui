@@ -2,6 +2,7 @@ import React from 'react'
 import { marketShape } from 'utils/shapes'
 import { OUTCOME_TYPES } from 'utils/constants'
 import OutcomesSectionCategorical from './OutcomesSectionCategorical'
+import OutcomesSectionScalar from './OutcomeSectionScalar'
 
 const BuySharesOutcomeSection = (props) => {
   const { market: { event: { type } } } = props
@@ -10,7 +11,7 @@ const BuySharesOutcomeSection = (props) => {
   }
 
   if (type === OUTCOME_TYPES.SCALAR) {
-    return <div />
+    return <OutcomesSectionScalar {...props} />
   }
 
   return <div />

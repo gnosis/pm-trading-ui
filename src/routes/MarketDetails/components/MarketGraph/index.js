@@ -6,7 +6,7 @@ import { OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import CategoricalGraph from './CategoricalGraph'
 import ScalarGraph from './ScalarGraph'
-import style from './MarketGraph.scss'
+import style from './MarketGraph.mod.scss'
 
 const cx = cn.bind(style)
 

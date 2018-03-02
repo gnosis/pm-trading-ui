@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
-import CustomTooltip from 'components/CustomTooltip'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import CustomTooltip from '../CustomTooltip'
 import DateAxisTick from '../DateAxisTick'
-import style from '../MarketGraph.scss'
+import style from '../MarketGraph.mod.scss'
 
 const cx = cn.bind(style)
 

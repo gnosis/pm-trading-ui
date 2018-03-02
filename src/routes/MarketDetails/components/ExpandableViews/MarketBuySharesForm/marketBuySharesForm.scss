@@ -27,27 +27,6 @@
   }
 }
 
-.marketBuyOutcome {
-  margin: 20px 0;
-
-  .marketBuyOutcome__input[type="radio"] {
-    width: 32px;
-    height: 32px;
-
-    // current color is highlight color
-    background-color: currentColor;
-
-    &:checked {
-      border-color: $bg-color-muted;
-    }
-  }
-
-  &__text {
-    line-height: 32px;
-    padding-left: 20px;
-  }
-}
-
 .marketBuyInvest {
   input {
     font-size: 32px;

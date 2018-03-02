@@ -4,7 +4,7 @@ import { Field, reduxForm, propTypes } from 'redux-form'
 import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
 
-import { calcLMSROutcomeTokenCount, calcLMSRMarginalPrice } from 'api'
+import { calcLMSROutcomeTokenCount } from 'api'
 
 import { weiToEth } from 'utils/helpers'
 import {
@@ -20,8 +20,7 @@ import InteractionButton from 'containers/InteractionButton'
 
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import ScalarSlider from 'components/ScalarSlider'
-import { OutcomeSelection, TextInput, TextInputAdornment } from 'components/Form'
+import { TextInput, TextInputAdornment } from 'components/Form'
 import OutcomeSection from './OutcomesSection'
 
 import './marketBuySharesForm.scss'
@@ -29,7 +28,7 @@ import './marketBuySharesForm.scss'
 export const NUMBER_REGEXP = /^-?\d+\.?\d*$/
 
 class MarketBuySharesForm extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const {
       requestGasCost, requestGasPrice, isGasCostFetched, isGasPriceFetched,
     } = this.props
@@ -135,91 +134,6 @@ class MarketBuySharesForm extends Component {
     }
 
     return undefined
-  }
-
-  renderScalar() {
-    const {
-      selectedBuyInvest,
-      selectedOutcome,
-      market: {
-        event: { lowerBound, upperBound },
-        eventDescription: { decimals, unit },
-        netOutcomeTokensSold,
-        funding,
-      },
-    } = this.props
-
-    const isOutcomeSelected = selectedOutcome !== undefined
-    const isInvestmentValid = NUMBER_REGEXP.test(selectedBuyInvest) || !selectedBuyInvest
-
-    const isMarketSimulation = isOutcomeSelected && isInvestmentValid
-
-    const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-    const marketTokenCountsWithSimulation = marketTokenCounts.slice()
-
-    const marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
-      calcLMSRMarginalPrice({
-        netOutcomeTokensSold: marketTokenCounts,
-        outcomeTokenIndex,
-        funding,
-      }))
-    let marginalPricesWithSimulation = marginalPrices.slice()
-
-    if (isMarketSimulation) {
-      const investmentOutcomeTokens = this.getOutcomeTokenCount(selectedBuyInvest, selectedOutcome)
-
-      marketTokenCountsWithSimulation[selectedOutcome] = marketTokenCountsWithSimulation[selectedOutcome].add(investmentOutcomeTokens)
-
-      marginalPricesWithSimulation = marketTokenCountsWithSimulation.map((value, outcomeTokenIndex) =>
-        calcLMSRMarginalPrice({
-          netOutcomeTokensSold: marketTokenCountsWithSimulation,
-          outcomeTokenIndex,
-          funding,
-        }))
-    }
-
-    const scalarOutcomes = [
-      {
-        index: 0,
-        label: 'Short',
-        color: COLOR_SCHEME_SCALAR[0],
-        probability: marginalPricesWithSimulation[0].mul(100),
-      },
-      {
-        index: 1,
-        label: 'Long',
-        color: COLOR_SCHEME_SCALAR[1],
-        probability: marginalPricesWithSimulation[1].mul(100),
-      },
-    ]
-
-    return (
-      <div className="col-md-6">
-        <div className="row">
-          <div className="col-md-12">
-            <h2 className="marketBuyHeading">Your Trade</h2>
-            <Field
-              component={OutcomeSelection}
-              name="selectedOutcome"
-              className="marketBuyOutcome"
-              outcomes={scalarOutcomes}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-            <ScalarSlider
-              lowerBound={parseInt(lowerBound, 10)}
-              upperBound={parseInt(upperBound, 10)}
-              unit={unit}
-              decimals={decimals}
-              marginalPriceCurrent={marginalPrices[0].toString()}
-              marginalPriceSelected={marginalPricesWithSimulation[1].toString()}
-            />
-          </div>
-        </div>
-      </div>
-    )
   }
 
   render() {

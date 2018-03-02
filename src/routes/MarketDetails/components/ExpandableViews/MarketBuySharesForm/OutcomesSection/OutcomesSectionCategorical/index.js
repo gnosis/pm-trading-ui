@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import { Field } from 'redux-form'
+import { marketShape } from 'utils/shapes'
 import { calcLMSRMarginalPrice } from 'api'
 import { OutcomeSelection } from 'components/Form'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
@@ -11,9 +12,9 @@ const OutcomesSectionCategorical = (props) => {
     selectedBuyInvest,
     selectedOutcome,
     market: { funding, netOutcomeTokensSold, eventDescription: { outcomes } },
-    valid: isInvestmentValid,
     outcomeTokenCount,
   } = props
+  const canRunSimulation = selectedBuyInvest && selectedOutcome
 
   const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
   let marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
@@ -23,9 +24,9 @@ const OutcomesSectionCategorical = (props) => {
       funding,
     }))
 
-  // Run the calculations only if the amount user wants to invest isvalid, by default values are set to current
+  // Run the simulation only if the amount user wants to invest is valid, by default values are set to current
   // Market's paramteters
-  if (isInvestmentValid && selectedBuyInvest) {
+  if (canRunSimulation) {
     marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
     marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
       calcLMSRMarginalPrice({
@@ -46,7 +47,7 @@ const OutcomesSectionCategorical = (props) => {
     <div className="col-md-7">
       <div className="row">
         <div className="col-md-12">
-          <h2 className="marketBuyHeading">Your Trade</h2>
+          <h2>Your Trade</h2>
         </div>
       </div>
       <div className="row">
@@ -61,6 +62,18 @@ const OutcomesSectionCategorical = (props) => {
       </div>
     </div>
   )
+}
+
+OutcomesSectionCategorical.propTypes = {
+  market: marketShape.isRequired,
+  selectedOutcome: PropTypes.string,
+  selectedBuyInvest: PropTypes.string,
+  outcomeTokenCount: PropTypes.instanceOf(Decimal).isRequired,
+}
+
+OutcomesSectionCategorical.defaultProps = {
+  selectedBuyInvest: '0',
+  selectedOutcome: undefined,
 }
 
 export default OutcomesSectionCategorical
