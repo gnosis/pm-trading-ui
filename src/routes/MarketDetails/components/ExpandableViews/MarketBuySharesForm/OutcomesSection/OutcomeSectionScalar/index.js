@@ -18,7 +18,7 @@ const OutcomeSectionScalar = (props) => {
     },
     outcomeTokenCount,
   } = props
-  const isInvestmentValid = valid && selectedBuyInvest && selectedOutcome
+  const canRunSimulation = selectedBuyInvest && selectedOutcome
 
   const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
   const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) =>
@@ -29,7 +29,7 @@ const OutcomeSectionScalar = (props) => {
     }))
   let marginalPriceSelected = marginalPricesCurrent
 
-  if (isInvestmentValid) {
+  if (canRunSimulation) {
     marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
     marginalPriceSelected = marketTokenCounts.map((value, outcomeTokenIndex) =>
       calcLMSRMarginalPrice({
