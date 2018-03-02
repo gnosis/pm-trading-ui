@@ -69,7 +69,7 @@ const OutcomeSectionScalar = (props) => {
             upperBound={parseInt(upperBound, 10)}
             unit={unit}
             decimals={decimals}
-            marginalPriceCurrent={marginalPricesCurrent[0].toString()}
+            marginalPriceCurrent={marginalPricesCurrent[1].toString()}
             marginalPriceSelected={marginalPriceSelected[1].toString()}
           />
         </div>

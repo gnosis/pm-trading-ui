@@ -27,10 +27,7 @@ const ScalarSlider = ({
 
   const currentValueSliderStyle = { left: `${percentage.toFixed(4)}%` }
   const selectedValueSliderStyle = { left: `${selectedPercentage.toFixed(4)}%` }
-  const selectedHandleStyle = cx('sliderHandle', 'selected', {
-    pinRight: selectedPercentage.gt(75),
-    pinLeft: selectedPercentage.lt(25),
-  })
+  const selectedHandleStyle = cx('sliderHandle', 'selected')
 
   return (
     <div className={cx('scalarSlider')}>
