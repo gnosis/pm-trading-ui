@@ -1,4 +1,4 @@
-@import "../../../../scss/vars";
+@import "../../../../../../../../scss/vars.scss";
 
 $slider-stroke-size: 2px;
 $slider-handle-size: 16px;
@@ -56,7 +56,7 @@ $scalarSliderBackground: #d6d8d8;
         background-color: $active-highlight;
       }
 
-      .scalarSlider__handleText {
+      .handleText {
         top: 50px;
         padding: 5px 4px;
         background-color: $active-highlight;
@@ -79,14 +79,14 @@ $scalarSliderBackground: #d6d8d8;
         }
       }
 
-      &--pinRight {
-        .scalarSlider__handleText {
+      &.pinRight {
+        .handleText {
           text-align: right;
           padding-right: ($slider-handle-text-width/2);
         }
       }
-      &--pinLeft {
-        .scalarSlider__handleText {
+      &.pinLeft {
+        .handleText {
           text-align: left;
           padding-left: ($slider-handle-text-width/2);
         }

@@ -7,7 +7,7 @@ import { Field } from 'redux-form'
 import { OutcomeSelection } from 'components/Form'
 import { COLOR_SCHEME_SCALAR } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
-import ScalarSlider from '../../../../ScalarSlider'
+import ScalarSlider from './ScalarSlider'
 
 const OutcomeSectionScalar = (props) => {
   const {
