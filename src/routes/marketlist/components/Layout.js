@@ -1,6 +1,7 @@
 import { List } from 'immutable'
 import PropTypes from 'prop-types'
 import React from 'react'
+import MarketOverview from './MarketOverview.jsx'
 import Markets from './Markets.jsx'
 import MarketsFilter from './MarketsFilter.jsx'
 import MarketStats from './MarketStats.jsx'
@@ -9,25 +10,21 @@ import NoMarkets from './NoMarkets.jsx'
 
 // eslint-disable-next-line
 const Layout = ({ markets, openMarkets, newMarkets, endingSoonMarkets, userAccount }) => (
-  <div className="marketListPage">
+  <div>
     <MarketsTitle />
     <MarketStats
       open={openMarkets}
       newMarkets={newMarkets}
       endingSoon={endingSoonMarkets}
     />
-    <div className="marketListPage__markets">
-      <div className="container">
-        <div className="row">
-          <div className="marketList col-md-9">
-            { markets ? <Markets markets={markets} userAccount={userAccount} /> : <NoMarkets /> }
-          </div>
-          <div className="marketList col-md-3">
-            <MarketsFilter />
-          </div>
-        </div>
+    <MarketOverview>
+      <div className="col-md-9">
+        { markets ? <Markets markets={markets} userAccount={userAccount} /> : <NoMarkets /> }
       </div>
-    </div>
+      <div className="col-md-3">
+        <MarketsFilter />
+      </div>
+    </MarketOverview>
   </div>
 )
 

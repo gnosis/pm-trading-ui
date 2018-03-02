@@ -1,10 +1,17 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import classNames from 'classnames/bind'
+
+import Icon from 'components/Icon'
+
+import css from '../Market.mod.scss'
+
+const cx = classNames.bind(css)
 
 const MarketResolution = ({ resolution }) => (
-  <div className="info__field">
-    <div className="info__field--icon icon icon--enddate" />
-    <div className="info__field--label">
+  <div className={cx('marketInfo')}>
+    <Icon type="enddate" size={25} />
+    <div className={cx('label')}>
       {resolution}
     </div>
   </div>
