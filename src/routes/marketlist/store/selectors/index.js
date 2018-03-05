@@ -2,7 +2,31 @@ import { List } from 'immutable'
 import { createSelector } from 'reselect'
 import { isMarketClosed, isMarketEndingSoon, isNewMarket } from 'store/utils/marketStatus'
 
-export const marketListSelector = state => List(state.marketList.values())
+const marketSort = (marketA, marketB) => {
+  const isAClosed = isMarketClosed(marketA.stage, marketA.resolution, marketA.resolved)
+  const isBClosed = isMarketClosed(marketB.stage, marketB.resolution, marketB.resolved)
+
+  if (isAClosed && !isBClosed) {
+    return 1
+  }
+
+  if (!isAClosed && isBClosed) {
+    return -1
+  }
+
+  if (marketA.resolution > marketB.resolution) {
+    return -1
+  }
+
+  if (marketB.resolution > marketA.resolution) {
+    return 1
+  }
+
+  return 0
+}
+
+export const marketListSelector = state =>
+  List(state.marketList.sort(marketSort).values())
 
 export const newMarketsSelector = createSelector(
   marketListSelector,
