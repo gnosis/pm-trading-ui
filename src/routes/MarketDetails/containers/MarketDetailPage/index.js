@@ -19,7 +19,7 @@ import { getMarketTradesForAccount } from 'selectors/marketTrades'
 import { getMarketShares } from 'selectors/marketShares'
 import { getMarketGraph } from 'selectors/marketGraph'
 import { getGasCosts, getGasPrice, isGasCostFetched, isGasPriceFetched } from 'selectors/blockchain'
-import { checkWalletConnection, getCurrentAccount, getCurrentBalance, isOnWhitelist } from 'integrations/store/selectors'
+import { checkWalletConnection, getCurrentAccount, getCurrentBalance } from 'integrations/store/selectors'
 import { isModerator, getModerators } from 'utils/helpers'
 
 let marketId
@@ -51,7 +51,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
     hasWallet: checkWalletConnection(state),
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
-    creatorIsModerator: isModerator(getCurrentAccount(state)),
+    isModerator: isModerator(getCurrentAccount(state)),
     moderators: getModerators(),
     marketTrades,
     marketGraph,
@@ -60,7 +60,6 @@ const mapStateToProps = (state, ownProps) => {
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
     currentBalance: getCurrentBalance(state),
-    isOnWhitelist: isOnWhitelist(state),
   }
 }
 

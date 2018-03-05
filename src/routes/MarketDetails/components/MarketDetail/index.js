@@ -1,29 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
-
-import { RESOLUTION_TIME, GAS_COST, MIN_CONSIDER_VALUE } from 'utils/constants'
-import { marketShape, marketShareShape, marketTradeShape, gasCostsShape } from 'utils/shapes'
-import { weiToEth, isMarketClosed, isMarketResolved } from 'utils/helpers'
-
-import InteractionButton from 'containers/InteractionButton'
-
+import { GAS_COST } from 'utils/constants'
+import { marketShape, marketShareShape, marketTradeShape, gasCostsShape, ReactRouterMatchShape } from 'utils/shapes'
+import { weiToEth, isMarketResolved } from 'utils/helpers'
 import { collateralTokenToText } from 'components/CurrencyName'
-import DecimalValue, { decimalToText } from 'components/DecimalValue'
-import Countdown from 'components/Countdown'
-import Outcome from 'components/Outcome'
+import { decimalToText } from 'components/DecimalValue'
 import MarketGraph from 'routes/MarketDetails/components/MarketGraph'
 import expandableViews, { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
+import Controls from './Controls'
+import Details from './Details'
 
 import config from 'config.json'
 
 import './marketDetail.scss'
-
-const ONE_WEEK_IN_HOURS = 168
 
 class MarketDetail extends Component {
   constructor(props) {
@@ -34,12 +27,9 @@ class MarketDetail extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetchEssentialData(!this.props.match.params.view)
     this.fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
-  }
-
-  componentDidMount() {
     this.scrollToSharesDiv()
   }
 
@@ -156,7 +146,7 @@ class MarketDetail extends Component {
       market.oracle.owner === this.props.defaultAccount &&
       new Decimal(market.collectedFees).gt(0)
 
-    if (this.props.isOnWhitelist) {
+    if (this.props.isModerator) {
       // Show creator String
       infos.creator = this.props.moderators[market.creator] || market.creator
     }
@@ -177,123 +167,10 @@ class MarketDetail extends Component {
     )
   }
 
-  renderDetails(market) {
-    const timeToResolution = moment
-      .utc(market.eventDescription.resolutionDate)
-      .local()
-      .diff(moment(), 'hours')
-    const { marketShares, gasCosts, gasPrice } = this.props
-    const winningsTotal = Object.keys(marketShares).reduce(
-      (acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')),
-      Decimal(0),
-    )
-    const redeemWinningsGasCost = gasCosts.get('redeemWinnings')
-    const marketClosed = isMarketClosed(market)
-    const marketResolved = isMarketResolved(market)
-    const showWinning = marketResolved
-    const marketClosedOrFinished = marketClosed || marketResolved
-    const marketStatus = marketResolved ? 'resolved.' : 'closed.'
-    const showCountdown = !marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS
-    const redeemWinningsTransactionGas = gasPrice
-      .mul(redeemWinningsGasCost || 0)
-      .div(1e18)
-      .toDP(5, 1)
-      .toString()
-
-    return (
-      <div className="marketDetails col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0">
-        <div className="marketDescription">
-          <p className="marketDescription__text">{market.eventDescription.description}</p>
-        </div>
-        <Outcome market={market} />
-        {showCountdown ? (
-          <div className="marketTimer">
-            <div className="marketTimer__live">
-              <Countdown target={market.eventDescription.resolutionDate} />
-            </div>
-            <small className="marketTime__absolute">
-              {moment
-                .utc(market.eventDescription.resolutionDate)
-                .local()
-                .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-            </small>
-          </div>
-        ) : (
-          <div className="marketTimer">
-            <div className="marketTimer__live marketTimer__live--big">
-              <div className="marketTimer__liveLabel">Resolution Time</div>
-            </div>
-            <div className="marketTimer__live">
-              {moment
-                .utc(market.eventDescription.resolutionDate)
-                .local()
-                .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-            </div>
-            {marketClosedOrFinished && (
-              <div className="marketTimer__marketClosed">{`This market was ${marketStatus}`}</div>
-            )}
-          </div>
-        )}
-        {showWinning &&
-          winningsTotal.gt(MIN_CONSIDER_VALUE) && (
-            <div className="redeemWinning">
-              <div className="redeemWinning__icon-details-container">
-                <div className="redeemWinning__icon icon icon--achievementBadge" />
-                <div className="redeemWinning__details">
-                  <div className="redeemWinning__heading">
-                    <DecimalValue value={weiToEth(winningsTotal)} />{' '}
-                    {collateralTokenToText(market.event.collateralToken)}
-                  </div>
-                  <div className="redeemWinning__label">Your Winnings</div>
-                </div>
-              </div>
-              <div className="redeemWinning__action">
-                <InteractionButton className="btn btn-primary" onClick={this.handleRedeemWinnings}>
-                  Redeem Winnings
-                </InteractionButton>
-                <span className="redeemWinning__gasCost">Gas cost: {redeemWinningsTransactionGas} ETH</span>
-              </div>
-            </div>
-          )}
-      </div>
-    )
-  }
-
-  renderControls() {
-    return (
-      <div className="marketControls container">
-        <div className="row">
-          {Object.keys(expandableViews)
-            .filter(view =>
-              typeof expandableViews[view].showCondition !== 'function' ||
-                expandableViews[view].showCondition(this.props))
-            .map(view => (
-              <button
-                key={view}
-                type="button"
-                className={cn({
-                  marketControls__button: true,
-                  'marketControls__button--active btn btn-primary': view === this.props.match.params.view,
-                  [expandableViews[view].className]: view !== this.props.match.params.view,
-                })}
-                onClick={() => this.handleExpand(view)}
-              >
-                {expandableViews[view].label}
-              </button>
-            ))}
-        </div>
-      </div>
-    )
-  }
-
-  renderMarketGraph() {
-    const { market, marketGraph } = this.props
-
-    return <MarketGraph data={marketGraph} market={market} />
-  }
-
   render() {
-    const { market } = this.props
+    const {
+      market, marketGraph, marketShares, gasCosts, gasPrice,
+    } = this.props
 
     const { marketFetchError } = this.state
     if (marketFetchError) {
@@ -319,11 +196,17 @@ class MarketDetail extends Component {
         </div>
         <div className="container">
           <div className="row">
-            {this.renderDetails(market)}
+            <Details
+              market={market}
+              marketShares={marketShares}
+              gasCosts={gasCosts}
+              gasPrice={gasPrice}
+              handleRedeemWinnings={this.handleRedeemWinnings}
+            />
             {this.renderInfos(market)}
           </div>
         </div>
-        {this.renderControls(market)}
+        <Controls handleExpand={this.handleExpand} {...this.props} />
         <div
           ref={(div) => {
             this.divSharesNode = div
@@ -332,7 +215,7 @@ class MarketDetail extends Component {
         >
           {this.renderExpandableContent()}
         </div>
-        <div>{this.renderMarketGraph()}</div>
+        <MarketGraph data={marketGraph} market={market} />
       </div>
     )
   }
@@ -357,7 +240,7 @@ MarketDetail.propTypes = {
   fetchMarketTradesForAccount: PropTypes.func,
   redeemWinnings: PropTypes.func,
   requestGasCost: PropTypes.func,
-  creatorIsModerator: PropTypes.bool,
+  isModerator: PropTypes.bool,
   moderators: PropTypes.shape({
     address: PropTypes.string,
   }),
@@ -366,6 +249,7 @@ MarketDetail.propTypes = {
   }),
   gasCosts: gasCostsShape,
   gasPrice: PropTypes.instanceOf(Decimal),
+  match: ReactRouterMatchShape,
 }
 
 export default MarketDetail

@@ -82,7 +82,7 @@ OutcomeSectionScalar.propTypes = {
   market: marketShape.isRequired,
   selectedOutcome: PropTypes.string,
   selectedBuyInvest: PropTypes.string,
-  outcomeTokenCount: PropTypes.instanceOf(Decimal).isRequired,
+  outcomeTokenCount: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.number]).isRequired,
 }
 
 OutcomeSectionScalar.defaultProps = {

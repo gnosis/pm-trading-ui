@@ -46,7 +46,7 @@ TradeRow.propTypes = {
   collateralToken: PropTypes.string,
   tradeDate: PropTypes.string,
   outcomeName: PropTypes.string,
-  tradeCost: PropTypes.string,
+  tradeCost: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 TradeRow.defaultProps = {
