@@ -15,7 +15,6 @@ const getOutcomeTokenCount = (market, investment, outcomeIndex, limitMargin) => 
   if (!market || !investment || !outcomeIndex || !NUMBER_REGEXP.test(investment) || parseFloat(investment) < 0) {
     return Decimal(0)
   }
-  console.log(outcomeIndex)
 
   const invest = new Decimal(investment)
     .mul(1e18)
