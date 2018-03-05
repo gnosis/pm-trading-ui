@@ -2,7 +2,7 @@
 @import "../../../../../components/Form/Slider.mod.scss";
 
 .marketBuySharesForm {
-  &__row {
+  .infoRow {
     margin: 20px 0;
     display: flex;
     margin-bottom: 10px;
@@ -12,18 +12,6 @@
     &:first-child {
       margin-top: 0;
     }
-  }
-
-  &__cancel {
-    &::before {
-      background: $bg-color-muted !important;
-    }
-  }
-}
-
-.marketBuyCheckbox {
-  &__input {
-    background-color: darken($bg-color-muted, 10%) !important;
   }
 }
 
@@ -55,23 +43,9 @@
   }
 }
 
-.limitMarginField {
-  margin: 0;
-}
-
-.marketBuyCurrency {
-  height: 100%;
-  font-size: 32px;
-  padding-bottom: 33px;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 300;
-}
-
 .marketBuyWin {
 
-  &__row {
+  &.winInfoRow {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -79,15 +53,15 @@
     line-height: 30px;
   }
 
-  &__min {
+  &.min {
     color: red;
   }
 
-  &__max {
+  &.max {
     color: green;
   }
 
-  &__outcomeColor {
+  &.outcomeColor {
     display: inline-block;
     vertical-align: middle;
 
@@ -96,14 +70,14 @@
 
     border-radius: 4px;
   }
+}
 
-  &__invalidParam {
-    color: $font-color-muted;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    height: 20px;
-    line-height: 30px;
-  }
+.invalidParam {
+  color: $font-color-muted;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  height: 20px;
+  line-height: 30px;
 }
