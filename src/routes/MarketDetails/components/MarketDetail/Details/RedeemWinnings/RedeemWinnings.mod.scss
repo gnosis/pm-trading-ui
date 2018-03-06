@@ -1,32 +1,20 @@
 @import '../../../../../../scss/vars.scss';
 
-$detailBadgesSize: 64px;
-
 .redeemWinning {
     display: flex;
     flex-direction: column;
     max-width: 267px;
     margin: 20px 0;
   
-    &__icon {
-      width: $detailBadgesSize;
-      height: $detailBadgesSize;
-  
-      position: relative;
-      float: left;
-    }
-  
-    &__details {
-      float: left;
+    .details {
       padding-left: 10px;
-      height: $detailBadgesSize;
     }
   
-    &__heading {
+    .heading {
       font-size: 30px;
     }
   
-    &__label {
+    .label {
       text-transform: uppercase;
       color: $font-color-muted;
       font-size: 10px;
@@ -34,7 +22,7 @@ $detailBadgesSize: 64px;
       letter-spacing: 0.5px;
     }
   
-    &__action {
+    .action {
       text-align: center;
       .btn {
         padding: 10px;
@@ -46,7 +34,7 @@ $detailBadgesSize: 64px;
       }
     }
   
-    &__gasCost {
+    .gasCost {
       margin-top: 5px;
       display: inline-block;
       color: $font-color-muted;

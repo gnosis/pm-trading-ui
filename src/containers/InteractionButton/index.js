@@ -142,8 +142,8 @@ InteractionButton.defaultProps = {
   whitelistRequired: false,
   children: <div />,
   type: 'button',
-  disabled: true,
-  loading: true,
+  disabled: false,
+  loading: false,
   targetNetworkId: 0,
 }
 

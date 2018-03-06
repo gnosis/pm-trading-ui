@@ -48,7 +48,7 @@ const Details = ({
       {showWinning && (
         <RedeemWinnigs
           winningsAmount={winningsTotal}
-          handleRedeemWinnigs={handleRedeemWinnings}
+          handleRedeemWinnings={handleRedeemWinnings}
           transactionGas={redeemWinningsTransactionGas}
           collateralToken={market.event.collateralToken}
         />
