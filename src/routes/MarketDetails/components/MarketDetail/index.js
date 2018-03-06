@@ -6,15 +6,13 @@ import cn from 'classnames'
 import Decimal from 'decimal.js'
 import { GAS_COST } from 'utils/constants'
 import { marketShape, marketShareShape, marketTradeShape, gasCostsShape, ReactRouterMatchShape } from 'utils/shapes'
-import { weiToEth, isMarketResolved } from 'utils/helpers'
-import { collateralTokenToText } from 'components/CurrencyName'
-import { decimalToText } from 'components/DecimalValue'
+import { isMarketResolved } from 'utils/helpers'
 import MarketGraph from 'routes/MarketDetails/components/MarketGraph'
 import expandableViews, { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
+import config from 'config.json'
 import Controls from './Controls'
 import Details from './Details'
-
-import config from 'config.json'
+import Infos from './Infos'
 
 import './marketDetail.scss'
 
@@ -28,7 +26,7 @@ class MarketDetail extends Component {
   }
 
   componentDidMount() {
-    this.fetchEssentialData(!this.props.match.params.view)
+    this.fetchEssentialData()
     this.fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
     this.scrollToSharesDiv()
   }
@@ -43,8 +41,8 @@ class MarketDetail extends Component {
   }
 
   scrollToSharesDiv = () => {
-    const { pathname } = this.props.location
-    const isMySharesView = pathname.indexOf(EXPAND_MY_SHARES) !== -1
+    const { view = '' } = this.props.match.params
+    const isMySharesView = view.indexOf(EXPAND_MY_SHARES) !== -1
     const shouldScroll = this.divSharesNode && isMySharesView
     if (shouldScroll) {
       const y = this.divSharesNode.offsetTop
@@ -56,21 +54,18 @@ class MarketDetail extends Component {
 
   // Check available views on first fetch
   @autobind
-  fetchEssentialData(firstFetch = false) {
+  fetchEssentialData() {
     this.props
       .fetchMarket()
       .then(() => {
         this.props.fetchMarketTrades(this.props.market)
+        const availableView = this.getAvailableView()
+        if (availableView) {
+          this.props.changeUrl(`/markets/${this.props.match.params.id}/${availableView}`)
+        }
 
         if (isMarketResolved(this.props.market)) {
           this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
-        }
-
-        if (firstFetch) {
-          const availableView = this.getAvailableView()
-          if (availableView) {
-            this.props.changeUrl(`/markets/${this.props.match.params.id}/${availableView}`)
-          }
         }
       })
       .catch((err) => {
@@ -134,42 +129,9 @@ class MarketDetail extends Component {
     return <div />
   }
 
-  renderInfos(market) {
-    const infos = {
-      Token: collateralTokenToText(market.event.collateralToken),
-      Fee: `${decimalToText(market.fee, 2) / 10000} %`,
-      Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
-      'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
-    }
-    const showWithdrawFees =
-      this.props.defaultAccount &&
-      market.oracle.owner === this.props.defaultAccount &&
-      new Decimal(market.collectedFees).gt(0)
-
-    if (this.props.isModerator) {
-      // Show creator String
-      infos.creator = this.props.moderators[market.creator] || market.creator
-    }
-
-    if (showWithdrawFees) {
-      infos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenToText(market.event.collateralToken)}`
-    }
-
-    return (
-      <div className="marketInfos col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0">
-        {Object.keys(infos).map(label => (
-          <div className="marketInfo" key={label}>
-            <p className="marketInfo__info marketInfo__info--value">{infos[label]}</p>
-            <p className="marketInfo__info marketInfo__info--label">{label}</p>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
   render() {
     const {
-      market, marketGraph, marketShares, gasCosts, gasPrice,
+      market, marketGraph, marketShares, gasCosts, gasPrice, defaultAccount, moderators,
     } = this.props
 
     const { marketFetchError } = this.state
@@ -203,7 +165,7 @@ class MarketDetail extends Component {
               gasPrice={gasPrice}
               handleRedeemWinnings={this.handleRedeemWinnings}
             />
-            {this.renderInfos(market)}
+            <Infos market={market} defaultAccount={defaultAccount} moderators={moderators} />
           </div>
         </div>
         <Controls handleExpand={this.handleExpand} {...this.props} />
