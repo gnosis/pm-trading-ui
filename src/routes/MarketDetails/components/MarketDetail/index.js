@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import { GAS_COST } from 'utils/constants'
 import { marketShape, marketShareShape, marketTradeShape, gasCostsShape, ReactRouterMatchShape } from 'utils/shapes'
@@ -13,8 +13,9 @@ import config from 'config.json'
 import Controls from './Controls'
 import Details from './Details'
 import Infos from './Infos'
+import style from './marketDetail.mod.scss'
 
-import './marketDetail.scss'
+const cx = cn.bind(style)
 
 class MarketDetail extends Component {
   constructor(props) {
@@ -137,8 +138,8 @@ class MarketDetail extends Component {
     const { marketFetchError } = this.state
     if (marketFetchError) {
       return (
-        <div className="marketDetailPage">
-          <div className="container">This market could not be found.</div>
+        <div>
+          <div className={cx('container')}>This market could not be found.</div>
         </div>
       )
     }
@@ -148,16 +149,16 @@ class MarketDetail extends Component {
     }
 
     return (
-      <div className="marketDetailPage">
-        <div className="container">
-          <div className="row">
-            <div className="col-xs-10 col-xs-offset-1 col-sm-7 col-sm-offset-0">
-              <h1 className="marketTitle__heading">{market.eventDescription.title}</h1>
+      <div>
+        <div className={cx('container')}>
+          <div className={cx('row')}>
+            <div className={cx('col-xs-10 col-xs-offset-1 col-sm-7 col-sm-offset-0')}>
+              <h1 className={cx('marketTitleHeading')}>{market.eventDescription.title}</h1>
             </div>
           </div>
         </div>
-        <div className="container">
-          <div className="row">
+        <div className={cx('container')}>
+          <div className={cx('row')}>
             <Details
               market={market}
               marketShares={marketShares}
@@ -173,7 +174,7 @@ class MarketDetail extends Component {
           ref={(div) => {
             this.divSharesNode = div
           }}
-          className="expandable"
+          className={cx('expandable')}
         >
           {this.renderExpandableContent()}
         </div>

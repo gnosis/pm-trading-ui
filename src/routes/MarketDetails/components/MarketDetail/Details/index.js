@@ -2,12 +2,12 @@ import React from 'react'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import InteractionButton from 'containers/InteractionButton'
-import { RESOLUTION_TIME, MIN_CONSIDER_VALUE } from 'utils/constants'
+import { MIN_CONSIDER_VALUE } from 'utils/constants'
 import { weiToEth, isMarketClosed, isMarketResolved } from 'utils/helpers'
 import { collateralTokenToText } from 'components/CurrencyName'
-import Countdown from 'components/Countdown'
 import DecimalValue from 'components/DecimalValue'
 import Outcome from 'components/Outcome'
+import MarketTimer from './MarketTimer'
 
 const ONE_WEEK_IN_HOURS = 168
 
@@ -41,34 +41,12 @@ const Details = ({
         <p className="marketDescription__text">{market.eventDescription.description}</p>
       </div>
       <Outcome market={market} />
-      {showCountdown ? (
-        <div className="marketTimer">
-          <div className="marketTimer__live">
-            <Countdown target={market.eventDescription.resolutionDate} />
-          </div>
-          <small className="marketTime__absolute">
-            {moment
-              .utc(market.eventDescription.resolutionDate)
-              .local()
-              .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-          </small>
-        </div>
-      ) : (
-        <div className="marketTimer">
-          <div className="marketTimer__live marketTimer__live--big">
-            <div className="marketTimer__liveLabel">Resolution Time</div>
-          </div>
-          <div className="marketTimer__live">
-            {moment
-              .utc(market.eventDescription.resolutionDate)
-              .local()
-              .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
-          </div>
-          {marketClosedOrFinished && (
-            <div className="marketTimer__marketClosed">{`This market was ${marketStatus}`}</div>
-          )}
-        </div>
-      )}
+      <MarketTimer
+        market={market}
+        showCountdown={showCountdown}
+        marketStatus={marketStatus}
+        showStatus={marketClosedOrFinished}
+      />
       {showWinning &&
         winningsTotal.gt(MIN_CONSIDER_VALUE) && (
           <div className="redeemWinning">
