@@ -5,7 +5,7 @@ import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
 import { marketTradeShape } from 'utils/shapes'
 import Decimal from 'decimal.js'
-import style from '../marketMyTrades.scss'
+import style from '../marketMyTrades.mod.scss'
 
 const cx = cn.bind(style)
 

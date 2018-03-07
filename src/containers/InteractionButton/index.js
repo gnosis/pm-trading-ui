@@ -91,14 +91,14 @@ class InteractionButton extends Component {
 
     const btn = (
       <button className={classNames} type={type || 'button'} onClick={onClickHandler} disabled={isDisabled}>
-        <div className={cx('interactionButton__inner')}>{children}</div>
+        <div className={cx('interactionButtonInner')}>{children}</div>
       </button>
     )
 
     if (isLoading) {
       return (
         <button className={classNames} type="button" disabled>
-          <div className={cx('interactionButton__inner')}>{children}</div>
+          <div className={cx('interactionButtonInner')}>{children}</div>
           <LoadingIndicator width={28} height={28} className={cx('interactionButtonLoading')} />
         </button>
       )

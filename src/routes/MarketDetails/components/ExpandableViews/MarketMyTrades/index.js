@@ -10,7 +10,7 @@ import { marketShape, marketTradeShape } from 'utils/shapes'
 import TableHeader from './TableHeader'
 import TradeRow from './TradeRow'
 
-import style from './marketMyTrades.scss'
+import style from './marketMyTrades.mod.scss'
 
 const cx = cn.bind(style)
 
