@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 
 import OutcomeColorBox from 'components/OutcomeColorBox'
-import style from '../outcomeCategorical.scss'
+import style from '../outcomeCategorical.mod.scss'
 
 const cx = cn.bind(style)
 

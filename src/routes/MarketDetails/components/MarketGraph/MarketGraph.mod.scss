@@ -1,0 +1,21 @@
+@import "../../../../scss/vars";
+
+.marketGraph {
+  width: 100%;
+  min-height: 400px;
+  padding: 60px 0;
+  height: 60vh;
+  background-color: $bg-color-dark;
+  color: $font-color-dark;
+}
+
+.marketGraphSpinner {
+  margin: auto;
+  display: block;
+  padding: 60px 0;
+}
+
+.marketGraphContainer {
+  width: 100%;
+  height: 100%;
+}

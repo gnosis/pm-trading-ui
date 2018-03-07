@@ -11,11 +11,12 @@ const Outcome = ({ market, opts = { showOnlyTrendingOutcome: false } }) => {
   const { event: { type: eventType } } = market
   const showWinningOutcome = isMarketResolved(market)
 
-  let outcomeComponent = eventType === OUTCOME_TYPES.CATEGORICAL ? (
-    <OutcomeCategorical market={market} opts={opts} />
-  ) : (
-    <OutcomeScalar market={market} opts={opts} />
-  )
+  let outcomeComponent =
+    eventType === OUTCOME_TYPES.CATEGORICAL ? (
+      <OutcomeCategorical market={market} opts={opts} />
+    ) : (
+      <OutcomeScalar market={market} opts={opts} />
+    )
 
   if (showWinningOutcome) {
     outcomeComponent = <WinningOutcome market={market} />
@@ -25,11 +26,12 @@ const Outcome = ({ market, opts = { showOnlyTrendingOutcome: false } }) => {
 }
 
 Outcome.propTypes = {
-  market: marketShape,
+  market: marketShape.isRequired,
   opts: PropTypes.shape({
     showOnlyTrendingOutcome: PropTypes.bool,
     showDate: PropTypes.bool,
     dateFormat: PropTypes.string,
+    className: PropTypes.string,
   }),
 }
 
