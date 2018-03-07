@@ -2,12 +2,11 @@ import { Record } from 'immutable'
 import { OUTCOME_TYPES } from 'utils/constants'
 
 const ScalarMarketRecord = Record({
-  type: OUTCOME_TYPES.CATEGORICAL,
+  type: OUTCOME_TYPES.SCALAR,
   address: undefined,
   title: undefined, // string
   resolution: undefined, // moment
   volume: undefined, // decimal
-  outcomes: undefined, // List<Outcome>
   winningOutcome: undefined, // int
   bounds: undefined, // BoundRecord
   funding: undefined, // int
@@ -16,7 +15,7 @@ const ScalarMarketRecord = Record({
   resolved: undefined, // boolean
   creator: undefined, // string
   collateralToken: undefined, // string
-  outcomeTokensSold: undefined, // int
+  outcomeTokensSold: undefined, // List<int>
 }, 'Market')
 
 export default ScalarMarketRecord

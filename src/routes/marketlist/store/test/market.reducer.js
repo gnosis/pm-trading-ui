@@ -46,9 +46,9 @@ const marketReducerTests = () => {
       // THEN
       const markets = marketListSelector(store.getState())
 
-      const firstMarketRecord = markets.get(0)
-      const secondMarketRecord = markets.get(1)
-      const thirdMarketRecord = markets.get(2)
+      const firstMarketRecord = markets.find(market => market.address === MarketFactory.aKittiesMarket.address)
+      const secondMarketRecord = markets.find(market => market.address === MarketFactory.aEthereumMarket.address)
+      const thirdMarketRecord = markets.find(market => market.address === MarketFactory.aGasPriceMarket.address)
 
       expect(firstMarketRecord).toEqual(MarketFactory.aKittiesMarket)
       expect(secondMarketRecord).toEqual(MarketFactory.aEthereumMarket)
@@ -66,8 +66,8 @@ const marketReducerTests = () => {
 
       // THEN
       const markets = marketListSelector(store.getState())
-      const firstMarketRecord = markets.get(0)
-      const secondMarketRecord = markets.get(1)
+      const firstMarketRecord = markets.find(market => market.address === MarketFactory.aEthereumMarket.address)
+      const secondMarketRecord = markets.find(market => market.address === MarketFactory.aGasPriceMarket.address)
 
       expect(store.getState().marketList.size).toEqual(2)
       expect(firstMarketRecord).toEqual(MarketFactory.aEthereumMarket)

@@ -15,7 +15,7 @@ const CategoricalMarketRecord = Record({
   resolved: undefined, // boolean
   creator: undefined, // string
   collateralToken: undefined, // string
-  outcomeTokensSold: undefined, // int
+  outcomeTokensSold: undefined, // List<int>
 }, 'Market')
 
 export default CategoricalMarketRecord

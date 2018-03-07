@@ -10,6 +10,7 @@ const newMarketsTests = () => {
     it('should return 1 new market if only one of three is new', () => {
       // GIVEN
       const aEndingSoonMarket = aMarket()
+        .ofScalarType()
         .withCreation(moment().subtract(1, 'days'))
         .withResolution(moment().add(3, 'days'))
         .withStage(MARKET_STAGES.MARKET_FUNDED)
@@ -17,11 +18,13 @@ const newMarketsTests = () => {
         .get()
 
       const aClosedMarketViaStage = aMarket()
+        .ofCategoricalType()
         .withResolution(moment())
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()
 
       const anExpiredMarket = aMarket()
+        .ofCategoricalType()
         .withResolution(moment().subtract(1, 'days'))
         .get()
 
@@ -38,6 +41,7 @@ const newMarketsTests = () => {
     it('should return 0 new markets if there is there is one market but no open', () => {
       // GIVEN
       const aClosedMarket = aMarket()
+        .ofScalarType()
         .withResolution(moment().subtract(1, 'M'))
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()

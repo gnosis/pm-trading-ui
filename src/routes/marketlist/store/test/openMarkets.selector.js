@@ -10,18 +10,22 @@ const openMarketTests = () => {
     it('should return 2 open markets if there backend only have two of three opened', () => {
       // GIVEN
       const aClosedMarketViaResolution = aMarket()
+        .ofCategoricalType()
         .withResolution(moment().subtract(1, 'M'))
         .get()
 
       const aClosedMarketViaStage = aMarket()
+        .ofCategoricalType()
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()
 
       const aClosedMarketViaResolved = aMarket()
+        .ofCategoricalType()
         .withResolved(true)
         .get()
 
       const anOpenMarket = aMarket()
+        .ofCategoricalType()
         .withResolved(false)
         .withResolution(moment().add(1, 'M'))
         .withStage(MARKET_STAGES.MARKET_FUNDED)
@@ -40,6 +44,7 @@ const openMarketTests = () => {
     it('should return 0 open markets if there is there is one market but no open', () => {
       // GIVEN
       const aClosedMarket = aMarket()
+        .ofScalarType()
         .withResolution(moment().subtract(1, 'M'))
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()
@@ -57,6 +62,7 @@ const openMarketTests = () => {
     it('should be closed if a market has stage 0 -> MARKET_CREATED', () => {
       // GIVEN
       const aClosedMarket = aMarket()
+        .ofScalarType()
         .withResolution(moment().add(1, 'M'))
         .withStage(MARKET_STAGES.MARKET_CREATED)
         .withResolved(false)

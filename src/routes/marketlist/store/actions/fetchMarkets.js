@@ -25,7 +25,7 @@ const buildOutcomesFrom = (outcomes, outcomeTokensSold, marginalPrices) => {
 }
 
 const buildBoundsFrom = (lower, upper, unit, decimals) => BoundsRecord({
-  lower, upper, unit, decimals,
+  lower, upper, unit, decimals: parseInt(decimals, 10),
 })
 
 const buildScalarMarket = (market) => {
@@ -77,7 +77,7 @@ const buildScalarMarket = (market) => {
     resolved: isOutcomeSet,
     winningOutcome: outcome,
     funding: funding || 0,
-    outcomeTokensSold: netOutcomeTokensSold,
+    outcomeTokensSold: List(netOutcomeTokensSold),
   })
 
   return marketRecord
@@ -119,7 +119,7 @@ const buildCategoricalMarket = (market) => {
     resolved: isOutcomeSet,
     funding: funding || 0,
     winningOutcome: outcomes.get(winningOutcomeIndex),
-    outcomeTokensSold: netOutcomeTokensSold,
+    outcomeTokensSold: List(netOutcomeTokensSold),
   })
 
   return marketRecord
