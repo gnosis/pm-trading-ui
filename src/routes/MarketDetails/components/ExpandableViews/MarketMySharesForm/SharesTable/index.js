@@ -14,7 +14,7 @@ import style from './SharesTable.mod.scss'
 
 const cx = cn.bind(style)
 
-class ShareTable extends Component {
+class SharesTable extends Component {
   state = {
     extendedSellId: this.props.match.params.shareId,
   }
@@ -101,9 +101,9 @@ class ShareTable extends Component {
   }
 }
 
-ShareTable.propTypes = {
+SharesTable.propTypes = {
   market: marketShape,
-  marketShares: PropTypes.arrayOf(PropTypes.object),
+  marketShares: PropTypes.objectOf(PropTypes.object),
   gasCosts: ImmutablePropTypes.map,
   gasPrice: PropTypes.instanceOf(Decimal),
   selectedSellAmount: PropTypes.string,
@@ -111,7 +111,7 @@ ShareTable.propTypes = {
   match: ReactRouterMatchShape,
 }
 
-ShareTable.defaultProps = {
+SharesTable.defaultProps = {
   market: {},
   marketShares: [],
   gasCosts: Map({}),
@@ -121,4 +121,4 @@ ShareTable.defaultProps = {
   match: {},
 }
 
-export default ShareTable
+export default SharesTable

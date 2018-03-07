@@ -16,7 +16,7 @@ const RedeemWinnings = ({
   collateralToken, winningsAmount, handleRedeemWinnings, transactionGas,
 }) => (
   <div className={cx('redeemWinning')}>
-    <div className="detailsContainer">
+    <div className={cx('detailsContainer')}>
       <Icon type="achievementBadge" size={iconSize} />
       <div className={cx('details')}>
         <div className={cx('heading')}>
@@ -26,7 +26,7 @@ const RedeemWinnings = ({
       </div>
     </div>
     <div className={cx('action')}>
-      <InteractionButton className={cx('btn btn-primary')} onClick={handleRedeemWinnings}>
+      <InteractionButton className={cx('redeemButton', 'btn btn-primary')} onClick={handleRedeemWinnings}>
         Redeem Winnings
       </InteractionButton>
       <span className={cx('gasCost')}>Gas cost: {transactionGas} ETH</span>
