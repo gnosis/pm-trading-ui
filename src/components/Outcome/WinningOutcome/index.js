@@ -3,14 +3,13 @@ import PropTypes from 'prop-types'
 import { OUTCOME_TYPES } from 'utils/constants'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
-import { eventDescriptionShape, marketShape } from 'utils/shapes'
+import { marketShape } from 'utils/shapes'
 import style from './WinningOutcome.mod.scss'
 
 const cx = cn.bind(style)
 
 const WinningOutcome = ({ market }) => {
   const {
-    outcomes,
     bounds,
     winningOutcome,
     type,
@@ -43,17 +42,7 @@ const WinningOutcome = ({ market }) => {
 }
 
 WinningOutcome.propTypes = {
-  eventDescription: eventDescriptionShape,
-  outcomes: PropTypes.array,
-  type: PropTypes.string,
-  funding: PropTypes.string,
-  oracle: PropTypes.object,
-  outcome: PropTypes.string,
-  type: PropTypes.string,
-  netOutcomeTokensSold: PropTypes.string,
   market: marketShape,
-  unit: PropTypes.string,
-  decimals: PropTypes.string,
 }
 
 WinningOutcome.defaultProps = {

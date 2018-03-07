@@ -17,7 +17,7 @@ const OutcomeCategorical = ({ market, market: { outcomes }, opts = {} }) => {
   } = opts
   const tokenDistribution = outcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: market.outcomeTokensSold,
+      netOutcomeTokensSold: market.outcomeTokensSold.toArray(),
       funding: market.funding,
       outcomeTokenIndex: outcomeIndex,
     })

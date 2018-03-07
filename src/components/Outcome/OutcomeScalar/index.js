@@ -13,7 +13,7 @@ const cx = cn.bind(style)
 
 const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
   let marginalPrice = calcLMSRMarginalPrice({
-    netOutcomeTokensSold: market.outcomeTokensSold,
+    netOutcomeTokensSold: market.outcomeTokensSold.toArray(),
     funding: market.funding,
     outcomeTokenIndex: 1, // always calc for long when calculating estimation
   })

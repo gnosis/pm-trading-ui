@@ -18,7 +18,7 @@ const Markets = ({ markets, userAccount }) => (
     <div>
       {markets.map((market) => {
         const closed = isMarketClosed(market.stage, market.resolution, market.resolved)
-        const isOwner = userAccount && market.creator === userAccount
+        const isOwner = !!(userAccount && market.creator === userAccount)
 
         return (
           <Market
