@@ -1,8 +1,10 @@
-// import { Record } from 'immutable'
+import { Record } from 'immutable'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
+
 import { decimalToText } from 'components/DecimalValue'
-// import Outcome from 'components/Outcome'
+import Outcome from 'components/Outcome'
+
 import Decimal from 'decimal.js'
 import moment from 'moment'
 import React from 'react'
@@ -18,7 +20,7 @@ const cx = classNames.bind(css)
 
 const onResolve = event => event.stopPropagation()
 
-const ResolveButton = ({ url, show }) => (show &&
+const ResolveButton = ({ url }) => (
   <div className="market__control">
     <NavLink to={url} onClick={onResolve}>
       Resolve
@@ -37,7 +39,7 @@ ResolveButton.defaultProps = {
 
 class Market extends React.PureComponent {
   render() {
-    // const { market } = this.props // TODO delete
+    const { market } = this.props
     const {
       address,
       resolved,
@@ -66,9 +68,9 @@ class Market extends React.PureComponent {
       >
         <div className={cx('header')}>
           <h2 className={cx('title')}>{title}</h2>
-          <ResolveButton show={showResolveButton} url={resolveUrl} />
+          {showResolveButton && <ResolveButton url={resolveUrl} />}
         </div>
-        {/* <Outcome market={market} /> */}
+        <Outcome market={market} />
         <div className={cx('info', 'row')}>
           <div className={cx('group', 'col-md-3')}>
             <MarketStatus
@@ -90,7 +92,7 @@ class Market extends React.PureComponent {
 }
 
 Market.propTypes = {
-  // market: PropTypes.instanceOf(Record).isRequired,
+  market: PropTypes.instanceOf(Record).isRequired,
   address: PropTypes.string.isRequired,
   resolved: PropTypes.bool.isRequired,
   closed: PropTypes.bool.isRequired,

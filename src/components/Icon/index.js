@@ -27,7 +27,7 @@ const Icon = ({ type, size, float }) => {
 
 Icon.propTypes = {
   type: PropTypes.string.isRequired,
-  size: PropTypes.string,
+  size: PropTypes.number,
   float: PropTypes.string,
 }
 

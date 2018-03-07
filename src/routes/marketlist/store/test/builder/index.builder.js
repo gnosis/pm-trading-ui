@@ -1,10 +1,9 @@
 import { List } from 'immutable'
 import {
-  MarketRecord,
+  ScalarMarketRecord,
+  CategoricalMarketRecord,
   BoundsRecord,
   OutcomeRecord,
-  MARKET_CATEGORICAL,
-  MARKET_SCALAR,
 } from 'store/models'
 
 export { default as oneMarketData } from './oneMarket'
@@ -13,7 +12,15 @@ export { default as realData } from './realData'
 
 class MarketBuilder {
   constructor() {
-    this.market = new MarketRecord()
+    this.market = undefined
+  }
+
+  ofScalarType() {
+    this.market = new ScalarMarketRecord()
+  }
+
+  ofCategoricalType() {
+    this.market = new CategoricalMarketRecord()
   }
 
   withAddress(address) {
