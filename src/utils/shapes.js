@@ -71,19 +71,6 @@ export const transactionShape = PropTypes.shape({
   completionStatus: PropTypes.oneOf(Object.values(TRANSACTION_COMPLETE_STATUS)),
 })
 
-export const gasCostsShape = PropTypes.shape({
-  redeemWinnings: PropTypes.number,
-  market: PropTypes.number,
-  buyShares: PropTypes.number,
-  sellShares: PropTypes.number,
-  resolveOracle: PropTypes.number,
-  withdrawFees: PropTypes.number,
-  categoricalEvent: PropTypes.number,
-  scalarEvent: PropTypes.number,
-  centralizedOracle: PropTypes.number,
-  funding: PropTypes.number,
-})
-
 export const ReactRouterMatchShape = PropTypes.shape({
   isExact: PropTypes.bool,
   path: PropTypes.string,

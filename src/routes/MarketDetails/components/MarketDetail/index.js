@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import { GAS_COST } from 'utils/constants'
-import { marketShape, marketShareShape, marketTradeShape, gasCostsShape, ReactRouterMatchShape } from 'utils/shapes'
+import { Map } from 'immutable'
+import { marketShape, marketShareShape, marketTradeShape, ReactRouterMatchShape } from 'utils/shapes'
 import { isMarketResolved } from 'utils/helpers'
 import MarketGraph from 'routes/MarketDetails/components/MarketGraph'
 import expandableViews, { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
@@ -186,33 +188,38 @@ class MarketDetail extends Component {
 
 MarketDetail.propTypes = {
   hasWallet: PropTypes.bool,
-  params: PropTypes.shape({
-    id: PropTypes.string,
-    view: PropTypes.string,
-  }),
-  requestGasPrice: PropTypes.func,
   marketShares: PropTypes.objectOf(marketShareShape),
   marketTrades: PropTypes.arrayOf(marketTradeShape),
   marketGraph: PropTypes.arrayOf(PropTypes.object),
   defaultAccount: PropTypes.string,
-  market: marketShape,
-  changeUrl: PropTypes.func,
-  fetchMarket: PropTypes.func,
-  fetchMarketShares: PropTypes.func,
-  fetchMarketTrades: PropTypes.func,
-  fetchMarketTradesForAccount: PropTypes.func,
-  redeemWinnings: PropTypes.func,
-  requestGasCost: PropTypes.func,
+  market: marketShape.isRequired,
+  requestGasPrice: PropTypes.func.isRequired,
+  changeUrl: PropTypes.func.isRequired,
+  fetchMarket: PropTypes.func.isRequired,
+  fetchMarketShares: PropTypes.func.isRequired,
+  fetchMarketTrades: PropTypes.func.isRequired,
+  fetchMarketTradesForAccount: PropTypes.func.isRequired,
+  redeemWinnings: PropTypes.func.isRequired,
+  requestGasCost: PropTypes.func.isRequired,
   isModerator: PropTypes.bool,
   moderators: PropTypes.shape({
     address: PropTypes.string,
   }),
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }),
-  gasCosts: gasCostsShape,
+  gasCosts: ImmutablePropTypes.map,
   gasPrice: PropTypes.instanceOf(Decimal),
-  match: ReactRouterMatchShape,
+  match: ReactRouterMatchShape.isRequired,
+}
+
+MarketDetail.defaultProps = {
+  isModerator: false,
+  hasWallet: false,
+  moderators: {},
+  marketShares: {},
+  marketTrades: [],
+  marketGraph: [],
+  defaultAccount: '',
+  gasCosts: Map({}),
+  gasPrice: Decimal(0),
 }
 
 export default MarketDetail

@@ -39,13 +39,16 @@ const Details = ({
     .div(1e18)
     .toDP(5, 1)
     .toString()
+  const outcomeOpts = {
+    className: cx('outcomes'),
+  }
 
   return (
     <div className={cx('col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0')}>
       <div className={cx('marketDescription')}>
         <p className={cx('text')}>{market.eventDescription.description}</p>
       </div>
-      <Outcome market={market} />
+      <Outcome market={market} opts={outcomeOpts} />
       <MarketTimer
         market={market}
         showCountdown={showCountdown}
