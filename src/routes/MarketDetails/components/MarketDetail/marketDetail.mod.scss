@@ -11,41 +11,6 @@ $expandable-margin: 40px;
   margin: $page-heading-margins;
 }
 
-.marketDescription {
-  margin-bottom: 40px;
-}
-
-.marketDescription__text {
-  font-size: 18px;
-  line-height: 30px;
-  letter-spacing: 0.25px;
-  font-weight: 300;
-}
-
-.marketControls.controlsContainer {
-  padding-top: 40px;
-}
-
-.marketControls__button {
-  margin-right: 20px;
-}
-
-.marketControls__button--active {
-  &:after {
-    content: "";
-    position: absolute;
-    bottom: -$expandable-margin;
-    left: 50%;
-    margin-left: -$expandable-arrow-size;
-    width: 0;
-    height: 0;
-    border-left: $expandable-arrow-size solid transparent;
-    border-right: $expandable-arrow-size solid transparent;
-    border-bottom: $expandable-arrow-size solid $bg-color-muted;
-  }
-}
-
-
 .expandable {
   position: relative;
   z-index: 2;
