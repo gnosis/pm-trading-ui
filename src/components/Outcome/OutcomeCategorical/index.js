@@ -15,14 +15,14 @@ const OutcomeCategorical = ({ market, market: { outcomes }, opts = {} }) => {
   const {
     showOnlyTrendingOutcome, showDate, dateFormat, className,
   } = opts
-  const tokenDistribution = outcomes.map((outcome, outcomeIndex) => {
+  const tokenDistribution = outcomes.toArray().map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
       netOutcomeTokensSold: market.outcomeTokensSold.toArray(),
       funding: market.funding,
       outcomeTokenIndex: outcomeIndex,
     })
 
-    return marginalPrice.toFixed()
+    return marginalPrice.toFixed(5)
   })
 
   // show only trending outcome

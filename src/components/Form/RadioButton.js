@@ -24,7 +24,7 @@ class RadioButton extends PureComponent {
     } = this.props
 
     const inputId = `formRadioButton_${input.name}_${JSON.stringify(value)}`
-    const isChecked = input && input.value.toString() === value.toString()
+    const isChecked = input && JSON.stringify(input.value) === JSON.stringify(value)
 
     const radioButtonClasses = cx('formRadioButton', className, {
       error: (touched && error),
@@ -39,7 +39,7 @@ class RadioButton extends PureComponent {
             id={inputId}
             onChange={this.handleOnChange}
             checked={isChecked}
-            value={value}
+            value={JSON.stringify(value)}
           />
           {label}
         </label>
@@ -51,7 +51,7 @@ class RadioButton extends PureComponent {
 RadioButton.propTypes = {
   input: PropTypes.shape(fieldPropTypes.input).isRequired,
   meta: PropTypes.shape(fieldPropTypes.meta).isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  value: PropTypes.any.isRequired,
   label: PropTypes.node.isRequired,
   className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   light: PropTypes.bool,

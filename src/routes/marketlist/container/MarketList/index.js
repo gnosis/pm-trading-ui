@@ -2,7 +2,7 @@ import { List } from 'immutable'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
-import Layout from '../components/Layout'
+import Layout from '../../components/Layout'
 import actions from './actions'
 import selector from './selector'
 

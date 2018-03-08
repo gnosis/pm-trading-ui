@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import MarketOverview from './MarketOverview.jsx'
 import Markets from './Markets.jsx'
-import MarketsFilter from './MarketsFilter.jsx'
+import Filter from './Filter/index.jsx'
 import MarketStats from './MarketStats.jsx'
 import MarketsTitle from './MarketsTitle.jsx'
 import NoMarkets from './NoMarkets.jsx'
@@ -22,7 +22,7 @@ const Layout = ({ markets, openMarkets, newMarkets, endingSoonMarkets, userAccou
         { markets ? <Markets markets={markets} userAccount={userAccount} /> : <NoMarkets /> }
       </div>
       <div className="col-md-3">
-        <MarketsFilter />
+        <Filter />
       </div>
     </MarketOverview>
   </div>

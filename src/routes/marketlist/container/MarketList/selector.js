@@ -6,7 +6,7 @@ import {
   newMarketsSelector,
   endingSoonMarketSelector,
   openMarketSelector,
-} from '../store/selectors'
+} from '../../store/selectors'
 
 export default createStructuredSelector({
   markets: marketListSelector,
