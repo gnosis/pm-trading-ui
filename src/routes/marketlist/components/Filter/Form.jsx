@@ -47,7 +47,7 @@ const MARKETFILTER_STATUS_OPTIONS = [
 
 const Form = ({ userAccount }) => (
   <form>
-    <Field label="Search" name="filterQuery" component={TextInput} placeholder="Title, Description, Keywords" />
+    <Field label="Search" name="filterQuery" component={TextInput} placeholder="Title, Description, Keywords" decoration="underlined" />
     <Field label="Sort By" name="sortBy" component={Select} options={MARKETFILTER_SELECT_OPTIONS} />
     <Field label="Marketstatus" name="filterByStatus" component={RadioButtonGroup} options={MARKETFILTER_STATUS_OPTIONS} light />
     {userAccount && (
