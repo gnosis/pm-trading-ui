@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import '../TransactionsExplanation/TransactionExplanation.scss'
+import './TransactionsExplanation/TransactionExplanation.scss'
 
 const OutcomePriceChanged = ({ closeModal }) => (
   <div className="transactionsExplanation">
