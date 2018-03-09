@@ -156,6 +156,7 @@ class MarketBuySharesForm extends Component {
                     name="invest"
                     component={TextInput}
                     className={cx('marketBuyInvest')}
+                    decoration="underlined"
                     placeholder="Investment"
                     validate={this.validateInvestment}
                     endAdornment={

@@ -59,7 +59,7 @@ const OutcomeSectionScalar = (props) => {
       <div className={cn('row')}>
         <div className={cn('col-md-12')}>
           <h2>Your Trade</h2>
-          <Field component={OutcomeSelection} name="selectedOutcome" outcomes={scalarOutcomes} />
+          <Field component={OutcomeSelection} name="selectedOutcome" outcomes={scalarOutcomes} hideBars />
         </div>
       </div>
       <div className={cn('row')}>
