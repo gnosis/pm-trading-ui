@@ -1,4 +1,5 @@
 import moment from 'moment'
+import get from 'lodash'
 import { createSelector } from 'reselect'
 import { getFormValues } from 'redux-form'
 import { isMarketClosed } from 'store/utils/marketStatus'
@@ -46,7 +47,9 @@ const DEFAULT_SORT_VALUES = {
 
 const marketSort = createSelector(
   formFilterSelector,
-  ({ sortBy: { value: { key, dir } } } = DEFAULT_SORT_VALUES) => (marketA, marketB) => {
+  formFields => (marketA, marketB) => {
+    const key = get(formFields, 'sortBy.value.key')
+    const dir = get(formFields, 'sortBy.value.dir')
     if (key === undefined) {
       return defaultSorting(marketA, marketB)
     }
