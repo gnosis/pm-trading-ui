@@ -7,9 +7,9 @@ import css from '../Filter.mod.scss'
 
 const cx = classNames.bind(css)
 
-const MarketsFilter = () => (
+const MarketsFilter = ({ userAccount }) => (
   <div className={cx('filter')}>
-    <Form />
+    <Form userAccount={userAccount} />
   </div>
 )
 

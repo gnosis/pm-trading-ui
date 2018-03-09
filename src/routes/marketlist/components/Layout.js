@@ -22,7 +22,7 @@ const Layout = ({ markets, openMarkets, newMarkets, endingSoonMarkets, userAccou
         { markets ? <Markets markets={markets} userAccount={userAccount} /> : <NoMarkets /> }
       </div>
       <div className="col-md-3">
-        <Filter />
+        <Filter userAccount={userAccount} />
       </div>
     </MarketOverview>
   </div>

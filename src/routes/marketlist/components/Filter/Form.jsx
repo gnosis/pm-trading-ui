@@ -1,8 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { reduxForm, Field } from 'redux-form'
 
 import {
   TextInput,
+  Checkbox,
   Select,
   RadioButtonGroup,
 } from 'components/Form'
@@ -19,12 +21,12 @@ const MARKETFILTER_SELECT_OPTIONS = [
     value: { key: 'resolution', dir: 'desc' },
   },
   {
-    label: 'Creation Date (Ascending)',
-    value: { key: 'creation', dir: 'asc' },
+    label: 'Trading Volume (Ascending)',
+    value: { key: 'volume', dir: 'asc' },
   },
   {
-    label: 'Creation Date (Descending)',
-    value: { key: 'creation', dir: 'desc' },
+    label: 'Trading Volume (Descending)',
+    value: { key: 'volume', dir: 'desc' },
   },
 ]
 
@@ -35,21 +37,32 @@ const MARKETFILTER_STATUS_OPTIONS = [
   },
   {
     label: 'Open Markets',
-    value: { key: 'stage', value: 1 },
+    value: 'isOpen',
   },
   {
     label: 'Closed Markets',
-    value: { key: 'isClosed', value: true },
+    value: 'isClosed',
   },
 ]
 
-const Form = () => (
+const Form = ({ userAccount }) => (
   <form>
-    <Field label="Search" name="query" component={TextInput} placeholder="Title, Description, Keywords" />
-    <Field label="Sort By" name="sortby" component={Select} options={MARKETFILTER_SELECT_OPTIONS} />
-    <Field label="Marketstatus" name="status" component={RadioButtonGroup} options={MARKETFILTER_STATUS_OPTIONS} light />
+    <Field label="Search" name="filterQuery" component={TextInput} placeholder="Title, Description, Keywords" />
+    <Field label="Sort By" name="sortBy" component={Select} options={MARKETFILTER_SELECT_OPTIONS} />
+    <Field label="Marketstatus" name="filterByStatus" component={RadioButtonGroup} options={MARKETFILTER_STATUS_OPTIONS} light />
+    {userAccount && (
+      <Field label="Show Only" name="filterMyMarkets" component={Checkbox} light>My Markets</Field>
+    )}
   </form>
 )
+
+Form.propTypes = {
+  userAccount: PropTypes.string,
+}
+
+Form.defaultProps = {
+  userAccount: undefined,
+}
 
 export default reduxForm({
   form: MARKETFILTER_FORM_NAME,

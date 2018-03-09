@@ -5,6 +5,7 @@ const CategoricalMarketRecord = Record({
   type: OUTCOME_TYPES.CATEGORICAL,
   address: undefined,
   title: undefined, // string
+  description: undefined, // string
   resolution: undefined, // moment
   volume: undefined, // decimal
   outcomes: undefined, // List<Outcome>

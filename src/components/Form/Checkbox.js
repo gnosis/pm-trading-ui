@@ -15,13 +15,13 @@ const Checkbox = ({
   label,
   children,
   className,
-  muted,
+  light,
   meta: { touched, error },
 }) => {
   const inputId = `formCheckbox_${input.name}`
 
   const checkboxClasses = cx('formCheckbox', className, {
-    muted,
+    light,
     error: (error && touched),
   })
 
@@ -47,7 +47,7 @@ Checkbox.propTypes = {
   meta: PropTypes.shape(fieldPropTypes.meta).isRequired,
   label: PropTypes.string,
   children: PropTypes.node,
-  muted: PropTypes.bool,
+  light: PropTypes.bool,
   className: PropTypes.string,
 }
 
@@ -55,7 +55,7 @@ Checkbox.defaultProps = {
   label: '',
   children: undefined,
   className: '',
-  muted: false,
+  light: false,
 }
 
 export default Checkbox

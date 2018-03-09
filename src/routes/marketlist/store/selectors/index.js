@@ -1,40 +1,22 @@
 import { List } from 'immutable'
 import { createSelector } from 'reselect'
-import { isMarketFunded, isMarketClosed, isMarketEndingSoon, isNewMarket } from 'store/utils/marketStatus'
+import { isMarketClosed, isMarketEndingSoon, isNewMarket } from 'store/utils/marketStatus'
 
-const marketSort = (marketA, marketB) => {
-  const isAClosed = isMarketClosed(marketA.stage, marketA.resolution, marketA.resolved)
-  const isBClosed = isMarketClosed(marketB.stage, marketB.resolution, marketB.resolved)
+import filterSelector from './filter'
+import sorterSelector from './sorter'
 
-  if (isAClosed && !isBClosed) {
-    return 1
-  }
+export const marketListSelector = createSelector(
+  state => state.marketList,
+  filterSelector,
+  sorterSelector,
+  (markets, filter, sorter) => List(markets.filter(filter).sort(sorter).values()),
+)
 
-  if (!isAClosed && isBClosed) {
-    return -1
-  }
-
-  if (marketA.resolution > marketB.resolution) {
-    return -1
-  }
-
-  if (marketB.resolution > marketA.resolution) {
-    return 1
-  }
-
-  return 0
-}
-
-const marketFilter = market => isMarketFunded(market.stage)
-
-export const marketListSelector = state =>
-  List(state.marketList
-    .filter(marketFilter)
-    .sort(marketSort)
-    .values())
+export const marketCounterSelector = state =>
+  List(state.marketList)
 
 export const newMarketsSelector = createSelector(
-  marketListSelector,
+  marketCounterSelector,
   (markets) => {
     if (!markets) {
       return 0
@@ -48,7 +30,7 @@ export const newMarketsSelector = createSelector(
 )
 
 export const endingSoonMarketSelector = createSelector(
-  marketListSelector,
+  marketCounterSelector,
   (markets) => {
     if (!markets) {
       return 0
@@ -61,7 +43,7 @@ export const endingSoonMarketSelector = createSelector(
 )
 
 export const openMarketSelector = createSelector(
-  marketListSelector,
+  marketCounterSelector,
   (markets) => {
     if (!markets) {
       return 0

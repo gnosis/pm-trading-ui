@@ -22,7 +22,7 @@ const RadioButtonGroup = ({
     {options.map(option => (
       <RadioButton
         key={JSON.stringify(option.value)}
-        value={JSON.stringify(option.value)}
+        value={option.value}
         label={option.label}
         input={input}
         meta={meta}

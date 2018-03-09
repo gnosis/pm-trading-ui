@@ -49,6 +49,7 @@ const buildScalarMarket = (market) => {
         outcome,
         eventDescription: {
           title,
+          description,
           resolutionDate,
           unit,
           decimals,
@@ -64,6 +65,7 @@ const buildScalarMarket = (market) => {
 
   const marketRecord = new ScalarMarketRecord({
     title,
+    description,
     creator,
     collateralToken,
     address,
@@ -97,6 +99,7 @@ const buildCategoricalMarket = (market) => {
         outcome: winningOutcomeIndex,
         eventDescription: {
           title,
+          description,
           resolutionDate,
           outcomes: outcomeLabels,
         },
@@ -108,6 +111,7 @@ const buildCategoricalMarket = (market) => {
 
   const marketRecord = new CategoricalMarketRecord({
     title,
+    description,
     creator,
     collateralToken,
     address,

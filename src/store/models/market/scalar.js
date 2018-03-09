@@ -5,6 +5,7 @@ const ScalarMarketRecord = Record({
   type: OUTCOME_TYPES.SCALAR,
   address: undefined,
   title: undefined, // string
+  description: undefined, // string
   resolution: undefined, // moment
   volume: undefined, // decimal
   winningOutcome: undefined, // int
