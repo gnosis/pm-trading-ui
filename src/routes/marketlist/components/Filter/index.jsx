@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
 
 import Form from './Form.jsx'
@@ -12,5 +13,13 @@ const MarketsFilter = ({ userAccount }) => (
     <Form userAccount={userAccount} />
   </div>
 )
+
+MarketsFilter.propTypes = {
+  userAccount: PropTypes.string,
+}
+
+MarketsFilter.defaultProps = {
+  userAccount: undefined,
+}
 
 export default MarketsFilter
