@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import { upperFirst } from 'lodash'
 
 import Tooltip from 'rc-tooltip'
@@ -49,7 +49,6 @@ class InteractionButton extends Component {
       targetNetworkId,
       loading,
     } = this.props
-
     if (whitelistRequired && !whitelisted) {
       return null
     }
@@ -92,14 +91,14 @@ class InteractionButton extends Component {
 
     const btn = (
       <button className={classNames} type={type || 'button'} onClick={onClickHandler} disabled={isDisabled}>
-        <div className="interactionButton__inner">{children}</div>
+        <div className={cx('interactionButtonInner')}>{children}</div>
       </button>
     )
 
     if (isLoading) {
       return (
         <button className={classNames} type="button" disabled>
-          <div className="interactionButton__inner">{children}</div>
+          <div className={cx('interactionButtonInner')}>{children}</div>
           <LoadingIndicator width={28} height={28} className={cx('interactionButtonLoading')} />
         </button>
       )
@@ -130,7 +129,7 @@ InteractionButton.propTypes = {
   type: PropTypes.oneOf(['button', 'submit']),
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
-  targetNetworkId: PropTypes.string,
+  targetNetworkId: PropTypes.number,
 }
 
 InteractionButton.defaultProps = {
@@ -143,8 +142,8 @@ InteractionButton.defaultProps = {
   whitelistRequired: false,
   children: <div />,
   type: 'button',
-  disabled: true,
-  loading: true,
+  disabled: false,
+  loading: false,
   targetNetworkId: 0,
 }
 

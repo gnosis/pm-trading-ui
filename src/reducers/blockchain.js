@@ -13,7 +13,7 @@ const reducer = handleActions(
         stateMap.set('connectionTried', true)
       }),
     [setGnosisInitialized]: (state, { payload: { initialized } }) => state.set('gnosisInitialized', initialized),
-    [setGasCost]: (state, { payload: { entityType, gasCost } }) => state.setIn(['gasCosts', entityType], gasCost),
+    [setGasCost]: (state, { payload: { contractType, gasCost } }) => state.setIn(['gasCosts', contractType], gasCost),
     [setGasPrice]: (state, { payload: { entityType, gasPrice } }) => state.set(entityType, gasPrice),
     [setEtherTokens]: (state, { payload: { entityType, account, etherTokens } }) =>
       state.setIn([entityType, account], etherTokens),

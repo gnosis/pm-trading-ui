@@ -23,11 +23,12 @@ const Outcome = ({ market, opts = { showOnlyTrendingOutcome: false } }) => {
 }
 
 Outcome.propTypes = {
-  market: marketShape,
+  market: marketShape.isRequired,
   opts: PropTypes.shape({
     showOnlyTrendingOutcome: PropTypes.bool,
     showDate: PropTypes.bool,
     dateFormat: PropTypes.string,
+    className: PropTypes.string,
   }),
 }
 
