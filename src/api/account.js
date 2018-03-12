@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js'
 import { weiToEth, hexWithPrefix } from 'utils/helpers'
+import Gnosis from '@gnosis.pm/gnosisjs/'
 import * as api from './'
 
 /**
