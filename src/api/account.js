@@ -1,3 +1,5 @@
+import Decimal from 'decimal.js'
+import { weiToEth, hexWithPrefix } from 'utils/helpers'
 import * as api from './'
 
 /**
