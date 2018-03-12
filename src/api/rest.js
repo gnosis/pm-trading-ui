@@ -21,8 +21,6 @@ export const requestMarkets = async () => {
     normalize(response.results.filter(market => typeof market.funding !== 'undefined'), [marketSchema]))
 }
 
-export const requestFactories = async () => restFetch(`${API_URL}/factories`)
-
 export const requestMarketTradesForAccount = async (marketAddress, accountAddress) => {
   const payload = await restFetch(`${API_URL}/markets/${hexWithoutPrefix(marketAddress)}/trades/${hexWithoutPrefix(accountAddress)}`)
   return normalize(payload.results, [marketTradesSchema])

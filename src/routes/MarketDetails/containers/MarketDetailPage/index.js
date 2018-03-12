@@ -5,8 +5,6 @@ import { requestGasCost, requestGasPrice } from 'actions/blockchain'
 import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
 import {
-  buyMarketShares,
-  sellMarketShares,
   requestMarketShares,
   requestMarket,
   requestMarketTrades,
@@ -14,6 +12,7 @@ import {
   redeemWinnings,
   withdrawFees,
 } from 'actions/market'
+import { buyMarketShares, sellMarketShares } from 'routes/MarketDetails/store/actions'
 import { getMarketById } from 'selectors/market'
 import { getMarketTradesForAccount } from 'selectors/marketTrades'
 import { getMarketShares } from 'selectors/marketShares'

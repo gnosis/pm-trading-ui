@@ -36,7 +36,7 @@ const getSoonClosingMarkets = (markets = [], limit) =>
     .slice(0, limit || markets.length)
 
 class Dashboard extends Component {
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.hasWallet) {
       this.props.changeUrl('/markets/list')
       return
