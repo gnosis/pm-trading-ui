@@ -4,15 +4,15 @@ import { replace } from 'react-router-redux'
 import { requestGasCost, requestGasPrice } from 'actions/blockchain'
 import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
+import { redeemWinnings } from 'actions/market'
 import {
-  requestMarketShares,
-  requestMarket,
+  buyMarketShares,
+  sellMarketShares,
   requestMarketTrades,
+  requestMarketSharesForAccount,
   requestMarketTradesForAccount,
-  redeemWinnings,
-  withdrawFees,
-} from 'actions/market'
-import { buyMarketShares, sellMarketShares } from 'routes/MarketDetails/store/actions'
+  requestMarket,
+} from 'routes/MarketDetails/store/actions'
 import { getMarketById } from 'selectors/market'
 import { getMarketTradesForAccount } from 'selectors/marketTrades'
 import { getMarketShares } from 'selectors/marketShares'
@@ -64,7 +64,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   fetchMarket: () => dispatch(requestMarket(marketId)),
-  fetchMarketShares: accountAddress => dispatch(requestMarketShares(marketId, accountAddress)),
+  fetchMarketShares: accountAddress => dispatch(requestMarketSharesForAccount(marketId, accountAddress)),
   fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(marketId, accountAddress)),
   fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
@@ -73,7 +73,6 @@ const mapDispatchToProps = dispatch => ({
     dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
-  withdrawFees: market => dispatch(withdrawFees(market)),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
 })

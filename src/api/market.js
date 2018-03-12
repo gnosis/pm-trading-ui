@@ -21,15 +21,3 @@ export const redeemWinnings = async (eventType, eventAddress) => {
   }
   throw new Error("Invalid Event - can't find the specified Event, invalid Eventtype?")
 }
-
-export const withdrawFees = async (marketAddress) => {
-  const gnosis = await api.getGnosisConnection()
-
-  const marketContract = gnosis.contracts.Market.at(marketAddress)
-
-  if (marketContract) {
-    await marketContract.withdrawFees()
-  }
-
-  throw new Error("Invalid Market - can't find the specified Market")
-}
