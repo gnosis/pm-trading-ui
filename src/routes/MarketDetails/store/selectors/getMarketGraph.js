@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect'
-
 import { normalizeScalarPoint, getOutcomeName } from 'utils/helpers'
 import { OUTCOME_TYPES } from 'utils/constants'
 

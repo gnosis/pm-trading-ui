@@ -16,8 +16,7 @@ export const getTrades = (state) => {
 
   return state.entities.marketTrades
 }
-
-export const eventMarketsSelector = (state) => {
+const eventMarketsSelector = (state) => {
   if (!state.entities) {
     return {}
   }
@@ -38,7 +37,7 @@ export const eventMarketsSelector = (state) => {
   return eventMarkets
 }
 
-export const eventMarketSelector = marketAddress => (state) => {
+const eventMarketSelector = marketAddress => (state) => {
   if (!state.entities) {
     return {}
   }
@@ -79,7 +78,7 @@ const getTradesForMarket = marketAddress => createSelector(
   trades => filter(trades, trade => trade.market === marketAddress),
 )
 
-export const getTradesForAccount = accountAddress => createSelector(
+const getTradesForAccount = accountAddress => createSelector(
   tradesWithMarketsSelector,
   (trades) => {
     const prefixedAccountAddress = hexWithPrefix(accountAddress)
@@ -87,7 +86,7 @@ export const getTradesForAccount = accountAddress => createSelector(
   },
 )
 
-export const enhanceAndSortTrades = (markets, eventMarkets, trades) => Object.keys(trades)
+const enhanceAndSortTrades = (markets, eventMarkets, trades) => Object.keys(trades)
   .map((tradeId) => {
     const eventAddress = trades[tradeId].outcomeToken.event
     const market = eventMarkets[eventAddress]

@@ -8,7 +8,7 @@ import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'actions/
 import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { REVOKE_TOKENS } from 'utils/transactionExplanations'
 
-import { getRedeemedShares } from 'selectors/market'
+import { getRedeemedShares } from 'selectors/marketShares'
 
 /**
  * Constant names for marketcreation stages
