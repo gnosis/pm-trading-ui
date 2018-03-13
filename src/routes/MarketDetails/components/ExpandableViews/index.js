@@ -1,4 +1,3 @@
-import Decimal from 'decimal.js'
 import { isMarketClosed, isMarketResolved } from 'utils/helpers'
 import MarketBuySharesForm from './MarketBuySharesForm'
 import MarketMySharesForm, { MY_TOKENS } from './MarketMySharesForm'
