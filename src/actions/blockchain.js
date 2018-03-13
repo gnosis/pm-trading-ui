@@ -1,10 +1,4 @@
-import {
-  initGnosisConnection,
-  getCurrentBalance,
-  getCurrentAccount,
-  getGasPrice,
-  getEtherTokens,
-} from 'api'
+import { initGnosisConnection, getCurrentBalance, getCurrentAccount, getGasPrice, getEtherTokens } from 'api'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
