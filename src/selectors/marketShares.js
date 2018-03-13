@@ -10,6 +10,7 @@ import { getCurrentAccount } from 'integrations/store/selectors'
 import { getEvents } from 'selectors/event'
 import { getOracles } from 'selectors/oracle'
 import { getEventDescriptions } from 'selectors/eventDescription'
+import { eventMarketsSelector } from 'selectors/marketTrades'
 import { MARKET_STAGES } from 'utils/constants'
 
 export const getShares = (state) => {
@@ -24,45 +25,7 @@ export const getShares = (state) => {
   return state.entities.marketShares
 }
 
-const eventMarketsSelector = (state) => {
-  if (!state.entities) {
-    return {}
-  }
-
-  if (!state.entities.markets) {
-    return {}
-  }
-
-  const { markets } = state.entities
-  const eventMarkets = {}
-
-  Object.keys(markets).forEach((marketAddress) => {
-    eventMarkets[markets[marketAddress].event] = markets[marketAddress]
-  })
-
-  return eventMarkets
-}
-
-const eventMarketSelector = marketAddress => (state) => {
-  if (!state.entities) {
-    return {}
-  }
-
-  if (!state.entities.markets) {
-    return {}
-  }
-
-  if (!state.entities.markets[marketAddress]) {
-    return {}
-  }
-
-  const market = state.entities.markets[marketAddress]
-  const eventAddress = add0xPrefix(market.event)
-
-  return { [eventAddress]: market }
-}
-
-const eventSharesSelector = createSelector(getCurrentAccount, getShares, (account, shares) => {
+export const eventSharesSelector = createSelector(getCurrentAccount, getShares, (account, shares) => {
   const eventShares = {}
 
   Object.keys(shares).forEach((shareId) => {
@@ -84,7 +47,7 @@ const eventSharesSelector = createSelector(getCurrentAccount, getShares, (accoun
   return eventShares
 })
 
-const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventShares) => {
+export const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventShares) => {
   const enhancedShares = {}
 
   Object.keys(eventShares).forEach((eventAddress) => {
@@ -168,14 +131,3 @@ export const getAccountShares = createSelector(
   getCurrentAccount,
   enhanceShares,
 )
-
-export const getMarketShares = marketAddress =>
-  createSelector(
-    getOracles,
-    getEvents,
-    getEventDescriptions,
-    eventMarketSelector(marketAddress),
-    eventSharesSelector,
-    getCurrentAccount,
-    enhanceShares,
-  )

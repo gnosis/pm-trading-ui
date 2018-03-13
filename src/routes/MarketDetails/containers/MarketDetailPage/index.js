@@ -15,10 +15,8 @@ import {
   requestGasCost,
 } from 'routes/MarketDetails/store/actions'
 import { getMarketById } from 'selectors/market'
-import { getMarketTradesForAccount } from 'selectors/marketTrades'
-import { getMarketShares } from 'selectors/marketShares'
-import { getMarketGraph } from 'selectors/marketGraph'
-import { getGasCosts, getGasPrice, isGasCostFetched, isGasPriceFetched } from 'selectors/blockchain'
+import { getMarketGraph, getMarketTradesForAccount, getMarketShares, getGasCosts, getGasPrice } from 'routes/MarketDetails/store/selectors'
+import { isGasCostFetched, isGasPriceFetched } from 'selectors/blockchain'
 import { checkWalletConnection, getCurrentAccount, getCurrentBalance } from 'integrations/store/selectors'
 import { isModerator, getModerators } from 'utils/helpers'
 
