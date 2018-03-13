@@ -1,5 +1,5 @@
 export * from './rest'
 export * from './gnosis'
-export * from './gas'
 export * from './account'
 export * from './market'
+export * from './gasPrice'

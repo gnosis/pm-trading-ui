@@ -1,5 +1,4 @@
 import Gnosis from '@gnosis.pm/gnosisjs/'
-import { OUTCOME_TYPES } from 'utils/constants'
 import { NETWORK_TIMEOUT } from 'actions/blockchain'
 
 let gnosisInstance
