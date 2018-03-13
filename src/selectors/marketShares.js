@@ -43,25 +43,6 @@ const eventMarketsSelector = (state) => {
   return eventMarkets
 }
 
-const eventMarketSelector = marketAddress => (state) => {
-  if (!state.entities) {
-    return {}
-  }
-
-  if (!state.entities.markets) {
-    return {}
-  }
-
-  if (!state.entities.markets[marketAddress]) {
-    return {}
-  }
-
-  const market = state.entities.markets[marketAddress]
-  const eventAddress = add0xPrefix(market.event)
-
-  return { [eventAddress]: market }
-}
-
 const eventSharesSelector = createSelector(getCurrentAccount, getShares, (account, shares) => {
   const eventShares = {}
 
