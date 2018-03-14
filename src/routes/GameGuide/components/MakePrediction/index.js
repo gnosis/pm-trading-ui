@@ -7,11 +7,11 @@ import Img from 'components/layout/Img'
 import Bold from 'components/layout/Bold'
 import * as css from '../index.css'
 
-const prediction1 = require('routes/gamerules/assets/prediction1.png')
-const prediction2 = require('routes/gamerules/assets/prediction2.png')
-const prediction3 = require('routes/gamerules/assets/prediction3.png')
-const prediction4 = require('routes/gamerules/assets/prediction4.png')
-const prediction5 = require('routes/gamerules/assets/prediction5.png')
+const prediction1 = require('routes/GameGuide/assets/prediction1.png')
+const prediction2 = require('routes/GameGuide/assets/prediction2.png')
+const prediction3 = require('routes/GameGuide/assets/prediction3.png')
+const prediction4 = require('routes/GameGuide/assets/prediction4.png')
+const prediction5 = require('routes/GameGuide/assets/prediction5.png')
 
 const cx = classNames.bind(css)
 

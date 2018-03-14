@@ -6,10 +6,10 @@ import Paragraph from 'components/layout/Paragraph'
 import Img from 'components/layout/Img'
 import * as css from '../index.css'
 
-const login1 = require('routes/gamerules/assets/login1.png')
-const login2 = require('routes/gamerules/assets/login2.png')
-const login3 = require('routes/gamerules/assets/login3.png')
-const login4 = require('routes/gamerules/assets/login4.png')
+const login1 = require('routes/GameGuide/assets/login1.png')
+const login2 = require('routes/GameGuide/assets/login2.png')
+const login3 = require('routes/GameGuide/assets/login3.png')
+const login4 = require('routes/GameGuide/assets/login4.png')
 
 const cx = classNames.bind(css)
 

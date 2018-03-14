@@ -5,9 +5,9 @@ import Paragraph from 'components/layout/Paragraph'
 import Img from 'components/layout/Img'
 import Bold from 'components/layout/Bold'
 
-const profits1 = require('routes/gamerules/assets/profits1.png')
-const profits2 = require('routes/gamerules/assets/profits2.png')
-const profits3 = require('routes/gamerules/assets/profits3.png')
+const profits1 = require('routes/GameGuide/assets/profits1.png')
+const profits2 = require('routes/GameGuide/assets/profits2.png')
+const profits3 = require('routes/GameGuide/assets/profits3.png')
 
 const MakePrediction = () => (
   <Block margin="xl">

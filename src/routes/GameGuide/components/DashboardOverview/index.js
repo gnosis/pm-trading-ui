@@ -4,7 +4,7 @@ import Subtitle from 'components/layout/Subtitle'
 import Paragraph from 'components/layout/Paragraph'
 import Img from 'components/layout/Img'
 
-const dashboardoverview1 = require('routes/gamerules/assets/dashboardoverview1.png')
+const dashboardoverview1 = require('routes/GameGuide/assets/dashboardoverview1.png')
 
 const DashboardOverview = () => (
   <Block margin="xl">

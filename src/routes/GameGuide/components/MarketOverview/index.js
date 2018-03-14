@@ -5,7 +5,7 @@ import Paragraph from 'components/layout/Paragraph'
 import Img from 'components/layout/Img'
 import Bold from 'components/layout/Bold'
 
-const marketoverview1 = require('routes/gamerules/assets/marketoverview1.png')
+const marketoverview1 = require('routes/GameGuide/assets/marketoverview1.png')
 
 const MarketOverview = () => (
   <Block margin="xl">
