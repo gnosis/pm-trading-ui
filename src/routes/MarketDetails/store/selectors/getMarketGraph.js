@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect'
-
 import { normalizeScalarPoint, getOutcomeName } from 'utils/helpers'
 import { OUTCOME_TYPES } from 'utils/constants'
 
@@ -30,7 +29,7 @@ const getFirstGraphPoint = (market) => {
 
 const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().valueOf() })
 
-export const getMarketGraph = market => createSelector(
+const getMarketGraph = market => createSelector(
   getMarketTrades(market.address),
   (trades) => {
     const firstPoint = getFirstGraphPoint(market)
@@ -56,3 +55,5 @@ export const getMarketGraph = market => createSelector(
     return [firstPoint, ...graphPoints, lastPoint]
   },
 )
+
+export default getMarketGraph

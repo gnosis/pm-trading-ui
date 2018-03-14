@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions'
 import { Map } from 'immutable'
-import { setConnectionStatus, setGnosisInitialized, setGasCost, setGasPrice, setEtherTokens } from 'actions/blockchain'
+import { setConnectionStatus, setGnosisInitialized, setGasPrice, setEtherTokens } from 'actions/blockchain'
+import { setGasCost } from 'routes/MarketDetails/store/actions'
 
 import { GAS_COST } from 'utils/constants'
 import Decimal from 'decimal.js'

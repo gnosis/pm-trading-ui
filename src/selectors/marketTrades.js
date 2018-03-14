@@ -107,13 +107,6 @@ export const getMarketTrades = marketAddress => createSelector(
   enhanceAndSortTrades,
 )
 
-export const getMarketTradesForAccount = (marketAddress, accountAddress) => createSelector(
-  getMarkets,
-  eventMarketSelector(marketAddress),
-  getTradesForAccount(accountAddress),
-  enhanceAndSortTrades,
-)
-
 export const getAccountTrades = accountAddress => createSelector(
   getMarkets,
   eventMarketsSelector,

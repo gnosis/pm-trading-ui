@@ -43,25 +43,6 @@ const eventMarketsSelector = (state) => {
   return eventMarkets
 }
 
-const eventMarketSelector = marketAddress => (state) => {
-  if (!state.entities) {
-    return {}
-  }
-
-  if (!state.entities.markets) {
-    return {}
-  }
-
-  if (!state.entities.markets[marketAddress]) {
-    return {}
-  }
-
-  const market = state.entities.markets[marketAddress]
-  const eventAddress = add0xPrefix(market.event)
-
-  return { [eventAddress]: market }
-}
-
 const eventSharesSelector = createSelector(getCurrentAccount, getShares, (account, shares) => {
   const eventShares = {}
 
@@ -169,13 +150,15 @@ export const getAccountShares = createSelector(
   enhanceShares,
 )
 
-export const getMarketShares = marketAddress =>
-  createSelector(
-    getOracles,
-    getEvents,
-    getEventDescriptions,
-    eventMarketSelector(marketAddress),
-    eventSharesSelector,
-    getCurrentAccount,
-    enhanceShares,
-  )
+export const getRedeemedShares = (state, marketAddress) => {
+  const shares = getAccountShares(state)
+
+  const redeemedShares = {}
+  Object.keys(shares).forEach((shareId) => {
+    const share = shares[shareId]
+    if (share.market && share.market.address === marketAddress) {
+      redeemedShares[shareId] = share
+    }
+  })
+  return redeemedShares
+}
