@@ -19,7 +19,7 @@ const videoOpts = {
   },
 }
 
-const GameRules = () => (
+const GameGuide = () => (
   <PageFrame width="750px">
     <Block margin="md">
       <Title>GAME GUIDE</Title>
@@ -34,4 +34,4 @@ const GameRules = () => (
   </PageFrame>
 )
 
-export default GameRules
+export default GameGuide
