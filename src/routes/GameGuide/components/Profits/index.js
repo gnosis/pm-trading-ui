@@ -26,18 +26,18 @@ const MakePrediction = () => (
     </Paragraph>
     <Paragraph>
       Your score is the{' '}
-      <Bold>sum of OLY tokens you hold (tokens you won - tokens you've lost) plus the predicted profits</Bold> you're
-      going to make out of the prediction markets you participated in.
+      <Bold>sum of OLY tokens you hold (tokens you won - tokens you&apos;ve lost) plus the predicted profits</Bold>{' '}
+      you&apos;re going to make out of the prediction markets you participated in.
     </Paragraph>
     <Paragraph>
-      <Bold>...the fancier the badge you'll receive</Bold>
+      <Bold>...the fancier the badge you&apos;ll receive</Bold>
     </Paragraph>
     <Block margin="md">
       <Img src={profits2} width="100%" bordered />
     </Block>
     <Paragraph>
-      As you make more predictions, you'll gain honorary predictor badges—will you remain a Junior Predictor, become a
-      Fortune Teller, or even call yourself a Psychic?
+      As you make more predictions, you&apos;ll gain honorary predictor badges—will you remain a Junior Predictor,
+      become a Fortune Teller, or even call yourself a Psychic?
     </Paragraph>
     <Paragraph>
       <Bold>...and the more GNO tokens you win!</Bold>
@@ -46,8 +46,8 @@ const MakePrediction = () => (
       <Img src={profits3} width="75%" bordered />
     </Block>
     <Paragraph>
-      If you're among the top 100 predictors, you will be rewarded with GNO tokens. In case you get to the top 10, your
-      GNO rewards will increase based on your final score.
+      If you&apos;re among the top 100 predictors, you will be rewarded with GNO tokens. In case you get to the top 10,
+      your GNO rewards will increase based on your final score.
     </Paragraph>
   </Block>
 )

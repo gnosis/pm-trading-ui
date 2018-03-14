@@ -31,7 +31,7 @@ const MakePrediction = () => (
       trading volume, or creator of the market in the sidebar.
     </Paragraph>
     <Paragraph>
-      From within this detail page, you’ll be able to participate in the prediction market.<br />
+      From within this detail page, you&apos;ll be able to participate in the prediction market.<br />
       You can buy tokens in the market, navigate to your current token holdings at My Tokens, as well as display your
       transactions in this market at My Trades.
     </Paragraph>
@@ -42,7 +42,7 @@ const MakePrediction = () => (
     </Paragraph>
     <Paragraph>
       To buy tokens, simply click on <Bold>Buy Tokens</Bold>, select your predicted outcome, and insert the amount which
-      you'd like to invest to make your prediction.
+      you&apos;d like to invest to make your prediction.
     </Paragraph>
     <Paragraph>
       To sign the transaction, scan the displayed barcode using your uPort app. From within the app, hit approve.

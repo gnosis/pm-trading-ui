@@ -14,9 +14,9 @@ const DashboardOverview = () => (
     </Block>
     <Paragraph color="medium">
       From the Dashboard, you can stay on top of all active markets and your trading activity. <br />
-      To get an overview of your trading activity, the top section will display the balance of OLY tokens you're
+      To get an overview of your trading activity, the top section will display the balance of OLY tokens you&apos;re
       currently holding, predicted profits from your investments, your rank on the scoreboard, as well as the predictor
-      badge you've been assigned.
+      badge you&apos;ve been assigned.
     </Paragraph>
     <Paragraph>
       Different cards will give you a preview of new and soon-closing markets along with their current outcome
