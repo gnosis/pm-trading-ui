@@ -8,7 +8,7 @@ import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
 
 import { connectBlockchain } from 'actions/blockchain'
-import LoadingIndicator from 'components/LoadingIndicator'
+import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { providerPropType } from 'utils/shapes'
 
 import HeaderContainer from 'containers/HeaderContainer'
@@ -39,7 +39,7 @@ class App extends Component {
       return (
         <div className="appContainer">
           <div className="loader-container">
-            <LoadingIndicator width={100} height={100} />
+            <IndefiniteSpinner width={100} height={100} />
             <h1>Connecting</h1>
           </div>
         </div>

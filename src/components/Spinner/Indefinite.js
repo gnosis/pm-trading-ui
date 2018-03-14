@@ -1,7 +1,13 @@
+
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames/bind'
 
-const LoadingIndicator = ({ className, width = 40, height = 40 }) => (
+import css from './Indefinite.mod.scss'
+
+const cx = classNames.bind(css)
+
+const IndefiniteSpinner = ({ centered, width, height }) => (
   <svg
     version="1.1"
     id="loader-1"
@@ -11,7 +17,9 @@ const LoadingIndicator = ({ className, width = 40, height = 40 }) => (
     height={`${height}px`}
     viewBox="0 0 40 40"
     enableBackground="new 0 0 40 40"
-    className={className || ''}
+    className={cx('indefiniteSpinner', {
+      centered,
+    })}
   >
     <path
       opacity="0.2"
@@ -35,10 +43,16 @@ const LoadingIndicator = ({ className, width = 40, height = 40 }) => (
   </svg>
 )
 
-LoadingIndicator.propTypes = {
-  className: PropTypes.string,
+IndefiniteSpinner.propTypes = {
+  centered: PropTypes.bool,
   height: PropTypes.number,
   width: PropTypes.number,
 }
 
-export default LoadingIndicator
+IndefiniteSpinner.defaultProps = {
+  centered: false,
+  height: 40,
+  width: 40,
+}
+
+export default IndefiniteSpinner

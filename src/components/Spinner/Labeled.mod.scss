@@ -1,22 +1,22 @@
 @import '../../scss/vars.scss';
 
-.progressSpinner {
+.labeledSpinner {
   position: relative;
   
-  &--success {
+  &.success {
     #bar {
       stroke: $active-highlight-success;
     }
   }
 
-  &--error {
+  &.error {
     #bar {
       stroke: $active-highlight-error;
     }
   }
 
-  &--spinning {
-    .progressSpinner__svg {
+  &.spinning {
+    .svg {
       animation: spin 5s linear infinite;
     }
   }
@@ -36,7 +36,7 @@
     transition-delay: stroke 3s;
   }
 
-  &__label {
+  .labelWrapper {
     display: table;
     position: absolute;
     top: 0;
@@ -45,7 +45,7 @@
     height: 100%;
   }
 
-  &__labelInner {
+  .label {
     font-size: 42px;
     display: table-cell;
     vertical-align: middle;

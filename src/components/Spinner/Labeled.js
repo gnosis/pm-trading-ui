@@ -1,36 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames/bind'
 
-import './progressSpinner.scss'
+import css from './Labeled.mod.scss'
 
-const ProgressSpinner = ({
+const cx = classNames.bind(css)
+
+const LabeledSpinner = ({
   width,
   height,
   progress,
   modifier,
   showLabel,
   label,
-  strokeWidthPx = 10,
-  fontSizePx = 42,
-  showBar = true,
-  minBarSize = 0,
+  strokeWidthPx,
+  fontSizePx,
+  showBar,
+  minBarSize,
 }) => {
   const size = Math.min(width, height)
   const r = (size / 2) - strokeWidthPx
   const d = r * 2
   const strokeDashoffset = Math.abs(Math.max(progress, minBarSize / 100) - 1) * Math.PI * d
 
+  const wrapperStyle = { width: `${width}px`, height: `${height}px` }
+
   return (
-    <div
-      className={`progressSpinner ${modifier
-        ? modifier
-          .split(' ')
-          .map(mod => `progressSpinner--${mod}`)
-          .join(' ')
-        : ''}`}
-      style={{ width: `${width}px`, height: `${height}px` }}
-    >
-      <svg className="progressSpinner__svg" width={width} height={width}>
+    <div className={cx('labeledSpinner', modifier)} style={wrapperStyle}>
+      <svg className={cx('svg')} width={width} height={width}>
         <defs>
           <linearGradient id="ProgressSpinnerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#00a6c4" />
@@ -62,9 +59,9 @@ const ProgressSpinner = ({
           />
         )}
       </svg>
-      <div className="progressSpinner__label">
+      <div className={cx('labelWrapper')}>
         {showLabel && (
-          <span className="progressSpinner__labelInner" style={{ fontSize: `${fontSizePx}px` }}>
+          <span className={cx('label')} style={{ fontSize: `${fontSizePx}px` }}>
             {label}
           </span>
         )}
@@ -73,7 +70,7 @@ const ProgressSpinner = ({
   )
 }
 
-ProgressSpinner.propTypes = {
+LabeledSpinner.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   progress: PropTypes.number,
@@ -86,4 +83,15 @@ ProgressSpinner.propTypes = {
   minBarSize: PropTypes.number,
 }
 
-export default ProgressSpinner
+LabeledSpinner.defaultProps = {
+  progress: 0,
+  modifier: '',
+  showLabel: false,
+  label: undefined,
+  strokeWidthPx: 10,
+  fontSizePx: 42,
+  showBar: true,
+  minBarSize: 0,
+}
+
+export default LabeledSpinner

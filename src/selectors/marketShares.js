@@ -43,7 +43,7 @@ const eventMarketsSelector = (state) => {
   return eventMarkets
 }
 
-const eventSharesSelector = createSelector(getCurrentAccount, getShares, (account, shares) => {
+export const eventSharesSelector = createSelector(getCurrentAccount, getShares, (account, shares) => {
   const eventShares = {}
 
   Object.keys(shares).forEach((shareId) => {
@@ -65,7 +65,7 @@ const eventSharesSelector = createSelector(getCurrentAccount, getShares, (accoun
   return eventShares
 })
 
-const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventShares) => {
+export const enhanceShares = (oracles, events, eventDescriptions, eventMarkets, eventShares) => {
   const enhancedShares = {}
 
   Object.keys(eventShares).forEach((eventAddress) => {

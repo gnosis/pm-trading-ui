@@ -5,7 +5,7 @@ import { takeRight } from 'lodash'
 
 import moment from 'moment'
 
-import ProgressSpinner from 'components/ProgressSpinner'
+import LabeledSpinner from 'components/Spinner/Labeled'
 import Notifications from 'components/Notifications'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 
@@ -25,7 +25,7 @@ const TransactionFloater = ({
       className="transactionFloater__spinner"
       onClick={() => (showLogs ? hideTransactionLog() : showTransactionLog())}
     >
-      <ProgressSpinner
+      <LabeledSpinner
         width={32}
         height={32}
         strokeWidthPx={3}
