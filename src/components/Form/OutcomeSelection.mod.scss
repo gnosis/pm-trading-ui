@@ -1,4 +1,18 @@
-@import "../../../scss/vars.scss";
+@import "../../scss/vars.scss";
+
+.formOutcomeSelection {
+  width: 100%;
+
+  &.hideBars {
+    .wrapper {
+      padding-left: 10px;
+
+      .outcomeBar {
+        display: none;
+      }
+    }
+  }
+}
 
 .outcome {
   margin: 5px 0;

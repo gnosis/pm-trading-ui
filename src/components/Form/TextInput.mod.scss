@@ -9,6 +9,14 @@
 }
 
 .formTextInput {
+  &.underlined {
+    input {
+      border-color: $font-color-light;
+      border-bottom-style: dotted;
+      border-bottom-width: 2px;
+    }
+  }
+
   input {
     -webkit-appearance: none !important;
     border: none;
