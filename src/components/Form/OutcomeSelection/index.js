@@ -7,16 +7,18 @@ import classNames from 'classnames/bind'
 
 import OutcomeBar from './OutcomeBar'
 
-import css from './style.mod.scss'
+import css from '../OutcomeSelection.mod.scss'
 
 const cx = classNames.bind(css)
 
 class OutcomeSelection extends PureComponent {
   render() {
-    const { outcomes, label, input: { value, onChange } } = this.props
+    const {
+      outcomes, label, hideBars, input: { value, onChange },
+    } = this.props
 
     return (
-      <div className={cx('formOutcomeSelection')}>
+      <div className={cx('formOutcomeSelection', { hideBars })}>
         <label>{label}</label>
         {outcomes.map(outcome => (<OutcomeBar
           {...outcome}
@@ -31,6 +33,7 @@ class OutcomeSelection extends PureComponent {
 
 OutcomeSelection.propTypes = {
   input: PropTypes.shape(fieldPropTypes.input).isRequired,
+  hideBars: PropTypes.bool,
   outcomes: PropTypes.arrayOf(PropTypes.shape({
     probability: PropTypes.instanceOf(Decimal).isRequired,
     index: PropTypes.number.isRequired,
@@ -41,6 +44,7 @@ OutcomeSelection.propTypes = {
 }
 
 OutcomeSelection.defaultProps = {
+  hideBars: false,
   outcomes: [],
   label: '',
 }

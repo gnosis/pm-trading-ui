@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import moment from 'moment'
 import { calcLMSRMarginalPrice } from 'api'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import TrendingOutcomeCategorical from './TrendingOutcomeCategorical'
 
-import style from './outcomeCategorical.scss'
+import style from './outcomeCategorical.mod.scss'
 
 const cx = cn.bind(style)
 

@@ -18,7 +18,7 @@ const IndefiniteSpinner = ({ centered, width, height }) => (
     viewBox="0 0 40 40"
     enableBackground="new 0 0 40 40"
     className={cx('indefiniteSpinner', {
-      centered
+      centered,
     })}
   >
     <path

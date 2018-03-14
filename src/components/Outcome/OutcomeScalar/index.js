@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
 import { marketShape } from 'utils/shapes'
 import { calcLMSRMarginalPrice } from 'api'
 import TrendingOutcomeScalar from './TredingOutcomeScalar'
 
-import style from './outcomeScalar.scss'
+import style from './outcomeScalar.mod.scss'
 
 const cx = cn.bind(style)
 
-const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
+const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome, className = '' } }) => {
   let marginalPrice = calcLMSRMarginalPrice({
     netOutcomeTokensSold: market.netOutcomeTokensSold,
     funding: market.funding,
@@ -45,7 +45,7 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome } }) => {
   }
 
   return (
-    <div>
+    <div className={className}>
       <div className={cx('scalarOutcome')}>
         <div className={cx('outcomeBound', 'lower')}>
           <DecimalValue value={lowerBound} decimals={market.eventDescription.decimals} />

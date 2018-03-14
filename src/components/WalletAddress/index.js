@@ -44,13 +44,15 @@ class WalletAddress extends Component {
 
     const changeToVarText = showAddress ? 'deterministic name' : 'address'
     const text = this.getText()
-    return (<Span
-      className={cx('walletAddress')}
-      onClick={this.onAddressClick}
-      title={`${text} (Click to see ${changeToVarText})`}
-    >
-      { text }
-    </Span>)
+    return (
+      <Span
+        className={cx('walletAddress')}
+        onClick={this.onAddressClick}
+        title={`${text} (Click to see ${changeToVarText})`}
+      >
+        {text}
+      </Span>
+    )
   }
 }
 

@@ -1,12 +1,15 @@
 import {
   isGnosisInitialized,
   triedToConnect,
-  getGasCosts,
-  isGasCostFetched,
   getEtherTokensAmount,
-  getGasPrice,
-  isGasPriceFetched,
 } from 'selectors/blockchain'
+// import getGasPrice from 'routes/MarketDetails/store/selectors/getGasPrice'
+// import getGasCosts from 'routes/MarketDetails/store/selectors/getGasCosts'
+// import isGasCostFetched from 'routes/MarketDetails/store/selectors/isGasCostFetched'
+// import isGasPriceFetched from 'routes/MarketDetails/store/selectors/isGasPriceFetched'
+
+import { getGasPrice, getGasCosts, isGasCostFetched, isGasPriceFetched } from 'routes/MarketDetails/store/selectors'
+
 import { Map } from 'immutable'
 
 describe('Blockchain selectors', () => {

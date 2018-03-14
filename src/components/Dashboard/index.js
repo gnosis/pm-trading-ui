@@ -21,7 +21,7 @@ import {
 } from 'utils/constants'
 import moment from 'moment'
 import Decimal from 'decimal.js'
-import { EXPAND_MY_SHARES } from 'components/MarketDetail/ExpandableViews'
+import { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
 
 import Metrics from './Metrics'
 import './dashboard.scss'
@@ -36,7 +36,7 @@ const getSoonClosingMarkets = (markets = [], limit) =>
     .slice(0, limit || markets.length)
 
 class Dashboard extends Component {
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.hasWallet) {
       this.props.changeUrl('/markets/list')
       return

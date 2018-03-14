@@ -15,6 +15,7 @@ const TextInput = ({
   type,
   className,
   placeholder,
+  decoration,
   meta: { touched, error },
   startAdornment,
   endAdornment,
@@ -22,7 +23,7 @@ const TextInput = ({
 }) => {
   const inputId = `formTextInput_${input.name}`
 
-  const textInputClasses = cx('formTextInput', className, {
+  const textInputClasses = cx('formTextInput', className, decoration, {
     error: (touched && error),
   })
 
@@ -57,6 +58,7 @@ TextInput.propTypes = {
   placeholder: PropTypes.string,
   startAdornment: PropTypes.node,
   endAdornment: PropTypes.node,
+  decoration: PropTypes.oneOf(['underlined']),
 }
 
 TextInput.defaultProps = {
@@ -66,6 +68,7 @@ TextInput.defaultProps = {
   placeholder: '',
   startAdornment: undefined,
   endAdornment: undefined,
+  decoration: undefined,
 }
 
 export default TextInput

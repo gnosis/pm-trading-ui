@@ -53,7 +53,6 @@ export const GAS_COST = {
   BUY_SHARES: 'buyShares',
   SELL_SHARES: 'sellShares',
   RESOLVE_ORACLE: 'resolveOracle',
-  WITHDRAW_FEES: 'withdrawFees',
   REDEEM_WINNINGS: 'redeemWinnings',
   CATEGORICAL_EVENT: 'categoricalEvent',
   SCALAR_EVENT: 'scalarEvent',

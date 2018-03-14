@@ -1,0 +1,88 @@
+@import "../../scss/vars.scss";
+
+.formOutcomeSelection {
+  width: 100%;
+
+  &.hideBars {
+    .wrapper {
+      padding-left: 10px;
+
+      .outcomeBar {
+        display: none;
+      }
+    }
+  }
+}
+
+.outcome {
+  margin: 5px 0;
+  width: 100%;
+  
+  padding: $paddings-inputs;
+
+  label {
+    display: flex;
+    margin: 0;
+    align-items: center;
+    position: relative;
+  }
+
+  .wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+  }
+
+  input[type="radio"] {
+    margin: 0;
+    appearance: none;
+    width: 33.68px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    border-radius: 9999px;
+    background-color: $bg-color-muted;
+    border: 0px solid $bg-color-muted;
+
+    // for use with currentColor:
+    color: $active-highlight;
+
+    transition: background-color 0.2s ease, border 0.2s ease;
+
+    // current color is highlight color
+    &:checked {
+      background-color: currentColor;
+      border-width: 4px;
+    }
+
+    &:checked, &:hover, &:focus {
+      outline: none;
+      box-shadow: 0 0 4px 1px currentColor;
+    }
+  }
+}
+
+.outcome.selected {
+  .outcomeLabel {
+    font-weight: 800;
+  }
+}
+
+.outcomeBar {
+  transition: width 1s ease-in-out;
+
+  height: 15px;
+  margin: 0 5px;
+
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.outcomeLabel {
+  margin-right: 5px;
+}
+
+.outcomeDescription {
+  color: black;
+}

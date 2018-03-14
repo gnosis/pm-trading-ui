@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import { closeModal } from 'actions/modal'
 
-import * as modals from 'containers/modals'
+import * as modals from 'containers/Modals'
 
 import './backdrop.scss'
 
