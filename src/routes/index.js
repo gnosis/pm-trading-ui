@@ -4,6 +4,7 @@ import web3 from 'web3'
 
 import GameGuidePage from 'routes/GameGuide/containers/GameGuide'
 import MarketListPage from 'containers/MarketListPage'
+import ScoreboardPage from 'routes/Scoreboard/containers/ScoreBoard'
 import MarketDetailPage from 'routes/MarketDetails/containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
 import DashboardPage from 'containers/DashboardPage'
@@ -22,7 +23,8 @@ const AppRouter = () => (
     <Route exact path="/transactions" component={TransactionsPage} />
     <Route exact path="/markets/list" component={MarketListPage} />
     <Route exact path="/markets/:id/:view?/:shareId?" render={marketDetailRender} />
-    <Route exact path="/game-guide" render={GameGuidePage} />
+    <Route exact path="/game-guide" component={GameGuidePage} />
+    <Route exact path="/scoreboard" component={ScoreboardPage} />
   </Switch>
 )
 
