@@ -8,6 +8,7 @@ import ScoreboardPage from 'routes/Scoreboard/containers/ScoreBoard'
 import MarketDetailPage from 'routes/MarketDetails/containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
 import DashboardPage from 'containers/DashboardPage'
+import { shallShowScoreboard } from 'selectors/configuration'
 
 const marketDetailRender = (props) => {
   if (web3.utils.isAddress(props.match.params.id)) {
@@ -18,13 +19,13 @@ const marketDetailRender = (props) => {
 
 const AppRouter = () => (
   <Switch>
-    <Redirect exact from="/" to="/markets/list" />
     <Route exact path="/dashboard" component={DashboardPage} />
     <Route exact path="/transactions" component={TransactionsPage} />
     <Route exact path="/markets/list" component={MarketListPage} />
     <Route exact path="/markets/:id/:view?/:shareId?" render={marketDetailRender} />
     <Route exact path="/game-guide" component={GameGuidePage} />
-    <Route exact path="/scoreboard" component={ScoreboardPage} />
+    {shallShowScoreboard() && <Route exact path="/scoreboard" component={ScoreboardPage} />}
+    <Redirect to="/markets/list" />
   </Switch>
 )
 
