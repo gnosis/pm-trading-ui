@@ -25,3 +25,7 @@ export const getSmallLogoPath = () => {
 
   return config.interface.smallLogoPath
 }
+
+export const shallShowScoreboard = () =>
+  (isTournament() && !!config.interface.showScoreboard) ||
+  (typeof config.interface.showScoreboard === 'undefined' && isTournament())

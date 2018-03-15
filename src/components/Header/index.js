@@ -33,6 +33,7 @@ class Header extends Component {
       isTournament,
       logoPath,
       smallLogoPath,
+      showScoreboard,
     } = this.props
 
     const logoVars = {}
@@ -63,6 +64,11 @@ class Header extends Component {
             {hasWallet && (
               <NavLink to="/transactions" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
                 Transactions
+              </NavLink>
+            )}
+            {showScoreboard && (
+              <NavLink to="/scoreboard" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
+                Scoreboard
               </NavLink>
             )}
           </div>
@@ -105,6 +111,7 @@ Header.propTypes = {
   isTournament: PropTypes.bool,
   logoPath: PropTypes.string.isRequired,
   smallLogoPath: PropTypes.string.isRequired,
+  showScoreboard: PropTypes.bool,
 }
 
 Header.defaultProps = {
@@ -115,6 +122,7 @@ Header.defaultProps = {
   currentProvider: {},
   currentAccount: '',
   isTournament: false,
+  showScoreboard: false,
 }
 
 export default Header
