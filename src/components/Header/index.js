@@ -24,42 +24,35 @@ class Header extends Component {
 
   render() {
     const {
-      version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider,
+      version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider, isTournament, logoPath,
     } = this.props
+
+    const logoVars = {}
+    if (isTournament) {
+      logoVars['--logoAnnotation'] = "'Powered by Gnosis'"
+      logoVars['--logoPath'] = `url("${logoPath}")`
+    }
+
     return (
       <div className={cx('headerContainer')}>
         <div className={cx('container')}>
           <div className={cx('group', 'logo')}>
             <NavLink to="/markets/list">
-              <div className={cx('headerLogo', 'beta')} />
+              <div className={cx('headerLogo', 'beta')} style={logoVars} />
             </NavLink>
           </div>
-          <div className={cx('group', 'left', 'version')}>
-            {version}
-          </div>
+          <div className={cx('group', 'left', 'version')}>{version}</div>
           <div className={cx('group', 'left', 'navLinks')}>
             {hasWallet && (
-              <NavLink
-                to="/dashboard"
-                activeClassName={cx('navLink', 'active')}
-                className={cx('navLink')}
-              >
+              <NavLink to="/dashboard" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
                 Dashboard
               </NavLink>
             )}
-            <NavLink
-              to="/markets/list"
-              activeClassName={cx('navLink', 'active')}
-              className={cx('navLink')}
-            >
+            <NavLink to="/markets/list" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
               Markets
             </NavLink>
             {hasWallet && (
-              <NavLink
-                to="/transactions"
-                activeClassName={cx('navLink', 'active')}
-                className={cx('navLink')}
-              >
+              <NavLink to="/transactions" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
                 Transactions
               </NavLink>
             )}
@@ -71,9 +64,7 @@ class Header extends Component {
                 <div className={cx('account')}>
                   {currentNetwork &&
                     currentNetwork !== 'MAIN' && (
-                      <span className={cx('network', 'text')}>
-                        Network: {upperFirst(currentNetwork.toLowerCase())}
-                      </span>
+                      <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
                     )}
                   <DecimalValue value={currentBalance} className={cx('balance', 'test')} />&nbsp;
                   <span className={cx('account', 'text')}>{collateralTokenToText()}</span>
@@ -102,6 +93,8 @@ Header.propTypes = {
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
   openConnectWalletModal: PropTypes.func.isRequired,
+  isTournament: PropTypes.bool,
+  logoPath: PropTypes.string,
 }
 
 Header.defaultProps = {
@@ -111,6 +104,7 @@ Header.defaultProps = {
   currentBalance: '0',
   currentProvider: {},
   currentAccount: '',
+  isTournament: false,
 }
 
 export default Header

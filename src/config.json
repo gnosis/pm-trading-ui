@@ -25,5 +25,10 @@
     "port": 443
   },
   "fetchMarketTimeInterval": 15000,
-  "ravenPublicDSN": null
+  "ravenPublicDSN": null,
+  "interface": {
+    "tournament": true,
+    "logoPath": "/src/assets/img/placeholder.svg",
+    "smallerLogoPath": "/src/assets/img/placeholder.svg"
+  }
 }

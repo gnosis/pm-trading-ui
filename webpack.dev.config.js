@@ -94,7 +94,7 @@ module.exports = {
           },
           {
             loader: 'sass-loader',
-            options: { sourceMap: true },
+            options: { sourceMap: true, includePaths: [path.resolve(__dirname, './src')] },
           },
         ],
       },
