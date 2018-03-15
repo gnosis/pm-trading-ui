@@ -154,7 +154,7 @@ $navbarHeight: 40px;
   display: inline-block;
   height: 25px;
   width: 70px;
-  background-image: var(--logoPath, url('../../assets/img/gnosis_logo_icon.svg'));
+  background-image: var(--smallLogoPath, url('../../assets/img/gnosis_logo_icon.svg'));
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;

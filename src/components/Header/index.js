@@ -24,13 +24,22 @@ class Header extends Component {
 
   render() {
     const {
-      version, hasWallet, currentAccount, currentNetwork, currentBalance, currentProvider, isTournament, logoPath,
+      version,
+      hasWallet,
+      currentAccount,
+      currentNetwork,
+      currentBalance,
+      currentProvider,
+      isTournament,
+      logoPath,
+      smallLogoPath,
     } = this.props
 
     const logoVars = {}
     if (isTournament) {
       logoVars['--logoAnnotation'] = "'Powered by Gnosis'"
       logoVars['--logoPath'] = `url("${logoPath}")`
+      logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
     }
 
     return (
@@ -94,7 +103,8 @@ Header.propTypes = {
   currentAccount: PropTypes.string,
   openConnectWalletModal: PropTypes.func.isRequired,
   isTournament: PropTypes.bool,
-  logoPath: PropTypes.string,
+  logoPath: PropTypes.string.isRequired,
+  smallLogoPath: PropTypes.string.isRequired,
 }
 
 Header.defaultProps = {

@@ -12,7 +12,7 @@ import {
   checkWalletConnection,
   isConnectedToCorrectNetwork,
 } from 'integrations/store/selectors'
-import { isTournament, getLogoPath } from 'selectors/configuration'
+import { isTournament, getLogoPath, getSmallLogoPath } from 'selectors/configuration'
 
 const mapStateToProps = state => ({
   hasWallet: checkWalletConnection(state),
@@ -23,6 +23,7 @@ const mapStateToProps = state => ({
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
   isTournament: isTournament(),
   logoPath: getLogoPath(),
+  smallLogoPath: getSmallLogoPath(),
 })
 
 const mapDispatchToProps = dispatch => ({
