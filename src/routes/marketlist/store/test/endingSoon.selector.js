@@ -10,18 +10,18 @@ const endingSoonTests = () => {
     it('should return 1 ending soon markets', () => {
       // GIVEN
       const aEndingSoonMarket = aMarket()
-        .withResolution(moment().add(3, 'days'))
+        .withResolution(moment().add(3, 'days').utc())
         .withStage(MARKET_STAGES.MARKET_FUNDED)
         .withResolved(false)
         .get()
 
       const aClosedMarketViaStage = aMarket()
-        .withResolution(moment())
+        .withResolution(moment().utc())
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()
 
       const anExpiredMarket = aMarket()
-        .withResolution(moment().subtract(1, 'days'))
+        .withResolution(moment().subtract(1, 'days').utc())
         .withStage(MARKET_STAGES.MARKET_FUNDED)
         .withResolved(false)
         .get()
@@ -39,7 +39,7 @@ const endingSoonTests = () => {
     it('should return 0 ending soon markets if there is one market but not ending soon', () => {
       // GIVEN
       const aClosedMarket = aMarket()
-        .withResolution(moment().subtract(1, 'M'))
+        .withResolution(moment().subtract(1, 'M').utc())
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()
 
