@@ -27,7 +27,7 @@
   "fetchMarketTimeInterval": 15000,
   "ravenPublicDSN": null,
   "interface": {
-    "tournament": true,
+    "tournament": false,
     "logoPath": "/src/assets/img/placeholder.svg",
     "smallLogoPath": "/src/assets/img/placeholder.svg",
     "showScoreboard": true,
