@@ -7,11 +7,8 @@
     "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail",
     "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama"
   },
-  "stagingWhitelist": {
-
-  },
-  "productionWhitelist": {
-  },
+  "stagingWhitelist": {},
+  "productionWhitelist": {},
   "gnosisdb": {
     "protocol": "https",
     "hostDev": "gnosisdb.staging.gnosisdev.com",
@@ -35,6 +32,12 @@
       "display": true,
       "type": "link",
       "url": "https://gnosis.pm"
+    },
+    "footer": {
+      "display": false,
+      "text":
+        "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
+      "path": ""
     }
   }
 }
