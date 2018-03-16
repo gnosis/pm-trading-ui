@@ -29,3 +29,9 @@ export const getSmallLogoPath = () => {
 export const shallShowScoreboard = () =>
   (isTournament() && !!config.interface.showScoreboard) ||
   (typeof config.interface.showScoreboard === 'undefined' && isTournament())
+
+export const shallShowGameGuide = () => isTournament() && !!config.interface.gameGuide.display
+
+export const getGameGuideType = () => config.interface.gameGuide.type
+
+export const getGameGuideURL = () => config.interface.gameGuide.url
