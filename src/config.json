@@ -30,6 +30,11 @@
     "tournament": false,
     "logoPath": "/src/assets/img/placeholder.svg",
     "smallLogoPath": "/src/assets/img/placeholder.svg",
-    "showScoreboard": true
+    "showScoreboard": true,
+    "gameGuide": {
+      "display": true,
+      "type": "link",
+      "url": "https://gnosis.pm"
+    }
   }
 }
