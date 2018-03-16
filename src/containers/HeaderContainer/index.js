@@ -18,6 +18,8 @@ import {
   getSmallLogoPath,
   shallShowScoreboard,
   shallShowGameGuide,
+  getGameGuideType,
+  getGameGuideURL,
 } from 'selectors/configuration'
 
 const mapStateToProps = state => ({
@@ -32,6 +34,8 @@ const mapStateToProps = state => ({
   smallLogoPath: getSmallLogoPath(),
   showScoreboard: shallShowScoreboard(),
   showGameGuide: shallShowGameGuide(),
+  gameGuideType: getGameGuideType(),
+  gameGuideURL: getGameGuideURL(),
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -35,6 +35,8 @@ class Header extends Component {
       smallLogoPath,
       showScoreboard,
       showGameGuide,
+      gameGuideType,
+      gameGuideURL,
     } = this.props
 
     const logoVars = {}
@@ -42,6 +44,25 @@ class Header extends Component {
       logoVars['--logoAnnotation'] = "'Powered by Gnosis'"
       logoVars['--logoPath'] = `url("${logoPath}")`
       logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
+    }
+
+    let gameGuideLink = <div />
+    if (showGameGuide) {
+      if (gameGuideType === 'default') {
+        gameGuideLink = (
+          <NavLink to="/game-guide" activeClassName={cx('active')} className={cx('navLink')}>
+            Game guide
+          </NavLink>
+        )
+      }
+
+      if (gameGuideType === 'link') {
+        gameGuideLink = (
+          <a href={gameGuideURL} className={cx('navLink')} target="_blank">
+            Game Guide
+          </a>
+        )
+      }
     }
 
     return (
@@ -55,28 +76,24 @@ class Header extends Component {
           <div className={cx('group', 'left', 'version')}>{version}</div>
           <div className={cx('group', 'left', 'navLinks')}>
             {hasWallet && (
-              <NavLink to="/dashboard" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
+              <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
                 Dashboard
               </NavLink>
             )}
-            <NavLink to="/markets/list" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
+            <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
               Markets
             </NavLink>
             {hasWallet && (
-              <NavLink to="/transactions" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
+              <NavLink to="/transactions" activeClassName={cx('active')} className={cx('navLink')}>
                 Transactions
               </NavLink>
             )}
             {showScoreboard && (
-              <NavLink to="/scoreboard" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
+              <NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink')}>
                 Scoreboard
               </NavLink>
             )}
-            {showGameGuide && (
-              <NavLink to="/game-guide" activeClassName={cx('navLink', 'active')} className={cx('navLink')}>
-                Game guide
-              </NavLink>
-            )}
+            {gameGuideLink}
           </div>
 
           <div className={cx('group', 'right')}>
@@ -119,6 +136,8 @@ Header.propTypes = {
   smallLogoPath: PropTypes.string.isRequired,
   showScoreboard: PropTypes.bool,
   showGameGuide: PropTypes.bool,
+  gameGuideType: PropTypes.string,
+  gameGuideURL: PropTypes.string,
 }
 
 Header.defaultProps = {
@@ -131,6 +150,8 @@ Header.defaultProps = {
   isTournament: false,
   showScoreboard: false,
   showGameGuide: false,
+  gameGuideType: 'default',
+  gameGuideURL: '',
 }
 
 export default Header

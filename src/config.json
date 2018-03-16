@@ -33,7 +33,7 @@
     "showScoreboard": true,
     "gameGuide": {
       "display": true,
-      "type": "default",
+      "type": "link",
       "url": "https://gnosis.pm"
     }
   }
