@@ -34,9 +34,9 @@
       "url": "https://gnosis.pm"
     },
     "footer": {
-      "display": false,
+      "display": true,
       "text":
-        "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
+        "#### Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
       "path": ""
     }
   }
