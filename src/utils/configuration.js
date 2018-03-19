@@ -35,3 +35,7 @@ export const shallShowGameGuide = () => isTournament() && !!config.interface?.ga
 export const getGameGuideType = () => config.interface?.gameGuide?.type
 
 export const getGameGuideURL = () => config.interface?.gameGuide?.url
+
+export const shallDisplayFooter = () => !!config.interface?.footer?.display
+
+export const getFooterContent = () => config.interface?.footer?.content

@@ -8,7 +8,7 @@ import ScoreboardPage from 'routes/Scoreboard/containers/ScoreBoard'
 import MarketDetailPage from 'routes/MarketDetails/containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
 import DashboardPage from 'containers/DashboardPage'
-import { shallShowScoreboard, shallShowGameGuide, getGameGuideType } from 'selectors/configuration'
+import { shallShowScoreboard, shallShowGameGuide, getGameGuideType } from 'utils/configuration'
 
 const marketDetailRender = (props) => {
   if (web3.utils.isAddress(props.match.params.id)) {

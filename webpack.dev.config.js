@@ -102,6 +102,10 @@ module.exports = {
         test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]',
       },
+      {
+        test: /\.txt$/,
+        use: 'raw-loader',
+      },
     ],
   },
   devServer: {

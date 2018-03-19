@@ -20,7 +20,7 @@ import {
   shallShowGameGuide,
   getGameGuideType,
   getGameGuideURL,
-} from 'selectors/configuration'
+} from 'utils/configuration'
 
 const mapStateToProps = state => ({
   hasWallet: checkWalletConnection(state),
