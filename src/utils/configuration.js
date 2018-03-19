@@ -38,4 +38,4 @@ export const getGameGuideURL = () => config.interface?.gameGuide?.url
 
 export const shallDisplayFooter = () => !!config.interface?.footer?.display
 
-export const getFooterText = () => config.interface?.footer?.text
+export const getFooterContent = () => config.interface?.footer?.content
