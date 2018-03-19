@@ -1,30 +1,30 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { getTokenSymbol } from 'selectors/blockchain'
 import PropTypes from 'prop-types'
 
 // Current mapping does not contain any logic
-export const outcomeTokenToText = outcomeToken => outcomeToken
-export const collateralTokenToText = () => 'ETH'
+export const tokenToText = () => 'ETH'
 
-const CurrencyName = ({ collateralToken, outcomeToken }) => {
-  if (collateralToken) {
-    return <span>{collateralTokenToText(collateralToken)}</span>
-  }
-
-  if (outcomeToken) {
-    return <span>{outcomeTokenToText(outcomeToken)}</span>
+const CurrencyName = ({ tokenAddress, tokenSymbol }) => {
+  if (tokenAddress) {
+    return <span>{tokenSymbol}</span>
   }
 
   return <span>Unknown</span>
 }
 
+const mapStateToProps = (state, ownProps) => ({
+  tokenSymbol: getTokenSymbol(state, ownProps.tokenAddress),
+})
+
 CurrencyName.propTypes = {
-  collateralToken: PropTypes.string,
-  outcomeToken: PropTypes.string,
+  tokenAddress: PropTypes.string.isRequired,
+  tokenSymbol: PropTypes.string,
 }
 
 CurrencyName.defaultProps = {
-  collateralToken: '',
-  outcomeToken: '',
+  tokenSymbol: undefined,
 }
 
-export default CurrencyName
+export default connect(mapStateToProps, null)(CurrencyName)

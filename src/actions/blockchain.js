@@ -10,6 +10,7 @@ export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
+export const setTokenSymbol = createAction('SET_TOKEN_NAME')
 
 export const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 

@@ -21,3 +21,5 @@ export const getEtherTokensAmount = (state, account) => {
 
   return etherTokensDecimal
 }
+
+export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['tokenSymbols', tokenAddress])

@@ -1,6 +1,12 @@
 import { handleActions } from 'redux-actions'
 import { Map } from 'immutable'
-import { setConnectionStatus, setGnosisInitialized, setGasPrice, setEtherTokens } from 'actions/blockchain'
+import {
+  setConnectionStatus,
+  setGnosisInitialized,
+  setGasPrice,
+  setEtherTokens,
+  setTokenSymbol,
+} from 'actions/blockchain'
 import { setGasCost } from 'routes/MarketDetails/store/actions'
 
 import { GAS_COST } from 'utils/constants'
@@ -18,6 +24,8 @@ const reducer = handleActions(
     [setGasPrice]: (state, { payload: { entityType, gasPrice } }) => state.set(entityType, gasPrice),
     [setEtherTokens]: (state, { payload: { entityType, account, etherTokens } }) =>
       state.setIn([entityType, account], etherTokens),
+    [setTokenSymbol]: (state, { payload: { tokenAddress, tokenName } }) =>
+      state.setIn(['tokenSymbols', tokenAddress], tokenName),
   },
   Map({
     gasCosts: Object.keys(GAS_COST).reduce((acc, item) => acc.set(GAS_COST[item], undefined), Map()),
@@ -25,6 +33,7 @@ const reducer = handleActions(
     connection: undefined,
     connectionTried: false,
     etherTokens: Map(),
+    tokenSymbols: Map(),
   }),
 )
 
