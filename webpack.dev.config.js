@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
-
+const config = require('./src/config.json')
 const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
@@ -9,9 +9,10 @@ const pkg = require('./package.json')
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
-const config = require('./src/config.json')
+const isTournament = config.interface && config.interface.tournament
 
-const faviconPath = 'assets/img/gnosis_logo_favicon.png'
+const defaultFavicon = isTournament ? 'assets/img/gnosis_apollo_favicon.png' : 'assets/img/gnosis_logo_favicon.png'
+const faviconPath = config.interface && config.interface.faviconPath ? config.interface.faviconPath : defaultFavicon
 const whitelist = config.developmentWhitelist
 
 const gnosisDbUrl =
@@ -123,7 +124,7 @@ module.exports = {
     watchOptions: {
       ignored: /node_modules/,
     },
-    contentBase: [path.join(__dirname, 'dist')],
+    contentBase: [path.join(__dirname, 'dist'), path.join(__dirname, 'src')],
   },
   plugins: [
     new CaseSensitivePathsPlugin(),
