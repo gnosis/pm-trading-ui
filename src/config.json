@@ -26,8 +26,8 @@
   "interface": {
     "tournament": false,
     "token": "0xd19bce9f7693598a9fa1f94c548b20887a33f141",
-    "logoPath": "/src/assets/img/placeholder.svg",
-    "smallLogoPath": "/src/assets/img/placeholder.svg",
+    "logoPath": "/assets/img/placeholder.svg",
+    "smallLogoPath": "/assets/img/placeholder.svg",
     "showScoreboard": true,
     "gameGuide": {
       "display": true,
@@ -41,6 +41,7 @@
         "source": "Powered by Gnosis",
         "markdown": true
       }
-    }
+    },
+    "faviconPath": "assets/img/gnosis_logo_icon.svg"
   }
 }
