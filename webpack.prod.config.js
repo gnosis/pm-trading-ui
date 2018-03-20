@@ -9,10 +9,11 @@ const pkg = require('./package.json')
 
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
-
 const branch = process.env.TRAVIS_BRANCH || 'development'
 
 const config = require('./src/config.json')
+
+const faviconPath = 'assets/img/gnosis_logo_favicon.png'
 
 const isProductionEnv = branch.indexOf('release/') > -1
 const isStagingEnv = branch === 'master'
@@ -89,7 +90,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
-      logo: 'assets/img/gnosis_logo_favicon.png',
+      logo: faviconPath,
       // Generate a cache file with control hashes and
       // don't rebuild the favicons until those hashes change
       persistentCache: true,

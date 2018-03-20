@@ -11,6 +11,7 @@ const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
 const config = require('./src/config.json')
 
+const faviconPath = 'assets/img/gnosis_logo_favicon.png'
 const whitelist = config.developmentWhitelist
 
 const gnosisDbUrl =
@@ -122,11 +123,12 @@ module.exports = {
     watchOptions: {
       ignored: /node_modules/,
     },
+    contentBase: [path.join(__dirname, 'dist')],
   },
   plugins: [
     new CaseSensitivePathsPlugin(),
     new FaviconsWebpackPlugin({
-      logo: 'assets/img/gnosis_logo_favicon.png',
+      logo: faviconPath,
       // Generate a cache file with control hashes and
       // don't rebuild the favicons until those hashes change
       persistentCache: true,
