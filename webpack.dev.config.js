@@ -10,9 +10,9 @@ const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
 const isTournament = config.interface && config.interface.tournament
-
 const defaultFavicon = isTournament ? 'assets/img/gnosis_apollo_favicon.png' : 'assets/img/gnosis_logo_favicon.png'
-const faviconPath = config.interface && config.interface.faviconPath ? config.interface.faviconPath : defaultFavicon
+const faviconPath =
+  config.interface && config.interface.faviconPath && isTournament ? config.interface.faviconPath : defaultFavicon
 const whitelist = config.developmentWhitelist
 
 const gnosisDbUrl =

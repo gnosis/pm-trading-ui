@@ -13,7 +13,8 @@ const branch = process.env.TRAVIS_BRANCH || 'development'
 
 const isTournament = config.interface && config.interface.tournament
 const defaultFavicon = isTournament ? 'assets/img/gnosis_apollo_favicon.png' : 'assets/img/gnosis_logo_favicon.png'
-const faviconPath = config.interface && config.interface.faviconPath && isTournament ? config.interface.faviconPath : defaultFavicon
+const faviconPath =
+  config.interface && config.interface.faviconPath && isTournament ? config.interface.faviconPath : defaultFavicon
 
 const isProductionEnv = branch.indexOf('release/') > -1
 const isStagingEnv = branch === 'master'
