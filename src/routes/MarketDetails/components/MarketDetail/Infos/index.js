@@ -28,7 +28,7 @@ const Infos = ({
   }
 
   if (showWithdrawFees) {
-    marketInfos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${tokenToText(market.event.collateralToken)}`
+    marketInfos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenSymbol}`
   }
 
   return (
