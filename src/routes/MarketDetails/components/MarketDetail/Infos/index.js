@@ -10,12 +10,14 @@ import style from './Infos.mod.scss'
 
 const cx = cn.bind(style)
 
-const Infos = ({ market, defaultAccount, moderators }) => {
+const Infos = ({
+  market, defaultAccount, moderators, collateralTokenSymbol,
+}) => {
   const marketInfos = {
-    Token: tokenToText(market.event.collateralToken),
+    Token: collateralTokenSymbol,
     Fee: `${decimalToText(market.fee, 2) / 10000} %`,
-    Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${tokenToText(market.event.collateralToken)}`,
-    'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${tokenToText(market.event.collateralToken)}`,
+    Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenSymbol}`,
+    'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenSymbol}`,
   }
   const showWithdrawFees =
     defaultAccount && market.oracle.owner === defaultAccount && new Decimal(market.collectedFees).gt(0)
@@ -45,6 +47,7 @@ Infos.propTypes = {
   market: marketShape.isRequired,
   defaultAccount: PropTypes.string,
   moderators: PropTypes.objectOf(PropTypes.string),
+  collateralTokenSymbol: PropTypes.string.isRequired,
 }
 
 Infos.defaultProps = {

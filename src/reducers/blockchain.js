@@ -24,8 +24,8 @@ const reducer = handleActions(
     [setGasPrice]: (state, { payload: { entityType, gasPrice } }) => state.set(entityType, gasPrice),
     [setEtherTokens]: (state, { payload: { entityType, account, etherTokens } }) =>
       state.setIn([entityType, account], etherTokens),
-    [setTokenSymbol]: (state, { payload: { tokenAddress, tokenName } }) =>
-      state.setIn(['tokenSymbols', tokenAddress], tokenName),
+    [setTokenSymbol]: (state, { payload: { tokenAddress, tokenSymbol } }) =>
+      state.setIn(['tokenSymbols', tokenAddress], tokenSymbol),
   },
   Map({
     gasCosts: Object.keys(GAS_COST).reduce((acc, item) => acc.set(GAS_COST[item], undefined), Map()),

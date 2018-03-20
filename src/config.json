@@ -25,7 +25,7 @@
   "ravenPublicDSN": null,
   "interface": {
     "tournament": false,
-    "token": "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca",
+    "token": "0xd19bce9f7693598a9fa1f94c548b20887a33f141",
     "logoPath": "/src/assets/img/placeholder.svg",
     "smallLogoPath": "/src/assets/img/placeholder.svg",
     "showScoreboard": true,

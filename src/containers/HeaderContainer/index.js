@@ -20,6 +20,7 @@ import {
   shallShowGameGuide,
   getGameGuideType,
   getGameGuideURL,
+  getTokenAddress,
 } from 'utils/configuration'
 
 const mapStateToProps = state => ({
@@ -36,6 +37,7 @@ const mapStateToProps = state => ({
   showGameGuide: shallShowGameGuide(),
   gameGuideType: getGameGuideType(),
   gameGuideURL: getGameGuideURL(),
+  tokenAddress: getTokenAddress(),
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -148,7 +148,7 @@ class Dashboard extends Component {
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               <DecimalValue value={weiToEth(share.isResolved ? share.winnings : share.value)} />&nbsp;
-              <CurrencyName collateralToken={share.event.collateralToken} />
+              <CurrencyName tokenAddress={share.event.collateralToken} />
             </div>
             <div className="col-md-4 dashboardMarket--highlight">
               {share.isRedeemable && (
@@ -193,7 +193,7 @@ class Dashboard extends Component {
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               {new Decimal(averagePrice).toFixed(4)}{' '}
-              {market.event && <CurrencyName collateralToken={market.event.collateralToken} />}
+              {market.event && <CurrencyName tokenAddress={market.event.collateralToken} />}
             </div>
             <div className="col-md-4 dashboardMarket--highlight">
               {moment.utc(trade.date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}

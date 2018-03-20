@@ -58,7 +58,7 @@ class MarketMyTrades extends Component {
             {Decimal(weiToEth(trade.cost))
               .toDP(2, 1)
               .toString()}&nbsp;
-            <CurrencyName collateralToken={market.event.collateralToken} />
+            <CurrencyName tokenAddress={market.event.collateralToken} />
           </Fragment>
         )
       }

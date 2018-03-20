@@ -1,4 +1,4 @@
-import { initGnosisConnection, getCurrentBalance, getCurrentAccount, getGasPrice, getEtherTokens } from 'api'
+import { initGnosisConnection, getCurrentBalance, getCurrentAccount, getGasPrice, getEtherTokens, getTokenSymbol } from 'api'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
@@ -22,6 +22,11 @@ export const requestGasPrice = () => async (dispatch) => {
 export const requestEtherTokens = account => async (dispatch) => {
   const etherTokens = await getEtherTokens(account)
   dispatch(setEtherTokens({ entityType: 'etherTokens', account, etherTokens }))
+}
+
+export const requestTokenSymbol = tokenAddress => async (dispatch) => {
+  const tokenSymbol = await getTokenSymbol(tokenAddress)
+  dispatch(setTokenSymbol({ tokenAddress, tokenSymbol }))
 }
 
 /**
