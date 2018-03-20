@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
 import { replace } from 'react-router-redux'
-import { requestGasPrice } from 'actions/blockchain'
+import { requestGasPrice, requestTokenSymbol } from 'actions/blockchain'
 import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
 import { redeemWinnings } from 'actions/market'
@@ -26,6 +26,7 @@ import {
 } from 'routes/MarketDetails/store/selectors'
 import { checkWalletConnection, getCurrentAccount, getCurrentBalance } from 'integrations/store/selectors'
 import { isModerator, getModerators } from 'utils/helpers'
+import { getTokenSymbol } from 'selectors/blockchain'
 
 let marketId
 
@@ -65,10 +66,11 @@ const mapStateToProps = (state, ownProps) => {
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
     currentBalance: getCurrentBalance(state),
+    collateralTokenSymbol: getTokenSymbol(state, market.event?.collateralToken),
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchMarket: () => dispatch(requestMarket(marketId)),
   fetchMarketShares: accountAddress => dispatch(requestMarketSharesForAccount(marketId, accountAddress)),
   fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(marketId, accountAddress)),
@@ -81,6 +83,7 @@ const mapDispatchToProps = dispatch => ({
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
+  requestTokenSymbol: () => dispatch(requestTokenSymbol(ownProps.market?.event?.collateralToken)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)

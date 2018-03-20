@@ -1,4 +1,4 @@
-import { initGnosisConnection, getCurrentBalance, getCurrentAccount, getGasPrice, getEtherTokens } from 'api'
+import { initGnosisConnection, getCurrentBalance, getCurrentAccount, getGasPrice, getEtherTokens, getTokenSymbol } from 'api'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
@@ -10,6 +10,7 @@ export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setEtherTokens = createAction('SET_ETHER_TOKENS')
+export const setTokenSymbol = createAction('SET_TOKEN_NAME')
 
 export const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
@@ -21,6 +22,11 @@ export const requestGasPrice = () => async (dispatch) => {
 export const requestEtherTokens = account => async (dispatch) => {
   const etherTokens = await getEtherTokens(account)
   dispatch(setEtherTokens({ entityType: 'etherTokens', account, etherTokens }))
+}
+
+export const requestTokenSymbol = tokenAddress => async (dispatch) => {
+  const tokenSymbol = await getTokenSymbol(tokenAddress)
+  dispatch(setTokenSymbol({ tokenAddress, tokenSymbol }))
 }
 
 /**

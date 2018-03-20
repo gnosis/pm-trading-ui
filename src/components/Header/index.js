@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
-import { collateralTokenToText } from 'components/CurrencyName'
+import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
@@ -37,6 +37,7 @@ class Header extends Component {
       showGameGuide,
       gameGuideType,
       gameGuideURL,
+      tokenAddress,
     } = this.props
 
     const logoVars = {}
@@ -99,18 +100,18 @@ class Header extends Component {
           <div className={cx('group', 'right')}>
             {hasWallet &&
               currentProvider && (
-                <div className={cx('account')}>
-                  {currentNetwork &&
+              <div className={cx('account')}>
+                {currentNetwork &&
                     currentNetwork !== 'MAIN' && (
-                      <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
-                    )}
-                  <DecimalValue value={currentBalance} className={cx('balance', 'test')} />&nbsp;
-                  <span className={cx('account', 'text')}>{collateralTokenToText()}</span>
-                  <ProviderIcon provider={currentProvider} />
-                  <Identicon account={currentAccount} />
-                  <MenuAccountDropdown />
-                </div>
-              )}
+                    <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
+                )}
+                <DecimalValue value={currentBalance} className={cx('balance', 'test')} />&nbsp;
+                <CurrencyName className={cx('account', 'text')} tokenAddress={tokenAddress} />
+                <ProviderIcon provider={currentProvider} />
+                <Identicon account={currentAccount} />
+                <MenuAccountDropdown />
+              </div>
+            )}
             {!hasWallet && (
               <a className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
                 Connect a wallet
@@ -138,6 +139,7 @@ Header.propTypes = {
   showGameGuide: PropTypes.bool,
   gameGuideType: PropTypes.string,
   gameGuideURL: PropTypes.string,
+  tokenAddress: PropTypes.string.isRequired,
 }
 
 Header.defaultProps = {

@@ -39,3 +39,5 @@ export const getGameGuideURL = () => config.interface?.gameGuide?.url
 export const shallDisplayFooter = () => !!config.interface?.footer?.display
 
 export const getFooterContent = () => config.interface?.footer?.content
+
+export const getTokenAddress = () => config.interface?.token

@@ -37,6 +37,10 @@ const getSoonClosingMarkets = (markets = [], limit) =>
 
 class Dashboard extends Component {
   componentDidMount() {
+    if (!this.props.tokenSymbol) {
+      this.props.requestTokenSymbol()
+    }
+
     if (!this.props.hasWallet) {
       this.props.changeUrl('/markets/list')
       return
@@ -148,7 +152,7 @@ class Dashboard extends Component {
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               <DecimalValue value={weiToEth(share.isResolved ? share.winnings : share.value)} />&nbsp;
-              <CurrencyName collateralToken={share.event.collateralToken} />
+              <CurrencyName tokenAddress={share.event.collateralToken} />
             </div>
             <div className="col-md-4 dashboardMarket--highlight">
               {share.isRedeemable && (
@@ -193,7 +197,7 @@ class Dashboard extends Component {
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
               {new Decimal(averagePrice).toFixed(4)}{' '}
-              {market.event && <CurrencyName collateralToken={market.event.collateralToken} />}
+              {market.event && <CurrencyName tokenAddress={market.event.collateralToken} />}
             </div>
             <div className="col-md-4 dashboardMarket--highlight">
               {moment.utc(trade.date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
@@ -273,12 +277,14 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { hasWallet, etherTokens, accountPredictiveAssets } = this.props
+    const {
+      hasWallet, etherTokens, accountPredictiveAssets, tokenSymbol,
+    } = this.props
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     const predictedProfitFormatted = Decimal(accountPredictiveAssets).toDP(4, 1).toString()
     if (hasWallet) {
-      metricsSection = <Metrics tokens={etherTokens} predictedProfit={predictedProfitFormatted} />
+      metricsSection = <Metrics tokens={etherTokens} tokenSymbol={tokenSymbol} predictedProfit={predictedProfitFormatted} />
 
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
@@ -342,6 +348,8 @@ Dashboard.propTypes = {
   redeemWinnings: PropTypes.func,
   accountPredictiveAssets: PropTypes.string,
   etherTokens: PropTypes.string,
+  tokenSymbol: PropTypes.string,
+  requestTokenSymbol: PropTypes.func,
 }
 
 export default Dashboard
