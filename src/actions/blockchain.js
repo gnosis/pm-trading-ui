@@ -1,9 +1,17 @@
-import { initGnosisConnection, getCurrentBalance, getCurrentAccount, getGasPrice, getTokenSymbol, getTokenBalance } from 'api'
+import {
+  initGnosisConnection,
+  getCurrentBalance,
+  getCurrentAccount,
+  getGasPrice,
+  getTokenSymbol,
+  getTokenBalance,
+} from 'api'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
+import { getTokenAddress } from 'utils/configuration'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -45,19 +53,17 @@ export const initGnosis = () => async (dispatch, getState) => {
       // init Gnosis connection
       if (newProvider.account) {
         const opts = getGnosisJsOptions(newProvider)
-        console.log(newProvider)
-        console.log(opts)
         await initGnosisConnection(opts)
       } else {
         throw new Error('No account found')
       }
 
-      await dispatch(setGnosisInitialized({ initialized: true }))
-      await requestEtherTokens()
+      dispatch(setGnosisInitialized({ initialized: true }))
+      getTokenBalance(getTokenAddress(), await getCurrentAccount())
     }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)
-    await dispatch(setConnectionStatus({ connected: false }))
+    dispatch(setConnectionStatus({ connected: false }))
     return dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 

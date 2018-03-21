@@ -53,7 +53,7 @@ class Dashboard extends Component {
       if (this.props.hasWallet) {
         this.props.requestAccountShares(this.props.defaultAccount)
         this.props.requestAccountTrades(this.props.defaultAccount)
-        this.props.requestEtherTokens(this.props.defaultAccount)
+        this.props.requestDefaultToken(this.props.defaultAccount)
       }
     }
   }
@@ -343,7 +343,7 @@ Dashboard.propTypes = {
   requestAccountShares: PropTypes.func,
   requestAccountTrades: PropTypes.func,
   changeUrl: PropTypes.func,
-  requestEtherTokens: PropTypes.func,
+  requestDefaultToken: PropTypes.func.isRequired,
   gnosisInitialized: PropTypes.bool,
   redeemWinnings: PropTypes.func,
   accountPredictiveAssets: PropTypes.string,

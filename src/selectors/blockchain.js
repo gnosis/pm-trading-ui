@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { getTokenAddress } from 'utils/configuration'
 
 /**
  * Returns if gnosis.js is initialized or not
@@ -10,16 +11,17 @@ export const triedToConnect = state => !!state.blockchain.get('connectionTried')
 
 export const isGasCostFetched = (state, property) => state.blockchain.getIn(['gasCosts', property]) !== undefined
 
-export const getEtherTokensAmount = (state, account) => {
-  const etherTokensAmount = state.blockchain.getIn(['etherTokens', account], 0)
-  let etherTokensDecimal
+export const getDefaultTokenAmount = (state) => {
+  const defaultTokenAddress = getTokenAddress()
+  const etherTokensAmount = state.blockchain.getIn(['tokenBalances', defaultTokenAddress], 0)
+  let defaultTokenDecimal
   try {
-    etherTokensDecimal = Decimal(etherTokensAmount)
+    defaultTokenDecimal = Decimal(etherTokensAmount)
   } catch (e) {
-    etherTokensDecimal = Decimal(0)
+    defaultTokenDecimal = Decimal(0)
   }
 
-  return etherTokensDecimal
+  return defaultTokenDecimal
 }
 
 export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['tokenSymbols', tokenAddress])
