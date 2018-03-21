@@ -6,6 +6,7 @@ import {
   setGasPrice,
   setEtherTokens,
   setTokenSymbol,
+  setTokenBalance,
 } from 'actions/blockchain'
 import { setGasCost } from 'routes/MarketDetails/store/actions'
 
@@ -26,6 +27,8 @@ const reducer = handleActions(
       state.setIn([entityType, account], etherTokens),
     [setTokenSymbol]: (state, { payload: { tokenAddress, tokenSymbol } }) =>
       state.setIn(['tokenSymbols', tokenAddress], tokenSymbol),
+    [setTokenBalance]: (state, { payload: { tokenAddress, tokenBalance } }) =>
+      state.setIn(['tokenBalances', tokenAddress], tokenBalance),
   },
   Map({
     gasCosts: Object.keys(GAS_COST).reduce((acc, item) => acc.set(GAS_COST[item], undefined), Map()),
@@ -34,6 +37,7 @@ const reducer = handleActions(
     connectionTried: false,
     etherTokens: Map(),
     tokenSymbols: Map(),
+    tokenBalances: Map(),
   }),
 )
 

@@ -1,8 +1,8 @@
 import { createSelector, createStructuredSelector } from 'reselect'
 import { getCurrentAccount } from 'integrations/store/selectors'
-import { firstOlympiaUsersSelectorAsList, meSelector, olympiaMainnetRegistryAddress } from '../store/selectors'
+import { firstTournamentUsersSelectorAsList, meSelector, tournamentMainnetRegistryAddress } from '../store/selectors'
 
-const usersSelector = createSelector(firstOlympiaUsersSelectorAsList, meSelector, (firstUsers, me) => {
+const usersSelector = createSelector(firstTournamentUsersSelectorAsList, meSelector, (firstUsers, me) => {
   if (!me) {
     return firstUsers
   }
@@ -19,6 +19,6 @@ const usersSelector = createSelector(firstOlympiaUsersSelectorAsList, meSelector
 
 export default createStructuredSelector({
   data: usersSelector,
-  mainnetAddress: olympiaMainnetRegistryAddress,
+  mainnetAddress: tournamentMainnetRegistryAddress,
   myAccount: getCurrentAccount,
 })

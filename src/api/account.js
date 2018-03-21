@@ -1,4 +1,3 @@
-import Decimal from 'decimal.js'
 import { weiToEth, hexWithPrefix } from 'utils/helpers'
 import Gnosis from '@gnosis.pm/gnosisjs/'
 import * as api from 'api'
@@ -21,26 +20,6 @@ export const getCurrentBalance = async (account) => {
   const balanceValue = await new Promise((resolve, reject) =>
     gnosis.web3.eth.getBalance(account, (e, balance) => (e ? reject(e) : resolve(weiToEth(balance.toString())))))
   return balanceValue
-}
-
-/**
- * Returns the amount of ether tokens
- * @param {*string} account address
- */
-export const getEtherTokens = async (account) => {
-  const gnosis = await api.getGnosisConnection()
-
-  if (gnosis && gnosis.etherToken) {
-    const balance = await gnosis.etherToken.balanceOf(account) // balance is a BigNumber
-    return new Decimal(balance.toFixed(0))
-  }
-  return undefined
-}
-
-export const getOlympiaTokensByAccount = async (account) => {
-  const gnosis = await api.getGnosisConnection()
-  const balance = await gnosis.olympiaToken.balanceOf(account)
-  return new Decimal(balance.toFixed(0)).toString()
 }
 
 export const getMainnetAddressForRinkebyAccount = async (account) => {

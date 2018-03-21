@@ -8,7 +8,7 @@ import selector from './selector'
 
 class ScoreBoard extends React.Component {
   componentDidMount() {
-    this.props.fetchOlympiaUsers()
+    this.props.fetchTournamentUsers()
   }
 
   render() {
@@ -40,7 +40,7 @@ ScoreBoard.propTypes = {
   })),
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
-  fetchOlympiaUsers: PropTypes.func.isRequired,
+  fetchTournamentUsers: PropTypes.func.isRequired,
   openSetMainnetAddressModal: PropTypes.func.isRequired,
 }
 

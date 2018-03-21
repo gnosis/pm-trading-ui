@@ -1,11 +1,11 @@
 import { openModal } from 'actions/modal'
 
-import { fetchOlympiaUsers, addUsers } from '../store/actions'
+import { fetchTournamentUsers, addUsers } from '../store/actions'
 
 const openSetMainnetAddressModal = () => openModal({ modalName: 'ModalSetMainnetAddress' })
 
 export default {
-  fetchOlympiaUsers,
+  fetchTournamentUsers,
   addUsers,
   openSetMainnetAddressModal,
 }

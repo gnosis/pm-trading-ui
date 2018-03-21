@@ -45,6 +45,7 @@
     "decimal.js": "^10.0.0",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
+    "jsontokens": "^0.7.7",
     "lodash": "^4.17.5",
     "moment": "^2.19.2",
     "moment-duration-format": "^2.2.1",
@@ -75,6 +76,7 @@
     "reselect": "^3.0.1",
     "seedrandom": "^2.4.3",
     "sha1": "^1.1.1",
+    "uport-connect": "^0.7.1",
     "uuid": "^3.1.0",
     "web3": "1.0.0-beta.30"
   },
