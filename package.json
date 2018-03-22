@@ -8,8 +8,10 @@
     "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack -p --progress --config webpack.prod.config.js",
     "build": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
     "clean": "rm -rf dist",
-    "start-dev": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
-    "start-prod": "NODE_ENV=production node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info --config webpack.prod.config.js",
+    "start-dev":
+      "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
+    "start-prod":
+      "NODE_ENV=production node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info --config webpack.prod.config.js",
     "start": "if test \"$NODE_ENV\" = \"production\" ; then npm run start-prod; else npm run start-dev; fi ",
     "start:standalone": "cross-env GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' npm start",
     "lint": "eslint ./src --quiet",
@@ -25,13 +27,9 @@
   "author": "Gnosis",
   "license": "ISC",
   "jest": {
-    "modulePaths": [
-      "<rootDir>/src/"
-    ]
+    "modulePaths": ["<rootDir>/src/"]
   },
-  "pre-commit": [
-    "precommit"
-  ],
+  "pre-commit": ["precommit"],
   "dependencies": {
     "@gnosis.pm/gnosisjs": "^1.1.1",
     "autobind-decorator": "^2.1.0",
@@ -82,7 +80,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.39",
-    "@babel/core": "^7.0.0-beta.39",
+    "@babel/core": "^7.0.0-beta.42",
     "@babel/preset-env": "^7.0.0-beta.39",
     "@babel/preset-react": "^7.0.0-beta.39",
     "@babel/preset-stage-0": "^7.0.0-beta.39",
@@ -91,9 +89,9 @@
     "@storybook/addon-links": "^3.3.12",
     "@storybook/react": "^3.3.12",
     "autoprefixer": "^8.0.0",
-    "babel-core": "^7.0.0-bridge.0",
+    "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.2.1",
-    "babel-jest": "^22.2.0",
+    "babel-jest": "^22.4.3",
     "babel-plugin-dynamic-import-node": "^1.2.0",
     "babel-plugin-lodash": "^3.2.11",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",

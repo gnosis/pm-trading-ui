@@ -1,13 +1,4 @@
-import {
-  isGnosisInitialized,
-  triedToConnect,
-  getEtherTokensAmount,
-} from 'selectors/blockchain'
-// import getGasPrice from 'routes/MarketDetails/store/selectors/getGasPrice'
-// import getGasCosts from 'routes/MarketDetails/store/selectors/getGasCosts'
-// import isGasCostFetched from 'routes/MarketDetails/store/selectors/isGasCostFetched'
-// import isGasPriceFetched from 'routes/MarketDetails/store/selectors/isGasPriceFetched'
-
+import { isGnosisInitialized, triedToConnect, getTokenAmount } from 'selectors/blockchain'
 import { getGasPrice, getGasCosts, isGasCostFetched, isGasPriceFetched } from 'routes/MarketDetails/store/selectors'
 
 import { Map } from 'immutable'
@@ -94,43 +85,43 @@ describe('Blockchain selectors', () => {
     })
   })
 
-  describe('getEtherTokensAmount', () => {
+  describe('getTokenAmount', () => {
     it('Should return correct amount of tokens the user has', () => {
-      const account = '0x000000000'
-      const etherTokensAmount = '18000000000000'
+      const tokenAddress = '0x000000'
+      const tokensAmount = '18000000000000'
       const state = {
         blockchain: Map({
-          etherTokens: Map({
-            [account]: etherTokensAmount,
+          tokenBalances: Map({
+            [tokenAddress]: tokensAmount,
           }),
         }),
       }
 
-      expect(getEtherTokensAmount(state, account).toString()).toEqual(etherTokensAmount)
+      expect(getTokenAmount(state, tokenAddress).toString()).toEqual(tokensAmount)
     })
 
     it('Should return 0 when ether tokens for account arent set', () => {
       const state = {
         blockchain: Map({
-          etherTokens: Map({}),
+          tokenBalances: Map({}),
         }),
       }
 
-      expect(getEtherTokensAmount(state, '0x0000').toString()).toEqual('0')
+      expect(getTokenAmount(state, '0x0000').toString()).toEqual('0')
     })
 
     it('Should return 0 when value is not a number', () => {
-      const account = '0x000000000'
-      const etherTokensAmount = 'passed test'
+      const tokenAddress = '0x000000000'
+      const tokensAmount = 'passed test'
       const state = {
         blockchain: Map({
-          etherTokens: Map({
-            [account]: etherTokensAmount,
+          tokenBalances: Map({
+            [tokenAddress]: tokensAmount,
           }),
         }),
       }
 
-      expect(getEtherTokensAmount(state, '0x0000').toString()).toEqual('0')
+      expect(getTokenAmount(state, '0x0000').toString()).toEqual('0')
     })
   })
 
