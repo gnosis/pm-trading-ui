@@ -6,7 +6,7 @@ import { getMarkets } from 'selectors/market'
 import { profitsSelector } from 'containers/DashboardPage/store/selectors'
 import { getAccountTrades } from 'selectors/marketTrades'
 import { getAccountShares } from 'selectors/marketShares'
-import { isGnosisInitialized, getDefaultTokenAmount, getTokenSymbol } from 'selectors/blockchain'
+import { isGnosisInitialized, getTokenAmount, getTokenSymbol } from 'selectors/blockchain'
 import { getCurrentAccount, checkWalletConnection } from 'integrations/store/selectors'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
   const accountPredictiveAssets = weiToEth(profitsSelector(state, defaultAccount))
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
-  let defaultTokenAmount = getDefaultTokenAmount(state, defaultAccount)
+  let defaultTokenAmount = getTokenAmount(state, tokenAddress)
   const hasWallet = checkWalletConnection(state)
   const tokenSymbol = getTokenSymbol(state, tokenAddress)
 
@@ -53,7 +53,7 @@ const mapDispatchToProps = dispatch => ({
   requestAccountShares: address => dispatch(requestAccountShares(address)),
   changeUrl: url => dispatch(push(url)),
   requestGasPrice: () => dispatch(requestGasPrice()),
-  requestEtherTokens: account => dispatch(requestTokenBalance(account)),
+  requestDefaultTokenAmount: account => dispatch(requestTokenBalance(tokenAddress, account)),
   requestTokenSymbol: () => dispatch(requestTokenSymbol(tokenAddress)),
 })
 
