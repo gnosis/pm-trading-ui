@@ -1,17 +1,30 @@
 import { Connect, SimpleSigner } from 'uport-connect'
+import { getUportOptions, isTournament } from 'utils/configuration'
 import { isValid as isValidPushNotificaiton } from './uportNotifications'
 import { isValid as isValidQrCredential } from './uportQr'
 import { notificationsEnabled } from './connector'
 
-export const UPORT_KEY = 'GNOSIS_USER'
+const { clientId, appName, network } = getUportOptions()
+const tournament = isTournament()
+
+export const UPORT_KEY = `${appName}_USER`
 
 let uport = null
+// http://developer.uport.me/guides.html#register-your-app
 export const connect = () => {
-  uport = new Connect('Gnosis', {
-    clientId: '2ozUxc1QzFVo7b51giZsbkEsKw2nJ87amAf',
-    network: 'rinkeby',
-    signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
-  })
+  if (!tournament) {
+    uport = new Connect('Gnosis', {
+      clientId: '2ozUxc1QzFVo7b51giZsbkEsKw2nJ87amAf',
+      network: 'rinkeby',
+      signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
+    })
+  } else {
+    uport = new Connect(appName, {
+      clientId,
+      network,
+      signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
+    })
+  }
 }
 
 export const getCredentialsFromLocalStorage = () => {

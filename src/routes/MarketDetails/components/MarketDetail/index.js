@@ -71,8 +71,8 @@ class MarketDetail extends Component {
           this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
         }
 
-        if (!this.props.collateralTokenSymbol) {
-          this.props.requestTokenSymbol()
+        if (!this.props.collateralTokenSymbol && this.props.market.event.collateralToken) {
+          this.props.requestTokenSymbol(this.props.market.event.collateralToken)
         }
       })
       .catch((err) => {
@@ -224,7 +224,7 @@ MarketDetail.propTypes = {
   gasCosts: ImmutablePropTypes.map,
   gasPrice: PropTypes.instanceOf(Decimal),
   match: ReactRouterMatchShape.isRequired,
-  collateralTokenSymbol: PropTypes.string.isRequired,
+  collateralTokenSymbol: PropTypes.string,
   requestTokenSymbol: PropTypes.func.isRequired,
 }
 
@@ -238,6 +238,7 @@ MarketDetail.defaultProps = {
   defaultAccount: '',
   gasCosts: Map({}),
   gasPrice: Decimal(0),
+  collateralTokenSymbol: '',
 }
 
 export default MarketDetail

@@ -174,7 +174,7 @@ export const generateDeterministicRandomName = (seed) => {
 
   // generate 5 so later we have more params left over for longer names, without changing everyone's other words
   // eslint-disable-next-line no-unsued-vars
-  const [r1, r2, ...params] = range(0, 5).map(rng)
+  const [r1, r2] = range(0, 5).map(rng)
 
   const { adjectives, nouns } = dictionary
 

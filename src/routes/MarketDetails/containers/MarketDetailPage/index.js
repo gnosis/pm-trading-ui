@@ -70,7 +70,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   fetchMarket: () => dispatch(requestMarket(marketId)),
   fetchMarketShares: accountAddress => dispatch(requestMarketSharesForAccount(marketId, accountAddress)),
   fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(marketId, accountAddress)),
@@ -83,7 +83,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
-  requestTokenSymbol: () => dispatch(requestTokenSymbol(ownProps.market?.event?.collateralToken)),
+  requestTokenSymbol: tokenAddress => dispatch(requestTokenSymbol(tokenAddress)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)

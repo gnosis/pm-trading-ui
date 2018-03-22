@@ -24,7 +24,7 @@
   "fetchMarketTimeInterval": 15000,
   "ravenPublicDSN": null,
   "interface": {
-    "tournament": false,
+    "tournament": true,
     "token": "0xd19bce9f7693598a9fa1f94c548b20887a33f141",
     "logoPath": "/assets/img/placeholder.svg",
     "smallLogoPath": "/assets/img/placeholder.svg",
@@ -42,6 +42,12 @@
         "markdown": true
       }
     },
-    "faviconPath": "assets/img/gnosis_logo_icon.svg"
+    "faviconPath": "assets/img/gnosis_logo_icon.svg",
+    "provider": "UPORT",
+    "uportOptions": {
+      "appName": "Tournament",
+      "clientId": "",
+      "network": "rinkeby"
+    }
   }
 }

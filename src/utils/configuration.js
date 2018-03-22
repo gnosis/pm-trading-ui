@@ -41,3 +41,7 @@ export const shallDisplayFooter = () => !!config.interface?.footer?.display
 export const getFooterContent = () => config.interface?.footer?.content
 
 export const getTokenAddress = () => config.interface?.token
+
+export const getProvider = () => config.interface?.provider
+
+export const getUportOptions = () => config.interface?.uportOptions
