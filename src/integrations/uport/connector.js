@@ -4,7 +4,9 @@ import { isValid as isValidPushNotificaiton } from './uportNotifications'
 import { isValid as isValidQrCredential } from './uportQr'
 import { notificationsEnabled } from './connector'
 
-const { clientId, appName, network } = getUportOptions()
+const {
+  clientId, appName, network, privateKey,
+} = getUportOptions()
 const tournament = isTournament()
 
 export const UPORT_KEY = `${appName}_USER`
@@ -22,7 +24,7 @@ export const connect = () => {
     uport = new Connect(appName, {
       clientId,
       network,
-      signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
+      signer: SimpleSigner(privateKey),
     })
   }
 }

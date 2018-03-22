@@ -24,7 +24,7 @@
   "fetchMarketTimeInterval": 15000,
   "ravenPublicDSN": null,
   "interface": {
-    "tournament": true,
+    "tournament": false,
     "token": "0xd19bce9f7693598a9fa1f94c548b20887a33f141",
     "logoPath": "/assets/img/placeholder.svg",
     "smallLogoPath": "/assets/img/placeholder.svg",
@@ -47,7 +47,8 @@
     "uportOptions": {
       "appName": "Tournament",
       "clientId": "",
-      "network": "rinkeby"
+      "network": "rinkeby",
+      "privateKey": "sss"
     }
   }
 }
