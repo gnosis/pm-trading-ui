@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import { connect } from 'react-redux'
+import { isTournament } from 'utils/configuration'
 
 import { closeModal } from 'actions/modal'
 
@@ -31,17 +32,19 @@ class BackdropProvider extends Component {
 
   render() {
     const { children, modal: { isOpen } } = this.props
+    const tournament = isTournament()
     return (
       <div className="backdrop">
         <div
           className={cn({
             backdrop__filter: true,
             'backdrop__filter--visible': isOpen,
+            tournament,
           })}
         >
           {isOpen ? <div style={{ position: 'fixed', minWidth: '100vw' }}>{children}</div> : children}
         </div>
-        <div className="backdrop__above">{this.renderBackdropContent()}</div>
+        <div className={cn('backdrop__above', { tournament })}>{this.renderBackdropContent()}</div>
       </div>
     )
   }

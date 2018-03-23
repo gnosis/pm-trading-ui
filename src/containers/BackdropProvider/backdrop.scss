@@ -14,6 +14,12 @@
 
             // disable buttons
             pointer-events: none;
+
+            &.tournament {
+                background-color: #09697b;
+                filter: blur(3px);
+                opacity: 0.9;
+            }
         }
     }
 
@@ -24,6 +30,11 @@
         left: 0;
         right: 0;
         bottom: 0;
+
+        &.tournament {
+            background-color: #09697b;
+            opacity: 0.9;
+        }
 
         &:empty {
             display: none;
