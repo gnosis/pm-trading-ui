@@ -48,7 +48,8 @@
       "appName": "Tournament",
       "clientId": "",
       "network": "rinkeby",
-      "privateKey": "sss"
+      "privateKey": "sss",
+      "useNotifications": false
     }
   }
 }
