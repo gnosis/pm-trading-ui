@@ -33,7 +33,6 @@
   "dependencies": {
     "@gnosis.pm/gnosisjs": "^1.1.1",
     "autobind-decorator": "^2.1.0",
-    "await-delay": "^1.0.0",
     "babel-polyfill": "^6.23.0",
     "blockies": "0.0.2",
     "classnames": "^2.2.5",
@@ -53,8 +52,6 @@
     "raven-js": "^3.23.3",
     "rc-tooltip": "^3.5.0",
     "react": "^16.2.0",
-    "react-autosize-textarea": "^3.0.2",
-    "react-datetime": "^2.10.1",
     "react-dom": "^16.2.0",
     "react-immutable-proptypes": "^2.1.0",
     "react-markdown": "^3.3.0",

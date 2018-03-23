@@ -1,5 +1,10 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { Connect, SimpleSigner } from 'uport-connect'
 import { getUportOptions, isTournament } from 'utils/configuration'
+import Bold from 'components/layout/Bold'
+import Block from 'components/layout/Block'
+import Paragraph from 'components/layout/Paragraph'
 import { isValid as isValidPushNotificaiton } from './uportNotifications'
 import { isValid as isValidQrCredential } from './uportQr'
 import { notificationsEnabled } from './connector'
@@ -10,6 +15,36 @@ const {
 const tournament = isTournament()
 
 export const UPORT_KEY = `${appName}_USER`
+
+const UPORT_QR_TEXT = 'uport-qr-text'
+
+const UportStyle = {
+  marginBottom: '20px',
+}
+
+const TermsStyle = {
+  textDecoration: 'underline',
+  color: '#333',
+}
+
+
+const LoginUport = () => (
+  <Block id={UPORT_QR_TEXT}>
+    <Paragraph style={UportStyle}>
+      {'Log into '}
+      <Bold>{appName}</Bold>
+    </Paragraph>
+    <Paragraph size="small">
+      By logging in via uPort, <br />{` you agree to ${appName}'s `}
+      <Bold>
+        {/* <Link>s rendered outside of a router context cannot navigate */}
+        <a style={TermsStyle} href="/olympia-terms" target="_blank">
+          {'terms of use'}
+        </a>
+      </Bold>
+    </Paragraph>
+  </Block>
+)
 
 let uport = null
 // Get clientId, privateKey from
@@ -43,8 +78,21 @@ export const areCredentialsValid = () => {
 
 export const isUserConnected = uportInstance => !!uportInstance.address
 
+const modifyUportLoginModal = (firstReq) => {
+  if (!document && !firstReq) {
+    return
+  }
+
+  // https://github.com/uport-project/uport-connect/blob/develop/src/util/qrdisplay.js#L41
+  // https://github.com/uport-project/uport-connect/blob/develop/src/util/qrdisplay.js#L72
+  setTimeout(() => {
+    ReactDOM.render(<LoginUport />, document.getElementById(UPORT_QR_TEXT).parentElement)
+  }, 100)
+}
+
 const requestCredentials = useNotifications => async () => {
   try {
+    modifyUportLoginModal(uport.firstReq)
     const cred = await uport.requestCredentials({ notifications: useNotifications })
     localStorage.setItem(UPORT_KEY, JSON.stringify(cred))
 
