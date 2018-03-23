@@ -10,16 +10,16 @@ export const triedToConnect = state => !!state.blockchain.get('connectionTried')
 
 export const isGasCostFetched = (state, property) => state.blockchain.getIn(['gasCosts', property]) !== undefined
 
-export const getEtherTokensAmount = (state, account) => {
-  const etherTokensAmount = state.blockchain.getIn(['etherTokens', account], 0)
-  let etherTokensDecimal
+export const getTokenAmount = (state, tokenAddress) => {
+  const tokenAmount = state.blockchain.getIn(['tokenBalances', tokenAddress], 0)
+  let defaultTokenDecimal
   try {
-    etherTokensDecimal = Decimal(etherTokensAmount)
+    defaultTokenDecimal = Decimal(tokenAmount)
   } catch (e) {
-    etherTokensDecimal = Decimal(0)
+    defaultTokenDecimal = Decimal(0)
   }
 
-  return etherTokensDecimal
+  return defaultTokenDecimal
 }
 
 export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['tokenSymbols', tokenAddress])

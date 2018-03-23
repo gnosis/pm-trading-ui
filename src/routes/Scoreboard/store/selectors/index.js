@@ -1,20 +1,20 @@
 import { createSelector } from 'reselect'
 import { getActiveProvider, getCurrentAccount } from 'integrations/store/selectors'
 
-const olympiaUsersSelectorAsList = (state) => {
-  if (!state.olympia) {
+const tournamentUsersSelectorAsList = (state) => {
+  if (!state.tournament) {
     return undefined
   }
 
-  if (!state.olympia.ranking) {
+  if (!state.tournament.ranking) {
     return undefined
   }
 
-  return state.olympia.ranking.toList()
+  return state.tournament.ranking.toList()
 }
 
-export const firstOlympiaUsersSelectorAsList = createSelector(
-  olympiaUsersSelectorAsList,
+export const firstTournamentUsersSelectorAsList = createSelector(
+  tournamentUsersSelectorAsList,
   users =>
     (users
       ? users
@@ -34,14 +34,14 @@ export const firstOlympiaUsersSelectorAsList = createSelector(
       : undefined),
 )
 
-export const olympiaMainnetRegistryAddress = (state) => {
+export const tournamentMainnetRegistryAddress = (state) => {
   const provider = getActiveProvider(state)
 
   return provider ? provider.mainnetAddress : undefined
 }
 
 export const meSelector = createSelector(
-  olympiaUsersSelectorAsList,
+  tournamentUsersSelectorAsList,
   getCurrentAccount,
   (users, account) => (users ? users.find(user => user.account === account) : undefined),
 )

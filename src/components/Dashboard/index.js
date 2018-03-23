@@ -53,7 +53,7 @@ class Dashboard extends Component {
       if (this.props.hasWallet) {
         this.props.requestAccountShares(this.props.defaultAccount)
         this.props.requestAccountTrades(this.props.defaultAccount)
-        this.props.requestEtherTokens(this.props.defaultAccount)
+        this.props.requestDefaultTokenAmount(this.props.defaultAccount)
       }
     }
   }
@@ -278,13 +278,13 @@ class Dashboard extends Component {
 
   render() {
     const {
-      hasWallet, etherTokens, accountPredictiveAssets, tokenSymbol,
+      hasWallet, defaultTokenAmount, accountPredictiveAssets, tokenSymbol,
     } = this.props
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     const predictedProfitFormatted = Decimal(accountPredictiveAssets).toDP(4, 1).toString()
     if (hasWallet) {
-      metricsSection = <Metrics tokens={etherTokens} tokenSymbol={tokenSymbol} predictedProfit={predictedProfitFormatted} />
+      metricsSection = <Metrics tokens={defaultTokenAmount} tokenSymbol={tokenSymbol} predictedProfit={predictedProfitFormatted} />
 
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
@@ -343,11 +343,11 @@ Dashboard.propTypes = {
   requestAccountShares: PropTypes.func,
   requestAccountTrades: PropTypes.func,
   changeUrl: PropTypes.func,
-  requestEtherTokens: PropTypes.func,
+  requestDefaultTokenAmount: PropTypes.func.isRequired,
   gnosisInitialized: PropTypes.bool,
   redeemWinnings: PropTypes.func,
   accountPredictiveAssets: PropTypes.string,
-  etherTokens: PropTypes.string,
+  defaultTokenAmount: PropTypes.string,
   tokenSymbol: PropTypes.string,
   requestTokenSymbol: PropTypes.func,
 }
