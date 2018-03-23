@@ -34,6 +34,9 @@
       "type": "link",
       "url": "https://gnosis.pm"
     },
+    "termsOfUse": {
+      "url":"https://gnosis.pm"
+    },
     "footer": {
       "display": true,
       "content": {

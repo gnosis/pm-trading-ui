@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Connect, SimpleSigner } from 'uport-connect'
-import { getUportOptions, isTournament } from 'utils/configuration'
+import { getUportOptions, isTournament, getTermsOfUseURL } from 'utils/configuration'
 import Bold from 'components/layout/Bold'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
@@ -27,7 +27,6 @@ const TermsStyle = {
   color: '#333',
 }
 
-
 const LoginUport = () => (
   <Block id={UPORT_QR_TEXT}>
     <Paragraph style={UportStyle}>
@@ -35,10 +34,11 @@ const LoginUport = () => (
       <Bold>{appName}</Bold>
     </Paragraph>
     <Paragraph size="small">
-      By logging in via uPort, <br />{` you agree to ${appName}'s `}
+      By logging in via uPort, <br />
+      {` you agree to ${appName}'s `}
       <Bold>
         {/* <Link>s rendered outside of a router context cannot navigate */}
-        <a style={TermsStyle} href="/olympia-terms" target="_blank">
+        <a style={TermsStyle} href={getTermsOfUseURL()} target="_blank">
           {'terms of use'}
         </a>
       </Bold>

@@ -45,3 +45,5 @@ export const getTokenAddress = () => config.interface?.token
 export const getProvider = () => config.interface?.provider
 
 export const getUportOptions = () => config.interface?.uportOptions
+
+export const getTermsOfUseURL = () => config.interface?.termsOfUse?.url
