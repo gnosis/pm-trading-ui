@@ -24,7 +24,7 @@
   "fetchMarketTimeInterval": 15000,
   "ravenPublicDSN": null,
   "interface": {
-    "tournament": false,
+    "tournament": true,
     "token": "0xd19bce9f7693598a9fa1f94c548b20887a33f141",
     "logoPath": "/assets/img/placeholder.svg",
     "smallLogoPath": "/assets/img/placeholder.svg",
@@ -45,10 +45,10 @@
     "faviconPath": "assets/img/gnosis_logo_icon.svg",
     "provider": "UPORT",
     "uportOptions": {
-      "appName": "Tournament",
-      "clientId": "",
+      "appName": "Tournament test",
+      "clientId": "2ooNzwDvjgZTPswkrewUnxokRUH8KYpRNNL",
       "network": "rinkeby",
-      "privateKey": "sss",
+      "privateKey": "a42611a039cad931c41e072953cb7dcaaa6b2dfefeff6a459d9ce4281acf0c01",
       "useNotifications": false
     }
   }

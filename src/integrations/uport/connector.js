@@ -12,6 +12,7 @@ const tournament = isTournament()
 export const UPORT_KEY = `${appName}_USER`
 
 let uport = null
+// Get clientId, privateKey from
 // http://developer.uport.me/guides.html#register-your-app
 export const connect = () => {
   if (!tournament) {
