@@ -1,9 +1,9 @@
 import React from 'react'
-import cn from 'classnames/bind'
+import cn from 'classnames'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import PropTypes from 'prop-types'
-import Checkbox from 'components/Form/Checkbox'
-import style from './AcceptTOS.scss'
+import Checkbox from 'components/FormCheckbox'
+import style from './AcceptTOS.less'
 
 const cx = cn.bind(style)
 
@@ -23,12 +23,18 @@ const AcceptTOS = ({
         <p className={cx('annotation')}>
           For using Gnosis Management Interface you have to agree with our terms of service and privacy policy
         </p>
-        <Field name="agreedWithTOS" component={Checkbox} className={cx('checkBox')}>
-          I agree with terms of service
-        </Field>
-        <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')}>
-          I agree with privacy policy
-        </Field>
+        <Field
+          name="agreedWithTOS"
+          component={Checkbox}
+          className={cx('checkBox')}
+          text="I agree with terms of service"
+        />
+        <Field
+          name="agreedWithPP"
+          component={Checkbox}
+          className={cx('checkBox')}
+          text="I agree with privacy policy"
+        />
         <button className={cx('loginButton', { disabled })} disabled={disabled} onClick={login}>
           LOGIN
         </button>

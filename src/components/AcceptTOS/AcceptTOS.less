@@ -1,4 +1,4 @@
-@import '../../../scss/vars.scss';
+@import url('../../less/vars.less');
 
 .acceptTOS {
   width: 100%;
@@ -59,7 +59,7 @@
   }
 
   .closeButton {
-    @include closeButton(32px, 5px);
+    .closeButton(32px, 5px);
     top: 20px;
     right: 20px;
     background: transparent;

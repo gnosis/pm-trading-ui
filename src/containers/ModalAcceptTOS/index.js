@@ -1,7 +1,7 @@
-import AcceptTOS from 'components/ModalAcceptTOS'
+import AcceptTOS from 'components/AcceptTOS'
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
-import { initProviders } from 'integrations/store/actions'
+import { initProviders } from 'actions/providers'
 
 const mapStateToProps = (state) => {
   const getFormValue = formValueSelector('tosAgreement')
