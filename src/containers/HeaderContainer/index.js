@@ -41,7 +41,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  openConnectWalletModal: () => dispatch(openModal({ modalName: 'ModalConnectWallet' })),
+  openConnectWalletModal: () => dispatch(openModal({ modalName: 'ModalInstallMetamask' })),
   openNetworkCheckModal: () => dispatch(openModal({ modalName: 'ModalNetworkCheck' })),
 })
 

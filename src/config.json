@@ -24,7 +24,7 @@
   "fetchMarketTimeInterval": 15000,
   "ravenPublicDSN": null,
   "interface": {
-    "tournament": true,
+    "tournament": false,
     "token": "0xd19bce9f7693598a9fa1f94c548b20887a33f141",
     "logoPath": "/assets/img/placeholder.svg",
     "smallLogoPath": "/assets/img/placeholder.svg",
@@ -46,7 +46,7 @@
       }
     },
     "faviconPath": "assets/img/gnosis_logo_icon.svg",
-    "provider": "UPORT",
+    "provider": "METAMASK",
     "uportOptions": {
       "appName": "Tournament test",
       "clientId": "2ooNzwDvjgZTPswkrewUnxokRUH8KYpRNNL",
