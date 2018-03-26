@@ -6,11 +6,13 @@ import { connect } from 'react-redux'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
 import { providerPropType } from 'utils/shapes'
+import Footer from 'components/Footer'
 
 import { connectBlockchain } from 'actions/blockchain'
 
 import LoadingIndicator from 'components/LoadingIndicator'
 
+import PageFrame from 'components/layout/PageFrame'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import HeaderContainer from 'containers/HeaderContainer'
 
@@ -68,6 +70,9 @@ class App extends Component {
         <HeaderContainer version={process.env.VERSION} />
         {this.props.provider && this.props.provider.account && <TransactionFloaterContainer />}
         {childrenContainer}
+        <PageFrame>
+          <Footer />
+        </PageFrame>
       </div>
     )
   }
