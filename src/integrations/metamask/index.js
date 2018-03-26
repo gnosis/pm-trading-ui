@@ -1,5 +1,6 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
+import { hasMetamask } from 'integrations/utils'
 import { timeoutCondition } from 'utils/helpers'
 import Web3 from 'web3'
 
@@ -36,10 +37,7 @@ class Metamask extends InjectedWeb3 {
     this.walletEnabled = false
 
     try {
-      if (
-        typeof window.web3 !== 'undefined' &&
-        window.web3.currentProvider.constructor.name === 'MetamaskInpageProvider'
-      ) {
+      if (hasMetamask()) {
         this.web3 = new Web3(window.web3.currentProvider)
         window.web3 = this.web3
         this.walletEnabled = true

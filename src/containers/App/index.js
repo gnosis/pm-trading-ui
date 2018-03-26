@@ -28,23 +28,23 @@ class App extends Component {
     const newTransitionKey = nextProps.location.pathname.split('/')[1]
 
     if (newTransitionKey !== prevTransitionKey) {
-      this.setState({ transition: true, transitionKey: newTransitionKey })
+      this.setState({ transition: true })
     } else {
       this.setState({ transition: false })
     }
   }
 
   render() {
-    if (!this.props.blockchainConnection) {
-      return (
-        <div className="appContainer">
-          <div className="loader-container">
-            <LoadingIndicator width={100} height={100} />
-            <h1>Connecting</h1>
-          </div>
-        </div>
-      )
-    }
+    // if (!this.props.blockchainConnection) {
+    //   return (
+    //     <div className="appContainer">
+    //       <div className="loader-container">
+    //         <LoadingIndicator width={100} height={100} />
+    //         <h1>Connecting</h1>
+    //       </div>
+    //     </div>
+    //   )
+    // }
 
     const timeout = { enter: 200, exit: 200 }
 

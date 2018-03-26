@@ -6,6 +6,7 @@ import { collateralTokenToText } from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import Identicon from 'components/Identicon'
 import ProviderIcon from 'components/ProviderIcon'
+import { metamaskUnlocked } from 'integrations/utils'
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
 
@@ -15,8 +16,12 @@ import './header.less'
 
 class Header extends Component {
   @autobind
-  handleConnectWalletClick() {
-    this.props.openConnectWalletModal()
+  async handleConnectWalletClick() {
+    if (!(await metamaskUnlocked())) {
+      this.props.openInstallMetamaskModal()
+    } else {
+      this.props.openAcceptTOSModal()
+    }
   }
 
   render() {
@@ -65,20 +70,20 @@ class Header extends Component {
           <div className="headerContainer__group headerContainer__group--right">
             {hasWallet &&
               currentProvider && (
-                <div className="headerContainer__account">
-                  {currentNetwork &&
+              <div className="headerContainer__account">
+                {currentNetwork &&
                     currentNetwork !== 'MAIN' && (
-                      <span className="headerContainer__network--text">
+                    <span className="headerContainer__network--text">
                         Network: {upperFirst(currentNetwork.toLowerCase())}
-                      </span>
-                    )}
-                  <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
-                  <span className="headerContainer__account--text">{collateralTokenToText()}</span>
-                  <ProviderIcon provider={currentProvider} />
-                  <Identicon account={currentAccount} />
-                  <MenuAccountDropdown />
-                </div>
-              )}
+                  </span>
+                )}
+                <DecimalValue value={currentBalance} className="headerContainer__account--text" />&nbsp;
+                <span className="headerContainer__account--text">{collateralTokenToText()}</span>
+                <ProviderIcon provider={currentProvider} />
+                <Identicon account={currentAccount} />
+                <MenuAccountDropdown />
+              </div>
+            )}
             {!hasWallet && (
               <a className="headerContainer__connect-wallet" onClick={this.handleConnectWalletClick}>
                 Connect a wallet
@@ -98,7 +103,8 @@ Header.propTypes = {
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
-  openConnectWalletModal: PropTypes.func.isRequired,
+  openAcceptTOSModal: PropTypes.func.isRequired,
+  openInstallMetamaskModal: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {
