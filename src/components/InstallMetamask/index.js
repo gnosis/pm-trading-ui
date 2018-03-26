@@ -12,13 +12,13 @@ const logoStyle = {
 }
 
 const InstallMetamask = ({ closeModal }) => (
-  <div className="installMetamask">
-    <button className="closeButton" onClick={() => closeModal()} />
+  <div className={cx('installMetamask')}>
+    <button className={cx('closeButton')} onClick={() => closeModal()} />
     <img src={OlympiaIcon} alt="logo" style={logoStyle} />
-    <h3 className="installText">Install MetaMask</h3>
-    <p className="downloadText">
+    <h3 className={cx('installText')}>Install MetaMask</h3>
+    <p className={cx('downloadText')}>
       Metamask is not currently installed or detected.{' '}
-      <a className="downloadLink" href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
+      <a className={cx('downloadLink')} href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
         Please download and install MetaMask
       </a>{' '}
       to start using Olympia.
