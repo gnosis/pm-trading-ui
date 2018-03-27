@@ -5,9 +5,9 @@ import './Footer.less'
 
 const Footer = () => (
   <Block className="footer">
-    <Paragraph color="medium">
+    <Paragraph color="small">
       Trading on prediction markets carry a high degree of financial risk to your capital. Please read our full{' '}
-      <a href="/TermsOfService.html" target="_blank" className="footerLink">
+      <a href="/RiskDisclaimerPolicy.html" target="_blank" className="footerLink">
         Risk Disclaimer
       </a>{' '}
       and{' '}

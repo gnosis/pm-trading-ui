@@ -125,6 +125,6 @@ module.exports = {
         compress: false,
       },
     }),
-    new CopyWebpackPlugin(['assets/TermsOfService.html', 'assets/PrivacyPolicy.html']),
+    new CopyWebpackPlugin(['assets/TermsOfService.html', 'assets/PrivacyPolicy.html', 'assets/RiskDisclaimerPolicy.html']),
   ],
 }

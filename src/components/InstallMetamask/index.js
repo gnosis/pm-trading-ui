@@ -21,7 +21,7 @@ const InstallMetamask = ({ closeModal }) => (
       <a className={cx('downloadLink')} href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
         Please download and install MetaMask
       </a>{' '}
-      to start using Olympia.
+      to start using Gnosis Trading Interface.
     </p>
   </div>
 )

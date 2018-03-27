@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
   return {
     tosAgreed: !!getFormValue(state, 'agreedWithTOS'),
     ppAgreed: !!getFormValue(state, 'agreedWithPP'),
+    rdAgreed: !!getFormValue(state, 'agreedWithRDP'),
   }
 }
 
