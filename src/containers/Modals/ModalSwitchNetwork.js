@@ -2,7 +2,7 @@
 import { upperFirst } from 'lodash'
 
 import { connect } from 'react-redux'
-import NetworkCheck from 'components/ModalContent/NetworkCheck'
+import SwitchNetwork from 'components/ModalContent/SwitchNetwork'
 
 import { getTargetNetworkId } from 'integrations/store/selectors'
 
@@ -27,4 +27,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(NetworkCheck)
+export default connect(mapStateToProps)(SwitchNetwork)

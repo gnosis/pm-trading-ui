@@ -13,7 +13,7 @@ const logoStyle = {
 
 const UnlockMetamask = ({ closeModal }) => (
   <div className={cx('unlockMetamask')}>
-    <button className={cx('closeButton')} onClick={() => closeModal()} />
+    <button className={cx('closeButton')} onClick={closeModal} />
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
     <h3 className={cx('unlockHeading')}>Unlock your MetaMask wallet</h3>
     <p className={cx('unlockText')}>Please unlock your MetaMask wallet to start using Gnosis Olympia.</p>

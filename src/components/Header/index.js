@@ -7,7 +7,7 @@ import className from 'classnames/bind'
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
-import { hasMetamask, isMetamaskUnlocked } from 'integrations/utils'
+import { hasMetamask, isMetamaskUnlocked } from 'integrations/metamask/utils'
 
 import Identicon from './Identicon'
 import ProviderIcon from './ProviderIcon'
