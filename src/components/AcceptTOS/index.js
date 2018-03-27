@@ -21,7 +21,14 @@ const AcceptTOS = ({
       <div className={cx('tosContainer')}>
         <h4 className={cx('acceptHeading')}>Terms of service and privacy policy</h4>
         <p className={cx('annotation')}>
-          For using Gnosis Management Interface you have to agree with our terms of service and privacy policy
+          For using Gnosis Management Interface you have to agree with our{' '}
+          <a href="/TermsOfService.html" target="_blank">
+            terms of service
+          </a>{' '}
+          and{' '}
+          <a href="/PrivacyPolicy.html" target="_blank">
+            privacy policy
+          </a>
         </p>
         <Field
           name="agreedWithTOS"
@@ -29,12 +36,7 @@ const AcceptTOS = ({
           className={cx('checkBox')}
           text="I agree with terms of service"
         />
-        <Field
-          name="agreedWithPP"
-          component={Checkbox}
-          className={cx('checkBox')}
-          text="I agree with privacy policy"
-        />
+        <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')} text="I agree with privacy policy" />
         <button className={cx('loginButton', { disabled })} disabled={disabled} onClick={login}>
           LOGIN
         </button>

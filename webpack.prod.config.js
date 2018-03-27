@@ -2,6 +2,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -30,10 +31,12 @@ if (isProductionEnv) {
 }
 
 const gnosisDbUrl =
-  process.env.GNOSISDB_URL || `${config.gnosisdb.protocol}://${config.gnosisdb.hostProd}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
+  process.env.GNOSISDB_URL ||
+  `${config.gnosisdb.protocol}://${config.gnosisdb.hostProd}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
 
 const ethereumUrl =
-  process.env.ETHEREUM_URL || `${config.ethereum.protocol}://${config.ethereum.hostProd}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
+  process.env.ETHEREUM_URL ||
+  `${config.ethereum.protocol}://${config.ethereum.hostProd}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
   devtool: 'source-map',
@@ -122,5 +125,6 @@ module.exports = {
         compress: false,
       },
     }),
+    new CopyWebpackPlugin(['assets/TermsOfService.html', 'assets/PrivacyPolicy.html']),
   ],
 }

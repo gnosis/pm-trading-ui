@@ -85,6 +85,7 @@ module.exports = {
     watchOptions: {
       ignored: /node_modules/,
     },
+    contentBase: [path.join(__dirname, 'assets'), path.join(__dirname, 'dist')],
   },
   plugins: [
     new FaviconsWebpackPlugin({
