@@ -9,6 +9,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import 'scss/style.scss'
 import initGoogleAnalytics from 'utils/analytics/init'
+import { isTournament } from 'utils/configuration'
 import store from 'store'
 import { setMomentRelativeTime } from './setup'
 
@@ -16,7 +17,9 @@ setMomentRelativeTime()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
-store.dispatch(initProviders())
+if (!isTournament()) {
+  store.dispatch(initProviders())
+}
 
 Decimal.set({ toExpPos: 9999, precision: 50 })
 

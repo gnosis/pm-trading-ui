@@ -40,16 +40,16 @@ class App extends Component {
   }
 
   render() {
-    if (!this.props.blockchainConnection) {
-      return (
-        <div className="appContainer">
-          <div className="loader-container">
-            <IndefiniteSpinner width={100} height={100} />
-            <h1>Connecting</h1>
-          </div>
-        </div>
-      )
-    }
+    // if (!this.props.blockchainConnection) {
+    //   return (
+    //     <div className="appContainer">
+    //       <div className="loader-container">
+    //         <IndefiniteSpinner width={100} height={100} />
+    //         <h1>Connecting</h1>
+    //       </div>
+    //     </div>
+    //   )
+    // }
 
     const timeout = { enter: 200, exit: 200 }
 

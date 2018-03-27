@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
+import MetamaskIcon from 'assets/img/icons/icon_metamask_color.svg'
 import css from './InstallMetamask.mod.scss'
-import OlympiaIcon from './metamask.svg'
 
 const cx = cn.bind(css)
 
@@ -14,7 +14,7 @@ const logoStyle = {
 const InstallMetamask = ({ closeModal }) => (
   <div className={cx('installMetamask')}>
     <button className={cx('closeButton')} onClick={() => closeModal()} />
-    <img src={OlympiaIcon} alt="logo" style={logoStyle} />
+    <img src={MetamaskIcon} alt="logo" style={logoStyle} />
     <h3 className={cx('installText')}>Install MetaMask</h3>
     <p className={cx('downloadText')}>
       Metamask is not currently installed or detected.{' '}

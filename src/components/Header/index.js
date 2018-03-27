@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
+import { upperFirst } from 'lodash'
+import className from 'classnames/bind'
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
-import { upperFirst } from 'lodash'
-import className from 'classnames/bind'
+import { hasMetamask, isMetamaskUnlocked } from 'integrations/utils'
 
 import Identicon from './Identicon'
 import ProviderIcon from './ProviderIcon'
@@ -18,8 +19,12 @@ const cx = className.bind(css)
 
 class Header extends Component {
   @autobind
-  handleConnectWalletClick() {
-    this.props.openConnectWalletModal()
+  async handleConnectWalletClick() {
+    if (!hasMetamask()) {
+      this.props.openInstallMetamaskModal()
+    } else if (!(await isMetamaskUnlocked())) {
+      this.props.openUnlockMetamaskModal()
+    }
   }
 
   render() {
@@ -131,7 +136,8 @@ Header.propTypes = {
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
-  openConnectWalletModal: PropTypes.func.isRequired,
+  openInstallMetamaskModal: PropTypes.func.isRequired,
+  openUnlockMetamaskModal: PropTypes.func.isRequired,
   isTournament: PropTypes.bool,
   logoPath: PropTypes.string.isRequired,
   smallLogoPath: PropTypes.string.isRequired,
