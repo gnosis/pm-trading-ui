@@ -1,6 +1,6 @@
 {
   "name": "@gnosis.pm/gnosis-management",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "GnosisInc Admin Interface",
   "main": "src/index.js",
   "scripts": {
@@ -94,6 +94,7 @@
     "babel-preset-stage-0": "6.24.1",
     "bootstrap-loader": "^2.1.0",
     "bootstrap-sass": "^3.3.7",
+    "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.27.3",
     "eslint": "^4.11.0",
     "eslint-config-airbnb": "^16.1.0",
