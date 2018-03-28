@@ -151,15 +151,9 @@ $shadow-color: #828282;
     top: 10px;
     margin-right: ((38px - 16px) / 2);
     right: 100%;
-    
-    &.icon--checkmark {
-      background: none; 
-      background-color: $active-highlight-success;
-    }
+  }
 
-    &.icon--error {
-      background: none;
-      background-color: $active-highlight-error;
-    }
+  .icon {
+    position: absolute;
   }
 }

@@ -63,16 +63,10 @@
 @include svgIcon('gear');
 @include svgIcon('logout');
 
-.icon--checkbox {
-  background: $active-highlight-success;
-}
-
 .icon--error {
   $url: '../assets/img/icons/icon_cross.svg';
   background-image: url('#{$url}');
   mask-image: url('#{$url}');
-
-  background: $active-highlight-error;
 }
 
 .icon--logout {
