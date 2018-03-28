@@ -6,6 +6,7 @@ import { takeRight } from 'lodash'
 import moment from 'moment'
 
 import LabeledSpinner from 'components/Spinner/Labeled'
+import ProgressSpinner from 'components/Spinner/Transaction'
 import Notifications from 'components/Notifications'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 
@@ -40,10 +41,10 @@ const TransactionFloater = ({
     </div>
     {!showLogs &&
       notifications.length > 0 && (
-        <div className="transactionFloater__popover transactionFloater--notifications">
-          <Notifications notifications={takeRight(notifications, 5)} onClick={showTransactionLog} />
-        </div>
-      )}
+      <div className="transactionFloater__popover transactionFloater--notifications">
+        <Notifications notifications={takeRight(notifications, 5)} onClick={showTransactionLog} />
+      </div>
+    )}
     <div
       className={`transactionFloater__popover ${
         showLogs ? 'transactionFloater__popover--visible' : 'transactionFloater__popover--hidden'
@@ -54,14 +55,14 @@ const TransactionFloater = ({
       <div className="transactionFloater__logs">
         {!runningTransactions.length &&
           !completedTransactions.length && (
-            <div className="transactionLog transactionLog--empty">
-              <div className="transactionLog__label">You have no active or past transactions.</div>
-              <div className="transactionLog__hint">
+          <div className="transactionLog transactionLog--empty">
+            <div className="transactionLog__label">You have no active or past transactions.</div>
+            <div className="transactionLog__hint">
                 When you interact with markets, all transactions will show up down here so you can keep track of all
                 your purchases, investments and market interactions.
-              </div>
             </div>
-          )}
+          </div>
+        )}
         {runningTransactions.map((transaction) => {
           const startTime = transaction.startTime ? moment(transaction.startTime).format('LLL') : ''
 
