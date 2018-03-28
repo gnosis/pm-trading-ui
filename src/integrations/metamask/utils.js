@@ -27,3 +27,17 @@ export const isMetamaskUnlocked = async () => {
   }
   return isUnlocked
 }
+
+export const isOnWrongNetwork = async (desiredNetworkId) => {
+  let wrongNetwork = true
+
+  if (hasMetamask()) {
+    const networkId = await promisify(window.web3.version.getNetwork, [], 0)
+
+    if (desiredNetworkId === +networkId) {
+      wrongNetwork = false
+    }
+  }
+
+  return wrongNetwork
+}

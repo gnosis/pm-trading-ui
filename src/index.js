@@ -11,6 +11,7 @@ import 'scss/style.scss'
 import initGoogleAnalytics from 'utils/analytics/init'
 import { isTournament } from 'utils/configuration'
 import store from 'store'
+import { WALLET_PROVIDER } from 'integrations/constants'
 import { setMomentRelativeTime } from './setup'
 
 setMomentRelativeTime()
@@ -19,6 +20,8 @@ setMomentRelativeTime()
 store.dispatch({ type: 'INIT' })
 if (!isTournament()) {
   store.dispatch(initProviders())
+} else {
+  store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE] }))
 }
 
 Decimal.set({ toExpPos: 9999, precision: 50 })

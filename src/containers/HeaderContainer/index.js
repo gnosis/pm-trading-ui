@@ -11,6 +11,7 @@ import {
   getActiveProvider,
   checkWalletConnection,
   isConnectedToCorrectNetwork,
+  getTargetNetworkId,
 } from 'integrations/store/selectors'
 import {
   isTournament,
@@ -30,6 +31,7 @@ const mapStateToProps = state => ({
   currentNetwork: getCurrentNetwork(state),
   currentProvider: getActiveProvider(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
+  targetNetworkId: getTargetNetworkId(state),
   isTournament: isTournament(),
   logoPath: getLogoPath(),
   smallLogoPath: getSmallLogoPath(),

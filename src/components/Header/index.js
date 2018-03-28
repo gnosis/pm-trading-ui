@@ -7,7 +7,7 @@ import className from 'classnames/bind'
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
-import { hasMetamask, isMetamaskUnlocked } from 'integrations/metamask/utils'
+import { hasMetamask, isMetamaskUnlocked, isOnWrongNetwork } from 'integrations/metamask/utils'
 
 import Identicon from './Identicon'
 import ProviderIcon from './ProviderIcon'
@@ -20,10 +20,13 @@ const cx = className.bind(css)
 class Header extends Component {
   @autobind
   async handleConnectWalletClick() {
+    const { targetNetworkId } = this.props
     if (!hasMetamask()) {
       this.props.openInstallMetamaskModal()
     } else if (!(await isMetamaskUnlocked())) {
       this.props.openUnlockMetamaskModal()
+    } else if (await isOnWrongNetwork(targetNetworkId)) {
+      this.props.openSwitchNetworkModal()
     }
   }
 
@@ -146,6 +149,8 @@ Header.propTypes = {
   gameGuideType: PropTypes.string,
   gameGuideURL: PropTypes.string,
   tokenAddress: PropTypes.string.isRequired,
+  openSwitchNetworkModal: PropTypes.func.isRequired,
+  targetNetworkId: PropTypes.number.isRequired,
 }
 
 Header.defaultProps = {

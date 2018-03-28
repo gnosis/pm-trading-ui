@@ -17,7 +17,7 @@ const SwitchNetwork = ({ closeModal, targetNetwork }) => (
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
     <h3 className={cx('switchNetworkHeading')}>Switch to the {targetNetwork} Network</h3>
     <p className={cx('switchNetworkText')}>
-      Metamask is not currently set to the Rinkeby network. Please switch to Rinkeby and make sure your wallet is
+      Your provider is not currently set to the Rinkeby network. Please switch to Rinkeby and make sure your wallet is
       unlocked to start using Olympia.
     </p>
   </div>

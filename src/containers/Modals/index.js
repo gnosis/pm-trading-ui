@@ -1,6 +1,5 @@
 export { default as ModalSwitchNetwork } from './ModalSwitchNetwork'
 export { default as ModalOutcomePriceChanged } from './ModalOutcomePriceChanged'
 export { default as ModalTransactionExplanation } from './ModalTransactionExplanation'
-export { default as ModalConnectWallet } from './ModalConnectWallet'
 export { default as ModalInstallMetamask } from './ModalInstallMetamask'
 export { default as ModalUnlockMetamask } from './ModalUnlockMetamask'
