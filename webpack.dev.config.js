@@ -27,6 +27,7 @@ module.exports = {
   context: path.join(__dirname, 'src'),
   entry: ['bootstrap-loader', 'index.js'],
   devtool: 'eval-source-map',
+  mode: 'development',
   output: {
     publicPath: '/',
     path: `${__dirname}/dist`,
