@@ -21,7 +21,7 @@ store.dispatch({ type: 'INIT' })
 if (!isTournament()) {
   store.dispatch(initProviders())
 } else {
-  store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE] }))
+  store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE, WALLET_PROVIDER.METAMASK] }))
 }
 
 Decimal.set({ toExpPos: 9999, precision: 50 })

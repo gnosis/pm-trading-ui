@@ -22,9 +22,10 @@ export const getCurrentBalance = async (account) => {
   return balanceValue
 }
 
-export const getMainnetAddressForRinkebyAccount = async (account) => {
+export const getMainnetAddressForRinkebyAccount = async (contractAddress, account) => {
   const gnosis = await api.getGnosisConnection()
-  const address = await gnosis.olympiaAddressRegistry.mainnetAddressFor(hexWithPrefix(account))
+  const addressContract = await gnosis.contracts.AddressRegistry.at(contractAddress)
+  const address = addressContract.mainnetAddressFor(hexWithPrefix(account))
 
   return address
 }

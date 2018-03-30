@@ -46,6 +46,7 @@ const mapDispatchToProps = dispatch => ({
   openInstallMetamaskModal: () => dispatch(openModal({ modalName: 'ModalInstallMetamask' })),
   openUnlockMetamaskModal: () => dispatch(openModal({ modalName: 'ModalUnlockMetamask' })),
   openSwitchNetworkModal: () => dispatch(openModal({ modalName: 'ModalSwitchNetwork' })),
+  openRegisterWalletModal: () => dispatch(openModal({ modalName: 'ModalRegisterWallet' })),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header))

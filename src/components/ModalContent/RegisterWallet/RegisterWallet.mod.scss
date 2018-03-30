@@ -1,0 +1,113 @@
+@import '../../../scss/vars.scss';
+
+.registerWallet {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .registerContainer {
+    width: 520px;
+    height: 410px;
+    border-radius: 9px;
+    background-color: #ffffff;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 27px;
+    text-align: center;
+
+    .annotation {
+      margin: 15px 0 0 0;
+    }
+
+    .walletAnnotation {
+      margin: 15px 0 10px 0;
+    }
+
+    .checkBox {
+      margin: 10px 0;
+      input {
+        border: 1px solid #09697b;
+      }
+    }
+
+    a {
+      text-decoration: underline;
+    }
+
+    .registerHeading {
+      font-size: 21px;
+      font-weight: 500;
+      text-align: center;
+      color: #333333;
+      margin-top: 45px;
+    }
+
+    .walletAddressContainer {
+      font-weight: 500;
+      border-radius: 2px;
+      border: solid 2px #b7bfc4;
+      padding: 14px 21px 14px 14px;
+      display: flex;
+      align-items: center;
+
+      .walletIcon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .walletAddress {
+        font-weight: 500;
+        margin-left: 18px;
+        font-size: 14px;
+      }
+    }
+
+    .rinkebyEthAnnotation {
+      margin-top: 23px;
+
+      .linkIcon {
+        width: 10px;
+        height: 10px;
+        margin-left: 5px;
+      }
+    }
+
+    .registerButton {
+      width: 220px;
+      height: 44px;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-align: center;
+      color: #ffffff;
+      border-radius: 22px;
+      background-image: linear-gradient(to right, #00bbc5, #00a9c6);
+      margin-top: 20px;
+
+      &.disabled {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .closeButton {
+    @include closeButton(32px, 5px);
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+
+    &:hover {
+      &::after,
+      &::before {
+        background-color: #fff;
+      }
+    }
+  }
+}

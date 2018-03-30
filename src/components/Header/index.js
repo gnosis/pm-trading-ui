@@ -27,6 +27,8 @@ class Header extends Component {
       this.props.openUnlockMetamaskModal()
     } else if (await isOnWrongNetwork(targetNetworkId)) {
       this.props.openSwitchNetworkModal()
+    } else {
+      this.props.openRegisterWalletModal()
     }
   }
 
@@ -150,6 +152,7 @@ Header.propTypes = {
   gameGuideURL: PropTypes.string,
   tokenAddress: PropTypes.string.isRequired,
   openSwitchNetworkModal: PropTypes.func.isRequired,
+  openRegisterWalletModal: PropTypes.func.isRequired,
   targetNetworkId: PropTypes.number.isRequired,
 }
 
