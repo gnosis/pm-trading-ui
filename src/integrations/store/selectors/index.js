@@ -130,3 +130,18 @@ export const isOnWhitelist = (state) => {
 
   return false
 }
+
+export const getRegisteredMainnetAddress = (state) => {
+  const provider = getActiveProvider(state)
+
+  return provider ? provider.mainnetAddress : undefined
+}
+
+export const isMetamaskLocked = (state) => {
+  const metamask = state.integrations.getIn(['providers', WALLET_PROVIDER.METAMASK])
+
+  // If metamask is connected to some network, but there are not account available
+  // Most likeliy it is locked
+
+  return metamask && !metamask.account && metamask.network
+}

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { openModal } from 'actions/modal'
+import { requestMainnetAddress } from 'actions/account'
 import { withRouter } from 'react-router-dom'
 
 import Header from 'components/Header'
@@ -12,6 +13,8 @@ import {
   checkWalletConnection,
   isConnectedToCorrectNetwork,
   getTargetNetworkId,
+  getRegisteredMainnetAddress,
+  isMetamaskLocked,
 } from 'integrations/store/selectors'
 import {
   isTournament,
@@ -32,6 +35,8 @@ const mapStateToProps = state => ({
   currentProvider: getActiveProvider(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
   targetNetworkId: getTargetNetworkId(state),
+  mainnetAddress: getRegisteredMainnetAddress(state),
+  lockedMetamask: isMetamaskLocked(state),
   isTournament: isTournament(),
   logoPath: getLogoPath(),
   smallLogoPath: getSmallLogoPath(),
@@ -47,6 +52,7 @@ const mapDispatchToProps = dispatch => ({
   openUnlockMetamaskModal: () => dispatch(openModal({ modalName: 'ModalUnlockMetamask' })),
   openSwitchNetworkModal: () => dispatch(openModal({ modalName: 'ModalSwitchNetwork' })),
   openRegisterWalletModal: () => dispatch(openModal({ modalName: 'ModalRegisterWallet' })),
+  requestMainnetAddress: () => dispatch(requestMainnetAddress()),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header))

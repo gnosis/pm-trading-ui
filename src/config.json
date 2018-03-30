@@ -24,8 +24,9 @@
   "fetchMarketTimeInterval": 15000,
   "ravenPublicDSN": null,
   "interface": {
-    "tournament": false,
+    "tournament": true,
     "tokenContract": "0xd19bce9f7693598a9fa1f94c548b20887a33f141",
+    "registrationContract": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13",
     "logoPath": "/assets/img/placeholder.svg",
     "smallLogoPath": "/assets/img/placeholder.svg",
     "showScoreboard": true,

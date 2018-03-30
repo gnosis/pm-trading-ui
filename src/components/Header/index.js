@@ -7,7 +7,7 @@ import className from 'classnames/bind'
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
-import { hasMetamask, isMetamaskUnlocked, isOnWrongNetwork } from 'integrations/metamask/utils'
+import { hasMetamask } from 'integrations/metamask/utils'
 
 import Identicon from './Identicon'
 import ProviderIcon from './ProviderIcon'
@@ -18,14 +18,20 @@ import css from './Header.scss'
 const cx = className.bind(css)
 
 class Header extends Component {
+  componentDidMount() {
+    if (this.props.isTournament) {
+      this.props.requestMainnetAddress()
+    }
+  }
+
   @autobind
   async handleConnectWalletClick() {
-    const { targetNetworkId } = this.props
+    const { isConnectedToCorrectNetwork, lockedMetamask } = this.props
     if (!hasMetamask()) {
       this.props.openInstallMetamaskModal()
-    } else if (!(await isMetamaskUnlocked())) {
+    } else if (lockedMetamask) {
       this.props.openUnlockMetamaskModal()
-    } else if (await isOnWrongNetwork(targetNetworkId)) {
+    } else if (!isConnectedToCorrectNetwork) {
       this.props.openSwitchNetworkModal()
     } else {
       this.props.openRegisterWalletModal()
@@ -48,8 +54,13 @@ class Header extends Component {
       gameGuideType,
       gameGuideURL,
       tokenAddress,
+      mainnetAddress,
     } = this.props
 
+    let walletConnected = hasWallet
+    if (isTournament) {
+      walletConnected = hasWallet && mainnetAddress
+    }
     const logoVars = {}
     if (isTournament) {
       logoVars['--logoAnnotation'] = "'Powered by Gnosis'"
@@ -86,7 +97,7 @@ class Header extends Component {
           </div>
           <div className={cx('group', 'left', 'version')}>{version}</div>
           <div className={cx('group', 'left', 'navLinks')}>
-            {hasWallet && (
+            {walletConnected && (
               <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
                 Dashboard
               </NavLink>
@@ -94,7 +105,7 @@ class Header extends Component {
             <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
               Markets
             </NavLink>
-            {hasWallet && (
+            {walletConnected && (
               <NavLink to="/transactions" activeClassName={cx('active')} className={cx('navLink')}>
                 Transactions
               </NavLink>
@@ -108,7 +119,7 @@ class Header extends Component {
           </div>
 
           <div className={cx('group', 'right')}>
-            {hasWallet &&
+            {walletConnected &&
               currentProvider && (
               <div className={cx('account')}>
                 {currentNetwork &&
@@ -122,10 +133,10 @@ class Header extends Component {
                 <MenuAccountDropdown />
               </div>
             )}
-            {!hasWallet && (
-              <a className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
+            {!walletConnected && (
+              <button className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
                 Connect a wallet
-              </a>
+              </button>
             )}
           </div>
         </div>
@@ -153,7 +164,9 @@ Header.propTypes = {
   tokenAddress: PropTypes.string.isRequired,
   openSwitchNetworkModal: PropTypes.func.isRequired,
   openRegisterWalletModal: PropTypes.func.isRequired,
-  targetNetworkId: PropTypes.number.isRequired,
+  lockedMetamask: PropTypes.bool,
+  requestMainnetAddress: PropTypes.func.isRequired,
+  mainnetAddress: PropTypes.string,
 }
 
 Header.defaultProps = {
@@ -168,6 +181,8 @@ Header.defaultProps = {
   showGameGuide: false,
   gameGuideType: 'default',
   gameGuideURL: '',
+  mainnetAddress: undefined,
+  lockedMetamask: true,
 }
 
 export default Header
