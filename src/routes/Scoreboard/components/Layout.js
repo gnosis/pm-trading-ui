@@ -9,7 +9,7 @@ import PropTypes from 'prop-types'
 import * as React from 'react'
 import * as css from './index.mod.scss'
 import ScoreTable from './ScoreTable'
-import RewardClaim from './RewardClaim'
+import RewardClaimAddress from './RewardClaimAddress'
 
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
@@ -39,7 +39,7 @@ class Layout extends React.PureComponent {
       <Block>
         <PageFrame>
           {myAccount && (
-            <RewardClaim mainnetAddress={mainnetAddress} openSetMainnetAddressModal={openSetMainnetAddressModal} />
+            <RewardClaimAddress mainnetAddress={mainnetAddress} openSetMainnetAddressModal={openSetMainnetAddressModal} />
           )}
           {myAccount && <Hairline />}
           <Block className={cx('trophy')}>

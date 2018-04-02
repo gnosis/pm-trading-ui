@@ -18,7 +18,7 @@ const LoadingSection = () => (
   </Block>
 )
 
-const RewardClaim = ({ mainnetAddress, openSetMainnetAddressModal }) => {
+const RewardClaimAddress = ({ mainnetAddress, openSetMainnetAddressModal }) => {
   const showLoading = mainnetAddress === undefined
   const hasRegistered = parseInt(mainnetAddress, 16) > 0
 
@@ -40,14 +40,14 @@ const RewardClaim = ({ mainnetAddress, openSetMainnetAddressModal }) => {
   )
 }
 
-RewardClaim.propTypes = {
+RewardClaimAddress.propTypes = {
   mainnetAddress: PropTypes.string,
   openSetMainnetAddressModal: PropTypes.func.isRequired,
 }
 
-RewardClaim.defaultProps = {
+RewardClaimAddress.defaultProps = {
   mainnetAddress: undefined,
   hasRegistered: undefined,
 }
 
-export default RewardClaim
+export default RewardClaimAddress
