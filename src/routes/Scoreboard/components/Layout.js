@@ -7,7 +7,7 @@ import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
 import * as React from 'react'
-import * as css from './index.css'
+import * as css from './index.mod.scss'
 import ScoreTable from './ScoreTable'
 import RewardClaim from './RewardClaim'
 

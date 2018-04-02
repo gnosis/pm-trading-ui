@@ -2,16 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
 
-import { Link } from 'react-router'
-
 import LoadingIndicator from 'components/Spinner/Indefinite'
 
 import Block from 'components/layout/Block'
-import Paragraph from 'components/layout/Paragraph'
-import Title from 'components/layout/Title'
-import CheckboxIcon from '../assets/ok.svg'
+import AddressSection from './AddressSection'
+import CheckboxIcon from '../../assets/ok.svg'
 
-import * as css from './index.css'
+import * as css from './RewardClaim.mod.scss'
 
 const cx = classNames.bind(css)
 
@@ -20,29 +17,6 @@ const LoadingSection = () => (
     <LoadingIndicator />
   </Block>
 )
-
-const AddressSection = ({ hasRegistered, mainnetAddress, openSetMainnetAddressModal }) => (
-  <Block className={cx('addressSection')}>
-    <Title className={cx('rewardClaimTitle')}>Your Reward Claim Address</Title>
-    <Paragraph className={cx('address')}>{hasRegistered ? mainnetAddress : 'No address specified yet.'}</Paragraph>
-    {!hasRegistered && (
-      <Link to="/scoreboard" href="/scoreboard" onClick={openSetMainnetAddressModal}>
-        Setup claim address
-      </Link>
-    )}
-  </Block>
-)
-
-AddressSection.propTypes = {
-  openSetMainnetAddressModal: PropTypes.func.isRequired,
-  mainnetAddress: PropTypes.string,
-  hasRegistered: PropTypes.bool,
-}
-
-AddressSection.defaultProps = {
-  hasRegistered: false,
-  mainnetAddress: '',
-}
 
 const RewardClaim = ({ mainnetAddress, openSetMainnetAddressModal }) => {
   const showLoading = mainnetAddress === undefined
