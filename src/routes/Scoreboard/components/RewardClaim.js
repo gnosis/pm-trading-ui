@@ -9,6 +9,7 @@ import LoadingIndicator from 'components/Spinner/Indefinite'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
 import Title from 'components/layout/Title'
+import CheckboxIcon from '../assets/ok.svg'
 
 import * as css from './index.css'
 
@@ -50,7 +51,7 @@ const RewardClaim = ({ mainnetAddress, openSetMainnetAddressModal }) => {
   return (
     <Block className={cx('rewardClaim')}>
       <Block className={cx('iconSection')}>
-        <i className={`icon icon--${hasRegistered ? 'ok' : 'warning'}`} />
+        <img src={CheckboxIcon} alt="" />
       </Block>
       {showLoading ? (
         <LoadingSection />
