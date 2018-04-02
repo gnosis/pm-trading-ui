@@ -29,7 +29,7 @@ export const getMainnetAddressForRinkebyAccount = async (contractAddress, accoun
   const addressContract = await gnosis.contracts.AddressRegistry.at(contractAddress)
   const address = await addressContract.mainnetAddressFor(hexWithPrefix(account))
 
-  return address === zeroAccount ? undefined : address
+  return address === zeroAccount ? null : address
 }
 
 export const setMainnetAddressForRinkebyAccount = async (contractAddress, mainnetAddress) => {
