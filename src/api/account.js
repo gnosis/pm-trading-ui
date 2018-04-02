@@ -2,6 +2,8 @@ import { weiToEth, hexWithPrefix } from 'utils/helpers'
 import Gnosis from '@gnosis.pm/gnosisjs/'
 import * as api from 'api'
 
+const zeroAccount = '0x0000000000000000000000000000000000000000'
+
 /**
  * Returns the default node account
  */
@@ -25,9 +27,9 @@ export const getCurrentBalance = async (account) => {
 export const getMainnetAddressForRinkebyAccount = async (contractAddress, account) => {
   const gnosis = await api.getGnosisConnection()
   const addressContract = await gnosis.contracts.AddressRegistry.at(contractAddress)
-  const address = addressContract.mainnetAddressFor(hexWithPrefix(account))
+  const address = await addressContract.mainnetAddressFor(hexWithPrefix(account))
 
-  return address
+  return address === zeroAccount ? undefined : address
 }
 
 export const setMainnetAddressForRinkebyAccount = async (mainnetAddress) => {

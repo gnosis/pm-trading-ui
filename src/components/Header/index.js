@@ -19,7 +19,7 @@ const cx = className.bind(css)
 
 class Header extends Component {
   componentDidMount() {
-    if (this.props.isTournament) {
+    if (this.props.isTournament && this.props.currentAccount) {
       this.props.requestMainnetAddress()
     }
   }

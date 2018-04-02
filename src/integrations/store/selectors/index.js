@@ -143,5 +143,5 @@ export const isMetamaskLocked = (state) => {
   // If metamask is connected to some network, but there are not account available
   // Most likeliy it is locked
 
-  return metamask && !metamask.account && metamask.network
+  return metamask && !metamask.account && !!metamask.network
 }
