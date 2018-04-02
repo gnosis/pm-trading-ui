@@ -10,10 +10,10 @@ import style from './RegisterWallet.mod.scss'
 const cx = cn.bind(style)
 
 const RegisterMainnetAddress = ({
-  closeModal, initProviders, currentAccount, currentBalance,
+  closeModal, currentAccount, currentBalance, updateMainnetAddress,
 }) => {
-  const login = () => {
-    initProviders()
+  const handleRegistration = async () => {
+    await updateMainnetAddress(currentAccount)
     closeModal()
   }
 
@@ -39,7 +39,7 @@ const RegisterMainnetAddress = ({
           </a>
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
         </p>
-        <button className={cx('registerButton')} onClick={login}>
+        <button className={cx('registerButton')} onClick={handleRegistration}>
           REGISTER ADDRESS
         </button>
       </div>

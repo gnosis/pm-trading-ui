@@ -32,10 +32,8 @@ export const getMainnetAddressForRinkebyAccount = async (contractAddress, accoun
   return address === zeroAccount ? undefined : address
 }
 
-export const setMainnetAddressForRinkebyAccount = async (mainnetAddress) => {
+export const setMainnetAddressForRinkebyAccount = async (contractAddress, mainnetAddress) => {
   const gnosis = await api.getGnosisConnection()
-  return Gnosis.requireEventFromTXResult(
-    await gnosis.olympiaAddressRegistry.register(mainnetAddress),
-    'AddressRegistration',
-  )
+  const addressContract = await gnosis.contracts.AddressRegistry.at(contractAddress)
+  return Gnosis.requireEventFromTXResult(await addressContract.register(mainnetAddress), 'AddressRegistration')
 }
