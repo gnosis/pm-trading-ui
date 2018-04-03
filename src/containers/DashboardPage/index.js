@@ -6,11 +6,14 @@ import { getMarkets } from 'selectors/market'
 import { profitsSelector } from 'containers/DashboardPage/store/selectors'
 import { getAccountTrades } from 'selectors/marketTrades'
 import { getAccountShares } from 'selectors/marketShares'
-import { isGnosisInitialized, getEtherTokensAmount } from 'selectors/blockchain'
+import { isGnosisInitialized, getTokenAmount, getTokenSymbol } from 'selectors/blockchain'
 import { getCurrentAccount, checkWalletConnection } from 'integrations/store/selectors'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
-import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
+import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
+import { getTokenAddress } from 'utils/configuration'
+
+const tokenAddress = getTokenAddress()
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
@@ -19,24 +22,27 @@ const mapStateToProps = (state) => {
   const accountPredictiveAssets = weiToEth(profitsSelector(state, defaultAccount))
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
-  let etherTokens = getEtherTokensAmount(state, defaultAccount)
+  let defaultTokenAmount = getTokenAmount(state, tokenAddress)
   const hasWallet = checkWalletConnection(state)
+  const tokenSymbol = getTokenSymbol(state, tokenAddress)
 
-  if (etherTokens !== undefined) {
-    etherTokens = weiToEth(etherTokens.toString())
+  if (defaultTokenAmount !== undefined) {
+    defaultTokenAmount = weiToEth(defaultTokenAmount.toString())
   } else {
-    etherTokens = '0'
+    defaultTokenAmount = '0'
   }
 
   return {
     hasWallet,
     defaultAccount,
     markets,
-    etherTokens,
+    defaultTokenAmount,
     accountShares,
     accountTrades,
     gnosisInitialized,
     accountPredictiveAssets,
+    tokenAddress,
+    tokenSymbol,
   }
 }
 
@@ -47,7 +53,8 @@ const mapDispatchToProps = dispatch => ({
   requestAccountShares: address => dispatch(requestAccountShares(address)),
   changeUrl: url => dispatch(push(url)),
   requestGasPrice: () => dispatch(requestGasPrice()),
-  requestEtherTokens: account => dispatch(requestEtherTokens(account)),
+  requestDefaultTokenAmount: account => dispatch(requestTokenBalance(tokenAddress, account)),
+  requestTokenSymbol: () => dispatch(requestTokenSymbol(tokenAddress)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage)

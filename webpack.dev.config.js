@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
-
+const config = require('./src/config.json')
 const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
@@ -9,8 +9,10 @@ const pkg = require('./package.json')
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
 
-const config = require('./src/config.json')
-
+const isTournament = config.interface && config.interface.tournament
+const defaultFavicon = isTournament ? 'assets/img/gnosis_apollo_favicon.png' : 'assets/img/gnosis_logo_favicon.png'
+const faviconPath =
+  config.interface && config.interface.faviconPath && isTournament ? config.interface.faviconPath : defaultFavicon
 const whitelist = config.developmentWhitelist
 
 const gnosisDbUrl =
@@ -94,13 +96,17 @@ module.exports = {
           },
           {
             loader: 'sass-loader',
-            options: { sourceMap: true },
+            options: { sourceMap: true, includePaths: [path.resolve(__dirname, './src')] },
           },
         ],
       },
       {
         test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]',
+      },
+      {
+        test: /\.txt$/,
+        use: 'raw-loader',
       },
     ],
   },
@@ -118,11 +124,12 @@ module.exports = {
     watchOptions: {
       ignored: /node_modules/,
     },
+    contentBase: [path.join(__dirname, 'dist'), path.join(__dirname, 'src')],
   },
   plugins: [
     new CaseSensitivePathsPlugin(),
     new FaviconsWebpackPlugin({
-      logo: 'assets/img/gnosis_logo_favicon.png',
+      logo: faviconPath,
       // Generate a cache file with control hashes and
       // don't rebuild the favicons until those hashes change
       persistentCache: true,

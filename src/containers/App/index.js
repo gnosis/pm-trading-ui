@@ -8,15 +8,20 @@ import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
 
 import { connectBlockchain } from 'actions/blockchain'
-import LoadingIndicator from 'components/LoadingIndicator'
+import IndefiniteSpinner from 'components/Spinner/Indefinite'
+import PageFrame from 'components/layout/PageFrame'
+import Footer from 'components/Footer'
 import { providerPropType } from 'utils/shapes'
 
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import { triedToConnect } from 'selectors/blockchain'
 import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
+import { shallDisplayFooter } from 'utils/configuration'
 
 import './app.scss'
+
+const displayFooter = shallDisplayFooter()
 
 class App extends Component {
   state = {
@@ -39,7 +44,7 @@ class App extends Component {
       return (
         <div className="appContainer">
           <div className="loader-container">
-            <LoadingIndicator width={100} height={100} />
+            <IndefiniteSpinner width={100} height={100} />
             <h1>Connecting</h1>
           </div>
         </div>
@@ -68,6 +73,11 @@ class App extends Component {
         <HeaderContainer version={process.env.VERSION} />
         {this.props.provider && this.props.provider.account && <TransactionFloaterContainer />}
         {childrenContainer}
+        {displayFooter && (
+          <PageFrame>
+            <Footer />
+          </PageFrame>
+        )}
       </div>
     )
   }

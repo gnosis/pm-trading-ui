@@ -9,11 +9,7 @@
     ],
     "@babel/preset-stage-0"
   ],
-  "plugins": [
-    "react-hot-loader/babel",
-    "transform-decorators-legacy",
-    "lodash"
-  ],
+  "plugins": ["react-hot-loader/babel", "transform-decorators-legacy", "lodash", "transform-optional-chaining"],
   "env": {
     "production": {
       "plugins": [
@@ -27,9 +23,7 @@
       ]
     },
     "test": {
-      "plugins": [
-        "dynamic-import-node"
-      ]
+      "plugins": ["dynamic-import-node"]
     }
   }
 }

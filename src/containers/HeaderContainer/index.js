@@ -12,6 +12,16 @@ import {
   checkWalletConnection,
   isConnectedToCorrectNetwork,
 } from 'integrations/store/selectors'
+import {
+  isTournament,
+  getLogoPath,
+  getSmallLogoPath,
+  shallShowScoreboard,
+  shallShowGameGuide,
+  getGameGuideType,
+  getGameGuideURL,
+  getTokenAddress,
+} from 'utils/configuration'
 
 const mapStateToProps = state => ({
   hasWallet: checkWalletConnection(state),
@@ -20,10 +30,18 @@ const mapStateToProps = state => ({
   currentNetwork: getCurrentNetwork(state),
   currentProvider: getActiveProvider(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
+  isTournament: isTournament(),
+  logoPath: getLogoPath(),
+  smallLogoPath: getSmallLogoPath(),
+  showScoreboard: shallShowScoreboard(),
+  showGameGuide: shallShowGameGuide(),
+  gameGuideType: getGameGuideType(),
+  gameGuideURL: getGameGuideURL(),
+  tokenAddress: getTokenAddress(),
 })
 
 const mapDispatchToProps = dispatch => ({
-  openConnectWalletModal: () => dispatch(openModal({ modalName: 'ModalConnectWallet' })),
+  openConnectWalletModal: () => dispatch(openModal({ modalName: 'ModalInstallMetamask' })),
   openNetworkCheckModal: () => dispatch(openModal({ modalName: 'ModalNetworkCheck' })),
 })
 

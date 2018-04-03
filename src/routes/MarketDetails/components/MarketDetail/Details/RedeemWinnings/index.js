@@ -5,7 +5,7 @@ import cn from 'classnames/bind'
 import DecimalValue from 'components/DecimalValue'
 import Icon from 'components/Icon'
 import InteractionButton from 'containers/InteractionButton'
-import { collateralTokenToText } from 'components/CurrencyName'
+import CurrencyName from 'components/CurrencyName'
 import { weiToEth } from 'utils/helpers'
 import style from './RedeemWinnings.mod.scss'
 
@@ -20,7 +20,7 @@ const RedeemWinnings = ({
       <Icon type="achievementBadge" size={iconSize} />
       <div className={cx('details')}>
         <div className={cx('heading')}>
-          <DecimalValue value={weiToEth(winningsAmount)} /> {collateralTokenToText(collateralToken)}
+          <DecimalValue value={weiToEth(winningsAmount)} /> <CurrencyName tokenAddress={collateralToken} />
         </div>
         <div className={cx('label')}>Your Winnings</div>
       </div>

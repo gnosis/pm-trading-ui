@@ -31,7 +31,7 @@ const TradeRow = ({
     <td>{decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}</td>
     <td>
       {decimalToText(getAverageCost(trade))}
-      <CurrencyName collateralToken={collateralToken} />
+      <CurrencyName tokenAddress={collateralToken} />
     </td>
     <td>{tradeDate}</td>
     <td>{tradeCost}</td>

@@ -1,14 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames/bind'
-import LoadingIndicator from 'components/LoadingIndicator'
+import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { OUTCOME_TYPES } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import CategoricalGraph from './CategoricalGraph'
 import ScalarGraph from './ScalarGraph'
-import style from './MarketGraph.mod.scss'
-
-const cx = cn.bind(style)
 
 const MarketGraph = ({ data = [], market: { event: { type, lowerBound, upperBound }, eventDescription } }) => {
   if (data.length) {
@@ -23,7 +19,7 @@ const MarketGraph = ({ data = [], market: { event: { type, lowerBound, upperBoun
 
   return (
     <div className="container">
-      <LoadingIndicator className={cx('marketGraphSpinner')} />
+      <IndefiniteSpinner width={60} height={60} />
     </div>
   )
 }

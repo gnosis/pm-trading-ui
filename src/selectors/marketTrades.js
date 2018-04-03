@@ -78,7 +78,7 @@ const getTradesForMarket = marketAddress => createSelector(
   trades => filter(trades, trade => trade.market === marketAddress),
 )
 
-const getTradesForAccount = accountAddress => createSelector(
+export const getTradesForAccount = accountAddress => createSelector(
   tradesWithMarketsSelector,
   (trades) => {
     const prefixedAccountAddress = hexWithPrefix(accountAddress)
@@ -86,7 +86,7 @@ const getTradesForAccount = accountAddress => createSelector(
   },
 )
 
-const enhanceAndSortTrades = (markets, eventMarkets, trades) => Object.keys(trades)
+export const enhanceAndSortTrades = (markets, eventMarkets, trades) => Object.keys(trades)
   .map((tradeId) => {
     const eventAddress = trades[tradeId].outcomeToken.event
     const market = eventMarkets[eventAddress]
@@ -104,13 +104,6 @@ export const getMarketTrades = marketAddress => createSelector(
   getMarkets,
   eventMarketSelector(marketAddress),
   getTradesForMarket(marketAddress),
-  enhanceAndSortTrades,
-)
-
-export const getMarketTradesForAccount = (marketAddress, accountAddress) => createSelector(
-  getMarkets,
-  eventMarketSelector(marketAddress),
-  getTradesForAccount(accountAddress),
   enhanceAndSortTrades,
 )
 

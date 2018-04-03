@@ -1,0 +1,117 @@
+.trophy {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    & img {
+        width: 48px;
+        height: 46px;
+    }
+
+    & p {
+        font-size: 44px;
+        margin: 0 0 0 10px;
+        font-family: Montserrat;
+        font-size: 42px;
+        font-weight: 300;
+        text-align: left;
+        color: #333333;
+    }
+}
+
+.explanation {
+    font-size: 12px;
+    line-height: 14px;
+    text-align: left;
+}
+
+.ol-account { 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.dot {
+    width: 25px;
+    height: 25px;
+    border-radius: 12px;
+    background-color: #ceedf3;
+    margin-right: 7px;
+}
+
+.your {
+    font-size: 10px;
+    line-height: 1.2;
+    letter-spacing: 2px;
+    text-align: left;
+    margin: 0;
+}
+
+.norows {
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 18px;
+    color: #626262;
+    margin: 10px 0px;
+}
+
+.rewardClaim {
+    width: 350px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.11);
+    word-break: break-all;
+    margin-bottom: 20px;
+
+    display: flex;
+}
+
+.rewardClaim p {
+    font-size: 14px;
+    margin: 0;
+}
+
+.rewardClaim a, .rewardClaim a:link, .rewardClaim a:visited {
+    color: #00a6c4;
+    text-decoration: underline;
+}
+
+.rewardClaimTitle {
+    font-size: 16px;
+    text-align: left;
+    font-weight: 500;
+    padding-bottom: 12px;
+    line-height: 1;
+    color: #000;
+    margin: 0;
+}
+
+.loadingSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 118px;
+}
+
+.addressSection {
+    padding: 26px 18px;
+}
+
+.noAddressSection {
+    line-height: 1;
+    margin: 0;
+}
+
+.iconSection {
+    background-color: #f0f1f1;
+    width: 60px;
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,12 +1,6 @@
 import { handleActions } from 'redux-actions'
 import { get } from 'lodash'
-
-const LOAD_LOCALSTORAGE = 'LOAD_LOCALSTORAGE'
-
-import {
-  TRANSACTION_STATUS,
-} from 'utils/constants'
-
+import { TRANSACTION_STATUS } from 'utils/constants'
 import {
   startTransactionLog,
   closeTransactionLog,
@@ -15,78 +9,80 @@ import {
   addTransactionLogEntry,
 } from 'actions/transactions'
 
-const reducer = handleActions({
-  [startTransactionLog]: (state, action) => ({
-    ...state,
-    log: {
-      ...state.log,
-      [action.payload.id]: {
-        ...action.payload,
-        events: action.payload.events.map((event) => {
-          if (!event.status) {
-            return {
-              ...event,
-              status: TRANSACTION_STATUS.RUNNING,
-            }
-          }
-          return event
-        }),
-      },
-    },
-  }),
-  [closeTransactionLog]: (state, action) => {
-    const { id, ...payload } = action.payload
-    return {
-      ...state,
-      log: {
-        ...state.log,
-        [id]: {
-          ...state.log[id],
-          ...payload,
-        },
-      },
-    }
-  },
-  [addTransactionLogEntry]: (state, action) => {
-    const { id, ...transactionLog } = action.payload
+const LOAD_LOCALSTORAGE = 'LOAD_LOCALSTORAGE'
 
-    return {
+const reducer = handleActions(
+  {
+    [startTransactionLog]: (state, action) => ({
       ...state,
       log: {
         ...state.log,
-        [id]: {
-          ...state.log[id],
-          events: state.log[id].events.map((log) => {
-            if (log.event === transactionLog.event) {
+        [action.payload.id]: {
+          ...action.payload,
+          events: action.payload.events.map((event) => {
+            if (!event.status) {
               return {
-                ...log,
-                ...transactionLog,
+                ...event,
+                status: TRANSACTION_STATUS.RUNNING,
               }
             }
-
-            return log
+            return event
           }),
         },
       },
-    }
-  },
-  [showTransactionLog]: state => ({
-    ...state,
-    visible: true,
-  }),
-  [hideTransactionLog]: state => ({
-    ...state,
-    visible: false,
-  }),
-  [LOAD_LOCALSTORAGE]: (state, action) => {
-    const newState = {
-      ...state,
-      log: {},
-    }
+    }),
+    [closeTransactionLog]: (state, action) => {
+      const { id, ...payload } = action.payload
+      return {
+        ...state,
+        log: {
+          ...state.log,
+          [id]: {
+            ...state.log[id],
+            ...payload,
+          },
+        },
+      }
+    },
+    [addTransactionLogEntry]: (state, action) => {
+      const { id, ...transactionLog } = action.payload
 
-    const savedLogs = get(action, 'payload.transactions.log', {})
-    const logs = Object.keys(savedLogs)
-      .forEach((id) => {
+      return {
+        ...state,
+        log: {
+          ...state.log,
+          [id]: {
+            ...state.log[id],
+            events: state.log[id].events.map((log) => {
+              if (log.event === transactionLog.event) {
+                return {
+                  ...log,
+                  ...transactionLog,
+                }
+              }
+
+              return log
+            }),
+          },
+        },
+      }
+    },
+    [showTransactionLog]: state => ({
+      ...state,
+      visible: true,
+    }),
+    [hideTransactionLog]: state => ({
+      ...state,
+      visible: false,
+    }),
+    [LOAD_LOCALSTORAGE]: (state, action) => {
+      const newState = {
+        ...state,
+        log: {},
+      }
+
+      const savedLogs = get(action, 'payload.transactions.log', {})
+      const logs = Object.keys(savedLogs).forEach((id) => {
         const log = savedLogs[id]
 
         if (log.completed) {
@@ -100,9 +96,10 @@ const reducer = handleActions({
         }
       })
 
-    return newState
+      return newState
+    },
   },
-}, { log: {}, visible: false })
-
+  { log: {}, visible: false },
+)
 
 export default reducer

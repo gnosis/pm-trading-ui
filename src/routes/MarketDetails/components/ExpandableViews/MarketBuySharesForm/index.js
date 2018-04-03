@@ -133,7 +133,7 @@ class MarketBuySharesForm extends Component {
         <span className={cx('marketBuyWin', 'winInfoRow', 'max')}>
           {returnSign}
           <DecimalValue value={percentageWin} /> %&nbsp; (<DecimalValue value={maximumWin} />&nbsp;
-          <CurrencyName collateralToken={collateralToken} />)
+          <CurrencyName tokenAddress={collateralToken} />)
         </span>
       )
     }
@@ -156,11 +156,12 @@ class MarketBuySharesForm extends Component {
                     name="invest"
                     component={TextInput}
                     className={cx('marketBuyInvest')}
+                    decoration="underlined"
                     placeholder="Investment"
                     validate={this.validateInvestment}
                     endAdornment={
                       <TextInputAdornment>
-                        <CurrencyName collateralToken={collateralToken} />
+                        <CurrencyName tokenAddress={market.event.collateralToken} />
                       </TextInputAdornment>
                     }
                   />

@@ -137,7 +137,7 @@ class MarketList extends Component {
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
                 {decimalToText(new Decimal(market.tradingVolume).div(1e18))}&nbsp;
-                <CurrencyName collateralToken={market.event.collateralToken} />&nbsp; Volume
+                <CurrencyName tokenAddress={market.event.collateralToken} />&nbsp; Volume
               </div>
             </div>
           </div>

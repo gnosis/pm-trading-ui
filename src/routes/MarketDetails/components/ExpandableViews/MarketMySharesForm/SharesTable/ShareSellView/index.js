@@ -161,7 +161,7 @@ class ShareSellView extends Component {
                   <label>Gas costs</label>
                   <span>
                     <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
-                    <CurrencyName collateralToken={market.event.collateralToken} />
+                    <CurrencyName tokenAddress={market.event.collateralToken} />
                   </span>
                 </div>
               </div>
@@ -189,7 +189,7 @@ class ShareSellView extends Component {
                     <label>Earnings</label>
                     <span>
                       <DecimalValue value={earnings} />&nbsp;
-                      <CurrencyName collateralToken={market.event.collateralToken} />
+                      <CurrencyName tokenAddress={market.event.collateralToken} />
                     </span>
                   </div>
                   <InteractionButton

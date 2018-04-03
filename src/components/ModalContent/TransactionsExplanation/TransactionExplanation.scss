@@ -1,0 +1,25 @@
+@import "../../../scss/vars.scss";
+
+.transactionsExplanation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+
+  &__close {
+    @include closeButton(32px, 5px);
+    top: 20px;
+    right: 10px;
+  }
+
+  &__transaction-list {
+    font-size: 16px;
+    list-style: none;
+    margin-top: 20px;
+
+    li + li {
+      margin-top: 5px;
+    }
+  }
+}

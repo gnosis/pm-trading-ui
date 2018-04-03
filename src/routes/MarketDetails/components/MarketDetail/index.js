@@ -70,6 +70,10 @@ class MarketDetail extends Component {
         if (isMarketResolved(this.props.market)) {
           this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
         }
+
+        if (!this.props.collateralTokenSymbol && this.props.market.event.collateralToken) {
+          this.props.requestTokenSymbol(this.props.market.event.collateralToken)
+        }
       })
       .catch((err) => {
         this.setState({
@@ -134,7 +138,14 @@ class MarketDetail extends Component {
 
   render() {
     const {
-      market, marketGraph, marketShares, gasCosts, gasPrice, defaultAccount, moderators,
+      market,
+      marketGraph,
+      marketShares,
+      gasCosts,
+      gasPrice,
+      defaultAccount,
+      moderators,
+      collateralTokenSymbol,
     } = this.props
 
     const { marketFetchError } = this.state
@@ -168,7 +179,12 @@ class MarketDetail extends Component {
               gasPrice={gasPrice}
               handleRedeemWinnings={this.handleRedeemWinnings}
             />
-            <Infos market={market} defaultAccount={defaultAccount} moderators={moderators} />
+            <Infos
+              market={market}
+              defaultAccount={defaultAccount}
+              moderators={moderators}
+              collateralTokenSymbol={collateralTokenSymbol}
+            />
           </div>
         </div>
         <Controls handleExpand={this.handleExpand} {...this.props} />
@@ -208,6 +224,8 @@ MarketDetail.propTypes = {
   gasCosts: ImmutablePropTypes.map,
   gasPrice: PropTypes.instanceOf(Decimal),
   match: ReactRouterMatchShape.isRequired,
+  collateralTokenSymbol: PropTypes.string,
+  requestTokenSymbol: PropTypes.func.isRequired,
 }
 
 MarketDetail.defaultProps = {
@@ -220,6 +238,7 @@ MarketDetail.defaultProps = {
   defaultAccount: '',
   gasCosts: Map({}),
   gasPrice: Decimal(0),
+  collateralTokenSymbol: '',
 }
 
 export default MarketDetail
