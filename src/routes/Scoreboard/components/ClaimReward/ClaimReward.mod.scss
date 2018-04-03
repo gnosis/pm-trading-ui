@@ -1,0 +1,57 @@
+.claimReward {
+  width: 320px;
+  height: 110px;
+  margin-left: 20px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.11);
+  word-break: break-all;
+  margin-bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  .rewardInfoContainer {
+    display: flex;
+    width: 100%;
+    height: 68%;
+
+    .rewardAmount,
+    .timeToClaim {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+
+      .infoText {
+        font-family: Montserrat;
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+        margin-top:21px;
+        
+        &.amount {
+            color: #90712b;
+        }
+      }
+
+      .annotation {
+        font-size: 11px;
+        color: #87949c;
+      }
+    }
+  }
+
+  .claimButton {
+    height: 32%;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 0;
+    border: 0;
+    letter-spacing: 1px;
+    text-align: center;
+    color: #ffffff;
+    border-radius: 2px;
+    background-color: #00a6c4;
+  }
+}

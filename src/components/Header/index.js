@@ -24,6 +24,15 @@ class Header extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    // If user unlocks metamask, changes his account, we need to check if the account was registered
+    const shouldRequestMainnetAddress =
+      this.props.isTournament && this.props.currentAccount !== prevProps.currentAccount
+    if (shouldRequestMainnetAddress) {
+      this.props.requestMainnetAddress()
+    }
+  }
+
   @autobind
   async handleConnectWalletClick() {
     const { isConnectedToCorrectNetwork, lockedMetamask } = this.props
