@@ -7,6 +7,7 @@ import className from 'classnames/bind'
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
+import { shouldUseMetamask, shouldUseUport } from 'utils/configuration'
 import { hasMetamask } from 'integrations/metamask/utils'
 
 import Identicon from './Identicon'
@@ -36,14 +37,18 @@ class Header extends Component {
   @autobind
   async handleConnectWalletClick() {
     const { isConnectedToCorrectNetwork, lockedMetamask } = this.props
-    if (!hasMetamask()) {
+    if (!hasMetamask() && !shouldUseUport) {
       this.props.openInstallMetamaskModal()
-    } else if (lockedMetamask) {
-      this.props.openUnlockMetamaskModal()
-    } else if (!isConnectedToCorrectNetwork) {
-      this.props.openSwitchNetworkModal()
-    } else {
-      this.props.openRegisterWalletModal()
+    } else if (shouldUseMetamask()) {
+      if (lockedMetamask) {
+        this.props.openUnlockMetamaskModal()
+      } else if (!isConnectedToCorrectNetwork) {
+        this.props.openSwitchNetworkModal()
+      } else {
+        this.props.openRegisterWalletModal()
+      }
+    } else if (shouldUseUport()) {
+      this.props.initUport()
     }
   }
 
@@ -176,6 +181,7 @@ Header.propTypes = {
   lockedMetamask: PropTypes.bool,
   requestMainnetAddress: PropTypes.func.isRequired,
   mainnetAddress: PropTypes.string,
+  initUport: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {

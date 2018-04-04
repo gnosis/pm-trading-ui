@@ -1,4 +1,5 @@
 import config from 'config.json'
+import { WALLET_PROVIDER } from 'integrations/constants'
 
 export const isTournament = () => config.interface.tournament
 
@@ -49,3 +50,7 @@ export const getProvider = () => config.interface?.provider
 export const getUportOptions = () => config.interface?.uportOptions
 
 export const getTermsOfUseURL = () => config.interface?.termsOfUse?.url
+
+export const shouldUseMetamask = () => isTournament() && getProvider() === WALLET_PROVIDER.METAMASK
+
+export const shouldUseUport = () => isTournament() && getProvider() === WALLET_PROVIDER.UPORT

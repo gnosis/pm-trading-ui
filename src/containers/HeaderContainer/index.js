@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { openModal } from 'actions/modal'
 import { requestMainnetAddress } from 'actions/account'
+import { initProviders } from 'integrations/store/actions'
 import { withRouter } from 'react-router-dom'
 
 import Header from 'components/Header'
@@ -26,6 +27,7 @@ import {
   getGameGuideURL,
   getTokenAddress,
 } from 'utils/configuration'
+import { WALLET_PROVIDER } from 'integrations/constants'
 
 const mapStateToProps = state => ({
   hasWallet: checkWalletConnection(state),
@@ -53,6 +55,7 @@ const mapDispatchToProps = dispatch => ({
   openSwitchNetworkModal: () => dispatch(openModal({ modalName: 'ModalSwitchNetwork' })),
   openRegisterWalletModal: () => dispatch(openModal({ modalName: 'ModalRegisterWallet' })),
   requestMainnetAddress: () => dispatch(requestMainnetAddress()),
+  initUport: () => dispatch(initProviders({ providers: [WALLET_PROVIDER.UPORT] })),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header))

@@ -47,7 +47,7 @@
       }
     },
     "faviconPath": "assets/img/gnosis_logo_icon.svg",
-    "provider": "METAMASK",
+    "provider": "UPORT",
     "uportOptions": {
       "appName": "Tournament test",
       "clientId": "2ooNzwDvjgZTPswkrewUnxokRUH8KYpRNNL",
