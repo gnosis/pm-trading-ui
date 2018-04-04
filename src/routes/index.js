@@ -3,10 +3,13 @@ import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import web3 from 'web3'
 
-import MarketListPage from 'routes/marketlist/container/MarketList'
+import GameGuidePage from 'routes/GameGuide/containers/GameGuide'
+import MarketListPage from 'containers/MarketListPage'
+import ScoreboardPage from 'routes/Scoreboard/containers/ScoreBoard'
 import MarketDetailPage from 'routes/MarketDetails/containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
 import DashboardPage from 'containers/DashboardPage'
+import { shallShowScoreboard, shallShowGameGuide, getGameGuideType } from 'utils/configuration'
 
 const marketDetailRender = (props) => {
   if (web3.utils.isAddress(props.match.params.id)) {
@@ -14,6 +17,7 @@ const marketDetailRender = (props) => {
   }
   return <Redirect to="/markets/list" />
 }
+const showGameGuide = shallShowGameGuide() && getGameGuideType() === 'default'
 
 marketDetailRender.propTypes = {
   match: PropTypes.shape({
@@ -25,12 +29,13 @@ marketDetailRender.propTypes = {
 
 const AppRouter = () => (
   <Switch>
-    <Redirect exact from="/" to="/markets/list" />
     <Route exact path="/dashboard" component={DashboardPage} />
     <Route exact path="/transactions" component={TransactionsPage} />
     <Route exact path="/markets/list" component={MarketListPage} />
-    {/* <Route exact path="/markets/moe" component={MarketListMoe} /> */}
     <Route exact path="/markets/:id/:view?/:shareId?" render={marketDetailRender} />
+    {shallShowScoreboard() && <Route exact path="/scoreboard" component={ScoreboardPage} />}
+    {showGameGuide && <Route exact path="/game-guide" component={GameGuidePage} />}
+    <Redirect to="/markets/list" />
   </Switch>
 )
 

@@ -8,42 +8,18 @@ export const isGnosisInitialized = state => !!state.blockchain.get('gnosisInitia
 
 export const triedToConnect = state => !!state.blockchain.get('connectionTried')
 
-export const getGasCosts = (state) => {
-  const gasCosts = state.blockchain.get('gasCosts')
-
-  return gasCosts.map((cost) => {
-    if (!cost) {
-      return 0
-    }
-
-    return cost
-  })
-}
-
 export const isGasCostFetched = (state, property) => state.blockchain.getIn(['gasCosts', property]) !== undefined
 
-export const getEtherTokensAmount = (state, account) => {
-  const etherTokensAmount = state.blockchain.getIn(['etherTokens', account], 0)
-  let etherTokensDecimal
+export const getTokenAmount = (state, tokenAddress) => {
+  const tokenAmount = state.blockchain.getIn(['tokenBalances', tokenAddress], 0)
+  let defaultTokenDecimal
   try {
-    etherTokensDecimal = Decimal(etherTokensAmount)
+    defaultTokenDecimal = Decimal(tokenAmount)
   } catch (e) {
-    etherTokensDecimal = Decimal(0)
+    defaultTokenDecimal = Decimal(0)
   }
 
-  return etherTokensDecimal
+  return defaultTokenDecimal
 }
 
-export const getGasPrice = (state) => {
-  const gasPrice = state.blockchain.get('gasPrice', 0)
-  let gasPriceDecimal
-  try {
-    gasPriceDecimal = Decimal(gasPrice.toString())
-  } catch (e) {
-    gasPriceDecimal = Decimal(0)
-  }
-
-  return gasPriceDecimal
-}
-
-export const isGasPriceFetched = state => state.blockchain.get('gasPrice') !== undefined
+export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['tokenSymbols', tokenAddress])

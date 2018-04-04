@@ -7,11 +7,8 @@
     "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail",
     "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama"
   },
-  "stagingWhitelist": {
-
-  },
-  "productionWhitelist": {
-  },
+  "stagingWhitelist": {},
+  "productionWhitelist": {},
   "gnosisdb": {
     "protocol": "https",
     "hostDev": "gnosisdb.staging.gnosisdev.com",
@@ -25,5 +22,37 @@
     "port": 443
   },
   "fetchMarketTimeInterval": 15000,
-  "ravenPublicDSN": null
+  "ravenPublicDSN": null,
+  "interface": {
+    "tournament": false,
+    "token": "0xd19bce9f7693598a9fa1f94c548b20887a33f141",
+    "logoPath": "/assets/img/placeholder.svg",
+    "smallLogoPath": "/assets/img/placeholder.svg",
+    "showScoreboard": true,
+    "gameGuide": {
+      "display": true,
+      "type": "link",
+      "url": "https://gnosis.pm"
+    },
+    "termsOfUse": {
+      "url":"https://gnosis.pm"
+    },
+    "footer": {
+      "display": true,
+      "content": {
+        "type": "file",
+        "source": "Powered by Gnosis",
+        "markdown": true
+      }
+    },
+    "faviconPath": "assets/img/gnosis_logo_icon.svg",
+    "provider": "METAMASK",
+    "uportOptions": {
+      "appName": "Tournament test",
+      "clientId": "2ooNzwDvjgZTPswkrewUnxokRUH8KYpRNNL",
+      "network": "rinkeby",
+      "privateKey": "a42611a039cad931c41e072953cb7dcaaa6b2dfefeff6a459d9ce4281acf0c01",
+      "useNotifications": false
+    }
+  }
 }

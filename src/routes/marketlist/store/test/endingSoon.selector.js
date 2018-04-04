@@ -11,20 +11,20 @@ const endingSoonTests = () => {
       // GIVEN
       const aEndingSoonMarket = aMarket()
         .ofCategoricalType()
-        .withResolution(moment().add(3, 'days'))
+        .withResolution(moment().add(3, 'days').utc())
         .withStage(MARKET_STAGES.MARKET_FUNDED)
         .withResolved(false)
         .get()
 
       const aClosedMarketViaStage = aMarket()
         .ofScalarType()
-        .withResolution(moment())
+        .withResolution(moment().utc())
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()
 
       const anExpiredMarket = aMarket()
         .ofCategoricalType()
-        .withResolution(moment().subtract(1, 'days'))
+        .withResolution(moment().subtract(1, 'days').utc())
         .withStage(MARKET_STAGES.MARKET_FUNDED)
         .withResolved(false)
         .get()
@@ -43,7 +43,7 @@ const endingSoonTests = () => {
       // GIVEN
       const aClosedMarket = aMarket()
         .ofScalarType()
-        .withResolution(moment().subtract(1, 'M'))
+        .withResolution(moment().subtract(1, 'M').utc())
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()
 

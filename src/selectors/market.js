@@ -1,12 +1,9 @@
-import { values } from 'lodash'
 import Decimal from 'decimal.js'
 import { isMarketResolved, isMarketClosed } from 'utils/helpers'
-
 import { entitySelector } from 'selectors/entities'
 import { getEventByAddress } from 'selectors/event'
 import { getOracleByAddress } from 'selectors/oracle'
 import { getEventDescriptionByAddress } from 'selectors/eventDescription'
-import { getAccountShares } from 'selectors/marketShares'
 
 export const getMarketById = state => (marketAddress) => {
   const marketEntities = entitySelector(state, 'markets')
@@ -113,31 +110,3 @@ export const sortMarkets = (markets = [], orderBy = null) => {
   }
 }
 
-export const getAccountPredictiveAssets = (state, account) => {
-  let predictiveAssets = new Decimal(0)
-
-  if (account) {
-    const shares = values(getAccountShares(state, account))
-    if (shares.length) {
-      predictiveAssets = shares.reduce(
-        (assets, share) => assets.add(new Decimal(share.balance).mul(share.marginalPrice)),
-        new Decimal(0),
-      )
-    }
-  }
-
-  return predictiveAssets
-}
-
-export const getRedeemedShares = (state, marketAddress) => {
-  const shares = getAccountShares(state)
-
-  const redeemedShares = {}
-  Object.keys(shares).forEach((shareId) => {
-    const share = shares[shareId]
-    if (share.market && share.market.address === marketAddress) {
-      redeemedShares[shareId] = share
-    }
-  })
-  return redeemedShares
-}

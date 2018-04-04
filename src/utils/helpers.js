@@ -5,6 +5,7 @@ import moment from 'moment'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES, MARKET_STAGES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
+import Uport from 'integrations/uport'
 
 import dictionary from 'randomNames.json'
 
@@ -153,6 +154,10 @@ export const getGnosisJsOptions = (provider) => {
   } else if (provider && provider === WALLET_PROVIDER.PARITY) {
     // Inject window.web3
     opts.ethereum = window.web3.currentProvider
+  } else if (provider && provider.name === WALLET_PROVIDER.UPORT) {
+    const { uport } = Uport
+    opts.ethereum = uport.getProvider()
+    opts.defaultAccount = provider.account
   } else {
     // Default remote node
     opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
@@ -169,7 +174,7 @@ export const generateDeterministicRandomName = (seed) => {
 
   // generate 5 so later we have more params left over for longer names, without changing everyone's other words
   // eslint-disable-next-line no-unsued-vars
-  const [r1, r2, ...params] = range(0, 5).map(rng)
+  const [r1, r2] = range(0, 5).map(rng)
 
   const { adjectives, nouns } = dictionary
 

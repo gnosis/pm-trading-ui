@@ -1,7 +1,6 @@
-@import "../../scss/vars.scss";
+@import '../../scss/vars.scss';
 
 $navbarHeight: 40px;
-
 .headerContainer {
   vertical-align: middle;
   padding: 30px 0 40px;
@@ -33,7 +32,6 @@ $navbarHeight: 40px;
 
   .container {
     display: flex;
-    align-items: center;
   }
 
   .network {
@@ -137,12 +135,12 @@ $navbarHeight: 40px;
       border-bottom: 2px solid transparent;
       color: black !important;
       font-size: 11px;
-    
+
       @media (min-width: $screen-sm) {
         font-size: 14px;
         margin-left: 20px;
       }
-    
+
       &:hover,
       &.active {
         border-color: $link-color;
@@ -155,7 +153,7 @@ $navbarHeight: 40px;
   display: inline-block;
   height: 25px;
   width: 70px;
-  background-image: url("../../assets/img/gnosis_logo_icon.svg");
+  background-image: var(--smallLogoPath, url('../../assets/img/gnosis_logo_icon.svg'));
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;
@@ -163,7 +161,7 @@ $navbarHeight: 40px;
   @media (min-width: $screen-sm) {
     height: 40px;
     width: 130px;
-    background-image: url("../../assets/img/gnosis_logo.svg");
+    background-image: var(--logoPath, url('../../assets/img/gnosis_logo.svg'));
   }
 
   &.beta {
@@ -173,11 +171,16 @@ $navbarHeight: 40px;
     color: #989898;
     letter-spacing: 1px;
     font-weight: normal;
+
     &:after {
-      content: "BETA";
+      content: var(--logoAnnotation, 'BETA');
       position: absolute;
       right: 0;
-      bottom: 0;
+      bottom: -5px;
+
+      @media (max-width: $screen-sm) {
+        bottom: -20px;
+      }
     }
   }
 }

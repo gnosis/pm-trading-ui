@@ -1,14 +1,9 @@
 import { createAction } from 'redux-actions'
 import uuid from 'uuid/v4'
 
-import {
-  didTransactionSucceed,
-  transactionSelector,
-} from 'selectors/transactions'
+import { didTransactionSucceed, transactionSelector } from 'selectors/transactions'
 
-import {
-  DEFAULT_NOTIFICATION_FADEOUT,
-} from 'utils/constants'
+import { DEFAULT_NOTIFICATION_FADEOUT } from 'utils/constants'
 
 export const showNotification = createAction('SHOW_NOTIFICATION')
 export const fadeOutNotification = createAction('FADE_OUT_NOTIFICATION')
@@ -34,10 +29,7 @@ export const createNotification = (
   }, fadeOutTimer)
 }
 
-export const createNotificationFromTransaction = (
-  transactionId,
-  type = 'START',
-) => (dispatch, getState) => {
+export const createNotificationFromTransaction = (transactionId, type = 'START') => (dispatch, getState) => {
   const state = getState()
   const transaction = transactionSelector(state, transactionId)
 
@@ -54,11 +46,7 @@ export const createNotificationFromTransaction = (
     icon = success ? 'checkmark' : 'error'
   }
 
-  dispatch(createNotification(
-    title,
-    message,
-    icon,
-  ))
+  dispatch(createNotification(title, message, icon))
 }
 
 export const hideAllNotifications = createAction('HIDE_ALL_NOTIFICATIONS')

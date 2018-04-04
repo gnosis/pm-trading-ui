@@ -3,19 +3,20 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import { marketShape } from 'utils/shapes'
-import { collateralTokenToText } from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
 import { weiToEth } from 'utils/helpers'
 import style from './Infos.mod.scss'
 
 const cx = cn.bind(style)
 
-const Infos = ({ market, defaultAccount, moderators }) => {
+const Infos = ({
+  market, defaultAccount, moderators, collateralTokenSymbol,
+}) => {
   const marketInfos = {
-    Token: collateralTokenToText(market.event.collateralToken),
+    Token: collateralTokenSymbol,
     Fee: `${decimalToText(market.fee, 2) / 10000} %`,
-    Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
-    'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenToText(market.event.collateralToken)}`,
+    Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenSymbol}`,
+    'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenSymbol}`,
   }
   const showWithdrawFees =
     defaultAccount && market.oracle.owner === defaultAccount && new Decimal(market.collectedFees).gt(0)
@@ -26,7 +27,7 @@ const Infos = ({ market, defaultAccount, moderators }) => {
   }
 
   if (showWithdrawFees) {
-    marketInfos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenToText(market.event.collateralToken)}`
+    marketInfos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenSymbol}`
   }
 
   return (
@@ -45,6 +46,7 @@ Infos.propTypes = {
   market: marketShape.isRequired,
   defaultAccount: PropTypes.string,
   moderators: PropTypes.objectOf(PropTypes.string),
+  collateralTokenSymbol: PropTypes.string.isRequired,
 }
 
 Infos.defaultProps = {
