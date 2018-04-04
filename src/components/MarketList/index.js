@@ -21,9 +21,9 @@ import {
 
 import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
+import { isMarketClosed, isMarketResolved } from 'utils/helpers'
 
 import './marketList.scss'
-import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
 
 const resolutionFilters = [
   {

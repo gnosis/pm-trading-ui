@@ -1,9 +1,9 @@
 import { List } from 'immutable'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
+import { OUTCOME_TYPES } from 'utils/constants'
 import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
 import addMarkets from './addMarkets'
-import { OUTCOME_TYPES } from '../../../../utils/constants'
 
 // TODO The default assignment is because JEST test do not work out of the box
 // with ENV variables. Fix that using the plugin dotenv(for example)
