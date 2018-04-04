@@ -8,19 +8,24 @@ import style from './WinningOutcome.mod.scss'
 
 const cx = cn.bind(style)
 
-const WinningOutcome = ({
-  market: { eventDescription: { outcomes, unit, decimals }, oracle: { outcome: winningOutcome }, event: { type } },
-}) => {
+const WinningOutcome = ({ market }) => {
+  const {
+    bounds,
+    winningOutcome,
+    type,
+  } = market
+
   let outcomeText
+
   if (type === OUTCOME_TYPES.CATEGORICAL) {
-    outcomeText = `${outcomes[winningOutcome]}`
+    outcomeText = `${winningOutcome.name}`
   } else if (type === OUTCOME_TYPES.SCALAR) {
-    const outcomeValue = Decimal(winningOutcome)
-      .div(10 ** decimals)
+    const outcomeValue = Decimal(market.winningOutcome)
+      .div(10 ** bounds.decimals)
       .toString()
     outcomeText = (
       <Fragment>
-        {outcomeValue} <span className={cx('winningOutcomeUnit')}>{unit}</span>
+        {outcomeValue} <span className={cx('winningOutcomeUnit')}>{bounds.unit}</span>
       </Fragment>
     )
   }
@@ -37,16 +42,7 @@ const WinningOutcome = ({
 }
 
 WinningOutcome.propTypes = {
-  eventDescription: eventDescriptionShape,
-  outcomes: PropTypes.array,
-  type: PropTypes.string,
-  funding: PropTypes.string,
-  oracle: PropTypes.object,
-  outcome: PropTypes.string,
-  netOutcomeTokensSold: PropTypes.string,
   market: marketShape,
-  unit: PropTypes.string,
-  decimals: PropTypes.string,
 }
 
 WinningOutcome.defaultProps = {

@@ -11,23 +11,22 @@ import style from './outcomeCategorical.mod.scss'
 
 const cx = cn.bind(style)
 
-const OutcomeCategorical = ({ market, opts = {} }) => {
-  const renderOutcomes = market.eventDescription.outcomes
+const OutcomeCategorical = ({ market, market: { outcomes }, opts = {} }) => {
   const {
     showOnlyTrendingOutcome, showDate, dateFormat, className,
   } = opts
-  const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
+  const tokenDistribution = outcomes.toArray().map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: market.netOutcomeTokensSold,
+      netOutcomeTokensSold: market.outcomeTokensSold.toArray(),
       funding: market.funding,
       outcomeTokenIndex: outcomeIndex,
     })
 
-    return marginalPrice.toFixed()
+    return marginalPrice.toFixed(5)
   })
 
-  // show only treding outcome
-  if (showOnlyTrendingOutcome && !market.oracle.isOutcomeSet) {
+  // show only trending outcome
+  if (showOnlyTrendingOutcome && !market.resolved) {
     const tokenDistributionInt = tokenDistribution.map(outcome => parseInt(parseFloat(outcome) * 10000, 10))
     const trendingOutcomeIndex = tokenDistributionInt.indexOf(Math.max(...tokenDistributionInt))
     const outcomeEntryStyle = {
@@ -41,7 +40,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
     return (
       <TrendingOutcomeCategorical
         entryStyle={outcomeEntryStyle}
-        outcome={renderOutcomes[trendingOutcomeIndex]}
+        outcome={outcomes[trendingOutcomeIndex]}
         percentage={trendingMarginalPricePercent}
         resolutionDate={resolutionDateFormatted}
       />
@@ -51,7 +50,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
   // show all outcomes
   return (
     <div className={className}>
-      {renderOutcomes.map((outcome, outcomeIndex) => {
+      {outcomes.map((outcome, outcomeIndex) => {
         const outcomeBarStyle = {
           width: `${tokenDistribution[outcomeIndex] * 100}%`,
           backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex],
@@ -63,7 +62,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
             <div className={cx('outcomeBar')}>
               <div className={cx('outcomeBarInner')} style={outcomeBarStyle}>
                 <div className={cx('outcomeBarLabel')}>
-                  {renderOutcomes[outcomeIndex]}
+                  {outcomes[outcomeIndex]}
                   <div className={cx('outcomeBarValue')}>{tokenDistributionPercent}</div>
                 </div>
               </div>

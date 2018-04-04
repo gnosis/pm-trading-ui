@@ -21,7 +21,7 @@ const RadioButtonGroup = ({
     <label>{label}</label>
     {options.map(option => (
       <RadioButton
-        key={option.value}
+        key={JSON.stringify(option.value)}
         value={option.value}
         label={option.label}
         input={input}
@@ -37,7 +37,7 @@ RadioButtonGroup.propTypes = {
   input: PropTypes.shape(fieldPropTypes.input).isRequired,
   meta: PropTypes.shape(fieldPropTypes.meta).isRequired,
   options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    value: PropTypes.any,
     label: PropTypes.node,
   })),
   label: PropTypes.node,

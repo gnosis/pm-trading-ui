@@ -10,7 +10,7 @@ export const findDefaultProvider = (state) => {
   return providersSorted.find(({ available, loaded }) => available && loaded)
 }
 
-export const getActiveProviderName = state => state.integrations.get('activeProvider')
+export const getActiveProviderName = state => state && state.integrations && state.integrations.get('activeProvider')
 
 export const getActiveProvider = (state) => {
   const activeProviderName = getActiveProviderName(state)
@@ -29,7 +29,6 @@ export const getActiveProvider = (state) => {
  */
 export const getCurrentAccount = (state) => {
   const provider = getActiveProvider(state)
-
   if (provider && provider.account) {
     return provider.account.toLowerCase()
   }

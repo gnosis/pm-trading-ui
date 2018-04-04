@@ -1,15 +1,16 @@
 import { List } from 'immutable'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
-import { BoundsRecord, MarketRecord, OutcomeRecord } from 'store/models'
+import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
 import addMarkets from './addMarkets'
+import { OUTCOME_TYPES } from '../../../../utils/constants'
 
 // TODO The default assignment is because JEST test do not work out of the box
 // with ENV variables. Fix that using the plugin dotenv(for example)
 const whitelisted = process.env.WHITELIST || {}
 const addresses = Object.keys(whitelisted).map(address => hexWithoutPrefix(address))
 
-const buildOutcomesFrom = (outcomes, marginalPrices) => {
+const buildOutcomesFrom = (outcomes, outcomeTokensSold, marginalPrices) => {
   if (!outcomes) {
     return List([])
   }
@@ -17,36 +18,132 @@ const buildOutcomesFrom = (outcomes, marginalPrices) => {
   const outcomesRecords = outcomes.map((outcome, index) => new OutcomeRecord({
     name: outcome,
     marginalPrice: marginalPrices[index],
+    outcomeTokensSold: outcomeTokensSold[index],
   }))
 
   return List(outcomesRecords)
 }
 
-const buildBoundsFrom = (lower, upper, unit) => BoundsRecord({ lower, upper, unit })
+const buildBoundsFrom = (lower, upper, unit, decimals) => BoundsRecord({
+  lower, upper, unit, decimals: parseInt(decimals, 10),
+})
 
-const extractMarkets = markets => markets.map((market) => {
+const buildScalarMarket = (market) => {
   const {
     stage,
-    contract: { address, creationDate: creation },
+    contract: {
+      address,
+      creationDate,
+      creator,
+    },
     tradingVolume,
-    event: { type },
+    funding,
+    netOutcomeTokensSold,
+    event: {
+      type,
+      collateralToken,
+      lowerBound,
+      upperBound,
+      oracle: {
+        isOutcomeSet,
+        outcome,
+        eventDescription: {
+          title,
+          description,
+          resolutionDate,
+          unit,
+          decimals,
+        },
+      },
+    },
   } = market
-  const { eventDescription, isOutcomeSet: resolved } = market.event.oracle
-  const {
+
+  const outcomesResponse = ['SHORT', 'LONG']
+
+  const outcomes = buildOutcomesFrom(outcomesResponse, netOutcomeTokensSold, market.marginalPrices)
+  const bounds = buildBoundsFrom(lowerBound, upperBound, unit, decimals)
+
+  const marketRecord = new ScalarMarketRecord({
     title,
-    unit,
-    resolutionDate: resolution,
-    outcomes: outcomesResponse,
-  } = eventDescription
-
-  const outcomes = buildOutcomesFrom(outcomesResponse, market.marginalPrices)
-  const bounds = buildBoundsFrom(market.event.lowerBound, market.event.upperBound, unit)
-
-  const marketRecord = new MarketRecord({
-    title, address, resolution, creation, stage, volume: tradingVolume, resolved, type, outcomes, bounds,
+    description,
+    creator,
+    collateralToken,
+    address,
+    stage,
+    type,
+    outcomes,
+    bounds,
+    resolution: resolutionDate,
+    creation: creationDate,
+    volume: tradingVolume,
+    resolved: isOutcomeSet,
+    winningOutcome: outcome,
+    funding: funding || 0,
+    outcomeTokensSold: List(netOutcomeTokensSold),
   })
 
   return marketRecord
+}
+
+const buildCategoricalMarket = (market) => {
+  const {
+    stage,
+    contract: { address, creationDate, creator },
+    tradingVolume,
+    funding,
+    netOutcomeTokensSold,
+    event: {
+      collateralToken,
+      oracle: {
+        isOutcomeSet,
+        outcome: winningOutcomeIndex,
+        eventDescription: {
+          title,
+          description,
+          resolutionDate,
+          outcomes: outcomeLabels,
+        },
+      },
+    },
+  } = market
+
+  const outcomes = buildOutcomesFrom(outcomeLabels, netOutcomeTokensSold, market.marginalPrices)
+
+  const marketRecord = new CategoricalMarketRecord({
+    title,
+    description,
+    creator,
+    collateralToken,
+    address,
+    stage,
+    outcomes,
+    resolution: resolutionDate,
+    creation: creationDate,
+    volume: tradingVolume,
+    resolved: isOutcomeSet,
+    funding: funding || 0,
+    winningOutcome: outcomes.get(winningOutcomeIndex),
+    outcomeTokensSold: List(netOutcomeTokensSold),
+  })
+
+  return marketRecord
+}
+
+const builderFunctions = {
+  [OUTCOME_TYPES.CATEGORICAL]: buildCategoricalMarket,
+  [OUTCOME_TYPES.SCALAR]: buildScalarMarket,
+}
+
+const extractMarkets = markets => markets.map((market) => {
+  const marketType = market.event.type
+
+  const builder = builderFunctions[marketType]
+
+  if (!builder) {
+    throw new Error(`No builder function associated with type '${marketType}'`)
+  }
+
+  return builder.call(builder, market)
 })
 
 

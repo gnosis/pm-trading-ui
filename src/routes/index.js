@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import web3 from 'web3'
@@ -17,6 +18,14 @@ const marketDetailRender = (props) => {
   return <Redirect to="/markets/list" />
 }
 const showGameGuide = shallShowGameGuide() && getGameGuideType() === 'default'
+
+marketDetailRender.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+}
 
 const AppRouter = () => (
   <Switch>
