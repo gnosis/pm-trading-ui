@@ -43,7 +43,7 @@ const endingSoonTests = () => {
       // GIVEN
       const aClosedMarket = aMarket()
         .ofScalarType()
-        .withResolution(moment().subtract(1, 'M').utc())
+        .withResolution(moment().subtract(1, 'months').utc())
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()
 
