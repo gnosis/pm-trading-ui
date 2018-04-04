@@ -1,5 +1,5 @@
 import moment from 'moment'
-import get from 'lodash'
+import { get } from 'lodash'
 import { createSelector } from 'reselect'
 import { getFormValues } from 'redux-form'
 import { isMarketClosed } from 'store/utils/marketStatus'
@@ -37,12 +37,6 @@ const SORTFIELD_TRADING_VOLUME = 'volume'
 const SORTER_VALUE_PARSERS = {
   [SORTFIELD_RESOLUTION_DATE]: val => moment(val).unix(),
   [SORTFIELD_TRADING_VOLUME]: val => parseInt(val, 10),
-}
-
-const DEFAULT_SORT_VALUES = {
-  sortBy: {
-    value: {},
-  },
 }
 
 const marketSort = createSelector(
