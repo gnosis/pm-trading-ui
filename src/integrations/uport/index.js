@@ -70,7 +70,7 @@ class Uport extends InjectedWeb3 {
   }
 
   getNetworkId() {
-    return hexWithoutPrefix(this.web3.currentProvider.networkId)
+    return +hexWithoutPrefix(this.web3.currentProvider.networkId)
   }
 
   getAccount() {

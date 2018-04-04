@@ -19,32 +19,25 @@ const TextInput = ({
   meta: { touched, error },
   startAdornment,
   endAdornment,
+  wrapperStyle,
+  errorStyle,
   ...props
 }) => {
   const inputId = `formTextInput_${input.name}`
 
   const textInputClasses = cx('formTextInput', className, decoration, {
-    error: (touched && error),
+    error: touched && error,
   })
 
   return (
     <div className={textInputClasses}>
-      <label htmlFor={inputId}>
-        {label}
-      </label>
-      <div className={cx('wrapper')}>
+      {label && <label htmlFor={inputId}>{label}</label>}
+      <div className={cx('wrapper')} style={wrapperStyle}>
         {startAdornment}
-        <input
-          id={inputId}
-          autoComplete="off"
-          placeholder={placeholder}
-          type={type}
-          {...input}
-          {...props}
-        />
+        <input id={inputId} autoComplete="off" placeholder={placeholder} type={type} {...input} {...props} />
         {endAdornment}
       </div>
-      <InputError error={touched && error} />
+      <InputError error={touched && error} style={errorStyle} />
     </div>
   )
 }
@@ -59,6 +52,10 @@ TextInput.propTypes = {
   startAdornment: PropTypes.node,
   endAdornment: PropTypes.node,
   decoration: PropTypes.oneOf(['underlined']),
+  // eslint-disable-next-line
+  wrapperStyle: PropTypes.object,
+  // eslint-disable-next-line
+  errorStyle: PropTypes.object,
 }
 
 TextInput.defaultProps = {
@@ -69,6 +66,8 @@ TextInput.defaultProps = {
   startAdornment: undefined,
   endAdornment: undefined,
   decoration: undefined,
+  wrapperStyle: {},
+  errorStyle: {},
 }
 
 export default TextInput

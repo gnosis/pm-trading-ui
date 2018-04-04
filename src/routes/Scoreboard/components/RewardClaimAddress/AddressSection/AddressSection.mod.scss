@@ -1,13 +1,21 @@
 .addressSection {
-    padding: 26px 18px;
+  padding: 26px 18px;
 
-    .rewardClaimTitle {
-        font-size: 16px;
-        text-align: left;
-        font-weight: 500;
-        padding-bottom: 12px;
-        line-height: 1;
-        color: #000;
-        margin: 0;
-    }    
+  .rewardClaimTitle {
+    font-size: 16px;
+    text-align: left;
+    font-weight: 500;
+    padding-bottom: 12px;
+    line-height: 1;
+    color: #000;
+    margin: 0;
+  }
+
+  .button {
+    background: transparent;
+    border: 0;
+    text-decoration: underline;
+    padding: 0;
+    color: #02b1c1;
+  }
 }

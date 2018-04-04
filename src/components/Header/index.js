@@ -72,9 +72,10 @@ class Header extends Component {
     } = this.props
 
     let walletConnected = hasWallet
-    if (isTournament) {
+    if (isTournament && shouldUseMetamask()) {
       walletConnected = hasWallet && mainnetAddress
     }
+
     const logoVars = {}
     if (isTournament) {
       logoVars['--logoAnnotation'] = "'Powered by Gnosis'"

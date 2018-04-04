@@ -12,7 +12,11 @@ const AddressSection = ({ hasRegistered, mainnetAddress, openSetMainnetAddressMo
   <Block className={cx('addressSection')}>
     <Title className={cx('rewardClaimTitle')}>Your Reward Claim Address</Title>
     <Paragraph color="soft">{hasRegistered ? mainnetAddress : 'No address specified yet.'}</Paragraph>
-    {!hasRegistered && <button onClick={openSetMainnetAddressModal}>Setup claim address</button>}
+    {!hasRegistered && (
+      <button className={cx('button')} onClick={openSetMainnetAddressModal}>
+        Setup claim address
+      </button>
+    )}
   </Block>
 )
 

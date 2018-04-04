@@ -4,3 +4,4 @@ export { default as ModalTransactionExplanation } from './ModalTransactionExplan
 export { default as ModalInstallMetamask } from './ModalInstallMetamask'
 export { default as ModalUnlockMetamask } from './ModalUnlockMetamask'
 export { default as ModalRegisterWallet } from './ModalRegisterWallet'
+export { default as ModalRegisterWalletUport } from './ModalRegisterWalletUport'
