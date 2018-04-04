@@ -35,6 +35,11 @@ class MarketBuilder {
     return this
   }
 
+  withDescription(description) {
+    this.market = this.market.set('description', description)
+    return this
+  }
+
   withCreator(creator) {
     this.market = this.market.set('creator', creator)
     return this
@@ -111,6 +116,7 @@ export class MarketFactory {
     .ofScalarType()
     .withAddress('0xa625c9ccf5860e9709a31cbac1ffd6fc557558f6')
     .withTitle('How much will Cryptokitties transactions make up of the entire Ethereum network transactions by December 29th, in the last 1500 blocks?')
+    .withDescription('How much of the total Ethereum transactions in the last 1500 blocks will be made by CryptoKitties game actions in the Ethereum network? The winning outcome will be calculated according to the sum of interactions with the smart contract address: 0x06012c8cf97bead5deae237070f9587f8e7a266d (CryptoKitties) and the address: 0xb1690c08e213a35ed9bab7b318de14420fb57d8c (CryptoKitties Auction) which make up for all the interactions made with CryptoKitties contracts. Source: https://ethgasstation.info/gasguzzlers.php')
     .withResolution('2017-12-30T00:00:00')
     .withVolume('9523809523809680')
     .withFunding('10000000000000000')
@@ -130,6 +136,7 @@ export class MarketFactory {
     .ofScalarType()
     .withAddress('0xedb69ab6fa7a1740f91f7dec0c667873269bea96')
     .withTitle('What will the number of Ethereum transactions be on January 3rd, 2018?')
+    .withDescription('You can check the progress and number of Ethereum transactions here: https://etherscan.io/chart/tx')
     .withResolution('2018-01-03T12:00:00')
     .withCreation('2017-12-31T13:12:51')
     .withResolved(false)
@@ -149,6 +156,7 @@ export class MarketFactory {
     .ofCategoricalType()
     .withAddress('0xa8d84fc1fc77c87203c1448587ebdb5ee845f26b')
     .withTitle('What will be the median gas price on Feb. 1st, 2018?')
+    .withDescription('What will be the median gas price payed among all transactions on Feb. 1st, 2018?')
     .withResolution('2018-02-01T12:00:00')
     .withVolume('342952380952380954')
     .withFunding('1000000000000000000')
