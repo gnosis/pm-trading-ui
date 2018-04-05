@@ -71,7 +71,7 @@
     }
 
     .rinkebyEthAnnotation {
-      margin-top: 23px;
+      margin: 23px 0 23px 0;
 
       .linkIcon {
         width: 10px;
@@ -81,23 +81,6 @@
 
       .walletBalance {
         color: #333;
-      }
-    }
-
-    .registerButton {
-      width: 220px;
-      height: 44px;
-      font-size: 15px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      text-align: center;
-      color: #ffffff;
-      border-radius: 22px;
-      background-image: linear-gradient(to right, #00bbc5, #00a9c6);
-      margin-top: 20px;
-
-      &.disabled {
-        opacity: 0.6;
       }
     }
   }

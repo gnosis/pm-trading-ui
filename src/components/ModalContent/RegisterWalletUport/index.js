@@ -2,12 +2,11 @@ import React from 'react'
 import { reduxForm, Field, propTypes as reduxFormPropTypes } from 'redux-form'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
+import web3 from 'web3'
 
 import { updateMainnetAddress } from 'actions/account'
 import { closeModal as closeModalAction } from 'actions/modal'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
-
-import { HEX_VALUE_REGEX } from 'utils/constants'
 
 import TextInput from 'components/Form/TextInput'
 import TextInputAdornment from 'components/Form/TextInputAdornment'
@@ -86,7 +85,7 @@ const FORM = {
     return dispatch(closeModalAction())
   },
   validate: values =>
-    (HEX_VALUE_REGEX.test(values.mainnetAddress) ? {} : { mainnetAddress: 'Please enter a valid address' }),
+    (web3.utils.isAddress(values.mainnetAddress) ? {} : { mainnetAddress: 'Please enter a valid address' }),
 }
 
 export default reduxForm(FORM)(SetMainnetAddress)

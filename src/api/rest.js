@@ -3,6 +3,7 @@ import { normalize } from 'normalizr'
 import qs from 'querystring'
 import { marketSchema, marketSharesSchema, marketTradesSchema } from './schema'
 
+console.log(hexWithoutPrefix)
 export const API_URL = `${process.env.GNOSISDB_URL}/api`
 
 // TODO The default assignment is because JEST test do not work out of the box with ENV variables. Fix that using the plugin dotenv(for example)

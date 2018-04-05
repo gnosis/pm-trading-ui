@@ -1,21 +1,33 @@
 import React from 'react'
 import cn from 'classnames/bind'
-import { reduxForm, propTypes } from 'redux-form'
 import PropTypes from 'prop-types'
+import { lifecycle } from 'recompose'
+import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
+import InteractionButton from 'containers/InteractionButton'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
+import { weiToEth } from 'utils/helpers'
 import style from './RegisterWallet.mod.scss'
 
 const cx = cn.bind(style)
 
 const RegisterMainnetAddress = ({
-  closeModal, currentAccount, currentBalance, updateMainnetAddress,
+  closeModal,
+  currentAccount,
+  currentBalance,
+  updateMainnetAddress,
+  gasPrice,
+  registrationGasCost,
 }) => {
   const handleRegistration = async () => {
     await updateMainnetAddress(currentAccount)
     closeModal()
   }
+  const disabled = gasPrice
+    .mul(registrationGasCost)
+    .div(1e18)
+    .lt(currentBalance)
 
   return (
     <div className={cx('registerWallet')}>
@@ -39,23 +51,26 @@ const RegisterMainnetAddress = ({
           </a>
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
         </p>
-        <button className={cx('registerButton')} onClick={handleRegistration}>
+        <InteractionButton onClick={handleRegistration} className={cx('btn', 'btn-primary')} disabled={disabled}>
           REGISTER ADDRESS
-        </button>
+        </InteractionButton>
       </div>
     </div>
   )
 }
 
 RegisterMainnetAddress.propTypes = {
-  ...propTypes,
   closeModal: PropTypes.func.isRequired,
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
+  updateMainnetAddress: PropTypes.func.isRequired,
+  gasPrice: PropTypes.instanceOf(Decimal).isRequired,
+  registrationGasCost: PropTypes.oneOf([PropTypes.string, PropTypes.number]).isRequired,
 }
 
-const form = {
-  form: 'registerMainnetAddress',
-}
-
-export default reduxForm(form)(RegisterMainnetAddress)
+export default lifecycle({
+  componentDidMount() {
+    this.props.requestRegistrationGasCost()
+    this.props.requestGasPrice()
+  },
+})(RegisterMainnetAddress)
