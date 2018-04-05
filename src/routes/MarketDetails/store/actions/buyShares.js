@@ -60,7 +60,6 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
   }
   if (approvalResetAmount) transactions.unshift(SETTING_ALLOWANCE)
 
-  console.log(fetchMarket)
   const payload = await fetchMarket(market.address)
   const updatedMarket = payload.entities.markets[market.address]
   const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
