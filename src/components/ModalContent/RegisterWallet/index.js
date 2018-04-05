@@ -7,7 +7,6 @@ import DecimalValue from 'components/DecimalValue'
 import InteractionButton from 'containers/InteractionButton'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
-import { weiToEth } from 'utils/helpers'
 import style from './RegisterWallet.mod.scss'
 
 const cx = cn.bind(style)
@@ -27,7 +26,7 @@ const RegisterMainnetAddress = ({
   const disabled = gasPrice
     .mul(registrationGasCost)
     .div(1e18)
-    .lt(currentBalance)
+    .gt(currentBalance)
 
   return (
     <div className={cx('registerWallet')}>
@@ -65,7 +64,7 @@ RegisterMainnetAddress.propTypes = {
   currentBalance: PropTypes.string.isRequired,
   updateMainnetAddress: PropTypes.func.isRequired,
   gasPrice: PropTypes.instanceOf(Decimal).isRequired,
-  registrationGasCost: PropTypes.oneOf([PropTypes.string, PropTypes.number]).isRequired,
+  registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
 
 export default lifecycle({

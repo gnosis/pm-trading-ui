@@ -12,7 +12,7 @@ import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import PageFrame from 'components/layout/PageFrame'
 import Footer from 'components/Footer'
 import { providerPropType } from 'utils/shapes'
-
+import { hexWithoutPrefix } from 'utils/helpers'
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import { triedToConnect } from 'selectors/blockchain'
