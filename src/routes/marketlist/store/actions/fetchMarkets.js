@@ -134,7 +134,7 @@ const builderFunctions = {
   [OUTCOME_TYPES.SCALAR]: buildScalarMarket,
 }
 
-const extractMarkets = markets => markets.map((market) => {
+export const extractMarkets = markets => markets.map((market) => {
   const marketType = market.event.type
 
   const builder = builderFunctions[marketType]

@@ -11,27 +11,40 @@ import style from './outcomeScalar.mod.scss'
 
 const cx = cn.bind(style)
 
-const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome, className = '' } }) => {
+const OutcomeScalar = ({
+  resolved,
+  outcomeTokensSold,
+  funding,
+  resolution,
+  outcomes,
+  marginalPrices,
+  upperBound,
+  lowerBound,
+  unit,
+  decimals: decimalsRaw,
+  winningOutcome,
+  opts: { showOnlyTrendingOutcome, className = '' },
+}) => {
   let marginalPrice = calcLMSRMarginalPrice({
-    netOutcomeTokensSold: market.outcomeTokensSold.toArray(),
-    funding: market.funding,
+    netOutcomeTokensSold: outcomeTokensSold,
+    funding,
     outcomeTokenIndex: 1, // always calc for long when calculating estimation
   })
 
-  const showOnlyWinningOutcome = market.resolved
+  const showOnlyWinningOutcome = resolved
 
-  const decimals = parseInt(market.bounds.decimals, 10)
+  const decimals = parseInt(decimalsRaw, 10)
 
-  const upperBound = Decimal(market.bounds.upper).div(10 ** decimals)
-  const lowerBound = Decimal(market.bounds.lower).div(10 ** decimals)
+  const upper = Decimal(upperBound).div(10 ** decimals)
+  const lower = Decimal(lowerBound).div(10 ** decimals)
 
-  const bounds = upperBound.sub(lowerBound)
+  const bounds = upper.sub(lower)
   let value = Decimal(marginalPrice.toString())
     .times(bounds)
     .add(lowerBound)
 
   if (showOnlyWinningOutcome) {
-    value = Decimal(market.winningOutcome).div(10 ** decimals)
+    value = Decimal(winningOutcome).div(10 ** decimals)
     marginalPrice = value.div(upperBound)
   }
 
@@ -39,8 +52,8 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome, className = ''
     return (
       <TrendingOutcomeScalar
         predictedValue={value}
-        decimals={market.bounds.decimals}
-        unit={market.bounds.unit}
+        decimals={decimals}
+        unit={unit}
       />
     )
   }
@@ -50,18 +63,18 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome, className = ''
       <div className={cx('scalarOutcome')}>
         <div className={cx('outcomeBound', 'lower')}>
           <DecimalValue value={lowerBound} decimals={decimals} />
-          &nbsp;{market.bounds.unit}
+          &nbsp;{unit}
         </div>
         <div className={cx('currentPrediction')}>
           <div className={cx('currentPredictionLine')} />
           <div className={cx('currentPredictionValue')} style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>
             <DecimalValue value={value} decimals={decimals} />
-            &nbsp;{market.bounds.unit}
+            &nbsp;{unit}
           </div>
         </div>
         <div className={cx('outcomeBound', 'upper')}>
           <DecimalValue value={upperBound} decimals={decimals} />
-          &nbsp;{market.bounds.unit}
+          &nbsp;{unit}
         </div>
       </div>
     </div>

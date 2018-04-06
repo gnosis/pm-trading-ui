@@ -9,7 +9,7 @@ import Decimal from 'decimal.js'
 import moment from 'moment'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { RESOLUTION_TIME } from 'utils/constants'
+import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
 import MarketResolution from './MarketResolution.jsx'
 import MarketStatus from './MarketStatus.jsx'
 import MarketTrading from './MarketTrading.jsx'
@@ -57,6 +57,17 @@ class Market extends React.PureComponent {
     const resolutionDate = moment(resolution).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)
     const tradingVolume = decimalToText(new Decimal(volume).div(1e18))
 
+    const bounds = market.bounds ? {
+      upperBound: market.bounds.upper,
+      lowerBound: market.bounds.lower,
+      unit: market.bounds.unit,
+      decimals: market.bounds.decimals,
+    } : {}
+
+    const outcomes = market.outcomes ? market.outcomes.map(outcome => outcome.name).toArray() : []
+
+    const winningOutcome = market.type === OUTCOME_TYPES.CATEGORICAL ? market.outcomes.keyOf(market.winningOutcome) : market.winningOutcome
+
     return (
       <NavLink
         to={viewUrl}
@@ -70,7 +81,16 @@ class Market extends React.PureComponent {
           <h2 className={cx('title')}>{title}</h2>
           {showResolveButton && <ResolveButton url={resolveUrl} />}
         </div>
-        <Outcome market={market} />
+        <Outcome
+          resolved={market.resolved}
+          type={market.type}
+          outcomeTokensSold={market.outcomeTokensSold.toArray()}
+          resolution={market.resolution}
+          funding={market.funding}
+          outcomes={outcomes}
+          winningOutcome={winningOutcome}
+          {...bounds}
+        />
         <div className={cx('info', 'row')}>
           <div className={cx('group', 'col-md-3')}>
             <MarketStatus
