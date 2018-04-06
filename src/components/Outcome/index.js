@@ -69,8 +69,8 @@ const Outcome = ({
 Outcome.propTypes = {
   resolved: PropTypes.bool.isRequired,
   type: PropTypes.oneOf(Object.keys(OUTCOME_TYPES)).isRequired,
-  upperBound: PropTypes.number,
-  lowerBound: PropTypes.number,
+  upperBound: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  lowerBound: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   unit: PropTypes.string,
   decimals: PropTypes.number,
   outcomeTokensSold: PropTypes.array,
@@ -78,6 +78,7 @@ Outcome.propTypes = {
   funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   outcomes: PropTypes.arrayOf(PropTypes.string),
   marginalPrices: PropTypes.arrayOf(PropTypes.string),
+  winningOutcome: PropTypes.number,
   opts: PropTypes.shape({
     showOnlyTrendingOutcome: PropTypes.bool,
     showDate: PropTypes.bool,

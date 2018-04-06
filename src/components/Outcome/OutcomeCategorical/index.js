@@ -85,6 +85,9 @@ OutcomeCategorical.propTypes = {
   resolved: PropTypes.bool.isRequired,
   outcomeTokensSold: PropTypes.array.isRequired,
   resolution: PropTypes.string.isRequired,
+  funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  outcomes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  marginalPrices: PropTypes.arrayOf(PropTypes.string),
   opts: PropTypes.shape({
     className: PropTypes.string,
     showOnlyTrendingOutcome: PropTypes.bool,
@@ -94,6 +97,7 @@ OutcomeCategorical.propTypes = {
 }
 
 OutcomeCategorical.defaultProps = {
+  marginalPrices: [],
   opts: {
     className: '',
     showOnlyTrendingOutcome: false,

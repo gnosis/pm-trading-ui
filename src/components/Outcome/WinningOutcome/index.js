@@ -10,12 +10,8 @@ const cx = cn.bind(style)
 
 const WinningOutcome = ({
   type,
-  upperBound,
-  lowerBound,
   unit,
   decimals,
-  outcomeTokensSold,
-  resolution,
   outcomes,
   winningOutcome,
 }) => {
@@ -46,9 +42,16 @@ const WinningOutcome = ({
 }
 
 WinningOutcome.propTypes = {
+  type: PropTypes.oneOf(Object.keys(OUTCOME_TYPES)).isRequired,
+  winningOutcome: PropTypes.number.isRequired,
+  unit: PropTypes.string,
+  decimals: PropTypes.number,
+  outcomes: PropTypes.array.isRequired,
 }
 
 WinningOutcome.defaultProps = {
+  unit: undefined,
+  decimals: 0,
 }
 
 export default WinningOutcome

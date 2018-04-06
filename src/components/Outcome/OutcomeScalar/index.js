@@ -15,9 +15,6 @@ const OutcomeScalar = ({
   resolved,
   outcomeTokensSold,
   funding,
-  resolution,
-  outcomes,
-  marginalPrices,
   upperBound,
   lowerBound,
   unit,
@@ -82,18 +79,21 @@ const OutcomeScalar = ({
 }
 
 OutcomeScalar.propTypes = {
-  market: marketShape,
+  resolved: PropTypes.bool.isRequired,
+  upperBound: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  lowerBound: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  unit: PropTypes.string.isRequired,
+  decimals: PropTypes.number.isRequired,
+  outcomeTokensSold: PropTypes.array.isRequired,
+  funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  winningOutcome: PropTypes.number,
   opts: PropTypes.shape({
     showOnlyTrendingOutcome: PropTypes.bool,
   }),
 }
 
 OutcomeScalar.defaultProps = {
-  market: {
-    event: {},
-    eventDescription: {},
-    oracle: {},
-  },
+  winningOutcome: undefined,
   opts: {
     showOnlyTrendingOutcome: false,
   },
