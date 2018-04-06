@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
-import { marketShape } from 'utils/shapes'
 import { calcLMSRMarginalPrice } from 'api'
 import TrendingOutcomeScalar from './TrendingOutcomeScalar'
 

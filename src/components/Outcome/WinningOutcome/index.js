@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { OUTCOME_TYPES } from 'utils/constants'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
-import { eventDescriptionShape, marketShape } from 'utils/shapes'
 import style from './WinningOutcome.mod.scss'
 
 const cx = cn.bind(style)
