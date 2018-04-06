@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 
 import { isMarketClosed } from 'store/utils/marketStatus'
 
-import Market from './Market/index.jsx'
+import Market from './Market/index'
 import css from './Markets.mod.scss'
 
 const cx = classNames.bind(css)

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
 
-import Form from './Form.jsx'
+import Form from './Form'
 
 import css from '../Filter.mod.scss'
 

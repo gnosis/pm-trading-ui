@@ -10,9 +10,9 @@ import moment from 'moment'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
-import MarketResolution from './MarketResolution.jsx'
-import MarketStatus from './MarketStatus.jsx'
-import MarketTrading from './MarketTrading.jsx'
+import MarketResolution from './MarketResolution'
+import MarketStatus from './MarketStatus'
+import MarketTrading from './MarketTrading'
 
 import css from '../Market.mod.scss'
 
