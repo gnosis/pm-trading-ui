@@ -18,6 +18,8 @@ import css from './Header.scss'
 
 const cx = className.bind(css)
 
+const [useMetamask, useUport] = [shouldUseMetamask(), shouldUseUport()]
+
 class Header extends Component {
   componentDidMount() {
     if (this.props.isTournament && this.props.currentAccount) {
@@ -37,9 +39,9 @@ class Header extends Component {
   @autobind
   async handleConnectWalletClick() {
     const { isConnectedToCorrectNetwork, lockedMetamask } = this.props
-    if (!hasMetamask() && !shouldUseUport) {
+    if (!hasMetamask() && !useUport) {
       this.props.openModal('ModalInstallMetamask')
-    } else if (shouldUseMetamask()) {
+    } else if (useMetamask) {
       if (lockedMetamask) {
         this.props.openModal('ModalUnlockMetamask')
       } else if (!isConnectedToCorrectNetwork) {
@@ -47,7 +49,7 @@ class Header extends Component {
       } else {
         this.props.openModal('ModalRegisterWallet')
       }
-    } else if (shouldUseUport()) {
+    } else if (useUport) {
       this.props.initUport()
     }
   }
@@ -72,7 +74,7 @@ class Header extends Component {
     } = this.props
 
     let walletConnected = hasWallet
-    if (isTournament && shouldUseMetamask()) {
+    if (isTournament && useMetamask) {
       walletConnected = hasWallet && mainnetAddress
     }
 
@@ -145,7 +147,7 @@ class Header extends Component {
                 <CurrencyName className={cx('account', 'text')} tokenAddress={tokenAddress} />
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
-                <MenuAccountDropdown />
+                {useUport && <MenuAccountDropdown />}
               </div>
             )}
             {!walletConnected && (
