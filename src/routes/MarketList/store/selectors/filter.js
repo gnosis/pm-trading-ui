@@ -4,7 +4,7 @@ import { getFormValues } from 'redux-form'
 import { getCurrentAccount } from 'integrations/store/selectors'
 import { isMarketFunded, isMarketClosed } from 'store/utils/marketStatus'
 
-import { MARKETFILTER_FORM_NAME } from 'routes/MarketList/components/Filter/Form.jsx'
+import { MARKETFILTER_FORM_NAME } from 'routes/MarketList/components/Filter/Form'
 
 const formFilterSelector = getFormValues(MARKETFILTER_FORM_NAME)
 
