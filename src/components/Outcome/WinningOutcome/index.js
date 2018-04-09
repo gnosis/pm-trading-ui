@@ -3,15 +3,19 @@ import PropTypes from 'prop-types'
 import { OUTCOME_TYPES } from 'utils/constants'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
-import { eventDescriptionShape, marketShape } from 'utils/shapes'
 import style from './WinningOutcome.mod.scss'
 
 const cx = cn.bind(style)
 
 const WinningOutcome = ({
-  market: { eventDescription: { outcomes, unit, decimals }, oracle: { outcome: winningOutcome }, event: { type } },
+  type,
+  unit,
+  decimals,
+  outcomes,
+  winningOutcome,
 }) => {
   let outcomeText
+
   if (type === OUTCOME_TYPES.CATEGORICAL) {
     outcomeText = `${outcomes[winningOutcome]}`
   } else if (type === OUTCOME_TYPES.SCALAR) {
@@ -37,32 +41,16 @@ const WinningOutcome = ({
 }
 
 WinningOutcome.propTypes = {
-  eventDescription: eventDescriptionShape,
-  outcomes: PropTypes.array,
-  type: PropTypes.string,
-  funding: PropTypes.string,
-  oracle: PropTypes.object,
-  outcome: PropTypes.string,
-  netOutcomeTokensSold: PropTypes.string,
-  market: marketShape,
+  type: PropTypes.oneOf(Object.keys(OUTCOME_TYPES)).isRequired,
+  winningOutcome: PropTypes.number.isRequired,
   unit: PropTypes.string,
-  decimals: PropTypes.string,
+  decimals: PropTypes.number,
+  outcomes: PropTypes.array.isRequired,
 }
 
 WinningOutcome.defaultProps = {
-  market: {
-    event: {
-      type: '',
-    },
-    eventDescription: {
-      outcomes: [],
-      unit: '',
-      decimals: '',
-    },
-    oracle: {
-      outcome: '',
-    },
-  },
+  unit: undefined,
+  decimals: 0,
 }
 
 export default WinningOutcome

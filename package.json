@@ -39,7 +39,8 @@
     "precommit"
   ],
   "dependencies": {
-    "@gnosis.pm/gnosisjs": "^1.1.1",
+    "@gnosis.pm/gnosis-core-contracts": "^1.0.3",
+    "@gnosis.pm/gnosisjs": "^2.0.0",
     "autobind-decorator": "^2.1.0",
     "babel-loader": "^8.0.0-beta.2",
     "babel-polyfill": "^6.23.0",

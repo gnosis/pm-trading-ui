@@ -52,8 +52,8 @@ Select.propTypes = {
   meta: PropTypes.shape(fieldPropTypes.meta).isRequired,
   label: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    value: PropTypes.any,
   })),
   className: PropTypes.string,
   defaultValue: PropTypes.string,
