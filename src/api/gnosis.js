@@ -1,4 +1,4 @@
-import Gnosis from '@gnosis.pm/gnosisjs/'
+import Gnosis from '@gnosis.pm/gnosisjs'
 import { NETWORK_TIMEOUT } from 'actions/blockchain'
 
 let gnosisInstance
