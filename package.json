@@ -37,7 +37,7 @@
   ],
   "dependencies": {
     "@gnosis.pm/gnosis-core-contracts": "^1.0.3",
-    "@gnosis.pm/gnosisjs": "github:gnosis/gnosis.js#v2.0.0",
+    "@gnosis.pm/gnosisjs": "^2.0.0",
     "autobind-decorator": "^2.1.0",
     "babel-polyfill": "^6.23.0",
     "blockies": "0.0.2",
