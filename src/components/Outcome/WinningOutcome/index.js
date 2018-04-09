@@ -3,29 +3,28 @@ import PropTypes from 'prop-types'
 import { OUTCOME_TYPES } from 'utils/constants'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
-import { eventDescriptionShape, marketShape } from 'utils/shapes'
 import style from './WinningOutcome.mod.scss'
 
 const cx = cn.bind(style)
 
-const WinningOutcome = ({ market }) => {
-  const {
-    bounds,
-    winningOutcome,
-    type,
-  } = market
-
+const WinningOutcome = ({
+  type,
+  unit,
+  decimals,
+  outcomes,
+  winningOutcome,
+}) => {
   let outcomeText
 
   if (type === OUTCOME_TYPES.CATEGORICAL) {
-    outcomeText = `${winningOutcome.name}`
+    outcomeText = `${outcomes[winningOutcome]}`
   } else if (type === OUTCOME_TYPES.SCALAR) {
-    const outcomeValue = Decimal(market.winningOutcome)
-      .div(10 ** bounds.decimals)
+    const outcomeValue = Decimal(winningOutcome)
+      .div(10 ** decimals)
       .toString()
     outcomeText = (
       <Fragment>
-        {outcomeValue} <span className={cx('winningOutcomeUnit')}>{bounds.unit}</span>
+        {outcomeValue} <span className={cx('winningOutcomeUnit')}>{unit}</span>
       </Fragment>
     )
   }
@@ -42,23 +41,16 @@ const WinningOutcome = ({ market }) => {
 }
 
 WinningOutcome.propTypes = {
-  market: marketShape,
+  type: PropTypes.oneOf(Object.keys(OUTCOME_TYPES)).isRequired,
+  winningOutcome: PropTypes.number.isRequired,
+  unit: PropTypes.string,
+  decimals: PropTypes.number,
+  outcomes: PropTypes.array.isRequired,
 }
 
 WinningOutcome.defaultProps = {
-  market: {
-    event: {
-      type: '',
-    },
-    eventDescription: {
-      outcomes: [],
-      unit: '',
-      decimals: '',
-    },
-    oracle: {
-      outcome: '',
-    },
-  },
+  unit: undefined,
+  decimals: 0,
 }
 
 export default WinningOutcome

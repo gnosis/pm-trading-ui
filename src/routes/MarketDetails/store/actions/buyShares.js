@@ -9,7 +9,7 @@ import { receiveEntities, updateEntity } from 'actions/entities'
 import { MAX_ALLOWANCE_WEI, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { SETTING_ALLOWANCE, DEPOSIT } from 'utils/transactionExplanations'
 import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'actions/market'
-import { buyShares } from '../../api'
+import { buyShares } from 'api'
 
 /**
  * Buy shares on specific market

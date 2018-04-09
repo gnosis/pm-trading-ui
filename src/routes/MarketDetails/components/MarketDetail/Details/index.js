@@ -48,7 +48,20 @@ const Details = ({
       <div className={cx('marketDescription')}>
         <p className={cx('text')}>{market.eventDescription.description}</p>
       </div>
-      <Outcome market={market} opts={outcomeOpts} />
+      <Outcome
+        resolved={marketResolved}
+        type={market.event.type}
+        outcomeTokensSold={market.netOutcomeTokensSold}
+        resolution={market.eventDescription.resolutionDate}
+        funding={market.funding}
+        outcomes={market.eventDescription.outcomes}
+        winningOutcome={market.oracle.winningOutcome}
+        upperBound={market.event.upperBound}
+        lowerBound={market.event.lowerbOund}
+        decimals={market.eventDescription.decimals}
+        unit={market.eventDescription.unit}
+        opts={outcomeOpts}
+      />
       <MarketTimer
         market={market}
         showCountdown={showCountdown}

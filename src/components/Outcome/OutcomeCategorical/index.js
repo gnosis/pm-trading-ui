@@ -4,21 +4,28 @@ import cn from 'classnames/bind'
 import moment from 'moment'
 import { calcLMSRMarginalPrice } from 'api'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-import { marketShape } from 'utils/shapes'
 import TrendingOutcomeCategorical from './TrendingOutcomeCategorical'
 
 import style from './outcomeCategorical.mod.scss'
 
 const cx = cn.bind(style)
 
-const OutcomeCategorical = ({ market, market: { outcomes }, opts = {} }) => {
+const OutcomeCategorical = ({
+  resolved,
+  outcomeTokensSold,
+  funding,
+  resolution,
+  outcomes,
+  marginalPrices,
+  opts = {},
+}) => {
   const {
     showOnlyTrendingOutcome, showDate, dateFormat, className,
   } = opts
-  const tokenDistribution = outcomes.toArray().map((outcome, outcomeIndex) => {
+  const tokenDistribution = outcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: market.outcomeTokensSold.toArray(),
-      funding: market.funding,
+      netOutcomeTokensSold: outcomeTokensSold,
+      funding,
       outcomeTokenIndex: outcomeIndex,
     })
 
@@ -26,16 +33,16 @@ const OutcomeCategorical = ({ market, market: { outcomes }, opts = {} }) => {
   })
 
   // show only trending outcome
-  if (showOnlyTrendingOutcome && !market.resolved) {
+  if (showOnlyTrendingOutcome && !resolved) {
     const tokenDistributionInt = tokenDistribution.map(outcome => parseInt(parseFloat(outcome) * 10000, 10))
     const trendingOutcomeIndex = tokenDistributionInt.indexOf(Math.max(...tokenDistributionInt))
     const outcomeEntryStyle = {
       backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex],
     }
-    const trendingMarginalPricePercent = market.marginalPrices
-      ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0)
+    const trendingMarginalPricePercent = marginalPrices
+      ? Math.round(marginalPrices[trendingOutcomeIndex] * 100).toFixed(0)
       : '0'
-    const resolutionDateFormatted = showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''
+    const resolutionDateFormatted = showDate ? moment(resolution).format(dateFormat) : ''
 
     return (
       <TrendingOutcomeCategorical
@@ -75,7 +82,12 @@ const OutcomeCategorical = ({ market, market: { outcomes }, opts = {} }) => {
 }
 
 OutcomeCategorical.propTypes = {
-  market: marketShape,
+  resolved: PropTypes.bool.isRequired,
+  outcomeTokensSold: PropTypes.array.isRequired,
+  resolution: PropTypes.string.isRequired,
+  funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  outcomes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  marginalPrices: PropTypes.arrayOf(PropTypes.string),
   opts: PropTypes.shape({
     className: PropTypes.string,
     showOnlyTrendingOutcome: PropTypes.bool,
@@ -85,11 +97,7 @@ OutcomeCategorical.propTypes = {
 }
 
 OutcomeCategorical.defaultProps = {
-  market: {
-    event: {},
-    oracle: {},
-    eventDescription: {},
-  },
+  marginalPrices: [],
   opts: {
     className: '',
     showOnlyTrendingOutcome: false,
