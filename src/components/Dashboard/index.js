@@ -92,7 +92,20 @@ class Dashboard extends Component {
       return (
         <div className="dashboardMarket dashboardMarket--new" key={market.address} onClick={viewMarket}>
           <div className="dashboardMarket__title">{market.eventDescription.title}</div>
-          <Outcome market={market} opts={outcomeOptions} />
+          <Outcome
+            resolved={isMarketResolved(market)}
+            type={market.event.type}
+            outcomeTokensSold={market.netOutcomeTokensSold}
+            resolution={market.eventDescription.resolutionDate}
+            funding={market.funding}
+            outcomes={market.eventDescription.outcomes}
+            winningOutcome={market.oracle.winningOutcome}
+            upperBound={market.event.upperBound}
+            lowerBound={market.event.lowerBound}
+            decimals={market.eventDescription.decimals}
+            unit={market.eventDescription.unit}
+            opts={outcomeOptions}
+          />
         </div>
       )
     })
@@ -112,7 +125,20 @@ class Dashboard extends Component {
           </div>
           <div className="dashboardMarket__rightCol">
             <div className="dashboardMarket__title">{market.eventDescription.title}</div>
-            <Outcome market={market} opts={{ showOnlyTrendingOutcome: true }} />
+            <Outcome
+              resolved={isMarketResolved(market)}
+              type={market.event.type}
+              outcomeTokensSold={market.netOutcomeTokensSold}
+              resolution={market.eventDescription.resolutionDate}
+              funding={market.funding}
+              outcomes={market.eventDescription.outcomes}
+              winningOutcome={market.oracle.winningOutcome}
+              upperBound={market.event.upperBound}
+              lowerBound={market.event.lowerBound}
+              decimals={market.eventDescription.decimals}
+              unit={market.eventDescription.unit}
+              opts={{ showOnlyTrendingOutcome: true }}
+            />
           </div>
         </div>
       )

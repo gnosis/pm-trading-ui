@@ -39,9 +39,7 @@ const OutcomeCategorical = ({
     const outcomeEntryStyle = {
       backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex],
     }
-    const trendingMarginalPricePercent = marginalPrices
-      ? Math.round(marginalPrices[trendingOutcomeIndex] * 100).toFixed(0)
-      : '0'
+    const trendingMarginalPricePercent = Math.round(tokenDistribution[trendingOutcomeIndex] * 100).toFixed(0)
     const resolutionDateFormatted = showDate ? moment(resolution).format(dateFormat) : ''
 
     return (

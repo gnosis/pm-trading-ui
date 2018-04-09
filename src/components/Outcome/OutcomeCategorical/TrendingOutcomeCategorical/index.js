@@ -15,6 +15,7 @@ const TrendingOutcomeCategorical = ({
       <OutcomeColorBox style={entryStyle} />
       <div className={cx('outcome')}>{outcome}</div>
     </div>
+    &nbsp;
     <div>{percentage}%</div>
     <div className={cx('date')}>{resolutionDate}</div>
   </div>
