@@ -45,7 +45,7 @@ const RegisterMainnetAddress = ({
         <p className={cx('rinkebyEthAnnotation')}>
           You need Rinkeby ETH to register your wallet address. <br />Rinkeby ETH balance:{' '}
           <DecimalValue value={currentBalance} className={cx('walletBalance')} /> -{' '}
-          <a className={cx('faucetLink')} href="http://rinkeby-faucet.com/" target="_blank" rel="noopener noreferrer">
+          <a className={cx('faucetLink')} href="https://faucet.rinkeby.io/" target="_blank" rel="noopener noreferrer">
             Request Rinkeby Ether
           </a>
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
