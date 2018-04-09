@@ -13,7 +13,7 @@ class Metamask extends InjectedWeb3 {
    * This allows "fallback providers" like a remote etherium host to be used as a last resort.
    */
   static providerPriority = 90
-  static watcherInterval = 10000
+  static watcherInterval = 1000
 
   constructor() {
     super()

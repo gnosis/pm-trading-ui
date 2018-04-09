@@ -54,3 +54,5 @@ export const getTermsOfUseURL = () => config.interface?.termsOfUse?.url
 export const shouldUseMetamask = () => isTournament() && getProvider() === WALLET_PROVIDER.METAMASK
 
 export const shouldUseUport = () => isTournament() && getProvider() === WALLET_PROVIDER.UPORT
+
+export const getTournamentName = () => config.interface?.tournamentName
