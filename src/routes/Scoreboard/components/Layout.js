@@ -6,10 +6,13 @@ import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
+import { getProvider } from 'utils/configuration'
+import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
-import * as css from './index.css'
+import * as css from './index.mod.scss'
 import ScoreTable from './ScoreTable'
-import RewardClaim from './RewardClaim'
+import RewardClaimAddress from './RewardClaimAddress'
+import ClaimReward from './ClaimReward'
 
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
@@ -34,14 +37,21 @@ class Layout extends React.PureComponent {
       data, myAccount, mainnetAddress, openSetMainnetAddressModal,
     } = this.props
     const hasRows = data && data.size > 1
+    const showRewardClaim = getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
 
     return (
       <Block>
         <PageFrame>
-          {myAccount && (
-            <RewardClaim mainnetAddress={mainnetAddress} openSetMainnetAddressModal={openSetMainnetAddressModal} />
+          {showRewardClaim && (
+            <Block className={cx('rewardContainer')}>
+              <RewardClaimAddress
+                mainnetAddress={mainnetAddress}
+                openSetMainnetAddressModal={openSetMainnetAddressModal}
+              />
+              <ClaimReward />
+            </Block>
           )}
-          {myAccount && <Hairline />}
+          {showRewardClaim && <Hairline />}
           <Block className={cx('trophy')}>
             <Img src={trophy} width="100" />
             <Paragraph>Scoreboard</Paragraph>

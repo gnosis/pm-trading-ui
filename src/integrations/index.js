@@ -13,9 +13,9 @@ if (tournament) {
   const provider = getProvider()
   if (provider) {
     if (provider === WALLET_PROVIDER.METAMASK) {
-      providers = { Metamask, Remote }
+      providers = { [WALLET_PROVIDER.METAMASK]: Metamask, [WALLET_PROVIDER.REMOTE]: Remote }
     } else if (provider === WALLET_PROVIDER.UPORT) {
-      providers = { Uport, Remote }
+      providers = { [WALLET_PROVIDER.UPORT]: Uport, [WALLET_PROVIDER.REMOTE]: Remote }
     }
   }
 }

@@ -1,6 +1,7 @@
 import allowedRangePrice from 'utils/marginPrice'
 import uuid from 'uuid/v4'
 import * as api from 'api'
+import { fetchMarket, buyShares } from 'routes/MarketDetails/api'
 import Decimal from 'decimal.js'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'actions/transactions'
 import { openModal, closeModal } from 'actions/modal'
@@ -9,7 +10,6 @@ import { receiveEntities, updateEntity } from 'actions/entities'
 import { MAX_ALLOWANCE_WEI, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { SETTING_ALLOWANCE, DEPOSIT } from 'utils/transactionExplanations'
 import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'actions/market'
-import { buyShares } from 'api'
 
 /**
  * Buy shares on specific market
@@ -60,7 +60,7 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
   }
   if (approvalResetAmount) transactions.unshift(SETTING_ALLOWANCE)
 
-  const payload = await api.requestMarket(market.address)
+  const payload = await fetchMarket(market.address)
   const updatedMarket = payload.entities.markets[market.address]
   const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
   const oldPrice = market.marginalPrices[outcomeIndex]

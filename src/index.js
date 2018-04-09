@@ -9,14 +9,21 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import 'scss/style.scss'
 import initGoogleAnalytics from 'utils/analytics/init'
+import { isTournament, getProvider } from 'utils/configuration'
 import store from 'store'
+import { WALLET_PROVIDER } from 'integrations/constants'
 import { setMomentRelativeTime } from './setup'
 
 setMomentRelativeTime()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
-store.dispatch(initProviders())
+if (!isTournament()) {
+  store.dispatch(initProviders())
+} else {
+  const tournamentProvider = WALLET_PROVIDER[getProvider()]
+  store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE, tournamentProvider] }))
+}
 
 Decimal.set({ toExpPos: 9999, precision: 50 })
 

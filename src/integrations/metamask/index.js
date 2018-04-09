@@ -20,6 +20,7 @@ class Metamask extends InjectedWeb3 {
     this.watcher = () => {
       this.watch('account', this.getAccount)
       this.watch('balance', this.getBalance)
+      this.watch('networkId', this.getNetworkId)
     }
   }
 

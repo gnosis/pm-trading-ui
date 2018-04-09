@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
 import { openModal } from 'actions/modal'
+import { requestMainnetAddress } from 'actions/account'
+import { initProviders } from 'integrations/store/actions'
 import { withRouter } from 'react-router-dom'
 
 import Header from 'components/Header'
@@ -11,6 +13,9 @@ import {
   getActiveProvider,
   checkWalletConnection,
   isConnectedToCorrectNetwork,
+  getTargetNetworkId,
+  getRegisteredMainnetAddress,
+  isMetamaskLocked,
 } from 'integrations/store/selectors'
 import {
   isTournament,
@@ -22,6 +27,7 @@ import {
   getGameGuideURL,
   getTokenAddress,
 } from 'utils/configuration'
+import { WALLET_PROVIDER } from 'integrations/constants'
 
 const mapStateToProps = state => ({
   hasWallet: checkWalletConnection(state),
@@ -30,6 +36,9 @@ const mapStateToProps = state => ({
   currentNetwork: getCurrentNetwork(state),
   currentProvider: getActiveProvider(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
+  targetNetworkId: getTargetNetworkId(state),
+  mainnetAddress: getRegisteredMainnetAddress(state),
+  lockedMetamask: isMetamaskLocked(state),
   isTournament: isTournament(),
   logoPath: getLogoPath(),
   smallLogoPath: getSmallLogoPath(),
@@ -41,8 +50,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  openConnectWalletModal: () => dispatch(openModal({ modalName: 'ModalInstallMetamask' })),
-  openNetworkCheckModal: () => dispatch(openModal({ modalName: 'ModalNetworkCheck' })),
+  requestMainnetAddress: () => dispatch(requestMainnetAddress()),
+  openModal: modalName => dispatch(openModal({ modalName })),
+  initUport: () => dispatch(initProviders({ providers: [WALLET_PROVIDER.UPORT] })),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header))

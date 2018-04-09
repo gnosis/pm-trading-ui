@@ -28,7 +28,7 @@ const reducer = handleActions(
       state.setIn(['tokenBalances', tokenAddress], tokenBalance),
   },
   Map({
-    gasCosts: Object.keys(GAS_COST).reduce((acc, item) => acc.set(GAS_COST[item], undefined), Map()),
+    gasCosts: Object.keys(GAS_COST).reduce((acc, item) => acc.set(GAS_COST[item], '0'), Map()),
     gasPrice: Decimal(0),
     connection: undefined,
     connectionTried: false,

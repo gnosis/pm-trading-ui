@@ -15,7 +15,11 @@ export default store => next => (action) => {
       initGnosis: () => dispatch(initGnosis()),
       dispatch,
     }
-    Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
+    if (payload && payload.providers.length) {
+      Promise.all(map(payload.providers, provider => integrations[provider].initialize(providerOptions)))
+    } else {
+      Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
+    }
   }
 
   if (type === 'PROVIDER_LOGOUT') {

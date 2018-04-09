@@ -9,6 +9,7 @@ const ProviderRecord = Record({
   account: undefined,
   priority: 1,
   networkId: 0,
+  mainnetAddress: undefined,
 }, 'Provider')
 
 export default ProviderRecord

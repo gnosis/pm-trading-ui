@@ -17,7 +17,7 @@ export default store => next => (action) => {
     const shouldOpen = shouldOpenNetworkModal(state)
 
     if (connectedToCorrectNetwork !== lastConnectedToCorrectNetwork && shouldOpen) {
-      store.dispatch(openModal({ modalName: 'ModalNetworkCheck' }))
+      // store.dispatch(openModal({ modalName: 'ModalSwitchNetwork' }))
     }
 
     lastConnectedToCorrectNetwork = connectedToCorrectNetwork

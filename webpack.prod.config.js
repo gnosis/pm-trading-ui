@@ -43,6 +43,7 @@ module.exports = {
   devtool: 'source-map',
   context: path.join(__dirname, 'src'),
   entry: ['bootstrap-loader', 'index.js'],
+  mode: 'production',
   output: {
     publicPath: '/',
     path: `${__dirname}/dist`,
