@@ -38,14 +38,14 @@ class Header extends Component {
   async handleConnectWalletClick() {
     const { isConnectedToCorrectNetwork, lockedMetamask } = this.props
     if (!hasMetamask() && !shouldUseUport) {
-      this.props.openInstallMetamaskModal()
+      this.props.openModal('ModalInstallMetamask')
     } else if (shouldUseMetamask()) {
       if (lockedMetamask) {
-        this.props.openUnlockMetamaskModal()
+        this.props.openModal('ModalUnlockMetamask')
       } else if (!isConnectedToCorrectNetwork) {
-        this.props.openSwitchNetworkModal()
+        this.props.openModal('ModalSwitchNetwork')
       } else {
-        this.props.openRegisterWalletModal()
+        this.props.openModal('ModalRegisterWallet')
       }
     } else if (shouldUseUport()) {
       this.props.initUport()
@@ -167,8 +167,6 @@ Header.propTypes = {
   currentBalance: PropTypes.string,
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
-  openInstallMetamaskModal: PropTypes.func.isRequired,
-  openUnlockMetamaskModal: PropTypes.func.isRequired,
   isTournament: PropTypes.bool,
   logoPath: PropTypes.string.isRequired,
   smallLogoPath: PropTypes.string.isRequired,
@@ -177,12 +175,11 @@ Header.propTypes = {
   gameGuideType: PropTypes.string,
   gameGuideURL: PropTypes.string,
   tokenAddress: PropTypes.string.isRequired,
-  openSwitchNetworkModal: PropTypes.func.isRequired,
-  openRegisterWalletModal: PropTypes.func.isRequired,
   lockedMetamask: PropTypes.bool,
   requestMainnetAddress: PropTypes.func.isRequired,
   mainnetAddress: PropTypes.string,
   initUport: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {

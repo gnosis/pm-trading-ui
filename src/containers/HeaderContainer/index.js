@@ -50,11 +50,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  openInstallMetamaskModal: () => dispatch(openModal({ modalName: 'ModalInstallMetamask' })),
-  openUnlockMetamaskModal: () => dispatch(openModal({ modalName: 'ModalUnlockMetamask' })),
-  openSwitchNetworkModal: () => dispatch(openModal({ modalName: 'ModalSwitchNetwork' })),
-  openRegisterWalletModal: () => dispatch(openModal({ modalName: 'ModalRegisterWallet' })),
   requestMainnetAddress: () => dispatch(requestMainnetAddress()),
+  openModal: modalName => dispatch(openModal({ modalName })),
   initUport: () => dispatch(initProviders({ providers: [WALLET_PROVIDER.UPORT] })),
 })
 

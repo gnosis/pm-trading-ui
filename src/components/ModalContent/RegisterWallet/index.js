@@ -32,7 +32,7 @@ const RegisterMainnetAddress = ({
     <div className={cx('registerWallet')}>
       <button className={cx('closeButton')} onClick={closeModal} />
       <div className={cx('registerContainer')}>
-        <h4 className={cx('registerHeading')}>Register wallet address</h4>
+        <h4 className={cx('heading')}>Register wallet address</h4>
         <p className={cx('annotation')}>
           Please register your wallet address, where we can send you OLY tokens, and subsequently your GNO reward. Read
           our terms of service for more information

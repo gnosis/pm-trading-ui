@@ -32,6 +32,9 @@
       "\\.(css|scss)$": "identity-obj-proxy"
     }
   },
+  "resolutions": {
+    "**/bootstrap-loader/resolve": "1.6.0"
+  },
   "pre-commit": [
     "precommit"
   ],
