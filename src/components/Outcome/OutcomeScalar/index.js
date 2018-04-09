@@ -3,34 +3,44 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
-import { marketShape } from 'utils/shapes'
 import { calcLMSRMarginalPrice } from 'api'
-import TrendingOutcomeScalar from './TredingOutcomeScalar'
+import TrendingOutcomeScalar from './TrendingOutcomeScalar'
 
 import style from './outcomeScalar.mod.scss'
 
 const cx = cn.bind(style)
 
-const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome, className = '' } }) => {
+const OutcomeScalar = ({
+  resolved,
+  outcomeTokensSold,
+  funding,
+  upperBound,
+  lowerBound,
+  unit,
+  decimals: decimalsRaw,
+  winningOutcome,
+  opts: { showOnlyTrendingOutcome, className = '' },
+}) => {
   let marginalPrice = calcLMSRMarginalPrice({
-    netOutcomeTokensSold: market.netOutcomeTokensSold,
-    funding: market.funding,
+    netOutcomeTokensSold: outcomeTokensSold,
+    funding,
     outcomeTokenIndex: 1, // always calc for long when calculating estimation
   })
-  const showOnlyWinningOutcome = market.oracle.isOutcomeSet && market.oracle.outcome !== undefined
 
-  const decimals = parseInt(market.eventDescription.decimals, 10)
+  const showOnlyWinningOutcome = resolved
 
-  const upperBound = Decimal(market.event.upperBound).div(10 ** decimals)
-  const lowerBound = Decimal(market.event.lowerBound).div(10 ** decimals)
+  const decimals = parseInt(decimalsRaw, 10)
 
-  const bounds = upperBound.sub(lowerBound)
+  const upper = Decimal(upperBound).div(10 ** decimals)
+  const lower = Decimal(lowerBound).div(10 ** decimals)
+
+  const bounds = upper.sub(lower)
   let value = Decimal(marginalPrice.toString())
     .times(bounds)
     .add(lowerBound)
 
   if (showOnlyWinningOutcome) {
-    value = Decimal(market.oracle.outcome).div(10 ** decimals)
+    value = Decimal(winningOutcome).div(10 ** decimals)
     marginalPrice = value.div(upperBound)
   }
 
@@ -38,8 +48,8 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome, className = ''
     return (
       <TrendingOutcomeScalar
         predictedValue={value}
-        decimals={market.eventDescription.decimals}
-        unit={market.eventDescription.unit}
+        decimals={decimals}
+        unit={unit}
       />
     )
   }
@@ -48,19 +58,19 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome, className = ''
     <div className={className}>
       <div className={cx('scalarOutcome')}>
         <div className={cx('outcomeBound', 'lower')}>
-          <DecimalValue value={lowerBound} decimals={market.eventDescription.decimals} />
-          &nbsp;{market.eventDescription.unit}
+          <DecimalValue value={lowerBound} decimals={decimals} />
+          &nbsp;{unit}
         </div>
         <div className={cx('currentPrediction')}>
           <div className={cx('currentPredictionLine')} />
           <div className={cx('currentPredictionValue')} style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>
-            <DecimalValue value={value} decimals={market.eventDescription.decimals} />
-            &nbsp;{market.eventDescription.unit}
+            <DecimalValue value={value} decimals={decimals} />
+            &nbsp;{unit}
           </div>
         </div>
         <div className={cx('outcomeBound', 'upper')}>
-          <DecimalValue value={upperBound} decimals={market.eventDescription.decimals} />
-          &nbsp;{market.eventDescription.unit}
+          <DecimalValue value={upperBound} decimals={decimals} />
+          &nbsp;{unit}
         </div>
       </div>
     </div>
@@ -68,18 +78,21 @@ const OutcomeScalar = ({ market, opts: { showOnlyTrendingOutcome, className = ''
 }
 
 OutcomeScalar.propTypes = {
-  market: marketShape,
+  resolved: PropTypes.bool.isRequired,
+  upperBound: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  lowerBound: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  unit: PropTypes.string.isRequired,
+  decimals: PropTypes.number.isRequired,
+  outcomeTokensSold: PropTypes.array.isRequired,
+  funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  winningOutcome: PropTypes.number,
   opts: PropTypes.shape({
     showOnlyTrendingOutcome: PropTypes.bool,
   }),
 }
 
 OutcomeScalar.defaultProps = {
-  market: {
-    event: {},
-    eventDescription: {},
-    oracle: {},
-  },
+  winningOutcome: undefined,
   opts: {
     showOnlyTrendingOutcome: false,
   },

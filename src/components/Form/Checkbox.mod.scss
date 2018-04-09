@@ -3,7 +3,7 @@
 .formCheckbox {
   display: inline-block;
 
-  label {
+  .formCheckboxLabel {
     margin: 0;
   }
 
@@ -39,7 +39,7 @@
     }
   }
 
-  &.muted {
+  &.light {
     input::before {
       background-color: $bg-color;
     }

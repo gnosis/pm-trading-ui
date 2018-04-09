@@ -4,44 +4,50 @@ import cn from 'classnames/bind'
 import moment from 'moment'
 import { calcLMSRMarginalPrice } from 'api'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-import { marketShape } from 'utils/shapes'
 import TrendingOutcomeCategorical from './TrendingOutcomeCategorical'
 
 import style from './outcomeCategorical.mod.scss'
 
 const cx = cn.bind(style)
 
-const OutcomeCategorical = ({ market, opts = {} }) => {
-  const renderOutcomes = market.eventDescription.outcomes
+const OutcomeCategorical = ({
+  resolved,
+  outcomeTokensSold,
+  funding,
+  resolution,
+  outcomes,
+  marginalPrices,
+  opts = {},
+}) => {
   const {
     showOnlyTrendingOutcome, showDate, dateFormat, className,
   } = opts
-  const tokenDistribution = renderOutcomes.map((outcome, outcomeIndex) => {
+  const tokenDistribution = outcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: market.netOutcomeTokensSold,
-      funding: market.funding,
+      netOutcomeTokensSold: outcomeTokensSold,
+      funding,
       outcomeTokenIndex: outcomeIndex,
     })
 
-    return marginalPrice.toFixed()
+    return marginalPrice.toFixed(5)
   })
 
-  // show only treding outcome
-  if (showOnlyTrendingOutcome && !market.oracle.isOutcomeSet) {
+  // show only trending outcome
+  if (showOnlyTrendingOutcome && !resolved) {
     const tokenDistributionInt = tokenDistribution.map(outcome => parseInt(parseFloat(outcome) * 10000, 10))
     const trendingOutcomeIndex = tokenDistributionInt.indexOf(Math.max(...tokenDistributionInt))
     const outcomeEntryStyle = {
       backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex],
     }
-    const trendingMarginalPricePercent = market.marginalPrices
-      ? Math.round(market.marginalPrices[trendingOutcomeIndex] * 100).toFixed(0)
+    const trendingMarginalPricePercent = marginalPrices
+      ? Math.round(marginalPrices[trendingOutcomeIndex] * 100).toFixed(0)
       : '0'
-    const resolutionDateFormatted = showDate ? moment(market.eventDescription.resolutionDate).format(dateFormat) : ''
+    const resolutionDateFormatted = showDate ? moment(resolution).format(dateFormat) : ''
 
     return (
       <TrendingOutcomeCategorical
         entryStyle={outcomeEntryStyle}
-        outcome={renderOutcomes[trendingOutcomeIndex]}
+        outcome={outcomes[trendingOutcomeIndex]}
         percentage={trendingMarginalPricePercent}
         resolutionDate={resolutionDateFormatted}
       />
@@ -51,7 +57,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
   // show all outcomes
   return (
     <div className={className}>
-      {renderOutcomes.map((outcome, outcomeIndex) => {
+      {outcomes.map((outcome, outcomeIndex) => {
         const outcomeBarStyle = {
           width: `${tokenDistribution[outcomeIndex] * 100}%`,
           backgroundColor: COLOR_SCHEME_DEFAULT[outcomeIndex],
@@ -63,7 +69,7 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
             <div className={cx('outcomeBar')}>
               <div className={cx('outcomeBarInner')} style={outcomeBarStyle}>
                 <div className={cx('outcomeBarLabel')}>
-                  {renderOutcomes[outcomeIndex]}
+                  {outcomes[outcomeIndex]}
                   <div className={cx('outcomeBarValue')}>{tokenDistributionPercent}</div>
                 </div>
               </div>
@@ -76,7 +82,12 @@ const OutcomeCategorical = ({ market, opts = {} }) => {
 }
 
 OutcomeCategorical.propTypes = {
-  market: marketShape,
+  resolved: PropTypes.bool.isRequired,
+  outcomeTokensSold: PropTypes.array.isRequired,
+  resolution: PropTypes.string.isRequired,
+  funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  outcomes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  marginalPrices: PropTypes.arrayOf(PropTypes.string),
   opts: PropTypes.shape({
     className: PropTypes.string,
     showOnlyTrendingOutcome: PropTypes.bool,
@@ -86,11 +97,7 @@ OutcomeCategorical.propTypes = {
 }
 
 OutcomeCategorical.defaultProps = {
-  market: {
-    event: {},
-    oracle: {},
-    eventDescription: {},
-  },
+  marginalPrices: [],
   opts: {
     className: '',
     showOnlyTrendingOutcome: false,
