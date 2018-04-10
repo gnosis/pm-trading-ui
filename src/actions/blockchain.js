@@ -5,13 +5,16 @@ import {
   getGasPrice,
   getTokenSymbol,
   getTokenBalance,
+  initReadOnlyGnosisConnection,
 } from 'api'
+import Web3 from 'web3'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
 import { getTokenAddress } from 'utils/configuration'
+import config from 'config.json'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -79,5 +82,16 @@ export const initGnosis = () => async (dispatch, getState) => {
   } catch (error) {
     console.warn(`Gnosis.js connection Error: ${error}`)
     return dispatch(setConnectionStatus({ connected: false }))
+  }
+}
+
+export const initReadOnlyGnosis = () => async () => {
+  // initialize
+  try {
+    await initReadOnlyGnosisConnection({
+      ethereum: new Web3(new Web3.providers.HttpProvider(process.env.ETHEREUM_URL)).currentProvider,
+    })
+  } catch (error) {
+    console.error(`Gnosis.js RO initialization Error: ${error}`)
   }
 }
