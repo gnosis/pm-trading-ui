@@ -91,7 +91,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.optimize.AggressiveMergingPlugin(),
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
       logo: faviconPath,
