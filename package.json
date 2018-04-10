@@ -41,7 +41,11 @@
   "dependencies": {
     "@gnosis.pm/gnosis-core-contracts": "^1.0.3",
     "@gnosis.pm/gnosisjs": "^2.0.0",
+<<<<<<< HEAD
     "@gnosis.pm/olympia-token": "^1.3.0",
+=======
+    "@gnosis.pm/olympia-token": "^1.2.1",
+>>>>>>> 0a5f38ad4af84bfdf04e3eccc9fee8193afc5899
     "autobind-decorator": "^2.1.0",
     "babel-loader": "^8.0.0-beta.2",
     "babel-polyfill": "^6.23.0",

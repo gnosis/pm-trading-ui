@@ -2,8 +2,6 @@ import Gnosis from '@gnosis.pm/gnosisjs'
 import olympiaArtifacts from '@gnosis.pm/olympia-token'
 import { NETWORK_TIMEOUT } from 'actions/blockchain'
 import { isTournament } from 'utils/configuration'
-import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
-import { hexWithoutPrefix } from 'utils/helpers'
 
 let gnosisInstance
 let gnosisROInstance
