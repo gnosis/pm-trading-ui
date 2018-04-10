@@ -1,5 +1,7 @@
 import Gnosis from '@gnosis.pm/gnosisjs'
+import olympiaArtifacts from '@gnosis.pm/olympia-token'
 import { NETWORK_TIMEOUT } from 'actions/blockchain'
+import { isTournament } from 'utils/configuration'
 
 let gnosisInstance
 
@@ -14,6 +16,14 @@ export const {
 export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
+
+    if (isTournament()) {
+      await gnosisInstance.importContracts(olympiaArtifacts, {
+        OlympiaToken: 'olympiaToken',
+        AddressRegistry: 'olympiaAddressRegistry',
+        RewardClaimHandler: 'rewardClaimHandler',
+      })
+    }
 
     if (process.env.NODE_ENV === 'development') {
       window.gnosis = gnosisInstance
