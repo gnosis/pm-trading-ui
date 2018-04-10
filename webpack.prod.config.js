@@ -132,5 +132,6 @@ module.exports = {
         compress: false,
       },
     }),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ],
 }
