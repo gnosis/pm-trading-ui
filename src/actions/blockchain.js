@@ -14,7 +14,6 @@ import { findDefaultProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
 import { getTokenAddress } from 'utils/configuration'
-import config from 'config.json'
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
