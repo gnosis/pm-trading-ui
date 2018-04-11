@@ -27,6 +27,7 @@
     "tournament": true,
     "tournamentName": "My tournament",
     "tokenContract": "0xa0c107db0e9194c18359d3265289239453b56cf2",
+    "tokenIcon": "/assets/img/icons/icon_metamask.svg",
     "registrationContract": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13",
     "logoPath": "/assets/img/placeholder.svg",
     "smallLogoPath": "/assets/img/placeholder.svg",
