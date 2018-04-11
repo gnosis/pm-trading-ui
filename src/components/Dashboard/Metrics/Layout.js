@@ -13,7 +13,7 @@ const etherTokens = require('./assets/icon_etherTokens.svg')
 const outstandingPredictions = require('./assets/icon_outstandingPredictions.svg')
 
 const Metric = ({
-  img, title, explanation, children, width, height, tokenSymbol, ...props
+  img, explanation, children, width, height, tokenSymbol, ...props
 }) => (
   <Block className={cx('ol-db-metric')} {...props}>
     <Img className={cx('ol-db-icon')} src={img} width={width} height={width} />
@@ -26,7 +26,6 @@ const Metric = ({
 
 Metric.propTypes = {
   img: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
   explanation: PropTypes.string,
   children: PropTypes.node,
   width: PropTypes.number,

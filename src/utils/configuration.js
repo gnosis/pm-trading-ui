@@ -58,3 +58,13 @@ export const shouldUseUport = () => isTournament() && getProvider() === WALLET_P
 export const getTournamentName = () => config.interface?.tournamentName
 
 export const getTokenIcon = () => config.interface?.tokenIcon
+
+export const getRewardLevels = () => config.interface?.rewards?.levels
+
+export const getBadgeLevels = () => config.interface?.badges?.levels
+
+export const getRewardTokenSymbol = () => config.interface?.rewards?.rewardToken?.symbol
+
+export const areBadgesEnabled = () => config.interface?.badges?.enabled
+
+export const areRewardsEnabled = () => config.interface?.rewards?.enabled
