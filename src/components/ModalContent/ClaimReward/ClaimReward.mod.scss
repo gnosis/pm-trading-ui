@@ -10,7 +10,7 @@
 
   .claimContainer {
     width: 520px;
-    height: 410px;
+    height: 350px;
     border-radius: 9px;
     background-color: #ffffff;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
@@ -33,21 +33,11 @@
       .network {
         text-decoration: underline;
       }
-    }
 
-    .walletAnnotation {
-      margin: 15px 0 10px 0;
-    }
-
-    .checkBox {
-      margin: 10px 0;
-      input {
-        border: 1px solid #09697b;
+      .faqLink {
+        text-decoration: underline;
+        color: #00a5c5;
       }
-    }
-
-    a {
-      text-decoration: underline;
     }
 
     .heading {
@@ -66,7 +56,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 19px;
+      margin: 20px 0 20px 0;
 
 
       .network {
@@ -76,19 +66,13 @@
       }
     }
 
-    .rinkebyEthAnnotation {
-      margin: 23px 0 23px 0;
-
-      .linkIcon {
-        width: 10px;
-        height: 10px;
-        margin-left: 5px;
-      }
-
-      .walletBalance {
-        color: #333;
+    .gasCosts {
+      .gasEstimation {
+        color: #333333;
       }
     }
+
+
   }
 
   .claim {

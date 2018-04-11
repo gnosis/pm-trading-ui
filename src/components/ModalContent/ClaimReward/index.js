@@ -13,7 +13,7 @@ import style from './ClaimReward.mod.scss'
 const cx = cn.bind(style)
 
 const ClaimReward = ({
-  closeModal, currentAccount, currentBalance, gasPrice,
+  closeModal, gasPrice,
 }) => {
   const handleRegistration = async () => {
     closeModal()
@@ -29,7 +29,7 @@ const ClaimReward = ({
           In order to claim your <span className={cx('rewardInfo')}>0.2 GNO</span> tokens, you first have to switch to
           the <span className={cx('network')}>MAINNET</span> network in your MetaMask wallet. Also make sure you have
           enough ETH to submit the transaction with the claim request. More information in{' '}
-          <Link to="/game-guide" href="/game-guide">
+          <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
             FAQ
           </Link>.
         </p>
@@ -38,7 +38,7 @@ const ClaimReward = ({
           <span className={cx('network')}>RINKEBY</span>
         </div>
         <p className={cx('gasCosts')}>
-          Gas Costs: <span className={cx('gasEstimation')}>0.004 ETH</span>
+          Gas Costs: <b className={cx('gasEstimation')}>0.004 ETH</b>
         </p>
         <InteractionButton
           onClick={handleRegistration}
