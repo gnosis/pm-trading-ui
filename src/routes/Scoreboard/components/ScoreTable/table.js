@@ -39,7 +39,7 @@ export const badgeOf = (value) => {
   badgeLevels.forEach((badgeLevel) => {
     if (
       (value >= badgeLevel.minPredictions && value <= badgeLevel.maxPredictions) || // between min/max
-      (value >= badgeLevel.minRank && badgeLevel.maxRank == null) // above min
+      (value >= badgeLevel.minPredictions && badgeLevel.maxPredictions == null) // above min
     ) {
       badge = badgeLevel
       return false // break
