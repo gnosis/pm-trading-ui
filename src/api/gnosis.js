@@ -62,3 +62,15 @@ export const getGnosisConnection = async () => {
     }, NETWORK_TIMEOUT)
   })
 }
+
+export const getIsListening = async () => {
+  const instance = await getGnosisConnection()
+
+  try {
+    await new Promise(instance.web3.eth.net.getListening)
+  } catch (e) {
+    return false
+  }
+
+  return true
+}

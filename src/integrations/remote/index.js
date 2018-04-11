@@ -30,8 +30,6 @@ class Remote extends InjectedWeb3 {
 
       this.networkId = await this.getNetworkId()
       this.network = await this.getNetwork()
-      this.account = await this.getAccount()
-      this.balance = await this.getBalance()
 
       return true
     } catch (err) {
@@ -56,15 +54,18 @@ class Remote extends InjectedWeb3 {
       setInterval(this.watcher, Remote.watcherInterval)
     }
 
-    return this.runProviderUpdate(this, {
-      available: this.walletEnabled && this.account != null,
-      networkId: this.networkId,
-      network: this.network,
-      account: this.account,
-      balance: this.balance,
-    })
-      .then(() => opts.initGnosis())
-      .catch(() => opts.initGnosis())
+    try {
+      await this.runProviderUpdate(this, {
+        available: this.walletEnabled && this.account != null,
+        readOnly: this.walletEnabled,
+        networkId: this.networkId,
+        network: this.network,
+        account: this.account,
+        balance: this.balance,
+      })
+    } finally {
+      opts.initGnosis()
+    }
   }
 }
 export default new Remote()
