@@ -9,13 +9,13 @@ import AppRouter from 'routes'
 
 const RootComponent = () => (
   <Provider store={store}>
-    <BackdropProvider>
-      <ConnectedRouter history={history}>
+    <ConnectedRouter history={history}>
+      <BackdropProvider>
         <AppContainer>
           <AppRouter />
         </AppContainer>
-      </ConnectedRouter>
-    </BackdropProvider>
+      </BackdropProvider>
+    </ConnectedRouter>
   </Provider>
 )
 

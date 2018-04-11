@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { isTournament } from 'utils/configuration'
 
 import { closeModal } from 'actions/modal'
@@ -65,4 +66,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   closeModal: () => dispatch(closeModal()),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(BackdropProvider)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BackdropProvider))
