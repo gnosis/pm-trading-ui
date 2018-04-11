@@ -313,13 +313,13 @@ class Dashboard extends Component {
 
   render() {
     const {
-      hasWallet, defaultTokenAmount, accountPredictiveAssets, tokenSymbol,
+      hasWallet, defaultTokenAmount, accountPredictiveAssets, tokenSymbol, tokenIcon,
     } = this.props
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     const predictedProfitFormatted = Decimal(accountPredictiveAssets).toDP(4, 1).toString()
     if (hasWallet) {
-      metricsSection = <Metrics tokens={defaultTokenAmount} tokenSymbol={tokenSymbol} predictedProfit={predictedProfitFormatted} />
+      metricsSection = <Metrics tokens={defaultTokenAmount} tokenSymbol={tokenSymbol} tokenIcon={tokenIcon} predictedProfit={predictedProfitFormatted} />
 
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
@@ -384,6 +384,7 @@ Dashboard.propTypes = {
   accountPredictiveAssets: PropTypes.string,
   defaultTokenAmount: PropTypes.string,
   tokenSymbol: PropTypes.string,
+  tokenIcon: PropTypes.string,
   requestTokenSymbol: PropTypes.func,
 }
 

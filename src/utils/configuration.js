@@ -56,3 +56,5 @@ export const shouldUseMetamask = () => isTournament() && getProvider() === WALLE
 export const shouldUseUport = () => isTournament() && getProvider() === WALLET_PROVIDER.UPORT
 
 export const getTournamentName = () => config.interface?.tournamentName
+
+export const getTokenIcon = () => config.interface?.tokenIcon

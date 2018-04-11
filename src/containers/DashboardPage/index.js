@@ -11,7 +11,7 @@ import { getCurrentAccount, checkWalletConnection } from 'integrations/store/sel
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
-import { getTokenAddress } from 'utils/configuration'
+import { getTokenAddress, getTokenIcon } from 'utils/configuration'
 
 const tokenAddress = getTokenAddress()
 
@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
   let defaultTokenAmount = getTokenAmount(state, tokenAddress)
   const hasWallet = checkWalletConnection(state)
   const tokenSymbol = getTokenSymbol(state, tokenAddress)
+  const tokenIcon = getTokenIcon(state)
 
   if (defaultTokenAmount !== undefined) {
     defaultTokenAmount = weiToEth(defaultTokenAmount.toString())
@@ -43,6 +44,7 @@ const mapStateToProps = (state) => {
     accountPredictiveAssets,
     tokenAddress,
     tokenSymbol,
+    tokenIcon,
   }
 }
 
