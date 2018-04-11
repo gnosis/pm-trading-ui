@@ -57,7 +57,7 @@ class Remote extends InjectedWeb3 {
     try {
       await this.runProviderUpdate(this, {
         available: this.walletEnabled && this.account != null,
-        readOnly: this.walletEnabled,
+        readOnly: this.walletEnabled && this.account == null,
         networkId: this.networkId,
         network: this.network,
         account: this.account,

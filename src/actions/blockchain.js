@@ -1,6 +1,6 @@
 import {
   initGnosisConnection,
-  // getCurrentBalance,
+  getCurrentBalance,
   getIsListening,
   getCurrentAccount,
   getGasPrice,
@@ -74,10 +74,22 @@ export const initGnosis = () => async (dispatch, getState) => {
     try {
       // runs test executions on gnosisjs
       const getConnection = async () => {
-        await getIsListening()
-        // const account = await getCurrentAccount()
-        // await getCurrentBalance(account)
+        let isListening = false
+        try {
+          isListening = await getIsListening()
+        } catch (e) {
+          // don't throw if we can't find out if we're in readOnly mode - it probably means we aren't
+          // read/write connections don't have use the listening getter!
+        }
+
+        // if connection is not a readOnly connection, ensure balance and account exist
+        if (!isListening) {
+          // these throw if they're not available, meaning we don't have a connection
+          const account = await getCurrentAccount()
+          await getCurrentBalance(account)
+        }
       }
+
       await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
       await dispatch(setConnectionStatus({ connected: true }))
     } catch (error) {
