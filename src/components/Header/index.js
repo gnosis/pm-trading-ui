@@ -145,7 +145,7 @@ class Header extends Component {
                 )}
                 <DecimalValue value={currentBalance} className={cx('balance', 'test')} />&nbsp;
                 <CurrencyName className={cx('account', 'text')} tokenAddress={tokenAddress} />
-                {areBadgesEnabled() && <BadgeIcon account={currentAccount} userTournamentInfo={userTournamentInfo} />}
+                {areBadgesEnabled() && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
                 {useUport && <MenuAccountDropdown />}
