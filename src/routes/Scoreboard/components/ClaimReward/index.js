@@ -8,7 +8,7 @@ import style from './ClaimReward.mod.scss'
 
 const cx = cn.bind(style)
 
-const ClaimReward = () => (
+const ClaimReward = ({ openClaimRewardModal }) => (
   <Block className={cx('claimReward')}>
     <Block className={cx('rewardInfoContainer')}>
       <Block className={cx('rewardAmount')}>
@@ -20,10 +20,14 @@ const ClaimReward = () => (
         <Paragraph className={cx('annotation')}>TIME LEFT TO CLAIM</Paragraph>
       </Block>
     </Block>
-    <button className={cx('claimButton')}>CLAIM NOW</button>
+    <button className={cx('claimButton')} onClick={openClaimRewardModal}>
+      CLAIM NOW
+    </button>
   </Block>
 )
 
-ClaimReward.propTypes = {}
+ClaimReward.propTypes = {
+  openClaimRewardModal: PropTypes.func.isRequired,
+}
 
 export default ClaimReward

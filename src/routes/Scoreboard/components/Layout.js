@@ -9,32 +9,20 @@ import PropTypes from 'prop-types'
 import { getProvider } from 'utils/configuration'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
-import * as css from './index.mod.scss'
-import ScoreTable from './ScoreTable'
+import * as css from './Layout.mod.scss'
+import Table from './Table'
 import RewardClaimAddress from './RewardClaimAddress'
 import ClaimReward from './ClaimReward'
 
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
 
-const Table = ({ data, myAccount }) => (
-  <Block>
-    <ScoreTable tableData={data} myAccount={myAccount} />
-    {myAccount && (
-      <Block className={cx('ol-account')}>
-        <Block className={cx('dot')} />
-        <Paragraph className={cx('your')}>= YOUR ACCOUNT</Paragraph>
-      </Block>
-    )}
-  </Block>
-)
-
 const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
 
 class Layout extends React.PureComponent {
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal,
     } = this.props
     const hasRows = data && data.size > 1
     const showRewardClaim = getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
@@ -48,7 +36,7 @@ class Layout extends React.PureComponent {
                 mainnetAddress={mainnetAddress}
                 openSetMainnetAddressModal={openSetMainnetAddressModal}
               />
-              <ClaimReward />
+              <ClaimReward openClaimRewardModal={openClaimRewardModal} />
             </Block>
           )}
           {showRewardClaim && <Hairline />}
@@ -68,7 +56,7 @@ class Layout extends React.PureComponent {
   }
 }
 
-const types = {
+Layout.propTypes = {
   data: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
     currentRank: PropTypes.number.isRequired,
     diffRank: PropTypes.number.isRequired,
@@ -79,21 +67,16 @@ const types = {
     predictedProfit: PropTypes.string.isRequired,
     predictions: PropTypes.string.number,
   })),
-  openSetMainnetAddressModal: PropTypes.func,
+  openSetMainnetAddressModal: PropTypes.func.isRequired,
+  openClaimRewardModal: PropTypes.func.isRequired,
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
 }
 
-const defaultProps = {
+Layout.defaultProps = {
   data: [],
-  openSetMainnetAddressModal: () => {},
   myAccount: '',
   mainnetAddress: undefined,
 }
-
-Layout.propTypes = types
-Layout.defaultProps = defaultProps
-Table.propTypes = types
-Table.defaultProps = defaultProps
 
 export default Layout
