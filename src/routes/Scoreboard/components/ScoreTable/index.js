@@ -4,6 +4,7 @@ import 'react-table/react-table.css'
 import * as React from 'react'
 import ReactTable from 'react-table'
 import { badgeCell, rankCell, olyCell, rewardCell, userAddressCell, ownTrCallback, ownTheadCallback } from './table'
+import { areBadgesEnabled, areRewardsEnabled } from '../../../../utils/configuration'
 
 const tableStyle = {
   border: 'none',
@@ -85,22 +86,6 @@ const columns = [
     style: columnStyle,
     Cell: olyCell('predictedProfit'),
   },
-  {
-    Header: 'Badge',
-    accessor: 'predictions',
-    id: 'predictions',
-    Cell: badgeCell,
-    headerStyle,
-    style: columnStyle,
-  },
-  {
-    Header: 'Reward',
-    accesor: 'currentRank',
-    id: 'reward',
-    headerStyle,
-    style: columnStyle,
-    Cell: rewardCell,
-  },
 ]
 
 const EmptyData = () => <div />
@@ -108,11 +93,33 @@ const EmptyData = () => <div />
 const ScoreTable = ({ tableData, myAccount }) => {
   const size = tableData ? tableData.size : 0
 
+  const tableColumns = [...columns]
+  if (areBadgesEnabled()) {
+    tableColumns.push({
+      Header: 'Badge',
+      accessor: 'predictions',
+      id: 'predictions',
+      Cell: badgeCell,
+      headerStyle,
+      style: columnStyle,
+    })
+  }
+  if (areRewardsEnabled()) {
+    tableColumns.push({
+      Header: 'Reward',
+      accesor: 'currentRank',
+      id: 'reward',
+      headerStyle,
+      style: columnStyle,
+      Cell: rewardCell,
+    })
+  }
+
   return (
     <ReactTable
       key={size}
       data={tableData}
-      columns={columns}
+      columns={tableColumns}
       showPagination={false}
       defaultPageSize={size}
       style={tableStyle}

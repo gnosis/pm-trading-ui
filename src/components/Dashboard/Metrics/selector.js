@@ -1,8 +1,8 @@
 import Decimal from 'decimal.js'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { getCurrentBalance } from 'selectors/blockchain'
-import { meSelector } from 'routes/scoreboard/store/selectors'
-import { badgeOf } from 'routes/scoreboard/components/ScoreTable/table'
+import { meSelector } from 'routes/Scoreboard/store/selectors'
+import { badgeOf } from 'routes/Scoreboard/components/ScoreTable/table'
 
 const tokenSelector = createSelector(
   getCurrentBalance,

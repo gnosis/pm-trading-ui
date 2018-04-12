@@ -7,11 +7,12 @@ import className from 'classnames/bind'
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
-import { shouldUseMetamask, shouldUseUport } from 'utils/configuration'
+import { shouldUseMetamask, shouldUseUport, areBadgesEnabled } from 'utils/configuration'
 import { hasMetamask } from 'integrations/metamask/utils'
 
 import Identicon from './Identicon'
 import ProviderIcon from './ProviderIcon'
+import BadgeIcon from './BadgeIcon'
 import MenuAccountDropdown from './MenuAccountDropdown'
 
 import css from './Header.scss'
@@ -71,6 +72,7 @@ class Header extends Component {
       gameGuideURL,
       tokenAddress,
       mainnetAddress,
+      userTournamentInfo,
     } = this.props
 
     let walletConnected = hasWallet
@@ -136,15 +138,14 @@ class Header extends Component {
           </div>
 
           <div className={cx('group', 'right')}>
-            {walletConnected &&
-              currentProvider && (
+            {walletConnected && currentProvider && (
               <div className={cx('account')}>
-                {currentNetwork &&
-                    currentNetwork !== 'MAIN' && (
-                    <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
+                {currentNetwork && currentNetwork !== 'MAIN' && (
+                  <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
                 )}
                 <DecimalValue value={currentBalance} className={cx('balance', 'test')} />&nbsp;
                 <CurrencyName className={cx('account', 'text')} tokenAddress={tokenAddress} />
+                {areBadgesEnabled() && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
                 {useUport && <MenuAccountDropdown />}
@@ -170,6 +171,7 @@ Header.propTypes = {
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
   isTournament: PropTypes.bool,
+  userTournamentInfo: PropTypes.object,
   logoPath: PropTypes.string.isRequired,
   smallLogoPath: PropTypes.string.isRequired,
   showScoreboard: PropTypes.bool,
@@ -198,6 +200,7 @@ Header.defaultProps = {
   gameGuideURL: '',
   mainnetAddress: undefined,
   lockedMetamask: true,
+  userTournamentInfo: undefined,
 }
 
 export default Header
