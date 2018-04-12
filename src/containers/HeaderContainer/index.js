@@ -3,6 +3,7 @@ import { openModal } from 'actions/modal'
 import { requestMainnetAddress } from 'actions/account'
 import { initProviders } from 'integrations/store/actions'
 import { withRouter } from 'react-router-dom'
+import { meSelector } from 'routes/Scoreboard/store/selectors'
 
 import Header from 'components/Header'
 
@@ -40,6 +41,7 @@ const mapStateToProps = state => ({
   mainnetAddress: getRegisteredMainnetAddress(state),
   lockedMetamask: isMetamaskLocked(state),
   isTournament: isTournament(),
+  userTournamentInfo: meSelector(state),
   logoPath: getLogoPath(),
   smallLogoPath: getSmallLogoPath(),
   showScoreboard: shallShowScoreboard(),

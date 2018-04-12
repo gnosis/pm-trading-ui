@@ -6,7 +6,7 @@ import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
-import { getProvider } from 'utils/configuration'
+import { getProvider, areRewardsEnabled } from 'utils/configuration'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
 import * as css from './index.mod.scss'
@@ -37,7 +37,7 @@ class Layout extends React.PureComponent {
       data, myAccount, mainnetAddress, openSetMainnetAddressModal,
     } = this.props
     const hasRows = data && data.size > 1
-    const showRewardClaim = getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    const showRewardClaim = areRewardsEnabled() && getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
 
     return (
       <Block>
