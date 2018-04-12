@@ -24,7 +24,7 @@ class Countdown extends Component {
 
   @autobind
   updateDuration() {
-    const { til = moment(), target, format = RESOLUTION_TIME.RELATIVE_LONG_FORMAT } = this.props
+    const { til, target, format = RESOLUTION_TIME.RELATIVE_LONG_FORMAT } = this.props
 
     const duration = moment.duration(moment.utc(target).diff(til))
     this.setState({ output: duration.format(format) })
@@ -46,6 +46,7 @@ Countdown.propTypes = {
 
 Countdown.defaultProps = {
   className: '',
+  til: moment(),
 }
 
 export default Countdown
