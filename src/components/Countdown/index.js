@@ -32,15 +32,20 @@ class Countdown extends Component {
 
   render() {
     return (
-      <span>{this.state.output}</span>
+      <span className={this.props.className}>{this.state.output}</span>
     )
   }
 }
 
 Countdown.propTypes = {
   til: PropTypes.instanceOf(moment),
-  target: PropTypes.string,
-  format: PropTypes.string,
+  target: PropTypes.string.isRequired,
+  format: PropTypes.string.isRequired,
+  className: PropTypes.string,
+}
+
+Countdown.defaultProps = {
+  className: '',
 }
 
 export default Countdown

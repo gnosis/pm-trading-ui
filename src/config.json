@@ -57,16 +57,18 @@
       "privateKey": "a42611a039cad931c41e072953cb7dcaaa6b2dfefeff6a459d9ce4281acf0c01",
       "useNotifications": false
     },
-    "rewardClaim": {
-      "contractAddress": "0xcb0f084504c4d47e47b41d610792c8401ef79e18",
-      "networkId": 4
-    },
     "rewards": {
       "enabled": true,
       "rewardToken": {
-        "symbol": "GNO",
-        "contractAddress": "0xcb0f084504c4d47e47b41d610792c8401ef79e18",
-        "network": "rinkeby"
+        "symbol": "RWD",
+        "contractAddress": "0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
+        "networkId": 3
+      },
+      "claimReward": {
+        "enabled": true,
+        "claimUntil": "2018-05-01T12:00:00",
+        "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
+        "networkId": 3
       },
       "levels": [
         { "value": 5, "minRank": 1, "maxRank": 1 },

@@ -6,7 +6,7 @@ import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
-import { getProvider, areRewardsEnabled } from 'utils/configuration'
+import { getProvider, areRewardsEnabled, getRewardClaimOptions } from 'utils/configuration'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
 import * as css from './Layout.mod.scss'
@@ -17,6 +17,8 @@ import ClaimReward from './ClaimReward'
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
 
+const { enabled: claimRewardsEnabled } = getRewardClaimOptions()
+
 const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
 
 class Layout extends React.PureComponent {
@@ -25,21 +27,23 @@ class Layout extends React.PureComponent {
       data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal,
     } = this.props
     const hasRows = data && data.size > 1
-    const showRewardClaim = areRewardsEnabled() && getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    const showRewardInfo =
+      areRewardsEnabled() && getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    const showRewardClaim = claimRewardsEnabled && getProvider() === WALLET_PROVIDER.METAMASK && !!mainnetAddress
 
     return (
       <Block>
         <PageFrame>
-          {showRewardClaim && (
+          {showRewardInfo && (
             <Block className={cx('rewardContainer')}>
               <RewardClaimAddress
                 mainnetAddress={mainnetAddress}
                 openSetMainnetAddressModal={openSetMainnetAddressModal}
               />
-              <ClaimReward openClaimRewardModal={openClaimRewardModal} />
+              {showRewardClaim && <ClaimReward openClaimRewardModal={openClaimRewardModal} />}
             </Block>
           )}
-          {showRewardClaim && <Hairline />}
+          {showRewardInfo && <Hairline />}
           <Block className={cx('trophy')}>
             <Img src={trophy} width="100" />
             <Paragraph>Scoreboard</Paragraph>

@@ -41,7 +41,7 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
   }
 }
 
-export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS, network) => {
+export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
     gnosisROInstance = await Gnosis.create(GNOSIS_OPTIONS)
 
@@ -53,9 +53,9 @@ export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS, network) => {
       window.gnosisRO = gnosisROInstance
     }
 
-    console.info(`Gnosis ${network} RO Integration: connection established`) // eslint-disable-line no-console
+    console.info('Gnosis RO Integration: connection established') // eslint-disable-line no-console
   } catch (err) {
-    console.error(`Gnosis ${network} RO Integration: connection failed`) // eslint-disable-line no-console
+    console.error('Gnosis RO Integration: connection failed') // eslint-disable-line no-console
     console.error(err) // eslint-disable-line no-console
   }
 }
@@ -87,4 +87,4 @@ export const getGnosisConnection = async () => {
   })
 }
 
-export const getROGnosisConnection = async () => (gnosisROInstance || undefined)
+export const getROGnosisConnection = async () => gnosisROInstance || undefined
