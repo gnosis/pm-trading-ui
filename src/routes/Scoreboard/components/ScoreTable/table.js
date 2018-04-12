@@ -9,7 +9,7 @@ import {
   getBadgeLevels,
   areBadgesEnabled,
   areRewardsEnabled,
-  getRewardTokenSymbol,
+  getRewardToken,
 } from 'utils/configuration'
 
 import * as css from './index.css'
@@ -78,9 +78,9 @@ export const rewardCell = (props) => {
     })
     const style = reward ? { color: '#90712b', letterSpacing: '0.5px' } : undefined
 
-    const tokenSymbol = getRewardTokenSymbol()
+    const { symbol } = getRewardToken()
 
-    return <span style={style}>{reward.value} {tokenSymbol}</span>
+    return <span style={style}>{reward.value} {symbol}</span>
   }
 }
 

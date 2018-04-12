@@ -3,7 +3,6 @@ import { Record } from 'immutable'
 const ProviderRecord = Record({
   name: undefined,
   available: false,
-  readOnly: false,
   loaded: false,
   network: undefined,
   balance: undefined,
