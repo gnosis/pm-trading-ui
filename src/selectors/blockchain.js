@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { getTokenAddress } from 'utils/configuration'
 
 /**
  * Returns if gnosis.js is initialized or not

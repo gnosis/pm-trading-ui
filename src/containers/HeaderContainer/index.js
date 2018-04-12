@@ -4,11 +4,12 @@ import { requestMainnetAddress } from 'actions/account'
 import { initProviders } from 'integrations/store/actions'
 import { withRouter } from 'react-router-dom'
 import { meSelector } from 'routes/Scoreboard/store/selectors'
+import { getTokenAmount } from 'selectors/blockchain'
+import { requestTokenBalance } from 'actions/blockchain'
 
 import Header from 'components/Header'
 
 import {
-  getCurrentBalance,
   getCurrentNetwork,
   getCurrentAccount,
   getActiveProvider,
@@ -33,7 +34,7 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 const mapStateToProps = state => ({
   hasWallet: checkWalletConnection(state),
   currentAccount: getCurrentAccount(state),
-  currentBalance: getCurrentBalance(state),
+  currentBalance: getTokenAmount(state, getTokenAddress()).toString(),
   currentNetwork: getCurrentNetwork(state),
   currentProvider: getActiveProvider(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
@@ -53,6 +54,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   requestMainnetAddress: () => dispatch(requestMainnetAddress()),
+  requestTokenBalance: account => dispatch(requestTokenBalance(getTokenAddress(), account)),
   openModal: modalName => dispatch(openModal({ modalName })),
   initUport: () => dispatch(initProviders({ providers: [WALLET_PROVIDER.UPORT] })),
 })

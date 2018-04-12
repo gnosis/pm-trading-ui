@@ -26,6 +26,10 @@ class Header extends Component {
     if (this.props.isTournament && this.props.currentAccount) {
       this.props.requestMainnetAddress()
     }
+
+    if (this.props.currentAccount) {
+      this.props.requestTokenBalance(this.props.currentAccount)
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -171,7 +175,7 @@ Header.propTypes = {
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
   isTournament: PropTypes.bool,
-  userTournamentInfo: PropTypes.object,
+  userTournamentInfo: PropTypes.shape({}),
   logoPath: PropTypes.string.isRequired,
   smallLogoPath: PropTypes.string.isRequired,
   showScoreboard: PropTypes.bool,
@@ -181,6 +185,7 @@ Header.propTypes = {
   tokenAddress: PropTypes.string.isRequired,
   lockedMetamask: PropTypes.bool,
   requestMainnetAddress: PropTypes.func.isRequired,
+  requestTokenBalance: PropTypes.func.isRequired,
   mainnetAddress: PropTypes.string,
   initUport: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
