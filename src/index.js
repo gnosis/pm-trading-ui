@@ -3,6 +3,7 @@ import 'whatwg-fetch'
 import Raven from 'raven-js'
 import RootComponent from 'components/Root'
 import { initProviders } from 'integrations/store/actions'
+import { initReadOnlyGnosis } from 'actions/blockchain'
 import Decimal from 'decimal.js'
 import React from 'react'
 
@@ -18,6 +19,7 @@ setMomentRelativeTime()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
+store.dispatch(initReadOnlyGnosis())
 if (!isTournament()) {
   store.dispatch(initProviders())
 } else {

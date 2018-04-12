@@ -60,7 +60,9 @@
     "rewards": {
       "enabled": true,
       "rewardToken": {
-        "symbol": "GNO"
+        "symbol": "GNO",
+        "contractAddress": "0xcb0f084504c4d47e47b41d610792c8401ef79e18",
+        "network": "rinkeby"
       },
       "levels": [
         { "value": 5, "minRank": 1, "maxRank": 1 },
