@@ -37,7 +37,7 @@
       "url": "https://gnosis.pm"
     },
     "termsOfUse": {
-      "url":"https://gnosis.pm"
+      "url": "https://gnosis.pm"
     },
     "footer": {
       "display": true,
@@ -55,6 +55,10 @@
       "network": "rinkeby",
       "privateKey": "a42611a039cad931c41e072953cb7dcaaa6b2dfefeff6a459d9ce4281acf0c01",
       "useNotifications": false
+    },
+    "rewardClaim": {
+      "contractAddress": "0xcb0f084504c4d47e47b41d610792c8401ef79e18",
+      "networkId": 4
     }
   }
 }

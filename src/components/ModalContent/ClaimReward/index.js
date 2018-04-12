@@ -4,21 +4,24 @@ import PropTypes from 'prop-types'
 import { lifecycle } from 'recompose'
 import { Link, withRouter } from 'react-router-dom'
 import Decimal from 'decimal.js'
+import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import DecimalValue from 'components/DecimalValue'
 import InteractionButton from 'containers/InteractionButton'
-import LinkIcon from 'assets/img/icons/icon_link.svg'
-import WalletIcon from 'assets/img/icons/icon_wallet.svg'
+import { getRewardClaimOptions } from 'utils/configuration'
 import style from './ClaimReward.mod.scss'
 
 const cx = cn.bind(style)
+const { networkId: rewardContractNetworkId } = getRewardClaimOptions()
 
 const ClaimReward = ({
-  closeModal, gasPrice, currentNetwork,
+  closeModal, gasPrice, currentNetwork, currentNetworkId,
 }) => {
   const handleRegistration = async () => {
     closeModal()
   }
   const disabled = false
+  const targetNetwork = ETHEREUM_NETWORK_IDS[rewardContractNetworkId]
+  const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardContractNetworkId)
 
   return (
     <div className={cx('claimRewards')}>
@@ -27,19 +30,21 @@ const ClaimReward = ({
         <h4 className={cx('heading')}>Claim GNO</h4>
         <p className={cx('annotation')}>
           In order to claim your <span className={cx('rewardInfo')}>0.2 GNO</span> tokens, you first have to switch to
-          the <span className={cx('network')}>MAINNET</span> network in your MetaMask wallet. Also make sure you have
-          enough ETH to submit the transaction with the claim request. More information in{' '}
+          the <span className={cx('network')}>{targetNetwork}</span> network in your MetaMask wallet. Also make sure you
+          have enough ETH to submit the transaction with the claim request. More information in{' '}
           <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
             FAQ
           </Link>.
         </p>
         <div className={cx('currentNetworkContainer')}>
           Current network:
-          <span className={cx('network')}>{currentNetwork}</span>
+          <span className={cx('network', { wrongNetwork: isWrongNetwork })}>{currentNetwork}</span>
         </div>
-        <p className={cx('gasCosts')}>
-          Gas Costs: <b className={cx('gasEstimation')}>0.004 ETH</b>
-        </p>
+        {!isWrongNetwork && (
+          <p className={cx('gasCosts')}>
+            Gas Costs: <b className={cx('gasEstimation')}>0.004 ETH</b>
+          </p>
+        )}
         <InteractionButton
           onClick={handleRegistration}
           className={cx('btn', 'btn-primary', 'claim')}
@@ -56,9 +61,15 @@ ClaimReward.propTypes = {
   closeModal: PropTypes.func.isRequired,
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
-  currentNetwork: PropTypes.string.isRequired,
+  currentNetwork: PropTypes.string,
+  currentNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   gasPrice: PropTypes.instanceOf(Decimal).isRequired,
   registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+}
+
+ClaimReward.defaultProps = {
+  currentNetworkId: 0,
+  currentNetwork: '',
 }
 
 export default withRouter(lifecycle({

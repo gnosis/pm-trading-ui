@@ -63,6 +63,10 @@
         font-weight: bold;
         margin-left: 5px;
         color: #333;
+
+        &.wrongNetwork {
+          color: red;
+        }
       }
     }
 

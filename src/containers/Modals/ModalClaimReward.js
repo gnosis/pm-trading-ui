@@ -5,7 +5,6 @@ import {
   getCurrentAccount,
   getCurrentBalance,
   getCurrentNetwork,
-  getTargetNetworkId,
   getCurrentNetworkId,
 } from 'integrations/store/selectors'
 import { getGasPrice } from 'routes/MarketDetails/store/selectors'
@@ -17,7 +16,6 @@ const mapStateToProps = state => ({
   currentBalance: getCurrentBalance(state),
   gasPrice: getGasPrice(state),
   currentNetwork: getCurrentNetwork(state),
-  targetNetworkId: getTargetNetworkId(state),
   currentNetworkId: getCurrentNetworkId(state),
 })
 
