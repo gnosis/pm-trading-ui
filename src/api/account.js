@@ -25,7 +25,7 @@ export const getCurrentBalance = async (account) => {
 }
 
 export const getMainnetAddressForRinkebyAccount = async (contractAddress, account) => {
-  const gnosis = await api.getGnosisConnection()
+  const gnosis = await api.getROGnosisConnection()
   const addressContract = await gnosis.contracts.AddressRegistry.at(contractAddress)
   const address = await addressContract.mainnetAddressFor(hexWithPrefix(account))
 

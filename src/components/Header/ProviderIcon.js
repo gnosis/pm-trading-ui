@@ -1,12 +1,11 @@
 import React from 'react'
 import className from 'classnames/bind'
+import Tooltip from 'rc-tooltip'
+
+import Icon from 'components/Icon'
 
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
-
-import IconMetamask from 'assets/img/icons/icon_metamask.svg'
-import IconParity from 'assets/img/icons/icon_parity.svg'
-import IconEtherToken from 'assets/img/icons/icon_etherTokens.svg'
 
 import css from './ProviderIcon.mod.scss'
 
@@ -17,17 +16,15 @@ const PROVIDER_PARITY = 'PARITY'
 const PROVIDER_REMOTE = 'REMOTE'
 
 const PROVIDER_ICONS = {
-  [PROVIDER_METAMASK]: IconMetamask,
-  [PROVIDER_PARITY]: IconParity,
-  [PROVIDER_REMOTE]: IconEtherToken,
+  [PROVIDER_METAMASK]: 'metamask',
+  [PROVIDER_PARITY]: 'parity',
+  [PROVIDER_REMOTE]: 'etherTokens',
 }
 
 const ProviderIcon = ({ provider }) => (
-  <div
-    className={cx('providerIcon')}
-    style={{ backgroundImage: `url(${PROVIDER_ICONS[provider.name]})` }}
-    title={`You are using ${upperFirst(provider.name.toLowerCase())} to connect to Gnosis`}
-  />
+  <Tooltip placement="left" overlay={`You are using ${upperFirst(provider.name.toLowerCase())} to connect to Gnosis`}>
+    <Icon type={PROVIDER_ICONS[provider.name]} size={35} />
+  </Tooltip>
 )
 
 ProviderIcon.propTypes = {

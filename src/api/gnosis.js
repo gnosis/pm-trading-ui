@@ -4,10 +4,19 @@ import { NETWORK_TIMEOUT } from 'actions/blockchain'
 import { isTournament } from 'utils/configuration'
 
 let gnosisInstance
+let gnosisROInstance
 
 export const {
   calcLMSRCost, calcLMSROutcomeTokenCount, calcLMSRMarginalPrice, calcLMSRProfit,
 } = Gnosis
+
+const addOlympiaContracts = async (gnosisJsInstance) => {
+  await gnosisJsInstance.importContracts(olympiaArtifacts, {
+    OlympiaToken: 'olympiaToken',
+    AddressRegistry: 'olympiaAddressRegistry',
+    RewardClaimHandler: 'rewardClaimHandler',
+  })
+}
 
 /**
  * Initializes connection to GnosisJS
@@ -18,11 +27,7 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
 
     if (isTournament()) {
-      await gnosisInstance.importContracts(olympiaArtifacts, {
-        OlympiaToken: 'olympiaToken',
-        AddressRegistry: 'olympiaAddressRegistry',
-        RewardClaimHandler: 'rewardClaimHandler',
-      })
+      await addOlympiaContracts(gnosisInstance)
     }
 
     if (process.env.NODE_ENV === 'development') {
@@ -32,6 +37,25 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
   } catch (err) {
     console.error('Gnosis Integration: connection failed') // eslint-disable-line no-console
+    console.error(err) // eslint-disable-line no-console
+  }
+}
+
+export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS, network) => {
+  try {
+    gnosisROInstance = await Gnosis.create(GNOSIS_OPTIONS)
+
+    if (isTournament()) {
+      await addOlympiaContracts(gnosisROInstance)
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      window.gnosisRO = gnosisROInstance
+    }
+
+    console.info(`Gnosis ${network} RO Integration: connection established`) // eslint-disable-line no-console
+  } catch (err) {
+    console.error(`Gnosis ${network} RO Integration: connection failed`) // eslint-disable-line no-console
     console.error(err) // eslint-disable-line no-console
   }
 }
@@ -62,3 +86,5 @@ export const getGnosisConnection = async () => {
     }, NETWORK_TIMEOUT)
   })
 }
+
+export const getROGnosisConnection = async () => (gnosisROInstance || undefined)

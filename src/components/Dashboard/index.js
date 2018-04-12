@@ -114,6 +114,15 @@ class Dashboard extends Component {
   renderClosingMarkets(markets) {
     return markets.map((market) => {
       const viewMarket = () => this.handleViewMarket(market)
+
+      const timeTilClose = moment.duration(moment.utc(market.eventDescription.resolutionDate).diff(moment.utc()))
+      let timeLeft = timeTilClose.humanize()
+
+      if (timeTilClose.asMonths() > 1) {
+        timeLeft = '> 30 d'
+      }
+
+
       return (
         <div
           className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns"
@@ -121,7 +130,7 @@ class Dashboard extends Component {
           onClick={viewMarket}
         >
           <div className="dashboardMarket__leftCol">
-            <div className="value">{moment.utc(market.eventDescription.resolutionDate).fromNow()}</div>
+            <div className="value">{timeLeft}</div>
           </div>
           <div className="dashboardMarket__rightCol">
             <div className="dashboardMarket__title">{market.eventDescription.title}</div>
@@ -304,13 +313,13 @@ class Dashboard extends Component {
 
   render() {
     const {
-      hasWallet, defaultTokenAmount, accountPredictiveAssets, tokenSymbol,
+      hasWallet, defaultTokenAmount, accountPredictiveAssets, tokenSymbol, tokenIcon,
     } = this.props
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     const predictedProfitFormatted = Decimal(accountPredictiveAssets).toDP(4, 1).toString()
     if (hasWallet) {
-      metricsSection = <Metrics tokens={defaultTokenAmount} tokenSymbol={tokenSymbol} predictedProfit={predictedProfitFormatted} />
+      metricsSection = <Metrics tokens={defaultTokenAmount} tokenSymbol={tokenSymbol} tokenIcon={tokenIcon} predictedProfit={predictedProfitFormatted} />
 
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
@@ -375,6 +384,7 @@ Dashboard.propTypes = {
   accountPredictiveAssets: PropTypes.string,
   defaultTokenAmount: PropTypes.string,
   tokenSymbol: PropTypes.string,
+  tokenIcon: PropTypes.string,
   requestTokenSymbol: PropTypes.func,
 }
 

@@ -5,7 +5,9 @@ import {
   getGasPrice,
   getTokenSymbol,
   getTokenBalance,
+  initReadOnlyGnosisConnection,
 } from 'api'
+import Web3 from 'web3'
 
 import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
@@ -48,24 +50,25 @@ export const requestTokenBalance = (tokenAddress, accountAddress) => async (disp
  */
 export const initGnosis = () => async (dispatch, getState) => {
   // initialize
+  let newProvider
+
   try {
     const state = getState()
 
     // determine new provider
-    const newProvider = findDefaultProvider(state)
+    newProvider = findDefaultProvider(state)
 
     if (newProvider) {
       await dispatch(setActiveProvider(newProvider.name))
       // init Gnosis connection
-      if (newProvider.account) {
-        const opts = getGnosisJsOptions(newProvider)
-        await initGnosisConnection(opts)
-      } else {
-        throw new Error('No account found')
-      }
 
-      dispatch(setGnosisInitialized({ initialized: true }))
-      getTokenBalance(getTokenAddress(), await getCurrentAccount())
+      const opts = getGnosisJsOptions(newProvider)
+      await initGnosisConnection(opts)
+      await dispatch(setGnosisInitialized({ initialized: true }))
+
+      if (newProvider.account) {
+        await getTokenBalance(getTokenAddress(), await getCurrentAccount())
+      }
     }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)
@@ -73,17 +76,32 @@ export const initGnosis = () => async (dispatch, getState) => {
     return dispatch(setGnosisInitialized({ initialized: false, error }))
   }
 
-  // connect
-  try {
-    // runs test executions on gnosisjs
-    const getConnection = async () => {
-      const account = await getCurrentAccount()
-      await getCurrentBalance(account)
+  if (newProvider) {
+    // connect
+    try {
+      // runs test executions on gnosisjs
+      const getConnection = async () => {
+        // these throw if they're not available, meaning we don't have a connection
+        const account = await getCurrentAccount()
+        await getCurrentBalance(account)
+      }
+
+      await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
+      await dispatch(setConnectionStatus({ connected: true }))
+    } catch (error) {
+      console.warn(`Gnosis.js connection Error: ${error}`)
+      return dispatch(setConnectionStatus({ connected: false }))
     }
-    await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
-    await dispatch(setConnectionStatus({ connected: true }))
+  }
+}
+
+export const initReadOnlyGnosis = () => async () => {
+  // initialize
+  try {
+    await initReadOnlyGnosisConnection({
+      ethereum: new Web3(new Web3.providers.HttpProvider(process.env.ETHEREUM_URL)).currentProvider,
+    })
   } catch (error) {
-    console.warn(`Gnosis.js connection Error: ${error}`)
-    return dispatch(setConnectionStatus({ connected: false }))
+    console.error(`Gnosis.js RO initialization Error: ${error}`)
   }
 }
