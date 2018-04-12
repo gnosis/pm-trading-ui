@@ -10,7 +10,7 @@ import css from './Markets.mod.scss'
 
 const cx = classNames.bind(css)
 
-const Markets = ({ markets, userAccount }) => (
+const Markets = ({ markets, userAccount, viewMarket }) => (
   <div className={cx('markets')}>
     <div className={cx('title')}>
       Showing {markets.size} of {markets.size}
@@ -32,6 +32,7 @@ const Markets = ({ markets, userAccount }) => (
             resolution={market.resolution}
             volume={market.volume}
             collateralToken={market.collateralToken}
+            viewMarket={viewMarket}
           />
         )
       })}
@@ -41,6 +42,7 @@ const Markets = ({ markets, userAccount }) => (
 
 
 Markets.propTypes = {
+  viewMarket: PropTypes.func.isRequired,
   markets: PropTypes.instanceOf(List),
   userAccount: PropTypes.string,
 }

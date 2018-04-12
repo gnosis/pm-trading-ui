@@ -1,5 +1,7 @@
+import { push } from 'react-router-redux'
 import { fetchMarkets } from '../../store/actions'
 
-export default {
-  fetchMarkets,
-}
+export default dispatch => ({
+  fetchMarkets: () => dispatch(fetchMarkets()),
+  viewMarket: address => dispatch(push(`/markets/${address}`)),
+})

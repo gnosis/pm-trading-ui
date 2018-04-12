@@ -16,7 +16,7 @@ class MarketList extends Component {
 
   render() {
     const {
-      markets, openMarkets, newMarkets, endingSoonMarkets, userAccount,
+      markets, openMarkets, newMarkets, endingSoonMarkets, userAccount, viewMarket,
     } = this.props
     return (
       <div>
@@ -28,7 +28,7 @@ class MarketList extends Component {
         />
         <MarketOverview>
           <div className="col-md-9">
-            { markets ? <Markets markets={markets} userAccount={userAccount} /> : <NoMarkets /> }
+            { markets ? <Markets markets={markets} userAccount={userAccount} viewMarket={viewMarket} /> : <NoMarkets /> }
           </div>
           <div className="col-md-3">
             <Filter userAccount={userAccount} />
@@ -41,6 +41,7 @@ class MarketList extends Component {
 
 
 MarketList.propTypes = {
+  viewMarket: PropTypes.func.isRequired,
   fetchMarkets: PropTypes.func.isRequired,
   markets: PropTypes.instanceOf(List),
   userAccount: PropTypes.string,
