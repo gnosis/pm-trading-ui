@@ -13,7 +13,7 @@ import style from './ClaimReward.mod.scss'
 const cx = cn.bind(style)
 
 const ClaimReward = ({
-  closeModal, gasPrice,
+  closeModal, gasPrice, currentNetwork,
 }) => {
   const handleRegistration = async () => {
     closeModal()
@@ -35,7 +35,7 @@ const ClaimReward = ({
         </p>
         <div className={cx('currentNetworkContainer')}>
           Current network:
-          <span className={cx('network')}>RINKEBY</span>
+          <span className={cx('network')}>{currentNetwork}</span>
         </div>
         <p className={cx('gasCosts')}>
           Gas Costs: <b className={cx('gasEstimation')}>0.004 ETH</b>
@@ -56,6 +56,7 @@ ClaimReward.propTypes = {
   closeModal: PropTypes.func.isRequired,
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
+  currentNetwork: PropTypes.string.isRequired,
   gasPrice: PropTypes.instanceOf(Decimal).isRequired,
   registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
