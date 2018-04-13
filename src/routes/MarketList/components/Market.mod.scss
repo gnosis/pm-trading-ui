@@ -46,6 +46,20 @@ $expandable-margin: 40px;
     }
   }
 
+  .resolve {
+    text-transform: uppercase;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: $link-color;
+    &:hover, &:focus {
+      color: $link-color-highlight;
+    }
+    &:visited, &:active {
+      color: $link-color;
+    }
+  }
+
   &:first-child {
     border-top-left-radius: $market-border-radius;
     border-top-right-radius: $market-border-radius;

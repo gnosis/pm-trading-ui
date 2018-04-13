@@ -4,6 +4,7 @@ import classNames from 'classnames/bind'
 
 import { decimalToText } from 'components/DecimalValue'
 import Outcome from 'components/Outcome'
+import autobind from 'autobind-decorator'
 
 import Decimal from 'decimal.js'
 import moment from 'moment'
@@ -21,7 +22,7 @@ const cx = classNames.bind(css)
 const onResolve = event => event.stopPropagation()
 
 const ResolveButton = ({ url }) => (
-  <div className="market__control">
+  <div className={cx('resolve')}>
     <NavLink to={url} onClick={onResolve}>
       Resolve
     </NavLink>
@@ -29,15 +30,18 @@ const ResolveButton = ({ url }) => (
 
 ResolveButton.propTypes = {
   url: PropTypes.string,
-  show: PropTypes.bool,
 }
 
 ResolveButton.defaultProps = {
   url: '',
-  show: false,
 }
 
 class Market extends React.PureComponent {
+  @autobind
+  handleViewMarket() {
+    this.props.viewMarket(this.props.address)
+  }
+
   render() {
     const { market } = this.props
     const {
@@ -52,7 +56,6 @@ class Market extends React.PureComponent {
     } = this.props
 
     const showResolveButton = isOwner && !resolved
-    const viewUrl = `/markets/${address}`
     const resolveUrl = `/markets/${address}/resolve`
     const resolutionDate = moment(resolution).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)
     const tradingVolume = decimalToText(new Decimal(volume).div(1e18))
@@ -69,9 +72,9 @@ class Market extends React.PureComponent {
     const winningOutcome = market.type === OUTCOME_TYPES.CATEGORICAL ? market.outcomes.keyOf(market.winningOutcome) : market.winningOutcome
 
     return (
-      <NavLink
-        to={viewUrl}
-        onClick={onResolve}
+      <button
+        onClick={this.handleViewMarket}
+        type="button"
         className={cx('market', {
           resolved,
           closed,
@@ -106,7 +109,7 @@ class Market extends React.PureComponent {
             <MarketTrading volume={tradingVolume} collateralToken={collateralToken} />
           </div>
         </div>
-      </NavLink>
+      </button>
     )
   }
 }
@@ -121,6 +124,7 @@ Market.propTypes = {
   resolution: PropTypes.string.isRequired,
   volume: PropTypes.string.isRequired,
   collateralToken: PropTypes.string.isRequired,
+  viewMarket: PropTypes.func.isRequired,
 }
 
 export default Market

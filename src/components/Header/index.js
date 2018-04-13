@@ -26,6 +26,10 @@ class Header extends Component {
     if (this.props.isTournament && this.props.currentAccount) {
       this.props.requestMainnetAddress()
     }
+
+    if (this.props.currentAccount) {
+      this.props.requestTokenBalance(this.props.currentAccount)
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -61,7 +65,7 @@ class Header extends Component {
       hasWallet,
       currentAccount,
       currentNetwork,
-      currentBalance,
+      tokenBalance,
       currentProvider,
       isTournament,
       logoPath,
@@ -143,8 +147,8 @@ class Header extends Component {
                 {currentNetwork && currentNetwork !== 'MAIN' && (
                   <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
                 )}
-                <DecimalValue value={currentBalance} className={cx('balance', 'test')} />&nbsp;
-                <CurrencyName className={cx('account', 'text')} tokenAddress={tokenAddress} />
+                <DecimalValue value={tokenBalance} className={cx('balance', 'test')} />&nbsp;
+                {tokenAddress ? <CurrencyName className={cx('account', 'text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
                 {areBadgesEnabled() && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
@@ -167,11 +171,11 @@ Header.propTypes = {
   version: PropTypes.string,
   currentNetwork: PropTypes.string,
   hasWallet: PropTypes.bool,
-  currentBalance: PropTypes.string,
+  tokenBalance: PropTypes.string,
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
   isTournament: PropTypes.bool,
-  userTournamentInfo: PropTypes.object,
+  userTournamentInfo: PropTypes.shape({}),
   logoPath: PropTypes.string.isRequired,
   smallLogoPath: PropTypes.string.isRequired,
   showScoreboard: PropTypes.bool,
@@ -181,6 +185,7 @@ Header.propTypes = {
   tokenAddress: PropTypes.string.isRequired,
   lockedMetamask: PropTypes.bool,
   requestMainnetAddress: PropTypes.func.isRequired,
+  requestTokenBalance: PropTypes.func.isRequired,
   mainnetAddress: PropTypes.string,
   initUport: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
@@ -190,7 +195,7 @@ Header.defaultProps = {
   version: '',
   currentNetwork: '',
   hasWallet: false,
-  currentBalance: '0',
+  tokenBalance: '0',
   currentProvider: {},
   currentAccount: '',
   isTournament: false,

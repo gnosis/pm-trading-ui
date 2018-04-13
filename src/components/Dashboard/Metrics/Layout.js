@@ -56,7 +56,7 @@ const Metrics = ({
 
 Metrics.propTypes = {
   predictedProfit: PropTypes.string,
-  tokens: PropTypes.instanceOf(Decimal),
+  tokens: PropTypes.string,
   tokenSymbol: PropTypes.string,
   tokenIcon: PropTypes.string,
 }
