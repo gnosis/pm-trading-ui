@@ -11,7 +11,7 @@
   "productionWhitelist": {},
   "gnosisdb": {
     "protocol": "https",
-    "hostDev": "gnosisdb-olympiaprod.gnosis.pm",
+    "hostDev": "gnosisdb.dev.gnosisdev.com",
     "hostProd": "gnosisdb-prod.gnosis.pm",
     "port": 443
   },
