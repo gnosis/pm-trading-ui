@@ -5,23 +5,24 @@ import Block from 'components/layout/Block'
 import Span from 'components/layout/Span'
 import Countdown from 'components/Countdown'
 import Paragraph from 'components/layout/Paragraph'
-import { getRewardClaimOptions } from 'utils/configuration'
+import { getRewardClaimOptions, getRewardToken } from 'utils/configuration'
 import style from './ClaimReward.mod.scss'
 
 const { claimUntil } = getRewardClaimOptions()
+const { symbol } = getRewardToken()
 const claimUntilFormat = 'y[Y] M[M] D[d] h[h] m[m]'
 const rewardsClaimed = window ? window.localStorage.getItem('rewardsClaimed') === 'true' : false
 const cx = cn.bind(style)
 
-const ClaimReward = ({ openClaimRewardModal }) => (
+const ClaimReward = ({ openClaimRewardModal, rewardValue }) => (
   <Block className={cx('claimReward')}>
     <Block className={cx('rewardInfoContainer')}>
       <Block className={cx('rewardAmount')}>
-        <Span className={cx('infoText', 'amount')}>{rewardsClaimed ? 'N/A' : '0.2 GNO'}</Span>
-        <Paragraph className={cx('annotation')}>CLAIMABLE GNO</Paragraph>
+        <Span className={cx('infoText', 'amount')}>{rewardsClaimed || !rewardValue ? 'N/A' : `${rewardValue} ${getRewardToken}`}</Span>
+        <Paragraph className={cx('annotation')}>CLAIMABLE {symbol}</Paragraph>
       </Block>
       <Block className={cx('timeToClaim')}>
-        {rewardsClaimed ? (
+        {rewardsClaimed || !rewardValue ? (
           <span className={cx('infoText')}>N/A</span>
         ) : (
           <Countdown className={cx('infoText')} target={claimUntil} format={claimUntilFormat} />
@@ -37,6 +38,7 @@ const ClaimReward = ({ openClaimRewardModal }) => (
 
 ClaimReward.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
+  rewardValue: PropTypes.number.isRequired,
 }
 
 export default ClaimReward

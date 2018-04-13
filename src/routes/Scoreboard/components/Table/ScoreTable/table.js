@@ -1,8 +1,6 @@
 import classNames from 'classnames/bind'
 import Decimal from 'decimal.js'
 import * as React from 'react'
-
-import CurrencyName from 'components/CurrencyName'
 import WalletAddress from 'components/WalletAddress'
 import {
   getRewardLevels,

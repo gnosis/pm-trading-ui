@@ -22,6 +22,7 @@ import {
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
+import { isTournament } from 'utils/configuration'
 
 import Metrics from './Metrics'
 import './dashboard.scss'
@@ -54,6 +55,13 @@ class Dashboard extends Component {
         this.props.requestAccountShares(this.props.defaultAccount)
         this.props.requestAccountTrades(this.props.defaultAccount)
         this.props.requestDefaultTokenAmount(this.props.defaultAccount)
+      }
+    }
+
+    if (isTournament()) {
+      this.props.fetchTournamentUsers()
+      if (this.props.defaultAccount) {
+        this.props.fetchTournamentUserData(this.props.defaultAccount)
       }
     }
   }
@@ -370,22 +378,28 @@ Dashboard.propTypes = {
   //   market: marketPropType,
   markets: PropTypes.arrayOf(marketPropType),
   defaultAccount: PropTypes.string,
-  hasWallet: PropTypes.bool,
+  hasWallet: PropTypes.bool.isRequired,
   accountShares: PropTypes.objectOf(marketShareShape),
-  accountTrades: PropTypes.array,
-  requestMarkets: PropTypes.func,
-  requestGasPrice: PropTypes.func,
-  requestAccountShares: PropTypes.func,
-  requestAccountTrades: PropTypes.func,
-  changeUrl: PropTypes.func,
+  accountTrades: PropTypes.array.isRequired,
+  requestMarkets: PropTypes.func.isRequired,
+  requestGasPrice: PropTypes.func.isRequired,
+  requestAccountShares: PropTypes.func.isRequired,
+  requestAccountTrades: PropTypes.func.isRequired,
+  changeUrl: PropTypes.func.isRequired,
   requestDefaultTokenAmount: PropTypes.func.isRequired,
-  gnosisInitialized: PropTypes.bool,
+  gnosisInitialized: PropTypes.bool.isRequired,
   redeemWinnings: PropTypes.func,
-  accountPredictiveAssets: PropTypes.string,
-  defaultTokenAmount: PropTypes.string,
+  accountPredictiveAssets: PropTypes.string.isRequired,
+  defaultTokenAmount: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string,
-  tokenIcon: PropTypes.string,
-  requestTokenSymbol: PropTypes.func,
+  tokenIcon: PropTypes.string.isRequired,
+  requestTokenSymbol: PropTypes.func.isRequired,
+  fetchTournamentUsers: PropTypes.func.isRequired,
+  fetchTournamentUserData: PropTypes.func.isRequired,
+}
+
+Dashboard.defaultProps = {
+  tokenSymbol: '',
 }
 
 export default Dashboard

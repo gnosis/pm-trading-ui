@@ -1,5 +1,7 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import selector from './selector'
 import Layout from './Layout'
 
 class Metrics extends React.PureComponent {
@@ -8,8 +10,13 @@ class Metrics extends React.PureComponent {
     tokens: PropTypes.string,
     tokenSymbol: PropTypes.string,
     tokenIcon: PropTypes.string,
-    rank: PropTypes.string,
-    badge: PropTypes.string,
+    rank: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    badge: PropTypes.shape({
+      icon: PropTypes.string,
+      maxPredictions: PropTypes.number,
+      minPredictions: PropTypes.number,
+      rank: PropTypes.string,
+    }),
   }
 
   static defaultProps = {
@@ -18,7 +25,7 @@ class Metrics extends React.PureComponent {
     tokenSymbol: '',
     tokenIcon: '',
     rank: '',
-    badge: '',
+    badge: {},
   }
 
   render() {
@@ -38,4 +45,4 @@ class Metrics extends React.PureComponent {
   }
 }
 
-export default Metrics
+export default connect(selector)(Metrics)

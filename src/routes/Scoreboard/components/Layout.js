@@ -7,7 +7,7 @@ import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
-import { getProvider, areRewardsEnabled, getRewardClaimOptions } from 'utils/configuration'
+import { getProvider, areRewardsEnabled, getRewardClaimOptions, getRewardLevels } from 'utils/configuration'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
 import * as css from './Layout.mod.scss'
@@ -19,19 +19,34 @@ const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
 
 const { claimStart, claimUntil } = getRewardClaimOptions()
+const rewardLevels = getRewardLevels()
 
 const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
 
 class Layout extends React.PureComponent {
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank,
     } = this.props
     const hasRows = data && data.size > 1
+    let rewardValue = 0
+
+    rewardLevels.forEach((rewardLevel) => {
+      if (
+        (rank >= rewardLevel.minRank && rank <= rewardLevel.maxRank) || // between min/max
+        (rank >= rewardLevel.minRank && rewardLevel.maxRank == null) // above min
+      ) {
+        rewardValue = rewardLevel.value
+      }
+    })
+
     const showRewardInfo =
       areRewardsEnabled() && getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
     const showRewardClaim =
-      moment.utc().isBetween(claimStart, claimUntil) && getProvider() === WALLET_PROVIDER.METAMASK && !!mainnetAddress
+      moment.utc().isBetween(claimStart, claimUntil) &&
+      getProvider() === WALLET_PROVIDER.METAMASK &&
+      !!mainnetAddress &&
+      rewardValue > 0
 
     return (
       <Block>
@@ -42,7 +57,7 @@ class Layout extends React.PureComponent {
                 mainnetAddress={mainnetAddress}
                 openSetMainnetAddressModal={openSetMainnetAddressModal}
               />
-              {showRewardClaim && <ClaimReward openClaimRewardModal={openClaimRewardModal} />}
+              {true && <ClaimReward openClaimRewardModal={openClaimRewardModal} rewardValue={rewardValue} />}
             </Block>
           )}
           {showRewardInfo && <Hairline />}
@@ -77,12 +92,14 @@ Layout.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
+  rank: PropTypes.string,
 }
 
 Layout.defaultProps = {
   data: [],
   myAccount: '',
   mainnetAddress: undefined,
+  rank: '',
 }
 
 export default Layout

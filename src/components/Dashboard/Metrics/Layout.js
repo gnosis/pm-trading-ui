@@ -59,7 +59,7 @@ const Metrics = ({
           <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
         </Metric>
         <Metric img={badge.icon} width={47} height={42} explanation="BADGE">
-          <Block className={cx('ol-db-title', 'ol-db-title-badge')}>{badge.name}</Block>
+          <Block className={cx('ol-db-title', 'ol-db-title-badge')}>{badge.rank}</Block>
         </Metric>
       </React.Fragment>
     )}
@@ -68,9 +68,16 @@ const Metrics = ({
 
 Metrics.propTypes = {
   predictedProfit: PropTypes.string,
-  tokens: PropTypes.instanceOf(Decimal),
+  tokens: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.string, PropTypes.number]),
   tokenSymbol: PropTypes.string,
   tokenIcon: PropTypes.string,
+  rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  badge: PropTypes.shape({
+    icon: PropTypes.string,
+    maxPredictions: PropTypes.number,
+    minPredictions: PropTypes.number,
+    rank: PropTypes.string,
+  }).isRequired,
 }
 
 Metrics.defaultProps = {
@@ -78,6 +85,7 @@ Metrics.defaultProps = {
   tokens: Decimal(0),
   tokenSymbol: 'UNKNOWN',
   tokenIcon: etherTokens,
+  rank: '',
 }
 
 export default Metrics

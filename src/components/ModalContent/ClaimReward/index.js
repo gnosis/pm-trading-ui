@@ -13,7 +13,7 @@ const { networkId: rewardContractNetworkId } = getRewardClaimOptions()
 const { symbol } = getRewardToken()
 
 const ClaimReward = ({
-  closeModal, gasPrice, currentNetwork, currentNetworkId, claimUserRewards,
+  closeModal, gasPrice, currentNetwork, currentNetworkId, claimUserRewards, claimRewardGasCost,
 }) => {
   const handleRegistration = async () => {
     await claimUserRewards()
@@ -22,6 +22,7 @@ const ClaimReward = ({
 
   const targetNetwork = ETHEREUM_NETWORK_IDS[rewardContractNetworkId]
   const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardContractNetworkId)
+  const disabled = Decimal(gasPrice).lt(claimRewardGasCost) || isWrongNetwork
 
   return (
     <div className={cx('claimRewards')}>
@@ -48,7 +49,7 @@ const ClaimReward = ({
         <button
           onClick={handleRegistration}
           className={cx('btn', 'btn-primary', 'claim')}
-          disabled={isWrongNetwork}
+          disabled={disabled}
         >
           CLAIM
         </button>
@@ -61,10 +62,11 @@ ClaimReward.propTypes = {
   closeModal: PropTypes.func.isRequired,
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
+  requestClaimRewardGasCost: PropTypes.func.isRequired,
   currentNetwork: PropTypes.string,
   currentNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   gasPrice: PropTypes.instanceOf(Decimal).isRequired,
-  registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  claimRewardGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   claimUserRewards: PropTypes.func.isRequired,
 }
 
@@ -76,5 +78,6 @@ ClaimReward.defaultProps = {
 export default withRouter(lifecycle({
   componentDidMount() {
     this.props.requestGasPrice()
+    this.props.requestClaimRewardGasCost()
   },
 })(ClaimReward))
