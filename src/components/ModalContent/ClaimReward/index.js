@@ -13,7 +13,14 @@ const { networkId: rewardContractNetworkId } = getRewardClaimOptions()
 const { symbol } = getRewardToken()
 
 const ClaimReward = ({
-  closeModal, gasPrice, currentNetwork, currentNetworkId, claimUserRewards, claimRewardGasCost,
+  closeModal,
+  gasPrice,
+  currentNetwork,
+  currentNetworkId,
+  claimUserRewards,
+  claimRewardGasCost,
+  currentBalance,
+  rewardValue,
 }) => {
   const handleRegistration = async () => {
     await claimUserRewards()
@@ -22,7 +29,10 @@ const ClaimReward = ({
 
   const targetNetwork = ETHEREUM_NETWORK_IDS[rewardContractNetworkId]
   const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardContractNetworkId)
-  const disabled = Decimal(gasPrice).lt(claimRewardGasCost) || isWrongNetwork
+  const disabled =
+    Decimal(gasPrice)
+      .mul(claimRewardGasCost)
+      .lt(currentBalance) || isWrongNetwork
 
   return (
     <div className={cx('claimRewards')}>
@@ -30,9 +40,13 @@ const ClaimReward = ({
       <div className={cx('claimContainer')}>
         <h4 className={cx('heading')}>Claim {symbol}</h4>
         <p className={cx('annotation')}>
-          In order to claim your <span className={cx('rewardInfo')}>0.2 {symbol}</span> tokens, you first have to switch to
-          the <span className={cx('network')}>{targetNetwork}</span> network in your MetaMask wallet. Also make sure you
-          have enough ETH to submit the transaction with the claim request. More information in{' '}
+          In order to claim your{' '}
+          <span className={cx('rewardInfo')}>
+            {rewardValue} {symbol}
+          </span>{' '}
+          tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in your
+          MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request. More
+          information in{' '}
           <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
             FAQ
           </Link>.
@@ -43,14 +57,15 @@ const ClaimReward = ({
         </div>
         {!isWrongNetwork && (
           <p className={cx('gasCosts')}>
-            Gas Costs: <b className={cx('gasEstimation')}>0.004 ETH</b>
+            Gas Costs:{' '}
+            <b className={cx('gasEstimation')}>
+              {Decimal(gasPrice)
+                .mul(claimRewardGasCost)
+                .toString()}
+            </b>
           </p>
         )}
-        <button
-          onClick={handleRegistration}
-          className={cx('btn', 'btn-primary', 'claim')}
-          disabled={disabled}
-        >
+        <button onClick={handleRegistration} className={cx('btn', 'btn-primary', 'claim')} disabled={disabled}>
           CLAIM
         </button>
       </div>
@@ -60,7 +75,6 @@ const ClaimReward = ({
 
 ClaimReward.propTypes = {
   closeModal: PropTypes.func.isRequired,
-  currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
   requestClaimRewardGasCost: PropTypes.func.isRequired,
   currentNetwork: PropTypes.string,
@@ -68,6 +82,7 @@ ClaimReward.propTypes = {
   gasPrice: PropTypes.instanceOf(Decimal).isRequired,
   claimRewardGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   claimUserRewards: PropTypes.func.isRequired,
+  rewardValue: PropTypes.number.isRequired,
 }
 
 ClaimReward.defaultProps = {

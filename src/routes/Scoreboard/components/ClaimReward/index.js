@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
+import Decimal from 'decimal.js'
 import Block from 'components/layout/Block'
 import Span from 'components/layout/Span'
 import Countdown from 'components/Countdown'
@@ -30,7 +31,7 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue }) => (
         <Paragraph className={cx('annotation')}>TIME LEFT TO CLAIM</Paragraph>
       </Block>
     </Block>
-    <button className={cx('claimButton')} onClick={openClaimRewardModal} disabled={rewardsClaimed}>
+    <button className={cx('claimButton')} onClick={openClaimRewardModal} disabled={rewardsClaimed || Decimal(rewardValue || 0).lte(0)}>
       CLAIM NOW
     </button>
   </Block>

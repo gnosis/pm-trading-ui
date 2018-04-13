@@ -11,7 +11,7 @@ import { getGasPrice } from 'routes/MarketDetails/store/selectors'
 import { claimUserRewards } from 'actions/rewards'
 import { getRewardClaimOptions } from 'utils/configuration'
 import { requestClaimRewardGasCost } from './action'
-import { getClaimRewardGasCost } from './selectors'
+import { getClaimRewardGasCost, getRewardValue } from './selectors'
 
 const { contractAddress } = getRewardClaimOptions()
 
@@ -22,6 +22,7 @@ const mapStateToProps = state => ({
   currentNetwork: getCurrentNetwork(state),
   currentNetworkId: getCurrentNetworkId(state),
   claimRewardGasCost: getClaimRewardGasCost(state),
+  rewardValue: getRewardValue(state),
 })
 
 const mapDispatchToProps = dispatch => ({
