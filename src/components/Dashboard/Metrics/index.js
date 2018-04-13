@@ -8,6 +8,8 @@ class Metrics extends React.PureComponent {
     tokens: PropTypes.string,
     tokenSymbol: PropTypes.string,
     tokenIcon: PropTypes.string,
+    rank: PropTypes.string,
+    badge: PropTypes.string,
   }
 
   static defaultProps = {
@@ -15,13 +17,24 @@ class Metrics extends React.PureComponent {
     tokens: '0',
     tokenSymbol: '',
     tokenIcon: '',
+    rank: '',
+    badge: '',
   }
 
   render() {
     const {
-      predictedProfit, tokens, tokenSymbol, tokenIcon,
+      predictedProfit, tokens, tokenSymbol, tokenIcon, rank, badge,
     } = this.props
-    return <Layout tokens={tokens} predictedProfit={predictedProfit} tokenSymbol={tokenSymbol} tokenIcon={tokenIcon} />
+    return (
+      <Layout
+        tokens={tokens}
+        predictedProfit={predictedProfit}
+        tokenSymbol={tokenSymbol}
+        tokenIcon={tokenIcon}
+        rank={rank}
+        badge={badge}
+      />
+    )
   }
 }
 

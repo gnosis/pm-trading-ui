@@ -66,7 +66,7 @@ export const rewardCell = (props) => {
     const rewardLevels = getRewardLevels()
     const value = props.row.currentRank
 
-    let reward
+    let reward = { value: 0 }
 
     rewardLevels.forEach((rewardLevel) => {
       if (
@@ -80,8 +80,14 @@ export const rewardCell = (props) => {
 
     const { symbol } = getRewardToken()
 
-    return <span style={style}>{reward.value} {symbol}</span>
+    return (
+      <span style={style}>
+        {reward.value} {symbol}
+      </span>
+    )
   }
+
+  return null
 }
 
 export const userAddressCell = props => <WalletAddress address={props.value} />

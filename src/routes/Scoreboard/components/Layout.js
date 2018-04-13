@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
+import moment from 'moment'
 import Hairline from 'components/layout/Hairline'
 import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
@@ -17,7 +18,7 @@ import ClaimReward from './ClaimReward'
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
 
-const { enabled: claimRewardsEnabled } = getRewardClaimOptions()
+const { claimStart, claimUntil } = getRewardClaimOptions()
 
 const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
 
@@ -29,7 +30,8 @@ class Layout extends React.PureComponent {
     const hasRows = data && data.size > 1
     const showRewardInfo =
       areRewardsEnabled() && getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
-    const showRewardClaim = claimRewardsEnabled && getProvider() === WALLET_PROVIDER.METAMASK && !!mainnetAddress
+    const showRewardClaim =
+      moment.utc().isBetween(claimStart, claimUntil) && getProvider() === WALLET_PROVIDER.METAMASK && !!mainnetAddress
 
     return (
       <Block>
