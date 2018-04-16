@@ -1,30 +1,45 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { getTokenSymbol } from 'selectors/blockchain'
+import { requestTokenSymbol } from 'actions/blockchain'
 import PropTypes from 'prop-types'
 
-// Current mapping does not contain any logic
-export const outcomeTokenToText = outcomeToken => outcomeToken
-export const collateralTokenToText = () => 'ETH'
-
-const CurrencyName = ({ collateralToken, outcomeToken }) => {
-  if (collateralToken) {
-    return <span>{collateralTokenToText(collateralToken)}</span>
+class CurrencyName extends Component {
+  componentDidMount() {
+    const unknownTokenSymbol = !this.props.tokenSymbol && this.props.tokenAddress
+    if (unknownTokenSymbol) {
+      this.props.requestTokenSymbol()
+    }
   }
 
-  if (outcomeToken) {
-    return <span>{outcomeTokenToText(outcomeToken)}</span>
-  }
+  render() {
+    const { tokenAddress, tokenSymbol, className } = this.props
+    if (tokenAddress) {
+      return <span className={className}>{tokenSymbol}</span>
+    }
 
-  return <span>Unknown</span>
+    return <span className={className}>Unknown</span>
+  }
 }
 
+const mapStateToProps = (state, ownProps) => ({
+  tokenSymbol: getTokenSymbol(state, ownProps.tokenAddress),
+})
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  requestTokenSymbol: () => dispatch(requestTokenSymbol(ownProps.tokenAddress)),
+})
+
 CurrencyName.propTypes = {
-  collateralToken: PropTypes.string,
-  outcomeToken: PropTypes.string,
+  tokenAddress: PropTypes.string.isRequired,
+  tokenSymbol: PropTypes.string,
+  requestTokenSymbol: PropTypes.func.isRequired,
+  className: PropTypes.string,
 }
 
 CurrencyName.defaultProps = {
-  collateralToken: '',
-  outcomeToken: '',
+  tokenSymbol: undefined,
+  className: '',
 }
 
-export default CurrencyName
+export default connect(mapStateToProps, mapDispatchToProps)(CurrencyName)

@@ -2,39 +2,50 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import DashboardPage from 'components/Dashboard'
-import { getMarkets, getAccountPredictiveAssets } from 'selectors/market'
+import { getMarkets } from 'selectors/market'
+import { profitsSelector } from 'containers/DashboardPage/store/selectors'
 import { getAccountTrades } from 'selectors/marketTrades'
 import { getAccountShares } from 'selectors/marketShares'
-import { getCurrentAccount, getEtherTokensAmount, isGnosisInitialized, checkWalletConnection } from 'selectors/blockchain'
+import { isGnosisInitialized, getTokenAmount, getTokenSymbol } from 'selectors/blockchain'
+import { getCurrentAccount, checkWalletConnection } from 'integrations/store/selectors'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
-import { requestGasPrice, requestEtherTokens } from 'actions/blockchain'
+import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
+import { fetchTournamentUserData, fetchTournamentUsers } from 'routes/Scoreboard/store/actions'
+import { getTokenAddress, getTokenIcon } from 'utils/configuration'
+
+const tokenAddress = getTokenAddress()
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
   const defaultAccount = getCurrentAccount(state)
   const accountTrades = getAccountTrades(defaultAccount)(state)
-  const accountPredictiveAssets = weiToEth(getAccountPredictiveAssets(state, defaultAccount))
+  const accountPredictiveAssets = weiToEth(profitsSelector(state, defaultAccount))
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
-  let etherTokens = getEtherTokensAmount(state, defaultAccount)
+  let defaultTokenAmount = getTokenAmount(state, tokenAddress)
   const hasWallet = checkWalletConnection(state)
+  const tokenSymbol = getTokenSymbol(state, tokenAddress)
+  const tokenIcon = getTokenIcon(state)
 
-  if (etherTokens !== undefined) {
-    etherTokens = weiToEth(etherTokens.toString())
+  if (defaultTokenAmount !== undefined) {
+    defaultTokenAmount = weiToEth(defaultTokenAmount.toString())
   } else {
-    etherTokens = '0'
+    defaultTokenAmount = '0'
   }
 
   return {
     hasWallet,
     defaultAccount,
     markets,
-    etherTokens,
+    defaultTokenAmount,
     accountShares,
     accountTrades,
     gnosisInitialized,
     accountPredictiveAssets,
+    tokenAddress,
+    tokenSymbol,
+    tokenIcon,
   }
 }
 
@@ -45,7 +56,10 @@ const mapDispatchToProps = dispatch => ({
   requestAccountShares: address => dispatch(requestAccountShares(address)),
   changeUrl: url => dispatch(push(url)),
   requestGasPrice: () => dispatch(requestGasPrice()),
-  requestEtherTokens: account => dispatch(requestEtherTokens(account)),
+  requestDefaultTokenAmount: account => dispatch(requestTokenBalance(tokenAddress, account)),
+  requestTokenSymbol: () => dispatch(requestTokenSymbol(tokenAddress)),
+  fetchTournamentUsers: () => dispatch(fetchTournamentUsers()),
+  fetchTournamentUserData: account => dispatch(fetchTournamentUserData(account)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage)

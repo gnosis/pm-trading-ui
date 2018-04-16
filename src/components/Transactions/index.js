@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Transaction from 'components/Transaction'
 import { transactionShape } from 'utils/shapes'
 
-import './Transactions.less'
+import './Transactions.scss'
 
 class Transactions extends Component {
   componentWillMount() {
@@ -42,8 +42,7 @@ class Transactions extends Component {
             </div>
           )}
           {completedTransactions.map(transaction =>
-            <Transaction key={transaction.id} type="completed" {...transaction} />,
-          )}
+            <Transaction key={transaction.id} type="completed" {...transaction} />)}
         </div>
       </div>
     )

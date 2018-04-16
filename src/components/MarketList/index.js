@@ -4,25 +4,26 @@ import autobind from 'autobind-decorator'
 import moment from 'moment'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router-dom'
 import 'moment-duration-format'
 import { reduxForm, Field } from 'redux-form'
 
-import InteractionButton from 'containers/InteractionButton'
 import Countdown from 'components/Countdown'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
 import Outcome from 'components/Outcome'
-import FormRadioButton from 'components/FormRadioButton'
-import FormInput from 'components/FormInput'
-import FormSelect from 'components/FormSelect'
-import FormCheckbox from 'components/FormCheckbox'
+import {
+  Checkbox,
+  Select,
+  TextInput,
+  RadioButtonGroup,
+} from 'components/Form'
 
 import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
+import { isMarketClosed, isMarketResolved } from 'utils/helpers'
 
-import './marketList.less'
-import { isMarketClosed, isMarketResolved } from '../../utils/helpers'
+import './marketList.scss'
 
 const resolutionFilters = [
   {
@@ -112,9 +113,9 @@ class MarketList extends Component {
           <h2 className="market__title">{market.eventDescription.title}</h2>
           {showResolveButton && (
             <div className="market__control">
-              <Link to={`/markets/${market.address}/resolve`} onClick={this.handleViewMarketResolve}>
+              <NavLink to={`/markets/${market.address}/resolve`} onClick={this.handleViewMarketResolve}>
                 Resolve
-              </Link>
+              </NavLink>
             </div>
           )}
         </div>
@@ -136,7 +137,7 @@ class MarketList extends Component {
               <div className="info__field--icon icon icon--currency" />
               <div className="info__field--label">
                 {decimalToText(new Decimal(market.tradingVolume).div(1e18))}&nbsp;
-                <CurrencyName collateralToken={market.event.collateralToken} />&nbsp; Volume
+                <CurrencyName tokenAddress={market.event.collateralToken} />&nbsp; Volume
               </div>
             </div>
           </div>
@@ -174,7 +175,7 @@ class MarketList extends Component {
         <form onSubmit={handleSubmit}>
           <div className="marketFilter__group">
             <Field
-              component={FormInput}
+              component={TextInput}
               name="search"
               label="Search"
               placeholder="Title, Description"
@@ -182,19 +183,20 @@ class MarketList extends Component {
             />
           </div>
           <div className="marketFilter__group">
-            <Field name="orderBy" label="Order by" component={FormSelect} values={selectFilter} defaultValue="---" />
+            <Field name="orderBy" label="Order by" component={Select} options={selectFilter} defaultValue="---" />
           </div>
           <div className="marketFilter__group">
             <Field
               name="resolved"
               label="Resolution Date"
-              component={FormRadioButton}
-              radioValues={resolutionFilters}
+              component={RadioButtonGroup}
+              options={resolutionFilters}
+              light
             />
           </div>
           {isModerator ? (
             <div className="marketFilter__group">
-              <Field name="myMarkets" label="Show only" text="My markets" component={FormCheckbox} />
+              <Field name="myMarkets" label="Show only" component={Checkbox} muted>My Markets</Field>
             </div>
           ) : (
             <div />
@@ -205,7 +207,7 @@ class MarketList extends Component {
   }
 
   render() {
-    const { markets, defaultAccount } = this.props
+    const { markets } = this.props
 
     const threeDayMSeconds = 3 * 24 * 60 * 60 * 1000
     const now = new Date()
@@ -243,23 +245,6 @@ class MarketList extends Component {
             </div>
           </div>
         </div>
-        {process.env.WHITELIST[defaultAccount] && (
-          <div className="marketListPage__controls">
-            <div className="container">
-              <div className="row">
-                <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
-                  <InteractionButton
-                    onClick={this.handleCreateMarket}
-                    className="marketStats__control btn btn-default"
-                    whitelistRequired
-                  >
-                    Create Market
-                  </InteractionButton>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
         <div className="marketListPage__markets">
           <div className="container">
             <div className="row">

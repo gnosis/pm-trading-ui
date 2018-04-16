@@ -1,6 +1,6 @@
-import * as walletIntegrations from 'integrations'
+import integrations from 'integrations'
 import { initGnosis } from 'actions/blockchain'
-import { runProviderRegister, runProviderUpdate } from 'actions/providers'
+import { runProviderRegister, runProviderUpdate } from 'integrations/store/actions'
 import { map } from 'lodash'
 
 export default store => next => (action) => {
@@ -15,13 +15,16 @@ export default store => next => (action) => {
       initGnosis: () => dispatch(initGnosis()),
       dispatch,
     }
-
-    Promise.all(map(walletIntegrations, integration => integration.initialize(providerOptions)))
+    if (payload && payload.providers.length) {
+      Promise.all(map(payload.providers, provider => integrations[provider].initialize(providerOptions)))
+    } else {
+      Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
+    }
   }
 
   if (type === 'PROVIDER_LOGOUT') {
-    Object.keys(walletIntegrations).forEach((providerName) => {
-      const integration = walletIntegrations[providerName]
+    Object.keys(integrations).forEach((providerName) => {
+      const integration = integrations[providerName]
 
       if (integration.constructor.providerName === payload) {
         integration.logout()

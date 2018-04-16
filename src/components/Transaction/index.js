@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ProgressIndicator from 'components/ProgressIndicator'
+import TransactionSpinner from 'components/Spinner/Transaction'
 import moment from 'moment'
 
 import { RESOLUTION_TIME, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
@@ -15,7 +15,7 @@ const completionMessages = {
 const DetailLabel = ({ label, date, children }) => (
   <div>
     <div className="transaction__detailLabel">{label}</div>
-    {date && children ? children : moment(date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
+    {children || moment(date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
   </div>
 )
 
@@ -25,9 +25,17 @@ DetailLabel.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 }
 
-const Transaction = ({ label, startTime, endTime, completed, completionStatus, progress, type }) => (
+DetailLabel.defaultProps = {
+  label: <div />,
+  date: undefined,
+  children: undefined,
+}
+
+const Transaction = ({
+  label, startTime, endTime, completed, completionStatus, progress, type,
+}) => (
   <div className={`transactionsPage__transaction transactionsPage__transaction--${type} transaction`}>
-    <ProgressIndicator completed={completed} completionStatus={completionStatus} progress={progress} />
+    <TransactionSpinner completed={completed} completionStatus={completionStatus} progress={progress} />
     <div className="transaction__content">
       <div className="transaction__heading">{label}</div>
       <div className="transaction__details">
@@ -44,10 +52,9 @@ const Transaction = ({ label, startTime, endTime, completed, completionStatus, p
         {endTime && (
           <div className="transaction__detail">
             <div className="icon icon--countdown" />
-            <DetailLabel label="Transaction Time">{`took ${moment(endTime).from(
-              moment(startTime),
-              true,
-            )}`}</DetailLabel>
+            <DetailLabel label="Transaction Time">
+              { `took ${moment(endTime).from(moment(startTime), true)}` }
+            </DetailLabel>
           </div>
         )}
       </div>
@@ -64,6 +71,16 @@ Transaction.propTypes = {
   completionStatus: PropTypes.string,
   progress: PropTypes.number,
   type: PropTypes.string,
+}
+
+Transaction.defaultProps = {
+  label: 'Unknown Transaction',
+  startTime: undefined,
+  endTime: undefined,
+  completed: false,
+  completionStatus: undefined,
+  progress: 0,
+  type: 'default',
 }
 
 export default Transaction

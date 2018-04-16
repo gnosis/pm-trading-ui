@@ -19,7 +19,7 @@ export default store => next => (action) => {
     })
 
     // eslint-disable-next-line no-undef
-    localStorage.setItem(`GNOSIS_${process.env.VERSION}`, JSON.stringify(storage))
+    window.localStorage.setItem(`GNOSIS_${process.env.VERSION}`, JSON.stringify(storage))
 
     return next(action)
   }

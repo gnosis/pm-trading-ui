@@ -4,6 +4,7 @@
     "0xb00a24c899f88e5514583cfa8c40e4cdab6c473e": "Andre Metamask",
     "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",
     "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Adolfo Metamask",
+    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama",
     "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail"
   },
   "stagingWhitelist": {
@@ -18,7 +19,7 @@
   "gnosisdb": {
     "protocol": "https",
     "hostDev": "gnosisdb.dev.gnosisdev.com",
-    "hostProd": "gnosisdb.dev.gnosisdev.com",
+    "hostProd": "gnosisdb-prod.gnosis.pm",
     "port": 443
   },
   "ethereum": {
@@ -28,5 +29,104 @@
     "port": 443
   },
   "fetchMarketTimeInterval": 15000,
-  "ravenPublicDSN": null
+  "ravenPublicDSN": null,
+  "interface": {
+    "tournament": true,
+    "tournamentName": "My tournament",
+    "tokenContract": "0xa0c107db0e9194c18359d3265289239453b56cf2",
+    "tokenIcon": "/assets/img/icons/icon_metamask.svg",
+    "registrationContract": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13",
+    "logoPath": "/assets/img/placeholder.svg",
+    "smallLogoPath": "/assets/img/placeholder.svg",
+    "showScoreboard": true,
+    "gameGuide": {
+      "display": true,
+      "type": "link",
+      "url": "https://gnosis.pm"
+    },
+    "termsOfUse": {
+      "url": "https://gnosis.pm"
+    },
+    "footer": {
+      "display": true,
+      "content": {
+        "type": "file",
+        "source": "Powered by Gnosis",
+        "markdown": true
+      }
+    },
+    "faviconPath": "assets/img/gnosis_logo_icon.svg",
+    "provider": "METAMASK",
+    "uportOptions": {
+      "appName": "Tournament test",
+      "clientId": "2ooNzwDvjgZTPswkrewUnxokRUH8KYpRNNL",
+      "network": "rinkeby",
+      "privateKey": "a42611a039cad931c41e072953cb7dcaaa6b2dfefeff6a459d9ce4281acf0c01",
+      "useNotifications": false
+    },
+    "rewards": {
+      "enabled": true,
+      "rewardToken": {
+        "symbol": "RWD",
+        "contractAddress": "0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
+        "networkId": 3
+      },
+      "claimReward": {
+        "claimStart": "2018-04-01T12:00:00",
+        "claimUntil": "2018-05-01T12:00:00",
+        "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
+        "networkId": 3
+      },
+      "levels": [
+        { "value": 5, "minRank": 1, "maxRank": 1 },
+        { "value": 4, "minRank": 2, "maxRank": 2 },
+        { "value": 3, "minRank": 3, "maxRank": 3 },
+        { "value": 2, "minRank": 4, "maxRank": 4 },
+        { "value": 1, "minRank": 5, "maxRank": 5 },
+        { "value": 0.9, "minRank": 6, "maxRank": 7 },
+        { "value": 0.8, "minRank": 8, "maxRank": 9 },
+        { "value": 0.7, "minRank": 10, "maxRank": 11 },
+        { "value": 0.6, "minRank": 12, "maxRank": 13 },
+        { "value": 0.5, "minRank": 14, "maxRank": 15 },
+        { "value": 0.4, "minRank": 16, "maxRank": 17 },
+        { "value": 0.3, "minRank": 18, "maxRank": 19 },
+        { "value": 0.2, "minRank": 19, "maxRank": 34 },
+        { "value": 0.1, "minRank": 34, "maxRank": 100 }
+      ]
+    },
+    "badges": {
+      "enabled": true,
+      "levels": [
+        {
+          "icon": "components/Dashboard/Metrics/assets/badges/junior-predictor.svg",
+          "rank": "Junior Predictor",
+          "minPredictions": 0,
+          "maxPredictions": 4
+        },
+        {
+          "icon": "components/Dashboard/Metrics/assets/badges/crystal-gazer.svg",
+          "rank": "Crystal Gazer",
+          "minPredictions": 5,
+          "maxPredictions": 9
+        },
+        {
+          "icon": "components/Dashboard/Metrics/assets/badges/fortune-teller.svg",
+          "rank": "Fortune Teller",
+          "minPredictions": 10,
+          "maxPredictions": 14
+        },
+        {
+          "icon": "components/Dashboard/Metrics/assets/badges/clairvoyant.svg",
+          "rank": "Clairvoyant",
+          "minPredictions": 15,
+          "maxPredictions": 19
+        },
+        {
+          "icon": "components/Dashboard/Metrics/assets/badges/psychic.svg",
+          "rank": "Psychic",
+          "minPredictions": 20
+        }
+      ]
+    }
+  }
 }

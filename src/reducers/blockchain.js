@@ -1,105 +1,40 @@
 import { handleActions } from 'redux-actions'
-
+import { Map } from 'immutable'
 import {
   setConnectionStatus,
   setGnosisInitialized,
-  setGasCost,
   setGasPrice,
-  setEtherTokens,
+  setTokenSymbol,
+  setTokenBalance,
 } from 'actions/blockchain'
-
-import {
-  setActiveProvider,
-  registerProvider,
-  updateProvider,
-} from 'actions/providers'
+import { setGasCost } from 'routes/MarketDetails/store/actions'
 
 import { GAS_COST } from 'utils/constants'
+import Decimal from 'decimal.js'
 
-const INITIAL_PROVIDER_STATE = {
-  loaded: false,
-  available: false,
-  network: undefined,
-  account: undefined,
-  balance: undefined,
-  priority: 1,
-}
-
-const reducer = handleActions({
-  [setConnectionStatus]: (state, action) => {
-    const { connection } = action.payload
-    return {
-      ...state,
-      connection,
-      connectionTried: true,
-    }
+const reducer = handleActions(
+  {
+    [setConnectionStatus]: (state, { payload: { connection } }) =>
+      state.withMutations((stateMap) => {
+        stateMap.set('connection', connection)
+        stateMap.set('connectionTried', true)
+      }),
+    [setGnosisInitialized]: (state, { payload: { initialized } }) => state.set('gnosisInitialized', initialized),
+    [setGasCost]: (state, { payload: { contractType, gasCost } }) => state.setIn(['gasCosts', contractType], gasCost),
+    [setGasPrice]: (state, { payload: { entityType, gasPrice } }) => state.set(entityType, gasPrice),
+    [setTokenSymbol]: (state, { payload: { tokenAddress, tokenSymbol } }) =>
+      state.setIn(['tokenSymbols', tokenAddress], tokenSymbol),
+    [setTokenBalance]: (state, { payload: { tokenAddress, tokenBalance } }) =>
+      state.setIn(['tokenBalances', tokenAddress], tokenBalance),
   },
-  [setGnosisInitialized]: (state, action) => {
-    const { initialized } = action.payload
-    return {
-      ...state,
-      gnosisInitialized: initialized,
-    }
-  },
-  [setGasCost]: (state, action) => ({
-    ...state,
-    [action.payload.entityType]: {
-      ...state[action.payload.entityType],
-      [action.payload.contractType]: action.payload.gasCost,
-    },
+  Map({
+    gasCosts: Object.keys(GAS_COST).reduce((acc, item) => acc.set(GAS_COST[item], '0'), Map()),
+    gasPrice: Decimal(0),
+    connection: undefined,
+    connectionTried: false,
+    tokenSymbols: Map(),
+    tokenBalances: Map(),
   }),
-  [setGasPrice]: (state, action) => ({
-    ...state,
-    [action.payload.entityType]: action.payload.gasPrice,
-  }),
-  [setActiveProvider]: (state, action) => ({
-    ...state,
-    activeProvider: action.payload,
-  }),
-  [registerProvider]: (state, action) => {
-    const { provider: name, ...provider } = action.payload
-    return {
-      ...state,
-      providers: {
-        ...state.providers,
-        [name]: {
-          name,
-          ...INITIAL_PROVIDER_STATE,
-          ...provider,
-        },
-      },
-    }
-  },
-  [updateProvider]: (state, action) => {
-    const { provider: name, ...provider } = action.payload
-
-    return {
-      ...state,
-      providers: {
-        ...state.providers,
-        [name]: {
-          ...state.providers[name],
-          loaded: true,
-          ...provider,
-        },
-      },
-    }
-  },
-  [setEtherTokens]: (state, action) => ({
-    ...state,
-    [action.payload.entityType]: {
-      ...state[action.payload.entityType],
-      [action.payload.account]: action.payload.etherTokens,
-    },
-  }),
-}, {
-  gasCosts: Object.keys(GAS_COST).reduce((acc, item) => ({ ...acc, [GAS_COST[item]]: undefined }), {}),
-  gasPrice: undefined,
-  connection: undefined,
-  connectionTried: false,
-  providers: {},
-  activeProvider: undefined,
-  etherTokens: undefined,
-})
+)
 
 export default reducer

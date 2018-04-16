@@ -53,15 +53,17 @@ export const GAS_COST = {
   BUY_SHARES: 'buyShares',
   SELL_SHARES: 'sellShares',
   RESOLVE_ORACLE: 'resolveOracle',
-  WITHDRAW_FEES: 'withdrawFees',
   REDEEM_WINNINGS: 'redeemWinnings',
   CATEGORICAL_EVENT: 'categoricalEvent',
   SCALAR_EVENT: 'scalarEvent',
   CENTRALIZED_ORACLE: 'centralizedOracle',
   FUNDING: 'funding',
+  MAINNET_ADDRESS_REGISTRATION: 'mainnetAddressRegistration',
+  CLAIM_REWARD: 'claimReward',
 }
 export const DEFAULT_NOTIFICATION_FADEOUT = 60000
 
+// TODO delete it
 export const MARKET_STAGES = {
   MARKET_CREATED: 0,
   MARKET_FUNDED: 1,

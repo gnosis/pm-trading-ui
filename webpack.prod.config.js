@@ -4,16 +4,19 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
+const config = require('./src/config.json')
 const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
 
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
-
 const branch = process.env.TRAVIS_BRANCH || 'development'
 
-const config = require('./src/config.json')
+const isTournament = config.interface && config.interface.tournament
+const defaultFavicon = isTournament ? 'assets/img/gnosis_apollo_favicon.png' : 'assets/img/gnosis_logo_favicon.png'
+const faviconPath =
+  config.interface && config.interface.faviconPath && isTournament ? config.interface.faviconPath : defaultFavicon
 
 const isProductionEnv = branch.indexOf('release/') > -1
 const isStagingEnv = branch === 'master'
@@ -42,6 +45,7 @@ module.exports = {
   devtool: 'source-map',
   context: path.join(__dirname, 'src'),
   entry: ['bootstrap-loader', 'index.js'],
+  mode: 'production',
   output: {
     publicPath: '/',
     path: `${__dirname}/dist`,
@@ -65,7 +69,7 @@ module.exports = {
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
       },
       {
-        test: /\.(less|css)$/,
+        test: /\.(scss|css)$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
@@ -73,7 +77,7 @@ module.exports = {
             {
               loader: 'postcss-loader',
             },
-            { loader: 'less-loader', options: { strictMath: true } },
+            { loader: 'sass-loader' },
           ],
         }),
       },
@@ -81,12 +85,16 @@ module.exports = {
         test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader?name=fonts/[name].[ext]',
       },
+      {
+        test: /\.txt$/,
+        use: 'raw-loader',
+      },
     ],
   },
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
-      logo: 'assets/img/gnosis_logo_favicon.png',
+      logo: faviconPath,
       // Generate a cache file with control hashes and
       // don't rebuild the favicons until those hashes change
       persistentCache: true,
@@ -125,6 +133,6 @@ module.exports = {
         compress: false,
       },
     }),
-    new CopyWebpackPlugin(['assets/TermsOfService.html', 'assets/PrivacyPolicy.html', 'assets/RiskDisclaimerPolicy.html']),
+    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
   ],
 }

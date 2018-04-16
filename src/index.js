@@ -1,25 +1,31 @@
 import 'babel-polyfill'
 import 'whatwg-fetch'
 import Raven from 'raven-js'
+import RootComponent from 'components/Root'
+import { initProviders } from 'integrations/store/actions'
+import { initReadOnlyGnosis } from 'actions/blockchain'
 import Decimal from 'decimal.js'
 import React from 'react'
 
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { browserHistory } from 'react-router'
-import { syncHistoryWithStore } from 'react-router-redux'
-import { AppContainer } from 'react-hot-loader'
-import 'less/style.less'
-import AppRouter from 'router'
+import 'scss/style.scss'
 import initGoogleAnalytics from 'utils/analytics/init'
-import BackdropProvider from 'containers/BackdropProvider'
+import { isTournament, getProvider } from 'utils/configuration'
 import store from 'store'
+import { WALLET_PROVIDER } from 'integrations/constants'
 import { setMomentRelativeTime } from './setup'
 
 setMomentRelativeTime()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
+store.dispatch(initReadOnlyGnosis())
+if (!isTournament()) {
+  store.dispatch(initProviders())
+} else {
+  const tournamentProvider = WALLET_PROVIDER[getProvider()]
+  store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE, tournamentProvider] }))
+}
 
 Decimal.set({ toExpPos: 9999, precision: 50 })
 
@@ -28,25 +34,8 @@ initGoogleAnalytics()
 /* global document */
 const rootElement = document.getElementById('root')
 
-// changed to browserHistory because for some reason with hashHistory render() of App
-// component is triggered twice and this breaks page transition animations
-const history = syncHistoryWithStore(browserHistory, store)
-
-const render = (App) => {
-  ReactDOM.render(
-    <AppContainer>
-      <Provider store={store}>
-        <BackdropProvider>
-          <App history={history} />
-        </BackdropProvider>
-      </Provider>
-    </AppContainer>,
-    rootElement,
-  )
+const render = () => {
+  ReactDOM.render(<RootComponent />, rootElement)
 }
 
-Raven.context(() => render(AppRouter))
-
-if (module.hot) {
-  module.hot.accept('./router', () => Raven.context(() => render(require('./router').default)))
-}
+Raven.context(() => render())
