@@ -9,6 +9,8 @@ import Providers from 'middlewares/Providers'
 // import Intercom from 'middlewares/Intercom'
 import LocalStorageDump from 'middlewares/LocalStorageDump'
 import LocalStorageLoad from 'middlewares/LocalStorageLoad'
+import SessionStorageDump from 'middlewares/SessionStorageDump'
+import SessionStorageLoad from 'middlewares/SessionStorageLoad'
 import Notifications from 'middlewares/Notifications'
 
 import reducer from 'reducers'
@@ -21,7 +23,9 @@ const middlewares = [
   Notifications,
   Blockchain,
   Providers,
+  SessionStorageLoad,
   LocalStorageLoad,
+  SessionStorageDump,
   LocalStorageDump,
   // ...RavenIntegration.getMiddlewares(),
   // Intercom,

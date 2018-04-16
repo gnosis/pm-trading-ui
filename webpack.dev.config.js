@@ -162,5 +162,6 @@ module.exports = {
       TRAVIS_BUILD_ID: null,
       TRAVIS_BRANCH: null,
     }),
+    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
   ],
 }

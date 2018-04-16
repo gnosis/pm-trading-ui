@@ -1,57 +1,66 @@
 import classNames from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
+import moment from 'moment'
 import Hairline from 'components/layout/Hairline'
 import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
-import { getProvider, areRewardsEnabled } from 'utils/configuration'
+import { getProvider, areRewardsEnabled, getRewardClaimOptions, getRewardLevels } from 'utils/configuration'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
-import * as css from './index.mod.scss'
-import ScoreTable from './ScoreTable'
+import * as css from './Layout.mod.scss'
+import Table from './Table'
 import RewardClaimAddress from './RewardClaimAddress'
 import ClaimReward from './ClaimReward'
 
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
 
-const Table = ({ data, myAccount }) => (
-  <Block>
-    <ScoreTable tableData={data} myAccount={myAccount} />
-    {myAccount && (
-      <Block className={cx('ol-account')}>
-        <Block className={cx('dot')} />
-        <Paragraph className={cx('your')}>= YOUR ACCOUNT</Paragraph>
-      </Block>
-    )}
-  </Block>
-)
+const { claimStart, claimUntil } = getRewardClaimOptions()
+const rewardLevels = getRewardLevels()
 
 const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
 
 class Layout extends React.PureComponent {
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank,
     } = this.props
     const hasRows = data && data.size > 1
-    const showRewardClaim = areRewardsEnabled() && getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    let rewardValue = 0
+
+    rewardLevels.forEach((rewardLevel) => {
+      if (
+        (rank >= rewardLevel.minRank && rank <= rewardLevel.maxRank) || // between min/max
+        (rank >= rewardLevel.minRank && rewardLevel.maxRank == null) // above min
+      ) {
+        rewardValue = rewardLevel.value
+      }
+    })
+
+    const showRewardInfo =
+      areRewardsEnabled() && getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    const showRewardClaim =
+      moment.utc().isBetween(claimStart, claimUntil) &&
+      getProvider() === WALLET_PROVIDER.METAMASK &&
+      !!mainnetAddress &&
+      rewardValue > 0
 
     return (
       <Block>
         <PageFrame>
-          {showRewardClaim && (
+          {showRewardInfo && (
             <Block className={cx('rewardContainer')}>
               <RewardClaimAddress
                 mainnetAddress={mainnetAddress}
                 openSetMainnetAddressModal={openSetMainnetAddressModal}
               />
-              <ClaimReward />
+              {true && <ClaimReward openClaimRewardModal={openClaimRewardModal} rewardValue={rewardValue} />}
             </Block>
           )}
-          {showRewardClaim && <Hairline />}
+          {showRewardInfo && <Hairline />}
           <Block className={cx('trophy')}>
             <Img src={trophy} width="100" />
             <Paragraph>Scoreboard</Paragraph>
@@ -68,7 +77,7 @@ class Layout extends React.PureComponent {
   }
 }
 
-const types = {
+Layout.propTypes = {
   data: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
     currentRank: PropTypes.number.isRequired,
     diffRank: PropTypes.number.isRequired,
@@ -79,21 +88,18 @@ const types = {
     predictedProfit: PropTypes.string.isRequired,
     predictions: PropTypes.string.number,
   })),
-  openSetMainnetAddressModal: PropTypes.func,
+  openSetMainnetAddressModal: PropTypes.func.isRequired,
+  openClaimRewardModal: PropTypes.func.isRequired,
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
+  rank: PropTypes.string,
 }
 
-const defaultProps = {
+Layout.defaultProps = {
   data: [],
-  openSetMainnetAddressModal: () => {},
   myAccount: '',
   mainnetAddress: undefined,
+  rank: '',
 }
-
-Layout.propTypes = types
-Layout.defaultProps = defaultProps
-Table.propTypes = types
-Table.defaultProps = defaultProps
 
 export default Layout

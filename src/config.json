@@ -11,7 +11,7 @@
   "productionWhitelist": {},
   "gnosisdb": {
     "protocol": "https",
-    "hostDev": "gnosisdb-olympiaprod.gnosis.pm",
+    "hostDev": "gnosisdb.dev.gnosisdev.com",
     "hostProd": "gnosisdb-prod.gnosis.pm",
     "port": 443
   },
@@ -38,7 +38,7 @@
       "url": "https://gnosis.pm"
     },
     "termsOfUse": {
-      "url":"https://gnosis.pm"
+      "url": "https://gnosis.pm"
     },
     "footer": {
       "display": true,
@@ -60,9 +60,15 @@
     "rewards": {
       "enabled": true,
       "rewardToken": {
-        "symbol": "GNO",
-        "contractAddress": "0xcb0f084504c4d47e47b41d610792c8401ef79e18",
-        "network": "rinkeby"
+        "symbol": "RWD",
+        "contractAddress": "0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
+        "networkId": 3
+      },
+      "claimReward": {
+        "claimStart": "2018-04-01T12:00:00",
+        "claimUntil": "2018-05-01T12:00:00",
+        "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
+        "networkId": 3
       },
       "levels": [
         { "value": 5, "minRank": 1, "maxRank": 1 },

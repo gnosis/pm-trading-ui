@@ -11,6 +11,7 @@ import { getCurrentAccount, checkWalletConnection } from 'integrations/store/sel
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
+import { fetchTournamentUserData, fetchTournamentUsers } from 'routes/Scoreboard/store/actions'
 import { getTokenAddress, getTokenIcon } from 'utils/configuration'
 
 const tokenAddress = getTokenAddress()
@@ -57,6 +58,8 @@ const mapDispatchToProps = dispatch => ({
   requestGasPrice: () => dispatch(requestGasPrice()),
   requestDefaultTokenAmount: account => dispatch(requestTokenBalance(tokenAddress, account)),
   requestTokenSymbol: () => dispatch(requestTokenSymbol(tokenAddress)),
+  fetchTournamentUsers: () => dispatch(fetchTournamentUsers()),
+  fetchTournamentUserData: account => dispatch(fetchTournamentUserData(account)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage)

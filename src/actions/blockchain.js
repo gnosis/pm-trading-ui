@@ -30,8 +30,14 @@ export const requestGasPrice = () => async (dispatch) => {
 }
 
 export const requestTokenSymbol = tokenAddress => async (dispatch) => {
-  const tokenSymbol = await getTokenSymbol(tokenAddress)
-  dispatch(setTokenSymbol({ tokenAddress, tokenSymbol }))
+  let tokenSymbol
+  try {
+    tokenSymbol = await getTokenSymbol(tokenAddress)
+  } catch (e) {
+    tokenSymbol = ''
+  } finally {
+    dispatch(setTokenSymbol({ tokenAddress, tokenSymbol }))
+  }
 }
 
 export const requestTokenBalance = (tokenAddress, accountAddress) => async (dispatch) => {

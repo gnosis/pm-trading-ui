@@ -26,7 +26,7 @@ const RegisterMainnetAddress = ({
   const disabled = gasPrice
     .mul(registrationGasCost)
     .div(1e18)
-    .gt(currentBalance)
+    .gt(currentBalance || 0)
 
   return (
     <div className={cx('registerWallet')}>

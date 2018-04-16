@@ -33,7 +33,7 @@ const combinedReducers = combineReducers(reducers)
 
 const rootReducer = (state, action) => {
   let resultState = state
-  if (action.type === 'LOAD_LOCALSTORAGE') {
+  if (action.type === 'LOAD_LOCALSTORAGE' || action.type === 'LOAD_SESSIONSTORAGE') {
     resultState = {
       ...state,
       ...action.payload,

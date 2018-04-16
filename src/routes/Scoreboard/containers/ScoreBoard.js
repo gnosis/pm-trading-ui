@@ -9,11 +9,12 @@ import selector from './selector'
 class ScoreBoard extends React.Component {
   componentDidMount() {
     this.props.fetchTournamentUsers()
+    this.props.fetchTournamentUserData(this.props.myAccount)
   }
 
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal,
     } = this.props
 
     return (
@@ -22,6 +23,7 @@ class ScoreBoard extends React.Component {
         myAccount={myAccount}
         mainnetAddress={mainnetAddress}
         openSetMainnetAddressModal={openSetMainnetAddressModal}
+        openClaimRewardModal={openClaimRewardModal}
       />
     )
   }
@@ -42,6 +44,8 @@ ScoreBoard.propTypes = {
   mainnetAddress: PropTypes.string,
   fetchTournamentUsers: PropTypes.func.isRequired,
   openSetMainnetAddressModal: PropTypes.func.isRequired,
+  openClaimRewardModal: PropTypes.func.isRequired,
+  fetchTournamentUserData: PropTypes.func.isRequired,
 }
 
 ScoreBoard.defaultProps = {

@@ -59,6 +59,7 @@ export const GAS_COST = {
   CENTRALIZED_ORACLE: 'centralizedOracle',
   FUNDING: 'funding',
   MAINNET_ADDRESS_REGISTRATION: 'mainnetAddressRegistration',
+  CLAIM_REWARD: 'claimReward',
 }
 export const DEFAULT_NOTIFICATION_FADEOUT = 60000
 

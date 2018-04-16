@@ -2,13 +2,13 @@ import React from 'react'
 import Tooltip from 'rc-tooltip'
 
 import Icon from 'components/Icon'
-import { badgeOf } from 'routes/Scoreboard/components/ScoreTable/table'
+import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 
 const BadgeIcon = ({ userTournamentInfo }) => {
   let predictions = 0
 
   if (userTournamentInfo) {
-    predictions = userTournamentInfo.predictions
+    [predictions] = userTournamentInfo
   }
 
   const badge = badgeOf(predictions)

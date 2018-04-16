@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import 'react-table/react-table.css'
 import * as React from 'react'
 import ReactTable from 'react-table'
+import { areBadgesEnabled, areRewardsEnabled } from 'utils/configuration'
 import { badgeCell, rankCell, olyCell, rewardCell, userAddressCell, ownTrCallback, ownTheadCallback } from './table'
-import { areBadgesEnabled, areRewardsEnabled } from '../../../../utils/configuration'
 
 const tableStyle = {
   border: 'none',

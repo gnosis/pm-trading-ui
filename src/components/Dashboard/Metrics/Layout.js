@@ -1,14 +1,16 @@
+import React from 'react'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import classNames from 'classnames/bind'
 import DecimalValue from 'components/DecimalValue'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
-import * as React from 'react'
+import { isTournament } from 'utils/configuration'
 import * as css from './index.css'
 
 const cx = classNames.bind(css)
 
+const arrows = require('./assets/arrows.svg')
 const etherTokens = require('./assets/icon_etherTokens.svg')
 const outstandingPredictions = require('./assets/icon_outstandingPredictions.svg')
 
@@ -42,7 +44,7 @@ Metric.defaultProps = {
 }
 
 const Metrics = ({
-  predictedProfit, tokens, tokenSymbol, tokenIcon,
+  predictedProfit, tokens, tokenSymbol, tokenIcon, rank, badge,
 }) => (
   <Block className={cx('ol-db-container')} margin="md">
     <Metric img={tokenIcon} explanation={`${tokenSymbol} TOKENS`}>
@@ -51,14 +53,31 @@ const Metrics = ({
     <Metric img={outstandingPredictions} width={45} height={45} explanation="PREDICTED PROFITS">
       <Block className={cx('ol-db-title')}>{predictedProfit}</Block>
     </Metric>
+    {isTournament() && (
+      <React.Fragment>
+        <Metric img={arrows} explanation="YOUR RANK">
+          <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
+        </Metric>
+        <Metric img={badge.icon} width={47} height={42} explanation="BADGE">
+          <Block className={cx('ol-db-title', 'ol-db-title-badge')}>{badge.rank}</Block>
+        </Metric>
+      </React.Fragment>
+    )}
   </Block>
 )
 
 Metrics.propTypes = {
   predictedProfit: PropTypes.string,
-  tokens: PropTypes.string,
+  tokens: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.string, PropTypes.number]),
   tokenSymbol: PropTypes.string,
   tokenIcon: PropTypes.string,
+  rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  badge: PropTypes.shape({
+    icon: PropTypes.string,
+    maxPredictions: PropTypes.number,
+    minPredictions: PropTypes.number,
+    rank: PropTypes.string,
+  }).isRequired,
 }
 
 Metrics.defaultProps = {
@@ -66,6 +85,7 @@ Metrics.defaultProps = {
   tokens: Decimal(0),
   tokenSymbol: 'UNKNOWN',
   tokenIcon: etherTokens,
+  rank: '',
 }
 
 export default Metrics
