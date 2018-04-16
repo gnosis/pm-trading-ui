@@ -15,7 +15,6 @@ after_success:
   fi
 - npm run build
 deploy:
-  matrix:
   - provider: s3
     bucket: management-development
     secret_access_key:
