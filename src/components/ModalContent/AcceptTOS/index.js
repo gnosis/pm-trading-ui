@@ -3,7 +3,7 @@ import cn from 'classnames'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import PropTypes from 'prop-types'
 import Checkbox from 'components/FormCheckbox'
-import style from './AcceptTOS.less'
+import style from './AcceptTOS.mod.scss'
 
 const cx = cn.bind(style)
 

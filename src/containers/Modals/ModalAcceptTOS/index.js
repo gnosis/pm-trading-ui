@@ -1,4 +1,4 @@
-import AcceptTOS from 'components/AcceptTOS'
+import AcceptTOS from 'components/ModalContent/AcceptTOS'
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
 import { initProviders } from 'actions/providers'

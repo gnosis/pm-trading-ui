@@ -1,7 +1,0 @@
-export ModalMarketProgress from 'containers/ModalMarketProgress'
-export ModalNetworkCheck from 'containers/ModalNetworkCheck'
-export ModalOutcomePriceChanged from 'containers/ModalOutcomePriceChanged'
-export ModalTransactionsExplanation from 'containers/ModalTransactionsExplanation'
-export ModalConnectWallet from 'containers/ModalConnectWallet'
-export ModalInstallMetamask from 'containers/ModalInstallMetamask'
-export ModalAcceptTOS from 'containers/ModalAcceptTOS'
