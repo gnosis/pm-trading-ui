@@ -68,15 +68,46 @@ module.exports = {
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
       },
       {
-        test: /\.(scss|css)$/,
+        test: /\.mod\.(scss|css)$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            'css-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                localIdentName: '[name]__[local]__[hash:base64:5]',
+                importLoaders: 2,
+              },
+            },
             {
               loader: 'postcss-loader',
             },
-            { loader: 'sass-loader' },
+            {
+              loader: 'sass-loader',
+              options: { includePaths: [path.resolve(__dirname, './src')] },
+            },
+          ],
+        }),
+      },
+      {
+        test: /^((?!\.mod).)*\.(css|scss)$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 2,
+              },
+            },
+            {
+              loader: 'postcss-loader',
+            },
+            {
+              loader: 'sass-loader',
+              options: { includePaths: [path.resolve(__dirname, './src')] },
+            },
           ],
         }),
       },
