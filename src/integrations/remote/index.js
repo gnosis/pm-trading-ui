@@ -1,8 +1,9 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import Web3 from 'web3'
+import { getConfiguration } from 'utils/features'
 
-const { config } = process.env.CONFIG
+const config = getConfiguration()
 
 class Remote extends InjectedWeb3 {
   static providerName = WALLET_PROVIDER.REMOTE

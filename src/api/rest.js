@@ -1,9 +1,10 @@
 import { restFetch, hexWithoutPrefix } from 'utils/helpers'
+import { getConfiguration } from 'utils/features'
 import { normalize } from 'normalizr'
 import qs from 'querystring'
 import { marketSchema, marketSharesSchema, marketTradesSchema } from './schema'
 
-const { config } = process.env.CONFIG
+const config = getConfiguration()
 
 export const API_URL = `${config.gnosisdb.protocol}://${config.gnosisdb.host}/api`
 

@@ -142,7 +142,10 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       VERSION: `${version}#${build}`,
       NODE_ENV: 'development',
-      CONFIG: { config, interfaceConfig },
+    }),
+    new webpack.DefinePlugin({
+      GNOSIS_CONFIG: JSON.stringify(config),
+      GNOSIS_INTERFACE: JSON.stringify(interfaceConfig),
     }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
   ],

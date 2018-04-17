@@ -1,6 +1,7 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
+import { getConfiguration } from 'utils/features'
 
-const { config } = process.env.CONFIG
+const config = getConfiguration()
 
 /**
  * Finds a default provider from all currently available providers. Determined by provider integrations `priority`

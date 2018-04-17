@@ -1,7 +1,8 @@
 /* globals fetch */
 import qs from 'querystring'
+import { getConfiguration } from 'utils/features'
 
-const { config } = process.env.CONFIG
+const config = getConfiguration()
 
 const API_URL = `${config.gnosisdb.protocol}://${config.gnosisdb.host}/api`
 

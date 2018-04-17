@@ -8,8 +8,9 @@ import { filterMarkets, sortMarkets } from 'selectors/market'
 import { getCurrentAccount } from 'integrations/store/selectors'
 
 import { requestMarkets } from 'actions/market'
+import { getConfiguration } from 'utils/features'
 
-const { config } = process.env.CONFIG
+const config = getConfiguration()
 
 const mapStateToProps = (state) => {
   // const markets = getMarkets(state)

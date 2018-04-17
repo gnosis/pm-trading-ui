@@ -1,13 +1,17 @@
-const { interfaceConfig } = process.env.CONFIG
 
-export const getLogoConfig = () => interfaceConfig.logo
+/* global GNOSIS_CONFIG, GNOSIS_INTERFACE */
+export const getConfiguration = () => GNOSIS_CONFIG
+export const getInterfaceConfiguration = () => GNOSIS_INTERFACE
 
-export const isFeatureEnabled = feature => interfaceConfig[feature] && interfaceConfig[feature].enabled
+export const getLogoConfig = () => GNOSIS_INTERFACE.logo
 
-export const getFeatureConfig = feature => interfaceConfig[feature] && interfaceConfig[feature]
+export const isFeatureEnabled = feature => GNOSIS_INTERFACE[feature] && GNOSIS_INTERFACE[feature].enabled
 
-export const getCollateralToken = () => interfaceConfig.collateralToken
+export const getFeatureConfig = feature => GNOSIS_INTERFACE[feature] && GNOSIS_INTERFACE[feature]
 
-export const getProviderConfig = () => interfaceConfig.providers
+export const getCollateralToken = () => GNOSIS_INTERFACE.collateralToken
 
-export const getProviderIntegrationConfig = providerName => interfaceConfig.providers.options[providerName.toUpperCase()]
+export const getProviderConfig = () => GNOSIS_INTERFACE.providers
+
+export const getProviderIntegrationConfig = providerName =>
+  GNOSIS_INTERFACE.providers.options[providerName.toUpperCase()]

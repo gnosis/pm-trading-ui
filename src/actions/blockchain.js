@@ -13,10 +13,10 @@ import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
-import { getCollateralToken } from 'utils/features'
+import { getCollateralToken, getConfiguration } from 'utils/features'
 
 const collateralToken = getCollateralToken()
-const { config } = process.env.CONFIG
+const config = getConfiguration()
 const ethereumUrl = `${config.ethereum.protocol}://${config.ethereum.host}`
 
 // TODO define reducer for GnosisStatus

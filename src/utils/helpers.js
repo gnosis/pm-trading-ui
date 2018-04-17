@@ -6,10 +6,11 @@ import { HEX_VALUE_REGEX, OUTCOME_TYPES, MARKET_STAGES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
 import Uport from 'integrations/uport'
+import { getConfiguration } from 'utils/features'
 
 import dictionary from 'assets/randomNames.json'
 
-const { config } = process.env.CONFIG
+const config = getConfiguration()
 
 const ethereumUrl = `${config.ethereum.protocol}://${config.ethereum.host}`
 

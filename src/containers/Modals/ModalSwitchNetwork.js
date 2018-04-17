@@ -7,10 +7,11 @@ import SwitchNetwork from 'components/ModalContent/SwitchNetwork'
 import { getTargetNetworkId } from 'integrations/store/selectors'
 
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
+import { getConfiguration } from 'utils/features'
+
+const { ethereum } = getConfiguration()
 
 const mapStateToProps = (state) => {
-  const { config: { ethereum } } = process.env.CONFIG
-
   const targetNetworkURL = `${ethereum.protocol}://${ethereum.host}`
   const targetNetworkId = getTargetNetworkId(state)
 
