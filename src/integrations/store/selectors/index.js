@@ -1,5 +1,7 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 
+const { config } = process.env.CONFIG
+
 /**
  * Finds a default provider from all currently available providers. Determined by provider integrations `priority`
  * @param {*} state - redux state
@@ -124,7 +126,7 @@ export const isOnWhitelist = (state) => {
   const account = getCurrentAccount(state)
 
   if (account) {
-    return process.env.WHITELIST[account] !== undefined
+    return config.whitelist[account] !== undefined
   }
 
   return false

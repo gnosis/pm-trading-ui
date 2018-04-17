@@ -60,7 +60,7 @@ export default state => ({
   logoPath: logoConfig.regular,
   smallLogoPath: logoConfig.small,
   showScoreboard: isFeatureEnabled('scoreboard'),
-  showGameGuide: isFeatureEnabled('gameguide'),
+  showGameGuide: isFeatureEnabled('gameGuide'),
   gameGuideType: gameGuideConfig.type,
   gameGuideURL: gameGuideConfig.url,
   tokenAddress: collateralToken.address,

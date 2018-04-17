@@ -140,9 +140,9 @@ export const timeoutCondition = (timeout, rejectReason) =>
  * @param {*string} accountAddress
  */
 export const isModerator = accountAddress =>
-  (Object.keys(process.env.WHITELIST).length ? process.env.WHITELIST[accountAddress] !== undefined : false)
+  (Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false)
 
-export const getModerators = () => process.env.WHITELIST
+export const getModerators = () => config.whitelist
 
 export const getGnosisJsOptions = (provider) => {
   const opts = {}
