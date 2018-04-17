@@ -3,6 +3,8 @@ node_js:
 - node
 - '8'
 dist: trusty
+# install:
+#  - npm install -s -q
 before_install:
 - rm -rf node_modules
 - npm i -g babel-cli webpack truffle-contract
@@ -15,7 +17,6 @@ after_success:
   fi
 - npm run build
 deploy:
-  matrix:
   - provider: s3
     bucket: management-development
     secret_access_key:
