@@ -14,8 +14,6 @@ const config = getConfiguration()
 
 const ethereumUrl = `${config.ethereum.protocol}://${config.ethereum.host}`
 
-export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
-
 /**
  * Adds the `0x` prefix to the incoming string value
  * @param {String} value
@@ -23,6 +21,8 @@ export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substr
 export const add0xPrefix = value => (startsWith(value, '0x') ? value : `0x${value}`)
 
 export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix(value) : value)
+
+export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
 
 export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
 

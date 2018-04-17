@@ -1,17 +1,22 @@
 
-/* global GNOSIS_CONFIG, GNOSIS_INTERFACE */
-export const getConfiguration = () => GNOSIS_CONFIG
-export const getInterfaceConfiguration = () => GNOSIS_INTERFACE
 
-export const getLogoConfig = () => GNOSIS_INTERFACE.logo
+const getGlobal = key => (typeof global !== 'undefined' && global[key]) || (typeof window !== 'undefined' && window[key]) || {}
 
-export const isFeatureEnabled = feature => GNOSIS_INTERFACE[feature] && GNOSIS_INTERFACE[feature].enabled
+const config = getGlobal('GNOSIS_CONFIG')
+const configInterface = getGlobal('GNOSIS_INTERFACE')
 
-export const getFeatureConfig = feature => GNOSIS_INTERFACE[feature] && GNOSIS_INTERFACE[feature]
+export const getConfiguration = () => config
+export const getInterfaceConfiguration = () => configInterface
 
-export const getCollateralToken = () => GNOSIS_INTERFACE.collateralToken
+export const getLogoConfig = () => configInterface.logo
 
-export const getProviderConfig = () => GNOSIS_INTERFACE.providers
+export const isFeatureEnabled = feature => configInterface[feature] && configInterface[feature].enabled
+
+export const getFeatureConfig = feature => configInterface[feature] && configInterface[feature]
+
+export const getCollateralToken = () => configInterface.collateralToken
+
+export const getProviderConfig = () => configInterface.providers
 
 export const getProviderIntegrationConfig = providerName =>
-  GNOSIS_INTERFACE.providers.options[providerName.toUpperCase()]
+  configInterface.providers.options[providerName.toUpperCase()]

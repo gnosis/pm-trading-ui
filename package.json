@@ -29,7 +29,8 @@
     ],
     "moduleNameMapper": {
       "\\.(css|scss)$": "identity-obj-proxy"
-    }
+    },
+    "setupTestFrameworkScriptFile": "./configuration.setup.js"
   },
   "resolutions": {
     "**/bootstrap-loader/resolve": "1.6.0"
