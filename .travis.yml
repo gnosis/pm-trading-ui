@@ -3,8 +3,11 @@ node_js:
 - node
 - '8'
 dist: trusty
+<<<<<<< HEAD
 # install:
 #  - npm install -s -q
+=======
+>>>>>>> e8f8763a99bceafcba80a9c98c8892dbd4e57d8f
 before_install:
 - rm -rf node_modules
 - npm i -g babel-cli webpack truffle-contract
