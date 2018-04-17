@@ -1,16 +1,18 @@
-import { restFetch, hexWithoutPrefix } from 'utils/helpers'
+import { hexWithoutPrefix, restFetch } from 'utils/helpers'
+import { getConfiguration } from 'utils/features'
 import { normalize } from 'normalizr'
 import qs from 'querystring'
 import { marketSchema, marketSharesSchema, marketTradesSchema } from './schema'
 
-export const API_URL = `${process.env.GNOSISDB_URL}/api`
+const config = getConfiguration()
 
-// TODO The default assignment is because JEST test do not work out of the box with ENV variables. Fix that using the plugin dotenv(for example)
-const addresses = Object.keys(process.env.WHITELIST || {}).map(address => hexWithoutPrefix(address))
-const whitelistedAddressesFilter = qs.stringify({ creator: addresses.join() }, ',')
+export const API_URL = `${config.gnosisdb.protocol}://${config.gnosisdb.host}/api`
 
 // TODO delete when src/routes/marketlist is fully operative
 export const requestMarkets = async () => {
+  const addresses = Object.keys(config.whitelist).map(hexWithoutPrefix)
+  const whitelistedAddressesFilter = qs.stringify({ creator: addresses.join() }, ',')
+
   const url = `${API_URL}/markets/?${whitelistedAddressesFilter}`
 
   return restFetch(url).then(response =>

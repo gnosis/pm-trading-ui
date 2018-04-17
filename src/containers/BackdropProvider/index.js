@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { isTournament } from 'utils/configuration'
+import { isFeatureEnabled } from 'utils/features'
 import { triedToConnect } from 'selectors/blockchain'
 import { closeModal } from 'actions/modal'
 import * as modals from 'containers/Modals'
 
 import './backdrop.scss'
+
+const tournamentEnabled = isFeatureEnabled('tournament')
 
 class BackdropProvider extends Component {
   renderBackdropContent() {
@@ -32,19 +34,18 @@ class BackdropProvider extends Component {
 
   render() {
     const { children, modal: { isOpen }, blockchainConnection } = this.props
-    const tournament = isTournament()
     return (
       <div className="backdrop">
         <div
           className={cn({
             backdrop__filter: true,
             'backdrop__filter--visible': isOpen && blockchainConnection,
-            tournament,
+            tournament: tournamentEnabled,
           })}
         >
           {isOpen && blockchainConnection ? <div style={{ position: 'fixed', minWidth: '100vw' }}>{children}</div> : children}
         </div>
-        <div className={cn('backdrop__above', { tournament })}>{this.renderBackdropContent()}</div>
+        <div className={cn('backdrop__above', { tournament: tournamentEnabled })}>{this.renderBackdropContent()}</div>
       </div>
     )
   }

@@ -5,12 +5,12 @@ import { lifecycle } from 'recompose'
 import { Link, withRouter } from 'react-router-dom'
 import Decimal from 'decimal.js'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
-import { getRewardClaimOptions, getRewardToken } from 'utils/configuration'
+import { getFeatureConfig } from 'utils/features'
 import style from './ClaimReward.mod.scss'
 
 const cx = cn.bind(style)
-const { networkId: rewardContractNetworkId } = getRewardClaimOptions()
-const { symbol } = getRewardToken()
+const rewardsConfig = getFeatureConfig('rewards')
+const { rewardToken } = rewardsConfig
 
 const ClaimReward = ({
   closeModal,
@@ -27,8 +27,8 @@ const ClaimReward = ({
     closeModal()
   }
 
-  const targetNetwork = ETHEREUM_NETWORK_IDS[rewardContractNetworkId]
-  const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardContractNetworkId)
+  const targetNetwork = ETHEREUM_NETWORK_IDS[rewardToken.networkId]
+  const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardToken.networkId)
   const disabled =
     Decimal(gasPrice)
       .mul(claimRewardGasCost)
@@ -38,11 +38,11 @@ const ClaimReward = ({
     <div className={cx('claimRewards')}>
       <button className={cx('closeButton')} onClick={closeModal} />
       <div className={cx('claimContainer')}>
-        <h4 className={cx('heading')}>Claim {symbol}</h4>
+        <h4 className={cx('heading')}>Claim {rewardToken.symbol}</h4>
         <p className={cx('annotation')}>
           In order to claim your{' '}
           <span className={cx('rewardInfo')}>
-            {rewardValue} {symbol}
+            {rewardValue} {rewardToken.symbol}
           </span>{' '}
           tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in your
           MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request. More

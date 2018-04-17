@@ -11,7 +11,6 @@
     "start-dev": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
     "start-prod": "NODE_ENV=production node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info --config webpack.prod.config.js",
     "start": "if test \"$NODE_ENV\" = \"production\" ; then npm run start-prod; else npm run start-dev; fi ",
-    "start:standalone": "cross-env GNOSISDB_HOST='https://gnosisdb-kovan.gnosis.pm' npm start",
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix --quiet",
     "test": "jest --no-cache",
@@ -30,7 +29,8 @@
     ],
     "moduleNameMapper": {
       "\\.(css|scss)$": "identity-obj-proxy"
-    }
+    },
+    "setupTestFrameworkScriptFile": "./configuration.setup.js"
   },
   "resolutions": {
     "**/bootstrap-loader/resolve": "1.6.0"

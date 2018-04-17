@@ -9,7 +9,9 @@ import ScoreboardPage from 'routes/Scoreboard/containers/ScoreBoard'
 import MarketDetailPage from 'routes/MarketDetails/containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
 import DashboardPage from 'containers/DashboardPage'
-import { shallShowScoreboard, shallShowGameGuide, getGameGuideType } from 'utils/configuration'
+import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
+
+const gameGuideConfig = getFeatureConfig('gameGuide')
 
 const marketDetailRender = (props) => {
   if (web3.utils.isAddress(props.match.params.id)) {
@@ -17,7 +19,7 @@ const marketDetailRender = (props) => {
   }
   return <Redirect to="/markets/list" />
 }
-const showGameGuide = shallShowGameGuide() && getGameGuideType() === 'default'
+const showGameGuide = gameGuideConfig.type === 'default'
 
 marketDetailRender.propTypes = {
   match: PropTypes.shape({
@@ -33,7 +35,7 @@ const AppRouter = () => (
     <Route exact path="/transactions" component={TransactionsPage} />
     <Route exact path="/markets/list" component={MarketListPage} />
     <Route exact path="/markets/:id/:view?/:shareId?" render={marketDetailRender} />
-    {shallShowScoreboard() && <Route exact path="/scoreboard" component={ScoreboardPage} />}
+    {isFeatureEnabled('scoreboard') && <Route exact path="/scoreboard" component={ScoreboardPage} />}
     {showGameGuide && <Route exact path="/game-guide" component={GameGuidePage} />}
     <Redirect to="/markets/list" />
   </Switch>

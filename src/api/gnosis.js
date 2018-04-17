@@ -1,7 +1,9 @@
 import Gnosis from '@gnosis.pm/gnosisjs'
 import olympiaArtifacts from '@gnosis.pm/olympia-token'
 import { NETWORK_TIMEOUT } from 'actions/blockchain'
-import { isTournament } from 'utils/configuration'
+import { isFeatureEnabled } from 'utils/features'
+
+const tournamentEnabled = isFeatureEnabled('tournament')
 
 let gnosisInstance
 let gnosisROInstance
@@ -26,7 +28,7 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
     gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
 
-    if (isTournament()) {
+    if (tournamentEnabled) {
       await addOlympiaContracts(gnosisInstance)
     }
 
@@ -45,7 +47,7 @@ export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
     gnosisROInstance = await Gnosis.create(GNOSIS_OPTIONS)
 
-    if (isTournament()) {
+    if (tournamentEnabled) {
       await addOlympiaContracts(gnosisROInstance)
     }
 

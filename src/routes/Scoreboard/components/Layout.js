@@ -7,7 +7,7 @@ import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
-import { getProvider, areRewardsEnabled, getRewardClaimOptions, getRewardLevels } from 'utils/configuration'
+import { getProviderConfig, isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
 import * as css from './Layout.mod.scss'
@@ -18,8 +18,10 @@ import ClaimReward from './ClaimReward'
 const cx = classNames.bind(css)
 const trophy = require('../assets/trophy.svg')
 
-const { claimStart, claimUntil } = getRewardClaimOptions()
-const rewardLevels = getRewardLevels()
+const providerConfig = getProviderConfig()
+
+const rewardsEnabled = isFeatureEnabled('rewards')
+const { levels, claimReward: { claimStart, claimUntil } } = getFeatureConfig('rewards')
 
 const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
 
@@ -31,7 +33,7 @@ class Layout extends React.PureComponent {
     const hasRows = data && data.size > 1
     let rewardValue = 0
 
-    rewardLevels.forEach((rewardLevel) => {
+    levels.forEach((rewardLevel) => {
       if (
         (rank >= rewardLevel.minRank && rank <= rewardLevel.maxRank) || // between min/max
         (rank >= rewardLevel.minRank && rewardLevel.maxRank == null) // above min
@@ -41,10 +43,10 @@ class Layout extends React.PureComponent {
     })
 
     const showRewardInfo =
-      areRewardsEnabled() && getProvider() === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
     const showRewardClaim =
       moment.utc().isBetween(claimStart, claimUntil) &&
-      getProvider() === WALLET_PROVIDER.METAMASK &&
+      providerConfig.default === WALLET_PROVIDER.METAMASK &&
       !!mainnetAddress &&
       rewardValue > 0
 
@@ -57,7 +59,7 @@ class Layout extends React.PureComponent {
                 mainnetAddress={mainnetAddress}
                 openSetMainnetAddressModal={openSetMainnetAddressModal}
               />
-              {true && <ClaimReward openClaimRewardModal={openClaimRewardModal} rewardValue={rewardValue} />}
+              {showRewardClaim && <ClaimReward openClaimRewardModal={openClaimRewardModal} rewardValue={rewardValue} />}
             </Block>
           )}
           {showRewardInfo && <Hairline />}

@@ -12,16 +12,13 @@ import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import PageFrame from 'components/layout/PageFrame'
 import Footer from 'components/Footer'
 import { providerPropType } from 'utils/shapes'
-import { hexWithoutPrefix } from 'utils/helpers'
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import { triedToConnect } from 'selectors/blockchain'
 import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
-import { shallDisplayFooter } from 'utils/configuration'
+import { isFeatureEnabled } from 'utils/features'
 
 import './app.scss'
-
-const displayFooter = shallDisplayFooter()
 
 class App extends Component {
   state = {
@@ -73,7 +70,7 @@ class App extends Component {
         <HeaderContainer version={process.env.VERSION} />
         {this.props.provider && this.props.provider.account && <TransactionFloaterContainer />}
         {childrenContainer}
-        {displayFooter && (
+        {isFeatureEnabled('footer') && (
           <PageFrame>
             <Footer />
           </PageFrame>

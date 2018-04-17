@@ -9,11 +9,11 @@ import {
 } from 'integrations/store/selectors'
 import { getGasPrice } from 'routes/MarketDetails/store/selectors'
 import { claimUserRewards } from 'actions/rewards'
-import { getRewardClaimOptions } from 'utils/configuration'
+import { getFeatureConfig } from 'utils/features'
 import { requestClaimRewardGasCost } from './action'
 import { getClaimRewardGasCost, getRewardValue } from './selectors'
 
-const { contractAddress } = getRewardClaimOptions()
+const { rewardToken } = getFeatureConfig('rewards')
 
 const mapStateToProps = state => ({
   currentAccount: getCurrentAccount(state),
@@ -28,7 +28,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   requestGasPrice: () => dispatch(requestGasPrice()),
   requestClaimRewardGasCost: () => dispatch(requestClaimRewardGasCost()),
-  claimUserRewards: () => dispatch(claimUserRewards(contractAddress)),
+  claimUserRewards: () => dispatch(claimUserRewards(rewardToken.address)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClaimReward)
