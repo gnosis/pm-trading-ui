@@ -1,5 +1,4 @@
 import React from 'react'
-import cn from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Subtitle from 'components/layout/Subtitle'
 import Paragraph from 'components/layout/Paragraph'
@@ -10,9 +9,6 @@ import ClaimSwitchNetwork from 'routes/GameGuide/assets/claimSwitchNetwork.png'
 import switchNetwork1 from 'routes/GameGuide/assets/switchNetwork.png'
 import switchNetwork2 from 'routes/GameGuide/assets/switchNetwork2.png'
 import ClaimScreenshot from 'routes/GameGuide/assets/claim.png'
-import style from './ClaimRewards.mod.scss'
-
-const cx = cn.bind(style)
 
 const SignUp = () => (
   <Block margin="md">
