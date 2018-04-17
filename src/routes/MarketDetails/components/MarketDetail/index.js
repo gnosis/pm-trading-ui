@@ -11,13 +11,14 @@ import { marketShape, marketShareShape, marketTradeShape, ReactRouterMatchShape 
 import { isMarketResolved } from 'utils/helpers'
 import MarketGraph from 'routes/MarketDetails/components/MarketGraph'
 import expandableViews, { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
-import config from 'config.json'
 import Controls from './Controls'
 import Details from './Details'
 import Infos from './Infos'
 import style from './marketDetail.mod.scss'
 
 const cx = cn.bind(style)
+
+const MARKET_FETCH_INTERVAL = 15000
 
 class MarketDetail extends Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class MarketDetail extends Component {
 
   componentDidMount() {
     this.fetchEssentialData()
-    this.fetchDataTimer = setInterval(this.fetchEssentialData, config.fetchMarketTimeInterval)
+    this.fetchDataTimer = setInterval(this.fetchEssentialData, MARKET_FETCH_INTERVAL)
     this.scrollToSharesDiv()
   }
 

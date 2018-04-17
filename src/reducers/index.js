@@ -4,12 +4,14 @@ import { reducer as formReducer } from 'redux-form'
 import integrations from 'integrations/store/reducers'
 import users from 'routes/Scoreboard/store/reducers/users'
 import market, { REDUCER_ID } from 'store/reducers/market'
-import { isTournament } from 'utils/configuration'
+import { isFeatureEnabled } from 'utils/features'
 import entities from './entities'
 import modal from './modal'
 import transactions from './transactions'
 import blockchain from './blockchain'
 import notifications from './notifications'
+
+const tournamentEnabled = isFeatureEnabled('tournament')
 
 const reducers = {
   routing: routerReducer,
@@ -23,7 +25,7 @@ const reducers = {
   [REDUCER_ID]: market,
 }
 
-if (isTournament()) {
+if (tournamentEnabled) {
   reducers.tournament = combineReducers({
     ranking: users,
   })

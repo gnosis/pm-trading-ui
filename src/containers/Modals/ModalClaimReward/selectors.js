@@ -1,9 +1,9 @@
 import { GAS_COST } from 'utils/constants'
 import { rankSelector } from 'components/Dashboard/Metrics/selector'
 import { createSelector } from 'reselect'
-import { getRewardLevels } from 'utils/configuration'
+import { getFeatureConfig } from 'utils/features'
 
-const rewardLevels = getRewardLevels()
+const { levels } = getFeatureConfig('rewards')
 
 const getClaimRewardGasCost = (state) => {
   const gasCost = state.blockchain.getIn(['gasCosts', GAS_COST.CLAIM_REWARD], 0)
@@ -14,7 +14,7 @@ const getClaimRewardGasCost = (state) => {
 export const getRewardValue = createSelector(rankSelector, (rank) => {
   let rewardValue = 0
 
-  rewardLevels.forEach((rewardLevel) => {
+  levels.forEach((rewardLevel) => {
     if (
       (rank >= rewardLevel.minRank && rank <= rewardLevel.maxRank) || // between min/max
       (rank >= rewardLevel.minRank && rewardLevel.maxRank == null) // above min

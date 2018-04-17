@@ -2,6 +2,8 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import Web3 from 'web3'
 
+const { config } = process.env.CONFIG
+
 class Remote extends InjectedWeb3 {
   static providerName = WALLET_PROVIDER.REMOTE
   /**
@@ -26,7 +28,8 @@ class Remote extends InjectedWeb3 {
    */
   async initWeb3() {
     try {
-      this.web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`))
+      const ethereumUrl = `${config.ethereum.protocol}://${config.ethereum.host}`
+      this.web3 = new Web3(new Web3.providers.HttpProvider(ethereumUrl))
 
       this.networkId = await this.getNetworkId()
       this.network = await this.getNetwork()

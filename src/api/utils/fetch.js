@@ -1,7 +1,9 @@
 /* globals fetch */
 import qs from 'querystring'
 
-const API_URL = `${process.env.GNOSISDB_URL}/api`
+const { config } = process.env.CONFIG
+
+const API_URL = `${config.gnosisdb.protocol}://${config.gnosisdb.host}/api`
 
 export const requestFromRestAPI = async (endpoint, queryparams) => {
   const url = `${API_URL}/${endpoint}?${qs.stringify(queryparams)}`

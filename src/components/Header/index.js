@@ -7,8 +7,9 @@ import className from 'classnames/bind'
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
-import { shouldUseMetamask, shouldUseUport, areBadgesEnabled } from 'utils/configuration'
+import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { hasMetamask } from 'integrations/metamask/utils'
+import { WALLET_PROVIDER } from 'integrations/constants'
 
 import Identicon from './Identicon'
 import ProviderIcon from './ProviderIcon'
@@ -19,11 +20,18 @@ import css from './Header.scss'
 
 const cx = className.bind(css)
 
-const [useMetamask, useUport] = [shouldUseMetamask(), shouldUseUport()]
+const tournamentEnabled = isFeatureEnabled('tournament')
+const badgesEnabled = isFeatureEnabled('badges')
+const providerConfig = getFeatureConfig('providers')
+
+const { default: defaultProvider } = providerConfig
+
+const useMetamask = tournamentEnabled && defaultProvider === WALLET_PROVIDER.METAMASK
+const useUport = tournamentEnabled && defaultProvider === WALLET_PROVIDER.UPORT
 
 class Header extends Component {
   componentDidMount() {
-    if (this.props.isTournament && this.props.currentAccount) {
+    if (tournamentEnabled && this.props.currentAccount) {
       this.props.requestMainnetAddress()
     }
 
@@ -35,7 +43,7 @@ class Header extends Component {
   componentDidUpdate(prevProps) {
     // If user unlocks metamask, changes his account, we need to check if the account was registered
     const shouldRequestMainnetAddress =
-      this.props.isTournament && this.props.currentAccount !== prevProps.currentAccount
+    tournamentEnabled && this.props.currentAccount !== prevProps.currentAccount
     if (shouldRequestMainnetAddress) {
       this.props.requestMainnetAddress()
     }
@@ -67,7 +75,6 @@ class Header extends Component {
       currentNetwork,
       tokenBalance,
       currentProvider,
-      isTournament,
       logoPath,
       smallLogoPath,
       showScoreboard,
@@ -80,12 +87,12 @@ class Header extends Component {
     } = this.props
 
     let walletConnected = hasWallet
-    if (isTournament && useMetamask) {
+    if (tournamentEnabled && useMetamask) {
       walletConnected = hasWallet && mainnetAddress
     }
 
     const logoVars = {}
-    if (isTournament) {
+    if (tournamentEnabled) {
       logoVars['--logoAnnotation'] = "'Powered by Gnosis'"
       logoVars['--logoPath'] = `url("${logoPath}")`
       logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
@@ -149,7 +156,7 @@ class Header extends Component {
                 )}
                 <DecimalValue value={tokenBalance} className={cx('balance', 'test')} />&nbsp;
                 {tokenAddress ? <CurrencyName className={cx('account', 'text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
-                {areBadgesEnabled() && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
+                {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
                 {useUport && <MenuAccountDropdown />}
@@ -174,7 +181,6 @@ Header.propTypes = {
   tokenBalance: PropTypes.string,
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
-  isTournament: PropTypes.bool,
   userTournamentInfo: PropTypes.shape({}),
   logoPath: PropTypes.string.isRequired,
   smallLogoPath: PropTypes.string.isRequired,
@@ -198,7 +204,6 @@ Header.defaultProps = {
   tokenBalance: '0',
   currentProvider: {},
   currentAccount: '',
-  isTournament: false,
   showScoreboard: false,
   showGameGuide: false,
   gameGuideType: 'default',

@@ -9,8 +9,9 @@ import { getTargetNetworkId } from 'integrations/store/selectors'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 
 const mapStateToProps = (state) => {
-  const targetNetworkURL = process.env.ETHEREUM_URL
+  const { config: { ethereum } } = process.env.CONFIG
 
+  const targetNetworkURL = `${ethereum.protocol}://${ethereum.host}`
   const targetNetworkId = getTargetNetworkId(state)
 
   let targetNetwork

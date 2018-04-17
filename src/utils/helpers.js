@@ -7,7 +7,11 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
 import Uport from 'integrations/uport'
 
-import dictionary from 'randomNames.json'
+import dictionary from 'assets/randomNames.json'
+
+const { config } = process.env.CONFIG
+
+const ethereumUrl = `${config.ethereum.protocol}://${config.ethereum.host}`
 
 export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
 
@@ -154,7 +158,7 @@ export const getGnosisJsOptions = (provider) => {
     opts.defaultAccount = provider.account
   } else {
     // Default remote node
-    opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
+    opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${ethereumUrl}`)).currentProvider
   }
   opts.logger = 'console'
 

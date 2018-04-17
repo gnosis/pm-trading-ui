@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import 'react-table/react-table.css'
 import * as React from 'react'
 import ReactTable from 'react-table'
-import { areBadgesEnabled, areRewardsEnabled } from 'utils/configuration'
+import { isFeatureEnabled } from 'utils/features'
 import { badgeCell, rankCell, olyCell, rewardCell, userAddressCell, ownTrCallback, ownTheadCallback } from './table'
+
+const rewardsEnabled = isFeatureEnabled('rewards')
+const badgesEnabled = isFeatureEnabled('badges')
 
 const tableStyle = {
   border: 'none',
@@ -94,7 +97,7 @@ const ScoreTable = ({ tableData, myAccount }) => {
   const size = tableData ? tableData.size : 0
 
   const tableColumns = [...columns]
-  if (areBadgesEnabled()) {
+  if (badgesEnabled) {
     tableColumns.push({
       Header: 'Badge',
       accessor: 'predictions',
@@ -104,7 +107,7 @@ const ScoreTable = ({ tableData, myAccount }) => {
       style: columnStyle,
     })
   }
-  if (areRewardsEnabled()) {
+  if (rewardsEnabled) {
     tableColumns.push({
       Header: 'Reward',
       accesor: 'currentRank',

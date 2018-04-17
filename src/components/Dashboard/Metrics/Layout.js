@@ -5,8 +5,10 @@ import classNames from 'classnames/bind'
 import DecimalValue from 'components/DecimalValue'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
-import { isTournament } from 'utils/configuration'
+import { isFeatureEnabled } from 'utils/features'
 import * as css from './index.css'
+
+const tournamentEnabled = isFeatureEnabled('tournament')
 
 const cx = classNames.bind(css)
 
@@ -53,7 +55,7 @@ const Metrics = ({
     <Metric img={outstandingPredictions} width={45} height={45} explanation="PREDICTED PROFITS">
       <Block className={cx('ol-db-title')}>{predictedProfit}</Block>
     </Metric>
-    {isTournament() && (
+    {tournamentEnabled && (
       <React.Fragment>
         <Metric img={arrows} explanation="YOUR RANK">
           <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
