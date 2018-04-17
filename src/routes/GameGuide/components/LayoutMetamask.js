@@ -1,36 +1,22 @@
-import Block from 'components/layout/Block'
+import React from 'react'
 import PageFrame from 'components/layout/PageFrame'
 import Title from 'components/layout/Title'
-import React from 'react'
-import Youtube from 'react-youtube'
 import SignUp from './metamaskComponents/SignUp'
-import LogIn from './metamaskComponents/LogIn'
 import MarketOverview from './metamaskComponents/MarketOverview'
 import DashboardOverview from './metamaskComponents/DashboardOverview'
 import MakePrediction from './metamaskComponents/MakePrediction'
-import Profits from './metamaskComponents/Profits'
-
-const videoOpts = {
-  height: '260',
-  width: '520',
-  playerVars: {
-    // https://developers.google.com/youtube/player_parameters
-    autoplay: 0,
-  },
-}
+import Profits from './metamaskComponents/ProfitsAndScoreboard'
+import ClaimRewards from './metamaskComponents/ClaimRewards'
 
 const GameGuide = () => (
   <PageFrame width="750px">
-    <Block margin="md">
-      <Title>GAME GUIDE</Title>
-      <Youtube videoId="36GgFg9CgG8" opts={videoOpts} />
-    </Block>
+    <Title>GAME GUIDE</Title>
     <SignUp />
-    <LogIn />
     <MarketOverview />
     <DashboardOverview />
     <MakePrediction />
     <Profits />
+    <ClaimRewards />
   </PageFrame>
 )
 

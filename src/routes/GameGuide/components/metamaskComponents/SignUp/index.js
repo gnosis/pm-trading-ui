@@ -5,8 +5,8 @@ import Subtitle from 'components/layout/Subtitle'
 import Paragraph from 'components/layout/Paragraph'
 import Bold from 'components/layout/Bold'
 import Img from 'components/layout/Img'
-import ConnectWalletScreenshot from './connectWallet.png'
-import RegisterWalletScreenshot from './registerWallet.png'
+import ConnectWalletScreenshot from 'routes/GameGuide/assets/connectWallet.png'
+import RegisterWalletScreenshot from 'routes/GameGuide/assets/registerWallet.png'
 import style from './SignUp.mod.scss'
 
 const cx = cn.bind(style)
@@ -14,9 +14,10 @@ const cx = cn.bind(style)
 const SignUp = () => (
   <Block margin="md">
     <Subtitle>Sign-up</Subtitle>
-    <Paragraph color="medium">
+    <Paragraph>
       To participate in our monthly tournament, you will need to verify your identity by signing up via Metamask on the
-      Rinkeby network, and registering your Metamask address on Olympia. <br />
+      Rinkeby network, and registering your Metamask address on Olympia.
+      <br />
       <br />
       <Bold>1. </Bold>Make sure Metamask is installed on your browser:{' '}
       <a className={cx('link')} href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
@@ -33,7 +34,7 @@ const SignUp = () => (
       <Img src={ConnectWalletScreenshot} />
       <br />
       <br />
-      <Bold>2. </Bold>Register your Metamask wallet address on Rinkeby when you see the following pop-up:
+      <Bold>4. </Bold>Register your Metamask wallet address on Rinkeby when you see the following pop-up:
       <br />
       <br />
       <Img src={RegisterWalletScreenshot} />

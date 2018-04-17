@@ -9,12 +9,13 @@ const profits1 = require('routes/GameGuide/assets/profits1.png')
 const profits2 = require('routes/GameGuide/assets/profits2.png')
 const profits3 = require('routes/GameGuide/assets/profits3.png')
 
-const MakePrediction = () => (
+const ProfitsAndScoreboard = () => (
   <Block margin="xl">
-    <Subtitle>Profits</Subtitle>
+    <Subtitle>Profits and Scoreboard</Subtitle>
     <Block margin="md">
-      <Paragraph color="medium">
-        The more profits you make from correctly predicted events, <Bold>...the higher you rank on the Scoreboard</Bold>
+      <Paragraph>
+        The more profits you make from correctly predicted events,<br />
+        <Bold>...the higher you rank on the Scoreboard</Bold>
       </Paragraph>
     </Block>
     <Block margin="md">
@@ -46,10 +47,10 @@ const MakePrediction = () => (
       <Img src={profits3} width="75%" bordered />
     </Block>
     <Paragraph>
-      If you&apos;re among the top 100 predictors, you will be rewarded with GNO tokens. In case you get to the top 10,
-      your GNO rewards will increase based on your final score.
+      <Bold>If you&apos;re among the top 100 predictors, you will be rewarded with GNO tokens.</Bold> The higher your
+      rank on the scoreboard, the more GNO you win.
     </Paragraph>
   </Block>
 )
 
-export default MakePrediction
+export default ProfitsAndScoreboard
