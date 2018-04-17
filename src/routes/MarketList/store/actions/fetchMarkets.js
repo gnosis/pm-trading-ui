@@ -7,7 +7,8 @@ import addMarkets from './addMarkets'
 
 // TODO The default assignment is because JEST test do not work out of the box
 // with ENV variables. Fix that using the plugin dotenv(for example)
-const whitelisted = process.env.WHITELIST || {}
+const { config = {} } = process.env.CONFIG
+const whitelisted = config.whitelist || {}
 const addresses = Object.keys(whitelisted).map(address => hexWithoutPrefix(address))
 
 const buildOutcomesFrom = (outcomes, outcomeTokensSold, marginalPrices) => {

@@ -9,7 +9,7 @@ import Title from 'components/layout/Title'
 import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import { add0xPrefix, weiToEth, getOutcomeName, isMarketResolved, isMarketClosed } from 'utils/helpers'
+import { add0xPrefix, weiToEth, getOutcomeName, isMarketResolved, isMarketClosed, isModerator } from 'utils/helpers'
 import { marketShareShape } from 'utils/shapes'
 import {
   COLOR_SCHEME_DEFAULT,
@@ -261,7 +261,7 @@ class Dashboard extends Component {
       Object.keys(market).length &&
         market.oracle &&
         market.event &&
-        process.env.WHITELIST[market.creator] &&
+        isModerator(market.creator) &&
         !isMarketResolved(market) &&
         !isMarketClosed(market))
     const newMarkets = getNewMarkets(whitelistedMarkets, 5)

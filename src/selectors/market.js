@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js'
-import { isMarketResolved, isMarketClosed } from 'utils/helpers'
+import { isMarketResolved, isMarketClosed, isModerator } from 'utils/helpers'
 import { entitySelector } from 'selectors/entities'
 import { getEventByAddress } from 'selectors/event'
 import { getOracleByAddress } from 'selectors/oracle'
@@ -59,7 +59,7 @@ export const filterMarkets = state => (opts) => {
         market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
         market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
       (!onlyMyMarkets || market.creator === defaultAccount.toLowerCase()) &&
-      (!onlyModeratorsMarkets || process.env.WHITELIST[market.creator] !== undefined) &&
+      (!onlyModeratorsMarkets || isModerator(market.creator) !== undefined) &&
       (typeof resolved === 'undefined' ||
         (resolved === 'RESOLVED' && (isMarketResolved(market) || isMarketClosed(market))) ||
         (resolved === 'UNRESOLVED' && !isMarketResolved(market) && !isMarketClosed(market))))

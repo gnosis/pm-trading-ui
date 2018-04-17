@@ -8,7 +8,7 @@ const { config } = process.env.CONFIG
 export const API_URL = `${config.gnosisdb.protocol}://${config.gnosisdb.host}/api`
 
 // TODO The default assignment is because JEST test do not work out of the box with ENV variables. Fix that using the plugin dotenv(for example)
-const addresses = Object.keys(process.env.WHITELIST || {}).map(address => hexWithoutPrefix(address))
+const addresses = Object.keys(config.whitelist || {}).map(address => hexWithoutPrefix(address))
 const whitelistedAddressesFilter = qs.stringify({ creator: addresses.join() }, ',')
 
 // TODO delete when src/routes/marketlist is fully operative

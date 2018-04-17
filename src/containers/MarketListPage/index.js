@@ -9,6 +9,8 @@ import { getCurrentAccount } from 'integrations/store/selectors'
 
 import { requestMarkets } from 'actions/market'
 
+const { config } = process.env.CONFIG
+
 const mapStateToProps = (state) => {
   // const markets = getMarkets(state)
   const defaultAccount = getCurrentAccount(state)
@@ -21,11 +23,11 @@ const mapStateToProps = (state) => {
     textSearch: filterSearch,
     resolved: filterShowResolved,
     onlyMyMarkets: filterMyMarkets,
-    onlyModeratorsMarkets: Object.keys(process.env.WHITELIST).length > 0, // Show only markets created by moderators if they're declared in config
+    onlyModeratorsMarkets: Object.keys(config.whitelist).length > 0, // Show only markets created by moderators if they're declared in config
     defaultAccount,
   })
 
-  const isModerator = process.env.WHITELIST[defaultAccount] !== undefined
+  const isModerator = config.whitelist[defaultAccount] !== undefined
 
   return {
     markets: sortMarkets(filteredMarktes, filterOrderBy && filterOrderBy.value),
