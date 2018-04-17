@@ -9,7 +9,9 @@ import selector from './selector'
 class ScoreBoard extends React.Component {
   componentDidMount() {
     this.props.fetchTournamentUsers()
-    this.props.fetchTournamentUserData(this.props.myAccount)
+    if (this.props.myAccount) {
+      this.props.fetchTournamentUserData(this.props.myAccount)
+    }
   }
 
   render() {
