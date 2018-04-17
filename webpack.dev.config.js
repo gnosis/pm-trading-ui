@@ -6,7 +6,10 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 
 const pkg = require('./package.json')
-const { config, interfaceConfig } = require('./configuration')
+
+const configLoader = require('./configuration')
+
+const { config, interfaceConfig } = configLoader(process.env.GNOSIS_ENV || 'local')
 
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
