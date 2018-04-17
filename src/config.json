@@ -41,7 +41,7 @@
     "showScoreboard": true,
     "gameGuide": {
       "display": true,
-      "type": "link",
+      "type": "default",
       "url": "https://gnosis.pm"
     },
     "termsOfUse": {

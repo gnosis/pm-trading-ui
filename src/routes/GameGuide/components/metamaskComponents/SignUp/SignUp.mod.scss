@@ -1,0 +1,10 @@
+@import '../../../../../scss/vars';
+.link {
+  text-decoration: underline;
+  color: $link-color;
+
+  &:visited,
+  &:active {
+    color: $link-color;
+  }
+}
