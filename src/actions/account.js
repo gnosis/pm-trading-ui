@@ -8,7 +8,7 @@ const tournamentConfig = getFeatureConfig('tournament')
 export const requestMainnetAddress = () => async (dispatch, getState) => {
   const state = getState()
   const provider = getActiveProvider(state).toJS()
-  const registrationContractAddress = tournamentConfig.registration.address
+  const registrationContractAddress = tournamentConfig.registration.contractAddress
   const mainnetAddress = await getMainnetAddressForRinkebyAccount(registrationContractAddress, provider.account)
   dispatch(updateProvider({
     provider: provider.name,
