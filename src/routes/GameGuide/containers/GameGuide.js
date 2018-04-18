@@ -1,4 +1,4 @@
-import GameGuide from '../components/Layout'
+import GameGuide from '../components'
 
 export default GameGuide
 
