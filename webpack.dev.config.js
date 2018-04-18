@@ -147,8 +147,8 @@ module.exports = {
       NODE_ENV: 'development',
     }),
     new webpack.DefinePlugin({
-      GNOSIS_CONFIG: JSON.stringify(config),
-      GNOSIS_INTERFACE: JSON.stringify(interfaceConfig),
+      'window.GNOSIS_CONFIG': JSON.stringify(config),
+      'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
     }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
   ],
