@@ -1,9 +1,5 @@
-
-
-const getGlobal = key => (typeof global !== 'undefined' && global[key]) || (typeof window !== 'undefined' && window[key]) || {}
-
-const config = getGlobal('GNOSIS_CONFIG')
-const configInterface = getGlobal('GNOSIS_INTERFACE')
+const config = window.GNOSIS_CONFIG
+const configInterface = window.GNOSIS_INTERFACE
 
 export const getConfiguration = () => config
 export const getInterfaceConfiguration = () => configInterface
