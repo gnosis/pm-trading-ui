@@ -28,7 +28,7 @@ module.exports = (env) => {
     const loadedInterfaceConfig = require(`./${configPath}/interface.config.json`)
 
     config = Object.assign(config, loadedConfig)
-    interfaceConfig = Object.assign(config, loadedInterfaceConfig)
+    interfaceConfig = Object.assign(interfaceConfig, loadedInterfaceConfig)
   })
 
   return {

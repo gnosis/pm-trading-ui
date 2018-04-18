@@ -125,8 +125,8 @@ module.exports = {
       NODE_ENV: 'production',
     }),
     new webpack.DefinePlugin({
-      GNOSIS_CONFIG: JSON.stringify(config),
-      GNOSIS_INTERFACE: JSON.stringify(interfaceConfig),
+      'window.GNOSIS_CONFIG': JSON.stringify(config),
+      'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
     }),
     new UglifyJsWebpackPlugin({
       sourceMap: true,
