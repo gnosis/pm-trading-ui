@@ -1,27 +1,18 @@
+const path = require('path')
+const webpack = require('webpack')
+
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
-const config = require('./src/config.json')
-const path = require('path')
-const webpack = require('webpack')
+
 const pkg = require('./package.json')
+
+const configLoader = require('./configuration')
+
+const { config, interfaceConfig } = configLoader(process.env.GNOSIS_ENV || 'local')
 
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
-
-const isTournament = config.interface && config.interface.tournament
-const defaultFavicon = isTournament ? 'assets/img/gnosis_apollo_favicon.png' : 'assets/img/gnosis_logo_favicon.png'
-const faviconPath =
-  config.interface && config.interface.faviconPath && isTournament ? config.interface.faviconPath : defaultFavicon
-const whitelist = config.developmentWhitelist
-
-const gnosisDbUrl =
-  process.env.GNOSISDB_URL ||
-  `${config.gnosisdb.protocol}://${config.gnosisdb.hostDev}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
-
-const ethereumUrl =
-  process.env.ETHEREUM_URL ||
-  `${config.ethereum.protocol}://${config.ethereum.hostDev}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -118,7 +109,7 @@ module.exports = {
     port: 5000,
     proxy: {
       '/api': {
-        target: gnosisDbUrl,
+        target: config.gnosisdb.host,
         secure: false,
       },
     },
@@ -130,7 +121,7 @@ module.exports = {
   plugins: [
     new CaseSensitivePathsPlugin(),
     new FaviconsWebpackPlugin({
-      logo: faviconPath,
+      logo: interfaceConfig.logo.favicon,
       // Generate a cache file with control hashes and
       // don't rebuild the favicons until those hashes change
       persistentCache: true,
@@ -154,13 +145,10 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       VERSION: `${version}#${build}`,
       NODE_ENV: 'development',
-      GNOSISDB_URL: gnosisDbUrl,
-      ETHEREUM_URL: ethereumUrl,
-      WHITELIST: whitelist,
-      INTERCOM_ID: null,
-      RAVEN_ID: null,
-      TRAVIS_BUILD_ID: null,
-      TRAVIS_BRANCH: null,
+    }),
+    new webpack.DefinePlugin({
+      GNOSIS_CONFIG: JSON.stringify(config),
+      GNOSIS_INTERFACE: JSON.stringify(interfaceConfig),
     }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
   ],

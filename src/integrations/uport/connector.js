@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Connect, SimpleSigner } from 'uport-connect'
-import { getUportOptions, isTournament, getTermsOfUseURL } from 'utils/configuration'
+import { getProviderIntegrationConfig, isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import Bold from 'components/layout/Bold'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
@@ -9,10 +9,12 @@ import { isValid as isValidPushNotificaiton } from './uportNotifications'
 import { isValid as isValidQrCredential } from './uportQr'
 import { notificationsEnabled } from './connector'
 
+const termsOfUseConfig = getFeatureConfig('termsOfUse')
+
 const {
   clientId, appName, network, privateKey,
-} = getUportOptions()
-const tournament = isTournament()
+} = getProviderIntegrationConfig('uport')
+const tournamentEnabled = isFeatureEnabled('tournament')
 
 export const UPORT_KEY = `${appName.replace(' ', '_')}_USER`
 
@@ -38,7 +40,7 @@ const LoginUport = () => (
       {` you agree to ${appName}'s `}
       <Bold>
         {/* <Link>s rendered outside of a router context cannot navigate */}
-        <a style={TermsStyle} href={getTermsOfUseURL()} target="_blank">
+        <a style={TermsStyle} href={termsOfUseConfig.url} target="_blank">
           {'terms of use'}
         </a>
       </Bold>
@@ -50,7 +52,7 @@ let uport = null
 // Get clientId, privateKey from
 // http://developer.uport.me/guides.html#register-your-app
 export const connect = () => {
-  if (!tournament) {
+  if (!tournamentEnabled) {
     uport = new Connect('Gnosis', {
       clientId: '2ozUxc1QzFVo7b51giZsbkEsKw2nJ87amAf',
       network: 'rinkeby',

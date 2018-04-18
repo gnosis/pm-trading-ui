@@ -1,5 +1,6 @@
-import { shouldUseMetamask } from 'utils/configuration'
+import { getProviderConfig } from 'utils/features'
+import { WALLET_PROVIDER } from 'integrations/constants'
 import LayoutMetamask from './LayoutMetamask'
 import LayoutUport from './LayoutUport'
 
-export default shouldUseMetamask() ? LayoutMetamask : LayoutUport
+export default getProviderConfig().default === WALLET_PROVIDER ? LayoutMetamask : LayoutUport

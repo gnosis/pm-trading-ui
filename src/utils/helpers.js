@@ -6,10 +6,13 @@ import { HEX_VALUE_REGEX, OUTCOME_TYPES, MARKET_STAGES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
 import Uport from 'integrations/uport'
+import { getConfiguration } from 'utils/features'
 
-import dictionary from 'randomNames.json'
+import dictionary from 'assets/randomNames.json'
 
-export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
+const config = getConfiguration()
+
+const ethereumUrl = `${config.ethereum.protocol}://${config.ethereum.host}`
 
 /**
  * Adds the `0x` prefix to the incoming string value
@@ -18,6 +21,8 @@ export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substr
 export const add0xPrefix = value => (startsWith(value, '0x') ? value : `0x${value}`)
 
 export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix(value) : value)
+
+export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
 
 export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
 
@@ -136,9 +141,9 @@ export const timeoutCondition = (timeout, rejectReason) =>
  * @param {*string} accountAddress
  */
 export const isModerator = accountAddress =>
-  (Object.keys(process.env.WHITELIST).length ? process.env.WHITELIST[accountAddress] !== undefined : false)
+  (Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false)
 
-export const getModerators = () => process.env.WHITELIST
+export const getModerators = () => config.whitelist
 
 export const getGnosisJsOptions = (provider) => {
   const opts = {}
@@ -154,7 +159,7 @@ export const getGnosisJsOptions = (provider) => {
     opts.defaultAccount = provider.account
   } else {
     // Default remote node
-    opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${process.env.ETHEREUM_URL}`)).currentProvider
+    opts.ethereum = new Web3(new Web3.providers.HttpProvider(`${ethereumUrl}`)).currentProvider
   }
   opts.logger = 'console'
 

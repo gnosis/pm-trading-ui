@@ -1,12 +1,14 @@
 import { getMainnetAddressForRinkebyAccount, setMainnetAddressForRinkebyAccount } from 'api'
 import { getActiveProvider } from 'integrations/store/selectors'
 import { updateProvider } from 'integrations/store/actions'
-import { getRegistrationContractAddress } from 'utils/configuration'
+import { getFeatureConfig } from 'utils/features'
+
+const tournamentConfig = getFeatureConfig('tournament')
 
 export const requestMainnetAddress = () => async (dispatch, getState) => {
   const state = getState()
   const provider = getActiveProvider(state).toJS()
-  const registrationContractAddress = getRegistrationContractAddress()
+  const registrationContractAddress = tournamentConfig.registration.address
   const mainnetAddress = await getMainnetAddressForRinkebyAccount(registrationContractAddress, provider.account)
   dispatch(updateProvider({
     provider: provider.name,
@@ -18,7 +20,7 @@ export const requestMainnetAddress = () => async (dispatch, getState) => {
 export const updateMainnetAddress = mainnetAddress => async (dispatch, getState) => {
   const state = getState()
   const provider = getActiveProvider(state).toJS()
-  const registrationContractAddress = getRegistrationContractAddress()
+  const registrationContractAddress = tournamentConfig.registration.address
   await setMainnetAddressForRinkebyAccount(registrationContractAddress, mainnetAddress)
 
   dispatch(updateProvider({

@@ -4,42 +4,16 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-const config = require('./src/config.json')
 const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
 
+const configLoader = require('./configuration')
+
+const { config, interfaceConfig } = configLoader(process.env.GNOSIS_ENV || 'development')
+
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
-const branch = process.env.TRAVIS_BRANCH || 'development'
-
-const isTournament = config.interface && config.interface.tournament
-const defaultFavicon = isTournament ? 'assets/img/gnosis_apollo_favicon.png' : 'assets/img/gnosis_logo_favicon.png'
-const faviconPath =
-  config.interface && config.interface.faviconPath && isTournament ? config.interface.faviconPath : defaultFavicon
-
-const isProductionEnv = branch.indexOf('release/') > -1
-const isStagingEnv = branch === 'master'
-let whitelist
-
-if (isProductionEnv) {
-  console.log('Using Production Whitelist')
-  whitelist = config.productionWhitelist
-} else if (isStagingEnv) {
-  console.log('Using Staging Whitelist')
-  whitelist = config.stagingWhitelist
-} else {
-  console.log('Using Development Whitelist')
-  whitelist = config.developmentWhitelist
-}
-
-const gnosisDbUrl =
-  process.env.GNOSISDB_URL ||
-  `${config.gnosisdb.protocol}://${config.gnosisdb.hostProd}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
-
-const ethereumUrl =
-  process.env.ETHEREUM_URL ||
-  `${config.ethereum.protocol}://${config.ethereum.hostProd}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
   devtool: 'source-map',
@@ -125,7 +99,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
-      logo: faviconPath,
+      logo: config.logo.favicon,
       // Generate a cache file with control hashes and
       // don't rebuild the favicons until those hashes change
       persistentCache: true,
@@ -149,13 +123,10 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       VERSION: `${version}#${build}`,
       NODE_ENV: 'production',
-      GNOSISDB_URL: gnosisDbUrl,
-      ETHEREUM_URL: ethereumUrl,
-      WHITELIST: whitelist,
-      INTERCOM_ID: undefined,
-      RAVEN_ID: config.ravenPublicDSN,
-      TRAVIS_BUILD_ID: undefined,
-      TRAVIS_BRANCH: undefined,
+    }),
+    new webpack.DefinePlugin({
+      GNOSIS_CONFIG: JSON.stringify(config),
+      GNOSIS_INTERFACE: JSON.stringify(interfaceConfig),
     }),
     new UglifyJsWebpackPlugin({
       sourceMap: true,
