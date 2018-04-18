@@ -37,7 +37,7 @@ const CategoricalGraph = ({ data }) => {
                 </linearGradient>
               ))}
             </defs>
-            <XAxis className="axis axis--x" dataKey="date" tickSize={0} scale="auto" tick={DateAxisTick} />
+            <XAxis className="axis axis--x" dataKey="date" tickSize={0} tick={DateAxisTick} />
             <YAxis className="axis axis--y" tickFormatter={percentageFormatter} unit="%" type="number" />
             <Tooltip className="tooltip" content={<CustomTooltip />} />
             <Legend />
