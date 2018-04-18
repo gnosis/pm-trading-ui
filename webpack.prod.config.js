@@ -99,7 +99,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
-      logo: config.logo.favicon,
+      logo: interfaceConfig.logo.favicon,
       // Generate a cache file with control hashes and
       // don't rebuild the favicons until those hashes change
       persistentCache: true,
