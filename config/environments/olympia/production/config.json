@@ -1,7 +1,7 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "gnosisdb.dev.gnosisdev.com",
+    "host": "gnosisolympia-prod.gnosisdev.com",
     "port": 443
   },
   "ethereum": {
@@ -10,6 +10,7 @@
     "port": 443
   },
   "whitelist": {
-    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama"
+    "0xb2e87b8ce41184e0688027f370a972a436abe77e": "Giacomo",
+    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama",
   }
 }

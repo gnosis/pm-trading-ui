@@ -1,0 +1,10 @@
+{
+  "tournament": {
+    "enabled": true,
+    "name": "Olympia",
+    "registration": {
+      "enabled": true,
+      "contractAddress": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13"
+    }
+  }
+}
