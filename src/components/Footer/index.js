@@ -3,12 +3,12 @@ import Markdown from 'react-markdown'
 import cn from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
-import { getFooterContent } from 'utils/configuration'
+import { getFeatureConfig } from 'utils/features'
 import footerText from './footerText.txt'
 import style from './Footer.mod.scss'
 
 const cx = cn.bind(style)
-const { type, source, markdown } = getFooterContent()
+const { type, source, markdown } = getFeatureConfig('footer')
 
 const Footer = () => {
   let text

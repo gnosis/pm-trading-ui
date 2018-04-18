@@ -4,42 +4,16 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-const config = require('./src/config.json')
 const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
 
+const configLoader = require('./configuration')
+
+const { config, interfaceConfig } = configLoader(process.env.GNOSIS_ENV || 'development')
+
 const version = process.env.BUILD_VERSION || pkg.version
 const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
-const branch = process.env.TRAVIS_BRANCH || 'development'
-
-const isTournament = config.interface && config.interface.tournament
-const defaultFavicon = isTournament ? 'assets/img/gnosis_apollo_favicon.png' : 'assets/img/gnosis_logo_favicon.png'
-const faviconPath =
-  config.interface && config.interface.faviconPath && isTournament ? config.interface.faviconPath : defaultFavicon
-
-const isProductionEnv = branch.indexOf('release/') > -1
-const isStagingEnv = branch === 'master'
-let whitelist
-
-if (isProductionEnv) {
-  console.log('Using Production Whitelist')
-  whitelist = config.productionWhitelist
-} else if (isStagingEnv) {
-  console.log('Using Staging Whitelist')
-  whitelist = config.stagingWhitelist
-} else {
-  console.log('Using Development Whitelist')
-  whitelist = config.developmentWhitelist
-}
-
-const gnosisDbUrl =
-  process.env.GNOSISDB_URL ||
-  `${config.gnosisdb.protocol}://${config.gnosisdb.hostProd}${config.gnosisdb.port ? `:${config.gnosisdb.port}` : ''}`
-
-const ethereumUrl =
-  process.env.ETHEREUM_URL ||
-  `${config.ethereum.protocol}://${config.ethereum.hostProd}${config.ethereum.port ? `:${config.ethereum.port}` : ''}`
 
 module.exports = {
   devtool: 'source-map',
@@ -49,7 +23,7 @@ module.exports = {
   output: {
     publicPath: '/',
     path: `${__dirname}/dist`,
-    filename: 'bundle.js',
+    filename: '[hash].js',
   },
   resolve: {
     symlinks: false,
@@ -69,15 +43,46 @@ module.exports = {
         loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
       },
       {
-        test: /\.(scss|css)$/,
+        test: /\.mod\.(scss|css)$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            'css-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                localIdentName: '[name]__[local]__[hash:base64:5]',
+                importLoaders: 2,
+              },
+            },
             {
               loader: 'postcss-loader',
             },
-            { loader: 'sass-loader' },
+            {
+              loader: 'sass-loader',
+              options: { includePaths: [path.resolve(__dirname, './src')] },
+            },
+          ],
+        }),
+      },
+      {
+        test: /^((?!\.mod).)*\.(css|scss)$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 2,
+              },
+            },
+            {
+              loader: 'postcss-loader',
+            },
+            {
+              loader: 'sass-loader',
+              options: { includePaths: [path.resolve(__dirname, './src')] },
+            },
           ],
         }),
       },
@@ -94,7 +99,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('styles.css'),
     new FaviconsWebpackPlugin({
-      logo: faviconPath,
+      logo: config.logo.favicon,
       // Generate a cache file with control hashes and
       // don't rebuild the favicons until those hashes change
       persistentCache: true,
@@ -118,13 +123,10 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       VERSION: `${version}#${build}`,
       NODE_ENV: 'production',
-      GNOSISDB_URL: gnosisDbUrl,
-      ETHEREUM_URL: ethereumUrl,
-      WHITELIST: whitelist,
-      INTERCOM_ID: undefined,
-      RAVEN_ID: config.ravenPublicDSN,
-      TRAVIS_BUILD_ID: undefined,
-      TRAVIS_BRANCH: undefined,
+    }),
+    new webpack.DefinePlugin({
+      GNOSIS_CONFIG: JSON.stringify(config),
+      GNOSIS_INTERFACE: JSON.stringify(interfaceConfig),
     }),
     new UglifyJsWebpackPlugin({
       sourceMap: true,

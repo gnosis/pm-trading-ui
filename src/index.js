@@ -10,20 +10,23 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import 'scss/style.scss'
 import initGoogleAnalytics from 'utils/analytics/init'
-import { isTournament, getProvider } from 'utils/configuration'
+import { isFeatureEnabled, getProviderConfig } from 'utils/features'
 import store from 'store'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { setMomentRelativeTime } from './setup'
+
+const providerConfig = getProviderConfig()
+const tournamentEnabled = isFeatureEnabled('tournament')
 
 setMomentRelativeTime()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 store.dispatch(initReadOnlyGnosis())
-if (!isTournament()) {
+if (tournamentEnabled) {
   store.dispatch(initProviders())
 } else {
-  const tournamentProvider = WALLET_PROVIDER[getProvider()]
+  const tournamentProvider = WALLET_PROVIDER[providerConfig.default]
   store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE, tournamentProvider] }))
 }
 

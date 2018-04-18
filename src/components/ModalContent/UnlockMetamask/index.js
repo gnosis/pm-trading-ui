@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
-import { getTournamentName } from 'utils/configuration'
+import { getFeatureConfig } from 'utils/features'
 import MetamaskIcon from 'assets/img/icons/icon_metamask_color.svg'
 import css from './UnlockMetamask.mod.scss'
 
@@ -12,14 +12,14 @@ const logoStyle = {
   height: 100,
 }
 
-const tournamentName = getTournamentName()
+const tournamentConfig = getFeatureConfig('tournament')
 
 const UnlockMetamask = ({ closeModal }) => (
   <div className={cx('unlockMetamask')}>
     <button className={cx('closeButton')} onClick={closeModal} />
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
     <h3 className={cx('heading')}>Unlock your MetaMask wallet</h3>
-    <p className={cx('text')}>Please unlock your MetaMask wallet to start using {tournamentName}.</p>
+    <p className={cx('text')}>Please unlock your MetaMask wallet to start using {tournamentConfig.name}.</p>
   </div>
 )
 

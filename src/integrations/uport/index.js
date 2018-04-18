@@ -4,10 +4,11 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import { fetchTournamentUserData } from 'routes/Scoreboard/store/actions'
 import { weiToEth, hexWithoutPrefix } from 'utils/helpers'
-import { getTokenAddress, getUportOptions } from 'utils/configuration'
+import { getCollateralToken, getProviderIntegrationConfig } from 'utils/features'
 import initUportConnector, { connect, connectorLogOut, isUserConnected } from './connector'
 
-export const { notificationsEnabled = false } = getUportOptions()
+const collateralToken = getCollateralToken()
+export const { notificationsEnabled = false } = getProviderIntegrationConfig('uport')
 
 class Uport extends InjectedWeb3 {
   static providerName = WALLET_PROVIDER.UPORT
@@ -93,12 +94,11 @@ class Uport extends InjectedWeb3 {
    */
   async getBalance(account) {
     const userAccount = account || this.account
-    const tokenAddress = getTokenAddress()
     if (!userAccount) {
       throw new Error('No Account available')
     }
 
-    const balance = await getTokenBalance(tokenAddress, userAccount)
+    const balance = await getTokenBalance(collateralToken.address, userAccount)
 
     if (typeof balance !== 'undefined') {
       return weiToEth(balance.toString())

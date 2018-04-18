@@ -1,4 +1,4 @@
-import { isTournament, getProvider } from 'utils/configuration'
+import { isFeatureEnabled, getProviderConfig } from 'utils/features'
 import Metamask from './metamask'
 import Parity from './parity'
 import Remote from './remote'
@@ -7,10 +7,11 @@ import { WALLET_PROVIDER } from './constants'
 
 // eslint-disable-next-line
 let providers = { Metamask, Parity, Remote }
-const tournament = isTournament()
+const tournament = isFeatureEnabled('tournament')
+const providerConfig = getProviderConfig()
 
 if (tournament) {
-  const provider = getProvider()
+  const provider = providerConfig.default
   if (provider) {
     if (provider === WALLET_PROVIDER.METAMASK) {
       providers = { [WALLET_PROVIDER.METAMASK]: Metamask, [WALLET_PROVIDER.REMOTE]: Remote }

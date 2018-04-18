@@ -8,6 +8,9 @@ import { filterMarkets, sortMarkets } from 'selectors/market'
 import { getCurrentAccount } from 'integrations/store/selectors'
 
 import { requestMarkets } from 'actions/market'
+import { getConfiguration } from 'utils/features'
+
+const config = getConfiguration()
 
 const mapStateToProps = (state) => {
   // const markets = getMarkets(state)
@@ -21,11 +24,11 @@ const mapStateToProps = (state) => {
     textSearch: filterSearch,
     resolved: filterShowResolved,
     onlyMyMarkets: filterMyMarkets,
-    onlyModeratorsMarkets: Object.keys(process.env.WHITELIST).length > 0, // Show only markets created by moderators if they're declared in config
+    onlyModeratorsMarkets: Object.keys(config.whitelist).length > 0, // Show only markets created by moderators if they're declared in config
     defaultAccount,
   })
 
-  const isModerator = process.env.WHITELIST[defaultAccount] !== undefined
+  const isModerator = config.whitelist[defaultAccount] !== undefined
 
   return {
     markets: sortMarkets(filteredMarktes, filterOrderBy && filterOrderBy.value),

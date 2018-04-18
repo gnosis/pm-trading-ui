@@ -13,7 +13,11 @@ import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
-import { getTokenAddress } from 'utils/configuration'
+import { getCollateralToken, getConfiguration } from 'utils/features'
+
+const collateralToken = getCollateralToken()
+const config = getConfiguration()
+const ethereumUrl = `${config.ethereum.protocol}://${config.ethereum.host}`
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
@@ -67,7 +71,7 @@ export const initGnosis = () => async (dispatch, getState) => {
       await dispatch(setGnosisInitialized({ initialized: true }))
 
       if (newProvider.account) {
-        await getTokenBalance(getTokenAddress(), await getCurrentAccount())
+        await getTokenBalance(collateralToken.address, await getCurrentAccount())
       }
     }
   } catch (error) {
@@ -99,7 +103,7 @@ export const initReadOnlyGnosis = () => async () => {
   // initialize
   try {
     await initReadOnlyGnosisConnection({
-      ethereum: new Web3(new Web3.providers.HttpProvider(process.env.ETHEREUM_URL)).currentProvider,
+      ethereum: new Web3(new Web3.providers.HttpProvider(ethereumUrl)).currentProvider,
     })
   } catch (error) {
     console.error(`Gnosis.js RO initialization Error: ${error}`)

@@ -12,9 +12,9 @@ import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinni
 import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
 import { fetchTournamentUserData, fetchTournamentUsers } from 'routes/Scoreboard/store/actions'
-import { getTokenAddress, getTokenIcon } from 'utils/configuration'
+import { getCollateralToken } from 'utils/features'
 
-const tokenAddress = getTokenAddress()
+const collateralToken = getCollateralToken()
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
@@ -23,10 +23,9 @@ const mapStateToProps = (state) => {
   const accountPredictiveAssets = weiToEth(profitsSelector(state, defaultAccount))
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
-  let defaultTokenAmount = getTokenAmount(state, tokenAddress)
+  let defaultTokenAmount = getTokenAmount(state, collateralToken.address)
   const hasWallet = checkWalletConnection(state)
-  const tokenSymbol = getTokenSymbol(state, tokenAddress)
-  const tokenIcon = getTokenIcon(state)
+  const tokenSymbol = getTokenSymbol(state, collateralToken.address)
 
   if (defaultTokenAmount !== undefined) {
     defaultTokenAmount = weiToEth(defaultTokenAmount.toString())
@@ -43,9 +42,9 @@ const mapStateToProps = (state) => {
     accountTrades,
     gnosisInitialized,
     accountPredictiveAssets,
-    tokenAddress,
     tokenSymbol,
-    tokenIcon,
+    tokenAddress: collateralToken.address,
+    tokenIcon: collateralToken.icon,
   }
 }
 
@@ -56,8 +55,8 @@ const mapDispatchToProps = dispatch => ({
   requestAccountShares: address => dispatch(requestAccountShares(address)),
   changeUrl: url => dispatch(push(url)),
   requestGasPrice: () => dispatch(requestGasPrice()),
-  requestDefaultTokenAmount: account => dispatch(requestTokenBalance(tokenAddress, account)),
-  requestTokenSymbol: () => dispatch(requestTokenSymbol(tokenAddress)),
+  requestDefaultTokenAmount: account => dispatch(requestTokenBalance(collateralToken.address, account)),
+  requestTokenSymbol: () => dispatch(requestTokenSymbol(collateralToken.address)),
   fetchTournamentUsers: () => dispatch(fetchTournamentUsers()),
   fetchTournamentUserData: account => dispatch(fetchTournamentUserData(account)),
 })

@@ -3,14 +3,20 @@ import Decimal from 'decimal.js'
 import * as React from 'react'
 import WalletAddress from 'components/WalletAddress'
 import {
-  getRewardLevels,
-  getBadgeLevels,
-  areBadgesEnabled,
-  areRewardsEnabled,
-  getRewardToken,
-} from 'utils/configuration'
+  isFeatureEnabled,
+  getFeatureConfig,
+} from 'utils/features'
 
 import * as css from './index.css'
+
+const rewardsEnabled = isFeatureEnabled('rewards')
+const badgesEnabled = isFeatureEnabled('badges')
+
+const rewardsConfig = getFeatureConfig('rewards')
+const { levels, rewardToken } = rewardsConfig
+
+const badgesConfig = getFeatureConfig('badges')
+const { ranks } = badgesConfig
 
 const cx = classNames.bind(css)
 
@@ -31,10 +37,9 @@ export const olyCell = prop => (props) => {
 }
 
 export const badgeOf = (value) => {
-  const badgeLevels = getBadgeLevels()
   let badge
 
-  badgeLevels.forEach((badgeLevel) => {
+  ranks.forEach((badgeLevel) => {
     if (
       (value >= badgeLevel.minPredictions && value <= badgeLevel.maxPredictions) || // between min/max
       (value >= badgeLevel.minPredictions && badgeLevel.maxPredictions == null) // above min
@@ -48,7 +53,7 @@ export const badgeOf = (value) => {
 }
 
 export const badgeCell = (props) => {
-  if (areBadgesEnabled()) {
+  if (badgesEnabled) {
     const badge = badgeOf(props.row.predictions)
 
     if (!badge) {
@@ -60,13 +65,12 @@ export const badgeCell = (props) => {
 }
 
 export const rewardCell = (props) => {
-  if (areRewardsEnabled()) {
-    const rewardLevels = getRewardLevels()
+  if (rewardsEnabled) {
     const value = props.row.currentRank
 
     let reward = { value: 0 }
 
-    rewardLevels.forEach((rewardLevel) => {
+    levels.forEach((rewardLevel) => {
       if (
         (value >= rewardLevel.minRank && value <= rewardLevel.maxRank) || // between min/max
         (value >= rewardLevel.minRank && rewardLevel.maxRank == null) // above min
@@ -76,11 +80,9 @@ export const rewardCell = (props) => {
     })
     const style = reward ? { color: '#90712b', letterSpacing: '0.5px' } : undefined
 
-    const { symbol } = getRewardToken()
-
     return (
       <span style={style}>
-        {reward.value} {symbol}
+        {reward.value} {rewardToken.symbol}
       </span>
     )
   }
