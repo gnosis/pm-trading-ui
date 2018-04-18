@@ -3,12 +3,12 @@ import PageFrame from 'components/layout/PageFrame'
 import Title from 'components/layout/Title'
 import * as React from 'react'
 import Youtube from 'react-youtube'
-import SignUp from './SignUp'
-import LogIn from './LogIn'
-import MarketOverview from './MarketOverview'
-import DashboardOverview from './DashboardOverview'
-import MakePrediction from './MakePrediction'
-import Profits from './Profits'
+import SignUp from './uPortComponents/SignUp'
+import LogIn from './uPortComponents/LogIn'
+import MarketOverview from './uPortComponents/MarketOverview'
+import DashboardOverview from './uPortComponents/DashboardOverview'
+import MakePrediction from './uPortComponents/MakePrediction'
+import Profits from './uPortComponents/Profits'
 
 const videoOpts = {
   height: '260',
