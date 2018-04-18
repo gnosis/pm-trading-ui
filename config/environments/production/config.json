@@ -1,12 +1,12 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "gnosisdb.dev.gnosisdev.com",
+    "host": "gnosisdb-prod.gnosis.pm",
     "port": 443
   },
   "ethereum": {
     "protocol": "https",
-    "host": "rinkeby.infura.io",
+    "host": "mainnet.infura.io",
     "port": 443
   },
   "whitelist": {
