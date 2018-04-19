@@ -4,7 +4,7 @@ import classNames from 'classnames/bind'
 
 import Form from './Form'
 
-import css from '../Filter.mod.scss'
+import css from './Filter.mod.scss'
 
 const cx = classNames.bind(css)
 

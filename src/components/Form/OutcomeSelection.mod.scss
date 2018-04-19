@@ -71,8 +71,7 @@
 
 .outcomeBar {
   transition: width 1s ease-in-out;
-
-  height: 15px;
+  max-width: 69%;
   margin: 0 5px;
 
   border-top-right-radius: 5px;

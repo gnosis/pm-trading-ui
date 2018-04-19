@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import MarketList from '../../components'
+import MarketList from '../../components/MarketList'
 import actions from './actions'
 import selector from './selector'
 
