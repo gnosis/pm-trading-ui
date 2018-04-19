@@ -24,7 +24,12 @@ import {
   isGasCostFetched,
   isGasPriceFetched,
 } from 'routes/MarketDetails/store/selectors'
-import { checkWalletConnection, getCurrentAccount, getCurrentBalance } from 'integrations/store/selectors'
+import {
+  checkWalletConnection,
+  getCurrentAccount,
+  getCurrentBalance,
+  getRegisteredMainnetAddress,
+} from 'integrations/store/selectors'
 import { isModerator, getModerators } from 'utils/helpers'
 import { getTokenSymbol } from 'selectors/blockchain'
 
@@ -67,6 +72,7 @@ const mapStateToProps = (state, ownProps) => {
     gasPrice: getGasPrice(state),
     currentBalance: getCurrentBalance(state),
     collateralTokenSymbol: getTokenSymbol(state, market.event?.collateralToken),
+    mainnetAddress: getRegisteredMainnetAddress(state),
   }
 }
 
