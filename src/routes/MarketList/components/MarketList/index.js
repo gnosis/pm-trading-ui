@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { List } from 'immutable'
 import PropTypes from 'prop-types'
-import MarketOverview from './MarketOverview'
-import Markets from './Markets'
-import Filter from './Filter/index'
-import MarketStats from './MarketStats'
-import MarketsTitle from './MarketsTitle'
-import NoMarkets from './NoMarkets'
+import MarketOverview from '../MarketOverview'
+import Markets from '../Markets'
+import Filter from '../Filter/index'
+import MarketStats from '../MarketStats'
+import MarketsTitle from '../MarketsTitle'
+import NoMarkets from '../NoMarkets'
 
 // eslint-disable-next-line
 class MarketList extends Component {

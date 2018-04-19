@@ -36,7 +36,7 @@ const LabeledSpinner = ({
           </linearGradient>
         </defs>
         <circle
-          id="inner"
+          className={cx('inner')}
           r={r}
           cx={size / 2}
           cy={size / 2}
@@ -47,7 +47,7 @@ const LabeledSpinner = ({
         />
         {showBar && (
           <circle
-            id="bar"
+            className={cx('bar')}
             r={r}
             cx={size / 2}
             cy={size / 2}
@@ -76,7 +76,7 @@ LabeledSpinner.propTypes = {
   progress: PropTypes.number,
   modifier: PropTypes.string,
   showLabel: PropTypes.bool,
-  label: PropTypes.any,
+  label: PropTypes.string,
   strokeWidthPx: PropTypes.number,
   fontSizePx: PropTypes.number,
   showBar: PropTypes.bool,

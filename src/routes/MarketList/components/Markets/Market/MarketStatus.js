@@ -3,11 +3,10 @@ import Countdown from 'components/Countdown'
 import PropTypes from 'prop-types'
 import React from 'react'
 import classNames from 'classnames/bind'
-
-import css from '../Market.mod.scss'
-
 import { RESOLUTION_TIME } from 'utils/constants'
 import Icon from 'components/Icon'
+
+import css from './Market.mod.scss'
 
 const cx = classNames.bind(css)
 
