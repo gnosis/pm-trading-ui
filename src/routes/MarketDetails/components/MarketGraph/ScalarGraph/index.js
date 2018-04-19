@@ -43,7 +43,6 @@ const ScalarGraph = ({
             <XAxis
               className="axis axis--x"
               dataKey="date"
-              scale="auto"
               tick={DateAxisTick}
               domain={[data[0].date, new Date().valueOf()]}
             />

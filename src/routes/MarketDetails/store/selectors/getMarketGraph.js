@@ -29,31 +29,30 @@ const getFirstGraphPoint = (market) => {
 
 const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().valueOf() })
 
-const getMarketGraph = market => createSelector(
-  getMarketTrades(market.address),
-  (trades) => {
+const getMarketGraph = market =>
+  createSelector(getMarketTrades(market.address), (trades) => {
     const firstPoint = getFirstGraphPoint(market)
 
     if (!trades.length) {
-      return []
+      return [firstPoint, firstPoint]
     }
 
-    const graphPoints = trades.reverse().map(trade => trade.marginalPrices.reduce(
-      (prev, current, outcomeIndex) => {
-        const toReturn = { ...prev }
-        toReturn[getOutcomeName(market, outcomeIndex)] = current
-        return toReturn
-      },
-      {
-        date: new Date(trade.date).valueOf(),
-        scalarPoint:
-          OUTCOME_TYPES.SCALAR === market.event.type ? normalizeScalarPoint(trade.marginalPrices, market) : undefined,
-      },
-    ))
+    const graphPoints = trades.reverse().map(trade =>
+      trade.marginalPrices.reduce(
+        (prev, current, outcomeIndex) => {
+          const toReturn = { ...prev }
+          toReturn[getOutcomeName(market, outcomeIndex)] = current
+          return toReturn
+        },
+        {
+          date: new Date(trade.date).valueOf(),
+          scalarPoint:
+            OUTCOME_TYPES.SCALAR === market.event.type ? normalizeScalarPoint(trade.marginalPrices, market) : undefined,
+        },
+      ))
     const lastPoint = trades.length ? getLastGraphPoint(graphPoints) : { ...firstPoint, date: new Date().valueOf() }
 
     return [firstPoint, ...graphPoints, lastPoint]
-  },
-)
+  })
 
 export default getMarketGraph
