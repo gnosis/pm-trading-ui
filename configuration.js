@@ -31,8 +31,9 @@ module.exports = (env, envVarsConfig = {}, envVarsInterface = {}) => {
     interfaceConfig = Object.assign(interfaceConfig, loadedInterfaceConfig)
   })
 
-  Object.assign(config, envVarsConfig)
-  Object.assign(interfaceConfig, envVarsInterface)
+  // use env config vars
+  Object.assign(config, envVarsConfig) // GNOSIS_CONFIG vars
+  Object.assign(interfaceConfig, envVarsInterface) // GNOSIS_INTERFACE vars
 
   return {
     config,

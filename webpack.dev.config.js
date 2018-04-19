@@ -1,15 +1,15 @@
-const path = require('path')
-const webpack = require('webpack')
-
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+
+const path = require('path')
+const webpack = require('webpack')
 
 const pkg = require('./package.json')
 
 const configLoader = require('./configuration')
 
-module.exports = (env) => {
+module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
   const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
