@@ -18,7 +18,7 @@ const showExpandableTournament = (props) => {
   let showExpandable = false
   if (providerConfig.default === WALLET_PROVIDER.METAMASK && !!props.defaultAccount && !!props.mainnetAddress) {
     showExpandable = true
-  } else if (providerConfig === WALLET_PROVIDER.UPORT && props.defaultAccount) {
+  } else if (providerConfig === WALLET_PROVIDER.UPORT && !!props.defaultAccount) {
     showExpandable = true
   }
 
