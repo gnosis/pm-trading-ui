@@ -2,7 +2,7 @@
 
 .labeledSpinner {
   position: relative;
-  
+
   &.success {
     #bar {
       stroke: $active-highlight-success;
@@ -21,13 +21,13 @@
     }
   }
 
-  #inner {
+  .inner {
     transform-origin: 50%;
     fill: transparent;
     stroke: darken($bg-color-muted, 10%);
-  } 
+  }
 
-  #bar {
+  .bar {
     transform: rotate(-90deg);
     transform-origin: 50%;
     fill: transparent;
@@ -54,6 +54,10 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg) };
-  100% { transform: Rotate(360deg) };
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: Rotate(360deg);
+  }
 }

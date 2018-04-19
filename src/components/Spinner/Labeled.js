@@ -19,7 +19,7 @@ const LabeledSpinner = ({
   minBarSize,
 }) => {
   const size = Math.min(width, height)
-  const r = (size / 2) - strokeWidthPx
+  const r = size / 2 - strokeWidthPx
   const d = r * 2
   const strokeDashoffset = Math.abs(Math.max(progress, minBarSize / 100) - 1) * Math.PI * d
 
@@ -36,7 +36,7 @@ const LabeledSpinner = ({
           </linearGradient>
         </defs>
         <circle
-          id="inner"
+          className={cx('inner')}
           r={r}
           cx={size / 2}
           cy={size / 2}
@@ -47,7 +47,7 @@ const LabeledSpinner = ({
         />
         {showBar && (
           <circle
-            id="bar"
+            className={cx('bar')}
             r={r}
             cx={size / 2}
             cy={size / 2}
