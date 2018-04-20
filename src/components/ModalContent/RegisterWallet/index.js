@@ -23,6 +23,7 @@ const RegisterMainnetAddress = ({
     await updateMainnetAddress(currentAccount)
     closeModal()
   }
+
   const disabled = gasPrice
     .mul(registrationGasCost)
     .div(1e18)
