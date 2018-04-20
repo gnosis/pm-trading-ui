@@ -109,6 +109,7 @@ SharesTable.propTypes = {
   selectedSellAmount: PropTypes.string,
   sellShares: PropTypes.func,
   match: ReactRouterMatchShape,
+  changeUrl: PropTypes.func.isRequired,
 }
 
 SharesTable.defaultProps = {
