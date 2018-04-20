@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
@@ -18,7 +19,10 @@ import { triedToConnect } from 'selectors/blockchain'
 import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
 import { isFeatureEnabled } from 'utils/features'
 
-import './app.scss'
+import style from './app.mod.scss'
+import transitionStyles from './transitions.mod.scss'
+
+const cx = cn.bind(style)
 
 class App extends Component {
   state = {
@@ -39,8 +43,8 @@ class App extends Component {
   render() {
     if (!this.props.blockchainConnection) {
       return (
-        <div className="appContainer">
-          <div className="loader-container">
+        <div className={cx('appContainer')}>
+          <div className={cx('loader-container')}>
             <IndefiniteSpinner width={100} height={100} />
             <h1>Connecting</h1>
           </div>
@@ -56,7 +60,14 @@ class App extends Component {
         <TransitionGroup>
           <CSSTransition
             key={this.props.location.pathname.split('/')[1]}
-            classNames="page-transition"
+            classNames={{
+              enter: transitionStyles.enter,
+              enterActive: transitionStyles.enterActive,
+              exit: transitionStyles.exit,
+              exitActive: transitionStyles.exitActive,
+              appear: transitionStyles.appear,
+              appearActive: transitionStyles.appearActive,
+            }}
             timeout={timeout}
           >
             {this.props.children}
@@ -66,7 +77,7 @@ class App extends Component {
     }
 
     return (
-      <div className="appContainer">
+      <div className={cx('appContainer')}>
         <HeaderContainer version={process.env.VERSION} />
         {this.props.provider && this.props.provider.account && <TransactionFloaterContainer />}
         {childrenContainer}

@@ -17,12 +17,13 @@
   position: relative;
 
   color: $font-color-light;
+  border: none;
 
   &:hover {
     color: $active-highlight;
   }
 
-  &__title {
+  .title {
     text-transform: uppercase;
     font-weight: 500;
     margin-bottom: 8px;
@@ -30,12 +31,12 @@
     padding-left: 24px;
   }
 
-  &__message {
+  .message {
     color: inherit;
     padding-left: 24px;
   }
 
-  &__icon {
+  .iconContainer {
     position: absolute;
     height: 100%;
     vertical-align: middle;

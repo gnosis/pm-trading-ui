@@ -1,30 +1,34 @@
 import React from 'react'
+import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
+import style from './Notifications.mod.scss'
 
-import './Notifications.scss'
+const cx = cn.bind(style)
 
 const Notifications = ({ notifications, onClick }) => (
-  <div className="notifications">
+  <div>
     {notifications.map(({
       id, title, icon, message,
     }) => (
-      <div key={id} className="notification" onClick={() => onClick()}>
-        <div className="notification__title">
-          {title}
+      <button key={id} className={cx('notification')} onClick={() => onClick()}>
+        <div className={cx('title')}>{title}</div>
+        <div className={cx('iconContainer')}>
+          <div className={cx('icon', `icon--${icon}`)} />
         </div>
-        <div className="notification__icon">
-          <div className={`icon icon--${icon}`} />
-        </div>
-        <div className="notification__message">
-          {message}
-        </div>
-      </div>
+        <div className={cx('message')}>{message}</div>
+      </button>
     ))}
   </div>
 )
 
 Notifications.propTypes = {
   notifications: PropTypes.arrayOf(PropTypes.object),
+  onClick: PropTypes.func,
+}
+
+Notifications.defaultProps = {
+  notifications: [],
+  onClick: () => {},
 }
 
 export default Notifications
