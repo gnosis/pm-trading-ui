@@ -21,13 +21,16 @@ export const updateMainnetAddress = mainnetAddress => async (dispatch, getState)
   const state = getState()
   const provider = getActiveProvider(state).toJS()
   const registrationContractAddress = tournamentConfig.registration.contractAddress
-  await setMainnetAddressForRinkebyAccount(registrationContractAddress, mainnetAddress)
-
-  dispatch(updateProvider({
-    provider: provider.name,
-    ...provider,
-    mainnetAddress,
-  }))
+  try {
+    await setMainnetAddressForRinkebyAccount(registrationContractAddress, mainnetAddress)
+    dispatch(updateProvider({
+      provider: provider.name,
+      ...provider,
+      mainnetAddress,
+    }))
+  } catch (e) {
+    console.error(e)
+  }
 
   dispatch(requestMainnetAddress())
 }

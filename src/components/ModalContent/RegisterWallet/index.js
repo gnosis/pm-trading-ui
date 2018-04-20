@@ -20,13 +20,10 @@ const RegisterMainnetAddress = ({
   registrationGasCost,
 }) => {
   const handleRegistration = async () => {
-    try {
-      await updateMainnetAddress(currentAccount)
-      closeModal()
-    } catch (e) {
-      console.error(e)
-    }
+    await updateMainnetAddress(currentAccount)
+    closeModal()
   }
+
   const disabled = gasPrice
     .mul(registrationGasCost)
     .div(1e18)
