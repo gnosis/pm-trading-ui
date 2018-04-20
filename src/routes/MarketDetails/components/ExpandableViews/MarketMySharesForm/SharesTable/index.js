@@ -30,7 +30,7 @@ class SharesTable extends Component {
       : shareAmount
     try {
       await this.props.sellShares(this.props.market, share, sellAmount, earnings)
-      this.setState({ extendedSellId: undefined })
+      this.props.changeUrl(`/markets/${this.props.market.address}/my-shares`)
     } catch (e) {
       console.error(e)
     }
