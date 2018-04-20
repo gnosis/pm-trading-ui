@@ -27,6 +27,7 @@ class MarketDetail extends Component {
     this.state = {
       marketFetchError: undefined,
     }
+    this.firstFetch = true
   }
 
   componentDidMount() {
@@ -41,6 +42,7 @@ class MarketDetail extends Component {
 
   @autobind
   getAvailableView() {
+    this.firstFetch = false
     return Object.keys(expandableViews).find(view => expandableViews[view].showCondition(this.props))
   }
 
@@ -63,9 +65,12 @@ class MarketDetail extends Component {
       .fetchMarket()
       .then(() => {
         this.props.fetchMarketTrades(this.props.market)
-        const availableView = this.getAvailableView()
-        if (availableView) {
-          this.props.changeUrl(`/markets/${this.props.match.params.id}/${availableView}`)
+        if (this.firstFetch && !this.props.match.params.view) {
+          console.log('redirecting', this.props.match.params.view)
+          const availableView = this.getAvailableView()
+          if (availableView) {
+            this.props.changeUrl(`/markets/${this.props.match.params.id}/${availableView}`)
+          }
         }
 
         if (isMarketResolved(this.props.market)) {

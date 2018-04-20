@@ -19,7 +19,7 @@ const LabeledSpinner = ({
   minBarSize,
 }) => {
   const size = Math.min(width, height)
-  const r = (size / 2) - strokeWidthPx
+  const r = size / 2 - strokeWidthPx
   const d = r * 2
   const strokeDashoffset = Math.abs(Math.max(progress, minBarSize / 100) - 1) * Math.PI * d
 
@@ -76,7 +76,7 @@ LabeledSpinner.propTypes = {
   progress: PropTypes.number,
   modifier: PropTypes.string,
   showLabel: PropTypes.bool,
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   strokeWidthPx: PropTypes.number,
   fontSizePx: PropTypes.number,
   showBar: PropTypes.bool,
