@@ -9,7 +9,7 @@ import Title from 'components/layout/Title'
 import Outcome from 'components/Outcome'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import { add0xPrefix, weiToEth, getOutcomeName, isMarketResolved, isMarketClosed, isModerator } from 'utils/helpers'
+import { weiToEth, getOutcomeName, isMarketResolved, isMarketClosed, isModerator } from 'utils/helpers'
 import { marketShareShape } from 'utils/shapes'
 import {
   COLOR_SCHEME_DEFAULT,
@@ -75,8 +75,9 @@ class Dashboard extends Component {
   }
 
   @autobind
-  handleShowSellView(market, share) {
-    this.props.changeUrl(`/markets/${market.address}/${EXPAND_MY_SHARES}/${add0xPrefix(share.id)}`)
+  handleShowSellView(event, market, share) {
+    event.stopPropagation()
+    this.props.changeUrl(`/markets/${market.address}/${EXPAND_MY_SHARES}/${share.id}`)
   }
 
   @autobind
@@ -176,7 +177,7 @@ class Dashboard extends Component {
 
       const viewMarketFunc = () => this.handleViewMarket(share.market)
       const redeemWinningsFunc = e => this.handleRedeemWinnigs(e, share.market)
-      const showSellViewFunc = () => this.handleShowSellView(share.market, share)
+      const showSellViewFunc = e => this.handleShowSellView(e, share.market, share)
 
       return (
         <div className="dashboardMarket dashboardMarket--onDark" key={share.id} onClick={viewMarketFunc}>

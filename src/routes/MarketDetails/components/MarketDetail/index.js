@@ -65,7 +65,8 @@ class MarketDetail extends Component {
       .fetchMarket()
       .then(() => {
         this.props.fetchMarketTrades(this.props.market)
-        if (this.firstFetch) {
+        if (this.firstFetch && !this.props.match.params.view) {
+          console.log('redirecting', this.props.match.params.view)
           const availableView = this.getAvailableView()
           if (availableView) {
             this.props.changeUrl(`/markets/${this.props.match.params.id}/${availableView}`)
