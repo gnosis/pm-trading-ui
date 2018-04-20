@@ -4,7 +4,7 @@ import classNames from 'classnames/bind'
 
 import Icon from 'components/Icon'
 
-import css from '../Market.mod.scss'
+import css from './Market.mod.scss'
 
 const cx = classNames.bind(css)
 

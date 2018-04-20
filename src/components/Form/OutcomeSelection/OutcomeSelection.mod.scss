@@ -1,4 +1,4 @@
-@import "../../scss/vars.scss";
+@import "../../../scss/vars.scss";
 
 .formOutcomeSelection {
   width: 100%;
@@ -17,6 +17,7 @@
 .outcome {
   margin: 5px 0;
   width: 100%;
+  white-space: nowrap;
   
   padding: $paddings-inputs;
 
@@ -71,8 +72,6 @@
 
 .outcomeBar {
   transition: width 1s ease-in-out;
-
-  height: 15px;
   margin: 0 5px;
 
   border-top-right-radius: 5px;
