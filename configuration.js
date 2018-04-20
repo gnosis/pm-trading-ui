@@ -2,7 +2,7 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = (env) => {
+module.exports = (env, envVarsConfig = {}, envVarsInterface = {}) => {
   const configsToLoad = ['./config/']
 
   const envConfigFolder = `./config/environments/${env}`
@@ -16,7 +16,7 @@ module.exports = (env) => {
   if (!isValidConfigFolder) {
     console.warn(`[WEBPACK]: invalid interface configuration selected: '${env}' - using fallback configuration`)
   } else {
-    // console.info(`[WEBPACK]: loaded env configuration: '${env}'`)
+    console.info(`[WEBPACK]: loaded env configuration: '${env}'`)
     configsToLoad.push(envConfigFolder)
   }
 
@@ -30,6 +30,10 @@ module.exports = (env) => {
     config = Object.assign(config, loadedConfig)
     interfaceConfig = Object.assign(interfaceConfig, loadedInterfaceConfig)
   })
+
+  // use env config vars
+  Object.assign(config, envVarsConfig) // GNOSIS_CONFIG vars
+  Object.assign(interfaceConfig, envVarsInterface) // GNOSIS_INTERFACE vars
 
   return {
     config,
