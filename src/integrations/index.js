@@ -8,7 +8,11 @@ import { WALLET_PROVIDER } from './constants'
 const providersInstances = [Metamask, Parity, Remote]
 
 // eslint-disable-next-line
-let providers = providersInstances.map(instance => instance.constructor.providerName)
+let providers = {}
+
+providersInstances.forEach((instance) => {
+  providers[instance.constructor.providerName] = instance
+})
 
 
 const tournament = isFeatureEnabled('tournament')
