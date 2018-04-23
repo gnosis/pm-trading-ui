@@ -5,7 +5,6 @@ install:
 before_install:
 - rm -rf node_modules
 - npm i -g babel-cli webpack truffle-contract
-after_success:
 - |
   if [ ${TRAVIS_BRANCH} = "master" ]; then
     export GNOSIS_ENV=staging;
@@ -14,6 +13,7 @@ after_success:
     export GNOSIS_ENV=development;
     export NODE_ENV=development;
   fi
+after_success:
 - npm run build
 deploy:
 - provider: s3
