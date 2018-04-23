@@ -30,7 +30,9 @@
     "moduleNameMapper": {
       "\\.(css|scss)$": "identity-obj-proxy"
     },
-    "setupFiles": ["./configuration.setup.js"]
+    "setupFiles": [
+      "./configuration.setup.js"
+    ]
   },
   "resolutions": {
     "**/bootstrap-loader/resolve": "1.6.0"
@@ -88,11 +90,11 @@
     "web3": "1.0.0-beta.30"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.39",
-    "@babel/core": "^7.0.0-beta.44",
-    "@babel/preset-env": "^7.0.0-beta.44",
-    "@babel/preset-react": "^7.0.0-beta.39",
-    "@babel/preset-stage-0": "^7.0.0-beta.39",
+    "@babel/cli": "^7.0.0-beta",
+    "@babel/core": "^7.0.0-beta",
+    "@babel/preset-env": "^7.0.0-beta",
+    "@babel/preset-react": "^7.0.0-beta",
+    "@babel/preset-stage-0": "^7.0.0-beta",
     "@storybook/addon-actions": "^3.4.2",
     "@storybook/addon-knobs": "^3.4.2",
     "@storybook/addon-links": "^3.4.2",
