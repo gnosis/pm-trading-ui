@@ -5,17 +5,17 @@
     "favicon": "assets/img/gnosis_logo_favicon.png"
   },
   "tournament": {
-    "enabled": false,
+    "enabled": false
   },
   "collateralToken": null,
   "providers": {
-    "default": "METAMASK",
+    "default": "METAMASK"
   },
   "scoreboard": {
     "enabled": false
   },
   "gameGuide": {
-    "enabled": false,
+    "enabled": false
   },
   "termsOfUse": {
     

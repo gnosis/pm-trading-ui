@@ -24,8 +24,23 @@ module.exports = (env) => {
   let interfaceConfig = {}
 
   configsToLoad.forEach((configPath) => {
-    const loadedConfig = require(`./${configPath}/config.json`)
-    const loadedInterfaceConfig = require(`./${configPath}/interface.config.json`)
+    let loadedConfig
+    let loadedInterfaceConfig
+
+    try {
+      loadedConfig = require(`./${configPath}/config.json`)
+    } catch (err) {
+      console.error(`Could not load config in ./${configPath}/config.json`)
+      console.error(err)
+    }
+
+    try {
+      loadedInterfaceConfig = require(`./${configPath}/interface.config.json`)
+    } catch (err) {
+      console.error(`Could not load config in ./${configPath}/config.json`)
+      console.error(err)
+    }
+
 
     config = Object.assign(config, loadedConfig)
     interfaceConfig = Object.assign(interfaceConfig, loadedInterfaceConfig)

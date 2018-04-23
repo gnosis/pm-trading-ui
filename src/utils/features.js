@@ -15,4 +15,7 @@ export const getCollateralToken = () => configInterface.collateralToken
 export const getProviderConfig = () => configInterface.providers
 
 export const getProviderIntegrationConfig = providerName =>
-  configInterface.providers.options[providerName.toUpperCase()]
+  configInterface.providers &&
+  configInterface.providers.options &&
+  configInterface.providers.options[providerName.toUpperCase()] || {}
+
