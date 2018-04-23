@@ -1,6 +1,7 @@
 import React from 'react'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
+import Icon from 'components/Icon'
 import style from './Notifications.mod.scss'
 
 const cx = cn.bind(style)
@@ -13,7 +14,7 @@ const Notifications = ({ notifications, onClick }) => (
       <button key={id} className={cx('notification')} onClick={() => onClick()}>
         <div className={cx('title')}>{title}</div>
         <div className={cx('iconContainer')}>
-          <div className={cx('icon', `icon--${icon}`)} />
+          <Icon type={icon} size={32} className={cx('txIcon')} />
         </div>
         <div className={cx('message')}>{message}</div>
       </button>

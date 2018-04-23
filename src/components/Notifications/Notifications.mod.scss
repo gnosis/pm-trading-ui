@@ -14,6 +14,8 @@
   background-color: $bg-color;
 
   padding: 4px;
+  display: block;
+  width: 100%;
   position: relative;
 
   color: $font-color-light;
@@ -45,9 +47,9 @@
     margin-left: 4px;
     width: 16px;
 
-    .icon {
+    .txIcon {
       top: 50%;
-      margin-top: -8px;
+      margin-top: -16px;
     }
   }
 }

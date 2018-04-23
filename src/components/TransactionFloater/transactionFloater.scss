@@ -43,6 +43,10 @@ $shadow-color: #828282;
     filter: drop-shadow(0px 0px 6px lighten($shadow-color, 20%));
     background: transparent;
     border: none;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   &__popover {
@@ -144,14 +148,14 @@ $shadow-color: #828282;
   &__progress {
     position: absolute;
     top: 10px;
-    margin-right: ((38px - 16px) / 2);
+    margin-right: 4px;
     right: 100%;
   }
 
   &__progressIcon {
     position: absolute;
     top: 10px;
-    margin-right: ((38px - 16px) / 2);
+    margin-right: 4px;
     right: 100%;
   }
 

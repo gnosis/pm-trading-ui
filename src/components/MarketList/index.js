@@ -49,7 +49,7 @@ const selectFilter = [
 ]
 
 class MarketList extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchMarkets()
   }
 

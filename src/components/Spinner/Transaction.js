@@ -1,18 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Icon from 'components/Icon'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 
 import IndefiniteSpinner from './Indefinite'
 
 const ProgressIndicator = ({ completed, completionStatus, progress }) => {
   const iconType = completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR ? 'checkmark' : 'error'
+  const iconStyle = {
+    top: '50%',
+    marginTop: -24,
+  }
 
   return completed ? (
-    <div className="transaction__icon">
-      <div className={`icon icon--${iconType}`} />
-    </div>
+    <Icon size={48} type={iconType} style={iconStyle} />
   ) : (
-    <IndefiniteSpinner width={32} height={32} strokeWidthPx={1} fontSizePx={8} progress={progress} modifier="spinning" />
+    <IndefiniteSpinner
+      width={32}
+      height={32}
+      strokeWidthPx={1}
+      fontSizePx={8}
+      progress={progress}
+      modifier="spinning"
+    />
   )
 }
 
