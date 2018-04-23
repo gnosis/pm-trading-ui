@@ -188,7 +188,7 @@ Header.propTypes = {
   showGameGuide: PropTypes.bool,
   gameGuideType: PropTypes.string,
   gameGuideURL: PropTypes.string,
-  tokenAddress: PropTypes.string.isRequired,
+  tokenAddress: PropTypes.string,
   lockedMetamask: PropTypes.bool,
   requestMainnetAddress: PropTypes.func.isRequired,
   requestTokenBalance: PropTypes.func.isRequired,
@@ -211,6 +211,7 @@ Header.defaultProps = {
   mainnetAddress: undefined,
   lockedMetamask: true,
   userTournamentInfo: undefined,
+  tokenAddress: undefined,
 }
 
 export default Header
