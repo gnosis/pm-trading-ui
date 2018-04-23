@@ -30,7 +30,7 @@ class SharesTable extends Component {
       : shareAmount
     try {
       await this.props.sellShares(this.props.market, share, sellAmount, earnings)
-      this.setState({ extendedSellId: undefined })
+      this.props.changeUrl(`/markets/${this.props.market.address}/my-shares`)
     } catch (e) {
       console.error(e)
     }
@@ -38,22 +38,31 @@ class SharesTable extends Component {
 
   @autobind
   handleShowSellView(e, shareId) {
-    const { extendedSellId } = this.state
-    this.setState({ extendedSellId: extendedSellId === shareId ? undefined : shareId })
+    if (this.props.match.params.shareId === shareId) {
+      this.props.changeUrl(`/markets/${this.props.market.address}/my-shares`)
+      return
+    }
+    this.props.changeUrl(`/markets/${this.props.market.address}/my-shares/${shareId}`)
   }
 
   generateTableRows() {
     const {
-      marketShares, market, gasCosts, gasPrice, selectedSellAmount,
+      marketShares,
+      market,
+      gasCosts,
+      gasPrice,
+      selectedSellAmount,
+      match: {
+        params: { shareId: extendedShareId },
+      },
     } = this.props
-    const { extendedSellId } = this.state
     const tableRows = []
 
     Object.keys(marketShares).forEach((shareId) => {
       const share = marketShares[shareId]
       const colorScheme = share.event.type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
       const outcomeColorStyle = { backgroundColor: colorScheme[share.outcomeToken.index] }
-      const isExtended = extendedSellId === share.id
+      const isExtended = extendedShareId === share.id
       const ableToSell = !isMarketClosed(market) && !isMarketResolved(market)
       const outcomeName = getOutcomeName(market, share.outcomeToken.index)
 
@@ -68,7 +77,7 @@ class SharesTable extends Component {
         onSellClick={this.handleShowSellView}
       />)
 
-      if (extendedSellId === shareId && ableToSell) {
+      if (extendedShareId === shareId && ableToSell) {
         tableRows.push(<ShareSellView
           key={`${share.id}-sellView`}
           share={share}
@@ -109,6 +118,7 @@ SharesTable.propTypes = {
   selectedSellAmount: PropTypes.string,
   sellShares: PropTypes.func,
   match: ReactRouterMatchShape,
+  changeUrl: PropTypes.func.isRequired,
 }
 
 SharesTable.defaultProps = {

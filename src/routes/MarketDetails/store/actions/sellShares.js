@@ -9,7 +9,7 @@ import { receiveEntities, updateEntity } from 'actions/entities'
 import { MAX_ALLOWANCE_WEI, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { SETTING_ALLOWANCE, SELL } from 'utils/transactionExplanations'
 import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'actions/market'
-import { sellShares } from '../../api'
+import { sellShares, fetchMarket } from '../../api'
 /**
  * Sell shares on a specific market
  * @param {Market} market - Market to sell shares on
@@ -28,7 +28,7 @@ const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (
   const outcomeCountWei = Decimal(outcomeTokenCount).mul(1e18)
   const approvalResetAmount = outcomeCountWei.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
-  const payload = await api.requestMarket(market.address)
+  const payload = await fetchMarket(market.address)
   const updatedMarket = payload.entities.markets[market.address]
   const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
   const oldPrice = market.marginalPrices[outcomeIndex]
@@ -56,7 +56,7 @@ const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (
     await dispatch(closeModal())
   } catch (e) {
     console.error(e)
-    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e.message))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
     await dispatch(closeModal())
     throw e
