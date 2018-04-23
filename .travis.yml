@@ -4,7 +4,7 @@ install:
 - npm install -s -q
 before_install:
 - rm -rf node_modules
-- npm i -g babel-cli webpack truffle-contract
+- npm i -g babel-cli webpack truffle-contract jest
 - |
   if [ ${TRAVIS_BRANCH} = "master" ]; then
     export GNOSIS_ENV=staging;
