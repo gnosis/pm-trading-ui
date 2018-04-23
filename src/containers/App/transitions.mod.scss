@@ -15,12 +15,3 @@
   transition: opacity 0.3s ease-out;
   opacity: 0;
 }
-
-.appear {
-  opacity: 0.01;
-}
-
-.appearActive {
-  transition: opacity 0.3s ease-in;
-  opacity: 1;
-}
