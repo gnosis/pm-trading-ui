@@ -1,6 +1,4 @@
-/* global __VERSION__ */
-
-import React, { Component } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
@@ -65,7 +63,12 @@ const App = (props) => {
 App.propTypes = {
   blockchainConnection: PropTypes.bool,
   children: PropTypes.node,
-  location: PropTypes.object,
+  location: PropTypes.shape({
+    key: PropTypes.string,
+    hash: PropTypes.string,
+    pathname: PropTypes.string,
+    search: PropTypes.string,
+  }),
   provider: providerPropType,
 }
 
