@@ -7,7 +7,12 @@
         "forceAllTransforms": true
       }
     ],
-    "@babel/preset-stage-0"
+    [
+      "@babel/preset-stage-0",
+      {
+        "decoratorsLegacy": true
+      }
+    ]
   ],
   "plugins": ["react-hot-loader/babel", "transform-decorators-legacy", "lodash", "transform-optional-chaining"],
   "env": {
@@ -23,7 +28,7 @@
       ]
     },
     "test": {
-      "plugins": ["dynamic-import-node", "transform-decorators-legacy"]
+      "plugins": ["dynamic-import-node"]
     }
   }
 }
