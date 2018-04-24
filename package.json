@@ -1,16 +1,22 @@
 {
-  "name": "@gnosis.pm/gnosis-management",
+  "name": "local-development",
   "version": "0.3.1",
-  "description": "GnosisInc Admin Interface",
+  "description": "local-development",
   "main": "src/index.js",
   "scripts": {
-    "build-dev": "NODE_ENV=development ./node_modules/.bin/webpack -p --config webpack.dev.config.js",
-    "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack -p --progress --config webpack.prod.config.js",
-    "build": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
+    "build-dev":
+      "NODE_ENV=development ./node_modules/.bin/webpack -p --config webpack.dev.config.js",
+    "build-prod":
+      "NODE_ENV=production ./node_modules/.bin/webpack -p --progress --config webpack.prod.config.js",
+    "build":
+      "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
     "clean": "rm -rf dist",
-    "start-dev": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
-    "start-prod": "NODE_ENV=production node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info --config webpack.prod.config.js",
-    "start": "if test \"$NODE_ENV\" = \"production\" ; then npm run start-prod; else npm run start-dev; fi ",
+    "start-dev":
+      "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
+    "start-prod":
+      "NODE_ENV=production node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info --config webpack.prod.config.js",
+    "start":
+      "if test \"$NODE_ENV\" = \"production\" ; then npm run start-prod; else npm run start-dev; fi ",
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix --quiet",
     "test": "jest --no-cache",
@@ -19,27 +25,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gnosis/gnosis-management.git"
+    "url": "https://github.com/tcsiwula/gnosis-management"
   },
-  "author": "Gnosis",
-  "license": "ISC",
+  "author": "Tim Siwula",
+  "license": "Apache-2.0",
   "jest": {
-    "modulePaths": [
-      "<rootDir>/src/"
-    ],
+    "modulePaths": ["<rootDir>/src/"],
     "moduleNameMapper": {
       "\\.(css|scss)$": "identity-obj-proxy"
     },
-    "setupFiles": [
-      "./configuration.setup.js"
-    ]
+    "setupFiles": ["./configuration.setup.js"]
   },
   "resolutions": {
     "**/bootstrap-loader/resolve": "1.6.0"
   },
-  "pre-commit": [
-    "precommit"
-  ],
+  "pre-commit": ["precommit"],
   "dependencies": {
     "@gnosis.pm/gnosis-core-contracts": "^1.0.3",
     "@gnosis.pm/gnosisjs": "^2.0.0",
