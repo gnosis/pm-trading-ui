@@ -10,6 +10,7 @@ styles:
   buttons: true
   mixins: true
   media: true
+  tables: true
 scripts: false
 bootstrapVersion: 3
 env:
