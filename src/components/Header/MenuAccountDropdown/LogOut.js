@@ -1,15 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames/bind'
 import { connect } from 'react-redux'
+import Icon from 'components/Icon'
+import { logoutProvider } from 'integrations/store/actions'
+import style from './dropdown.scss'
 
-import {
-  logoutProvider,
-} from 'integrations/store/actions'
+const cx = cn.bind(style)
 
 const LogOut = ({ logout }) => (
-  <li key="action-logout" className="menuAccountAction__action">
+  <li key="action-logout" className={cx('action')}>
     <button type="button" onClick={() => logout()}>
-      <i className="icon icon--logout" /> Logout
+      <Icon type="logout" size={13} /> Logout
     </button>
   </li>
 )

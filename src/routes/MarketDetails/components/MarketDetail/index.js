@@ -115,8 +115,8 @@ class MarketDetail extends Component {
 
   renderLoading() {
     return (
-      <div className="marketDetailPage">
-        <div className="container">Loading...</div>
+      <div className={cx('container')}>
+        <div>Loading...</div>
       </div>
     )
   }
@@ -129,8 +129,8 @@ class MarketDetail extends Component {
       if (typeof view.showCondition !== 'function' || view.showCondition(this.props)) {
         const ViewComponent = view.component
         return (
-          <div className="expandable__inner">
-            <div className="container">
+          <div className={cx('inner')}>
+            <div className={cx('container')}>
               <ViewComponent {...this.props} />
             </div>
           </div>
@@ -156,8 +156,8 @@ class MarketDetail extends Component {
     const { marketFetchError } = this.state
     if (marketFetchError) {
       return (
-        <div>
-          <div className={cx('container')}>This market could not be found.</div>
+        <div className={cx('container')}>
+          <div>This market could not be found.</div>
         </div>
       )
     }
