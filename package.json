@@ -57,6 +57,7 @@
     "lodash": "^4.17.5",
     "moment": "^2.22.0",
     "moment-duration-format": "^2.2.1",
+    "normalize.css": "^8.0.0",
     "normalizr": "^3.2.2",
     "prop-types": "^15.6.0",
     "raven-for-redux": "^1.1.1",

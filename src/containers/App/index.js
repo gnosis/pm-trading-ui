@@ -16,6 +16,7 @@ import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import { triedToConnect } from 'selectors/blockchain'
 import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
 import { isFeatureEnabled } from 'utils/features'
+import 'normalize.css'
 
 import style from './app.mod.scss'
 import transitionStyles from './transitions.mod.scss'
