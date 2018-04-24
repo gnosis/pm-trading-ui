@@ -22,7 +22,7 @@ const TransactionFloater = ({
   showTransactionLog,
 }) => (
   <div className="transactionFloater">
-    <div
+    <button
       className="transactionFloater__spinner"
       onClick={() => (showLogs ? hideTransactionLog() : showTransactionLog())}
     >
@@ -38,7 +38,7 @@ const TransactionFloater = ({
         minBarSize={1}
         showLabel={runningTransactions.length > 0}
       />
-    </div>
+    </button>
     {!showLogs &&
       notifications.length > 0 && (
       <div className="transactionFloater__popover transactionFloater--notifications">

@@ -7,14 +7,14 @@ import css from './Icon.mod.scss'
 const cx = classNames.bind(css)
 
 const Icon = ({
-  src, type, size, float, style, ...props
+  src, type, size, float, style, className, ...props
 }) => {
   let icon
   if (src) {
     icon = src
   } else {
     // eslint-disable-next-line
-      icon = require(`assets/img/icons/icon_${type}.svg`)
+    icon = require(`assets/img/icons/icon_${type}.svg`)
   }
 
   const iconStyle = {
@@ -25,13 +25,7 @@ const Icon = ({
     ...style,
   }
 
-  return (
-    <div
-      {...props}
-      className={cx('icon')}
-      style={iconStyle}
-    />
-  )
+  return <div {...props} className={cx('icon', className)} style={iconStyle} />
 }
 
 Icon.propTypes = {
@@ -40,6 +34,7 @@ Icon.propTypes = {
   size: PropTypes.number,
   float: PropTypes.string,
   style: PropTypes.shape({}),
+  className: PropTypes.string,
 }
 
 Icon.defaultProps = {
@@ -48,6 +43,7 @@ Icon.defaultProps = {
   float: 'none',
   size: 16,
   style: {},
+  className: '',
 }
 
 export default Icon

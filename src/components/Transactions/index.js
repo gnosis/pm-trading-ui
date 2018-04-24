@@ -7,7 +7,7 @@ import { transactionShape } from 'utils/shapes'
 import './Transactions.scss'
 
 class Transactions extends Component {
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.currentAccount) {
       this.props.changeUrl('/markets/list')
     }
