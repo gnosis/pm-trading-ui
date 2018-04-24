@@ -12,7 +12,7 @@ import { notificationsEnabled } from './connector'
 const termsOfUseConfig = getFeatureConfig('termsOfUse')
 
 const {
-  clientId, appName, network, privateKey,
+  clientId = '', appName = '', network = 0, privateKey = '',
 } = getProviderIntegrationConfig('uport')
 const tournamentEnabled = isFeatureEnabled('tournament')
 

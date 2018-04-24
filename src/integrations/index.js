@@ -5,8 +5,16 @@ import Remote from './remote'
 import Uport from './uport'
 import { WALLET_PROVIDER } from './constants'
 
+const providersInstances = [Metamask, Parity, Remote]
+
 // eslint-disable-next-line
-let providers = { Metamask, Parity, Remote }
+let providers = {}
+
+providersInstances.forEach((instance) => {
+  providers[instance.constructor.providerName] = instance
+})
+
+
 const tournament = isFeatureEnabled('tournament')
 const providerConfig = getProviderConfig()
 

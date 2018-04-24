@@ -14,7 +14,7 @@
       }
     ]
   ],
-  "plugins": ["react-hot-loader/babel", "transform-decorators-legacy", "lodash", "transform-optional-chaining"],
+  "plugins": ["react-hot-loader/babel", "lodash", "transform-optional-chaining"],
   "env": {
     "production": {
       "plugins": [

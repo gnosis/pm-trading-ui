@@ -4,13 +4,11 @@
   "description": "GnosisInc Admin Interface",
   "main": "src/index.js",
   "scripts": {
-    "build-dev": "NODE_ENV=development ./node_modules/.bin/webpack -p --config webpack.dev.config.js",
-    "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack -p --progress --config webpack.prod.config.js",
+    "build-dev": "./node_modules/.bin/webpack -p --config webpack.dev.config.js",
+    "build-prod": "./node_modules/.bin/webpack -p --config webpack.prod.config.js",
     "build": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
-    "clean": "rm -rf dist",
-    "start-dev": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
-    "start-prod": "NODE_ENV=production node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info --config webpack.prod.config.js",
-    "start": "if test \"$NODE_ENV\" = \"production\" ; then npm run start-prod; else npm run start-dev; fi ",
+    "start": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
+    "start-prod": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info -p --progress --config webpack.prod.config.js",	
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix --quiet",
     "test": "jest --no-cache",
@@ -30,7 +28,9 @@
     "moduleNameMapper": {
       "\\.(css|scss)$": "identity-obj-proxy"
     },
-    "setupTestFrameworkScriptFile": "./configuration.setup.js"
+    "setupFiles": [
+      "./configuration.setup.js"
+    ]
   },
   "resolutions": {
     "**/bootstrap-loader/resolve": "1.6.0"
@@ -43,7 +43,6 @@
     "@gnosis.pm/gnosisjs": "^2.0.0",
     "@gnosis.pm/olympia-token": "^1.4.0",
     "autobind-decorator": "^2.1.0",
-    "babel-loader": "^8.0.0-beta.2",
     "babel-polyfill": "^6.23.0",
     "blockies": "0.0.2",
     "classnames": "^2.2.5",
@@ -88,11 +87,11 @@
     "web3": "1.0.0-beta.30"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.39",
-    "@babel/core": "^7.0.0-beta.44",
-    "@babel/preset-env": "^7.0.0-beta.44",
-    "@babel/preset-react": "^7.0.0-beta.39",
-    "@babel/preset-stage-0": "^7.0.0-beta.39",
+    "@babel/cli": "^7.0.0-beta",
+    "@babel/core": "^7.0.0-beta",
+    "@babel/preset-env": "^7.0.0-beta",
+    "@babel/preset-react": "^7.0.0-beta",
+    "@babel/preset-stage-0": "^7.0.0-beta",
     "@storybook/addon-actions": "^3.4.2",
     "@storybook/addon-knobs": "^3.4.2",
     "@storybook/addon-links": "^3.4.2",
@@ -101,9 +100,9 @@
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.2.1",
     "babel-jest": "^22.4.3",
+    "babel-loader": "^8.0.0-beta.2",
     "babel-plugin-dynamic-import-node": "^1.2.0",
     "babel-plugin-lodash": "^3.2.11",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-optional-chaining": "^7.0.0-beta.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.8",
     "bootstrap-loader": "^2.1.0",
