@@ -8,6 +8,7 @@
     "build-prod": "./node_modules/.bin/webpack -p --config webpack.prod.config.js",
     "build": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
     "start": "node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --config webpack.dev.config.js --progress",
+    "start-prod": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --client-log-level info -p --progress --config webpack.prod.config.js",	
     "lint": "eslint ./src --quiet",
     "lint:fix": "eslint ./src --fix --quiet",
     "test": "jest --no-cache",
