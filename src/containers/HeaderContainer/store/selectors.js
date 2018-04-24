@@ -32,9 +32,7 @@ const logoConfig = getLogoConfig('logo')
  * @param {*} state
  */
 const getCurrentTokenBalance = (state) => {
-  const platformToken = collateralToken.address
-
-  if (!platformToken) {
+  if (!collateralToken) {
     return getCurrentBalance(state)
   }
 
@@ -63,7 +61,7 @@ export default state => ({
   showGameGuide: isFeatureEnabled('gameGuide'),
   gameGuideType: gameGuideConfig.type,
   gameGuideURL: gameGuideConfig.url,
-  tokenAddress: collateralToken.address,
+  tokenAddress: collateralToken && collateralToken.address,
   tokenBalance: getCurrentTokenBalance(state),
 })
 

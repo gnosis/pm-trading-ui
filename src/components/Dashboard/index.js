@@ -22,7 +22,7 @@ import {
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
-import { isFeatureEnabled } from 'utils/features'
+import { isFeatureEnabled, get } from 'utils/features'
 
 import Metrics from './Metrics'
 import './dashboard.scss'
@@ -40,7 +40,7 @@ const getSoonClosingMarkets = (markets = [], limit) =>
 
 class Dashboard extends Component {
   componentDidMount() {
-    if (!this.props.tokenSymbol) {
+    if (!this.props.collateralToken.symbol) {
       this.props.requestTokenSymbol()
     }
 
@@ -56,7 +56,10 @@ class Dashboard extends Component {
       if (this.props.hasWallet) {
         this.props.requestAccountShares(this.props.defaultAccount)
         this.props.requestAccountTrades(this.props.defaultAccount)
-        this.props.requestDefaultTokenAmount(this.props.defaultAccount)
+
+        if (this.props.collateralToken.address) {
+          this.props.requestDefaultTokenAmount(this.props.collateralToken.address, this.props.defaultAccount)
+        }
       }
     }
 
@@ -324,13 +327,13 @@ class Dashboard extends Component {
 
   render() {
     const {
-      hasWallet, defaultTokenAmount, accountPredictiveAssets, tokenSymbol, tokenIcon,
+      hasWallet, collateralToken, accountPredictiveAssets,
     } = this.props
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     const predictedProfitFormatted = Decimal(accountPredictiveAssets).toDP(4, 1).toString()
     if (hasWallet) {
-      metricsSection = <Metrics tokens={defaultTokenAmount} tokenSymbol={tokenSymbol} tokenIcon={tokenIcon} predictedProfit={predictedProfitFormatted} />
+      metricsSection = <Metrics tokens={collateralToken.amount} tokenSymbol={collateralToken.symbol} tokenIcon={collateralToken.icon} predictedProfit={predictedProfitFormatted} />
 
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
@@ -391,18 +394,22 @@ Dashboard.propTypes = {
   changeUrl: PropTypes.func.isRequired,
   requestDefaultTokenAmount: PropTypes.func.isRequired,
   gnosisInitialized: PropTypes.bool.isRequired,
-  redeemWinnings: PropTypes.func,
+  redeemWinnings: PropTypes.func.isRequired,
   accountPredictiveAssets: PropTypes.string.isRequired,
-  defaultTokenAmount: PropTypes.string.isRequired,
-  tokenSymbol: PropTypes.string,
-  tokenIcon: PropTypes.string.isRequired,
   requestTokenSymbol: PropTypes.func.isRequired,
   fetchTournamentUsers: PropTypes.func.isRequired,
   fetchTournamentUserData: PropTypes.func.isRequired,
+  collateralToken: PropTypes.shape({
+    symbol: PropTypes.string,
+    amount: PropTypes.string,
+    address: PropTypes.string,
+  }).isRequired,
 }
 
 Dashboard.defaultProps = {
-  tokenSymbol: '',
+  markets: [],
+  defaultAccount: undefined,
+  accountShares: {},
 }
 
 export default Dashboard
