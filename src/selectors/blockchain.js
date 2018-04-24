@@ -33,7 +33,7 @@ export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['
  * @param {*} state - redux state
  * @returns {object} collateralToken - with Symbol, Amount in ETH and Address
  */
-export const getCollateralTokenAmount = (state) => {
+export const getCollateralTokenInfo = (state) => {
   const collateralToken = getCollateralToken()
 
   if (!collateralToken) {
