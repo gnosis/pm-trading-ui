@@ -70,7 +70,7 @@ export const initGnosis = () => async (dispatch, getState) => {
       await initGnosisConnection(opts)
       await dispatch(setGnosisInitialized({ initialized: true }))
 
-      if (newProvider.account) {
+      if (newProvider.account && collateralToken) {
         await getTokenBalance(collateralToken.address, await getCurrentAccount())
       }
     }

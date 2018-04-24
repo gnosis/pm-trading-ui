@@ -6,15 +6,13 @@ import { getMarkets } from 'selectors/market'
 import { profitsSelector } from 'containers/DashboardPage/store/selectors'
 import { getAccountTrades } from 'selectors/marketTrades'
 import { getAccountShares } from 'selectors/marketShares'
-import { isGnosisInitialized, getTokenAmount, getTokenSymbol } from 'selectors/blockchain'
+import { isGnosisInitialized, getCollateralTokenAmount } from 'selectors/blockchain'
 import { getCurrentAccount, checkWalletConnection } from 'integrations/store/selectors'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
 import { fetchTournamentUserData, fetchTournamentUsers } from 'routes/Scoreboard/store/actions'
-import { getCollateralToken } from 'utils/features'
 
-const collateralToken = getCollateralToken()
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
@@ -23,28 +21,18 @@ const mapStateToProps = (state) => {
   const accountPredictiveAssets = weiToEth(profitsSelector(state, defaultAccount))
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
-  let defaultTokenAmount = getTokenAmount(state, collateralToken.address)
   const hasWallet = checkWalletConnection(state)
-  const tokenSymbol = getTokenSymbol(state, collateralToken.address)
-
-  if (defaultTokenAmount !== undefined) {
-    defaultTokenAmount = weiToEth(defaultTokenAmount.toString())
-  } else {
-    defaultTokenAmount = '0'
-  }
+  const collateralToken = getCollateralTokenAmount(state)
 
   return {
     hasWallet,
     defaultAccount,
     markets,
-    defaultTokenAmount,
     accountShares,
     accountTrades,
     gnosisInitialized,
     accountPredictiveAssets,
-    tokenSymbol,
-    tokenAddress: collateralToken.address,
-    tokenIcon: collateralToken.icon,
+    collateralToken,
   }
 }
 
@@ -55,8 +43,8 @@ const mapDispatchToProps = dispatch => ({
   requestAccountShares: address => dispatch(requestAccountShares(address)),
   changeUrl: url => dispatch(push(url)),
   requestGasPrice: () => dispatch(requestGasPrice()),
-  requestDefaultTokenAmount: account => dispatch(requestTokenBalance(collateralToken.address, account)),
-  requestTokenSymbol: () => dispatch(requestTokenSymbol(collateralToken.address)),
+  requestDefaultTokenAmount: (address, account) => dispatch(requestTokenBalance(address, account)),
+  requestTokenSymbol: address => dispatch(requestTokenSymbol(address)),
   fetchTournamentUsers: () => dispatch(fetchTournamentUsers()),
   fetchTournamentUserData: account => dispatch(fetchTournamentUserData(account)),
 })

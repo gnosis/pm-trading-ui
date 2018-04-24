@@ -1,4 +1,9 @@
 import Decimal from 'decimal.js'
+import { getCollateralToken } from 'utils/features'
+import { getCurrentBalance } from 'integrations/store/selectors'
+import { weiToEth } from 'utils/helpers'
+
+const ETH_TOKEN_ICON = 'assets/img/icons/icon_etherTokens.svg'
 
 /**
  * Returns if gnosis.js is initialized or not
@@ -23,3 +28,27 @@ export const getTokenAmount = (state, tokenAddress) => {
 }
 
 export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['tokenSymbols', tokenAddress])
+
+/**
+ * @param {*} state - redux state
+ * @returns {object} collateralToken - with Symbol, Amount in ETH and Address
+ */
+export const getCollateralTokenAmount = (state) => {
+  const collateralToken = getCollateralToken()
+
+  if (!collateralToken) {
+    return {
+      symbol: 'ETH',
+      amount: weiToEth(getCurrentBalance(state)),
+      address: undefined,
+      icon: ETH_TOKEN_ICON,
+    }
+  }
+
+  return {
+    symbol: getTokenSymbol(state, collateralToken.address),
+    amount: weiToEth(getTokenAmount(state, collateralToken.address)),
+    address: collateralToken.address,
+    icon: collateralToken.icon,
+  }
+}
