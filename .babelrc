@@ -14,7 +14,7 @@
       }
     ]
   ],
-  "plugins": ["react-hot-loader/babel", "lodash", "transform-optional-chaining", "dynamic-import-node"],
+  "plugins": ["react-hot-loader/babel", "lodash", "transform-optional-chaining"],
   "env": {
     "production": {
       "plugins": [
@@ -26,6 +26,9 @@
           }
         ]
       ]
+    },
+    "test": {
+      "plugins": ["dynamic-import-node"]
     }
   }
 }
