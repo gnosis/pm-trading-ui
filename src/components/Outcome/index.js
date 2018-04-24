@@ -47,7 +47,7 @@ const Outcome = ({
     />
   )
 
-  if (showWinningOutcome) {
+  if (showWinningOutcome && winningOutcome) {
     outcomeComponent = (
       <WinningOutcome
         type={type}
