@@ -106,13 +106,20 @@ const TransactionFloater = ({
 )
 
 TransactionFloater.propTypes = {
-  progress: PropTypes.number,
+  progress: PropTypes.number.isRequired,
   runningTransactions: PropTypes.arrayOf(PropTypes.object),
   completedTransactions: PropTypes.arrayOf(PropTypes.object),
   notifications: PropTypes.arrayOf(PropTypes.object),
   showLogs: PropTypes.bool,
-  hideTransactionLog: PropTypes.func,
-  showTransactionLog: PropTypes.func,
+  hideTransactionLog: PropTypes.func.isRequired,
+  showTransactionLog: PropTypes.func.isRequired,
+}
+
+TransactionFloater.defaultProps = {
+  notifications: [],
+  runningTransactions: [],
+  completedTransactions: [],
+  showLogs: false,
 }
 
 export default TransactionFloater
