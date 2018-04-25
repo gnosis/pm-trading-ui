@@ -1,16 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames/bind'
 import { NavLink } from 'react-router-dom'
 import { takeRight } from 'lodash'
-
 import moment from 'moment'
-
 import LabeledSpinner from 'components/Spinner/Labeled'
 import ProgressSpinner from 'components/Spinner/Transaction'
 import Notifications from 'components/Notifications'
+import Icon from 'components/Icon'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
+import style from './transactionFloater.mod.scss'
 
-import './transactionFloater.scss'
+const cx = cn.bind(style)
 
 const TransactionFloater = ({
   progress,
@@ -21,11 +22,8 @@ const TransactionFloater = ({
   hideTransactionLog,
   showTransactionLog,
 }) => (
-  <div className="transactionFloater">
-    <button
-      className="transactionFloater__spinner"
-      onClick={() => (showLogs ? hideTransactionLog() : showTransactionLog())}
-    >
+  <div className={cx('transactionFloater')}>
+    <button className={cx('spinner')} onClick={() => (showLogs ? hideTransactionLog() : showTransactionLog())}>
       <LabeledSpinner
         width={32}
         height={32}
@@ -41,23 +39,19 @@ const TransactionFloater = ({
     </button>
     {!showLogs &&
       notifications.length > 0 && (
-      <div className="transactionFloater__popover transactionFloater--notifications">
+      <div className={cx('popover', 'notifications')}>
         <Notifications notifications={takeRight(notifications, 5)} onClick={showTransactionLog} />
       </div>
     )}
-    <div
-      className={`transactionFloater__popover ${
-        showLogs ? 'transactionFloater__popover--visible' : 'transactionFloater__popover--hidden'
-      }`}
-    >
-      <div className="transactionFloater__heading">Transactions</div>
-      <div className="transactionFloater__close" onClick={() => hideTransactionLog()} />
-      <div className="transactionFloater__logs">
+    <div className={cx('popover', showLogs ? 'visible' : 'hidden')}>
+      <div className={cx('heading')}>Transactions</div>
+      <button className={cx('closeButton')} onClick={() => hideTransactionLog()} />
+      <div className={cx('logs')}>
         {!runningTransactions.length &&
           !completedTransactions.length && (
-          <div className="transactionLog transactionLog--empty">
-            <div className="transactionLog__label">You have no active or past transactions.</div>
-            <div className="transactionLog__hint">
+          <div className={cx('transactionLog', 'empty')}>
+            <div className={cx('label')}>You have no active or past transactions.</div>
+            <div className={cx('hint')}>
                 When you interact with markets, all transactions will show up down here so you can keep track of all
                 your purchases, investments and market interactions.
             </div>
@@ -67,8 +61,8 @@ const TransactionFloater = ({
           const startTime = transaction.startTime ? moment(transaction.startTime).format('LLL') : ''
 
           return (
-            <div key={transaction.id} className="transactionLog">
-              <div className="transactionLog__progress">
+            <div key={transaction.id} className={cx('transactionLog')}>
+              <div className={cx('progress')}>
                 <ProgressSpinner
                   width={16}
                   height={16}
@@ -78,8 +72,8 @@ const TransactionFloater = ({
                   modifier="spinning"
                 />
               </div>
-              <div className="transactionLog__label">{transaction.label || 'Unnamed Transaction'}</div>
-              <div className="transactionLog__startTime">{startTime}</div>
+              <div className={cx('label')}>{transaction.label || 'Unnamed Transaction'}</div>
+              <div className={cx('startTime')}>{startTime}</div>
             </div>
           )
         })}
@@ -92,17 +86,17 @@ const TransactionFloater = ({
 
           const icon = transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR ? 'checkmark' : 'error'
           return (
-            <div key={transaction.id} className="transactionLog">
-              <div className={`transactionLog__progressIcon icon icon--${icon}`} />
-              <div className="transactionLog__label">{transaction.label || 'Unnamed Transaction'}</div>
-              <div className="transactionLog__startTime">
+            <div key={transaction.id} className={cx('transactionLog')}>
+              <Icon type={icon} className={cx('progressIcon')} />
+              <div className={cx('label')}>{transaction.label || 'Unnamed Transaction'}</div>
+              <div className={cx('startTime')}>
                 {endTime} {timeDiff && `(took ${timeDiff})`}
               </div>
             </div>
           )
         })}
       </div>
-      <div className="transactionFloater__footer">
+      <div className={cx('footer')}>
         <NavLink to="/transactions" onClick={hideTransactionLog}>
           Show all transactions
         </NavLink>
