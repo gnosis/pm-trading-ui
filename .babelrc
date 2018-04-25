@@ -21,8 +21,8 @@
         [
           "transform-react-remove-prop-types",
           {
-            "mode": "remove",
-            "removeImport": true
+            "removeImport": true,
+            "additionalLibraries": ["react-immutable-proptypes"]
           }
         ]
       ]
