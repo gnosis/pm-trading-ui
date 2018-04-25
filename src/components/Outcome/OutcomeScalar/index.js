@@ -11,7 +11,7 @@ import style from './outcomeScalar.mod.scss'
 const cx = cn.bind(style)
 
 const OutcomeScalar = ({
-  resolved,
+  resolved: showOnlyWinningOutcome,
   outcomeTokensSold,
   funding,
   upperBound,
@@ -26,8 +26,6 @@ const OutcomeScalar = ({
     funding,
     outcomeTokenIndex: 1, // always calc for long when calculating estimation
   })
-
-  const showOnlyWinningOutcome = resolved
 
   const decimals = parseInt(decimalsRaw, 10)
 
