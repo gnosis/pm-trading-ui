@@ -20,34 +20,35 @@ const Outcome = ({
   funding,
   opts = { showOnlyTrendingOutcome: false },
 }) => {
-  let outcomeComponent = type === OUTCOME_TYPES.CATEGORICAL ? (
-    <OutcomeCategorical
-      opts={opts}
-      resolved={showWinningOutcome}
-      outcomeTokensSold={outcomeTokensSold}
-      resolution={resolution}
-      funding={funding}
-      outcomes={outcomes}
-      marginalPrices={marginalPrices}
-      winningOutcome={winningOutcome}
-    />
-  ) : (
-    <OutcomeScalar
-      opts={opts}
-      upperBound={upperBound}
-      lowerBound={lowerBound}
-      unit={unit}
-      decimals={decimals}
-      resolved={showWinningOutcome}
-      outcomeTokensSold={outcomeTokensSold}
-      resolution={resolution}
-      funding={funding}
-      marginalPrices={marginalPrices}
-      winningOutcome={winningOutcome}
-    />
-  )
+  let outcomeComponent =
+    type === OUTCOME_TYPES.CATEGORICAL ? (
+      <OutcomeCategorical
+        opts={opts}
+        resolved={showWinningOutcome}
+        outcomeTokensSold={outcomeTokensSold}
+        resolution={resolution}
+        funding={funding}
+        outcomes={outcomes}
+        marginalPrices={marginalPrices}
+        winningOutcome={winningOutcome}
+      />
+    ) : (
+      <OutcomeScalar
+        opts={opts}
+        upperBound={upperBound}
+        lowerBound={lowerBound}
+        unit={unit}
+        decimals={decimals}
+        resolved={showWinningOutcome}
+        outcomeTokensSold={outcomeTokensSold}
+        resolution={resolution}
+        funding={funding}
+        marginalPrices={marginalPrices}
+        winningOutcome={winningOutcome}
+      />
+    )
 
-  if (showWinningOutcome && winningOutcome) {
+  if (showWinningOutcome && typeof winningOutcome !== 'undefined') {
     outcomeComponent = (
       <WinningOutcome
         type={type}
@@ -86,6 +87,5 @@ Outcome.propTypes = {
     className: PropTypes.string,
   }),
 }
-
 
 export default Outcome

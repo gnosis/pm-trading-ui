@@ -17,4 +17,8 @@ Span.propTypes = {
   children: PropTypes.node,
 }
 
+Span.defaultProps = {
+  children: null,
+}
+
 export default Span
