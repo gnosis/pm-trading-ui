@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
-import Transaction from 'components/Transaction'
 import { transactionShape } from 'utils/shapes'
+import Transaction from '../Transaction'
 
 import './Transactions.scss'
 

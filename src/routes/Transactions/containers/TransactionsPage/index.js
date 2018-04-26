@@ -5,7 +5,7 @@ import { getRunningTransactions, getCompletedTransactions } from 'selectors/tran
 
 import { getCurrentAccount } from 'integrations/store/selectors'
 
-import Transactions from 'components/Transactions'
+import Transactions from '../../components/Transactions'
 
 const mapStateToProps = state => ({
   currentAccount: getCurrentAccount(state),
