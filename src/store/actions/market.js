@@ -3,7 +3,7 @@ import * as api from 'api'
 
 import { receiveEntities, updateEntity } from 'store/actions//entities'
 import { closeModal } from 'store/actions//modal'
-import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'store/actions//transactions'
+import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 
 import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { REVOKE_TOKENS } from 'utils/transactionExplanations'

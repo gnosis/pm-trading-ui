@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions'
 import uuid from 'uuid/v4'
 
-import { didTransactionSucceed, transactionSelector } from 'store/selectors/transactions'
+import { didTransactionSucceed, transactionSelector } from 'routes/Transactions/store/selectors/transactions'
 
 import { DEFAULT_NOTIFICATION_FADEOUT } from 'utils/constants'
 

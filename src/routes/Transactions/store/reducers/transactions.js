@@ -7,7 +7,7 @@ import {
   showTransactionLog,
   hideTransactionLog,
   addTransactionLogEntry,
-} from 'store/actions//transactions'
+} from 'routes/Transactions/store/actions/transactions'
 
 const LOAD_LOCALSTORAGE = 'LOAD_LOCALSTORAGE'
 

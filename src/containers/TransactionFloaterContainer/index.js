@@ -6,14 +6,14 @@ import TransactionFloater from 'components/TransactionFloater'
 import {
   showTransactionLog,
   hideTransactionLog,
-} from 'store/actions//transactions'
+} from 'routes/Transactions/store/actions//transactions'
 
 import {
   getRunningTransactions,
   getCompletedTransactions,
   getRunningTransactionsProgress,
   areLogsVisible,
-} from 'store/selectors/transactions'
+} from 'routes/Transactions/store/selectors/transactions'
 
 import { getVisibleNotifications } from 'store/selectors/notifications'
 

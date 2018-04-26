@@ -7,7 +7,6 @@ const PERSIST_PATHS = ['transactions.log']
 
 export default store => next => (action) => {
   const state = store.getState()
-
   if (action.type !== CLEAR_LOCAL_STORAGE && action.type !== INIT) {
     let storage = {}
 
