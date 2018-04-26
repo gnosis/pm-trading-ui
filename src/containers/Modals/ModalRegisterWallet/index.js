@@ -1,6 +1,6 @@
 import RegisterWallet from 'components/ModalContent/RegisterWallet'
-import { updateMainnetAddress } from 'actions/account'
-import { requestGasPrice } from 'actions/blockchain'
+import { updateMainnetAddress } from 'store/actions//account'
+import { requestGasPrice } from 'store/actions//blockchain'
 import { connect } from 'react-redux'
 import { getCurrentAccount, getCurrentBalance } from 'integrations/store/selectors'
 import { getGasPrice } from 'routes/MarketDetails/store/selectors'

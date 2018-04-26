@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-import { getRunningTransactions, getCompletedTransactions } from 'selectors/transactions'
+import { getRunningTransactions, getCompletedTransactions } from 'store/selectors/transactions'
 
 import { getCurrentAccount } from 'integrations/store/selectors'
 

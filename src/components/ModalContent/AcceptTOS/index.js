@@ -1,5 +1,5 @@
 import React from 'react'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import PropTypes from 'prop-types'
 import Checkbox from 'components/FormCheckbox'

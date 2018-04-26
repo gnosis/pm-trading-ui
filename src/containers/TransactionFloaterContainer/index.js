@@ -6,18 +6,16 @@ import TransactionFloater from 'components/TransactionFloater'
 import {
   showTransactionLog,
   hideTransactionLog,
-} from 'actions/transactions'
+} from 'store/actions//transactions'
 
 import {
   getRunningTransactions,
   getCompletedTransactions,
   getRunningTransactionsProgress,
   areLogsVisible,
-} from 'selectors/transactions'
+} from 'store/selectors/transactions'
 
-import {
-  getVisibleNotifications,
-} from 'selectors/notifications'
+import { getVisibleNotifications } from 'store/selectors/notifications'
 
 const LIMIT_COUNT_RUNNING_TRANSACTIONS = 3
 const LIMIT_COUNT_COMPLETED_TRANSACTIONS = 3

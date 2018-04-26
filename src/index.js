@@ -3,7 +3,7 @@ import 'whatwg-fetch'
 import Raven from 'raven-js'
 import RootComponent from 'components/Root'
 import { initProviders } from 'integrations/store/actions'
-import { initReadOnlyGnosis } from 'actions/blockchain'
+import { initReadOnlyGnosis } from 'store/actions//blockchain'
 import Decimal from 'decimal.js'
 import React from 'react'
 
