@@ -1,29 +1,28 @@
 import { handleActions } from 'redux-actions'
+import { Map, List } from 'immutable'
 
-import {
-  openModal,
-  closeModal,
-} from 'store/actions//modal'
+import { openModal, closeModal } from 'store/actions/modal'
 
-const reducer = handleActions({
-  [openModal]: (state, action) => {
-    const { modalName: currentModal, ...modalData } = action.payload
-    return {
-      ...state,
-      isOpen: true,
-      currentModal,
-      ...modalData,
-    }
+const reducer = handleActions(
+  {
+    [openModal]: (state, { payload: { modalName: currentModal, modalData = {} } }) =>
+      state.withMutations((stateMap) => {
+        stateMap.set('isOpen', true)
+        stateMap.set('currentModal', currentModal)
+        stateMap.set('modalData', modalData)
+      }),
+    [closeModal]: () =>
+      Map({
+        isOpen: false,
+        currentModal: undefined,
+        transactions: List(),
+      }),
   },
-  [closeModal]: () => ({
+  Map({
     isOpen: false,
     currentModal: undefined,
+    transactions: List(),
   }),
-}, {
-  isOpen: false,
-  currentModal: undefined,
-  transactions: [],
-})
-
+)
 
 export default reducer

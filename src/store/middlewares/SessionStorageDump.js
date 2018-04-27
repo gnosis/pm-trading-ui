@@ -13,7 +13,7 @@ export default store => next => (action) => {
 
     PERSIST_PATHS.forEach((path) => {
       storage = {
-        ...pick(state, path),
+        [path]: state[path].toJS ? state[path].toJS() : state[path],
       }
     })
 

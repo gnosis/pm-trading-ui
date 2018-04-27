@@ -15,11 +15,10 @@ const tournamentEnabled = isFeatureEnabled('tournament')
 
 class BackdropProvider extends Component {
   renderBackdropContent() {
-    const {
-      modal: { currentModal, isOpen, ...data },
-      closeModal: closeModalProp,
-      blockchainConnection,
-    } = this.props
+    const { modal, closeModal: closeModalProp, blockchainConnection } = this.props
+    const isOpen = modal.get('isOpen', false)
+    const currentModal = modal.get('currentModal')
+    const transactions = modal.get('transactions', [])
 
     if (isOpen && blockchainConnection) {
       /*
@@ -31,7 +30,7 @@ class BackdropProvider extends Component {
         throw Error('Invalid Modal Type', currentModal)
       }
 
-      return <Modal {...data} closeModal={closeModalProp} />
+      return <Modal transactions={transactions} closeModal={closeModalProp} />
     }
 
     return undefined

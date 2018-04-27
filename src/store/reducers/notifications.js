@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-
+import { Map } from 'immutable'
 import { showNotification, fadeOutNotification, hideAllNotifications } from 'store/actions//notifications'
 
 const reducer = handleActions(

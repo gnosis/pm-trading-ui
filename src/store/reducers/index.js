@@ -38,8 +38,15 @@ const rootReducer = (state, action) => {
   if (action.type === 'LOAD_LOCALSTORAGE' || action.type === 'LOAD_SESSIONSTORAGE') {
     resultState = {
       ...state,
-      ...action.payload,
     }
+
+    Object.keys(action.payload).forEach((key) => {
+      if (state[key].merge) {
+        state[key].merge(action.payload[key])
+      } else {
+        resultState[key] = { ...action.payload[key] }
+      }
+    })
   }
   return combinedReducers(resultState, action)
 }

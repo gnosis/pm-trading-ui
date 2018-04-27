@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import moment from 'moment'
 import { RESOLUTION_TIME } from 'utils/constants'
 import style from './DetailLabel.mod.scss'

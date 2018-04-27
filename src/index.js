@@ -23,7 +23,7 @@ setMomentRelativeTime()
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 store.dispatch(initReadOnlyGnosis())
-if (tournamentEnabled) {
+if (!tournamentEnabled) {
   store.dispatch(initProviders())
 } else {
   const tournamentProvider = WALLET_PROVIDER[providerConfig.default]
