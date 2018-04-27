@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-import { Map, List } from 'immutable'
+import { Map, List, fromJS } from 'immutable'
 
 import { openModal, closeModal } from 'store/actions/modal'
 
@@ -9,7 +9,7 @@ const reducer = handleActions(
       state.withMutations((stateMap) => {
         stateMap.set('isOpen', true)
         stateMap.set('currentModal', currentModal)
-        stateMap.set('modalData', modalData)
+        stateMap.set('modalData', fromJS(modalData))
       }),
     [closeModal]: () =>
       Map({
@@ -21,7 +21,7 @@ const reducer = handleActions(
   Map({
     isOpen: false,
     currentModal: undefined,
-    transactions: List(),
+    modalData: Map(),
   }),
 )
 
