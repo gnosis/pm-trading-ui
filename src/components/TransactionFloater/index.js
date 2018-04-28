@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import { NavLink } from 'react-router-dom'
 import { takeRight } from 'lodash'
-
 import moment from 'moment'
 
 import LabeledSpinner from 'components/Spinner/Labeled'
