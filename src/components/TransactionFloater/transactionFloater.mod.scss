@@ -23,21 +23,22 @@ $shadow-color: #828282;
 
   z-index: 1000;
 
-  &__heading {
+  .heading {
     text-align: center;
     font-size: 12px;
     text-transform: uppercase;
     padding-top: 16px;
   }
 
-  &__close {
+  .closeButton {
     @include closeButton(12px, 2px);
 
-    top: 12px;
-    right: 7px;
+    top: 7px;
+    right: 12px;
+    border: none;
   }
 
-  &__spinner {
+  .spinner {
     z-index: 1001;
     cursor: pointer;
     filter: drop-shadow(0px 0px 6px lighten($shadow-color, 20%));
@@ -49,7 +50,7 @@ $shadow-color: #828282;
     }
   }
 
-  &__popover {
+  .popover {
     position: absolute;
     bottom: 100%;
     margin-bottom: $expandable-arrow-margin;
@@ -60,16 +61,16 @@ $shadow-color: #828282;
     background-color: $floater-bg;
     filter: drop-shadow(0 0 4px $shadow-color);
 
-    &--visible {
+    &.visible {
       opacity: 1;
     }
 
-    &--hidden {
+    &.hidden {
       opacity: 0;
       pointer-events: none;
     }
 
-    transition: opacity .4s ease;
+    transition: opacity 0.4s ease;
 
     &::after {
       content: '';
@@ -83,20 +84,18 @@ $shadow-color: #828282;
       border-right: $expandable-arrow-size solid transparent;
       border-top: $expandable-arrow-size solid $floater-bg-bottom;
     }
-
   }
 
-  &--notifications {
+  .notifications {
     padding-bottom: 0;
     background-color: transparent;
   }
 
-
-  &__logs {
+  .logs {
     padding: 8px 0;
   }
 
-  &__footer {
+  .footer {
     position: absolute;
     padding: 12px 0;
     border-bottom-left-radius: 4px;
@@ -109,57 +108,57 @@ $shadow-color: #828282;
     background-color: $floater-bg-bottom;
     text-align: center;
   }
-}
 
-.transactionLog {
-  padding: 4px 0;
-  margin-right: 12px;
-  margin-left: 38px;
-  position: relative;
+  .transactionLog {
+    padding: 4px 0;
+    margin-right: 12px;
+    margin-left: 38px;
+    position: relative;
 
-  &--empty {
-    margin: 0px;
-    
-    .transactionLog__label {
-      text-align: center;
+    &.empty {
+      margin: 0px;
+
+      .label {
+        text-align: center;
+      }
+
+      .hint {
+        margin: 12px;
+        text-align: center;
+        color: $font-color-muted;
+      }
     }
 
-    .transactionLog__hint {
-      margin: 12px;
-      text-align: center;
+    &:not(:last-of-type) {
+      border-bottom: 1px solid $floater-bg-bottom;
+    }
+
+    .label {
+      font-weight: 500;
+      margin: 8px 0;
+    }
+
+    .startTime {
+      text-transform: uppercase;
       color: $font-color-muted;
     }
-  }
 
-  &:not(:last-of-type) {
-    border-bottom: 1px solid $floater-bg-bottom;
-  }
+    .progress {
+      position: absolute;
+      top: 10px;
+      margin-right: 4px;
+      right: 100%;
+    }
 
-  &__label {
-    font-weight: 500;
-    margin: 8px 0;
-  }
+    .progressIcon {
+      position: absolute;
+      top: 10px;
+      margin-right: 4px;
+      right: 100%;
+    }
 
-  &__startTime {
-    text-transform: uppercase;
-    color: $font-color-muted;
-  }
-
-  &__progress {
-    position: absolute;
-    top: 10px;
-    margin-right: 4px;
-    right: 100%;
-  }
-
-  &__progressIcon {
-    position: absolute;
-    top: 10px;
-    margin-right: 4px;
-    right: 100%;
-  }
-
-  .icon {
-    position: absolute;
+    .icon {
+      position: absolute;
+    }
   }
 }

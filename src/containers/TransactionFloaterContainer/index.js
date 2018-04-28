@@ -3,10 +3,7 @@ import { takeRight } from 'lodash'
 
 import TransactionFloater from 'components/TransactionFloater'
 
-import {
-  showTransactionLog,
-  hideTransactionLog,
-} from 'routes/Transactions/store/actions//transactions'
+import { showTransactionLog, hideTransactionLog } from 'store/actions/transactions'
 
 import {
   getRunningTransactions,
