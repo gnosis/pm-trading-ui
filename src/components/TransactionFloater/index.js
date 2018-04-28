@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import { NavLink } from 'react-router-dom'
+import { List } from 'immutable'
 import { takeRight } from 'lodash'
 import moment from 'moment'
 import LabeledSpinner from 'components/Spinner/Labeled'
 import ProgressSpinner from 'components/Spinner/Transaction'
-import Notifications from 'components/Notifications'
 import Icon from 'components/Icon'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
+import Notifications from './Notifications'
 import style from './transactionFloater.mod.scss'
 
 const cx = cn.bind(style)
@@ -39,9 +40,9 @@ const TransactionFloater = ({
       />
     </button>
     {!showLogs &&
-      notifications.length > 0 && (
+      !notifications.isEmpty() > 0 && (
       <div className={cx('popover', 'notifications')}>
-        <Notifications notifications={takeRight(notifications, 5)} onClick={showTransactionLog} />
+        <Notifications notifications={notifications.takeLast(5)} onClick={showTransactionLog} />
       </div>
     )}
     <div className={cx('popover', showLogs ? 'visible' : 'hidden')}>
@@ -110,14 +111,15 @@ TransactionFloater.propTypes = {
   progress: PropTypes.number.isRequired,
   runningTransactions: PropTypes.arrayOf(PropTypes.object),
   completedTransactions: PropTypes.arrayOf(PropTypes.object),
-  notifications: PropTypes.arrayOf(PropTypes.object),
+  // eslint-disable-next-line
+  notifications: ImmutablePropTypes.list,
   showLogs: PropTypes.bool,
   hideTransactionLog: PropTypes.func.isRequired,
   showTransactionLog: PropTypes.func.isRequired,
 }
 
 TransactionFloater.defaultProps = {
-  notifications: [],
+  notifications: List(),
   runningTransactions: [],
   completedTransactions: [],
   showLogs: false,

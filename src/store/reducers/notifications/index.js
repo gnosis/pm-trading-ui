@@ -7,11 +7,11 @@ const reducer = handleActions(
   {
     [showNotification]: (state, action) =>
       state.withMutations((stateMap) => {
-        stateMap.set('currentVisible', value => value.push(action.payload.id))
-        stateMap.get('log').set(action.payload.id, new NotificationRecord(action.payload))
+        stateMap.update('currentVisible', value => value.push(action.payload.id))
+        stateMap.setIn(['log', action.payload.id], new NotificationRecord(action.payload))
       }),
     [fadeOutNotification]: (state, action) =>
-      state.set('currentVisible', value => value.filter(id => id !== action.payload.id)),
+      state.update('currentVisible', value => value.filter(id => id !== action.payload.id)),
     [hideAllNotifications]: state => state.set('currentVisible', List()),
   },
   Map({
