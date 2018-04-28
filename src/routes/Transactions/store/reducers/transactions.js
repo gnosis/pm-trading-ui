@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions'
 import { get } from 'lodash'
-import { TRANSACTION_STATUS } from 'utils/constants'
+import { Map } from 'immutable'
 import {
   startTransactionLog,
   closeTransactionLog,
@@ -8,73 +8,25 @@ import {
   hideTransactionLog,
   addTransactionLogEntry,
 } from 'routes/Transactions/store/actions/transactions'
+import TxRecord from 'routes/Transactions/store/models/transaction'
 
 const LOAD_LOCALSTORAGE = 'LOAD_LOCALSTORAGE'
 
 const reducer = handleActions(
   {
-    [startTransactionLog]: (state, action) => ({
-      ...state,
-      log: {
-        ...state.log,
-        [action.payload.id]: {
-          ...action.payload,
-          events: action.payload.events.map((event) => {
-            if (!event.status) {
-              return {
-                ...event,
-                status: TRANSACTION_STATUS.RUNNING,
-              }
+    [startTransactionLog]: (state, { payload }) => state.setIn(['log', payload.id], new TxRecord(payload)),
+    [closeTransactionLog]: (state, { payload }) => state.mergeIn(['log', payload.id], payload),
+    [addTransactionLogEntry]: (state, { payload: { id, ...transactionLog } }) =>
+      state.updateIn(['log', id, 'events'], events =>
+        events.map(log =>
+          (log.event === transactionLog.event
+            ? {
+              ...log,
+              ...transactionLog,
             }
-            return event
-          }),
-        },
-      },
-    }),
-    [closeTransactionLog]: (state, action) => {
-      const { id, ...payload } = action.payload
-      return {
-        ...state,
-        log: {
-          ...state.log,
-          [id]: {
-            ...state.log[id],
-            ...payload,
-          },
-        },
-      }
-    },
-    [addTransactionLogEntry]: (state, action) => {
-      const { id, ...transactionLog } = action.payload
-
-      return {
-        ...state,
-        log: {
-          ...state.log,
-          [id]: {
-            ...state.log[id],
-            events: state.log[id].events.map((log) => {
-              if (log.event === transactionLog.event) {
-                return {
-                  ...log,
-                  ...transactionLog,
-                }
-              }
-
-              return log
-            }),
-          },
-        },
-      }
-    },
-    [showTransactionLog]: state => ({
-      ...state,
-      visible: true,
-    }),
-    [hideTransactionLog]: state => ({
-      ...state,
-      visible: false,
-    }),
+            : log))),
+    [showTransactionLog]: state => state.set('visible', true),
+    [hideTransactionLog]: state => state.set('visible', false),
     [LOAD_LOCALSTORAGE]: (state, action) => {
       const newState = {
         ...state,
@@ -99,7 +51,10 @@ const reducer = handleActions(
       return newState
     },
   },
-  { log: {}, visible: false },
+  Map({
+    log: Map(),
+    visible: false,
+  }),
 )
 
 export default reducer

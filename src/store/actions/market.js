@@ -5,7 +5,7 @@ import { receiveEntities, updateEntity } from 'store/actions//entities'
 import { closeModal } from 'store/actions//modal'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 
-import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
+import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, TRANSACTION_STATUS } from 'utils/constants'
 import { REVOKE_TOKENS } from 'utils/transactionExplanations'
 
 import { getRedeemedShares } from 'store/selectors/marketShares'
@@ -32,6 +32,7 @@ export const TRANSACTION_EVENTS_GENERIC = [
   {
     event: TRANSACTION_STAGES.GENERIC,
     label: 'Sending Transaction',
+    status: TRANSACTION_STATUS.RUNNING,
   },
 ]
 

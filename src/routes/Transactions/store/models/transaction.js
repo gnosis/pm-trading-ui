@@ -1,13 +1,14 @@
 import { Record, List } from 'immutable'
 
-const txRecord = Record(
+const TxRecord = Record(
   {
     id: undefined,
     label: '',
     events: List(),
     startTime: undefined,
+    progress: undefined,
   },
   'Transaction',
 )
 
-export default txRecord
+export default TxRecord
