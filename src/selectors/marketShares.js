@@ -152,11 +152,11 @@ export const getAccountShares = createSelector(
 
 export const getRedeemedShares = (state, marketAddress) => {
   const shares = getAccountShares(state)
+  const blah = marketAddress
 
   const redeemedShares = {}
   Object.keys(shares).forEach((shareId) => {
-    const share = shares[shareId]
-    redeemedShares[shareId] = share
+    redeemedShares[shareId] = blah
   })
   return redeemedShares
 }
