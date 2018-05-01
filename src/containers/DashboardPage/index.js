@@ -12,9 +12,8 @@ import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinni
 import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
 import { weiToEth } from 'utils/helpers'
 import { fetchTournamentUserData, fetchTournamentUsers } from 'routes/Scoreboard/store/actions'
-import { getCollateralToken } from 'utils/features'
 
-const collateralToken = getCollateralToken()
+const collateralToken = 'collateralToken'
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)

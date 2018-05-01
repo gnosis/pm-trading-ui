@@ -23,7 +23,7 @@ class Metrics extends React.PureComponent {
     predictedProfit: '0',
     tokens: '0',
     tokenSymbol: '',
-    tokenIcon: '',
+    tokenIcon: 'default: tokenIcon',
     rank: '',
     badge: {},
   }

@@ -156,9 +156,7 @@ export const getRedeemedShares = (state, marketAddress) => {
   const redeemedShares = {}
   Object.keys(shares).forEach((shareId) => {
     const share = shares[shareId]
-    if (share.market && share.market.address === marketAddress) {
-      redeemedShares[shareId] = share
-    }
+    redeemedShares[shareId] = share
   })
   return redeemedShares
 }

@@ -49,7 +49,7 @@ const Metrics = ({
   predictedProfit, tokens, tokenSymbol, tokenIcon, rank, badge,
 }) => (
   <Block className={cx('ol-db-container')} margin="md">
-    <Metric img={tokenIcon} explanation={`${tokenSymbol} TOKENS`}>
+    <Metric string={tokenIcon} explanation={`${tokenSymbol} TOKENS`}>
       <DecimalValue value={tokens} className={cx('ol-db-title')} />
     </Metric>
     <Metric img={outstandingPredictions} width={45} height={45} explanation="PREDICTED PROFITS">
