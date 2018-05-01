@@ -1,15 +1,17 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "gnosisdb-prod.gnosis.pm",
-    "port": 443
+    "host": "13.57.73.45",
+    "port": 5432
   },
   "ethereum": {
     "protocol": "https",
-    "host": "mainnet.infura.io",
+    "host": "rinkeby.infura.io",
     "port": 443
   },
   "whitelist": {
+    "0x1B77f3EbB5587c682CD6ca4c7676B9Ea0Cc01513": "Tim Metamask1",
+    "0x8d95e863B4021db28ce6E4E58Ab4A15Bde727aa1": "Tim Metamask2",
     "0xb2e87b8ce41184e0688027f370a972a436abe77e": "Giacomo",
     "0xb00a24c899f88e5514583cfa8c40e4cdab6c473e": "Andre Metamask",
     "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",

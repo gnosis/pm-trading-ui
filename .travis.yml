@@ -11,8 +11,8 @@ after_success:
     export GNOSIS_ENV=staging;
     export NODE_ENV=production;
   else
-    export GNOSIS_ENV=development;
-    export NODE_ENV=development;
+    export GNOSIS_ENV=production;
+    export NODE_ENV=production;
   fi
 - npm run build
 deploy:

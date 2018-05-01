@@ -16,9 +16,9 @@ module.exports = (env, envVarsConfig = {}, envVarsInterface = {}) => {
   if (!isValidConfigFolder) {
     console.warn(`[WEBPACK]: invalid interface configuration selected: '${env}' - using fallback configuration`)
   } else {
-    // console.info(`[WEBPACK]: loaded env configuration: '${env}'`)
     configsToLoad.push(envConfigFolder)
   }
+  console.info(`[WEBPACK]: loaded env configuration: '${env}'`)
 
   let config = {}
   let interfaceConfig = {}
