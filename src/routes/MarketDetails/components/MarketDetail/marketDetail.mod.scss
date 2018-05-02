@@ -11,7 +11,7 @@ $expandable-margin: 40px;
   position: relative;
   z-index: 2;
   margin-top: $expandable-margin;
-  &__inner {
+  .inner {
     padding: 40px 0;
     background-color: $bg-color-muted;
 

@@ -13,14 +13,14 @@
     }
   }
 
-  &__arrow {
+  .arrow {
     width: 32px;
     height: 32px;
-    
+
     &::after {
       content: '';
       position: absolute;
- 
+
       top: 50%;
       left: 50%;
 
@@ -29,17 +29,17 @@
 
       width: 12px;
       height: 12px;
-  
+
       border-bottom: 3px solid black;
       border-right: 3px solid black;
-  
+
       transform: rotate(45deg);
       transform-origin: 50% 50%;
     }
   }
 
   &.rc-tooltip {
-    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, .24));
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.24));
   }
 
   .rc-tooltip-inner {
@@ -50,7 +50,9 @@
     z-index: 5;
   }
 
-  .rc-tooltip, .rc-tooltip-inner, .rc-tooltip-content {
+  .rc-tooltip,
+  .rc-tooltip-inner,
+  .rc-tooltip-content {
     box-shadow: none;
   }
 
@@ -69,43 +71,42 @@
   }
 }
 
-.menuAccountAction {
-  &__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.action {
+  color: black;
+  font-size: 15px;
+  padding: 8px;
+
+  button {
+    appearance: none;
+    display: block;
+    background: none;
+    border: none;
+
+    &:hover,
+    &:active {
+      color: lighten(black, 50%);
+      text-decoration: underline;
+    }
   }
-  
-  &__seperator {
+}
+
+.separator {
+  height: 1px;
+
+  &::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    left: 50%;
+    margin-left: -50%;
+
     height: 1px;
-
-    &::after {
-      position: absolute;
-      content: '';
-      width: 100%;
-      left: 50%;
-      margin-left: -50%;
-
-      height: 1px;
-      background-color: rgba(0, 0, 0, .12);
-    }
-  }
-
-  &__action {
-    color: black;
-    font-size: 15px;
-    padding: 8px;
-
-    button {
-      appearance: none;
-      display: block;
-      background: none;
-      border: none;
-
-      &:hover,&:active {
-        color: lighten(black, 50%);
-        text-decoration: underline;
-      }
-    }
+    background-color: rgba(0, 0, 0, 0.12);
   }
 }

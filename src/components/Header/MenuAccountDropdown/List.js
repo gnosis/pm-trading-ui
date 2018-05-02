@@ -1,8 +1,12 @@
 import React from 'react'
+import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
+import style from './dropdown.scss'
+
+const cx = cn.bind(style)
 
 const List = ({ children }) => (
-  <ul className="menuAccountAction__list">
+  <ul className={cx('list')}>
     {children}
   </ul>
 )
