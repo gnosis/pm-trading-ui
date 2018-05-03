@@ -6,7 +6,7 @@ import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import IndefiniteSpinner from './Indefinite'
 
 const ProgressIndicator = ({ completed, completionStatus, progress }) => {
-  const iconType = completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR ? 'checkmark' : 'error'
+  const iconType = completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR ? 'checkmark' : 'cross'
   const iconStyle = {
     top: '50%',
     marginTop: -24,

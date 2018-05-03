@@ -1,8 +1,8 @@
-FROM node:8.2.1
-RUN apt-get update && apt-get install -y git
+FROM node:9.11.1-alpine
+RUN apk update && apk --no-cache add git python alpine-sdk
 RUN npm install -g webpack babel-cli truffle-contract
 ADD package.json /tmp/package.json
-RUN cd /tmp && npm install -s && npm install truffle-contract && npm install --only=dev -s
+RUN cd /tmp && npm install && npm install truffle-contract && npm install --only=dev 
 
 RUN mkdir -p /app && cp -a /tmp/node_modules /app/
 

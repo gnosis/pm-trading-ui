@@ -84,7 +84,7 @@ const TransactionFloater = ({
               ? moment(transaction.startTime).to(moment(transaction.endTime), true)
               : undefined
 
-          const icon = transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR ? 'checkmark' : 'error'
+          const icon = transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR ? 'checkmark' : 'cross'
           return (
             <div key={transaction.id} className={cx('transactionLog')}>
               <Icon type={icon} className={cx('progressIcon')} />
