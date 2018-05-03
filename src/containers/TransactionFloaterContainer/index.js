@@ -1,17 +1,12 @@
 import { connect } from 'react-redux'
-import { takeRight } from 'lodash'
-
 import TransactionFloater from 'components/TransactionFloater'
-
 import { showTransactionLog, hideTransactionLog } from 'routes/Transactions/store/actions/transactions'
-
 import {
   getRunningTransactions,
   getCompletedTransactions,
   getRunningTransactionsProgress,
   areLogsVisible,
 } from 'routes/Transactions/store/selectors/transactions'
-
 import { getVisibleNotifications } from 'store/selectors/notifications'
 
 const LIMIT_COUNT_RUNNING_TRANSACTIONS = 3
