@@ -5,6 +5,33 @@ gnosis-management
 
 Start with `npm start`, server available under `http://localhost:8000/`
 
+Quickstart with Docker/Docker Compose
+-----
+
+### Install Docker and Docker Compose
+* First, install docker: https://docs.docker.com/engine/installation/.
+* Then, install docker compose: https://docs.docker.com/compose/install/
+* Clone the repository and change your working directory:
+
+```
+git clone https://github.com/gnosis/gnosis-management.git
+cd gnosis-management
+```
+
+### Build containers
+The application is made up of several container images that are linked together using docker-compose. Before running the application, build the images:
+
+`docker-compose build --force-rm`
+
+### Running the Application
+
+```
+docker-compose up
+```
+
+*Application will run on `http://localhost:8080`*
+
+
 Installing gnosis.js
 ------
 
