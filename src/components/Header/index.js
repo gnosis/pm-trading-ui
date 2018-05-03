@@ -140,18 +140,18 @@ class Header extends Component {
                 Transactions
               </NavLink>
             )}
-            {showScoreboard && (
-              <NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink')}>
-                Scoreboard
-              </NavLink>
-            )}
+            {/*{showScoreboard && (*/}
+              {/*<NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink')}>*/}
+                {/*Scoreboard*/}
+              {/*</NavLink>*/}
+            {/*)}*/}
             {gameGuideLink}
           </div>
 
           <div className={cx('group', 'right')}>
             {walletConnected && currentProvider && (
               <div className={cx('account')}>
-                {currentNetwork && currentNetwork !== 'MAIN' && (
+                {(
                   <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
                 )}
                 <DecimalValue value={tokenBalance} className={cx('balance', 'test')} />&nbsp;

@@ -13,7 +13,7 @@ import { getConfiguration } from 'utils/features'
 const config = getConfiguration()
 
 const mapStateToProps = (state) => {
-  // const markets = getMarkets(state)
+  const markets = getMarkets(state)
   const defaultAccount = getCurrentAccount(state)
   const filterForm = formValueSelector('marketListFilter')
   const filterSearch = filterForm(state, 'search')
@@ -27,6 +27,7 @@ const mapStateToProps = (state) => {
     onlyModeratorsMarkets: Object.keys(config.whitelist).length > 0, // Show only markets created by moderators if they're declared in config
     defaultAccount,
   })
+
 
   const isModerator = config.whitelist[defaultAccount] !== undefined
 

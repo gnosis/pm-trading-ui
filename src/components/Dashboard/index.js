@@ -95,6 +95,7 @@ class Dashboard extends Component {
     return <div />
   }
 
+  // newMarkets  new markets/latest markets
   renderNewMarkets(markets) {
     return markets.map((market) => {
       const viewMarket = () => this.handleViewMarket(market)
@@ -122,6 +123,8 @@ class Dashboard extends Component {
     })
   }
 
+
+  // closing markets / closing next
   renderClosingMarkets(markets) {
     return markets.map((market) => {
       const viewMarket = () => this.handleViewMarket(market)
@@ -351,7 +354,9 @@ class Dashboard extends Component {
             <div className="row">
               <div className="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
                 <Block margin="md">
-                  <Title>Dashboard</Title>
+                  <h2>Decentralized research & strategy platform</h2>
+                  <h4>Dashboard Component</h4>
+                  <h4>/src/components/dashboard/index.js line:348</h4>
                 </Block>
                 <Block margin="xl">{metricsSection}</Block>
               </div>

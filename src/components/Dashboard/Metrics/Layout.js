@@ -12,9 +12,9 @@ const tournamentEnabled = isFeatureEnabled('tournament')
 
 const cx = classNames.bind(css)
 
-const arrows = require('./assets/arrows.svg')
-const etherTokens = require('./assets/icon_etherTokens.svg')
-const outstandingPredictions = require('./assets/icon_outstandingPredictions.svg')
+const arrows = require('./assets/bitcoin.svg')
+const etherTokens = require('./assets/monero.svg')
+const outstandingPredictions = require('./assets/monero.svg')
 
 const Metric = ({
   img, explanation, children, width, height, tokenSymbol, ...props
@@ -49,10 +49,10 @@ const Metrics = ({
   predictedProfit, tokens, tokenSymbol, tokenIcon, rank, badge,
 }) => (
   <Block className={cx('ol-db-container')} margin="md">
-    <Metric string={tokenIcon} explanation={`${tokenSymbol} TOKENS`}>
+    <Metric img={etherTokens} width={45} height={45} explanation={`${tokenSymbol} Ether Balance`}>
       <DecimalValue value={tokens} className={cx('ol-db-title')} />
     </Metric>
-    <Metric img={outstandingPredictions} width={45} height={45} explanation="PREDICTED PROFITS">
+    <Metric img={outstandingPredictions} width={45} height={45} explanation="Research Token Balance">
       <Block className={cx('ol-db-title')}>{predictedProfit}</Block>
     </Metric>
     {tournamentEnabled && (

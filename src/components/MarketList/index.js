@@ -19,6 +19,7 @@ import {
   RadioButtonGroup,
 } from 'components/Form'
 
+
 import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import { isMarketClosed, isMarketResolved } from 'utils/helpers'
@@ -221,8 +222,13 @@ class MarketList extends Component {
       <div className="marketListPage">
         <div className="marketListPage__header">
           <div className="container">
-            <h1>Market overview</h1>
+            <h3>Market overview meowwww</h3>
+
+
+
+
           </div>
+
         </div>
         <div className="marketListPage__stats">
           <div className="container">

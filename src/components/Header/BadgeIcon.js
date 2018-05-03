@@ -5,7 +5,7 @@ import Icon from 'components/Icon'
 import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 
 const BadgeIcon = ({ userTournamentInfo }) => {
-  let predictions = 0
+  let predictions = 12345
 
   if (userTournamentInfo) {
     [predictions] = userTournamentInfo

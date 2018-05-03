@@ -3,9 +3,9 @@ import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import web3 from 'web3'
 
-import GameGuidePage from 'routes/GameGuide/containers/GameGuide'
+// import GameGuidePage from 'routes/GameGuide/containers/GameGuide'
 import MarketListPage from 'routes/MarketList/containers/MarketList'
-import ScoreboardPage from 'routes/Scoreboard/containers/ScoreBoard'
+// import ScoreboardPage from 'routes/Scoreboard/containers/ScoreBoard'
 import MarketDetailPage from 'routes/MarketDetails/containers/MarketDetailPage'
 import TransactionsPage from 'containers/TransactionsPage'
 import DashboardPage from 'containers/DashboardPage'
@@ -35,8 +35,8 @@ const AppRouter = () => (
     <Route exact path="/transactions" component={TransactionsPage} />
     <Route exact path="/markets/list" component={MarketListPage} />
     <Route exact path="/markets/:id/:view?/:shareId?" render={marketDetailRender} />
-    {isFeatureEnabled('scoreboard') && <Route exact path="/scoreboard" component={ScoreboardPage} />}
-    {showGameGuide && <Route exact path="/game-guide" component={GameGuidePage} />}
+    {/*{isFeatureEnabled('scoreboard') && <Route exact path="/scoreboard" component={ScoreboardPage} />}*/}
+    {/*{showGameGuide && <Route exact path="/game-guide" component={GameGuidePage} />}*/}
     <Redirect to="/markets/list" />
   </Switch>
 )

@@ -52,9 +52,7 @@ TextInput.propTypes = {
   startAdornment: PropTypes.node,
   endAdornment: PropTypes.node,
   decoration: PropTypes.oneOf(['underlined']),
-  // eslint-disable-next-line
   wrapperStyle: PropTypes.object,
-  // eslint-disable-next-line
   errorStyle: PropTypes.object,
 }
 

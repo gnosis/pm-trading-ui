@@ -19,8 +19,8 @@ const Icon = ({
 
   const iconStyle = {
     backgroundImage: `url(${icon})`,
-    width: `${size}px`,
-    height: `${size}px`,
+    width: `25px`,
+    height: `25px`,
     float,
     ...style,
   }
@@ -43,7 +43,7 @@ Icon.propTypes = {
 }
 
 Icon.defaultProps = {
-  src: undefined,
+  src: "assets/img/monero.svg",
   type: 'etherTokens',
   float: 'none',
   size: 16,
