@@ -7,6 +7,9 @@ const TxRecord = Record(
     events: List(),
     startTime: undefined,
     progress: undefined,
+    endTime: undefined,
+    completed: undefined,
+    completionStatus: undefined,
   },
   'Transaction',
 )

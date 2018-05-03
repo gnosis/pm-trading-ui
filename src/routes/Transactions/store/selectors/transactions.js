@@ -2,17 +2,11 @@ import _ from 'lodash'
 
 import { TRANSACTION_STATUS, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 
-export const transactionSelector = (state, transactionId) => {
-  if (!transactionId) {
-    throw new Error('suka blat')
-  }
-  console.log(transactionId)
-  return state.transactions.getIn(['log', transactionId], {})
-}
+export const transactionSelector = (state, transactionId) => state.transactions.getIn(['log', transactionId], {})
 
 export const getTransactionProgress = (state, transactionId) => {
   const transaction = transactionSelector(state, transactionId)
-  console.log(transaction)
+
   if (transaction) {
     const events = transaction.get ? transaction.get('events', []) : []
 
@@ -34,7 +28,7 @@ export const getTransactionProgress = (state, transactionId) => {
 
 export const getTransactionLogs = (state, transactionId) => {
   const transaction = transactionSelector(state, transactionId)
-  console.log(transaction)
+
   if (transaction) {
     const events = transaction.get('events', [])
 
@@ -77,10 +71,7 @@ export const getCompletedTransactions = state => getAllTransactions(state).filte
 export const getRunningTransactionsProgress = (state) => {
   const transactions = getRunningTransactions(state)
 
-  const doneEvents = transactions.reduce((acc, transaction) => {
-    console.log(transaction)
-    return acc + getTransactionProgress(state, transaction.id)
-  }, 0)
+  const doneEvents = transactions.reduce((acc, transaction) => acc + getTransactionProgress(state, transaction.id), 0)
 
   const totalEvents = transactions.reduce((acc, transaction) => acc + transaction.events.length, 0)
 
