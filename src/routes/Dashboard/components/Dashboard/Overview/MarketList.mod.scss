@@ -1,0 +1,12 @@
+@import "../../../../../scss/vars";
+
+.marketList {
+  .title {
+    margin: 0 0 12px 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: $font-color-bright;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  } 
+}
