@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import { NavLink } from 'react-router-dom'
-import { List } from 'immutable'
+import { List, Map } from 'immutable'
 import moment from 'moment'
 import LabeledSpinner from 'components/Spinner/Labeled'
 import ProgressSpinner from 'components/Spinner/Transaction'
@@ -39,7 +39,7 @@ const TransactionFloater = ({
       />
     </button>
     {!showLogs &&
-      !notifications.isEmpty() > 0 && (
+      !notifications.isEmpty() && (
       <div className={cx('popover', 'notifications')}>
         <Notifications notifications={notifications.takeLast(5)} onClick={showTransactionLog} />
       </div>
@@ -48,8 +48,8 @@ const TransactionFloater = ({
       <div className={cx('heading')}>Transactions</div>
       <button className={cx('closeButton')} onClick={() => hideTransactionLog()} />
       <div className={cx('logs')}>
-        {!runningTransactions.length &&
-          !completedTransactions.length && (
+        {runningTransactions.isEmpty() &&
+          completedTransactions.isEmpty() && (
           <div className={cx('transactionLog', 'empty')}>
             <div className={cx('label')}>You have no active or past transactions.</div>
             <div className={cx('hint')}>
@@ -58,7 +58,7 @@ const TransactionFloater = ({
             </div>
           </div>
         )}
-        {runningTransactions.map((transaction) => {
+        {runningTransactions.toArray().map((transaction) => {
           const startTime = transaction.startTime ? moment(transaction.startTime).format('LLL') : ''
 
           return (
@@ -78,7 +78,7 @@ const TransactionFloater = ({
             </div>
           )
         })}
-        {completedTransactions.map((transaction) => {
+        {completedTransactions.toArray().map((transaction) => {
           const endTime = transaction.endTime ? moment(transaction.endTime).format('LLL') : ''
           const timeDiff =
             transaction.startTime && transaction.endTime
@@ -108,8 +108,10 @@ const TransactionFloater = ({
 
 TransactionFloater.propTypes = {
   progress: PropTypes.number.isRequired,
-  runningTransactions: PropTypes.arrayOf(PropTypes.object),
-  completedTransactions: PropTypes.arrayOf(PropTypes.object),
+  // eslint-disable-next-line
+  runningTransactions: ImmutablePropTypes.map,
+  // eslint-disable-next-line
+  completedTransactions: ImmutablePropTypes.map,
   // eslint-disable-next-line
   notifications: ImmutablePropTypes.list,
   showLogs: PropTypes.bool,
@@ -119,8 +121,8 @@ TransactionFloater.propTypes = {
 
 TransactionFloater.defaultProps = {
   notifications: List(),
-  runningTransactions: [],
-  completedTransactions: [],
+  runningTransactions: Map({}),
+  completedTransactions: Map({}),
   showLogs: false,
 }
 

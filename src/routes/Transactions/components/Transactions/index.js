@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
+import { Map } from 'immutable'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import Icon from 'components/Icon'
-import { transactionShape } from 'utils/shapes'
 import Transaction from './Transaction'
 import style from './Transactions.mod.scss'
 
@@ -17,6 +18,7 @@ class Transactions extends Component {
 
   render() {
     const { runningTransactions, completedTransactions } = this.props
+
     return (
       <div className={cx('transactionsPage')}>
         <div className="container">
@@ -26,20 +28,24 @@ class Transactions extends Component {
             </div>
             Currently Running Transactions
           </div>
-          {!runningTransactions.length && (
+          {runningTransactions.isEmpty() && (
             <div className={cx('transaction')}>There are no currently running transactions</div>
           )}
-          {runningTransactions.map(transaction => <Transaction key={transaction.id} type="running" {...transaction} />)}
+          {runningTransactions
+            .toArray()
+            .map(transaction => <Transaction key={transaction.id} type="running" {...transaction} />)}
           <div className={cx('heading')}>
             <div className={cx('headingIcon')}>
               <Icon type="countdown" size={48} />
             </div>
             Previous Transactions
           </div>
-          {!completedTransactions.length && <div className={cx('transaction')}>There are no previous transactions</div>}
-          {completedTransactions.map(transaction => (
-            <Transaction key={transaction.id} type="completed" {...transaction} />
-          ))}
+          {completedTransactions.isEmpty() && (
+            <div className={cx('transaction')}>There are no previous transactions</div>
+          )}
+          {completedTransactions
+            .toArray()
+            .map(transaction => <Transaction key={transaction.id} type="completed" {...transaction} />)}
         </div>
       </div>
     )
@@ -48,14 +54,16 @@ class Transactions extends Component {
 
 Transactions.propTypes = {
   changeUrl: PropTypes.func.isRequired,
-  completedTransactions: PropTypes.arrayOf(transactionShape),
+  // eslint-disable-next-line
+  completedTransactions: ImmutablePropTypes.map,
   currentAccount: PropTypes.string,
-  runningTransactions: PropTypes.arrayOf(transactionShape),
+  // eslint-disable-next-line
+  runningTransactions:ImmutablePropTypes.map,
 }
 
 Transactions.defaultProps = {
-  completedTransactions: [],
-  runningTransactions: [],
+  completedTransactions: Map({}),
+  runningTransactions: Map({}),
   currentAccount: undefined,
 }
 
