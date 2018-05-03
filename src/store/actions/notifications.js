@@ -43,7 +43,7 @@ export const createNotificationFromTransaction = (transactionId, type = 'START')
   } else if (type === 'CLOSE') {
     const success = didTransactionSucceed(state, transactionId)
     message = `Transaction ${success ? 'finished successfully' : 'did not finish, errors occured'}`
-    icon = success ? 'checkmark' : 'error'
+    icon = success ? 'checkmark' : 'cross'
   }
 
   dispatch(createNotification(title, message, icon))
