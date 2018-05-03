@@ -1,6 +1,8 @@
 import React from 'react'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
+import { List } from 'immutable'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import Icon from 'components/Icon'
 import style from './Notifications.mod.scss'
 
@@ -23,12 +25,13 @@ const Notifications = ({ notifications, onClick }) => (
 )
 
 Notifications.propTypes = {
-  notifications: PropTypes.arrayOf(PropTypes.object),
+  // eslint-disable-next-line
+  notifications: ImmutablePropTypes.list,
   onClick: PropTypes.func,
 }
 
 Notifications.defaultProps = {
-  notifications: [],
+  notifications: List(),
   onClick: () => {},
 }
 
