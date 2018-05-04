@@ -1,15 +1,22 @@
-{
-  "useFlexbox": true,
-
-  "styleLoaders": ["style-loader", "css-loader", "sass-loader"],
-
-  "styles": true,
-
-  "scripts": false,
-  "bootstrapVersion": 3,
-  "env": {
-    "production": {
-      "extractStyles": true
-    }
-  }
-}
+---
+useFlexbox: true
+styleLoaders:
+- style-loader
+- css-loader
+- postcss-loader
+- sass-loader
+styles:
+  grid: true
+  buttons: true
+  mixins: true
+  media: true
+  tables: true
+scripts: false
+bootstrapVersion: 3
+env:
+  production:
+    extractStyles: true
+    styleLoaders:
+    - css-loader
+    - postcss-loader
+    - sass-loader

@@ -1,20 +1,25 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { isFeatureEnabled } from 'utils/features'
 import { triedToConnect } from 'selectors/blockchain'
 import { closeModal } from 'actions/modal'
 import * as modals from 'containers/Modals'
+import style from './backdrop.mod.scss'
 
-import './backdrop.scss'
+const cx = cn.bind(style)
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 
 class BackdropProvider extends Component {
   renderBackdropContent() {
-    const { modal: { currentModal, isOpen, ...data }, closeModal: closeModalProp, blockchainConnection } = this.props
+    const {
+      modal: { currentModal, isOpen, ...data },
+      closeModal: closeModalProp,
+      blockchainConnection,
+    } = this.props
 
     if (isOpen && blockchainConnection) {
       /*
@@ -33,19 +38,26 @@ class BackdropProvider extends Component {
   }
 
   render() {
-    const { children, modal: { isOpen }, blockchainConnection } = this.props
+    const {
+      children,
+      modal: { isOpen },
+      blockchainConnection,
+    } = this.props
     return (
-      <div className="backdrop">
+      <div>
         <div
-          className={cn({
-            backdrop__filter: true,
-            'backdrop__filter--visible': isOpen && blockchainConnection,
-            tournament: tournamentEnabled,
+          className={cx({
+            filter: true,
+            visible: isOpen && blockchainConnection,
           })}
         >
-          {isOpen && blockchainConnection ? <div style={{ position: 'fixed', minWidth: '100vw' }}>{children}</div> : children}
+          {isOpen && blockchainConnection ? (
+            <div style={{ position: 'fixed', minWidth: '100vw' }}>{children}</div>
+          ) : (
+            children
+          )}
         </div>
-        <div className={cn('backdrop__above', { tournament: tournamentEnabled })}>{this.renderBackdropContent()}</div>
+        <div className={cx('above', { tournament: tournamentEnabled })}>{this.renderBackdropContent()}</div>
       </div>
     )
   }

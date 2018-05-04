@@ -1,0 +1,38 @@
+.filter {
+  height: 100vh;
+
+  filter: blur(0px);
+  filter: none;
+  transition: filter 1s ease;
+
+  &.visible {
+    filter: blur(3px);
+
+    // disable text selection
+    user-select: none;
+
+    // disable buttons
+    pointer-events: none;
+    background-color: #09697b;
+  }
+}
+
+.above {
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #09697b;
+  opacity: 0.9;
+
+  &.tournament {
+    background-color: #09697b;
+    opacity: 0.9;
+  }
+
+  &:empty {
+    display: none;
+  }
+}

@@ -10,19 +10,21 @@
 }
 
 .notification {
-  animation: 1s ease-out 0s 1 slideInFromRight; 
+  animation: slideInFromRight 1s ease-out 0s 1; 
   background-color: $bg-color;
 
   padding: 4px;
+  width: 100%;
   position: relative;
 
   color: $font-color-light;
+  border: none;
 
   &:hover {
     color: $active-highlight;
   }
 
-  &__title {
+  .title {
     text-transform: uppercase;
     font-weight: 500;
     margin-bottom: 8px;
@@ -30,12 +32,12 @@
     padding-left: 24px;
   }
 
-  &__message {
+  .message {
     color: inherit;
     padding-left: 24px;
   }
 
-  &__icon {
+  .iconContainer {
     position: absolute;
     height: 100%;
     vertical-align: middle;
@@ -44,9 +46,9 @@
     margin-left: 4px;
     width: 16px;
 
-    .icon {
+    .txIcon {
       top: 50%;
-      margin-top: -8px;
+      margin-top: -16px;
     }
   }
 }
