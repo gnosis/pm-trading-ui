@@ -33,7 +33,7 @@ class Transactions extends Component {
           )}
           {runningTransactions
             .toArray()
-            .map(transaction => <Transaction key={transaction.id} type="running" {...transaction} />)}
+            .map(transaction => <Transaction key={transaction.id} type="running" {...transaction.toObject()} />)}
           <div className={cx('heading')}>
             <div className={cx('headingIcon')}>
               <Icon type="countdown" size={48} />
@@ -45,7 +45,7 @@ class Transactions extends Component {
           )}
           {completedTransactions
             .toArray()
-            .map(transaction => <Transaction key={transaction.id} type="completed" {...transaction} />)}
+            .map(transaction => <Transaction key={transaction.id} type="completed" {...transaction.toObject()} />)}
         </div>
       </div>
     )
