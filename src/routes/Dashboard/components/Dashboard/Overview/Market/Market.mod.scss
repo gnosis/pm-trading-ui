@@ -1,8 +1,10 @@
 @import "../../../../../../scss/vars";
 
 .market {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  background: white;
   appearance: none;
   padding: 10px;
   transition: all 0.2s ease;
@@ -41,15 +43,15 @@
   &:hover,
   &:focus {
     outline: 0;
-    color: inherit !important;
+    color: inherit;
     cursor: pointer;
     padding-left: 13px;
   }
 
   // Display as flex to show time next to title/outcome
   &.closingSoon {
-    display: flex;
     text-align: left;
+    flex-direction: row;
     align-items: center;
 
     .timeUntilResolution {
@@ -62,6 +64,26 @@
       @media (min-width: $screen-sm) {
         font-size: 30px;
       }
+    }
+  }
+
+  &.none {
+    justify-content: center;
+    min-height: inherit;
+    font-size: 12px;
+    color: $font-color-dark;
+
+    font-weight: 400;
+    letter-spacing: 0.5px;
+
+    &:focus,&:hover {
+      cursor: default;
+      padding-left: 10px;
+      color: $font-color-dark;
+    }
+
+    .title {
+      text-align: center;
     }
   }
 }

@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
-import { List } from 'immutable'
-import { lifecycle } from 'recompose'
+import { compose, lifecycle, withState } from 'recompose'
 import { marketRecordListShape } from 'utils/shapes'
 
 import DashboardMetrics from './Metrics'
@@ -13,30 +12,42 @@ import styles from './Dashboard.mod.scss'
 
 const cx = classNames.bind(styles)
 
-const Dashboard = ({ newestMarkets, closingSoonMarkets }) => (
+const Dashboard = ({
+  loadingMarkets, newestMarkets, closingSoonMarkets, viewMarket,
+}) => (
   <div className={cx('dashboard')}>
     <DashboardTitle />
     <DashboardMetrics />
     <DashboardOverview
-      newestMarkets={newestMarkets}
-      closingSoonMarkets={closingSoonMarkets}
+      newestMarkets={loadingMarkets ? undefined : newestMarkets}
+      closingSoonMarkets={loadingMarkets ? undefined : closingSoonMarkets}
+      viewMarket={viewMarket}
     />
   </div>
 )
 
 Dashboard.propTypes = {
   fetchMarkets: PropTypes.func.isRequired,
+  viewMarket: PropTypes.func.isRequired,
+  loadingMarkets: PropTypes.bool.isRequired,
   newestMarkets: marketRecordListShape,
   closingSoonMarkets: marketRecordListShape,
 }
 
 Dashboard.defaultProps = {
-  newestMarkets: List(),
-  closingSoonMarkets: List(),
+  newestMarkets: undefined,
+  closingSoonMarkets: undefined,
 }
 
-export default lifecycle({
-  componentDidMount() {
-    this.props.fetchMarkets()
-  },
-})(Dashboard)
+const enhancer = compose(
+  withState('loadingMarkets', 'setLoadingMarkets', false),
+  lifecycle({
+    async componentDidMount() {
+      this.props.setLoadingMarkets(true)
+      await this.props.fetchMarkets()
+      this.props.setLoadingMarkets(false)
+    },
+  }),
+)
+
+export default enhancer(Dashboard)

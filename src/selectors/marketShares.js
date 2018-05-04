@@ -10,7 +10,7 @@ import { getCurrentAccount } from 'integrations/store/selectors'
 import { getEvents } from 'selectors/event'
 import { getOracles } from 'selectors/oracle'
 import { getEventDescriptions } from 'selectors/eventDescription'
-import { MARKET_STAGES } from 'utils/constants'
+import { MARKET_STAGES } from 'store/models/market'
 
 export const getShares = (state) => {
   if (!state.entities) {

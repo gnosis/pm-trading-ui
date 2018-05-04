@@ -1,2 +1,3 @@
-export { default as ClosingSoonMarket } from './closingSoonMarket'
-export { default as NewMarket } from './newMarket'
+export { default as ClosingSoonMarket } from './ClosingSoonMarket'
+export { default as NewMarket } from './NewMarket'
+export { default as NoMarket } from './NoMarket'

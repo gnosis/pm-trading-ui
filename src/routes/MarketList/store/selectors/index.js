@@ -1,19 +1,22 @@
 import { List } from 'immutable'
 import { createSelector } from 'reselect'
 import { isMarketClosed, isMarketEndingSoon, isNewMarket } from 'store/utils/marketStatus'
+import { marketSelector } from 'store/selectors/market'
 
 import filterSelector from './filter'
 import sorterSelector from './sorter'
 
 export const marketListSelector = createSelector(
-  state => state.marketList,
+  marketSelector,
   filterSelector,
   sorterSelector,
   (markets, filter, sorter) => List(markets.filter(filter).sort(sorter).values()),
 )
 
-export const marketCounterSelector = state =>
-  List(state.marketList)
+export const marketCounterSelector = createSelector(
+  marketSelector,
+  state => List(state.marketList),
+)
 
 export const newMarketsSelector = createSelector(
   marketCounterSelector,

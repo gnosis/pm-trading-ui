@@ -9,15 +9,15 @@ import { NewMarket, ClosingSoonMarket } from './Market'
 
 const cx = classname.bind(style)
 
-const Overview = ({ newestMarkets, closingSoonMarkets }) => (
+const Overview = ({ newestMarkets, closingSoonMarkets, viewMarket }) => (
   <div className={cx('dashboardOverview')}>
     <div className={cx('container')}>
       <div className={cx('row')}>
         <div className={cx('col-md-6')}>
-          <MarketList markets={newestMarkets} title="Newest Markets" component={NewMarket} />
+          <MarketList markets={newestMarkets} title="Newest Markets" component={NewMarket} viewMarket={viewMarket} />
         </div>
         <div className={cx('col-md-6')}>
-          <MarketList markets={closingSoonMarkets} title="Closing Soon" component={ClosingSoonMarket} />
+          <MarketList markets={closingSoonMarkets} title="Closing Soon" component={ClosingSoonMarket} viewMarket={viewMarket} />
         </div>
       </div>
     </div>
@@ -25,8 +25,13 @@ const Overview = ({ newestMarkets, closingSoonMarkets }) => (
 )
 
 Overview.propTypes = {
-  newestMarkets: marketRecordListShape.isRequired,
-  closingSoonMarkets: marketRecordListShape.isRequired,
+  newestMarkets: marketRecordListShape,
+  closingSoonMarkets: marketRecordListShape,
+}
+
+Overview.defaultProps = {
+  newestMarkets: undefined,
+  closingSoonMarkets: undefined,
 }
 
 export default Overview

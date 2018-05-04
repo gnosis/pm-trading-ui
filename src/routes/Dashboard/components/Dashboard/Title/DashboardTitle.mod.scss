@@ -1,9 +1,12 @@
 @import '../../../../../scss/vars.scss';
 
 .dashboardTitle {
-  margin-top: 30px;
-
-  h1 {
-    margin: $page-heading-margins;
+  .title {
+    margin-bottom: 30px;
+    font-family: Montserrat;
+    font-size: 42px;
+    font-weight: 300;
+    text-align: left;
+    color: #333;
   }
 }

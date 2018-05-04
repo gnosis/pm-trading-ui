@@ -19,7 +19,7 @@ const NewMarket = ({ market, viewMarket }) => {
     decimals: market.bounds.decimals,
   } : {}
   const winningOutcome = market.type === OUTCOME_TYPES.CATEGORICAL ? market.outcomes.keyOf(market.winningOutcome) : market.winningOutcome
-  console.log(market.outcomeTokensSold.toArray(), market.funding)
+
   return (
     <button type="button" className={cx('market', 'newMarket')} onClick={() => viewMarket(market.address)}>
       <div className={cx('title')}>{market.title}</div>
