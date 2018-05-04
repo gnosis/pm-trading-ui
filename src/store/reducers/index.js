@@ -41,7 +41,7 @@ const rootReducer = (state, action) => {
     }
 
     Object.keys(action.payload).forEach((key) => {
-      if (state[key].merge) {
+      if (state[key] && state[key].merge) {
         state[key].merge(action.payload[key])
       } else {
         resultState[key] = { ...action.payload[key] }

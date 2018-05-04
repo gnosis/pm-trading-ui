@@ -1,4 +1,4 @@
-const LOAD_SESSIONSTORAGE = 'LOAD_SESSIONSTORAGE'
+export const LOAD_SESSIONSTORAGE = 'LOAD_SESSIONSTORAGE'
 
 export default store => next => (action) => {
   const { type } = action
@@ -6,10 +6,7 @@ export default store => next => (action) => {
   if (type !== 'INIT') return next(action)
 
   try {
-    const storedState = JSON.parse(
-      // eslint-disable-next-line
-      window.sessionStorage.getItem(`GNOSIS_${process.env.VERSION}`),)
-
+    const storedState = JSON.parse(window.sessionStorage.getItem(`GNOSIS_${process.env.VERSION}`))
     if (storedState) {
       store.dispatch({
         type: LOAD_SESSIONSTORAGE,
@@ -19,7 +16,7 @@ export default store => next => (action) => {
 
     return next(action)
   } catch (e) {
-    // Unable to load or parse stored state, proceed as usual
+    console.error(e.message)
   }
 
   return null

@@ -9,8 +9,7 @@ import {
   addTransactionLogEntry,
 } from 'routes/Transactions/store/actions/transactions'
 import TxRecord from 'routes/Transactions/store/models/transaction'
-
-const LOAD_LOCALSTORAGE = 'LOAD_LOCALSTORAGE'
+import { LOAD_LOCALSTORAGE } from 'store/middlewares/LocalStorageLoad'
 
 const reducer = handleActions(
   {
@@ -27,29 +26,23 @@ const reducer = handleActions(
             : log))),
     [showTransactionLog]: state => state.set('visible', true),
     [hideTransactionLog]: state => state.set('visible', false),
-    [LOAD_LOCALSTORAGE]: (state, action) => {
-      const newState = {
-        ...state,
-        log: {},
-      }
+    [LOAD_LOCALSTORAGE]: (state, action) =>
+      state.withMutations((stateMap) => {
+        const savedLogs = get(action, 'payload.transactions.log', {})
+        Object.keys(savedLogs).forEach((id) => {
+          let log = { ...savedLogs[id] }
 
-      const savedLogs = get(action, 'payload.transactions.log', {})
-      const logs = Object.keys(savedLogs).forEach((id) => {
-        const log = savedLogs[id]
-
-        if (log.completed) {
-          newState.log[id] = log
-        } else {
-          newState.log[id] = {
-            ...log,
-            completed: true,
-            completionStatus: 'LOST',
+          if (!log.completed) {
+            log = {
+              ...log,
+              completed: true,
+              completionStatus: 'LOST',
+            }
           }
-        }
-      })
 
-      return newState
-    },
+          stateMap.setIn(['log', id], new TxRecord(log))
+        })
+      }),
   },
   Map({
     log: Map(),

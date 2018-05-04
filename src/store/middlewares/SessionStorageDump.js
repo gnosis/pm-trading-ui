@@ -1,23 +1,22 @@
-import { pick } from 'lodash'
+import { LOAD_SESSIONSTORAGE } from './SessionStorageLoad'
+import { LOAD_LOCALSTORAGE } from './LocalStorageLoad'
 
 const CLEAR_SESSION_STORAGE = 'CLEAR_SESSION_STORAGE'
 const INIT = 'INIT'
+const forbiddenActions = [INIT, CLEAR_SESSION_STORAGE, LOAD_LOCALSTORAGE, LOAD_SESSIONSTORAGE]
 
 const PERSIST_PATHS = ['modal']
 
 export default store => next => (action) => {
   const state = store.getState()
 
-  if (action.type !== CLEAR_SESSION_STORAGE && action.type !== INIT) {
-    let storage = {}
+  if (forbiddenActions.indexOf(action.type) === -1) {
+    const storage = {}
 
     PERSIST_PATHS.forEach((path) => {
-      storage = {
-        [path]: state[path].toJS ? state[path].toJS() : state[path],
-      }
+      storage[path] = { ...(state[path].toJS()) }
     })
 
-    // eslint-disable-next-line no-undef
     window.sessionStorage.setItem(`GNOSIS_${process.env.VERSION}`, JSON.stringify(storage))
 
     return next(action)

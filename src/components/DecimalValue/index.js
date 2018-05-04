@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Decimal from 'decimal.js'
 
-export const decimalToText = (value, decimals) => {
+export const decimalToText = (value, decimals = 4) => {
   if (value && value.toDP) {
     // toDP is a function of Decimal.js, it rounds the Decimal object to decimals places with rounding mode entered
     // rounding mode = 1 => round down
@@ -21,7 +21,7 @@ export const decimalToText = (value, decimals) => {
   return decimalValue.toDP(decimals, 1).toString()
 }
 
-const DecimalValue = ({ value, decimals, className }) => {
+const DecimalValue = ({ value, decimals = 4, className }) => {
   const text = decimalToText(value, decimals)
   return <span className={className}>{text}</span>
 }
