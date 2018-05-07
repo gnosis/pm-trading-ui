@@ -5,6 +5,8 @@ import { lifecycle } from 'recompose'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
 import InteractionButton from 'containers/InteractionButton'
+import { Field, reduxForm, propTypes } from 'redux-form'
+import Checkbox from 'components/Form/Checkbox'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 import style from './RegisterWallet.mod.scss'
@@ -51,6 +53,17 @@ const RegisterMainnetAddress = ({
           </a>
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
         </p>
+        <div className={cx('checkBoxContainer')}>
+          <Field name="agreedWithTOS" component={Checkbox} className={cx('checkBox')}>
+            I agree with terms of service
+          </Field>
+          <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')}>
+            I agree with privacy policy
+          </Field>
+          <Field name="agreedWithRDP" component={Checkbox} className={cx('checkBox')}>
+            I have read the risk disclaimer policy
+          </Field>
+        </div>
         <InteractionButton onClick={handleRegistration} className={cx('btn', 'btn-primary')} disabled={disabled}>
           REGISTER ADDRESS
         </InteractionButton>
@@ -68,9 +81,13 @@ RegisterMainnetAddress.propTypes = {
   registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
 
-export default lifecycle({
+const form = {
+  form: 'tosAgreement',
+}
+
+export default reduxForm(form)(lifecycle({
   componentDidMount() {
     this.props.requestRegistrationGasCost()
     this.props.requestGasPrice()
   },
-})(RegisterMainnetAddress)
+})(RegisterMainnetAddress))
