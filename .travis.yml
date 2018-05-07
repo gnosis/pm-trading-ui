@@ -42,6 +42,7 @@ deploy:
   local_dir: dist
   on:
     branch: development
+    condition: $PROJECT = olympia
 - provider: s3
   bucket: olympia-staging
   secret_access_key:
@@ -52,6 +53,7 @@ deploy:
   local_dir: dist
   on:
     branch: master
+    condition: $PROJECT = olympia
 # mainnet deployments
 - provider: s3
   bucket: management-development
@@ -63,6 +65,7 @@ deploy:
   local_dir: dist
   on:
     branch: development
+    condition: $PROJECT = mainnet
 - provider: s3
   bucket: management-staging
   secret_access_key:
@@ -73,3 +76,4 @@ deploy:
   local_dir: dist
   on:
     branch: master
+    condition: $PROJECT = mainnet
