@@ -8,10 +8,18 @@ import InteractionButton from 'containers/InteractionButton'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import Checkbox from 'components/Form/Checkbox'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
+import { getCollateralToken, getFeatureConfig } from 'utils/features'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 import style from './RegisterWallet.mod.scss'
 
 const cx = cn.bind(style)
+const { symbol: collateralTokenSymbol } = getCollateralToken()
+const {
+  rewardToken: { symbol: rewardTokenSymbol },
+} = getFeatureConfig('rewards')
+const { url: termsOfServiceUrl } = getFeatureConfig('termsOfUse')
+const { url: riskDisclaimerUrl } = getFeatureConfig('riskDisclaimer')
+const { url: privacyPolicyUrl } = getFeatureConfig('privacyPolicy')
 
 const RegisterMainnetAddress = ({
   closeModal,
@@ -20,16 +28,23 @@ const RegisterMainnetAddress = ({
   updateMainnetAddress,
   gasPrice,
   registrationGasCost,
+  tosAgreed,
+  ppAgreed,
+  rdAgreed,
 }) => {
   const handleRegistration = async () => {
     await updateMainnetAddress(currentAccount)
     closeModal()
   }
 
-  const disabled = gasPrice
-    .mul(registrationGasCost)
-    .div(1e18)
-    .gt(currentBalance || 0)
+  const disabled =
+    gasPrice
+      .mul(registrationGasCost)
+      .div(1e18)
+      .gt(currentBalance || 0) ||
+    (!ppAgreed && !!privacyPolicyUrl) ||
+    (!tosAgreed && !!termsOfServiceUrl) ||
+    (!rdAgreed && !!riskDisclaimerUrl)
 
   return (
     <div className={cx('registerWallet')}>
@@ -37,8 +52,8 @@ const RegisterMainnetAddress = ({
       <div className={cx('registerContainer')}>
         <h4 className={cx('heading')}>Register wallet address</h4>
         <p className={cx('annotation')}>
-          Please register your wallet address, where we can send you OLY tokens, and subsequently your GNO reward. Read
-          our terms of service for more information
+          Please register your wallet address, where we can send you {collateralTokenSymbol} tokens, and subsequently
+          your {rewardTokenSymbol} reward. Read our terms of service for more information
         </p>
         <p className={cx('walletAnnotation')}>Your current Metamask address is:</p>
         <div className={cx('walletAddressContainer')}>
@@ -54,17 +69,32 @@ const RegisterMainnetAddress = ({
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
         </p>
         <div className={cx('checkBoxContainer')}>
-          <Field name="agreedWithTOS" component={Checkbox} className={cx('checkBox')}>
-            I agree with terms of service
-          </Field>
-          <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')}>
-            I agree with privacy policy
-          </Field>
-          <Field name="agreedWithRDP" component={Checkbox} className={cx('checkBox')}>
-            I have read the risk disclaimer policy
-          </Field>
+          {!!termsOfServiceUrl && (
+            <Field name="agreedWithTOS" component={Checkbox} className={cx('checkBox')}>
+              I agree with{' '}
+              <a href={termsOfServiceUrl} target="_blank" rel="noopener noreferrer">
+                terms of service
+              </a>
+            </Field>
+          )}
+          {!!riskDisclaimerUrl && (
+            <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')}>
+              I agree with{' '}
+              <a href={riskDisclaimerUrl} target="_blank" rel="noopener noreferrer">
+                privacy policy
+              </a>
+            </Field>
+          )}
+          {privacyPolicyUrl && (
+            <Field name="agreedWithRDP" component={Checkbox} className={cx('checkBox')}>
+              I have read the risk{' '}
+              <a href={privacyPolicyUrl} target="_blank" rel="noopener noreferrer">
+                disclaimer policy
+              </a>
+            </Field>
+          )}
         </div>
-        <InteractionButton onClick={handleRegistration} className={cx('btn', 'btn-primary')} disabled={disabled}>
+        <InteractionButton onClick={handleRegistration} className={cx('btn', 'btn-primary', 'actionButton')} disabled={disabled}>
           REGISTER ADDRESS
         </InteractionButton>
       </div>
@@ -80,6 +110,15 @@ RegisterMainnetAddress.propTypes = {
   updateMainnetAddress: PropTypes.func.isRequired,
   gasPrice: PropTypes.instanceOf(Decimal).isRequired,
   registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  tosAgreed: PropTypes.bool,
+  ppAgreed: PropTypes.bool,
+  rdAgreed: PropTypes.bool,
+}
+
+RegisterMainnetAddress.defaultProps = {
+  tosAgreed: false,
+  ppAgreed: false,
+  rdAgreed: false,
 }
 
 const form = {
