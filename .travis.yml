@@ -1,12 +1,7 @@
 language: node_js
 dist: trusty
-install:
-- npm install -s -q
-before_install:
-- rm -rf node_modules
-- npm i -g babel-cli webpack truffle-contract
-after_success:
-- |
+env:
+- | # mainnet env
   if [ ${TRAVIS_BRANCH} = "master" ]; then
     export GNOSIS_ENV=staging;
     export NODE_ENV=production;
@@ -14,6 +9,20 @@ after_success:
     export GNOSIS_ENV=development;
     export NODE_ENV=development;
   fi
+- | # olympia env
+  if [ ${TRAVIS_BRANCH} = "master" ]; then
+    export GNOSIS_ENV=olympia/staging;
+    export NODE_ENV=production;
+  else
+    export GNOSIS_ENV=olympia/development;
+    export NODE_ENV=development;
+  fi
+install:
+- npm install -s -q
+before_install:
+- rm -rf node_modules
+- npm i -g babel-cli webpack truffle-contract
+after_success:
 - npm run build
 deploy:
 - provider: s3
