@@ -1,5 +1,5 @@
 import ClaimReward from 'components/ModalContent/ClaimReward'
-import { requestGasPrice } from 'store/actions//blockchain'
+import { requestGasPrice } from 'store/actions/blockchain'
 import { connect } from 'react-redux'
 import {
   getCurrentAccount,
@@ -8,7 +8,7 @@ import {
   getCurrentNetworkId,
 } from 'integrations/store/selectors'
 import { getGasPrice } from 'routes/MarketDetails/store/selectors'
-import { claimUserRewards } from 'store/actions//rewards'
+import { claimUserRewards } from 'store/actions/rewards'
 import { getFeatureConfig } from 'utils/features'
 import { requestClaimRewardGasCost } from './action'
 import { getClaimRewardGasCost, getRewardValue } from './selectors'

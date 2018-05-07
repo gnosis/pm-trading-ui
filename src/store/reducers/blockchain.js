@@ -6,7 +6,7 @@ import {
   setGasPrice,
   setTokenSymbol,
   setTokenBalance,
-} from 'store/actions//blockchain'
+} from 'store/actions/blockchain'
 import { setGasCost } from 'routes/MarketDetails/store/actions'
 
 import { GAS_COST } from 'utils/constants'

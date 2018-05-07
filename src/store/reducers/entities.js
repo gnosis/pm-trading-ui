@@ -4,7 +4,7 @@ import { keys, set, get, cloneDeep } from 'lodash'
 import {
   updateEntity,
   receiveEntities,
-} from 'store/actions//entities'
+} from 'store/actions/entities'
 
 const reducer = handleActions({
   [updateEntity]: (state, action) => ({

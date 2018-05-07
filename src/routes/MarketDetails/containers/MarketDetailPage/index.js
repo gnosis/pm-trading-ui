@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
 import { replace } from 'react-router-redux'
-import { requestGasPrice, requestTokenSymbol } from 'store/actions//blockchain'
+import { requestGasPrice, requestTokenSymbol } from 'store/actions/blockchain'
 import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
-import { redeemWinnings } from 'store/actions//market'
+import { redeemWinnings } from 'store/actions/market'
 import {
   buyMarketShares,
   sellMarketShares,

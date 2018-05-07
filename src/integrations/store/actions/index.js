@@ -3,7 +3,7 @@ import { createAction } from 'redux-actions'
 import { isGnosisInitialized } from 'store/selectors/blockchain'
 import { getActiveProvider, initializedAllProviders } from 'integrations/store/selectors'
 
-import { initGnosis } from 'store/actions//blockchain'
+import { initGnosis } from 'store/actions/blockchain'
 
 export const registerProvider = createAction('REGISTER_PROVIDER')
 export const updateProvider = createAction('UPDATE_PROVIDER')

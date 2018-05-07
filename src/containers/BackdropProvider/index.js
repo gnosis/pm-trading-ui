@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { isFeatureEnabled } from 'utils/features'
 import { triedToConnect } from 'store/selectors/blockchain'
-import { closeModal } from 'store/actions//modal'
+import { closeModal } from 'store/actions/modal'
 import * as modals from 'containers/Modals'
 import style from './backdrop.mod.scss'
 

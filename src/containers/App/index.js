@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
 
-import { connectBlockchain } from 'store/actions//blockchain'
+import { connectBlockchain } from 'store/actions/blockchain'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import PageFrame from 'components/layout/PageFrame'
 import Footer from 'components/Footer'

@@ -1,4 +1,4 @@
-import { openModal } from 'store/actions//modal'
+import { openModal } from 'store/actions/modal'
 import { fetchTournamentUsers, addUsers, fetchTournamentUserData } from '../store/actions'
 
 const openSetMainnetAddressModal = () => openModal({ modalName: 'ModalRegisterWalletUport' })
