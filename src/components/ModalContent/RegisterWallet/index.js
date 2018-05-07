@@ -73,6 +73,7 @@ const RegisterMainnetAddress = ({
 }
 
 RegisterMainnetAddress.propTypes = {
+  ...propTypes,
   closeModal: PropTypes.func.isRequired,
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
