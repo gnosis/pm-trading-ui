@@ -1,28 +1,34 @@
 language: node_js
 dist: trusty
 env:
-- | # mainnet env
-  if [ ${TRAVIS_BRANCH} = "master" ]; then
-    export GNOSIS_ENV=staging;
-    export NODE_ENV=production;
-  else
-    export GNOSIS_ENV=development;
-    export NODE_ENV=development;
-  fi
-- | # olympia env
-  if [ ${TRAVIS_BRANCH} = "master" ]; then
-    export GNOSIS_ENV=olympia/staging;
-    export NODE_ENV=production;
-  else
-    export GNOSIS_ENV=olympia/development;
-    export NODE_ENV=development;
-  fi
+- PROJECT=mainnet
+- PROJECT=olympia
 install:
 - npm install -s -q
 before_install:
 - rm -rf node_modules
 - npm i -g babel-cli webpack truffle-contract
 after_success:
+- |
+  if [ ${PROJECT} = 'mainnet']; then
+    # mainnet
+    if [ ${TRAVIS_BRANCH} = "master" ]; then
+      export GNOSIS_ENV=staging;
+      export NODE_ENV=production;
+    else
+      export GNOSIS_ENV=development;
+      export NODE_ENV=development;
+    fi
+  elif [ ${PROJECT} = 'olympia']; then
+    # olympia
+    if [ ${TRAVIS_BRANCH} = "master" ]; then
+      export GNOSIS_ENV=olympia/staging;
+      export NODE_ENV=production;
+    else
+      export GNOSIS_ENV=olympia/development;
+      export NODE_ENV=development;
+    fi
+  fi
 - npm run build
 deploy:
   # olympia deployments
