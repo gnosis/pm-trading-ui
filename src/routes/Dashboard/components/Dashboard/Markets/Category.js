@@ -6,7 +6,7 @@ import { marketRecordListShape } from 'utils/shapes'
 import Spinner from 'components/Spinner/Indefinite'
 import { NoMarket } from './Market'
 
-import style from './MarketList.mod.scss'
+import style from './Category.mod.scss'
 
 const cx = classnames.bind(style)
 
@@ -46,7 +46,7 @@ ConditionalList.defaultProps = {
   markets: undefined,
 }
 
-const MarketList = ({
+const Category = ({
   markets, title, viewMarket, component: MarketComponent,
 }) => (
   <div className={cx('marketList')}>
@@ -55,15 +55,15 @@ const MarketList = ({
   </div>
 )
 
-MarketList.propTypes = {
+Category.propTypes = {
   title: PropTypes.string.isRequired,
   viewMarket: PropTypes.func.isRequired,
   component: PropTypes.func.isRequired,
   markets: marketRecordListShape,
 }
 
-MarketList.defaultProps = {
+Category.defaultProps = {
   markets: undefined,
 }
 
-export default MarketList
+export default Category

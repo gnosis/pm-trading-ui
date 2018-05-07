@@ -78,3 +78,10 @@ export const TRANSACTION_DESCRIPTIONS = {
 }
 
 export const LIMIT_MARGIN_DEFAULT = '5'
+
+export const REQUEST_STATES = {
+  UNKNOWN: 'UNKNOWN',
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS',
+  LOADING: 'LOADING',
+}

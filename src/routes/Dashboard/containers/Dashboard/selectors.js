@@ -8,7 +8,7 @@ import { marketSelector } from 'store/selectors/market'
 /**
  * How many markets to get from state to display in each list
  */
-const MARKET_OVERVIEW_PREVIEW_NUM = 10
+const MARKET_OVERVIEW_PREVIEW_NUM = 5
 
 export const dashboardMarkets = createSelector(
   marketSelector,

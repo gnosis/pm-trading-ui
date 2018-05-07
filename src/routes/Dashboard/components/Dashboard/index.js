@@ -3,49 +3,52 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
 import { compose, lifecycle, withState } from 'recompose'
 import { marketRecordListShape } from 'utils/shapes'
+import { setRequestStateWrap } from 'utils/helpers'
+import { REQUEST_STATES } from 'utils/constants'
 
-import DashboardMetrics from './Metrics'
-import DashboardTitle from './Title'
-import DashboardOverview from './Overview'
+import Metrics from './Metrics'
+import Title from './Title'
+import Markets from './Markets'
+import UserSection from './UserSection'
 
 import styles from './Dashboard.mod.scss'
 
 const cx = classNames.bind(styles)
 
 const Dashboard = ({
-  loadingMarkets, newestMarkets, closingSoonMarkets, viewMarket,
+  marketState, newestMarkets, closingSoonMarkets, viewMarket, myShares, myTrades,
 }) => (
   <div className={cx('dashboard')}>
-    <DashboardTitle />
-    <DashboardMetrics />
-    <DashboardOverview
-      newestMarkets={loadingMarkets ? undefined : newestMarkets}
-      closingSoonMarkets={loadingMarkets ? undefined : closingSoonMarkets}
+    <Title />
+    <Metrics />
+    <Markets
+      newestMarkets={marketState !== REQUEST_STATES.SUCCESS ? undefined : newestMarkets}
+      closingSoonMarkets={marketState !== REQUEST_STATES.SUCCESS ? undefined : closingSoonMarkets}
       viewMarket={viewMarket}
     />
+    <UserSection myShares={myShares} myTrades={myTrades} />
   </div>
 )
 
 Dashboard.propTypes = {
   fetchMarkets: PropTypes.func.isRequired,
   viewMarket: PropTypes.func.isRequired,
-  loadingMarkets: PropTypes.bool.isRequired,
+  marketState: PropTypes.oneOf(Object.values(REQUEST_STATES)),
   newestMarkets: marketRecordListShape,
   closingSoonMarkets: marketRecordListShape,
 }
 
 Dashboard.defaultProps = {
+  marketState: REQUEST_STATES.UNKNOWN,
   newestMarkets: undefined,
   closingSoonMarkets: undefined,
 }
 
 const enhancer = compose(
-  withState('loadingMarkets', 'setLoadingMarkets', false),
+  withState('marketState', 'setMarketState', REQUEST_STATES.UNKNOWN),
   lifecycle({
     async componentDidMount() {
-      this.props.setLoadingMarkets(true)
-      await this.props.fetchMarkets()
-      this.props.setLoadingMarkets(false)
+      await setRequestStateWrap(this.props.setMarketState, this.props.fetchMarkets, this)
     },
   }),
 )
