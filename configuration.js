@@ -1,6 +1,7 @@
 /* eslint-disable global-require, import/no-dynamic-require, no-console */
 const fs = require('fs')
 const path = require('path')
+const _ = require('lodash')
 
 module.exports = (env, envVarsConfig = {}, envVarsInterface = {}) => {
   const configsToLoad = ['./config/']
@@ -42,13 +43,13 @@ module.exports = (env, envVarsConfig = {}, envVarsInterface = {}) => {
     }
 
 
-    config = Object.assign(config, loadedConfig)
-    interfaceConfig = Object.assign(interfaceConfig, loadedInterfaceConfig)
+    config = _.merge(config, loadedConfig)
+    interfaceConfig = _.merge(interfaceConfig, loadedInterfaceConfig)
   })
 
   // use env config vars
-  Object.assign(config, envVarsConfig) // GNOSIS_CONFIG vars
-  Object.assign(interfaceConfig, envVarsInterface) // GNOSIS_INTERFACE vars
+  _.merge(config, envVarsConfig) // GNOSIS_CONFIG vars
+  _.merge(interfaceConfig, envVarsInterface) // GNOSIS_INTERFACE vars
 
   return {
     config,
