@@ -1,7 +1,7 @@
-gnosis-management
+pm-trading-ui
 ------
 
-[![Join the chat at https://gitter.im/gnosis/gnosis-management](https://badges.gitter.im/gnosis/gnosis-management.svg)](https://gitter.im/gnosis/gnosis-management?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/gnosis/pm-trading-ui](https://badges.gitter.im/gnosis/pm-trading-ui.svg)](https://gitter.im/gnosis/pm-trading-ui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Start with `npm start`, server available under `http://localhost:8000/`
 
@@ -14,8 +14,8 @@ Quickstart with Docker/Docker Compose
 * Clone the repository and change your working directory:
 
 ```
-git clone https://github.com/gnosis/gnosis-management.git
-cd gnosis-management
+git clone https://github.com/gnosis/pm-trading-ui.git
+cd pm-trading-ui
 ```
 
 ### Build containers
