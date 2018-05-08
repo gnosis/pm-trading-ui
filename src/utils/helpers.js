@@ -6,7 +6,6 @@ import { HEX_VALUE_REGEX, OUTCOME_TYPES, REQUEST_STATES } from 'utils/constants'
 import { MARKET_STAGES } from 'store/models/market'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
-import Uport from 'integrations/uport'
 import { getConfiguration } from 'utils/features'
 
 import dictionary from 'assets/randomNames.json'
@@ -155,7 +154,8 @@ export const getGnosisJsOptions = (provider) => {
     // Inject window.web3
     opts.ethereum = window.web3.currentProvider
   } else if (provider && provider.name === WALLET_PROVIDER.UPORT) {
-    const { uport } = Uport
+    // eslint-disable-next-line
+    const { uport } = require('integrations/uport')
     opts.ethereum = uport.getProvider()
     opts.defaultAccount = provider.account
   } else {

@@ -4,10 +4,12 @@ import { ADD_MARKET_LIST } from 'store/actions/market/addMarkets'
 
 export const REDUCER_ID = 'marketList'
 
-export default handleActions({
-  [ADD_MARKET_LIST]: (state, { payload }) =>
-    Map().withMutations((map) => {
-      payload.forEach(market =>
-        map.set(market.address, market))
-    }),
-}, Map())
+export default handleActions(
+  {
+    [ADD_MARKET_LIST]: (state, { payload }) =>
+      Map().withMutations((map) => {
+        payload.forEach(market => map.set(market.address, market))
+      }),
+  },
+  Map(),
+)

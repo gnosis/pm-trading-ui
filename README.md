@@ -1,9 +1,36 @@
-gnosis-management
+pm-trading-ui
 ------
 
-[![Join the chat at https://gitter.im/gnosis/gnosis-management](https://badges.gitter.im/gnosis/gnosis-management.svg)](https://gitter.im/gnosis/gnosis-management?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/gnosis/pm-trading-ui](https://badges.gitter.im/gnosis/pm-trading-ui.svg)](https://gitter.im/gnosis/pm-trading-ui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Start with `npm start`, server available under `http://localhost:8000/`
+
+Quickstart with Docker/Docker Compose
+-----
+
+### Install Docker and Docker Compose
+* First, install docker: https://docs.docker.com/engine/installation/.
+* Then, install docker compose: https://docs.docker.com/compose/install/
+* Clone the repository and change your working directory:
+
+```
+git clone https://github.com/gnosis/pm-trading-ui.git
+cd pm-trading-ui
+```
+
+### Build containers
+The application is made up of several container images that are linked together using docker-compose. Before running the application, build the images:
+
+`docker-compose build --force-rm`
+
+### Running the Application
+
+```
+docker-compose up
+```
+
+*Application will run on `http://localhost:8080`*
+
 
 Installing gnosis.js
 ------
