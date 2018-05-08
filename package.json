@@ -39,7 +39,7 @@
     "precommit"
   ],
   "dependencies": {
-    "@gnosis.pm/gnosis-core-contracts": "^1.0.3",
+    "@gnosis.pm/gnosis-core-contracts": "^1.0.4",
     "@gnosis.pm/gnosisjs": "^2.0.0",
     "@gnosis.pm/olympia-token": "^1.4.0",
     "autobind-decorator": "^2.1.0",
@@ -47,7 +47,7 @@
     "blockies": "0.0.2",
     "classnames": "^2.2.5",
     "cross-env": "^5.0.5",
-    "d3": "^5.1.0",
+    "d3": "^5.2.0",
     "d3-scale-chromatic": "^1.1.1",
     "decimal.js": "^10.0.0",
     "history": "^4.7.2",
@@ -65,7 +65,7 @@
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-immutable-proptypes": "^2.1.0",
-    "react-markdown": "^3.3.0",
+    "react-markdown": "^3.3.2",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
@@ -135,7 +135,7 @@
     "truffle-hdwallet-provider": "0.0.5",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^1.0.1",
-    "webpack": "^4.6.0",
+    "webpack": "^4.8.1",
     "webpack-cli": "^2.1.2",
     "webpack-dev-server": "^3.1.4"
   }
