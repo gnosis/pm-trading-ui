@@ -2,8 +2,6 @@ import { Map } from 'immutable'
 import { handleActions } from 'redux-actions'
 import { ADD_MARKET_LIST } from 'store/actions/market/addMarkets'
 
-export const REDUCER_ID = 'marketList'
-
 export default handleActions(
   {
     [ADD_MARKET_LIST]: (state, { payload }) =>

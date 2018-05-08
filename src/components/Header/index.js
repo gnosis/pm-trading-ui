@@ -21,6 +21,7 @@ import css from './Header.scss'
 const cx = className.bind(css)
 
 const tournamentEnabled = isFeatureEnabled('tournament')
+const registrationEnabled = isFeatureEnabled('tournament') && getFeatureConfig('tournament').registration && getFeatureConfig('tournament').registration.enabled
 const badgesEnabled = isFeatureEnabled('badges')
 const providerConfig = getFeatureConfig('providers')
 
@@ -31,7 +32,7 @@ const useUport = tournamentEnabled && defaultProvider === WALLET_PROVIDER.UPORT
 
 class Header extends Component {
   componentDidMount() {
-    if (tournamentEnabled && this.props.currentAccount) {
+    if (registrationEnabled && this.props.currentAccount) {
       this.props.requestMainnetAddress()
     }
 
@@ -42,8 +43,7 @@ class Header extends Component {
 
   componentDidUpdate(prevProps) {
     // If user unlocks metamask, changes his account, we need to check if the account was registered
-    const shouldRequestMainnetAddress =
-    tournamentEnabled && this.props.currentAccount !== prevProps.currentAccount
+    const shouldRequestMainnetAddress = registrationEnabled && this.props.currentAccount !== prevProps.currentAccount
     if (shouldRequestMainnetAddress) {
       this.props.requestMainnetAddress()
     }
