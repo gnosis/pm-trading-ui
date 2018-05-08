@@ -37,7 +37,13 @@
     "type": "default"
   },
   "termsOfUse": {
-    "url": null
+    "url": "/TermsOfService.html"
+  },
+  "riskDisclaimer": {
+    "url": "/RiskDisclaimerPolicy.html"
+  },
+  "privacyPolicy": {
+    "url": "/PrivacyPolicy.html"
   },
   "footer": {
     "enabled": true,

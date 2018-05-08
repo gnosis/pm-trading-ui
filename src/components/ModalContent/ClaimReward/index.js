@@ -9,8 +9,7 @@ import { getFeatureConfig } from 'utils/features'
 import style from './ClaimReward.mod.scss'
 
 const cx = cn.bind(style)
-const rewardsConfig = getFeatureConfig('rewards')
-const { rewardToken } = rewardsConfig
+const { rewardToken } = getFeatureConfig('rewards')
 
 const ClaimReward = ({
   closeModal,

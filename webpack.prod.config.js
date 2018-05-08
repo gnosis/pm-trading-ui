@@ -2,6 +2,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -16,7 +17,11 @@ module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
   const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
-  const { config, interfaceConfig } = configLoader(process.env.GNOSIS_ENV || 'development', configEnvVars, interfaceEnvVars)
+  const { config, interfaceConfig } = configLoader(
+    process.env.GNOSIS_ENV || 'development',
+    configEnvVars,
+    interfaceEnvVars,
+  )
 
   return {
     devtool: 'source-map',
@@ -139,6 +144,7 @@ module.exports = (env = {}) => {
         },
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+      new CopyWebpackPlugin(['assets/content']),
     ],
   }
 }
