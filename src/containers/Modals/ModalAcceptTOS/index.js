@@ -3,15 +3,13 @@ import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
 import { initProviders } from 'store/actions/providers'
 
-const mapStateToProps = (state) => {
-  const getFormValue = formValueSelector('tosAgreement')
+const getFormValue = formValueSelector('tosAgreement')
 
-  return {
-    tosAgreed: !!getFormValue(state, 'agreedWithTOS'),
-    ppAgreed: !!getFormValue(state, 'agreedWithPP'),
-    rdAgreed: !!getFormValue(state, 'agreedWithRDP'),
-  }
-}
+const mapStateToProps = state => ({
+  tosAgreed: !!getFormValue(state, 'agreedWithTOS'),
+  ppAgreed: !!getFormValue(state, 'agreedWithPP'),
+  rdAgreed: !!getFormValue(state, 'agreedWithRDP'),
+})
 
 const mapDispatchToProps = dispatch => ({
   initProviders: () => dispatch(initProviders()),
