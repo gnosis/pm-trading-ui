@@ -1,6 +1,6 @@
 import Gnosis from '@gnosis.pm/gnosisjs'
 import olympiaArtifacts from '@gnosis.pm/olympia-token'
-import { NETWORK_TIMEOUT } from 'actions/blockchain'
+import { NETWORK_TIMEOUT } from 'store/actions/blockchain'
 import { isFeatureEnabled } from 'utils/features'
 
 const tournamentEnabled = isFeatureEnabled('tournament')

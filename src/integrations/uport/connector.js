@@ -12,7 +12,7 @@ import { notificationsEnabled } from './connector'
 const termsOfUseConfig = getFeatureConfig('termsOfUse')
 
 const {
-  clientId = '', appName = '', network = 0, privateKey = '',
+  clientId, appName, network, privateKey,
 } = getProviderIntegrationConfig('uport')
 const tournamentEnabled = isFeatureEnabled('tournament')
 
@@ -58,12 +58,14 @@ export const connect = () => {
       network: 'rinkeby',
       signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
     })
-  } else {
+  } else if (clientId && network && privateKey) {
     uport = new Connect(appName, {
       clientId,
       network,
       signer: SimpleSigner(privateKey),
     })
+  } else {
+    console.error('No options were specified for uPort')
   }
 }
 
