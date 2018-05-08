@@ -2,6 +2,7 @@ import moment from 'moment'
 import { List } from 'immutable'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { isMarketClosed } from 'store/utils/marketStatus'
+import { getCurrentAccount } from 'integrations/store/selectors'
 
 import { marketSelector } from 'store/selectors/market'
 
@@ -39,4 +40,5 @@ export const newestMarkets = createSelector(
 export default createStructuredSelector({
   closingSoonMarkets,
   newestMarkets,
+  currentAccount: getCurrentAccount,
 })

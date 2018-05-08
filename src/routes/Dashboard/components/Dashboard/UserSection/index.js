@@ -31,8 +31,8 @@ const enhance = compose(
   lifecycle({
     async componentDidMount() {
       await Promise.all([
-        setRequestStateWrap(this.props.setTradesStatus, this.props.requestTrades, this),
-        setRequestStateWrap(this.props.setSharesStatus, this.props.requestShares, this),
+        setRequestStateWrap(this.props.setTradesStatus, this.props.requestTrades, this, this.props.currentAccount),
+        setRequestStateWrap(this.props.setSharesStatus, this.props.requestShares, this, this.props.currentAccount),
       ])
     },
   }),

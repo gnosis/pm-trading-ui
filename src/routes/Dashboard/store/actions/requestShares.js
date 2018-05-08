@@ -8,8 +8,13 @@ import { OutcomeRecord } from 'store/models/market'
 import ShareRecord from '../models/share'
 import { addShare } from '../actions'
 
+const OUTCOMES_SCALAR = ['short', 'long']
+
 const buildOutcomesFrom = (marginalPrice, selectedOutcomeToken, marketOutcomeLabels) => {
-  const outcomes = marketOutcomeLabels.map((label, index) =>
+  // no value for eventDescription.outcomes means we have a scalar market
+  const outcomeLabels = marketOutcomeLabels || OUTCOMES_SCALAR
+
+  const outcomes = outcomeLabels.map((label, index) =>
     new OutcomeRecord({
       name: label,
       marginalPrice: selectedOutcomeToken.index === index ? marginalPrice : undefined,
@@ -34,6 +39,7 @@ const extractShare = (payload) => {
   } = payload
 
   const outcomes = buildOutcomesFrom(marginalPrice, selectedOutcomeToken, marketOutcomeLabels)
+
   const id = sha1(`${owner}-${selectedOutcomeToken.event}-${selectedOutcomeToken.index}`)
 
   const record = new ShareRecord({
@@ -51,11 +57,10 @@ const extractShare = (payload) => {
   return record
 }
 
-const processSharesResponse = (dispatch, response) => {
+const processSharesResponse = (response, dispatch) => {
   if (response && response.results.length) {
     const shareRecords = response.results.map(extractShare)
-
-    return dispatch(addShare(shareRecords))
+    dispatch(addShare(shareRecords))
   }
 }
 
@@ -63,5 +68,5 @@ export default account => async (dispatch) => {
   const normalizedAccount = hexWithoutPrefix(account)
   const response = await requestFromRestAPI(`account/${normalizedAccount}/shares`)
 
-  return dispatch(processSharesResponse(response))
+  processSharesResponse(response, dispatch)
 }

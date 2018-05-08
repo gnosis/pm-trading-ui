@@ -206,9 +206,10 @@ export const generateWalletName = (account) => {
 export const setRequestStateWrap = async (setRequestState, asyncAction, context, ...params) => {
   setRequestState(REQUEST_STATES.LOADING)
   try {
-    await asyncAction.call(context, params)
+    await asyncAction.apply(context, params)
     setRequestState(REQUEST_STATES.SUCCESS)
   } catch (e) {
+    console.error(e)
     setRequestState(REQUEST_STATES.ERROR)
   }
 }

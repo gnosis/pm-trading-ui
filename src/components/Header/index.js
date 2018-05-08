@@ -88,7 +88,7 @@ class Header extends Component {
 
     let walletConnected = hasWallet
     if (tournamentEnabled && useMetamask) {
-      walletConnected = hasWallet && mainnetAddress
+      walletConnected = hasWallet// && mainnetAddress
     }
 
     const logoVars = {}

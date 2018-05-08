@@ -17,6 +17,7 @@ const cx = classNames.bind(styles)
 
 const Dashboard = ({
   marketState, newestMarkets, closingSoonMarkets, viewMarket, myShares, myTrades,
+  requestShares, requestTrades, currentAccount,
 }) => (
   <div className={cx('dashboard')}>
     <Title />
@@ -26,7 +27,13 @@ const Dashboard = ({
       closingSoonMarkets={marketState !== REQUEST_STATES.SUCCESS ? undefined : closingSoonMarkets}
       viewMarket={viewMarket}
     />
-    <UserSection myShares={myShares} myTrades={myTrades} />
+    <UserSection
+      myShares={myShares}
+      myTrades={myTrades}
+      requestShares={requestShares}
+      requestTrades={requestTrades}
+      currentAccount={currentAccount}
+    />
   </div>
 )
 
