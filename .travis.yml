@@ -31,7 +31,6 @@ after_success:
   fi
 - npm run build
 deploy:
-  # olympia deployments
 - provider: s3
   bucket: olympia-development
   secret_access_key:
@@ -42,7 +41,7 @@ deploy:
   local_dir: dist
   on:
     branch: development
-    condition: $PROJECT = olympia
+    condition: "$PROJECT = olympia"
 - provider: s3
   bucket: olympia-staging
   secret_access_key:
@@ -53,8 +52,7 @@ deploy:
   local_dir: dist
   on:
     branch: master
-    condition: $PROJECT = olympia
-# mainnet deployments
+    condition: "$PROJECT = olympia"
 - provider: s3
   bucket: management-development
   secret_access_key:
@@ -65,7 +63,7 @@ deploy:
   local_dir: dist
   on:
     branch: development
-    condition: $PROJECT = mainnet
+    condition: "$PROJECT = mainnet"
 - provider: s3
   bucket: management-staging
   secret_access_key:
@@ -76,4 +74,4 @@ deploy:
   local_dir: dist
   on:
     branch: master
-    condition: $PROJECT = mainnet
+    condition: "$PROJECT = mainnet"
