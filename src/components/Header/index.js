@@ -127,14 +127,14 @@ class Header extends Component {
           </div>
           <div className={cx('group', 'left', 'version')}>{version}</div>
           <div className={cx('group', 'left', 'navLinks')}>
+            <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
+              Markets
+            </NavLink>
             {walletConnected && (
               <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
                 Dashboard
               </NavLink>
             )}
-            <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
-              Markets
-            </NavLink>
             {walletConnected && (
               <NavLink to="/transactions" activeClassName={cx('active')} className={cx('navLink')}>
                 Transactions

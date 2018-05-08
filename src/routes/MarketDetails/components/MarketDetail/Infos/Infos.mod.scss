@@ -14,7 +14,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 0; //just until we use real names
-    margin-bottom: 20px;
     @media (min-width: $screen-sm) {
       //just until we use real names
       padding-left: 100px; //just until we use real names
@@ -26,7 +25,7 @@
       letter-spacing: 1px;
       font-weight: 400;
       margin: 0;
-      margin-bottom: 2px;
+      margin-bottom: 5px;
     }
 
     &.label {
@@ -35,6 +34,7 @@
       font-size: 10px;
       opacity: 0.6;
       letter-spacing: 0.5px;
+      margin: 0 0 20px 0;
     }
   }
 }
