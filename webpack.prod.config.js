@@ -17,7 +17,11 @@ module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
   const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
-  const { config, interfaceConfig } = configLoader(process.env.GNOSIS_ENV || 'development', configEnvVars, interfaceEnvVars)
+  const { config, interfaceConfig } = configLoader(
+    process.env.GNOSIS_ENV || 'development',
+    configEnvVars,
+    interfaceEnvVars,
+  )
 
   return {
     devtool: 'source-map',
@@ -140,7 +144,7 @@ module.exports = (env = {}) => {
         },
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin(['assets/TermsOfService.html', 'assets/PrivacyPolicy.html', 'assets/RiskDisclaimerPolicy.html']),
+      new CopyWebpackPlugin(['assets/content']),
     ],
   }
 }

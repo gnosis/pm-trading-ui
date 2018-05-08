@@ -13,13 +13,13 @@ import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 import style from './RegisterWallet.mod.scss'
 
 const cx = cn.bind(style)
-const { symbol: collateralTokenSymbol } = getCollateralToken()
+const { symbol: collateralTokenSymbol } = getCollateralToken() || {}
 const {
   rewardToken: { symbol: rewardTokenSymbol },
 } = getFeatureConfig('rewards')
-const { url: termsOfServiceUrl } = getFeatureConfig('termsOfUse')
-const { url: riskDisclaimerUrl } = getFeatureConfig('riskDisclaimer')
-const { url: privacyPolicyUrl } = getFeatureConfig('privacyPolicy')
+const { url: termsOfServiceUrl } = getFeatureConfig('termsOfUse') || {}
+const { url: riskDisclaimerUrl } = getFeatureConfig('riskDisclaimer') || {}
+const { url: privacyPolicyUrl } = getFeatureConfig('privacyPolicy') || {}
 
 const RegisterMainnetAddress = ({
   closeModal,
@@ -94,7 +94,11 @@ const RegisterMainnetAddress = ({
             </Field>
           )}
         </div>
-        <InteractionButton onClick={handleRegistration} className={cx('btn', 'btn-primary', 'actionButton')} disabled={disabled}>
+        <InteractionButton
+          onClick={handleRegistration}
+          className={cx('btn', 'btn-primary', 'actionButton')}
+          disabled={disabled}
+        >
           REGISTER ADDRESS
         </InteractionButton>
       </div>
