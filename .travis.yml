@@ -9,27 +9,7 @@ before_install:
 - rm -rf node_modules
 - npm i -g babel-cli webpack truffle-contract
 after_success:
-- |
-  if [ ${PROJECT} = 'mainnet']; then
-    # mainnet
-    if [ ${TRAVIS_BRANCH} = "master" ]; then
-      export GNOSIS_ENV=staging;
-      export NODE_ENV=production;
-    else
-      export GNOSIS_ENV=development;
-      export NODE_ENV=development;
-    fi
-  elif [ ${PROJECT} = 'olympia']; then
-    # olympia
-    if [ ${TRAVIS_BRANCH} = "master" ]; then
-      export GNOSIS_ENV=olympia/staging;
-      export NODE_ENV=production;
-    else
-      export GNOSIS_ENV=olympia/development;
-      export NODE_ENV=development;
-    fi
-  fi
-- npm run build
+- ./env_build.sh
 deploy:
 - provider: s3
   bucket: olympia-development
