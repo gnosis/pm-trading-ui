@@ -159,5 +159,5 @@ export const processMarketResponse = (dispatch, response) => {
 }
 
 export default () => dispatch =>
-  requestFromRestAPI('markets', { creator: addresses.join() }).then(response =>
-    processMarketResponse(dispatch, response))
+  requestFromRestAPI('markets', { creator: addresses.join() })
+    .then(response => processMarketResponse(dispatch, response))
