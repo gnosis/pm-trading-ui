@@ -1,4 +1,4 @@
-import { receiveEntities } from 'actions/entities'
+import { receiveEntities } from 'store/actions/entities'
 import { fetchMarketSharesForAccount } from '../../api'
 
 /**

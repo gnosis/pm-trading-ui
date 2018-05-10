@@ -1,0 +1,59 @@
+@import '../../../../scss/vars';
+
+.transactionsPage {
+  padding-top: 50px;
+
+  .heading {
+    text-transform: uppercase;
+    font-size: 24px;
+  }
+
+  .headingIcon {
+    margin-top: -8px;
+    background: $btn-gradient;
+    float: left;
+    line-height: 48px;
+    height: 48px;
+    margin-right: 12px;
+    border-radius: 100%;
+  }
+}
+
+.transaction {
+  display: flex;
+  align-items: stretch;
+  margin: $page-heading-margins;
+
+  .heading {
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    position: relative;
+    left: 37px;
+  }
+
+  .details {
+    margin-top: 10px;
+    display: flex;
+    align-items: flex-start;
+
+    .detail {
+      display: flex;
+      align-items: center;
+      color: $font-color-muted;
+      width: 200px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+  }
+
+  .message {
+    margin-top: 5px;
+    position: relative;
+    left: 37px;
+  }
+
+  .content {
+    margin-left: 24px;
+  }
+}
