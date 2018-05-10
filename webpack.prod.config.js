@@ -17,11 +17,8 @@ module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
   const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
-  const { config, interfaceConfig } = configLoader(
-    process.env.GNOSIS_ENV || 'development',
-    configEnvVars,
-    interfaceEnvVars,
-  )
+  const gnosisEnv = process.env.GNOSIS_ENV || 'development'
+  const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
 
   return {
     devtool: 'source-map',

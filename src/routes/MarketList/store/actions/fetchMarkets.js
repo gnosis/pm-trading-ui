@@ -6,11 +6,10 @@ import { OUTCOME_TYPES } from 'utils/constants'
 import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
 import addMarkets from './addMarkets'
 
-// TODO The default assignment is because JEST test do not work out of the box
-// with ENV variables. Fix that using the plugin dotenv(for example)
 const config = getConfiguration()
 const whitelisted = config.whitelist || {}
-const addresses = Object.keys(whitelisted).map(address => hexWithoutPrefix(address))
+
+const addresses = Object.keys(whitelisted).map(hexWithoutPrefix)
 
 const buildOutcomesFrom = (outcomes, outcomeTokensSold, marginalPrices) => {
   if (!outcomes) {
