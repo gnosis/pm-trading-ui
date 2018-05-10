@@ -19,7 +19,7 @@ import {
   getCollateralToken,
 } from 'utils/features'
 
-import { getTokenAmount } from 'selectors/blockchain'
+import { getTokenAmount } from 'store/selectors/blockchain'
 
 import { meSelector } from 'routes/Scoreboard/store/selectors'
 
