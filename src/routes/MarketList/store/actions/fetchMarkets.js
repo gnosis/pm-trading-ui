@@ -7,7 +7,7 @@ import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecor
 import addMarkets from './addMarkets'
 
 const config = getConfiguration()
-const { address: collateralTokenConfigAddress } = getCollateralToken()
+const { address: collateralTokenConfigAddress } = getCollateralToken() || {}
 const whitelisted = config.whitelist || {}
 
 const addresses = Object.keys(whitelisted).map(hexWithoutPrefix)
