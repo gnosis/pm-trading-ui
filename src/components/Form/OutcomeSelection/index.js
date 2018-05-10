@@ -14,18 +14,23 @@ const cx = classNames.bind(css)
 class OutcomeSelection extends PureComponent {
   render() {
     const {
-      outcomes, label, hideBars, input: { value, onChange },
+      outcomes,
+      label,
+      hideBars,
+      input: { value, onChange },
     } = this.props
 
     return (
       <div className={cx('formOutcomeSelection', { hideBars })}>
-        <label>{label}</label>
-        {outcomes.map(outcome => (<OutcomeBar
-          {...outcome}
-          key={outcome.index}
-          onSelect={onChange}
-          selected={outcome.index.toString() === value}
-        />))}
+        {label && <label>{label}</label>}
+        {outcomes.map(outcome => (
+          <OutcomeBar
+            {...outcome}
+            key={outcome.index}
+            onSelect={onChange}
+            selected={outcome.index.toString() === value}
+          />
+        ))}
       </div>
     )
   }

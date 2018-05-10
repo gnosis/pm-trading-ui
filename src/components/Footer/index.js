@@ -8,7 +8,7 @@ import footerText from './footerText.txt'
 import style from './Footer.mod.scss'
 
 const cx = cn.bind(style)
-const { type, source, markdown } = getFeatureConfig('footer')
+const { type, source, markdown } = getFeatureConfig('footer').content
 
 const Footer = () => {
   let text

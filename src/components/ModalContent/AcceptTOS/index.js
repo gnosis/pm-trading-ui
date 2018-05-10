@@ -1,8 +1,8 @@
 import React from 'react'
-import cn from 'classnames'
+import cn from 'classnames/bind'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import PropTypes from 'prop-types'
-import Checkbox from 'components/FormCheckbox'
+import Checkbox from 'components/Form/Checkbox'
 import style from './AcceptTOS.mod.scss'
 
 const cx = cn.bind(style)

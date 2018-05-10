@@ -28,7 +28,7 @@
       ]
     },
     "test": {
-      "plugins": ["dynamic-import-node"]
+      "plugins": ["syntax-dynamic-import", "dynamic-import-node"]
     }
   }
 }

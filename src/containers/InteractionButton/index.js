@@ -7,7 +7,7 @@ import { upperFirst } from 'lodash'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import { isGnosisInitialized } from 'selectors/blockchain'
+import { isGnosisInitialized } from 'store/selectors/blockchain'
 import {
   isConnectedToCorrectNetwork,
   isOnWhitelist,

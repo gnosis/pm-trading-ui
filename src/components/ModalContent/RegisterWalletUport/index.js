@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import web3 from 'web3'
 
-import { updateMainnetAddress } from 'actions/account'
-import { closeModal as closeModalAction } from 'actions/modal'
+import { updateMainnetAddress } from 'store/actions/account'
+import { closeModal as closeModalAction } from 'store/actions/modal'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 
 import TextInput from 'components/Form/TextInput'
