@@ -32,12 +32,26 @@ docker-compose up
 *Application will run on `http://localhost:8080`*
 
 
-Installing gnosis.js
+Installing `pm-js`
 ------
 
-This package implements the npm package for gnosis.js as the github repo from [gnosis/gnosis.js](https://github.com/gnosis/gnosis.js)
+This package implements the npm package for pm-js for interaction with prediction markets. See the github repo from [gnosis/pm-js](https://github.com/gnosis/pm-js)
 
-If you have gnosis.js locally, install it like this: `npm i ../gnosis.js` (if your local gnosis.js installation is in the parent folder)
+If you're working with pm-js locally, you can add it to your installation like this: `npm i ../pm-js` (if your `pm-js` repo is in the parent folder) this will [npm-link](https://docs.npmjs.com/cli/link) and you're free to make changes there too
+
+Running `pm-trading-db`
+------
+Refer to [pm-trading-db's repo](https://github.com/gnosis/pm-trading-db)
+
+Quick version:
+- Clone pm-trading-db's repo.
+- Go to pm-trading-db/settings/local.py and change the `ETHEREUM_HOST` to your *local LAN IP* (localhost won't work as this is a docker container).
+- Build the image and start the container with `docker-compose build && docker-compose up`.
+- Enter the docker container with `docker-compose run web bash`.
+- Inside the docker container run `python manage.py createsuperuser` and create a user.
+- Login at `localhost:8000/admin` with the created user.
+- Create a periodical task with an interval between 5s and 30s.
+- Check the docker-output to see if there were any problems reading from the local blockchain.
 
 Running Ganache-Cli
 ------
@@ -46,17 +60,3 @@ In order to run this on a local blockchain, install ganache-cli `npm install gan
 `ganache-cli --gasLimit 400000000 -d -h 0.0.0.0`
 
 Afterwards, go into your gnosis folder (either `../gnosis.js` or `./node_modules/@gnosis.pm/gnosisjs/`) and run `npm run migrate` this will deploy all contracts to Ganache.
-
-Running GnosisDB
-------
-Refer to [gnosisdb's repo](https://github.com/gnosis/gnosisdb)
-
-Quick version:
-- Download gnosisdb's repo.
-- Go to gnosisdb/gnosisdb/settings/local.py and change the `ETHEREUM_HOST` to your local LAN IP.
-- Build the image and start the container with `docker-compose build && docker-compose up`.
-- Enter the docker container with `docker-compose run web bash`.
-- Inside the docker container run `python manage.py createsuperuser` and create a user.
-- Login at `localhost:8000/admin` with the created user.
-- Create a periodical task with an interval between 5s and 30s.
-- Check the docker-output to see if there were any problems reading from the local blockchain.
