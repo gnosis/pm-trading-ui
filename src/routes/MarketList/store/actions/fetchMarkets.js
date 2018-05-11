@@ -1,12 +1,13 @@
 import { List } from 'immutable'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
-import { getConfiguration } from 'utils/features'
+import { getConfiguration, getCollateralToken } from 'utils/features'
 import { OUTCOME_TYPES } from 'utils/constants'
 import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
 import addMarkets from './addMarkets'
 
 const config = getConfiguration()
+const { address: collateralTokenConfigAddress } = getCollateralToken() || {}
 const whitelisted = config.whitelist || {}
 
 const addresses = Object.keys(whitelisted).map(hexWithoutPrefix)
@@ -16,27 +17,28 @@ const buildOutcomesFrom = (outcomes, outcomeTokensSold, marginalPrices) => {
     return List([])
   }
 
-  const outcomesRecords = outcomes.map((outcome, index) => new OutcomeRecord({
-    name: outcome,
-    marginalPrice: marginalPrices[index],
-    outcomeTokensSold: outcomeTokensSold[index],
-  }))
+  const outcomesRecords = outcomes.map((outcome, index) =>
+    new OutcomeRecord({
+      name: outcome,
+      marginalPrice: marginalPrices[index],
+      outcomeTokensSold: outcomeTokensSold[index],
+    }))
 
   return List(outcomesRecords)
 }
 
-const buildBoundsFrom = (lower, upper, unit, decimals) => BoundsRecord({
-  lower, upper, unit, decimals: parseInt(decimals, 10),
-})
+const buildBoundsFrom = (lower, upper, unit, decimals) =>
+  BoundsRecord({
+    lower,
+    upper,
+    unit,
+    decimals: parseInt(decimals, 10),
+  })
 
 const buildScalarMarket = (market) => {
   const {
     stage,
-    contract: {
-      address,
-      creationDate,
-      creator,
-    },
+    contract: { address, creationDate, creator },
     tradingVolume,
     funding,
     netOutcomeTokensSold,
@@ -49,11 +51,7 @@ const buildScalarMarket = (market) => {
         isOutcomeSet,
         outcome,
         eventDescription: {
-          title,
-          description,
-          resolutionDate,
-          unit,
-          decimals,
+          title, description, resolutionDate, unit, decimals,
         },
       },
     },
@@ -99,10 +97,7 @@ const buildCategoricalMarket = (market) => {
         isOutcomeSet,
         outcome: winningOutcomeIndex,
         eventDescription: {
-          title,
-          description,
-          resolutionDate,
-          outcomes: outcomeLabels,
+          title, description, resolutionDate, outcomes: outcomeLabels,
         },
       },
     },
@@ -135,18 +130,18 @@ const builderFunctions = {
   [OUTCOME_TYPES.SCALAR]: buildScalarMarket,
 }
 
-export const extractMarkets = markets => markets.map((market) => {
-  const marketType = market.event.type
+export const extractMarkets = markets =>
+  markets.map((market) => {
+    const marketType = market.event.type
 
-  const builder = builderFunctions[marketType]
+    const builder = builderFunctions[marketType]
 
-  if (!builder) {
-    throw new Error(`No builder function associated with type '${marketType}'`)
-  }
+    if (!builder) {
+      throw new Error(`No builder function associated with type '${marketType}'`)
+    }
 
-  return builder.call(builder, market)
-})
-
+    return builder.call(builder, market)
+  })
 
 export const processMarketResponse = (dispatch, response) => {
   if (!response || !response.results) {
@@ -154,7 +149,12 @@ export const processMarketResponse = (dispatch, response) => {
     return
   }
 
-  const marketRecords = extractMarkets(response.results)
+  let marketRecords = extractMarkets(response.results)
+
+  if (collateralTokenConfigAddress) {
+    marketRecords = marketRecords.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(collateralTokenConfigAddress))
+  }
+
   dispatch(addMarkets(marketRecords))
 }
 
