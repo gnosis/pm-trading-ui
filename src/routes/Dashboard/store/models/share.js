@@ -5,6 +5,7 @@ const ShareRecord = Record({
   owner: undefined, // string
   balance: undefined, // int
   marketTitle: undefined, // string
+  marketType: undefined, // oneOf OUTCOME_TYPE
   marketDescription: undefined, // string
   marketResolution: undefined, // moment
   marketOutcomes: undefined, // List<Outcome>

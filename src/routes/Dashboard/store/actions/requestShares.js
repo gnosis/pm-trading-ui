@@ -2,9 +2,11 @@ import moment from 'moment'
 import { List } from 'immutable'
 import sha1 from 'sha1'
 
+import { OUTCOME_TYPES } from 'utils/constants'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
 import { OutcomeRecord } from 'store/models/market'
+
 import ShareRecord from '../models/share'
 import { addShare } from '../actions'
 
@@ -41,12 +43,14 @@ const extractShare = (payload) => {
   const outcomes = buildOutcomesFrom(marginalPrice, selectedOutcomeToken, marketOutcomeLabels)
 
   const id = sha1(`${owner}-${selectedOutcomeToken.event}-${selectedOutcomeToken.index}`)
+  const marketType = typeof marketOutcomeLabels !== 'undefined' ? OUTCOME_TYPES.CATEGORICAL : OUTCOME_TYPES.SCALAR
 
   const record = new ShareRecord({
     id,
     owner,
     balance,
     marketTitle,
+    marketType,
     marketDescription,
     marketResolution: moment.utc(marketResolution),
     marketOutcomes: outcomes,

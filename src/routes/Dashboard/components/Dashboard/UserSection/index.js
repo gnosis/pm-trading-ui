@@ -10,15 +10,15 @@ import { MyShares, MyTrades } from './Holdings'
 
 const cx = classname.bind(style)
 
-const UserSection = () => (
+const UserSection = ({ myShares, myTrades }) => (
   <div className={cx('userSection')}>
     <div className={cx('container')}>
       <div className={cx('row')}>
         <div className={cx('col-md-6')}>
-          <MyShares />
+          <MyShares shares={myShares} />
         </div>
         <div className={cx('col-md-6')}>
-          <MyTrades />
+          <MyTrades trades={myTrades} />
         </div>
       </div>
     </div>

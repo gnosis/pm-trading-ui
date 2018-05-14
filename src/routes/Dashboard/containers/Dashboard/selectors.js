@@ -5,6 +5,7 @@ import { isMarketClosed } from 'store/utils/marketStatus'
 import { getCurrentAccount } from 'integrations/store/selectors'
 
 import { marketSelector } from 'store/selectors/market'
+import { shareSelector } from '../../store/selectors'
 
 /**
  * How many markets to get from state to display in each list
@@ -40,5 +41,6 @@ export const newestMarkets = createSelector(
 export default createStructuredSelector({
   closingSoonMarkets,
   newestMarkets,
+  myShares: shareSelector,
   currentAccount: getCurrentAccount,
 })

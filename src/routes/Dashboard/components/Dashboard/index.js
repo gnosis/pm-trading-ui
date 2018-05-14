@@ -49,6 +49,7 @@ Dashboard.defaultProps = {
   marketState: REQUEST_STATES.UNKNOWN,
   newestMarkets: undefined,
   closingSoonMarkets: undefined,
+  myShares: [],
 }
 
 const enhancer = compose(
