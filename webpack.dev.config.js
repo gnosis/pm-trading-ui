@@ -13,11 +13,11 @@ module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
   const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
-  const gnosisEnv = process.env.GNOSIS_ENV || 'local'
+  const gnosisEnv = env.GNOSIS_ENV || 'local'
   const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
 
-  const version = process.env.BUILD_VERSION || pkg.version
-  const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
+  const version = env.BUILD_VERSION || pkg.version
+  const commitId = `${env.TRAVIS_BRANCH}@${env.TRAVIS_COMMIT}`
 
   return {
     context: path.join(__dirname, 'src'),
@@ -148,7 +148,7 @@ module.exports = (env = {}) => {
         template: path.join(__dirname, 'src/html/index.html'),
       }),
       new webpack.EnvironmentPlugin({
-        VERSION: `${version}#${build}`,
+        VERSION: `${version}#${commitId}`,
         NODE_ENV: 'development',
       }),
       new webpack.DefinePlugin({
