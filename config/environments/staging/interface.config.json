@@ -1,6 +1,7 @@
 {
   "providers": {
-    "default": "METAMASK"
+    "default": "METAMASK",
+    "requireTOSAccept": true
   },
   "footer": {
     "enabled": true,
