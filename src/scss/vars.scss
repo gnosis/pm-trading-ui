@@ -88,3 +88,64 @@ $paddings-inputs: 5px 0;
     }
   }
 }
+
+@mixin interfaceButton() {
+  color: $btn-font-color;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+  background: $btn-gradient;
+  border: none;
+  position: relative;
+  z-index: 2;
+  transition: 0.15s;
+  transition: all 0.15s ease;
+  -webkit-transition: all 0.15s ease;
+
+  @media (min-width: $screen-sm) {
+    font-size: 15px;
+    padding: 12px 26px;
+  }
+
+  &:hover {
+    //transform: translateY(-1px);
+    background: $btn-gradient-hover;
+    //box-shadow: 0 4px 6px rgba(50,50,93,@mixin 11), 0 1px 3px rgba(0,0,0,.08);
+    transition: 0.15s;
+    transition: all 0.15s ease;
+    -webkit-transition: all 0.15s ease;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:active {
+    //transform: translateY(1px);
+    background: $btn-gradient-active;
+    //box-shadow: inset 0 4px 6px rgba(50,50,93,@mixin 11), 0 1px 3px rgba(0,0,0,.08);
+    transition: 0.15s;
+    transition: all 0.15s ease;
+    -webkit-transition: all 0.15s ease;
+  }
+
+  &.btn-default--muted {
+    &::before {
+      background: $bg-color-muted;
+    }
+  }
+
+  &.btn-link {
+    color: $btn-invert-font-color;
+    background: none;
+    border-radius: none;
+  }
+
+  &.btn-primary--disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
+}

@@ -11,7 +11,7 @@ const pkg = require('./package.json')
 const configLoader = require('./configuration')
 
 const version = process.env.BUILD_VERSION || pkg.version
-const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
+const commitId = `${process.env.TRAVIS_BRANCH}@${process.env.TRAVIS_COMMIT}`
 
 module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
@@ -128,7 +128,7 @@ module.exports = (env = {}) => {
         template: path.join(__dirname, 'src/html/index.html'),
       }),
       new webpack.EnvironmentPlugin({
-        VERSION: `${version}#${build}`,
+        VERSION: `${version}#${commitId}`,
         NODE_ENV: 'production',
       }),
       new webpack.DefinePlugin({

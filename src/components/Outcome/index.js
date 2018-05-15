@@ -6,7 +6,7 @@ import { OUTCOME_TYPES } from 'utils/constants'
 import PropTypes from 'prop-types'
 
 const Outcome = ({
-  resolved: showWinningOutcome,
+  resolved,
   type,
   upperBound,
   lowerBound,
@@ -24,7 +24,7 @@ const Outcome = ({
     type === OUTCOME_TYPES.CATEGORICAL ? (
       <OutcomeCategorical
         opts={opts}
-        resolved={showWinningOutcome}
+        resolved={resolved}
         outcomeTokensSold={outcomeTokensSold}
         resolution={resolution}
         funding={funding}
@@ -39,7 +39,7 @@ const Outcome = ({
         lowerBound={lowerBound}
         unit={unit}
         decimals={decimals}
-        resolved={showWinningOutcome}
+        resolved={resolved}
         outcomeTokensSold={outcomeTokensSold}
         resolution={resolution}
         funding={funding}
@@ -48,7 +48,7 @@ const Outcome = ({
       />
     )
 
-  if (showWinningOutcome && typeof winningOutcome !== 'undefined') {
+  if (resolved) {
     outcomeComponent = (
       <WinningOutcome
         type={type}

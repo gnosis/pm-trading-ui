@@ -21,9 +21,9 @@ const requestTournamentTokenBalance = dispatch => (account) => {
   return dispatch(requestTokenBalance(tournamentToken.address, account))
 }
 
-export default dispatch => ({
-  requestMainnetAddress: () => dispatch(requestMainnetAddress()),
+export default {
+  requestMainnetAddress,
   requestTokenBalance: requestTournamentTokenBalance,
-  openModal: modalName => dispatch(openModal({ modalName })),
-  initUport: () => dispatch(initProviders({ providers: [WALLET_PROVIDER.UPORT] })),
-})
+  openModal: modalName => dispatch => dispatch(openModal({ modalName })),
+  initUport: () => dispatch => dispatch(initProviders({ providers: [WALLET_PROVIDER.UPORT] })),
+}

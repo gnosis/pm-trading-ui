@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { formValueSelector } from 'redux-form'
 
 import {
   getCurrentAccount,
@@ -26,6 +27,16 @@ import { meSelector } from 'routes/Scoreboard/store/selectors'
 const collateralToken = getCollateralToken()
 const gameGuideConfig = getFeatureConfig('gameGuide')
 const logoConfig = getLogoConfig('logo')
+
+const getTOSStatus = (state) => {
+  const getFormValue = formValueSelector('tosAgreement')
+
+  return (
+    !!getFormValue(state, 'agreedWithTOS') &&
+    !!getFormValue(state, 'agreedWithPP') &&
+    !!getFormValue(state, 'agreedWithRDP')
+  )
+}
 
 /**
  * Returns either the balance of the counfigured token of the current balance of ether
@@ -63,5 +74,6 @@ export default state => ({
   gameGuideURL: gameGuideConfig.url,
   tokenAddress: collateralToken && collateralToken.address,
   tokenBalance: getCurrentTokenBalance(state),
+  acceptedTOS: getTOSStatus(state),
 })
 

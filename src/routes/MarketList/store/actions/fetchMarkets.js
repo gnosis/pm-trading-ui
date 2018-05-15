@@ -47,6 +47,7 @@ const buildScalarMarket = (market) => {
       collateralToken,
       lowerBound,
       upperBound,
+      isWinningOutcomeSet,
       oracle: {
         isOutcomeSet,
         outcome,
@@ -75,7 +76,7 @@ const buildScalarMarket = (market) => {
     resolution: resolutionDate,
     creation: creationDate,
     volume: tradingVolume,
-    resolved: isOutcomeSet,
+    resolved: isOutcomeSet || isWinningOutcomeSet,
     winningOutcome: outcome,
     funding: funding || 0,
     outcomeTokensSold: List(netOutcomeTokensSold),
@@ -93,6 +94,7 @@ const buildCategoricalMarket = (market) => {
     netOutcomeTokensSold,
     event: {
       collateralToken,
+      isWinningOutcomeSet,
       oracle: {
         isOutcomeSet,
         outcome: winningOutcomeIndex,
@@ -116,7 +118,7 @@ const buildCategoricalMarket = (market) => {
     resolution: resolutionDate,
     creation: creationDate,
     volume: tradingVolume,
-    resolved: isOutcomeSet,
+    resolved: isOutcomeSet || isWinningOutcomeSet,
     funding: funding || 0,
     winningOutcome: outcomes.get(winningOutcomeIndex),
     outcomeTokensSold: List(netOutcomeTokensSold),

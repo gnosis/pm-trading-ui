@@ -1,14 +1,13 @@
 import React from 'react'
 import Markdown from 'react-markdown'
 import cn from 'classnames/bind'
-import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
 import { getFeatureConfig } from 'utils/features'
 import footerText from './footerText.txt'
 import style from './Footer.mod.scss'
 
 const cx = cn.bind(style)
-const { type, source, markdown } = getFeatureConfig('footer').content
+const { content: { type, source, markdown } } = getFeatureConfig('footer')
 
 const Footer = () => {
   let text
@@ -20,15 +19,22 @@ const Footer = () => {
   }
 
   return (
-    <Block margin="md">
-      {markdown ? (
-        <Markdown source={text} className={cx('footerContainer')} />
-      ) : (
-        <Paragraph center color="medium">
-          {source}
-        </Paragraph>
-      )}
-    </Block>
+    <div className={cx('footer')}>
+      <div className={cx('container')}>
+        <div className={cx('row')}>
+          <div className={cx('col-xs-12')}>
+
+            {markdown ? (
+              <Markdown source={text} className={cx('footerContainer')} />
+            ) : (
+              <Paragraph center color="medium" className={cx('footerContainer')}>
+                {source}
+              </Paragraph>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
