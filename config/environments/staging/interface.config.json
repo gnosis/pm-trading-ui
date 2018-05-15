@@ -1,1 +1,14 @@
-{}
+{
+  "providers": {
+    "default": "METAMASK",
+    "requireTOSAccept": true
+  },
+  "footer": {
+    "enabled": true,
+    "content": {
+      "type": "text",
+      "source": "Trading on prediction markets carry a high degree of financial risk to your capital. Please read our full [Risk Disclaimer](/assets/RiskDisclaimerPolicy.html) and [Terms of Service](/assets/TermsOfService.html) before trading",
+      "markdown": true
+    }
+  }
+}

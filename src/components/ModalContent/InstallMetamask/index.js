@@ -12,7 +12,7 @@ const logoStyle = {
   height: 100,
 }
 
-const tournamentConfig = getFeatureConfig('tournament')
+const { name = 'the application' } = getFeatureConfig('tournament')
 
 const InstallMetamask = ({ closeModal }) => (
   <div className={cx('installMetamask')}>
@@ -24,7 +24,7 @@ const InstallMetamask = ({ closeModal }) => (
       <a className={cx('downloadLink')} href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
         Please download and install MetaMask
       </a>{' '}
-      to start using {tournamentConfig.name}.
+      to start using {name}.
     </p>
   </div>
 )

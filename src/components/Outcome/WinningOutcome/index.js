@@ -17,7 +17,11 @@ const WinningOutcome = ({
   let outcomeText
 
   if (type === OUTCOME_TYPES.CATEGORICAL) {
-    outcomeText = `${outcomes[winningOutcome]}`
+    if (typeof outcomes[winningOutcome] === 'undefined') {
+      outcomeText = <Fragment><span title={winningOutcome}>Invalid Outcome</span></Fragment>
+    } else {
+      outcomeText = `${outcomes[winningOutcome]}`
+    }
   } else if (type === OUTCOME_TYPES.SCALAR) {
     const outcomeValue = Decimal(winningOutcome)
       .div(10 ** decimals)

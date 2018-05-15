@@ -1,9 +1,13 @@
 import React from 'react'
-import cn from 'classnames'
+import { lifecycle } from 'recompose'
+import cn from 'classnames/bind'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import PropTypes from 'prop-types'
-import Checkbox from 'components/FormCheckbox'
+import Checkbox from 'components/Form/Checkbox'
 import style from './AcceptTOS.mod.scss'
+import { getFeatureConfig } from 'utils/features'
+
+const { name = 'the application' } = getFeatureConfig('tournament')
 
 const cx = cn.bind(style)
 
@@ -23,33 +27,39 @@ const AcceptTOS = ({
       <div className={cx('tosContainer')}>
         <h4 className={cx('acceptHeading')}>Terms of service and privacy policy</h4>
         <p className={cx('annotation')}>
-          For using Gnosis Trading Interface, you have to agree with our{' '}
-          <a href="/TermsOfService.html" target="_blank">
+          For using { name }, you have to agree with our{' '}
+          <a href="/assets/TermsOfService.html" target="_blank">
             terms of service
           </a>{' '}
           and{' '}
-          <a href="/PrivacyPolicy.html" target="_blank">
+          <a href="/assets/PrivacyPolicy.html" target="_blank">
             privacy policy
           </a>
           {', '}
           and{' '}
-          <a href="/RiskDisclaimerPolicy.html" target="_blank">
+          <a href="/assets/RiskDisclaimerPolicy.html" target="_blank">
             risk policy
           </a>
         </p>
-        <Field
-          name="agreedWithTOS"
-          component={Checkbox}
-          className={cx('checkBox')}
-          text="I agree with terms of service"
-        />
-        <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')} text="I agree with privacy policy" />
-        <Field
-          name="agreedWithRDP"
-          component={Checkbox}
-          className={cx('checkBox')}
-          text="I have read the risk disclaimer policy"
-        />
+        <div className={cx('checks')}>
+          <Field
+            name="agreedWithTOS"
+            component={Checkbox}
+            className={cx('checkBox')}
+          >
+            I agree with terms of service
+          </Field>
+          <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')}>
+            I agree with privacy policy
+          </Field>
+          <Field
+            name="agreedWithRDP"
+            component={Checkbox}
+            className={cx('checkBox')}
+          >
+            I have read the risk disclaimer policy
+          </Field>
+        </div>
         <button className={cx('loginButton', { disabled })} disabled={disabled} onClick={login}>
           LOGIN
         </button>
@@ -68,6 +78,7 @@ AcceptTOS.propTypes = {
 
 const form = {
   form: 'tosAgreement',
+  destroyOnUnmount: false,
 }
 
 AcceptTOS.defaultProps = {
@@ -76,4 +87,10 @@ AcceptTOS.defaultProps = {
   rdAgreed: false,
 }
 
-export default reduxForm(form)(AcceptTOS)
+const withResetOnMount = lifecycle({
+  componentDidMount() {
+    this.props.reset()
+  },
+})(AcceptTOS)
+
+export default reduxForm(form)(withResetOnMount)

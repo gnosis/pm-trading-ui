@@ -1,4 +1,4 @@
-@import '../../scss/vars.scss';
+@import '../../../scss/vars.scss';
 
 .acceptTOS {
   width: 100%;
@@ -10,7 +10,7 @@
 
   .tosContainer {
     width: 520px;
-    height: 350px;
+    height: 410px;
     border-radius: 9px;
     background-color: #ffffff;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
@@ -20,6 +20,11 @@
     align-items: center;
     padding: 0 27px;
     text-align: center;
+    color: #666;
+
+    .checks {
+      text-align: left;
+    }
 
     .annotation {
       margin-top: 15px;
@@ -49,12 +54,8 @@
       height: 44px;
       font-size: 15px;
       font-weight: 500;
-      letter-spacing: 1px;
-      text-align: center;
-      color: #ffffff;
-      border-radius: 22px;
-      background-image: linear-gradient(to right, #00bbc5, #00a9c6);
-      margin-top: 20px;
+
+      @include interfaceButton();
 
       &.disabled {
         opacity: 0.6;
@@ -63,7 +64,7 @@
   }
 
   .closeButton {
-    .closeButton(32px, 5px);
+    @include closeButton(32px, 5px);
     top: 20px;
     right: 20px;
     background: transparent;
