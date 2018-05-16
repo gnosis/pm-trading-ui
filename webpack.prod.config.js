@@ -17,6 +17,8 @@ module.exports = (env = {}) => {
   const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
   const gnosisEnv = process.env.GNOSIS_ENV || 'development'
+
+  console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv}'`)
   const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
 
   return {
