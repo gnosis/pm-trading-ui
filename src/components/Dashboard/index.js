@@ -329,6 +329,7 @@ class Dashboard extends Component {
     const {
       hasWallet, collateralToken, accountPredictiveAssets,
     } = this.props
+
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     const predictedProfitFormatted = Decimal(accountPredictiveAssets).toDP(4, 1).toString()

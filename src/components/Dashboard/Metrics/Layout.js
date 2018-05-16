@@ -50,10 +50,12 @@ const Metrics = ({
 }) => (
   <Block className={cx('ol-db-container')} margin="md">
     <Metric img={tokenIcon} explanation={`${tokenSymbol} TOKENS`}>
-      <DecimalValue value={tokens} className={cx('ol-db-title')} />
+      <span className={cx('ol-db-title')}>
+        <DecimalValue value={tokens} /> {tokenSymbol}
+      </span>
     </Metric>
     <Metric img={outstandingPredictions} width={45} height={45} explanation="PREDICTED PROFITS">
-      <Block className={cx('ol-db-title')}>{predictedProfit}</Block>
+      <Block className={cx('ol-db-title')}>{predictedProfit} {tokenSymbol}</Block>
     </Metric>
     {tournamentEnabled && (
       <React.Fragment>

@@ -23,7 +23,6 @@ const mapStateToProps = (state) => {
   const gnosisInitialized = isGnosisInitialized(state)
   const hasWallet = checkWalletConnection(state)
   const collateralToken = getCollateralTokenInfo(state)
-
   return {
     hasWallet,
     defaultAccount,
