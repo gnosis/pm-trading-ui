@@ -11,7 +11,7 @@ import { getCollateralToken } from 'utils/features'
  * Requests the configured tournaments collateralToken balance. If none is set, does nothing
  * @param {function} dispatch
  */
-const requestTournamentTokenBalance = dispatch => (account) => {
+const requestTournamentTokenBalance = account => (dispatch) => {
   const tournamentToken = getCollateralToken()
 
   if (!tournamentToken) {

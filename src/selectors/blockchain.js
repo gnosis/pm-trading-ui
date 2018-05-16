@@ -39,14 +39,14 @@ export const getCollateralTokenInfo = (state) => {
   if (!collateralToken) {
     return {
       symbol: 'ETH',
-      amount: weiToEth(getCurrentBalance(state)),
+      amount: getCurrentBalance(state),
       address: undefined,
       icon: ETH_TOKEN_ICON,
     }
   }
 
   return {
-    symbol: getTokenSymbol(state, collateralToken.address),
+    symbol: collateralToken.symbol || getTokenSymbol(state, collateralToken.address),
     amount: weiToEth(getTokenAmount(state, collateralToken.address)),
     address: collateralToken.address,
     icon: collateralToken.icon,
