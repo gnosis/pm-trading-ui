@@ -27,17 +27,20 @@ class MarketDetail extends Component {
     this.state = {
       marketFetchError: undefined,
     }
+
     this.firstFetch = true
+    this.autoRefreshStop = false
   }
 
   componentDidMount() {
-    this.fetchEssentialData()
-    this.fetchDataTimer = setInterval(this.fetchEssentialData, MARKET_FETCH_INTERVAL)
     this.scrollToSharesDiv()
+    this.autoRefreshStop = false
+    this.refresh()
   }
 
   componentWillUnmount() {
-    clearInterval(this.fetchDataTimer)
+    this.autoRefreshStop = true
+    clearTimeout(this.fetchDataTimer)
   }
 
   @autobind
@@ -58,10 +61,21 @@ class MarketDetail extends Component {
     }
   }
 
-  // Check available views on first fetch
   @autobind
-  fetchEssentialData() {
-    this.props
+  async refresh() {
+    try {
+      await this.fetchEssentialData()
+    } catch (e) {
+      console.warn(`market detail update: fetch failed ${e}`)
+    } finally {
+      if (!this.autoRefreshStop) {
+        this.fetchDataTimer = setTimeout(this.refresh, MARKET_FETCH_INTERVAL)
+      }
+    }
+  }
+
+  async fetchMarketUpdates() {
+    return this.props
       .fetchMarket()
       .then(() => {
         this.props.fetchMarketTrades(this.props.market)
@@ -85,18 +99,39 @@ class MarketDetail extends Component {
           marketFetchError: err,
         })
       })
+  }
 
+  async fetchGasCosts() {
     if (this.props.hasWallet) {
-      this.props.requestGasCost(GAS_COST.BUY_SHARES)
-      this.props.requestGasCost(GAS_COST.SELL_SHARES)
+      return Promise.all([
+        this.props.requestGasCost(GAS_COST.BUY_SHARES),
+        this.props.requestGasCost(GAS_COST.SELL_SHARES),
+      ])
     }
 
+    return Promise.resolve()
+  }
+
+  async fetchMarketShares() {
     if (this.props.defaultAccount && this.props.match.params.id !== undefined) {
-      this.props.fetchMarketTradesForAccount(this.props.defaultAccount)
-      this.props.fetchMarketShares(this.props.defaultAccount)
+      return Promise.all([
+        this.props.fetchMarketTradesForAccount(this.props.defaultAccount),
+        this.props.fetchMarketShares(this.props.defaultAccount),
+      ])
     }
 
-    this.props.requestGasPrice()
+    return Promise.resolve()
+  }
+
+  // Check available views on first fetch
+  @autobind
+  async fetchEssentialData() {
+    await Promise.all([
+      this.fetchMarketUpdates(),
+      this.fetchGasCosts(),
+      this.fetchMarketShares(),
+      this.props.requestGasPrice(),
+    ])
   }
 
   @autobind
