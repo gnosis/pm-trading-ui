@@ -42,7 +42,7 @@ const newMarketsTests = () => {
       // GIVEN
       const aClosedMarket = aMarket()
         .ofScalarType()
-        .withResolution(moment().subtract(1, 'M'))
+        .withResolution(moment().subtract(3, 'days'))
         .withStage(MARKET_STAGES.MARKET_CLOSED)
         .get()
 
