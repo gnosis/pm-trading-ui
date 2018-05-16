@@ -3,6 +3,11 @@
     "default": "METAMASK",
     "requireTOSAccept": true
   },
+  "collateralToken":  {
+    "address": "0xd19bce9f7693598a9fa1f94c548b20887a33f141",
+    "symbol": "WETH",
+    "icon": "/assets/img/icons/icon_etherTokens.svg"
+  },
   "footer": {
     "enabled": true,
     "content": {
