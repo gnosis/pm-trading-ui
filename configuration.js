@@ -17,7 +17,7 @@ module.exports = (env, envVarsConfig = {}, envVarsInterface = {}) => {
   if (!isValidConfigFolder) {
     console.warn(`[WEBPACK]: invalid interface configuration selected: '${env}' - using fallback configuration`)
   } else {
-    // console.info(`[WEBPACK]: loaded env configuration: '${env}'`)
+    console.info(`[WEBPACK]: loaded env configuration: '${env}'`)
     configsToLoad.push(envConfigFolder)
   }
 
@@ -48,8 +48,8 @@ module.exports = (env, envVarsConfig = {}, envVarsInterface = {}) => {
   })
 
   // use env config vars
-  _.merge(config, envVarsConfig) // GNOSIS_CONFIG vars
-  _.merge(interfaceConfig, envVarsInterface) // GNOSIS_INTERFACE vars
+  config = _.merge(config, envVarsConfig) // GNOSIS_CONFIG vars
+  interfaceConfig = _.merge(interfaceConfig, envVarsInterface) // GNOSIS_INTERFACE vars
 
   return {
     config,

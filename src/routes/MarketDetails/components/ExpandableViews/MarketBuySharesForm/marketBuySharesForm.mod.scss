@@ -8,6 +8,7 @@
     margin-bottom: 10px;
     flex-direction: row;
     align-items: center;
+    font-size: 14px;
 
     &:first-child {
       margin-top: 0;
@@ -76,4 +77,9 @@
   margin-bottom: 10px;
   height: 20px;
   line-height: 30px;
+}
+
+.limitMarginAnnotation {
+  text-align: center;
+  font-size: 14px;
 }
