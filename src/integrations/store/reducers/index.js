@@ -1,6 +1,6 @@
-import { Map } from 'immutable'
+import { Map, List } from 'immutable'
 import { handleActions } from 'redux-actions'
-import { registerProvider, updateProvider, setActiveProvider } from 'integrations/store/actions'
+import { registerProvider, updateProvider, setActiveProvider, setTermsAndConditionsStatus } from 'integrations/store/actions'
 import { ProviderRecord } from 'integrations/store/models'
 
 export default handleActions(
@@ -17,9 +17,11 @@ export default handleActions(
       const newProviderState = currentProviderState.merge(updatedProvider)
       return state.setIn(['providers', name], newProviderState)
     },
+    [setTermsAndConditionsStatus]: (state, { payload: docs }) => state.set('termsAndConditionsAccepted', List(docs)),
   },
   Map({
     providers: Map(),
     activeProvider: undefined,
+    termsAndConditionsAccepted: List(),
   }),
 )

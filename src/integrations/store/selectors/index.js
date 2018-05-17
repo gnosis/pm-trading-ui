@@ -1,7 +1,11 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { getConfiguration } from 'utils/features'
+import { getConfiguration, getFeatureConfig } from 'utils/features'
+import { formValueSelector } from 'redux-form'
 
 const config = getConfiguration()
+
+const providerConfig = getFeatureConfig('providers')
+const requireTOSAccept = !!providerConfig.requireTOSAccept
 
 /**
  * Finds a default provider from all currently available providers. Determined by provider integrations `priority`
@@ -39,10 +43,20 @@ export const getCurrentAccount = (state) => {
   return undefined
 }
 
+export const hasAcceptedTermsAndConditions = (state) => {
+  if (!requireTOSAccept) {
+    return true
+  }
+
+  // TODO: In the future we can check against which were accepted
+  return !state.integrations.get('termsAndConditionsAccepted').isEmpty()
+}
+
 export const checkWalletConnection = (state) => {
   const provider = getActiveProvider(state)
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
 
-  if (provider && provider.account) {
+  if (termsNotRequiredOrAccepted && provider && provider.account) {
     return true
   }
 
