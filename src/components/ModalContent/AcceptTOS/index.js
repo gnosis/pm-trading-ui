@@ -1,21 +1,21 @@
 import React from 'react'
-import { lifecycle } from 'recompose'
 import cn from 'classnames/bind'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import PropTypes from 'prop-types'
+import { getFeatureConfig } from 'utils/features'
 import Checkbox from 'components/Form/Checkbox'
 import style from './AcceptTOS.mod.scss'
-import { getFeatureConfig } from 'utils/features'
 
 const { name = 'the application' } = getFeatureConfig('tournament')
 
 const cx = cn.bind(style)
 
 const AcceptTOS = ({
-  closeModal, tosAgreed, ppAgreed, rdAgreed, initProviders,
+  closeModal, tosAgreed, ppAgreed, rdAgreed, initProviders, setTermsAndConditionsStatus,
 }) => {
   const disabled = !ppAgreed || !tosAgreed || !rdAgreed
   const login = () => {
+    setTermsAndConditionsStatus(['TermsOfService.html', 'PrivacyPolicy.html', 'RiskDisclaimerPolicy.html'])
     initProviders()
     closeModal()
   }
@@ -71,6 +71,7 @@ const AcceptTOS = ({
 AcceptTOS.propTypes = {
   ...propTypes,
   closeModal: PropTypes.func.isRequired,
+  setTermsAndConditionsStatus: PropTypes.func.isRequired,
   tosAgreed: PropTypes.bool,
   ppAgreed: PropTypes.bool,
   rdAgreed: PropTypes.bool,
@@ -87,10 +88,4 @@ AcceptTOS.defaultProps = {
   rdAgreed: false,
 }
 
-const withResetOnMount = lifecycle({
-  componentDidMount() {
-    this.props.reset()
-  },
-})(AcceptTOS)
-
-export default reduxForm(form)(withResetOnMount)
+export default reduxForm(form)(AcceptTOS)

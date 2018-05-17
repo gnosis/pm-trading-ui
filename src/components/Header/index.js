@@ -128,7 +128,7 @@ class Header extends Component {
       }
     }
 
-    const shouldShowWallet = (!requireTOSAccept || acceptedTOS) && walletConnected && currentProvider
+    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && currentProvider
 
     return (
       <div className={cx('headerContainer')}>
@@ -140,7 +140,7 @@ class Header extends Component {
           </div>
           <div className={cx('group', 'left', 'version')}>{version}</div>
           <div className={cx('group', 'left', 'navLinks')}>
-            {walletConnected && (
+            {canInteract && (
               <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
                 Dashboard
               </NavLink>
@@ -148,7 +148,7 @@ class Header extends Component {
             <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
               Markets
             </NavLink>
-            {walletConnected && (
+            {canInteract && (
               <NavLink to="/transactions" activeClassName={cx('active')} className={cx('navLink')}>
                 Transactions
               </NavLink>
@@ -162,7 +162,7 @@ class Header extends Component {
           </div>
 
           <div className={cx('group', 'right')}>
-            {shouldShowWallet ? (
+            {canInteract ? (
               <div className={cx('account')}>
                 {currentNetwork && currentNetwork !== 'MAIN' && (
                   <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
