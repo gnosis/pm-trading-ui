@@ -5,20 +5,22 @@ import { requestMainnetAddress } from 'actions/account'
 import { initProviders } from 'integrations/store/actions'
 import { WALLET_PROVIDER } from 'integrations/constants'
 
-import { getCollateralToken } from 'utils/features'
+import { getCollateralToken } from 'selectors/blockchain'
 
 /**
  * Requests the configured tournaments collateralToken balance. If none is set, does nothing
  * @param {function} dispatch
+ * @param {function} getState
  */
-const requestTournamentTokenBalance = account => (dispatch) => {
-  const tournamentToken = getCollateralToken()
+const requestTournamentTokenBalance = account => (dispatch, getState) => {
+  const state = getState()
+  const collateralToken = getCollateralToken(state)
 
-  if (!tournamentToken) {
-    return null
+  if (!collateralToken) {
+    return undefined
   }
 
-  return dispatch(requestTokenBalance(tournamentToken.address, account))
+  return dispatch(requestTokenBalance(collateralToken.address, account))
 }
 
 export default {

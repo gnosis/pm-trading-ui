@@ -4,10 +4,9 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import { fetchTournamentUserData } from 'routes/Scoreboard/store/actions'
 import { weiToEth, hexWithoutPrefix } from 'utils/helpers'
-import { getCollateralToken, getProviderIntegrationConfig } from 'utils/features'
+import { getProviderIntegrationConfig } from 'utils/features'
 import initUportConnector, { connect, connectorLogOut, isUserConnected } from './connector'
 
-const collateralToken = getCollateralToken()
 export const { notificationsEnabled = false } = getProviderIntegrationConfig('uport')
 
 class Uport extends InjectedWeb3 {
@@ -84,27 +83,6 @@ class Uport extends InjectedWeb3 {
     })
 
     return accounts && accounts.length ? accounts[0] : null
-  }
-
-  /**
-   * Returns the balance of olympia tokens for the current default account in Wei
-   * @async
-   * @param {string} account - Useraccount to get the balance for
-   * @returns {Promise<string>} - Accountbalance in WEI for current account
-   */
-  async getBalance(account) {
-    const userAccount = account || this.account
-    if (!userAccount) {
-      throw new Error('No Account available')
-    }
-
-    const balance = await getTokenBalance(collateralToken.address, userAccount)
-
-    if (typeof balance !== 'undefined') {
-      return weiToEth(balance.toString())
-    }
-
-    throw new Error('Invalid Balance')
   }
 
   async logout() {
