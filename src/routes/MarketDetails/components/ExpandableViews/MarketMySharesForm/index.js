@@ -72,7 +72,6 @@ MarketMySharesForm.defaultProps = {
   selectedSellAmount: '0',
   limitMargin: '0',
   marketShares: {},
-  isGasCostFetched: false,
   isGasPriceFetched: false,
   gasCosts: undefined,
   gasPrice: undefined,
