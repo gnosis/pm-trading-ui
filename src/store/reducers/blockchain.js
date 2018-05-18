@@ -10,7 +10,6 @@ import {
 import { setGasCost } from 'routes/MarketDetails/store/actions'
 
 import { GAS_COST } from 'utils/constants'
-import Decimal from 'decimal.js'
 
 const reducer = handleActions(
   {
@@ -28,8 +27,8 @@ const reducer = handleActions(
       state.setIn(['tokenBalances', tokenAddress], tokenBalance),
   },
   Map({
-    gasCosts: Object.keys(GAS_COST).reduce((acc, item) => acc.set(GAS_COST[item], '0'), Map()),
-    gasPrice: Decimal(0),
+    gasCosts: Object.keys(GAS_COST).reduce((acc, item) => acc.set(GAS_COST[item], undefined), Map()),
+    gasPrice: undefined,
     connection: undefined,
     connectionTried: false,
     tokenSymbols: Map(),
