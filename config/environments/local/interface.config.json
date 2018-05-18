@@ -1,7 +1,7 @@
 {
   "providers": {
     "default": "METAMASK",
-    "requireTOSAccept": true
+    "requireTOSAccept": false
   },
   "collateralToken":  {
     "source": "contract",

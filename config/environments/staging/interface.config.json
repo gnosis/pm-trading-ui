@@ -5,9 +5,11 @@
   },
   "collateralToken":  {
     "source": "contract",
-    "contractName": "EtherToken",
-    "symbol": "WETH",
-    "icon": "/assets/img/icons/icon_etherTokens.svg"
+    "options": {
+      "contractName": "EtherToken",
+      "symbol": "WETH",
+      "icon": "/assets/img/icons/icon_etherTokens.svg"
+    }
   },
   "footer": {
     "enabled": true,
