@@ -90,3 +90,5 @@ export const getGnosisConnection = async () => {
 }
 
 export const getROGnosisConnection = async () => gnosisROInstance || undefined
+
+export default Gnosis

@@ -19,7 +19,7 @@ module.exports = (env = {}) => {
   const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
 
   const version = env.BUILD_VERSION || pkg.version
-  const commitId = `${env.TRAVIS_BRANCH}@${env.TRAVIS_COMMIT}`
+  const commitId = `${env.TRAVIS_BRANCH || 'local'}@${env.TRAVIS_COMMIT || 'SNAPSHOT'}`
 
   return {
     context: path.join(__dirname, 'src'),

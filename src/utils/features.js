@@ -12,8 +12,6 @@ export const isFeatureEnabled = feature => configInterface[feature] && configInt
 
 export const getFeatureConfig = feature => configInterface[feature] && configInterface[feature]
 
-export const getCollateralToken = () => configInterface.collateralToken
-
 export const getProviderConfig = () => configInterface.providers
 
 export const getProviderIntegrationConfig = providerName =>
