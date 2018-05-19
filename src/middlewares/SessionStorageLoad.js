@@ -1,4 +1,4 @@
-const LOAD_SESSIONSTORAGE = 'LOAD_SESSIONSTORAGE'
+export const LOAD_SESSIONSTORAGE = 'LOAD_SESSIONSTORAGE'
 
 export default store => next => (action) => {
   const { type } = action
