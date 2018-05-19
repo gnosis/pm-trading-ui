@@ -32,11 +32,13 @@ const reducer = handleActions(
         address,
         symbol,
         icon,
+        source,
       },
     }) => state.set('collateralToken', Map({
       address,
       symbol,
       icon,
+      source,
     })),
   },
   Map({

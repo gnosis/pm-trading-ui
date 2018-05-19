@@ -83,10 +83,11 @@ export const updateCollateralToken = () => async (dispatch) => {
 
   if (source === TOKEN_SOURCE_ETH) {
     // options are optional here
-    const { icon = ETH_TOKEN_ICON } = options || {}
+    const { icon = ETH_TOKEN_ICON, symbol = 'ETH' } = options || {}
 
     return dispatch(setCollateralToken({
       source: TOKEN_SOURCE_ETH,
+      symbol,
       icon,
     }))
   } else if (source === TOKEN_SOURCE_CONTRACT) {
@@ -122,6 +123,14 @@ export const updateCollateralToken = () => async (dispatch) => {
       address: contractInstance.address,
       symbol: tokenSymbol,
       icon: icon || ETH_TOKEN_ICON,
+    }))
+  } else if (source === TOKEN_SOURCE_ADDRESS) {
+    const { address, symbol, icon } = options
+    return dispatch(setCollateralToken({
+      source: TOKEN_SOURCE_ADDRESS,
+      address,
+      symbol,
+      icon,
     }))
   }
 

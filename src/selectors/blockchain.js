@@ -38,9 +38,11 @@ export const getCollateralToken = (state) => {
 
   if (source === TOKEN_SOURCE_ADDRESS) {
     // hardcoded address for collateralToken contract
-    return {
-      ...collateralToken,
-      balance: weiToEth(getTokenAmount(state, address)),
+    if (address) {
+      return {
+        ...collateralToken,
+        balance: weiToEth(getTokenAmount(state, address)),
+      }
     }
   } else if (source === TOKEN_SOURCE_CONTRACT) {
     // might need to wait until address becomes available
@@ -54,6 +56,7 @@ export const getCollateralToken = (state) => {
     // use eth balance as currency
 
     const balance = getCurrentBalance(state)
+
     return {
       ...collateralToken,
       balance: (balance || 0).toString(),
