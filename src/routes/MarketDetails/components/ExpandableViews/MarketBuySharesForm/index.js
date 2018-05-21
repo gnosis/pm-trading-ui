@@ -128,7 +128,7 @@ class MarketBuySharesForm extends Component {
         </span>
       )
 
-      const returnSign = maximumWin > 0 ? '' : '+'
+      const returnSign = maximumWin > 0 ? '+' : ''
       maxReturnField = (
         <span className={cx('marketBuyWin', 'winInfoRow', 'max')}>
           {returnSign}
