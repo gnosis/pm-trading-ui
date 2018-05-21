@@ -11,6 +11,7 @@ import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { TextInput, TextInputAdornment } from 'components/Form'
+import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { getOutcomeTokenCount, getMaximumWin, getPercentageWin } from './utils'
 import OutcomeSection from './OutcomesSection'
 import SubmitError from './SubmitError'
@@ -84,6 +85,8 @@ class MarketBuySharesForm extends Component {
     const {
       gasCosts,
       gasPrice,
+      isGasCostFetched,
+      isGasPriceFetched,
       invalid,
       handleSubmit,
       market: { event: { collateralToken, type }, local },
@@ -128,7 +131,7 @@ class MarketBuySharesForm extends Component {
         </span>
       )
 
-      const returnSign = maximumWin > 0 ? '' : '+'
+      const returnSign = maximumWin > 0 ? '+' : ''
       maxReturnField = (
         <span className={cx('marketBuyWin', 'winInfoRow', 'max')}>
           {returnSign}
@@ -178,8 +181,14 @@ class MarketBuySharesForm extends Component {
               <div className={cx('row', 'infoRow')}>
                 <div className={cx('col-md-6')}>Gas Costs</div>
                 <div className={cx('col-md-6')}>
-                  <DecimalValue value={gasCostEstimation} decimals={4} />
-                  {' ETH'}
+                  {isGasPriceFetched && isGasCostFetched(GAS_COST.BUY_SHARES) ? (
+                    <React.Fragment>
+                      <DecimalValue value={gasCostEstimation} decimals={4} />
+                      <CurrencyName tokenAddress={market.event.collateralToken} />
+                    </React.Fragment>
+                  ) : (
+                    <IndefiniteSpinner width={16} height={16} />
+                  )}
                 </div>
               </div>
               <LimitMarginAnnotation />

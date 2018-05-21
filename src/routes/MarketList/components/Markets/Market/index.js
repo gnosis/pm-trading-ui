@@ -82,7 +82,6 @@ class Market extends React.PureComponent {
       >
         <div className={cx('header')}>
           <h2 className={cx('title')}>{title}</h2>
-          {showResolveButton && <ResolveButton url={resolveUrl} />}
         </div>
         <Outcome
           resolved={market.resolved}

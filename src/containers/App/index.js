@@ -50,11 +50,7 @@ const App = (props) => {
           {props.children}
         </CSSTransition>
       </TransitionGroup>
-      {isFeatureEnabled('footer') && (
-        <PageFrame>
-          <Footer />
-        </PageFrame>
-      )}
+      <Footer />
     </div>
   )
 }

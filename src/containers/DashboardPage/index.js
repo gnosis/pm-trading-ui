@@ -6,7 +6,7 @@ import { getMarkets } from 'selectors/market'
 import { profitsSelector } from 'containers/DashboardPage/store/selectors'
 import { getAccountTrades } from 'selectors/marketTrades'
 import { getAccountShares } from 'selectors/marketShares'
-import { isGnosisInitialized, getCollateralTokenInfo } from 'selectors/blockchain'
+import { isGnosisInitialized, getCollateralToken } from 'selectors/blockchain'
 import { getCurrentAccount, checkWalletConnection } from 'integrations/store/selectors'
 import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
 import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
@@ -22,8 +22,7 @@ const mapStateToProps = (state) => {
   const accountShares = getAccountShares(state)
   const gnosisInitialized = isGnosisInitialized(state)
   const hasWallet = checkWalletConnection(state)
-  const collateralToken = getCollateralTokenInfo(state)
-
+  const collateralToken = getCollateralToken(state)
   return {
     hasWallet,
     defaultAccount,

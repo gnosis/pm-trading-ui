@@ -55,6 +55,8 @@ class SharesTable extends Component {
       match: {
         params: { shareId: extendedShareId },
       },
+      isGasCostFetched,
+      isGasPriceFetched,
     } = this.props
     const tableRows = []
 
@@ -84,6 +86,8 @@ class SharesTable extends Component {
           market={market}
           gasCosts={gasCosts}
           gasPrice={gasPrice}
+          isGasCostFetched={isGasCostFetched}
+          isGasPriceFetched={isGasPriceFetched}
           selectedSellAmount={selectedSellAmount}
           handleSellShare={this.handleSellShare}
         />)
@@ -115,6 +119,8 @@ SharesTable.propTypes = {
   marketShares: PropTypes.objectOf(PropTypes.object),
   gasCosts: ImmutablePropTypes.map,
   gasPrice: PropTypes.instanceOf(Decimal),
+  isGasCostFetched: PropTypes.func.isRequired,
+  isGasPriceFetched: PropTypes.bool,
   selectedSellAmount: PropTypes.string,
   sellShares: PropTypes.func,
   match: ReactRouterMatchShape,
@@ -129,6 +135,7 @@ SharesTable.defaultProps = {
   selectedSellAmount: undefined,
   sellShares: () => {},
   match: {},
+  isGasPriceFetched: false,
 }
 
 export default SharesTable

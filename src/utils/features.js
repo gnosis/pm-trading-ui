@@ -6,11 +6,11 @@ export const getInterfaceConfiguration = () => configInterface
 
 export const getLogoConfig = () => configInterface.logo
 
+export const getGasPriceConfig = () => config.gasPrice || {}
+
 export const isFeatureEnabled = feature => configInterface[feature] && configInterface[feature].enabled
 
 export const getFeatureConfig = feature => configInterface[feature] && configInterface[feature]
-
-export const getCollateralToken = () => configInterface.collateralToken
 
 export const getProviderConfig = () => configInterface.providers
 

@@ -13,8 +13,9 @@ import CurrencyName from 'components/CurrencyName'
 import { Slider, TextInput } from 'components/Form'
 import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
+import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { marketShape, marketShareShape } from 'utils/shapes'
-import { LIMIT_MARGIN_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
+import { LIMIT_MARGIN_DEFAULT, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
 import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { calculateCurrentProbability, calculateEarnings, calculateNewProbability } from './utils'
 import style from './ShareSellView.mod.scss'
@@ -67,6 +68,8 @@ class ShareSellView extends Component {
       share,
       gasCosts,
       gasPrice,
+      isGasPriceFetched,
+      isGasCostFetched,
       valid,
     } = this.props
 
@@ -160,8 +163,14 @@ class ShareSellView extends Component {
                 <div className={cx('col-md-3', 'sellColumn')}>
                   <label>Gas costs</label>
                   <span>
-                    <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
-                    <CurrencyName tokenAddress={market.event.collateralToken} />
+                    {isGasPriceFetched && isGasCostFetched(GAS_COST.SELL_SHARES) ? (
+                      <React.Fragment>
+                        <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
+                        <CurrencyName tokenAddress={market.event.collateralToken} />
+                      </React.Fragment>
+                    ) : (
+                      <IndefiniteSpinner width={16} height={16} />
+                    )}
                   </span>
                 </div>
               </div>
@@ -219,8 +228,10 @@ class ShareSellView extends Component {
 
 ShareSellView.propTypes = {
   ...propTypes,
+  isGasCostFetched: PropTypes.func.isRequired,
   gasCosts: ImmutablePropTypes.map,
   gasPrice: PropTypes.instanceOf(Decimal),
+  isGasPriceFetched: PropTypes.bool,
   market: marketShape,
   selectedSellAmount: PropTypes.string,
   handleSellShare: PropTypes.func,
@@ -234,6 +245,7 @@ ShareSellView.defaultProps = {
   selectedSellAmount: undefined,
   handleSellShare: () => {},
   share: {},
+  isGasPriceFetched: false,
 }
 
 const FORM = {

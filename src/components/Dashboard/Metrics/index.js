@@ -32,6 +32,7 @@ class Metrics extends React.PureComponent {
     const {
       predictedProfit, tokens, tokenSymbol, tokenIcon, rank, badge,
     } = this.props
+
     return (
       <Layout
         tokens={tokens}
@@ -45,4 +46,4 @@ class Metrics extends React.PureComponent {
   }
 }
 
-export default connect(selector)(Metrics)
+export default Metrics
