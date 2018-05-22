@@ -85,31 +85,31 @@
     "enabled": true,
     "ranks": [
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/junior-predictor.svg",
+        "icon": "assets/badges/junior-predictor.svg",
         "rank": "Junior Predictor",
         "minPredictions": 0,
         "maxPredictions": 4
       },
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/crystal-gazer.svg",
+        "icon": "assets/badges/crystal-gazer.svg",
         "rank": "Crystal Gazer",
         "minPredictions": 5,
         "maxPredictions": 9
       },
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/fortune-teller.svg",
+        "icon": "assets/badges/fortune-teller.svg",
         "rank": "Fortune Teller",
         "minPredictions": 10,
         "maxPredictions": 14
       },
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/clairvoyant.svg",
+        "icon": "assets/badges/clairvoyant.svg",
         "rank": "Clairvoyant",
         "minPredictions": 15,
         "maxPredictions": 19
       },
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/psychic.svg",
+        "icon": "assets/badges/psychic.svg",
         "rank": "Psychic",
         "minPredictions": 20
       }
