@@ -22,7 +22,11 @@ const loadGoogleAnalytics = () => new Promise((resolve) => {
   }
 })
 
-export const ga = (...args) => window.ga.q(...args) || window.ga(...args)
+export const ga = (...args) =>
+  (window.ga && window.ga.q && window.ga.q(...args)) ||
+  (window.ga && window.ga(...args)) ||
+  (() => {})(...args) // no-op
+
 export const gaSend = (...args) => ga(config.name, ...args)
 
 export default loadGoogleAnalytics
