@@ -143,7 +143,9 @@ module.exports = (env = {}) => {
         },
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin(['assets/content']),
+      new CopyWebpackPlugin([
+        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
+      ]),
     ],
   }
 }
