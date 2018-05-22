@@ -1,8 +1,12 @@
 @import "../../scss/vars.scss";
 
+$footer-bottom: 44px;
+
 .appContainer {
   background-color: $bg-color;
-  height: calc(100vh - 44px);
+  min-height: calc(100vh - $footer-bottom);
+
+  padding-bottom: $footer-bottom;
 
   .loader-container {
     height: 100%;
