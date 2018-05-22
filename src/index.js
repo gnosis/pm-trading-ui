@@ -9,7 +9,7 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 import 'scss/style.scss'
-import initGoogleAnalytics from 'utils/analytics/init'
+import initAnalytics from 'utils/analytics'
 import { isFeatureEnabled, getProviderConfig } from 'utils/features'
 import store from 'store'
 import { WALLET_PROVIDER } from 'integrations/constants'
@@ -30,9 +30,8 @@ if (!tournamentEnabled) {
   store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE, tournamentProvider] }))
 }
 
+initAnalytics()
 Decimal.set({ toExpPos: 9999, precision: 50 })
-
-initGoogleAnalytics()
 
 /* global document */
 const rootElement = document.getElementById('root')
