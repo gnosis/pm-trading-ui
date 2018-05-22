@@ -18,9 +18,7 @@
   "whitelist": {},
   "thirdparty": {
     "googleAnalytics": {
-      "enabled": true,
-      "clientId": "UA-83220550-2",
-      "name": "apollo-tracker"
+      "enabled": true
     }
   }
 }
