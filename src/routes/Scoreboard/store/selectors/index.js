@@ -43,5 +43,8 @@ export const tournamentMainnetRegistryAddress = (state) => {
 export const meSelector = createSelector(
   tournamentUsersSelectorAsList,
   getCurrentAccount,
-  (users, account) => (users ? users.find(user => user.account === account) : undefined),
+  (users, account) => {
+    const foundUser = (users ? users.find(user => user.account === account) : undefined)
+    return foundUser ? foundUser.toJS() : undefined
+  },
 )
