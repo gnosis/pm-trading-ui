@@ -83,7 +83,7 @@ Metrics.propTypes = {
     maxPredictions: PropTypes.number,
     minPredictions: PropTypes.number,
     rank: PropTypes.string,
-  }).isRequired,
+  }),
 }
 
 Metrics.defaultProps = {
@@ -92,6 +92,7 @@ Metrics.defaultProps = {
   tokenSymbol: 'UNKNOWN',
   tokenIcon: etherTokens,
   rank: '',
+  badge: {},
 }
 
 export default connect(selector)(Metrics)

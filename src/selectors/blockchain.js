@@ -17,7 +17,7 @@ export const getTokenAmount = (state, tokenAddress) => {
   const tokenAmount = state.blockchain.getIn(['tokenBalances', tokenAddress], 0)
   let defaultTokenDecimal
   try {
-    defaultTokenDecimal = Decimal(tokenAmount)
+    defaultTokenDecimal = Decimal(tokenAmount.toString())
   } catch (e) {
     defaultTokenDecimal = Decimal(0)
   }
