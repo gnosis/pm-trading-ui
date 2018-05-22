@@ -2,7 +2,7 @@
 
 .appContainer {
   background-color: $bg-color;
-  margin-bottom: 44px;
+  height: calc(100vh - 44px);
 
   .loader-container {
     height: 100%;
