@@ -10,6 +10,7 @@ export const updateProvider = createAction('UPDATE_PROVIDER')
 export const logout = createAction('PROVIDER_LOGOUT')
 export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
 export const initProviders = createAction('INIT_PROVIDERS')
+export const setTermsAndConditionsStatus = createAction('SET_TERMS_AND_CONDITION_STATUS')
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 

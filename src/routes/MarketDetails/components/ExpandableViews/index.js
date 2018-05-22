@@ -20,7 +20,7 @@ const showExpandableTournament = (props) => {
   if (
     providerConfig.default === WALLET_PROVIDER.METAMASK &&
     !!props.defaultAccount &&
-    (requireRegistration ? !!props.mainnetAddress : true)
+    (!requireRegistration || !!props.mainnetAddress)
   ) {
     showExpandable = true
   } else if (providerConfig === WALLET_PROVIDER.UPORT && !!props.defaultAccount) {
