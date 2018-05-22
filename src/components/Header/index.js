@@ -105,11 +105,8 @@ class Header extends Component {
 
 
     const logoVars = {}
-    if (tournamentEnabled) {
-      logoVars['--logoAnnotation'] = "'Powered by Gnosis'"
-      logoVars['--logoPath'] = `url("${logoPath}")`
-      logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
-    }
+    logoVars['--logoPath'] = `url("${logoPath}")`
+    logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
 
     let gameGuideLink = <div />
     if (showGameGuide) {
