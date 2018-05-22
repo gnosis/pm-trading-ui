@@ -74,4 +74,5 @@ Form.defaultProps = {
 
 export default reduxForm({
   form: MARKETFILTER_FORM_NAME,
+  destroyOnUnmount: false,
 })(Form)
