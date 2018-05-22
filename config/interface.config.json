@@ -7,7 +7,7 @@
   "tournament": {
     "enabled": false
   },
-  "collateralToken": null,
+  "collateralToken": {},
   "providers": {
     "default": "METAMASK",
     "requireTOSAccept": false
