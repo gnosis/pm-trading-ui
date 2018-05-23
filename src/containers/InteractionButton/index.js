@@ -51,6 +51,7 @@ class InteractionButton extends Component {
       loading,
       termsNotRequiredOrAccepted,
     } = this.props
+    console.log(targetNetworkId)
     if (whitelistRequired && !whitelisted) {
       return null
     }
@@ -118,7 +119,7 @@ class InteractionButton extends Component {
     }
 
     if (networkError) {
-      const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst(ETHEREUM_NETWORK_IDS[targetNetworkId].toLowerCase())} network.`
+      const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst((ETHEREUM_NETWORK_IDS[targetNetworkId] || '').toLowerCase())} network.`
       return <Tooltip overlay={wrongNetworkText}>{btn}</Tooltip>
     }
 
