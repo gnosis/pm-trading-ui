@@ -3,6 +3,7 @@ import {
   getCurrentNetwork,
   getActiveProvider,
   checkWalletConnection,
+  hasAcceptedTermsAndConditions,
   isConnectedToCorrectNetwork,
   getTargetNetworkId,
   getRegisteredMainnetAddress,

@@ -44,10 +44,10 @@ describe('Blockchain selectors', () => {
       expect(isGasCostFetched(state)).toEqual(false)
     })
 
-    it('Should return falsy value if gasCost prop is not set', () => {
+    it('Should return false value if gasCost prop is not set', () => {
       const state = { blockchain: Map({ gasCosts: Map() }) }
 
-      expect(isGasCostFetched(state)).toBeFalsy()
+      expect(isGasCostFetched(state)).toEqual(false)
     })
 
     it('Should return true if gasCost for a prop is set', () => {
@@ -59,10 +59,10 @@ describe('Blockchain selectors', () => {
   })
 
   describe('getGasCosts', () => {
-    it('Should return gasCosts without falsy values and replace falsy values with 0', () => {
+    it('Should return gasCosts and if no gasCost is found, return undefined', () => {
       const buySharesGasCost = '500000'
       const sellSharesGasCost = '55405300'
-      const falsyValueReplacement = 0
+
       const state = {
         blockchain: Map({
           gasCosts: Map({ buyShares: buySharesGasCost, sellShares: sellSharesGasCost, market: undefined }),
@@ -73,7 +73,7 @@ describe('Blockchain selectors', () => {
       expect(gasCosts.size).toEqual(3)
       expect(gasCosts.get('buyShares', buySharesGasCost)).toEqual(buySharesGasCost)
       expect(gasCosts.get('sellShares', sellSharesGasCost)).toEqual(sellSharesGasCost)
-      expect(gasCosts.get('market')).toEqual(falsyValueReplacement)
+      expect(gasCosts.get('market')).toBeUndefined()
     })
 
     it('Should return an empty map when there are no gas costs set', () => {
@@ -127,7 +127,7 @@ describe('Blockchain selectors', () => {
   })
 
   describe('isGasPriceFetched', () => {
-    it('Should return false if gas price is undefined', () => {
+    it('Should return false if no gas price is fetched yet', () => {
       const state = {
         blockchain: Map({
           gasPrice: undefined,
@@ -137,7 +137,7 @@ describe('Blockchain selectors', () => {
       expect(isGasPriceFetched(state)).toEqual(false)
     })
 
-    it('Should return true if gas price is undefined', () => {
+    it('Should return true if gas price is defined', () => {
       const state = {
         blockchain: Map({
           gasPrice: '12345678',
@@ -149,14 +149,14 @@ describe('Blockchain selectors', () => {
   })
 
   describe('getGasPrice', () => {
-    it('Should return 0 if gas price is undefined', () => {
+    it('Should return undefined if no gas price is fetched yet', () => {
       const state = {
         blockchain: Map({
           gasPrice: undefined,
         }),
       }
 
-      expect(getGasPrice(state).toString()).toEqual('0')
+      expect(getGasPrice(state)).toBeUndefined()
     })
 
     it('Should return 0 if gas price is not a number', () => {

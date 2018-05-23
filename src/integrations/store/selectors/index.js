@@ -51,11 +51,11 @@ export const hasAcceptedTermsAndConditions = (state) => {
   return !state.integrations.get('termsAndConditionsAccepted').isEmpty()
 }
 
-
 export const checkWalletConnection = (state) => {
   const provider = getActiveProvider(state)
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
 
-  if (provider && provider.account) {
+  if (termsNotRequiredOrAccepted && provider && provider.account) {
     return true
   }
 

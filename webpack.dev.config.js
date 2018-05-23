@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -158,6 +159,9 @@ module.exports = (env = {}) => {
         'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+      new CopyWebpackPlugin([
+        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
+      ]),
     ],
   }
 }
