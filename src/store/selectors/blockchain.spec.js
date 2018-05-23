@@ -1,5 +1,6 @@
-import { isGnosisInitialized, triedToConnect, getTokenAmount } from 'store/selectors/blockchain'
+import { isGnosisInitialized, triedToConnect, getTokenAmount, getCollateralToken } from 'store/selectors/blockchain'
 import { getGasPrice, getGasCosts, isGasCostFetched, isGasPriceFetched } from 'routes/MarketDetails/store/selectors'
+import { ProviderRecord } from 'integrations/store/models'
 
 import { Map } from 'immutable'
 
@@ -177,6 +178,156 @@ describe('Blockchain selectors', () => {
       }
 
       expect(getGasPrice(state).toString()).toEqual(gasPrice)
+    })
+  })
+
+  describe('getCollateralToken', () => {
+    describe('source: "contract"', () => {
+      it('Should return empty collateralToken if no collateralToken is set yet', () => {
+        const state = {
+          blockchain: Map({
+            collateralToken: Map({
+              address: undefined,
+              source: undefined,
+            }),
+          }),
+        }
+
+        expect(getCollateralToken(state)).toMatchObject({
+          address: undefined,
+          source: undefined,
+        })
+      })
+
+      it('Should return the collateralToken with address and with non-falsey balance if no balance was fetched yet', () => {
+        const state = {
+          blockchain: Map({
+            collateralToken: Map({
+              address: '0x123',
+              source: 'contract',
+            }),
+          }),
+        }
+
+        expect(getCollateralToken(state)).toHaveProperty('balance', '0')
+        expect(getCollateralToken(state)).toHaveProperty('address', '0x123')
+      })
+
+      it('Should return the collateralToken with address and with the balance in eth, if a balance was fetched', () => {
+        const state = {
+          blockchain: Map({
+            collateralToken: Map({
+              address: '0x123',
+              source: 'contract',
+            }),
+            tokenBalances: Map({
+              '0x123': 1e18.toString(), // 1 eth
+            }),
+          }),
+        }
+
+        expect(getCollateralToken(state)).toHaveProperty('balance', '1')
+        expect(getCollateralToken(state)).toHaveProperty('address', '0x123')
+      })
+    })
+
+    describe('source: "address"', () => {
+      it('Should return undefined if no collateralToken is set yet', () => {
+        const state = {
+          blockchain: Map({
+            collateralToken: Map({
+              address: undefined,
+              source: undefined,
+            }),
+          }),
+        }
+
+        expect(getCollateralToken(state)).toMatchObject({
+          address: undefined,
+          source: undefined,
+        })
+      })
+
+      it('Should return the collateralToken with address and with non-falsey balance if no balance was fetched yet', () => {
+        const state = {
+          blockchain: Map({
+            collateralToken: Map({
+              address: '0x123',
+              source: 'address',
+            }),
+          }),
+        }
+
+        expect(getCollateralToken(state)).toHaveProperty('balance', '0')
+        expect(getCollateralToken(state)).toHaveProperty('address', '0x123')
+      })
+
+      it('Should return the collateralToken with address and with the balance in eth, if a balance was fetched', () => {
+        const state = {
+          blockchain: Map({
+            collateralToken: Map({
+              address: '0x123',
+              source: 'address',
+            }),
+            tokenBalances: Map({
+              '0x123': 1e18.toString(), // 1 eth
+            }),
+          }),
+        }
+
+        expect(getCollateralToken(state)).toHaveProperty('balance', '1')
+        expect(getCollateralToken(state)).toHaveProperty('address', '0x123')
+      })
+    })
+
+    describe('source: "eth"', () => {
+      it('Should return the balance of the current account in ETH', () => {
+        const state = {
+          blockchain: Map({
+            collateralToken: Map({
+              source: 'eth',
+            }),
+          }),
+          integrations: Map({
+            providers: Map({
+              METAMASK: new ProviderRecord({
+                name: 'METAMASK',
+                available: true,
+                loaded: true,
+                balance: '5',
+                account: '0x123',
+              }),
+            }),
+            activeProvider: 'METAMASK',
+          }),
+        }
+
+        expect(getCollateralToken(state)).toMatchObject({ balance: '5', source: 'eth' })
+      })
+
+      it('Should return 0 instead of falsey values if no ETH balance was fetched yet', () => {
+        const state = {
+          blockchain: Map({
+            collateralToken: Map({
+              source: 'eth',
+            }),
+          }),
+          integrations: Map({
+            providers: Map({
+              METAMASK: new ProviderRecord({
+                name: 'METAMASK',
+                available: true,
+                loaded: true,
+                balance: undefined,
+                account: '0x123',
+              }),
+            }),
+            activeProvider: 'METAMASK',
+          }),
+        }
+
+        expect(getCollateralToken(state)).toMatchObject({ balance: '0', source: 'eth' })
+      })
     })
   })
 })

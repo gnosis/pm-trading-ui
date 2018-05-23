@@ -2,6 +2,7 @@ import { combineReducers, createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { List } from 'immutable'
 import marketReducer, { REDUCER_ID } from 'store/reducers/market'
+import blockchainReducer from 'store/reducers/blockchain'
 import { processMarketResponse } from '../actions/fetchMarkets'
 import { marketListSelector } from '../selectors'
 import { oneMarketData, twoMarketData, realData, MarketFactory } from './builder/index.builder'
@@ -12,6 +13,7 @@ const marketReducerTests = () => {
     beforeEach(() => {
       const reducers = combineReducers({
         [REDUCER_ID]: marketReducer,
+        blockchain: blockchainReducer,
       })
       const middlewares = [
         thunk,
@@ -28,7 +30,7 @@ const marketReducerTests = () => {
       const emptyResponse = { }
 
       // WHEN
-      processMarketResponse(store.dispatch, emptyResponse)
+      processMarketResponse(store.dispatch, store.getState(), emptyResponse)
 
       // THEN
       const emptyList = List([])
@@ -41,7 +43,7 @@ const marketReducerTests = () => {
       const threeMarketsResponse = realData
 
       // WHEN
-      processMarketResponse(store.dispatch, threeMarketsResponse)
+      processMarketResponse(store.dispatch, store.getState(), threeMarketsResponse)
 
       // THEN
       const markets = marketListSelector(store.getState())
@@ -58,11 +60,11 @@ const marketReducerTests = () => {
     it('should replace markets in store when fetch data', () => {
       // GIVEN
       const kittiesResponse = oneMarketData
-      processMarketResponse(store.dispatch, kittiesResponse)
+      processMarketResponse(store.dispatch, store.getState(), kittiesResponse)
 
       // WHEN
       const etherAndGasMarketsResponse = twoMarketData
-      processMarketResponse(store.dispatch, etherAndGasMarketsResponse)
+      processMarketResponse(store.dispatch, store.getState(), etherAndGasMarketsResponse)
 
       // THEN
       const markets = marketListSelector(store.getState())

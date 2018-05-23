@@ -1,6 +1,5 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { getConfiguration, getFeatureConfig } from 'utils/features'
-import { formValueSelector } from 'redux-form'
 
 const config = getConfiguration()
 

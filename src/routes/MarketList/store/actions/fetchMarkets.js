@@ -1,13 +1,13 @@
 import { List } from 'immutable'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
-import { getConfiguration, getCollateralToken } from 'utils/features'
+import { getConfiguration } from 'utils/features'
 import { OUTCOME_TYPES } from 'utils/constants'
 import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
+import { getCollateralToken } from 'store/selectors/blockchain'
 import addMarkets from './addMarkets'
 
 const config = getConfiguration()
-const { address: collateralTokenConfigAddress } = getCollateralToken() || {}
 const whitelisted = config.whitelist || {}
 
 const addresses = Object.keys(whitelisted).map(hexWithoutPrefix)
@@ -145,21 +145,26 @@ export const extractMarkets = markets =>
     return builder.call(builder, market)
   })
 
-export const processMarketResponse = (dispatch, response) => {
+export const processMarketResponse = (dispatch, state, response) => {
   if (!response || !response.results) {
     dispatch(addMarkets([]))
     return
   }
 
+  const applicationCollateralToken = getCollateralToken(state)
+
   let marketRecords = extractMarkets(response.results)
 
-  if (collateralTokenConfigAddress) {
-    marketRecords = marketRecords.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(collateralTokenConfigAddress))
+  if (applicationCollateralToken.address) {
+    marketRecords = marketRecords.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(applicationCollateralToken.address))
   }
 
   dispatch(addMarkets(marketRecords))
 }
 
-export default () => dispatch =>
-  requestFromRestAPI('markets', { creator: addresses.join() })
-    .then(response => processMarketResponse(dispatch, response))
+export default () => async (dispatch, getState) => {
+  const response = await requestFromRestAPI('markets', { creator: addresses.join() })
+  const state = getState()
+
+  return processMarketResponse(dispatch, state, response)
+}

@@ -334,7 +334,7 @@ class Dashboard extends Component {
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
     const predictedProfitFormatted = Decimal(accountPredictiveAssets).toDP(4, 1).toString()
     if (hasWallet) {
-      metricsSection = <Metrics tokens={collateralToken.amount} tokenSymbol={collateralToken.symbol} tokenIcon={collateralToken.icon} predictedProfit={predictedProfitFormatted} />
+      metricsSection = <Metrics tokens={collateralToken.balance} tokenSymbol={collateralToken.symbol} tokenIcon={collateralToken.icon} predictedProfit={predictedProfitFormatted} />
 
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
@@ -402,7 +402,7 @@ Dashboard.propTypes = {
   fetchTournamentUserData: PropTypes.func.isRequired,
   collateralToken: PropTypes.shape({
     symbol: PropTypes.string,
-    amount: PropTypes.string,
+    balance: PropTypes.string,
     address: PropTypes.string,
   }).isRequired,
 }
