@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js'
-import { TOKEN_SOURCE_ADDRESS, TOKEN_SOURCE_CONTRACT, TOKEN_SOURCE_ETH } from 'actions/blockchain'
+import { TOKEN_SOURCE_ADDRESS, TOKEN_SOURCE_CONTRACT, TOKEN_SOURCE_ETH } from 'store/actions/blockchain'
 import { getCurrentBalance } from 'integrations/store/selectors'
 import { weiToEth } from 'utils/helpers'
 

@@ -5,7 +5,7 @@ import { requestMainnetAddress } from 'store/actions/account'
 import { initProviders } from 'integrations/store/actions'
 import { WALLET_PROVIDER } from 'integrations/constants'
 
-import { getCollateralToken } from 'selectors/blockchain'
+import { getCollateralToken } from 'store/selectors/blockchain'
 
 /**
  * Requests the configured tournaments collateralToken balance. If none is set, does nothing
