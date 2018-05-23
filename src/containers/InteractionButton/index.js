@@ -51,7 +51,7 @@ class InteractionButton extends Component {
       loading,
       termsNotRequiredOrAccepted,
     } = this.props
-    console.log(targetNetworkId)
+
     if (whitelistRequired && !whitelisted) {
       return null
     }
@@ -111,11 +111,17 @@ class InteractionButton extends Component {
     }
 
     if (termsAndConditionsError) {
-      return <Tooltip overlay="You need to accept our terms and conditions before you can with this application.">{btn}</Tooltip>
+      return (
+        <Tooltip overlay="You need to accept our terms and conditions before you can with this application.">
+          {btn}
+        </Tooltip>
+      )
     }
 
     if (walletError) {
-      return <Tooltip overlay="You need a wallet connected before you can interact with this application.">{btn}</Tooltip>
+      return (
+        <Tooltip overlay="You need a wallet connected before you can interact with this application.">{btn}</Tooltip>
+      )
     }
 
     if (networkError) {
