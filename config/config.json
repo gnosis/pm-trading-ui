@@ -15,5 +15,10 @@
       "type": "ETH_GAS_STATION"
     }
   },
-  "whitelist": {}
+  "whitelist": {},
+  "thirdparty": {
+    "googleAnalytics": {
+      "enabled": true
+    }
+  }
 }

@@ -19,3 +19,8 @@ export const getProviderIntegrationConfig = providerName =>
   configInterface.providers.options &&
   configInterface.providers.options[providerName.toUpperCase()]) || {}
 
+export const isThirdPartyIntegrationEnabled = thirdPartyName =>
+  config.thirdparty?.[thirdPartyName]?.enabled === true
+
+export const getThirdPartyConfig = thirdPartyName =>
+  (isThirdPartyIntegrationEnabled(thirdPartyName) ? config.thirdparty[thirdPartyName] : {})
