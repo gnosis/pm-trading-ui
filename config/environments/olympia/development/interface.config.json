@@ -6,11 +6,11 @@
   },
   "tournament": {
     "enabled": true,
-    "name": "Olympia",
-    "registration": {
-      "enabled": true,
-      "contractAddress": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13"
-    }
+    "name": "Olympia"
+  },
+  "registration": {
+    "enabled": true,
+    "contractAddress": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13"
   },
   "collateralToken": {
     "source": "address",
@@ -46,7 +46,8 @@
     "enabled": true,
     "content": {
       "type": "text",
-      "source": "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
+      "source":
+        "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
       "markdown": true
     }
   },

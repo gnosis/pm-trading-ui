@@ -25,7 +25,7 @@ const badgesEnabled = isFeatureEnabled('badges')
 const requireRegistration = isFeatureEnabled('registration')
 const providerConfig = getFeatureConfig('providers')
 const requireTOSAccept = !!providerConfig.requireTOSAccept
-
+console.log(tournamentEnabled, requireRegistration)
 const { default: defaultProvider } = providerConfig
 
 const useMetamask = defaultProvider === WALLET_PROVIDER.METAMASK
