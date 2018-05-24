@@ -8,7 +8,6 @@ import {
   getTargetNetworkId,
   getRegisteredMainnetAddress,
   isMetamaskLocked,
-  hasAcceptedTermsAndConditions,
 } from 'integrations/store/selectors'
 
 import {
