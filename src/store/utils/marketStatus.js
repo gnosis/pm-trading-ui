@@ -12,8 +12,7 @@ export const isMarketClosed = (stage, resolutionDate, resolved) => {
 
 export const isMarketEndingSoon = (resolutionDate) => {
   const threeDays = moment.utc().add(3, 'days')
-
-  return moment.utc(resolutionDate).isBefore(threeDays)
+  return moment.utc(resolutionDate).isSameOrBefore(threeDays)
 }
 
 export const isNewMarket = (creation) => {
