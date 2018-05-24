@@ -7,7 +7,14 @@
   "tournament": {
     "enabled": true
   },
-  "collateralToken": null,
+  "collateralToken":  {
+    "source": "contract",
+    "options": {
+      "contractName": "EtherToken",
+      "symbol": "WETH",
+      "icon": "/assets/img/icons/icon_etherTokens.svg"
+    }
+  },
   "providers": {
     "default": "METAMASK",
     "requireTOSAccept": false
