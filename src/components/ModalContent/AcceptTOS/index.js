@@ -47,17 +47,17 @@ const AcceptTOS = ({
             component={Checkbox}
             className={cx('checkBox')}
           >
-            I agree with terms of service
+            I have read and understood the T&C’s
           </Field>
           <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')}>
-            I agree with privacy policy
+          I have read and understood the Privacy Policy
           </Field>
           <Field
             name="agreedWithRDP"
             component={Checkbox}
             className={cx('checkBox')}
           >
-            I have read the risk disclaimer policy
+            I have read and understood the Risk Disclaimer
           </Field>
         </div>
         <button className={cx('loginButton', { disabled })} disabled={disabled} onClick={login}>
