@@ -51,6 +51,7 @@ class InteractionButton extends Component {
       loading,
       termsNotRequiredOrAccepted,
     } = this.props
+
     if (whitelistRequired && !whitelisted) {
       return null
     }
@@ -110,15 +111,21 @@ class InteractionButton extends Component {
     }
 
     if (termsAndConditionsError) {
-      return <Tooltip overlay="You need to accept our terms and conditions before you can with this application.">{btn}</Tooltip>
+      return (
+        <Tooltip overlay="You need to accept our terms and conditions before you can with this application.">
+          {btn}
+        </Tooltip>
+      )
     }
 
     if (walletError) {
-      return <Tooltip overlay="You need a wallet connected before you can interact with this application.">{btn}</Tooltip>
+      return (
+        <Tooltip overlay="You need a wallet connected before you can interact with this application.">{btn}</Tooltip>
+      )
     }
 
     if (networkError) {
-      const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst(ETHEREUM_NETWORK_IDS[targetNetworkId].toLowerCase())} network.`
+      const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst((ETHEREUM_NETWORK_IDS[targetNetworkId] || '').toLowerCase())} network.`
       return <Tooltip overlay={wrongNetworkText}>{btn}</Tooltip>
     }
 
