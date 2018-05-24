@@ -12,7 +12,7 @@ const logoStyle = {
   height: 100,
 }
 
-const tournamentConfig = getFeatureConfig('tournament')
+const { name: applicationName = 'the application' } = getFeatureConfig('tournament')
 
 const SwitchNetwork = ({ closeModal, targetNetwork }) => (
   <div className={cx('switchNetwork')}>
@@ -21,7 +21,7 @@ const SwitchNetwork = ({ closeModal, targetNetwork }) => (
     <h3 className={cx('heading')}>Switch to the {targetNetwork} Network</h3>
     <p className={cx('text')}>
       Your provider is not currently set to the {targetNetwork} network. Please switch to {targetNetwork} and make sure your wallet is
-      unlocked to start using {tournamentConfig.name}.
+      unlocked to start using {applicationName}.
     </p>
   </div>
 )
