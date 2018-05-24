@@ -12,6 +12,7 @@ import {
   isConnectedToCorrectNetwork,
   isOnWhitelist,
   checkWalletConnection,
+  hasAcceptedTermsAndConditions,
   getTargetNetworkId,
 } from 'integrations/store/selectors'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
@@ -48,10 +49,15 @@ class InteractionButton extends Component {
       disabled,
       targetNetworkId,
       loading,
+      termsNotRequiredOrAccepted,
     } = this.props
+
     if (whitelistRequired && !whitelisted) {
       return null
     }
+
+    // "you need to accept our ToS"
+    const termsAndConditionsError = !termsNotRequiredOrAccepted
 
     // "you need a wallet"
     const walletError = !hasWallet || !gnosisInitialized
@@ -104,12 +110,22 @@ class InteractionButton extends Component {
       )
     }
 
+    if (termsAndConditionsError) {
+      return (
+        <Tooltip overlay="You need to accept our terms and conditions before you can with this application.">
+          {btn}
+        </Tooltip>
+      )
+    }
+
     if (walletError) {
-      return <Tooltip overlay="You need a wallet connected in order to create a market">{btn}</Tooltip>
+      return (
+        <Tooltip overlay="You need a wallet connected before you can interact with this application.">{btn}</Tooltip>
+      )
     }
 
     if (networkError) {
-      const wrongNetworkText = `You are connected to the wrong chain. You can only interact using ${upperFirst(ETHEREUM_NETWORK_IDS[targetNetworkId].toLowerCase())} network.`
+      const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst((ETHEREUM_NETWORK_IDS[targetNetworkId] || '').toLowerCase())} network.`
       return <Tooltip overlay={wrongNetworkText}>{btn}</Tooltip>
     }
 
@@ -130,6 +146,7 @@ InteractionButton.propTypes = {
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
   targetNetworkId: PropTypes.number,
+  termsNotRequiredOrAccepted: PropTypes.bool,
 }
 
 InteractionButton.defaultProps = {
@@ -144,6 +161,7 @@ InteractionButton.defaultProps = {
   type: 'button',
   disabled: false,
   loading: false,
+  termsNotRequiredOrAccepted: false,
   targetNetworkId: 0,
 }
 
@@ -153,4 +171,5 @@ export default connect(state => ({
   correctNetwork: isConnectedToCorrectNetwork(state),
   targetNetworkId: getTargetNetworkId(state),
   whitelisted: isOnWhitelist(state),
+  termsNotRequiredOrAccepted: hasAcceptedTermsAndConditions(state),
 }))(InteractionButton)

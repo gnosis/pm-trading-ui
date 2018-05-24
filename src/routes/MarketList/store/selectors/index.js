@@ -13,46 +13,32 @@ export const marketListSelector = createSelector(
   (markets, filter, sorter) => List(markets.filter(filter).sort(sorter).values()),
 )
 
-export const marketCounterSelector = createSelector(
-  marketSelector,
-  state => List(state.marketList),
-)
+export const marketCounterSelector = state =>
+  List(state.marketList.values())
 
 export const newMarketsSelector = createSelector(
   marketCounterSelector,
   (markets) => {
-    if (!markets) {
-      return 0
-    }
-
-    const openMarkets = markets.filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
+    const openMarkets = markets.toArray().filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
     const newMarkets = openMarkets.filter(market => isNewMarket(market.creation))
 
-    return newMarkets ? newMarkets.size : 0
+    return newMarkets.length
   },
 )
 
 export const endingSoonMarketSelector = createSelector(
   marketCounterSelector,
   (markets) => {
-    if (!markets) {
-      return 0
-    }
-
-    const openMarkets = markets.filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
+    const openMarkets = markets.toArray().filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
     const endingSoonMarkets = openMarkets.filter(market => isMarketEndingSoon(market.resolution))
-    return endingSoonMarkets ? endingSoonMarkets.size : 0
+    return endingSoonMarkets.length
   },
 )
 
 export const openMarketSelector = createSelector(
   marketCounterSelector,
   (markets) => {
-    if (!markets) {
-      return 0
-    }
-
-    const openMarkets = markets.filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
-    return openMarkets ? openMarkets.size : 0
+    const openMarkets = markets.toArray().filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
+    return openMarkets.length
   },
 )

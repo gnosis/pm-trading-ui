@@ -33,32 +33,8 @@ $navbarHeight: 40px;
     color: #00a6c4;
   }
 
-  .container {
+  .containerFlex {
     display: flex;
-  }
-
-  .network {
-    margin-right: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-
-    &--wrongChain,
-    &--wrongChainHelp {
-      margin: 0;
-      line-height: 1;
-      font-weight: 300;
-      letter-spacing: 0.5px;
-    }
-
-    &--wrongChain {
-      color: $active-highlight-error;
-    }
-
-    &--text {
-      margin-right: 20px;
-    }
   }
 
   .account {
@@ -71,12 +47,17 @@ $navbarHeight: 40px;
     justify-content: center;
     align-items: center;
 
-    &--text {
+    .text {
+      font-size: 14px;
       line-height: 40px;
       font-weight: 500;
       margin-right: 5px;
       margin-bottom: 2px;
       letter-spacing: 0.5px;
+
+      &.network {
+        font-weight: normal;
+      }
     }
 
     img {
@@ -86,10 +67,11 @@ $navbarHeight: 40px;
 
   .group {
     &.version {
+      top: -13px;
+      position: absolute;
       line-height: $navbarHeight;
       color: white !important;
       font-size: 12px;
-      display: none;
       letter-spacing: 0.5px;
     }
 
@@ -140,7 +122,7 @@ $navbarHeight: 40px;
       font-size: 11px;
 
       @media (min-width: $screen-sm) {
-        font-size: 14px;
+        font-size: 13px;
         margin-left: 20px;
       }
 

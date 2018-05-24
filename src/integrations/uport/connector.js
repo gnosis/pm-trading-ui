@@ -35,16 +35,18 @@ const LoginUport = () => (
       {'Log into '}
       <Bold>{appName}</Bold>
     </Paragraph>
-    <Paragraph size="small">
-      By logging in via uPort, <br />
-      {` you agree to ${appName}'s `}
-      <Bold>
-        {/* <Link>s rendered outside of a router context cannot navigate */}
-        <a style={TermsStyle} href={termsOfUseConfig.url} target="_blank">
-          {'terms of use'}
-        </a>
-      </Bold>
-    </Paragraph>
+    {!!termsOfUseConfig.url && (
+      <Paragraph size="small">
+        By logging in via uPort, <br />
+        {` you agree to ${appName}'s `}
+        <Bold>
+          {/* <Link>s rendered outside of a router context cannot navigate */}
+          <a style={TermsStyle} href={termsOfUseConfig.url} target="_blank">
+            {'terms of use'}
+          </a>
+        </Bold>
+      </Paragraph>
+    )}
   </Block>
 )
 

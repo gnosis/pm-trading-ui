@@ -3,7 +3,7 @@ const getGasCosts = (state) => {
 
   return gasCosts.map((cost) => {
     if (!cost) {
-      return 0
+      return undefined
     }
 
     return cost

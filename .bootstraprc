@@ -2,9 +2,9 @@
 useFlexbox: true
 styleLoaders:
 - style-loader
-- css-loader
-- postcss-loader
-- sass-loader
+- css-loader?sourceMap
+- postcss-loader?sourceMap
+- sass-loader?sourceMap
 styles:
   grid: true
   buttons: true

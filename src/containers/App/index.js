@@ -8,14 +8,12 @@ import CSSTransition from 'react-transition-group/CSSTransition'
 
 import { connectBlockchain } from 'store/actions/blockchain'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import PageFrame from 'components/layout/PageFrame'
 import Footer from 'components/Footer'
 import { providerPropType } from 'utils/shapes'
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import { triedToConnect } from 'store/selectors/blockchain'
 import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
-import { isFeatureEnabled } from 'utils/features'
 import 'normalize.css'
 
 import style from './app.mod.scss'
@@ -52,11 +50,7 @@ const App = (props) => {
           {props.children}
         </CSSTransition>
       </TransitionGroup>
-      {isFeatureEnabled('footer') && (
-        <PageFrame>
-          <Footer />
-        </PageFrame>
-      )}
+      <Footer />
     </div>
   )
 }

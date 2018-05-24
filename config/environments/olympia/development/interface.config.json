@@ -6,16 +6,19 @@
   },
   "tournament": {
     "enabled": true,
-    "name": "Olympia",
-    "registration": {
-      "enabled": true,
-      "contractAddress": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13"
-    }
+    "name": "Olympia"
+  },
+  "registration": {
+    "enabled": true,
+    "contractAddress": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13"
   },
   "collateralToken": {
-    "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
-    "symbol": "OLY",
-    "icon": "/assets/img/icons/gno_token.svg"
+    "source": "address",
+    "options": {
+      "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
+      "symbol": "OLY",
+      "icon": "/assets/img/icons/gno_token.svg"
+    }
   },
   "providers": {
     "default": "METAMASK",
@@ -37,13 +40,20 @@
     "type": "default"
   },
   "termsOfUse": {
-    "url": null
+    "url": "/TermsOfService.html"
+  },
+  "riskDisclaimer": {
+    "url": "/RiskDisclaimerPolicy.html"
+  },
+  "privacyPolicy": {
+    "url": "/PrivacyPolicy.html"
   },
   "footer": {
     "enabled": true,
     "content": {
       "type": "text",
-      "source": "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
+      "source":
+        "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
       "markdown": true
     }
   },

@@ -2,6 +2,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -10,13 +11,16 @@ const pkg = require('./package.json')
 const configLoader = require('./configuration')
 
 const version = process.env.BUILD_VERSION || pkg.version
-const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
+const commitId = `${process.env.TRAVIS_BRANCH}@${process.env.TRAVIS_COMMIT}`
 
 module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
   const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
-  const { config, interfaceConfig } = configLoader(process.env.GNOSIS_ENV || 'development', configEnvVars, interfaceEnvVars)
+  const gnosisEnv = process.env.GNOSIS_ENV || 'development'
+
+  console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv}'`)
+  const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
 
   return {
     devtool: 'source-map',
@@ -124,7 +128,7 @@ module.exports = (env = {}) => {
         template: path.join(__dirname, 'src/html/index.html'),
       }),
       new webpack.EnvironmentPlugin({
-        VERSION: `${version}#${build}`,
+        VERSION: `${version}#${commitId}`,
         NODE_ENV: 'production',
       }),
       new webpack.DefinePlugin({
@@ -139,6 +143,9 @@ module.exports = (env = {}) => {
         },
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+      new CopyWebpackPlugin([
+        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
+      ]),
     ],
   }
 }

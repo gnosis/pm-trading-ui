@@ -9,7 +9,8 @@
   },
   "collateralToken": null,
   "providers": {
-    "default": "METAMASK"
+    "default": "METAMASK",
+    "requireTOSAccept": false
   },
   "scoreboard": {
     "enabled": false
@@ -18,13 +19,12 @@
     "enabled": false
   },
   "termsOfUse": {
-    
+    "enabled": true
   },
   "footer": {
     "enabled": true,
     "content": {
-      "type": "text",
-      "source": "Trading on prediction markets carry a high degree of financial risk to your capital. Please read our full Risk Disclaimer and Terms of Service before trading",
+      "type": "file",
       "markdown": true
     }
   },

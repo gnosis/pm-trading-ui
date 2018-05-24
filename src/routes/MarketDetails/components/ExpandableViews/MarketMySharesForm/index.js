@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import Decimal from 'decimal.js'
+
 import { marketShape } from 'utils/shapes'
 import { GAS_COST } from 'utils/constants'
 import SharesTable from './SharesTable'
@@ -53,10 +56,25 @@ MarketMySharesForm.propTypes = {
   selectedSellAmount: PropTypes.string,
   limitMargin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   marketShares: PropTypes.objectOf(PropTypes.object),
-  sellShares: PropTypes.func,
-  fetchMarketShares: PropTypes.func,
-  requestGasCost: PropTypes.func,
-  requestGasPrice: PropTypes.func,
+  sellShares: PropTypes.func.isRequired,
+  fetchMarketShares: PropTypes.func.isRequired,
+  requestGasCost: PropTypes.func.isRequired,
+  requestGasPrice: PropTypes.func.isRequired,
+  isGasCostFetched: PropTypes.func.isRequired,
+  isGasPriceFetched: PropTypes.bool,
+  gasCosts: ImmutablePropTypes.map,
+  gasPrice: PropTypes.instanceOf(Decimal),
+}
+
+MarketMySharesForm.defaultProps = {
+  defaultAccount: undefined,
+  market: undefined,
+  selectedSellAmount: '0',
+  limitMargin: '0',
+  marketShares: {},
+  isGasPriceFetched: false,
+  gasCosts: undefined,
+  gasPrice: undefined,
 }
 
 export default MarketMySharesForm

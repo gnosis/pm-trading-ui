@@ -1,11 +1,12 @@
 import {
   initGnosisConnection,
+  initReadOnlyGnosisConnection,
+  getROGnosisConnection,
   getCurrentBalance,
   getCurrentAccount,
   getGasPrice,
   getTokenSymbol,
   getTokenBalance,
-  initReadOnlyGnosisConnection,
 } from 'api'
 import Web3 from 'web3'
 
@@ -13,9 +14,9 @@ import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
-import { getCollateralToken, getConfiguration } from 'utils/features'
+import { getFeatureConfig, getConfiguration } from 'utils/features'
 
-const collateralToken = getCollateralToken()
+const collateralTokenFromConfig = getFeatureConfig('collateralToken')
 const config = getConfiguration()
 const ethereumUrl = `${config.ethereum.protocol}://${config.ethereum.host}`
 
@@ -25,8 +26,15 @@ export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setTokenBalance = createAction('SET_TOKEN_BALANCE')
 export const setTokenSymbol = createAction('SET_TOKEN_NAME')
+export const setCollateralToken = createAction('SET_COLLATERAL_TOKEN')
 
 export const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
+
+export const TOKEN_SOURCE_CONTRACT = 'contract'
+export const TOKEN_SOURCE_ETH = 'eth'
+export const TOKEN_SOURCE_ADDRESS = 'address'
+
+export const ETH_TOKEN_ICON = 'assets/img/icons/icon_etherTokens.svg'
 
 export const requestGasPrice = () => async (dispatch) => {
   const gasPrice = await getGasPrice()
@@ -47,6 +55,86 @@ export const requestTokenSymbol = tokenAddress => async (dispatch) => {
 export const requestTokenBalance = (tokenAddress, accountAddress) => async (dispatch) => {
   const tokenBalance = await getTokenBalance(tokenAddress, accountAddress)
   dispatch(setTokenBalance({ tokenAddress, tokenBalance }))
+}
+
+
+export const initReadOnlyGnosis = () => async () => {
+  // initialize
+  try {
+    await initReadOnlyGnosisConnection({
+      ethereum: new Web3(new Web3.providers.HttpProvider(ethereumUrl)).currentProvider,
+    })
+  } catch (error) {
+    console.error(`Gnosis.js RO initialization Error: ${error}`)
+  }
+}
+
+export const updateCollateralToken = () => async (dispatch) => {
+  if (typeof collateralTokenFromConfig === 'undefined') {
+    return dispatch(setCollateralToken({
+      source: TOKEN_SOURCE_ETH,
+    }))
+  }
+
+  const {
+    source,
+    options,
+  } = collateralTokenFromConfig
+
+  if (source === TOKEN_SOURCE_ETH) {
+    // options are optional here
+    const { icon = ETH_TOKEN_ICON, symbol = 'ETH' } = options || {}
+
+    return dispatch(setCollateralToken({
+      source: TOKEN_SOURCE_ETH,
+      symbol,
+      icon,
+    }))
+  } else if (source === TOKEN_SOURCE_CONTRACT) {
+    const { contractName, symbol, icon } = options
+
+    if (!contractName) {
+      throw new Error(`Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': No contractName defined`)
+    }
+
+    await dispatch(initReadOnlyGnosis())
+    const gnosisROInstance = await getROGnosisConnection()
+
+    if (!gnosisROInstance) {
+      throw new Error(`Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': Couldn't initialize RO connection to fetch contract`)
+    }
+
+    const gnosisROContract = gnosisROInstance.contracts[contractName]
+
+    if (!gnosisROContract) {
+      throw new Error(`Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': Contract "${contractName}" not found in pm-js. Please check https://github.com/gnosis/pm-js`)
+    }
+
+    const contractInstance = await gnosisROContract.deployed()
+
+    // use from config or fetch from contract
+    let tokenSymbol = symbol
+    if (!tokenSymbol) {
+      tokenSymbol = await contractInstance.symbol()
+    }
+
+    return dispatch(setCollateralToken({
+      source: TOKEN_SOURCE_CONTRACT,
+      address: contractInstance.address,
+      symbol: tokenSymbol,
+      icon: icon || ETH_TOKEN_ICON,
+    }))
+  } else if (source === TOKEN_SOURCE_ADDRESS) {
+    const { address, symbol, icon } = options
+    return dispatch(setCollateralToken({
+      source: TOKEN_SOURCE_ADDRESS,
+      address,
+      symbol,
+      icon,
+    }))
+  }
+
+  return undefined
 }
 
 /**
@@ -70,8 +158,8 @@ export const initGnosis = () => async (dispatch, getState) => {
       await initGnosisConnection(opts)
       await dispatch(setGnosisInitialized({ initialized: true }))
 
-      if (newProvider.account && collateralToken) {
-        await getTokenBalance(collateralToken.address, await getCurrentAccount())
+      if (newProvider.account) {
+        await dispatch(updateCollateralToken())
       }
     }
   } catch (error) {
@@ -96,16 +184,5 @@ export const initGnosis = () => async (dispatch, getState) => {
       console.warn(`Gnosis.js connection Error: ${error}`)
       return dispatch(setConnectionStatus({ connected: false }))
     }
-  }
-}
-
-export const initReadOnlyGnosis = () => async () => {
-  // initialize
-  try {
-    await initReadOnlyGnosisConnection({
-      ethereum: new Web3(new Web3.providers.HttpProvider(ethereumUrl)).currentProvider,
-    })
-  } catch (error) {
-    console.error(`Gnosis.js RO initialization Error: ${error}`)
   }
 }

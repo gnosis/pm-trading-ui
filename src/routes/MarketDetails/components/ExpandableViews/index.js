@@ -13,10 +13,15 @@ const showExpandableTournament = (props) => {
   if (!isFeatureEnabled('tournament')) {
     return true
   }
+  const requireRegistration = isFeatureEnabled('registration')
 
   const providerConfig = getProviderConfig()
   let showExpandable = false
-  if (providerConfig.default === WALLET_PROVIDER.METAMASK && !!props.defaultAccount && !!props.mainnetAddress) {
+  if (
+    providerConfig.default === WALLET_PROVIDER.METAMASK &&
+    !!props.defaultAccount &&
+    (!requireRegistration || !!props.mainnetAddress)
+  ) {
     showExpandable = true
   } else if (providerConfig === WALLET_PROVIDER.UPORT && !!props.defaultAccount) {
     showExpandable = true

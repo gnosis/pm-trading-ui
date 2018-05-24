@@ -16,23 +16,23 @@ import ProviderIcon from './ProviderIcon'
 import BadgeIcon from './BadgeIcon'
 import MenuAccountDropdown from './MenuAccountDropdown'
 
-import css from './Header.scss'
+import css from './Header.mod.scss'
 
 const cx = className.bind(css)
 
 const tournamentEnabled = isFeatureEnabled('tournament')
-const registrationEnabled = isFeatureEnabled('tournament') && getFeatureConfig('tournament').registration && getFeatureConfig('tournament').registration.enabled
 const badgesEnabled = isFeatureEnabled('badges')
+const requireRegistration = isFeatureEnabled('registration')
 const providerConfig = getFeatureConfig('providers')
-
+const requireTOSAccept = !!providerConfig.requireTOSAccept
 const { default: defaultProvider } = providerConfig
 
-const useMetamask = tournamentEnabled && defaultProvider === WALLET_PROVIDER.METAMASK
-const useUport = tournamentEnabled && defaultProvider === WALLET_PROVIDER.UPORT
+const useMetamask = defaultProvider === WALLET_PROVIDER.METAMASK
+const useUport = defaultProvider === WALLET_PROVIDER.UPORT
 
 class Header extends Component {
   componentDidMount() {
-    if (registrationEnabled && this.props.currentAccount) {
+    if (requireRegistration && this.props.currentAccount) {
       this.props.requestMainnetAddress()
     }
 
@@ -43,7 +43,8 @@ class Header extends Component {
 
   componentDidUpdate(prevProps) {
     // If user unlocks metamask, changes his account, we need to check if the account was registered
-    const shouldRequestMainnetAddress = registrationEnabled && this.props.currentAccount !== prevProps.currentAccount
+    const shouldRequestMainnetAddress =
+    requireRegistration && this.props.currentAccount !== prevProps.currentAccount
     if (shouldRequestMainnetAddress) {
       this.props.requestMainnetAddress()
     }
@@ -51,16 +52,24 @@ class Header extends Component {
 
   @autobind
   async handleConnectWalletClick() {
-    const { isConnectedToCorrectNetwork, lockedMetamask } = this.props
-    if (!hasMetamask() && !useUport) {
+    const { isConnectedToCorrectNetwork, lockedMetamask, acceptedTOS } = this.props
+
+    const shouldInstallProviders = !hasMetamask() && !useUport
+    const shouldAcceptTOS = requireTOSAccept && !acceptedTOS
+
+    if (shouldInstallProviders) {
       this.props.openModal('ModalInstallMetamask')
     } else if (useMetamask) {
       if (lockedMetamask) {
         this.props.openModal('ModalUnlockMetamask')
       } else if (!isConnectedToCorrectNetwork) {
         this.props.openModal('ModalSwitchNetwork')
-      } else {
+      } else if (shouldAcceptTOS) {
+        this.props.openModal('ModalAcceptTOS')
+      } else if (requireRegistration) {
         this.props.openModal('ModalRegisterWallet')
+      } else {
+        console.warn('should be connected')
       }
     } else if (useUport) {
       this.props.initUport()
@@ -84,12 +93,15 @@ class Header extends Component {
       tokenAddress,
       mainnetAddress,
       userTournamentInfo,
+      acceptedTOS,
     } = this.props
 
     let walletConnected = hasWallet
-    if (tournamentEnabled && useMetamask) {
-      walletConnected = hasWallet// && mainnetAddress
+
+    if (tournamentEnabled && useMetamask && requireRegistration) {
+      walletConnected = hasWallet && !!mainnetAddress
     }
+
 
     const logoVars = {}
     if (tournamentEnabled) {
@@ -117,9 +129,11 @@ class Header extends Component {
       }
     }
 
+    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && currentProvider
+
     return (
       <div className={cx('headerContainer')}>
-        <div className={cx('container')}>
+        <div className={cx('container', 'containerFlex')}>
           <div className={cx('group', 'logo')}>
             <NavLink to="/markets/list">
               <div className={cx('headerLogo', 'beta')} style={logoVars} />
@@ -127,7 +141,7 @@ class Header extends Component {
           </div>
           <div className={cx('group', 'left', 'version')}>{version}</div>
           <div className={cx('group', 'left', 'navLinks')}>
-            {walletConnected && (
+            {canInteract && (
               <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
                 Dashboard
               </NavLink>
@@ -135,7 +149,7 @@ class Header extends Component {
             <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
               Markets
             </NavLink>
-            {walletConnected && (
+            {canInteract && (
               <NavLink to="/transactions" activeClassName={cx('active')} className={cx('navLink')}>
                 Transactions
               </NavLink>
@@ -149,20 +163,19 @@ class Header extends Component {
           </div>
 
           <div className={cx('group', 'right')}>
-            {walletConnected && currentProvider && (
+            {canInteract ? (
               <div className={cx('account')}>
                 {currentNetwork && currentNetwork !== 'MAIN' && (
                   <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
                 )}
-                <DecimalValue value={tokenBalance} className={cx('balance', 'test')} />&nbsp;
-                {tokenAddress ? <CurrencyName className={cx('account', 'text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
+                <DecimalValue value={tokenBalance} className={cx('text')} />&nbsp;
+                {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
                 {useUport && <MenuAccountDropdown />}
               </div>
-            )}
-            {!walletConnected && (
+            ) : (
               <button className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
                 Connect a wallet
               </button>
@@ -195,6 +208,7 @@ Header.propTypes = {
   mainnetAddress: PropTypes.string,
   initUport: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
+  acceptedTOS: PropTypes.bool,
 }
 
 Header.defaultProps = {
@@ -212,6 +226,7 @@ Header.defaultProps = {
   lockedMetamask: true,
   userTournamentInfo: undefined,
   tokenAddress: undefined,
+  acceptedTOS: false,
 }
 
 export default Header

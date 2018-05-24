@@ -1,9 +1,7 @@
 import Decimal from 'decimal.js'
-import { getCollateralToken } from 'utils/features'
+import { TOKEN_SOURCE_ADDRESS, TOKEN_SOURCE_CONTRACT, TOKEN_SOURCE_ETH } from 'store/actions/blockchain'
 import { getCurrentBalance } from 'integrations/store/selectors'
 import { weiToEth } from 'utils/helpers'
-
-const ETH_TOKEN_ICON = 'assets/img/icons/icon_etherTokens.svg'
 
 /**
  * Returns if gnosis.js is initialized or not
@@ -31,24 +29,40 @@ export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['
 
 /**
  * @param {*} state - redux state
- * @returns {object} collateralToken - with Symbol, Amount in ETH and Address
+ * @returns {object} collateralToken - with Symbol, Balance in ETH
  */
-export const getCollateralTokenInfo = (state) => {
-  const collateralToken = getCollateralToken()
+export const getCollateralToken = (state) => {
+  const collateralToken = state.blockchain.get('collateralToken').toJS()
 
-  if (!collateralToken) {
+  const { source, address } = collateralToken
+
+  if (source === TOKEN_SOURCE_ADDRESS) {
+    // hardcoded address for collateralToken contract
+    if (address) {
+      return {
+        ...collateralToken,
+        balance: weiToEth(getTokenAmount(state, address)),
+      }
+    }
+  } else if (source === TOKEN_SOURCE_CONTRACT) {
+    // might need to wait until address becomes available
+    if (address) {
+      return {
+        ...collateralToken,
+        balance: weiToEth(getTokenAmount(state, address)),
+      }
+    }
+  } else if (source === TOKEN_SOURCE_ETH) {
+    // use eth balance as currency
+
+    const balance = getCurrentBalance(state)
+
     return {
-      symbol: 'ETH',
-      amount: weiToEth(getCurrentBalance(state)),
-      address: undefined,
-      icon: ETH_TOKEN_ICON,
+      ...collateralToken,
+      balance: (balance || 0).toString(),
     }
   }
 
-  return {
-    symbol: getTokenSymbol(state, collateralToken.address),
-    amount: weiToEth(getTokenAmount(state, collateralToken.address)),
-    address: collateralToken.address,
-    icon: collateralToken.icon,
-  }
+  // no collateral token available
+  return collateralToken
 }

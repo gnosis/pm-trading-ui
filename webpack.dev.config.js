@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -13,10 +14,13 @@ module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
   const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
-  const { config, interfaceConfig } = configLoader(process.env.GNOSIS_ENV || 'local', configEnvVars, interfaceEnvVars)
+  const gnosisEnv = env.GNOSIS_ENV || 'local'
 
-  const version = process.env.BUILD_VERSION || pkg.version
-  const build = process.env.BUILD_NUMBER || 'SNAPSHOT'
+  console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv}'`)
+  const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
+
+  const version = env.BUILD_VERSION || pkg.version
+  const commitId = `${env.TRAVIS_BRANCH || 'local'}@${env.TRAVIS_COMMIT || 'SNAPSHOT'}`
 
   return {
     context: path.join(__dirname, 'src'),
@@ -147,7 +151,7 @@ module.exports = (env = {}) => {
         template: path.join(__dirname, 'src/html/index.html'),
       }),
       new webpack.EnvironmentPlugin({
-        VERSION: `${version}#${build}`,
+        VERSION: `${version}#${commitId}`,
         NODE_ENV: 'development',
       }),
       new webpack.DefinePlugin({
@@ -155,6 +159,9 @@ module.exports = (env = {}) => {
         'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+      new CopyWebpackPlugin([
+        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
+      ]),
     ],
   }
 }
