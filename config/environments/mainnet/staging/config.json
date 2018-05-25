@@ -11,5 +11,10 @@
   },
   "whitelist": {
     "0x9eab578556de5782445ec036f25a41902ba19eeb": "Gnosis"
+  },
+  "thirdparty": {
+    "googleAnalytics": {
+      "enabled": false
+    }
   }
 }
