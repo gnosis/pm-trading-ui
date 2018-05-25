@@ -104,7 +104,7 @@ export const updateCollateralToken = () => async (dispatch) => {
       throw new Error(`Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': Couldn't initialize RO connection to fetch contract`)
     }
 
-    const gnosisROContract = gnosisROInstance.contracts[contractName]
+    const gnosisROContract = gnosisROInstance[contractName]
 
     if (!gnosisROContract) {
       throw new Error(`Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': Contract "${contractName}" not found in pm-js. Please check https://github.com/gnosis/pm-js`)
