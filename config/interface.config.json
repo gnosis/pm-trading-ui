@@ -10,7 +10,7 @@
   "collateralToken":  {
     "source": "contract",
     "options": {
-      "contractName": "EtherToken",
+      "contractName": "etherToken",
       "symbol": "WETH",
       "icon": "/assets/img/icons/icon_etherTokens.svg"
     }
