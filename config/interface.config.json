@@ -5,7 +5,7 @@
     "favicon": "assets/img/gnosis_logo_favicon.png"
   },
   "tournament": {
-    "enabled": true
+    "enabled": false
   },
   "collateralToken":  {
     "source": "contract",
