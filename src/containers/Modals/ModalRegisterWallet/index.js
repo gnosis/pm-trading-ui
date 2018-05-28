@@ -4,6 +4,7 @@ import { requestGasPrice } from 'store/actions/blockchain'
 import { connect } from 'react-redux'
 import { getCurrentAccount, getCurrentBalance } from 'integrations/store/selectors'
 import { getGasPrice } from 'routes/MarketDetails/store/selectors'
+import { getCollateralToken } from 'store/selectors/blockchain'
 import { formValueSelector } from 'redux-form'
 import { requestRegistrationGasCost } from './actions'
 import { getRegistrationGasCost } from './selectors'
@@ -15,6 +16,7 @@ const mapStateToProps = state => ({
   currentBalance: getCurrentBalance(state),
   registrationGasCost: getRegistrationGasCost(state),
   gasPrice: getGasPrice(state),
+  collateralToken: getCollateralToken(state),
   tosAgreed: !!getFormValue(state, 'agreedWithTOS'),
   ppAgreed: !!getFormValue(state, 'agreedWithPP'),
   rdAgreed: !!getFormValue(state, 'agreedWithRDP'),

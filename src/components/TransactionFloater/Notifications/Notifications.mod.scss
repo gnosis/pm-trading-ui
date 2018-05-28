@@ -2,16 +2,16 @@
 
 @keyframes slideInFromRight {
   0% {
-    transform: translateX(400px)
+    transform: translateX(400px);
   }
 
   100% {
-    transform: translateX(0)
+    transform: translateX(0);
   }
 }
 
 .notification {
-  animation: slideInFromRight 1s ease-out 0s 1; 
+  animation: slideInFromRight 1s ease-out 0s 1;
   background-color: $bg-color;
 
   padding: 4px;
@@ -25,31 +25,28 @@
     color: $active-highlight;
   }
 
-  .title {
-    text-transform: uppercase;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: inherit;
-    padding-left: 24px;
+  .notificationHeaderContainer {
+    display: flex;
+    align-items: center;
+
+    .iconContainer {
+      height: 100%;
+      vertical-align: middle;
+      margin-left: 4px;
+      display: inline-block;
+    }
+
+    .title {
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: inherit;
+      display: inline-block;
+    }
   }
 
   .message {
     color: inherit;
     padding-left: 24px;
-  }
-
-  .iconContainer {
-    position: absolute;
-    height: 100%;
-    vertical-align: middle;
-    top: 0;
-    left: 0;
-    margin-left: 4px;
-    width: 16px;
-
-    .txIcon {
-      top: 50%;
-      margin-top: -16px;
-    }
   }
 }
