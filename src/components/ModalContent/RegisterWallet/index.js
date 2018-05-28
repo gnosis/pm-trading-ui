@@ -6,10 +6,17 @@ import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
 import InteractionButton from 'containers/InteractionButton'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
+import { getFeatureConfig } from 'utils/features'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 import style from './RegisterWallet.mod.scss'
 
 const cx = cn.bind(style)
+const {
+  rewardToken: { symbol: rewardTokenSymbol },
+} = getFeatureConfig('rewards')
+const { url: termsOfServiceUrl } = getFeatureConfig('termsOfUse') || {}
+const { url: riskDisclaimerUrl } = getFeatureConfig('riskDisclaimer') || {}
+const { url: privacyPolicyUrl } = getFeatureConfig('privacyPolicy') || {}
 
 const RegisterMainnetAddress = ({
   closeModal,
@@ -18,6 +25,10 @@ const RegisterMainnetAddress = ({
   updateMainnetAddress,
   gasPrice,
   registrationGasCost,
+  tosAgreed,
+  ppAgreed,
+  rdAgreed,
+  collateralToken: { symbol: collateralTokenSymbol },
 }) => {
   const handleRegistration = async () => {
     await updateMainnetAddress(currentAccount)
