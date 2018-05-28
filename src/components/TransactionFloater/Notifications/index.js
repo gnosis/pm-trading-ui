@@ -14,9 +14,11 @@ const Notifications = ({ notifications, onClick }) => (
       id, title, icon, message,
     }) => (
       <button key={id} className={cx('notification')} onClick={() => onClick()}>
-        <div className={cx('title')}>{title}</div>
-        <div className={cx('iconContainer')}>
-          <Icon type={icon} size={32} className={cx('txIcon')} />
+        <div className={cx('notificationHeaderContainer')}>
+          <div className={cx('iconContainer')}>
+            <Icon type={icon} size={32} />
+          </div>
+          <div className={cx('title')}>{title}</div>
         </div>
         <div className={cx('message')}>{message}</div>
       </button>
