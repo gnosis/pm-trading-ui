@@ -8,12 +8,11 @@ import InteractionButton from 'containers/InteractionButton'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import Checkbox from 'components/Form/Checkbox'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
-import { getCollateralToken, getFeatureConfig } from 'utils/features'
+import { getFeatureConfig } from 'utils/features'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 import style from './RegisterWallet.mod.scss'
 
 const cx = cn.bind(style)
-const { symbol: collateralTokenSymbol } = getCollateralToken() || {}
 const {
   rewardToken: { symbol: rewardTokenSymbol },
 } = getFeatureConfig('rewards')
@@ -31,6 +30,7 @@ const RegisterMainnetAddress = ({
   tosAgreed,
   ppAgreed,
   rdAgreed,
+  collateralToken: { symbol: collateralTokenSymbol },
 }) => {
   const handleRegistration = async () => {
     await updateMainnetAddress(currentAccount)
