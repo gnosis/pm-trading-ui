@@ -112,7 +112,7 @@ class InteractionButton extends Component {
 
     if (termsAndConditionsError) {
       return (
-        <Tooltip overlay="You need to accept our terms and conditions before you can with this application.">
+        <Tooltip overlay="You need to accept our terms and conditions before you can interact with this application.">
           {btn}
         </Tooltip>
       )
