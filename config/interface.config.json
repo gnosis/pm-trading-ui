@@ -68,5 +68,10 @@
   "badges": {
     "enabled": false,
     "ranks": []
+  },
+  "constants": {
+    "LIMIT_MARGIN": 5,
+    "NOTIFICATION_TIMEOUT": 60000,
+    "LOWEST_VALUE": 0.001
   }
 }
