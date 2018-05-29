@@ -15,10 +15,6 @@ import style from './SharesTable.mod.scss'
 const cx = cn.bind(style)
 
 class SharesTable extends Component {
-  state = {
-    extendedSellId: this.props.match.params.shareId,
-  }
-
   @autobind
   async handleSellShare(shareId, shareAmount, earnings) {
     const share = this.props.marketShares[shareId]
