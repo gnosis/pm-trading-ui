@@ -129,7 +129,7 @@ class Header extends Component {
       }
     }
 
-    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && currentProvider
+    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && !!currentProvider
 
     return (
       <div className={cx('headerContainer')}>
