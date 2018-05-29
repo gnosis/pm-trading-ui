@@ -5,7 +5,7 @@ import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
 import OutcomeColorBox from 'components/OutcomeColorBox'
 import { marketShareShape } from 'utils/shapes'
-import { LOWEST_DISPLAYED_VALUE } from 'utils/constants'
+import { LOWEST_VALUE } from 'utils/constants'
 import style from './ShareRow.mod.scss'
 
 const cx = cn.bind(style)
@@ -15,10 +15,10 @@ const ShareRow = ({
 }) => {
   const shareBalance = Decimal(share.balance)
     .div(1e18)
-    .gte(LOWEST_DISPLAYED_VALUE) ? (
+    .gte(LOWEST_VALUE) ? (
       <DecimalValue value={Decimal(share.balance).div(1e18)} />
     ) : (
-      `< ${LOWEST_DISPLAYED_VALUE}`
+      `< ${LOWEST_VALUE}`
     )
   const onClickHandler = e => onSellClick(e, share.id)
 

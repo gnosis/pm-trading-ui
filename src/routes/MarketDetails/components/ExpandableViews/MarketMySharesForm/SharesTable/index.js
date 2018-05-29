@@ -6,7 +6,7 @@ import { Map } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import Decimal from 'decimal.js'
 import { isMarketClosed, isMarketResolved, getOutcomeName, weiToEth } from 'utils/helpers'
-import { OUTCOME_TYPES, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, MIN_CONSIDER_VALUE } from 'utils/constants'
+import { OUTCOME_TYPES, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, LOWEST_VALUE } from 'utils/constants'
 import { marketShape, ReactRouterMatchShape } from 'utils/shapes'
 import ShareRow from './ShareRow'
 import ShareSellView from './ShareSellView'
@@ -25,7 +25,7 @@ class SharesTable extends Component {
     const shareBalance = new Decimal(share.balance)
     const shareBalanceRounded = shareBalance.div(1e18).toDP(4, 1)
     const selectedSellAmount = new Decimal(shareAmount)
-    const sellAmount = shareBalanceRounded.sub(selectedSellAmount).lt(MIN_CONSIDER_VALUE)
+    const sellAmount = shareBalanceRounded.sub(selectedSellAmount).lt(LOWEST_VALUE)
       ? weiToEth(shareBalance)
       : shareAmount
     try {
