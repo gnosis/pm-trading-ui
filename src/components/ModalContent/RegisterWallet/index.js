@@ -39,7 +39,7 @@ const RegisterMainnetAddress = ({
 
   const disabled =
     gasPrice
-      .mul(registrationGasCost)
+      .mul(registrationGasCost || 0)
       .div(1e18)
       .gt(currentBalance || 0) ||
     (!ppAgreed && !!privacyPolicyUrl) ||
@@ -112,8 +112,8 @@ RegisterMainnetAddress.propTypes = {
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
   updateMainnetAddress: PropTypes.func.isRequired,
-  gasPrice: PropTypes.instanceOf(Decimal).isRequired,
-  registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  gasPrice: PropTypes.instanceOf(Decimal),
+  registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   tosAgreed: PropTypes.bool,
   ppAgreed: PropTypes.bool,
   rdAgreed: PropTypes.bool,
@@ -123,6 +123,8 @@ RegisterMainnetAddress.defaultProps = {
   tosAgreed: false,
   ppAgreed: false,
   rdAgreed: false,
+  gasPrice: Decimal(0),
+  registrationGasCost: 0,
 }
 
 const form = {
