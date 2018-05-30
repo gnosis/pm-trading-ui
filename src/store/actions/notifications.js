@@ -3,7 +3,7 @@ import uuid from 'uuid/v4'
 
 import { didTransactionSucceed, transactionSelector } from 'routes/Transactions/store/selectors/transactions'
 
-import { DEFAULT_NOTIFICATION_FADEOUT } from 'utils/constants'
+import { NOTIFICATION_FADEOUT } from 'utils/constants'
 
 export const showNotification = createAction('SHOW_NOTIFICATION')
 export const fadeOutNotification = createAction('FADE_OUT_NOTIFICATION')
@@ -12,7 +12,7 @@ export const createNotification = (
   title,
   message,
   icon,
-  fadeOutTimer = DEFAULT_NOTIFICATION_FADEOUT,
+  fadeOutTimer = NOTIFICATION_FADEOUT,
 ) => async (dispatch) => {
   const notificationId = uuid()
   dispatch(showNotification({
