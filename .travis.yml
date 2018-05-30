@@ -33,7 +33,7 @@ deploy:
   skip_cleanup: true
   local_dir: dist
   on:
-    branch: master
+    branch: olympia-qa
     condition: $PROJECT = olympia
 # mainnet deployments
 - provider: s3
