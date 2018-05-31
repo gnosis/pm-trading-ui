@@ -157,11 +157,10 @@ module.exports = (env = {}) => {
       new webpack.DefinePlugin({
         'window.GNOSIS_CONFIG': JSON.stringify(config),
         'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
+        NODE_ENV: 'development',
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin([
-        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
-      ]),
+      new CopyWebpackPlugin([{ from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') }]),
     ],
   }
 }
