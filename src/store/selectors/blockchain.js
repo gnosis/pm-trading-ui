@@ -15,9 +15,11 @@ export const isGasCostFetched = (state, property) => state.blockchain.getIn(['ga
 
 export const getTokenAmount = (state, tokenAddress) => {
   const tokenAmount = state.blockchain.getIn(['tokenBalances', tokenAddress], 0)
+  const tokenAmountString = tokenAmount.toString?.() || tokenAmount
   let defaultTokenDecimal
+
   try {
-    defaultTokenDecimal = Decimal(tokenAmount)
+    defaultTokenDecimal = Decimal(tokenAmount.toString ? tokenAmount.toString() : tokenAmount)
   } catch (e) {
     defaultTokenDecimal = Decimal(0)
   }
