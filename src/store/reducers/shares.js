@@ -1,6 +1,6 @@
 import { Map } from 'immutable'
 import { handleActions } from 'redux-actions'
-import { ADD_MARKET_SHARE } from '../actions'
+import { ADD_MARKET_SHARE } from 'store/actions/shares'
 
 export default handleActions({
   [ADD_MARKET_SHARE]: (state, { payload }) =>

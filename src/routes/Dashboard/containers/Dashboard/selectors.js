@@ -2,10 +2,10 @@ import moment from 'moment'
 import { List } from 'immutable'
 import { createSelector, createStructuredSelector } from 'reselect'
 import { isMarketClosed } from 'store/utils/marketStatus'
-import { getCurrentAccount } from 'integrations/store/selectors'
+import { checkWalletConnection, getCurrentAccount } from 'integrations/store/selectors'
 
 import { marketSelector } from 'store/selectors/market'
-import { shareSelector } from '../../store/selectors'
+import { shareSelector, tradeSelector } from '../../store/selectors'
 
 /**
  * How many markets to get from state to display in each list
@@ -42,5 +42,7 @@ export default createStructuredSelector({
   closingSoonMarkets,
   newestMarkets,
   myShares: shareSelector,
+  myTrades: tradeSelector,
   currentAccount: getCurrentAccount,
+  hasWallet: checkWalletConnection,
 })

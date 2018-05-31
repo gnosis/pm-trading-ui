@@ -43,6 +43,9 @@ Dashboard.propTypes = {
   marketState: PropTypes.oneOf(Object.values(REQUEST_STATES)),
   newestMarkets: marketRecordListShape,
   closingSoonMarkets: marketRecordListShape,
+  hasWallet: PropTypes.bool,
+  myTrades: PropTypes.array,
+  myShares: PropTypes.array,
 }
 
 Dashboard.defaultProps = {
@@ -50,11 +53,20 @@ Dashboard.defaultProps = {
   newestMarkets: undefined,
   closingSoonMarkets: undefined,
   myShares: [],
+  hasWallet: false,
 }
 
 const enhancer = compose(
   withState('marketState', 'setMarketState', REQUEST_STATES.UNKNOWN),
   lifecycle({
+    shouldComponentUpdate() {
+      if (!this.props.hasWallet) {
+        this.props.viewMarketList()
+        return false
+      }
+      return true
+    },
+
     async componentDidMount() {
       await setRequestStateWrap(this.props.setMarketState, this.props.fetchMarkets, this)
     },

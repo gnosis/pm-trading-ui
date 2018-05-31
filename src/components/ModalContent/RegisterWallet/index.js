@@ -8,12 +8,12 @@ import InteractionButton from 'containers/InteractionButton'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import Checkbox from 'components/Form/Checkbox'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
-import { getCollateralToken, getFeatureConfig } from 'utils/features'
+import { /* getCollateralToken, */ getFeatureConfig } from 'utils/features'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 import style from './RegisterWallet.mod.scss'
 
 const cx = cn.bind(style)
-const { symbol: collateralTokenSymbol } = getCollateralToken() || {}
+const { symbol: collateralTokenSymbol } = {}
 const {
   rewardToken: { symbol: rewardTokenSymbol },
 } = getFeatureConfig('rewards')

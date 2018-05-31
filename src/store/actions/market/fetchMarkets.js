@@ -20,6 +20,7 @@ const buildOutcomesFrom = (outcomes, outcomeTokensSold, marginalPrices) => {
   const outcomesRecords = outcomes.map((outcome, index) =>
     new OutcomeRecord({
       name: outcome,
+      index,
       marginalPrice: marginalPrices[index],
       outcomeTokensSold: outcomeTokensSold[index],
     }))

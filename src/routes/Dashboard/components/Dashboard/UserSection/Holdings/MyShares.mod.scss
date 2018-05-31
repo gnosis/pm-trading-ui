@@ -1,3 +1,39 @@
 .share {
-  
+  display: block;
+  outline: 0;
+  transition: padding-left .2s ease;
+  padding: 10px;
+  border-top: 1px solid #f0f1f1;
+
+  &:first-of-type {
+    border-top: none;
+  }
+
+  &:hover, &:active, &:focus, &:visited {
+    outline: 0;
+    color: inherit !important;
+    cursor: pointer;
+  }
+
+  &:hover, &:focus {
+    padding-left: 13px;
+  }
+
+  .title {
+    font-size: 18px;
+    letter-spacing: .5px;
+    font-weight: 300;
+    padding: 2px 0;
+  }
+
+  .outcome {
+    display: flex;
+    margin-right: 10px;
+    align-items: center;
+  }
+
+  .outcomeBox, .shareAmount, .sharePrice {
+    display: inline-block;
+    margin-top: 6px;
+  }
 }

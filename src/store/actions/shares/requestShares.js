@@ -7,10 +7,10 @@ import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
 import { OutcomeRecord } from 'store/models/market'
 
-import ShareRecord from '../models/share'
-import { addShare } from '../actions'
+import ShareRecord from 'store/models/share'
+import addShare from './addShare'
 
-const OUTCOMES_SCALAR = ['short', 'long']
+const OUTCOMES_SCALAR = ['Short', 'Long']
 
 const buildOutcomesFrom = (marginalPrice, selectedOutcomeToken, marketOutcomeLabels) => {
   // no value for eventDescription.outcomes means we have a scalar market
@@ -18,6 +18,7 @@ const buildOutcomesFrom = (marginalPrice, selectedOutcomeToken, marketOutcomeLab
 
   const outcomes = outcomeLabels.map((label, index) =>
     new OutcomeRecord({
+      index,
       name: label,
       marginalPrice: selectedOutcomeToken.index === index ? marginalPrice : undefined,
       outcomeTokensSold: undefined,
@@ -34,7 +35,6 @@ const extractShare = (payload) => {
     marginalPrice,
     eventDescription: {
       title: marketTitle,
-      description: marketDescription,
       resolutionDate: marketResolution,
       outcomes: marketOutcomeLabels,
     },
@@ -51,11 +51,10 @@ const extractShare = (payload) => {
     balance,
     marketTitle,
     marketType,
-    marketDescription,
     marketResolution: moment.utc(marketResolution),
     marketOutcomes: outcomes,
     marginalPrice,
-    outcomeToken: outcomes[selectedOutcomeToken.index],
+    outcomeToken: outcomes.get(selectedOutcomeToken.index),
   })
 
   return record
