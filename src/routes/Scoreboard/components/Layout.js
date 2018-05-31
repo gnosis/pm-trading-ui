@@ -21,7 +21,7 @@ const trophy = require('../assets/trophy.svg')
 const providerConfig = getProviderConfig()
 
 const rewardsEnabled = isFeatureEnabled('rewards')
-const { levels, claimReward: { claimStart, claimUntil } } = getFeatureConfig('rewards')
+const { levels } = getFeatureConfig('rewards')
 
 const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
 
@@ -43,12 +43,8 @@ class Layout extends React.PureComponent {
     })
 
     const showRewardInfo =
-    rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
-    const showRewardClaim =
-      moment.utc().isBetween(claimStart, claimUntil) &&
-      providerConfig.default === WALLET_PROVIDER.METAMASK &&
-      !!mainnetAddress &&
-      rewardValue > 0
+      rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    const showRewardClaim = rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK && !!mainnetAddress
 
     return (
       <Block>
