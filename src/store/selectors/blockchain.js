@@ -19,7 +19,7 @@ export const getTokenAmount = (state, tokenAddress) => {
   let defaultTokenDecimal
 
   try {
-    defaultTokenDecimal = Decimal(tokenAmount.toString ? tokenAmount.toString() : tokenAmount)
+    defaultTokenDecimal = Decimal(tokenAmountString)
   } catch (e) {
     defaultTokenDecimal = Decimal(0)
   }
