@@ -28,8 +28,8 @@ export const requestAccountTrades = async (accountAddress, collateralTokenAddres
   return normalize(trades, [marketTradesSchema])
 }
 
-export const requestAccountShares = async (address, collateralTokenAddress) => {
-  const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/shares/`)
+export const requestAccountShares = async (accountAddress, collateralTokenAddress) => {
+  const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(accountAddress)}/shares/`)
   let shares = payload.results
   if (collateralTokenAddress) {
     shares = payload.results.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(collateralTokenAddress))
