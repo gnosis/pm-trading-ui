@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
-import moment from 'moment'
 import Hairline from 'components/layout/Hairline'
 import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'

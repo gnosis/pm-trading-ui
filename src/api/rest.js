@@ -19,12 +19,20 @@ export const requestMarkets = async () => {
     normalize(response.results.filter(market => typeof market.funding !== 'undefined'), [marketSchema]))
 }
 
-export const requestAccountTrades = async (accountAddress) => {
+export const requestAccountTrades = async (accountAddress, collateralTokenAddress) => {
   const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(accountAddress)}/trades/`)
-  return normalize(payload.results.map(trade => ({ ...trade, owner: accountAddress })), [marketTradesSchema])
+  let trades = payload.results
+  if (collateralTokenAddress) {
+    trades = payload.results.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(collateralTokenAddress))
+  }
+  return normalize(trades, [marketTradesSchema])
 }
 
-export const requestAccountShares = async (address) => {
+export const requestAccountShares = async (address, collateralTokenAddress) => {
   const payload = await restFetch(`${API_URL}/account/${hexWithoutPrefix(address)}/shares/`)
-  return normalize(payload.results, [marketSharesSchema])
+  let shares = payload.results
+  if (collateralTokenAddress) {
+    shares = payload.results.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(collateralTokenAddress))
+  }
+  return normalize(shares, [marketSharesSchema])
 }
