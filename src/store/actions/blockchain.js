@@ -70,7 +70,7 @@ export const initReadOnlyGnosis = () => async () => {
 }
 
 export const updateCollateralToken = () => async (dispatch) => {
-  if (typeof collateralTokenFromConfig === 'undefined') {
+  if (!collateralTokenFromConfig) {
     return dispatch(setCollateralToken({
       source: TOKEN_SOURCE_ETH,
     }))
