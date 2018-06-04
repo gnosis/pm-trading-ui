@@ -9,6 +9,7 @@ import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, TRANSACTION_STATUS } from '
 import { REVOKE_TOKENS } from 'utils/transactionExplanations'
 
 import { getRedeemedShares } from 'store/selectors/marketShares'
+import { getCollateralToken } from 'store/selectors/blockchain'
 
 /**
  * Constant names for marketcreation stages
@@ -48,8 +49,9 @@ export const requestMarkets = () => async (dispatch) => {
  * Dispatches the shares for the given account address
  * @param {String} accountAddress
  */
-export const requestAccountShares = accountAddress => async (dispatch) => {
-  const payload = await api.requestAccountShares(accountAddress)
+export const requestAccountShares = accountAddress => async (dispatch, getState) => {
+  const { address: collateralTokenAddress } = getCollateralToken(getState())
+  const payload = await api.requestAccountShares(accountAddress, collateralTokenAddress)
   return dispatch(receiveEntities(payload))
 }
 
@@ -57,8 +59,9 @@ export const requestAccountShares = accountAddress => async (dispatch) => {
  * Dispatches the trades for the given account address
  * @param {String} accountAddress
  */
-export const requestAccountTrades = accountAddress => async (dispatch) => {
-  const payload = await api.requestAccountTrades(accountAddress)
+export const requestAccountTrades = accountAddress => async (dispatch, getState) => {
+  const { address: collateralTokenAddress } = getCollateralToken(getState())
+  const payload = await api.requestAccountTrades(accountAddress, collateralTokenAddress)
   return dispatch(receiveEntities(payload))
 }
 

@@ -89,7 +89,10 @@ class MarketBuySharesForm extends Component {
       isGasPriceFetched,
       invalid,
       handleSubmit,
-      market: { event: { collateralToken, type }, local },
+      market: {
+        event: { collateralToken, type },
+        local,
+      },
       selectedBuyInvest,
       submitFailed,
       submitting,
@@ -183,8 +186,8 @@ class MarketBuySharesForm extends Component {
                 <div className={cx('col-md-6')}>
                   {isGasPriceFetched && isGasCostFetched(GAS_COST.BUY_SHARES) ? (
                     <React.Fragment>
-                      <DecimalValue value={gasCostEstimation} decimals={4} />
-                      <CurrencyName tokenAddress={market.event.collateralToken} />
+                      <DecimalValue value={gasCostEstimation} decimals={4} />{' '}
+                      ETH
                     </React.Fragment>
                   ) : (
                     <IndefiniteSpinner width={16} height={16} />
