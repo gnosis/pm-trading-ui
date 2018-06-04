@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { getConstant } from 'utils/features'
 
 export const RESOLUTION_TIME = {
   RELATIVE_FORMAT: 'y[Y] M[M] D[D] h[hrs] m[mins]',
@@ -61,11 +62,16 @@ export const GAS_COST = {
   MAINNET_ADDRESS_REGISTRATION: 'mainnetAddressRegistration',
   CLAIM_REWARD: 'claimReward',
 }
-export const DEFAULT_NOTIFICATION_FADEOUT = 60000
+export const NOTIFICATION_FADEOUT = getConstant('NOTIFICATION_FADEOUT') || 60000
 
-export const LOWEST_DISPLAYED_VALUE = 0.001
+// TODO delete it
+export const MARKET_STAGES = {
+  MARKET_CREATED: 0,
+  MARKET_FUNDED: 1,
+  MARKET_CLOSED: 2,
+}
 
-export const MIN_CONSIDER_VALUE = 0.001
+export const LOWEST_VALUE = getConstant('LOWEST_VALUE') || 0.001
 
 export const MAX_ALLOWANCE_WEI = Decimal(2)
   .pow(256)
@@ -77,11 +83,4 @@ export const TRANSACTION_DESCRIPTIONS = {
   SELL: 'SOLD',
 }
 
-export const LIMIT_MARGIN_DEFAULT = '5'
-
-export const REQUEST_STATES = {
-  UNKNOWN: 'UNKNOWN',
-  ERROR: 'ERROR',
-  SUCCESS: 'SUCCESS',
-  LOADING: 'LOADING',
-}
+export const LIMIT_MARGIN = getConstant('LIMIT_MARGIN') || '5'

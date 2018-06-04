@@ -8,12 +8,11 @@ import InteractionButton from 'containers/InteractionButton'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import Checkbox from 'components/Form/Checkbox'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
-import { /* getCollateralToken, */ getFeatureConfig } from 'utils/features'
+import { getFeatureConfig } from 'utils/features'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 import style from './RegisterWallet.mod.scss'
 
 const cx = cn.bind(style)
-const { symbol: collateralTokenSymbol } = {}
 const {
   rewardToken: { symbol: rewardTokenSymbol },
 } = getFeatureConfig('rewards')
@@ -31,6 +30,7 @@ const RegisterMainnetAddress = ({
   tosAgreed,
   ppAgreed,
   rdAgreed,
+  collateralToken: { symbol: collateralTokenSymbol },
 }) => {
   const handleRegistration = async () => {
     await updateMainnetAddress(currentAccount)
@@ -39,7 +39,7 @@ const RegisterMainnetAddress = ({
 
   const disabled =
     gasPrice
-      .mul(registrationGasCost)
+      .mul(registrationGasCost || 0)
       .div(1e18)
       .gt(currentBalance || 0) ||
     (!ppAgreed && !!privacyPolicyUrl) ||
@@ -112,8 +112,8 @@ RegisterMainnetAddress.propTypes = {
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
   updateMainnetAddress: PropTypes.func.isRequired,
-  gasPrice: PropTypes.instanceOf(Decimal).isRequired,
-  registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  gasPrice: PropTypes.instanceOf(Decimal),
+  registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   tosAgreed: PropTypes.bool,
   ppAgreed: PropTypes.bool,
   rdAgreed: PropTypes.bool,
@@ -123,6 +123,8 @@ RegisterMainnetAddress.defaultProps = {
   tosAgreed: false,
   ppAgreed: false,
   rdAgreed: false,
+  gasPrice: Decimal(0),
+  registrationGasCost: 0,
 }
 
 const form = {

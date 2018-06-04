@@ -6,11 +6,11 @@
   },
   "tournament": {
     "enabled": true,
-    "name": "Olympia",
-    "registration": {
+    "name": "Olympia"
+  },
+  "registration": {
       "enabled": true,
-      "contractAddress": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13"
-    }
+      "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
   },
   "collateralToken": {
     "source": "address",

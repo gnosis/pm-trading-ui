@@ -13,7 +13,7 @@ import { weiToEth, getOutcomeName, isMarketResolved, isMarketClosed, isModerator
 import { marketShareShape } from 'utils/shapes'
 import {
   COLOR_SCHEME_DEFAULT,
-  LOWEST_DISPLAYED_VALUE,
+  LOWEST_VALUE,
   TRANSACTION_DESCRIPTIONS,
   RESOLUTION_TIME,
   OUTCOME_TYPES,
@@ -22,7 +22,7 @@ import {
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
-import { isFeatureEnabled, get } from 'utils/features'
+import { isFeatureEnabled } from 'utils/features'
 
 import Metrics from './Metrics'
 import './dashboard.scss'
@@ -193,10 +193,10 @@ class Dashboard extends Component {
             <div className="col-md-2 dashboardMarket--highlight">
               {Decimal(share.balance)
                 .div(1e18)
-                .gte(LOWEST_DISPLAYED_VALUE) ? (
+                .gte(LOWEST_VALUE) ? (
                   <DecimalValue value={weiToEth(share.balance)} />
                 ) : (
-                  `< ${LOWEST_DISPLAYED_VALUE}`
+                  `< ${LOWEST_VALUE}`
                 )}
             </div>
             <div className="col-md-3 dashboardMarket--highlight">

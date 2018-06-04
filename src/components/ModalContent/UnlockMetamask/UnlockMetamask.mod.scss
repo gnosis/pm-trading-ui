@@ -10,9 +10,9 @@
   color: #fff;
 
   .heading {
-      font-size: 21px;
-      margin: 33px 0px 20px 0px;
-      font-weight: 500;
+    font-size: 21px;
+    margin: 33px 0px 20px 0px;
+    font-weight: 500;
   }
 
   .text {
@@ -28,9 +28,10 @@
     border: none;
 
     &:hover {
-        &::after, &::before {
-          background-color: #fff;
-        }
+      &::after,
+      &::before {
+        background-color: #fff;
       }
+    }
   }
 }

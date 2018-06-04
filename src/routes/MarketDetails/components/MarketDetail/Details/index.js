@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import ImmutableProptypes from 'react-immutable-proptypes'
 import moment from 'moment'
 import Decimal from 'decimal.js'
-import { MIN_CONSIDER_VALUE } from 'utils/constants'
+import { LOWEST_VALUE } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 import { isMarketClosed, isMarketResolved } from 'utils/helpers'
 import Outcome from 'components/Outcome'
@@ -30,7 +30,7 @@ const Details = ({
   const redeemWinningsGasCost = gasCosts.get('redeemWinnings')
   const marketClosed = isMarketClosed(market)
   const marketResolved = isMarketResolved(market)
-  const showWinning = marketResolved && winningsTotal.gt(MIN_CONSIDER_VALUE)
+  const showWinning = marketResolved && winningsTotal.gt(LOWEST_VALUE)
   const marketClosedOrFinished = marketClosed || marketResolved
   const marketStatus = marketResolved ? 'resolved.' : 'closed.'
   const showCountdown = !marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS

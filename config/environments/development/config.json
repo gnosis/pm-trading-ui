@@ -11,10 +11,11 @@
   },
   "whitelist": {
     "0xb2e87b8ce41184e0688027f370a972a436abe77e": "Giacomo",
-    "0xb00a24c899f88e5514583cfa8c40e4cdab6c473e": "Andre Metamask",
-    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",
-    "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Adolfo Metamask",
+    "0xb00a24c899f88e5514583cfa8c40e4cdab6c473e": "Andre",
+    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis",
     "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama",
-    "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail"
+    "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail",
+    "0x95db47d3e9d574cd15b0f02c845bc2971b0fc3e1": "Lauti",
+    "0x2865be1f71dda04fc9a596fa70a7db4f82890343": "Giacomo 2"
   }
 }

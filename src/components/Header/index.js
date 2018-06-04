@@ -129,7 +129,7 @@ class Header extends Component {
       }
     }
 
-    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && currentProvider
+    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && !!currentProvider
 
     return (
       <div className={cx('headerContainer')}>
@@ -149,11 +149,6 @@ class Header extends Component {
             <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
               Markets
             </NavLink>
-            {canInteract && (
-              <NavLink to="/transactions" activeClassName={cx('active')} className={cx('navLink')}>
-                Transactions
-              </NavLink>
-            )}
             {showScoreboard && (
               <NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink')}>
                 Scoreboard

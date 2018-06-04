@@ -3,7 +3,7 @@ import { MARKET_STAGES } from 'store/models'
 
 export const isMarketClosed = (stage, resolutionDate, resolved) => {
   const stageClosed = stage !== MARKET_STAGES.MARKET_FUNDED
-  const marketExpired = moment.utc(resolutionDate).isBefore(moment().utc())
+  const marketExpired = moment.utc(resolutionDate).isBefore(moment.utc())
   const marketResolved = resolved === true
 
   const marketClosed = stageClosed || marketExpired || marketResolved
@@ -11,13 +11,12 @@ export const isMarketClosed = (stage, resolutionDate, resolved) => {
 }
 
 export const isMarketEndingSoon = (resolutionDate) => {
-  const threeDays = moment().add(3, 'days').utc()
-
-  return moment.utc(resolutionDate).isBefore(threeDays)
+  const threeDays = moment.utc().add(3, 'days')
+  return moment.utc(resolutionDate).isSameOrBefore(threeDays)
 }
 
 export const isNewMarket = (creation) => {
-  const threeDaysAgo = moment().subtract(3, 'days').utc()
+  const threeDaysAgo = moment.utc().subtract(3, 'days')
 
   return threeDaysAgo.isBefore(creation)
 }
