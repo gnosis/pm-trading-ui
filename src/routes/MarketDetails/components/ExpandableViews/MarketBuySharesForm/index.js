@@ -58,7 +58,8 @@ class MarketBuySharesForm extends Component {
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
   validateInvestment = (investmentValue) => {
-    const { currentBalance = 0 } = this.props
+    const { currentBalance = 0, collateralTokenBalance, collateralTokenSymbol } = this.props
+
     // check if investment is not undefined and test it against number regexp to prevent errors from decimal.js
     if (!investmentValue) {
       return 'Enter the investment value'
@@ -74,7 +75,13 @@ class MarketBuySharesForm extends Component {
       return "Number can't be negative or equal to zero."
     }
 
-    if (decimalValue.gt(currentBalance)) {
+    let balance = currentBalance
+
+    if (collateralTokenSymbol !== 'WETH') {
+      balance = collateralTokenBalance.div(1e18)
+    }
+
+    if (decimalValue.gt(balance)) {
       return "You're trying to invest more than you have."
     }
 
@@ -226,6 +233,13 @@ MarketBuySharesForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   submitEnabled: PropTypes.bool,
   currentBalance: PropTypes.string.isRequired,
+  collateralToken: PropTypes.shape({
+    address: PropTypes.string,
+    balance: PropTypes.string,
+    icon: PropTypes.string,
+    source: PropTypes.string,
+    symbol: PropTypes.string,
+  }),
 }
 
 MarketBuySharesForm.defaultProps = {
@@ -233,6 +247,7 @@ MarketBuySharesForm.defaultProps = {
   selectedOutcome: undefined,
   selectedBuyInvest: '',
   submitEnabled: false,
+  collateralToken: {},
 }
 
 const form = {
