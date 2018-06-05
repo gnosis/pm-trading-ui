@@ -87,9 +87,9 @@ const RegisterMainnetAddress = ({
           )}
           {!!riskDisclaimerUrl && (
             <Field name="agreedWithRDP" component={Checkbox} className={cx('checkBox')}>
-              I have read the risk{' '}
+              I have read the{' '}
               <a href={riskDisclaimerUrl} target="_blank" rel="noopener noreferrer">
-                disclaimer policy
+                risk disclaimer policy
               </a>
             </Field>
           )}
