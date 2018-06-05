@@ -61,7 +61,7 @@ class ShareSellView extends Component {
     }
 
     if (Decimal(0).eq(earnings)) {
-      return 'You are trying to sell an invalid amount. This transaction would result in a loss of an outcome token, due to costs of this transaction.'
+      return 'This transaction is not permitted because it will result in a loss of an outcome token.'
     }
 
     return undefined
