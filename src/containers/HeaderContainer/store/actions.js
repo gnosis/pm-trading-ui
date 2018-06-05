@@ -6,6 +6,7 @@ import { initProviders } from 'integrations/store/actions'
 import { WALLET_PROVIDER } from 'integrations/constants'
 
 import { getCollateralToken } from 'store/selectors/blockchain'
+import { fetchTournamentUserData } from 'routes/Scoreboard/store'
 
 /**
  * Requests the configured tournaments collateralToken balance. If none is set, does nothing
@@ -33,6 +34,7 @@ const requestCollateralTokenBalance = account => (dispatch, getState) => {
 
 export default {
   requestMainnetAddress,
+  fetchTournamentUserData: accountAddress => dispatch => dispatch(fetchTournamentUserData(accountAddress)),
   requestTokenBalance: requestCollateralTokenBalance,
   openModal: modalName => dispatch => dispatch(openModal({ modalName })),
   initUport: () => dispatch => dispatch(initProviders({ providers: [WALLET_PROVIDER.UPORT] })),

@@ -32,12 +32,15 @@ const useUport = defaultProvider === WALLET_PROVIDER.UPORT
 
 class Header extends Component {
   componentDidMount() {
-    if (requireRegistration && this.props.currentAccount) {
+    const { currentAccount } = this.props
+
+    if (requireRegistration && currentAccount) {
       this.props.requestMainnetAddress()
     }
 
-    if (this.props.currentAccount) {
-      this.props.requestTokenBalance(this.props.currentAccount)
+    if (currentAccount) {
+      this.props.requestTokenBalance(currentAccount)
+      this.props.fetchTournamentUserData(currentAccount)
     }
   }
 
@@ -204,6 +207,7 @@ Header.propTypes = {
   initUport: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   acceptedTOS: PropTypes.bool,
+  fetchTournamentUserData: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {
