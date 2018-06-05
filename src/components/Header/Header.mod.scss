@@ -163,7 +163,7 @@ $navbarHeight: 40px;
       content: var(--logoAnnotation, 'BETA');
       position: absolute;
       right: 0;
-      bottom: -5px;
+      bottom: 0;
 
       @media (max-width: $screen-sm) {
         bottom: -20px;
