@@ -40,14 +40,16 @@ class Header extends Component {
 
     if (currentAccount) {
       this.props.requestTokenBalance(currentAccount)
-      this.props.fetchTournamentUserData(currentAccount)
+
+      if (tournamentEnabled) {
+        this.props.fetchTournamentUserData(currentAccount)
+      }
     }
   }
 
   componentDidUpdate(prevProps) {
     // If user unlocks metamask, changes his account, we need to check if the account was registered
-    const shouldRequestMainnetAddress =
-    requireRegistration && this.props.currentAccount !== prevProps.currentAccount
+    const shouldRequestMainnetAddress = requireRegistration && this.props.currentAccount !== prevProps.currentAccount
     if (shouldRequestMainnetAddress) {
       this.props.requestMainnetAddress()
     }
@@ -104,7 +106,6 @@ class Header extends Component {
     if (tournamentEnabled && useMetamask && requireRegistration) {
       walletConnected = hasWallet && !!mainnetAddress
     }
-
 
     const logoVars = {}
     if (tournamentEnabled) {
@@ -163,7 +164,8 @@ class Header extends Component {
           <div className={cx('group', 'right')}>
             {canInteract ? (
               <div className={cx('account')}>
-                {currentNetwork && currentNetwork !== 'MAIN' && (
+                {currentNetwork &&
+                  currentNetwork !== 'MAIN' && (
                   <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
                 )}
                 <DecimalValue value={tokenBalance} className={cx('text')} />&nbsp;
