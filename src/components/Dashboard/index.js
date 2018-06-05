@@ -9,7 +9,7 @@ import PageFrame from 'components/layout/PageFrame'
 import Block from 'components/layout/Block'
 import Title from 'components/layout/Title'
 import Outcome from 'components/Outcome'
-import DecimalValue from 'components/DecimalValue'
+import DecimalValue, { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { weiToEth, getOutcomeName, isMarketResolved, isMarketClosed, isModerator } from 'utils/helpers'
 import { marketShareShape } from 'utils/shapes'
@@ -333,9 +333,8 @@ class Dashboard extends Component {
 
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
-    const predictedProfitFormatted = Decimal(accountPredictiveAssets)
-      .toDP(4, 1)
-      .toString()
+    const predictedProfitFormatted = decimalToText(accountPredictiveAssets)
+
     if (hasWallet) {
       metricsSection = (
         <Metrics
