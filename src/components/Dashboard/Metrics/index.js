@@ -1,7 +1,6 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import selector from './selector'
+import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 import Layout from './Layout'
 
 class Metrics extends React.PureComponent {
@@ -11,12 +10,7 @@ class Metrics extends React.PureComponent {
     tokenSymbol: PropTypes.string,
     tokenIcon: PropTypes.string,
     rank: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    badge: PropTypes.shape({
-      icon: PropTypes.string,
-      maxPredictions: PropTypes.number,
-      minPredictions: PropTypes.number,
-      rank: PropTypes.string,
-    }),
+    predictionsAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }
 
   static defaultProps = {
@@ -25,13 +19,15 @@ class Metrics extends React.PureComponent {
     tokenSymbol: '',
     tokenIcon: '',
     rank: '',
-    badge: {},
+    predictionsAmount: 0,
   }
 
   render() {
     const {
-      predictedProfit, tokens, tokenSymbol, tokenIcon, rank, badge,
+      predictedProfit, tokens, tokenSymbol, tokenIcon, rank, predictionsAmount,
     } = this.props
+
+    const badge = badgeOf(predictionsAmount) || {}
 
     return (
       <Layout

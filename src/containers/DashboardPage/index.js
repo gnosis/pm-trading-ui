@@ -12,7 +12,7 @@ import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinni
 import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'store/actions/blockchain'
 import { weiToEth } from 'utils/helpers'
 import { fetchTournamentUserData, fetchTournamentUsers } from 'routes/Scoreboard/store/actions'
-
+import { meSelector } from 'routes/Scoreboard/store'
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
@@ -23,6 +23,8 @@ const mapStateToProps = (state) => {
   const gnosisInitialized = isGnosisInitialized(state)
   const hasWallet = checkWalletConnection(state)
   const collateralToken = getCollateralToken(state)
+  const userTournamentInfo = meSelector(state)
+
   return {
     hasWallet,
     defaultAccount,
@@ -32,6 +34,7 @@ const mapStateToProps = (state) => {
     gnosisInitialized,
     accountPredictiveAssets,
     collateralToken,
+    userTournamentInfo,
   }
 }
 
@@ -48,4 +51,7 @@ const mapDispatchToProps = dispatch => ({
   fetchTournamentUserData: account => dispatch(fetchTournamentUserData(account)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DashboardPage)
