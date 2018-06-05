@@ -159,7 +159,9 @@ module.exports = (env = {}) => {
         'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin([{ from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') }]),
+      new CopyWebpackPlugin([
+        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
+      ]),
     ],
   }
 }
