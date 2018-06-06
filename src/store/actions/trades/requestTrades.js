@@ -30,6 +30,7 @@ const extractTrade = (payload) => {
   const {
     outcomeToken: selectedOutcomeToken,
     outcomeTokenCount: selectedOutcomeTokenCount,
+    collateralToken: collateralTokenAddress,
     cost,
     owner,
     profit: rawProfit,
@@ -50,6 +51,8 @@ const extractTrade = (payload) => {
   const record = new TradeRecord({
     id,
     date: moment.utc(date),
+    collateralTokenAddress,
+    eventAddress: hexWithoutPrefix(selectedOutcomeToken.event),
     outcomeToken: outcomes.get(selectedOutcomeToken.index),
     price: orderType === 'BUY' ? cost : profit,
     marketTitle,

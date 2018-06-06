@@ -24,6 +24,8 @@ export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix
 
 export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
 
+export const normalizeHex = value => hexWithPrefix(value).toLowerCase()
+
 export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
 
 export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) =>

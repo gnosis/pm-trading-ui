@@ -1,18 +1,19 @@
+@import '../../../../../../scss/vars.scss';
+
+.shares {
+  color: $font-color-bright;
+  margin-bottom: 44px;
+}
+
 .share {
   display: block;
   outline: 0;
   transition: padding-left .2s ease;
   padding: 10px;
   border-top: 1px solid #f0f1f1;
-
+  
   &:first-of-type {
     border-top: none;
-  }
-
-  &:hover, &:active, &:focus, &:visited {
-    outline: 0;
-    color: inherit !important;
-    cursor: pointer;
   }
 
   &:hover, &:focus {
@@ -24,6 +25,14 @@
     letter-spacing: .5px;
     font-weight: 300;
     padding: 2px 0;
+
+    color: inherit !important;
+    cursor: pointer;
+
+    &:hover, &:active, &:focus, &:visited {
+      outline: 0;
+      color: inherit !important;
+    }
   }
 
   .outcome {
@@ -32,7 +41,7 @@
     align-items: center;
   }
 
-  .outcomeBox, .shareAmount, .sharePrice {
+  .outcomeBox, .shareAmount, .sharePrice, .shareAction {
     display: inline-block;
     margin-top: 6px;
   }

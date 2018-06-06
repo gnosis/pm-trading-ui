@@ -30,6 +30,7 @@ const buildOutcomesFrom = (marginalPrice, selectedOutcomeToken, marketOutcomeLab
 const extractShare = (payload) => {
   const {
     outcomeToken: selectedOutcomeToken,
+    collateralToken: collateralTokenAddress,
     owner,
     balance,
     marginalPrice,
@@ -51,6 +52,8 @@ const extractShare = (payload) => {
     balance,
     marketTitle,
     marketType,
+    eventAddress: hexWithoutPrefix(selectedOutcomeToken.event),
+    collateralTokenAddress: hexWithoutPrefix(collateralTokenAddress),
     marketResolution: moment.utc(marketResolution),
     marketOutcomes: outcomes,
     marginalPrice,

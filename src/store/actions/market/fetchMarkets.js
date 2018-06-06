@@ -6,6 +6,7 @@ import { OUTCOME_TYPES } from 'utils/constants'
 import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
 import { getCollateralToken } from 'store/selectors/blockchain'
 import addMarkets from './addMarkets'
+import { isMarketClosed } from 'store/utils/marketStatus'
 
 const config = getConfiguration()
 const whitelisted = config.whitelist || {}
@@ -44,6 +45,9 @@ const buildScalarMarket = (market) => {
     funding,
     netOutcomeTokensSold,
     event: {
+      contract: {
+        address: eventAddress,
+      },
       type,
       collateralToken,
       lowerBound,
@@ -64,6 +68,9 @@ const buildScalarMarket = (market) => {
   const outcomes = buildOutcomesFrom(outcomesResponse, netOutcomeTokensSold, market.marginalPrices)
   const bounds = buildBoundsFrom(lowerBound, upperBound, unit, decimals)
 
+  const resolved = isOutcomeSet || isWinningOutcomeSet
+  const closed = isMarketClosed(stage, resolutionDate, resolved)
+
   const marketRecord = new ScalarMarketRecord({
     title,
     description,
@@ -74,10 +81,12 @@ const buildScalarMarket = (market) => {
     type,
     outcomes,
     bounds,
+    eventAddress: hexWithoutPrefix(eventAddress),
     resolution: resolutionDate,
     creation: creationDate,
     volume: tradingVolume,
-    resolved: isOutcomeSet || isWinningOutcomeSet,
+    resolved,
+    closed,
     winningOutcome: outcome,
     funding: funding || 0,
     outcomeTokensSold: List(netOutcomeTokensSold),
@@ -94,6 +103,9 @@ const buildCategoricalMarket = (market) => {
     funding,
     netOutcomeTokensSold,
     event: {
+      contract: {
+        address: eventAddress,
+      },
       collateralToken,
       isWinningOutcomeSet,
       oracle: {
@@ -108,6 +120,9 @@ const buildCategoricalMarket = (market) => {
 
   const outcomes = buildOutcomesFrom(outcomeLabels, netOutcomeTokensSold, market.marginalPrices)
 
+  const resolved = isOutcomeSet || isWinningOutcomeSet
+  const closed = isMarketClosed(stage, resolutionDate, resolved)
+
   const marketRecord = new CategoricalMarketRecord({
     title,
     description,
@@ -116,10 +131,12 @@ const buildCategoricalMarket = (market) => {
     address,
     stage,
     outcomes,
+    eventAddress: hexWithoutPrefix(eventAddress),
     resolution: resolutionDate,
     creation: creationDate,
     volume: tradingVolume,
-    resolved: isOutcomeSet || isWinningOutcomeSet,
+    resolved,
+    closed,
     funding: funding || 0,
     winningOutcome: outcomes.get(winningOutcomeIndex),
     outcomeTokensSold: List(netOutcomeTokensSold),

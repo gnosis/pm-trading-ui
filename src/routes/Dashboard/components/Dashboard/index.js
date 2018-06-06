@@ -1,10 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import classNames from 'classnames/bind'
 import { compose, lifecycle, withState } from 'recompose'
 import { marketRecordListShape } from 'utils/shapes'
 import { setRequestStateWrap } from 'utils/helpers'
 import { REQUEST_STATES } from 'utils/constants'
+import TradeRecord from 'store/models/trade'
+import ShareRecord from 'store/models/share'
 
 import Metrics from './Metrics'
 import Title from './Title'
@@ -44,8 +47,8 @@ Dashboard.propTypes = {
   newestMarkets: marketRecordListShape,
   closingSoonMarkets: marketRecordListShape,
   hasWallet: PropTypes.bool,
-  myTrades: PropTypes.array,
-  myShares: PropTypes.array,
+  myTrades: ImmutablePropTypes.listOf(ImmutablePropTypes.recordOf(TradeRecord)),
+  myShares: ImmutablePropTypes.listOf(ImmutablePropTypes.recordOf(ShareRecord)),
 }
 
 Dashboard.defaultProps = {
