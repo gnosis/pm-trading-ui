@@ -77,19 +77,19 @@ const RegisterMainnetAddress = ({
               </a>
             </Field>
           )}
-          {!!riskDisclaimerUrl && (
+          {!!privacyPolicyUrl && (
             <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')}>
               I agree with{' '}
-              <a href={riskDisclaimerUrl} target="_blank" rel="noopener noreferrer">
+              <a href={privacyPolicyUrl} target="_blank" rel="noopener noreferrer">
                 privacy policy
               </a>
             </Field>
           )}
-          {privacyPolicyUrl && (
+          {!!riskDisclaimerUrl && (
             <Field name="agreedWithRDP" component={Checkbox} className={cx('checkBox')}>
-              I have read the risk{' '}
-              <a href={privacyPolicyUrl} target="_blank" rel="noopener noreferrer">
-                disclaimer policy
+              I have read the{' '}
+              <a href={riskDisclaimerUrl} target="_blank" rel="noopener noreferrer">
+                risk disclaimer policy
               </a>
             </Field>
           )}

@@ -31,7 +31,7 @@ import {
   getRegisteredMainnetAddress,
 } from 'integrations/store/selectors'
 import { isModerator, getModerators } from 'utils/helpers'
-import { getTokenSymbol } from 'store/selectors/blockchain'
+import { getTokenSymbol, getTokenAmount } from 'store/selectors/blockchain'
 
 let marketId
 
@@ -71,6 +71,7 @@ const mapStateToProps = (state, ownProps) => {
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
     currentBalance: getCurrentBalance(state),
+    collateralTokenBalance: getTokenAmount(state, market.event?.collateralToken),
     collateralTokenSymbol: getTokenSymbol(state, market.event?.collateralToken),
     mainnetAddress: getRegisteredMainnetAddress(state),
   }
