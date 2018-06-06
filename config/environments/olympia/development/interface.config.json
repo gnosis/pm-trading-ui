@@ -40,13 +40,13 @@
     "type": "default"
   },
   "termsOfUse": {
-    "url": "/TermsOfService.html"
+    "url": "/assets/content/TermsOfService.html"
   },
   "riskDisclaimer": {
-    "url": "/RiskDisclaimerPolicy.html"
+    "url": "/assets/content/RiskDisclaimerPolicy.html"
   },
   "privacyPolicy": {
-    "url": "/PrivacyPolicy.html"
+    "url": "/assets/content/PrivacyPolicy.html"
   },
   "footer": {
     "enabled": true,
