@@ -43,7 +43,7 @@ const extractShare = (payload) => {
 
   const outcomes = buildOutcomesFrom(marginalPrice, selectedOutcomeToken, marketOutcomeLabels)
 
-  const id = sha1(`${owner}-${selectedOutcomeToken.event}-${selectedOutcomeToken.index}`)
+  const id = sha1(`${owner}-${balance}-${selectedOutcomeToken.event}-${selectedOutcomeToken.index}`)
   const marketType = typeof marketOutcomeLabels !== 'undefined' ? OUTCOME_TYPES.CATEGORICAL : OUTCOME_TYPES.SCALAR
 
   const record = new ShareRecord({

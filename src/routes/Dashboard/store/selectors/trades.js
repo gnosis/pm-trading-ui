@@ -9,9 +9,6 @@ const tradesWithMarketsSelector = createSelector(
   (marketList, marketTrades) => (
     marketTrades.map((marketTrade) => {
       const tradesMarket = marketList.find(market => market.eventAddress === marketTrade.eventAddress)
-      if (!tradesMarket) {
-        console.log('no market for', marketTrade)
-      }
       return marketTrade.set('market', tradesMarket)
     })
   ),
@@ -24,7 +21,7 @@ const tradeSelector = createSelector(
       typeof trade.market !== 'undefined' &&
       trade.collateralTokenAddress === collateralToken.address
     ))
-    .sortBy(trade => trade.date).values()),
+    .sortBy(trade => trade.date, (dateA, dateB) => (dateA.isBefore(dateB) ? 1 : -1)).values()),
 )
 
 export default tradeSelector

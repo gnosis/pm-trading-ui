@@ -38,7 +38,8 @@ const Trade = ({ trade }) => (
 )
 
 const MyTrades = ({ trades }) => (
-  <div>
+  <div className={cx('trades')}>
+    <h2>My Trades</h2>
     {trades.map(trade => <Trade key={trade.id} trade={trade} />)}
   </div>
 )

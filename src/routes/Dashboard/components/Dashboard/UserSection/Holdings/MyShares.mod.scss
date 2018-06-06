@@ -1,8 +1,18 @@
 @import '../../../../../../scss/vars.scss';
 
 .shares {
+  margin-bottom: 30px;
   color: $font-color-bright;
-  margin-bottom: 44px;
+
+  h2 {
+    color: $font-color-dark;
+    font-size: 12px;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: .5px;
+    line-height: normal;
+  }
 }
 
 .share {

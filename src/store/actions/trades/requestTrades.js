@@ -42,11 +42,12 @@ const extractTrade = (payload) => {
     },
   } = payload
 
-  const id = sha1(`${owner}-${orderType}-${selectedOutcomeToken.index}-${selectedOutcomeTokenCount}`)
+  const profit = rawProfit === 'None' ? '0' : rawProfit
+  const price = orderType === 'BUY' ? cost : profit
+  const id = sha1(`${owner}-${orderType}-${price}-${date}-${selectedOutcomeToken.index}-${selectedOutcomeTokenCount}`)
   const marketType = typeof marketOutcomeLabels !== 'undefined' ? OUTCOME_TYPES.CATEGORICAL : OUTCOME_TYPES.SCALAR
 
   const outcomes = buildOutcomesFrom(selectedOutcomeTokenCount, selectedOutcomeToken, marketOutcomeLabels)
-  const profit = rawProfit === 'None' ? '0' : rawProfit
 
   const record = new TradeRecord({
     id,
@@ -54,7 +55,7 @@ const extractTrade = (payload) => {
     collateralTokenAddress,
     eventAddress: hexWithoutPrefix(selectedOutcomeToken.event),
     outcomeToken: outcomes.get(selectedOutcomeToken.index),
-    price: orderType === 'BUY' ? cost : profit,
+    price,
     marketTitle,
     marketType,
     marketOutcomes: outcomes,

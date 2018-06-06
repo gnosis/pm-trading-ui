@@ -43,6 +43,7 @@ const Share = ({ share }) => {
 }
 const MyShares = ({ shares }) => (
   <div className={cx('shares')}>
+    <h2>My Tokens</h2>
     {shares.map(share => <Share key={share.id} share={share} />)}
   </div>
 )

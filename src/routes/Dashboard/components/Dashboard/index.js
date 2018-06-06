@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { List } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import classNames from 'classnames/bind'
 import { compose, lifecycle, withState } from 'recompose'
@@ -20,23 +21,25 @@ const cx = classNames.bind(styles)
 
 const Dashboard = ({
   marketState, newestMarkets, closingSoonMarkets, viewMarket, myShares, myTrades,
-  requestShares, requestTrades, currentAccount,
+  requestShares, requestTrades, currentAccount, collateralToken, predictedProfits,
 }) => (
   <div className={cx('dashboard')}>
     <Title />
-    <Metrics />
+    <Metrics collateralToken={collateralToken} predictedProfits={predictedProfits} />
     <Markets
-      newestMarkets={marketState !== REQUEST_STATES.SUCCESS ? undefined : newestMarkets}
-      closingSoonMarkets={marketState !== REQUEST_STATES.SUCCESS ? undefined : closingSoonMarkets}
+      newestMarkets={marketState === REQUEST_STATES.SUCCESS ? newestMarkets : undefined}
+      closingSoonMarkets={marketState === REQUEST_STATES.SUCCESS ? closingSoonMarkets : undefined}
       viewMarket={viewMarket}
     />
-    <UserSection
-      myShares={myShares}
-      myTrades={myTrades}
-      requestShares={requestShares}
-      requestTrades={requestTrades}
-      currentAccount={currentAccount}
-    />
+    {marketState === REQUEST_STATES.SUCCESS ? (
+      <UserSection
+        myShares={myShares}
+        myTrades={myTrades}
+        requestShares={requestShares}
+        requestTrades={requestTrades}
+        currentAccount={currentAccount}
+      />
+    ) : undefined}
   </div>
 )
 
@@ -44,6 +47,10 @@ Dashboard.propTypes = {
   fetchMarkets: PropTypes.func.isRequired,
   viewMarket: PropTypes.func.isRequired,
   marketState: PropTypes.oneOf(Object.values(REQUEST_STATES)),
+  collateralToken: PropTypes.shape({
+    amount: PropTypes.string,
+    address: PropTypes.string,
+  }),
   newestMarkets: marketRecordListShape,
   closingSoonMarkets: marketRecordListShape,
   hasWallet: PropTypes.bool,
@@ -55,8 +62,10 @@ Dashboard.defaultProps = {
   marketState: REQUEST_STATES.UNKNOWN,
   newestMarkets: undefined,
   closingSoonMarkets: undefined,
-  myShares: [],
+  myShares: List(),
+  myTrades: List(),
   hasWallet: false,
+  collateralToken: {},
 }
 
 const enhancer = compose(

@@ -24,7 +24,7 @@ const shareSelector = createSelector(
       typeof share.market !== 'undefined' &&
       normalizeHex(share.collateralTokenAddress) === normalizeHex(collateralToken.address)
     ))
-    .sortBy(share => share.marketResolution).values()),
+    .sortBy(share => share.marketResolution, (dateA, dateB) => (dateA.isBefore(dateB) ? -1 : 1)).values()),
 )
 
 export default shareSelector
