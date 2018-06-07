@@ -2,6 +2,7 @@ import uuid from 'uuid/v4'
 import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, TRANSACTION_STATUS } from 'utils/constants'
 import { hexWithPrefix } from 'utils/helpers'
 import { closeModal } from 'store/actions/modal'
+import { redeemShare } from 'store/actions/shares'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 import * as marketContractAPI from 'api/market'
 import { CategoricalMarketRecord } from 'store/models/market'
@@ -42,6 +43,7 @@ const redeemWinnings = market => async (dispatch, getState) => {
   const transactionId = uuid()
   const state = getState()
   const sharesToRedeem = sharesForMarketSelector(state, market.address)
+  debugger
 
   const outcomeType = ((market instanceof CategoricalMarketRecord) ? OUTCOME_TYPES.CATEGORICAL : OUTCOME_TYPES.SCALAR)
 
@@ -52,10 +54,7 @@ const redeemWinnings = market => async (dispatch, getState) => {
     console.log('winnings: ', await marketContractAPI.redeemWinnings(outcomeType, hexWithPrefix(market.eventAddress)))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
 
-    sharesToRedeem.values((share) => {
-      console.log('update share')
-      dispatch(/* update share , balance 0 */)
-    })
+    sharesToRedeem.forEach(share => dispatch(redeemShare(share.id)))
   } catch (e) {
     console.error(e)
     await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))

@@ -11,7 +11,7 @@ export const sharesForMarketSelector = (state, marketAddress) => {
       marketShare.collateralTokenAddress === collateralToken.address
     ))
 
-    return marketShares
+    return List(marketShares.values())
   }
 
   return List()

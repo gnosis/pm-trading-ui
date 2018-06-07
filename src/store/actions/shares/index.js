@@ -1,3 +1,5 @@
 export { default as requestShares } from './requestShares'
 export { default as addShare } from './addShare'
+export { default as redeemShare } from './redeemShare'
 export * from './addShare'
+export * from './redeemShare'
