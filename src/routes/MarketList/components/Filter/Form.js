@@ -61,11 +61,6 @@ const Form = ({ userAccount }) => (
       options={MARKETFILTER_STATUS_OPTIONS}
       light
     />
-    {userAccount && (
-      <Field label="Show Only" name="filterMyMarkets" component={Checkbox} light>
-        My Markets
-      </Field>
-    )}
   </form>
 )
 
