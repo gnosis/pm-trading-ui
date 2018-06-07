@@ -43,7 +43,6 @@ const redeemWinnings = market => async (dispatch, getState) => {
   const transactionId = uuid()
   const state = getState()
   const sharesToRedeem = sharesForMarketSelector(state, market.address)
-  debugger
 
   const outcomeType = ((market instanceof CategoricalMarketRecord) ? OUTCOME_TYPES.CATEGORICAL : OUTCOME_TYPES.SCALAR)
 
