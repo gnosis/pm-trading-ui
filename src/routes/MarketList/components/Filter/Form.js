@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { reduxForm, Field } from 'redux-form'
 import cn from 'classnames/bind'
-import { TextInput, Checkbox, Select, RadioButtonGroup } from 'components/Form'
+import { TextInput, Select, RadioButtonGroup } from 'components/Form'
 import style from './Filter.mod.scss'
 
 const cx = cn.bind(style)
@@ -43,7 +43,7 @@ const MARKETFILTER_STATUS_OPTIONS = [
   },
 ]
 
-const Form = ({ userAccount }) => (
+const Form = () => (
   <form>
     <Field
       label="Search"
@@ -63,14 +63,6 @@ const Form = ({ userAccount }) => (
     />
   </form>
 )
-
-Form.propTypes = {
-  userAccount: PropTypes.string,
-}
-
-Form.defaultProps = {
-  userAccount: undefined,
-}
 
 export default reduxForm({
   form: MARKETFILTER_FORM_NAME,
