@@ -7,7 +7,8 @@ import { checkWalletConnection, getCurrentAccount } from 'integrations/store/sel
 
 import { marketSelector } from 'store/selectors/market'
 import { getCollateralToken } from 'store/selectors/blockchain'
-import { shareSelector, tradeSelector } from '../../store/selectors'
+import shareSelector from 'store/selectors/account/shares'
+import tradeSelector from 'store/selectors/account/trades'
 import { calculateProfit } from './utils'
 
 /**

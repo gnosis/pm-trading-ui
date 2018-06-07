@@ -1,0 +1,15 @@
+@import '../../../../../scss/vars.scss';
+
+.category {
+  min-height: 200px;
+  
+  h2 {
+    color: $font-color-dark;
+    font-size: 12px;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: .5px;
+    line-height: normal;
+  }
+}

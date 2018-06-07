@@ -18,11 +18,11 @@ const cx = classnames.bind(style)
 const Metrics = ({ collateralToken = {}, predictedProfits }) => (
   <div className={cx('metrics')}>
     <div className={cx('container')}>
-      <Metric src={etherTokensIconSrc} explanation={`${collateralToken.symbol} tokens`}>
+      <Metric isLoading={collateralToken.symbol === '/'} src={etherTokensIconSrc} explanation={`${collateralToken.symbol} tokens`}>
         <DecimalValue value={collateralToken.balance} className={cx('metric-value')} />&nbsp;
         <CurrencyName tokenAddress={collateralToken.address} />
       </Metric>
-      <Metric src={outstandingPredictionsIconSrc} explanation="Predicted Profits">
+      <Metric isLoading={typeof predictedProfits === 'undefined'} src={outstandingPredictionsIconSrc} explanation="Predicted Profits">
         <DecimalValue value={weiToEth(predictedProfits)} className={cx('metric-value')} />&nbsp;
         <CurrencyName tokenAddress={collateralToken.address} />
       </Metric>
@@ -46,7 +46,7 @@ Metrics.defaultProps = {
     address: undefined,
     icon: etherTokensIconSrc,
   },
-  predictedProfits: Decimal(0),
+  predictedProfits: undefined,
 }
 
 export default Metrics

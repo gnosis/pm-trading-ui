@@ -1,4 +1,5 @@
 import React from 'react'
+import Decimal from 'decimal.js'
 import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
@@ -22,6 +23,7 @@ const cx = classNames.bind(styles)
 const Dashboard = ({
   marketState, newestMarkets, closingSoonMarkets, viewMarket, myShares, myTrades,
   requestShares, requestTrades, currentAccount, collateralToken, predictedProfits,
+  redeemWinnings,
 }) => (
   <div className={cx('dashboard')}>
     <Title />
@@ -38,19 +40,25 @@ const Dashboard = ({
         requestShares={requestShares}
         requestTrades={requestTrades}
         currentAccount={currentAccount}
+        redeemWinnings={redeemWinnings}
       />
     ) : undefined}
   </div>
 )
 
 Dashboard.propTypes = {
+  requestShares: PropTypes.func.isRequired,
+  requestTrades: PropTypes.func.isRequired,
   fetchMarkets: PropTypes.func.isRequired,
+  redeemWinnings: PropTypes.func.isRequired,
   viewMarket: PropTypes.func.isRequired,
   marketState: PropTypes.oneOf(Object.values(REQUEST_STATES)),
   collateralToken: PropTypes.shape({
     amount: PropTypes.string,
     address: PropTypes.string,
   }),
+  predictedProfits: PropTypes.instanceOf(Decimal),
+  currentAccount: PropTypes.string,
   newestMarkets: marketRecordListShape,
   closingSoonMarkets: marketRecordListShape,
   hasWallet: PropTypes.bool,
@@ -60,12 +68,14 @@ Dashboard.propTypes = {
 
 Dashboard.defaultProps = {
   marketState: REQUEST_STATES.UNKNOWN,
-  newestMarkets: undefined,
-  closingSoonMarkets: undefined,
+  newestMarkets: null,
+  closingSoonMarkets: null,
   myShares: List(),
   myTrades: List(),
   hasWallet: false,
   collateralToken: {},
+  currentAccount: null,
+  predictedProfits: Decimal(0),
 }
 
 const enhancer = compose(

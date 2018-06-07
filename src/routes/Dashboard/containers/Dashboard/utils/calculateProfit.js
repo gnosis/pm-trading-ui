@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js'
-import { calcShareWinnings } from 'containers/DashboardPage/store/selectors/utils'
+import calcShareWinnings from './calcShareWinnings'
 
 const calculateProfit = (share) => {
   if (share.resolved) {

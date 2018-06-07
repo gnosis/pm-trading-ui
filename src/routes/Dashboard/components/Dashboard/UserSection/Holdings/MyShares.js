@@ -1,26 +1,29 @@
 import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import className from 'classnames/bind'
 import OutcomeColorBox from 'components/Outcome/OutcomeColorBox'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { weiToEth } from 'utils/helpers'
+import ShareRecord from 'store/models/share'
 
-import { MARKET_STAGES } from 'store/models/market'
-
-import style from './MyShares.mod.scss'
+import style from './style.mod.scss'
 
 const cx = className.bind(style)
 
-const Share = ({ share }) => {
+const Share = ({ share, redeemWinnings }) => {
   const showSellLink = !share.market.closed && !share.market.resolved
   const showRedeemLink = share.market.resolved
 
   return (
-    <div className={cx('share')}>
-      <Link className={cx('title')} to={`/markets/${share.market.address}`}>
-        {share.marketTitle}
-      </Link>
+    <div className={cx('share', 'category')}>
+      <div className={cx('row')}>
+        <Link className={cx('title', 'col-md-12')} to={`/markets/${share.market.address}`} title={share.marketTitle}>
+          {share.marketTitle}
+        </Link>
+      </div>
       <div className={cx('outcome', 'row')}>
         <div className={cx('outcomeBox', 'col-md-3')}>
           <OutcomeColorBox scheme={share.marketType} outcomeIndex={share.outcomeToken.index} />&nbsp;
@@ -35,17 +38,34 @@ const Share = ({ share }) => {
         </div>
         <div className={cx('shareAction', 'col-md-4')}>
           {showSellLink && <Link to={`/markets/${share.market.address}/my-shares/${share.id}`}>SELL</Link>}
-          {showRedeemLink && <Link to={`/markets/${share.market.address}/my-shares`}>REDEEM WINNINGS</Link>}
+          {showRedeemLink && <button className="btn btn-link" type="button" onClick={() => redeemWinnings(share.market)}>REDEEM WINNINGS</button>}
         </div>
       </div>
     </div>
   )
 }
-const MyShares = ({ shares }) => (
-  <div className={cx('shares')}>
-    <h2>My Tokens</h2>
-    {shares.map(share => <Share key={share.id} share={share} />)}
+
+Share.propTypes = {
+  share: ImmutablePropTypes.recordOf(ShareRecord).isRequired,
+  redeemWinnings: PropTypes.func.isRequired,
+}
+
+const MyShares = ({ shares, redeemWinnings }) => (
+  <div className={cx('shares', 'category')}>
+    <h2 className={cx('title')}>My Tokens</h2>
+    {shares.size ? (
+      shares.map(share => <Share key={share.id} share={share} redeemWinnings={redeemWinnings} />)
+    ) : (
+      <div className={cx('no-shares')}>
+        You don&apos;t have any tokens yet.
+      </div>
+    )}
   </div>
 )
+
+MyShares.propTypes = {
+  shares: ImmutablePropTypes.listOf(ImmutablePropTypes.recordOf(ShareRecord)).isRequired,
+  redeemWinnings: PropTypes.func.isRequired,
+}
 
 export default MyShares

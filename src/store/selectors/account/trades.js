@@ -1,6 +1,5 @@
 import { List } from 'immutable'
 import { createSelector } from 'reselect'
-import Decimal from 'decimal.js'
 import { getCollateralToken } from 'store/selectors/blockchain'
 
 const tradesWithMarketsSelector = createSelector(
