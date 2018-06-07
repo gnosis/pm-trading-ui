@@ -77,8 +77,10 @@ class MarketBuySharesForm extends Component {
 
     let balance = currentBalance
 
-    if (collateralTokenSymbol !== 'WETH') {
+    if (!/^(WETH|ETH|W-ETH)$/.test(collateralTokenSymbol)) {
       balance = collateralTokenBalance.div(1e18)
+    } else {
+      balance = Decimal(balance).add(collateralTokenBalance.div(1e18))
     }
 
     if (decimalValue.gt(balance)) {
