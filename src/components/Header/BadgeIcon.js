@@ -1,12 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from 'rc-tooltip'
-
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import Icon from 'components/Icon'
+import { UserRecord } from 'routes/Scoreboard/store'
 import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 
-const BadgeIcon = ({ userTournamentInfo: { predictions = 0 } }) => {
-  const badge = badgeOf(predictions)
+const BadgeIcon = ({ userTournamentInfo }) => {
+  let predictionsAmount = 0
+
+  if (userTournamentInfo) {
+    predictionsAmount = userTournamentInfo.predictions
+  }
+
+  const badge = badgeOf(predictionsAmount)
 
   if (!badge) {
     return null
@@ -20,13 +27,11 @@ const BadgeIcon = ({ userTournamentInfo: { predictions = 0 } }) => {
 }
 
 BadgeIcon.propTypes = {
-  userTournamentInfo: PropTypes.shape({
-    predictions: PropTypes.number,
-  }),
+  userTournamentInfo: ImmutablePropTypes.record,
 }
 
 BadgeIcon.defaultProps = {
-  userTournamentInfo: {},
+  userTournamentInfo: new UserRecord(),
 }
 
 export default BadgeIcon

@@ -16,7 +16,7 @@ import ProviderIcon from './ProviderIcon'
 import BadgeIcon from './BadgeIcon'
 import MenuAccountDropdown from './MenuAccountDropdown'
 
-import css from './Header.scss'
+import css from './Header.mod.scss'
 
 const cx = className.bind(css)
 
@@ -32,19 +32,24 @@ const useUport = defaultProvider === WALLET_PROVIDER.UPORT
 
 class Header extends Component {
   componentDidMount() {
-    if (requireRegistration && this.props.currentAccount) {
+    const { currentAccount } = this.props
+
+    if (requireRegistration && currentAccount) {
       this.props.requestMainnetAddress()
     }
 
-    if (this.props.currentAccount) {
-      this.props.requestTokenBalance(this.props.currentAccount)
+    if (currentAccount) {
+      this.props.requestTokenBalance(currentAccount)
+
+      if (tournamentEnabled) {
+        this.props.fetchTournamentUserData(currentAccount)
+      }
     }
   }
 
   componentDidUpdate(prevProps) {
     // If user unlocks metamask, changes his account, we need to check if the account was registered
-    const shouldRequestMainnetAddress =
-    requireRegistration && this.props.currentAccount !== prevProps.currentAccount
+    const shouldRequestMainnetAddress = requireRegistration && this.props.currentAccount !== prevProps.currentAccount
     if (shouldRequestMainnetAddress) {
       this.props.requestMainnetAddress()
     }
@@ -119,18 +124,18 @@ class Header extends Component {
 
       if (gameGuideType === 'link') {
         gameGuideLink = (
-          <a href={gameGuideURL} className={cx('navLink')} target="_blank">
+          <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
             Game Guide
           </a>
         )
       }
     }
 
-    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && currentProvider
+    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && !!currentProvider
 
     return (
       <div className={cx('headerContainer')}>
-        <div className={cx('container')}>
+        <div className={cx('container', 'containerFlex')}>
           <div className={cx('group', 'logo')}>
             <NavLink to="/markets/list">
               <div className={cx('headerLogo', 'beta')} style={logoVars} />
@@ -146,11 +151,6 @@ class Header extends Component {
             <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
               Markets
             </NavLink>
-            {canInteract && (
-              <NavLink to="/transactions" activeClassName={cx('active')} className={cx('navLink')}>
-                Transactions
-              </NavLink>
-            )}
             {showScoreboard && (
               <NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink')}>
                 Scoreboard
@@ -162,11 +162,12 @@ class Header extends Component {
           <div className={cx('group', 'right')}>
             {canInteract ? (
               <div className={cx('account')}>
-                {currentNetwork && currentNetwork !== 'MAIN' && (
+                {currentNetwork &&
+                  currentNetwork !== 'MAIN' && (
                   <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
                 )}
-                <DecimalValue value={tokenBalance} className={cx('balance', 'test')} />&nbsp;
-                {tokenAddress ? <CurrencyName className={cx('account', 'text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
+                <DecimalValue value={tokenBalance} className={cx('text')} />&nbsp;
+                {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
@@ -206,6 +207,7 @@ Header.propTypes = {
   initUport: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   acceptedTOS: PropTypes.bool,
+  fetchTournamentUserData: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {

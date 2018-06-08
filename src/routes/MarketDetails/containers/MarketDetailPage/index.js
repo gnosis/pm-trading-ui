@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
 import { replace } from 'react-router-redux'
-import { requestGasPrice, requestTokenSymbol } from 'actions/blockchain'
+import { requestGasPrice, requestTokenSymbol } from 'store/actions/blockchain'
 import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
-import { redeemWinnings } from 'actions/market'
+import { redeemWinnings } from 'store/actions/market'
 import {
   buyMarketShares,
   sellMarketShares,
@@ -14,7 +14,7 @@ import {
   requestMarket,
   requestGasCost,
 } from 'routes/MarketDetails/store/actions'
-import { getMarketById } from 'selectors/market'
+import { getMarketById } from 'store/selectors/market'
 import {
   getMarketGraph,
   getMarketTradesForAccount,
@@ -31,7 +31,7 @@ import {
   getRegisteredMainnetAddress,
 } from 'integrations/store/selectors'
 import { isModerator, getModerators } from 'utils/helpers'
-import { getTokenSymbol } from 'selectors/blockchain'
+import { getTokenSymbol, getTokenAmount } from 'store/selectors/blockchain'
 
 let marketId
 
@@ -71,6 +71,7 @@ const mapStateToProps = (state, ownProps) => {
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
     currentBalance: getCurrentBalance(state),
+    collateralTokenBalance: getTokenAmount(state, market.event?.collateralToken),
     collateralTokenSymbol: getTokenSymbol(state, market.event?.collateralToken),
     mainnetAddress: getRegisteredMainnetAddress(state),
   }

@@ -4,7 +4,7 @@ import { hexWithoutPrefix } from 'utils/helpers'
 import { getConfiguration } from 'utils/features'
 import { OUTCOME_TYPES } from 'utils/constants'
 import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
-import { getCollateralToken } from 'selectors/blockchain'
+import { getCollateralToken } from 'store/selectors/blockchain'
 import addMarkets from './addMarkets'
 
 const config = getConfiguration()

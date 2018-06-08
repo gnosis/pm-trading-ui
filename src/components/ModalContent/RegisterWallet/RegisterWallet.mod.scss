@@ -10,7 +10,6 @@
 
   .registerContainer {
     width: 520px;
-    height: 410px;
     border-radius: 9px;
     background-color: #ffffff;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
@@ -30,10 +29,20 @@
       margin: 15px 0 10px 0;
     }
 
-    .checkBox {
-      margin: 10px 0;
-      input {
-        border: 1px solid #09697b;
+    .checkBoxContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .checkBox {
+        margin: 2px 0;
+        input {
+          border: 1px solid #09697b;
+        }
+
+        &:last-child {
+          margin-bottom: 25px;
+        }
       }
     }
 
@@ -82,6 +91,10 @@
       .walletBalance {
         color: #333;
       }
+    }
+
+    .actionButton {
+      margin-bottom: 25px;
     }
   }
 

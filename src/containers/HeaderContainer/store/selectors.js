@@ -16,7 +16,7 @@ import {
   getFeatureConfig,
 } from 'utils/features'
 
-import { getCollateralToken } from 'selectors/blockchain'
+import { getCollateralToken } from 'store/selectors/blockchain'
 
 import { meSelector } from 'routes/Scoreboard/store/selectors'
 

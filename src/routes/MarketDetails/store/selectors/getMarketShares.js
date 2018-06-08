@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect'
-import { getEvents } from 'selectors/event'
-import { getOracles } from 'selectors/oracle'
-import { getEventDescriptions } from 'selectors/eventDescription'
-import { eventSharesSelector, enhanceShares } from 'selectors/marketShares'
+import { getEvents } from 'store/selectors/event'
+import { getOracles } from 'store/selectors/oracle'
+import { getEventDescriptions } from 'store/selectors/eventDescription'
+import { eventSharesSelector, enhanceShares } from 'store/selectors/marketShares'
 import { getCurrentAccount } from 'integrations/store/selectors'
 import { hexWithPrefix } from 'utils/helpers'
 

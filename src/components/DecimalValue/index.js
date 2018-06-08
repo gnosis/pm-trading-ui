@@ -36,9 +36,14 @@ const decimalJsTest = (props, propName, componentName) => {
 }
 
 DecimalValue.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.string, decimalJsTest]),
+  value: PropTypes.oneOfType([PropTypes.string, decimalJsTest]).isRequired,
   decimals: PropTypes.number,
   className: PropTypes.string,
+}
+
+DecimalValue.defaultProps = {
+  decimals: 4,
+  className: '',
 }
 
 export default DecimalValue
