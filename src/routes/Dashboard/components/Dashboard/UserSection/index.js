@@ -10,7 +10,7 @@ import TradeRecord from 'store/models/trade'
 
 import style from './UserSection.mod.scss'
 
-import { MyShares, MyTrades } from './Holdings'
+import Holdings, { Share, Trade } from './Holdings'
 import Category from './Category'
 
 const cx = classname.bind(style)
@@ -22,10 +22,10 @@ const UserSection = ({
     <div className={cx('container')}>
       <div className={cx('row')}>
         <Category className={cx('col-md-6')} isLoading={sharesStatus === REQUEST_STATES.LOADING}>
-          <MyShares shares={myShares} {...props} />
+          <Holdings holdings={myShares} component={Share} {...props} />
         </Category>
         <Category className={cx('col-md-6')} isLoading={tradesStatus === REQUEST_STATES.LOADING}>
-          <MyTrades trades={myTrades} {...props} />
+          <Holdings holdings={myTrades} component={Trade} {...props} />
         </Category>
       </div>
     </div>
