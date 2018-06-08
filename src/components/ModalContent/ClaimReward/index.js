@@ -1,7 +1,6 @@
 import React from 'react'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
-import { compose, lifecycle, withState } from 'recompose'
 import { Link, withRouter } from 'react-router-dom'
 import Decimal from 'decimal.js'
 
@@ -38,9 +37,9 @@ class ClaimReward extends React.Component {
       await this.props.claimUserRewards()
       await this.setState({ claimState: 'success' })
     } catch (e) {
+      await this.setState({ claimState: 'error' })
       console.error(e)
     }
-    await this.setState({ claimState: 'error' })
   }
 
   render() {
@@ -54,9 +53,7 @@ class ClaimReward extends React.Component {
       rewardValue,
     } = this.props
 
-    const {
-      claimState,
-    } = this.state
+    const { claimState } = this.state
 
     const targetNetwork = ETHEREUM_NETWORK_IDS[rewardToken.networkId]
     const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardToken.networkId)
@@ -89,9 +86,7 @@ class ClaimReward extends React.Component {
     } else if (claimState === 'error') {
       claimButton = (
         <Tooltip overlay="Unfortunately, the transaction failed. Please try again or contact our support for further assistance.">
-          <button className={cx('btn', 'btn-primary', 'claim')}>
-            CLAIM
-          </button>
+          <button className={cx('btn', 'btn-primary', 'claim')}>CLAIM</button>
         </Tooltip>
       )
     } else if (!canClaim) {
@@ -120,9 +115,9 @@ class ClaimReward extends React.Component {
             <span className={cx('rewardInfo')}>
               {rewardValue} {rewardToken.symbol}
             </span>{' '}
-            tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in your
-            MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request. More
-            information in{' '}
+            tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in
+            your MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request.
+            More information in{' '}
             <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
               FAQ
             </Link>.
