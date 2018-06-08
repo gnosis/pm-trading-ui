@@ -3,18 +3,6 @@
 .marketList {
   min-height: 200px;
   margin-bottom: 30px;
-
-  .list {
-    min-height: inherit;
-
-    &.loading {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-
   >.title {
     margin: 0 0 12px 0;
     font-size: 12px;

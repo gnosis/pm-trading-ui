@@ -6,7 +6,7 @@ import { marketRecordListShape } from 'utils/shapes'
 import Spinner from 'components/Spinner/Indefinite'
 import { NoMarket } from './Market'
 
-import style from './Category.mod.scss'
+import style from './ConditionalList.mod.scss'
 
 const cx = classnames.bind(style)
 
@@ -45,3 +45,5 @@ ConditionalList.propTypes = {
 ConditionalList.defaultProps = {
   markets: undefined,
 }
+
+export default ConditionalList

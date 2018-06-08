@@ -22,10 +22,10 @@ const UserSection = ({
     <div className={cx('container')}>
       <div className={cx('row')}>
         <Category className={cx('col-md-6')} isLoading={sharesStatus === REQUEST_STATES.LOADING}>
-          <Holdings holdings={myShares} component={Share} {...props} />
+          <Holdings title="My Tokens" holdings={myShares} component={Share} {...props} />
         </Category>
         <Category className={cx('col-md-6')} isLoading={tradesStatus === REQUEST_STATES.LOADING}>
-          <Holdings holdings={myTrades} component={Trade} {...props} />
+          <Holdings title="My Trades" holdings={myTrades} component={Trade} {...props} />
         </Category>
       </div>
     </div>
