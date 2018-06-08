@@ -53,7 +53,7 @@ const extractTrade = (payload) => {
     id,
     date: moment.utc(date),
     collateralTokenAddress,
-    eventAddress: hexWithoutPrefix(selectedOutcomeToken.event),
+    eventAddress: selectedOutcomeToken.event,
     outcomeToken: outcomes.get(selectedOutcomeToken.index),
     price,
     marketTitle,

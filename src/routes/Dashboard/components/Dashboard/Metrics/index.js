@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import classnames from 'classnames/bind'
 
-import outstandingPredictionsIconSrc from 'routes/Dashboard/assets/icon_outstandingPredictions.svg'
-import etherTokensIconSrc from 'routes/Dashboard/assets/icon_etherTokens.svg'
+import outstandingPredictionsIcon from 'routes/Dashboard/assets/icon_outstandingPredictions.svg'
+import etherTokensIcon from 'routes/Dashboard/assets/icon_etherTokens.svg'
 
 import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
@@ -18,11 +18,11 @@ const cx = classnames.bind(style)
 const Metrics = ({ collateralToken = {}, predictedProfits }) => (
   <div className={cx('metrics')}>
     <div className={cx('container')}>
-      <Metric isLoading={collateralToken.symbol === '/'} src={etherTokensIconSrc} explanation={`${collateralToken.symbol} tokens`}>
+      <Metric isLoading={collateralToken.symbol === '/'} src={etherTokensIcon} explanation={`${collateralToken.symbol} tokens`}>
         <DecimalValue value={collateralToken.balance} className={cx('metric-value')} />&nbsp;
         <CurrencyName tokenAddress={collateralToken.address} />
       </Metric>
-      <Metric isLoading={typeof predictedProfits === 'undefined'} src={outstandingPredictionsIconSrc} explanation="Predicted Profits">
+      <Metric isLoading={typeof predictedProfits === 'undefined'} src={outstandingPredictionsIcon} explanation="Predicted Profits">
         <DecimalValue value={weiToEth(predictedProfits)} className={cx('metric-value')} />&nbsp;
         <CurrencyName tokenAddress={collateralToken.address} />
       </Metric>
@@ -44,7 +44,7 @@ Metrics.defaultProps = {
     amount: '0',
     symbol: 'N/A',
     address: undefined,
-    icon: etherTokensIconSrc,
+    icon: etherTokensIcon,
   },
   predictedProfits: undefined,
 }

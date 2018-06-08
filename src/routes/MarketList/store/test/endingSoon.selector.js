@@ -1,7 +1,6 @@
 import moment from 'moment'
 import { List } from 'immutable'
 import { MARKET_STAGES } from 'store/models'
-import { REDUCER_ID } from 'store/reducers/market'
 import { endingSoonMarketSelector } from '../selectors'
 import aMarket from './builder/index.builder'
 
@@ -30,7 +29,7 @@ const endingSoonTests = () => {
         .get()
 
       const markets = List([aEndingSoonMarket, aClosedMarketViaStage, anExpiredMarket])
-      const reduxStore = { [REDUCER_ID]: markets }
+      const reduxStore = { marketList: markets }
 
       // WHEN
       const endingSoonMarkets = endingSoonMarketSelector(reduxStore)
@@ -48,7 +47,7 @@ const endingSoonTests = () => {
         .get()
 
       const markets = List([aClosedMarket])
-      const reduxStore = { [REDUCER_ID]: markets }
+      const reduxStore = { marketList: markets }
 
       // WHEN
       const endingSoonMarkets = endingSoonMarketSelector(reduxStore)
@@ -60,7 +59,7 @@ const endingSoonTests = () => {
     it('should return 0 ending soon markets if there is no ending soon markets loaded in store', () => {
       // GIVEN
       const markets = List([])
-      const reduxStore = { [REDUCER_ID]: markets }
+      const reduxStore = { marketList: markets }
 
       // WHEN
       const endingSoonMarkets = endingSoonMarketSelector(reduxStore)

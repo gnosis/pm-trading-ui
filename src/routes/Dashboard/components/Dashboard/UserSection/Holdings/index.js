@@ -1,4 +1,5 @@
 import React from 'react'
+import { List } from 'immutable'
 import PropTypes from 'prop-types'
 import classnames from 'classnames/bind'
 
@@ -17,13 +18,13 @@ const Holdings = ({
 
 Holdings.propTypes = {
   component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
-  holdings: PropTypes.arrayOf(PropTypes.object),
+  holdings: PropTypes.instanceOf(List),
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   keyParam: PropTypes.string,
 }
 
 Holdings.defaultProps = {
-  holdings: [],
+  holdings: List(),
   title: '/',
   keyParam: 'id',
 }

@@ -1,13 +1,14 @@
 import { List } from 'immutable'
 import { createSelector } from 'reselect'
 import { getCollateralToken } from 'store/selectors/blockchain'
+import { normalizeHex } from 'utils/helpers'
 
 const tradesWithMarketsSelector = createSelector(
   state => state.marketList,
   state => state.marketTrades,
   (marketList, marketTrades) => (
     marketTrades.map((marketTrade) => {
-      const tradesMarket = marketList.find(market => market.eventAddress === marketTrade.eventAddress)
+      const tradesMarket = marketList.find(market => normalizeHex(market.eventAddress) === normalizeHex(marketTrade.eventAddress))
       return marketTrade.set('market', tradesMarket)
     })
   ),

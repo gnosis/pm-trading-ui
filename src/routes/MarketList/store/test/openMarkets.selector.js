@@ -1,7 +1,6 @@
 import moment from 'moment'
 import { List } from 'immutable'
 import { MARKET_STAGES } from 'store/models'
-import { REDUCER_ID } from 'store/reducers/market'
 import { openMarketSelector } from '../selectors'
 import aMarket from './builder/index.builder'
 
@@ -32,7 +31,7 @@ const openMarketTests = () => {
         .get()
 
       const markets = List([aClosedMarketViaResolution, aClosedMarketViaStage, aClosedMarketViaResolved, anOpenMarket])
-      const reduxStore = { [REDUCER_ID]: markets }
+      const reduxStore = { marketList: markets }
 
       // WHEN
       const openMarkets = openMarketSelector(reduxStore)
@@ -50,7 +49,7 @@ const openMarketTests = () => {
         .get()
 
       const markets = List([aClosedMarket])
-      const reduxStore = { [REDUCER_ID]: markets }
+      const reduxStore = { marketList: markets }
 
       // WHEN
       const openMarkets = openMarketSelector(reduxStore)
@@ -69,7 +68,7 @@ const openMarketTests = () => {
         .get()
 
       const markets = List([aClosedMarket])
-      const reduxStore = { [REDUCER_ID]: markets }
+      const reduxStore = { marketList: markets }
 
       // WHEN
       const openMarkets = openMarketSelector(reduxStore)
@@ -81,7 +80,7 @@ const openMarketTests = () => {
     it('should return 0 open markets if there is no open markets loaded in store', () => {
       // GIVEN
       const markets = List([])
-      const reduxStore = { [REDUCER_ID]: markets }
+      const reduxStore = { marketList: markets }
 
       // WHEN
       const openMarkets = openMarketSelector(reduxStore)

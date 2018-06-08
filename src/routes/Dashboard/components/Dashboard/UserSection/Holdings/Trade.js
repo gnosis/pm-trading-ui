@@ -52,7 +52,7 @@ const Trade = ({
 Trade.propTypes = {
   marketTitle: PropTypes.string.isRequired,
   marketType: PropTypes.string.isRequired,
-  market: marketRecordShape.isRequired,
+  market: PropTypes.object.isRequired,
   date: PropTypes.instanceOf(moment).isRequired,
   orderType: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
