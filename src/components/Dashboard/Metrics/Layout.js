@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import classNames from 'classnames/bind'
@@ -7,6 +8,7 @@ import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
 import { isFeatureEnabled } from 'utils/features'
 import * as css from './index.css'
+import selector from './selector'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 
@@ -81,7 +83,7 @@ Metrics.propTypes = {
     maxPredictions: PropTypes.number,
     minPredictions: PropTypes.number,
     rank: PropTypes.string,
-  }).isRequired,
+  }),
 }
 
 Metrics.defaultProps = {
@@ -90,6 +92,7 @@ Metrics.defaultProps = {
   tokenSymbol: 'UNKNOWN',
   tokenIcon: etherTokens,
   rank: '',
+  badge: {},
 }
 
-export default Metrics
+export default connect(selector)(Metrics)
