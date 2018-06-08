@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 import { getActiveProvider, getCurrentAccount } from 'integrations/store/selectors'
+import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 
 const tournamentUsersSelectorAsList = (state) => {
   if (!state.tournament) {
@@ -45,3 +46,7 @@ export const meSelector = createSelector(
   getCurrentAccount,
   (users, account) => (users ? users.find(user => user.account === account) : undefined),
 )
+
+export const rankSelector = createSelector(meSelector, account => (account ? account.currentRank : undefined))
+
+export const badgeSelector = createSelector(meSelector, account => badgeOf(account ? account.predictions : undefined))

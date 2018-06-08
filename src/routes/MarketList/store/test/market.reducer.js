@@ -1,9 +1,9 @@
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { List } from 'immutable'
-import marketReducer, { REDUCER_ID } from 'store/reducers/market'
+import marketReducer from 'store/reducers/market'
 import blockchainReducer from 'store/reducers/blockchain'
-import { processMarketResponse } from '../actions/fetchMarkets'
+import { processMarketResponse } from 'store/actions/market/fetchMarkets'
 import { marketListSelector } from '../selectors'
 import { oneMarketData, twoMarketData, realData, MarketFactory } from './builder/index.builder'
 
@@ -12,7 +12,7 @@ const marketReducerTests = () => {
     let store
     beforeEach(() => {
       const reducers = combineReducers({
-        [REDUCER_ID]: marketReducer,
+        marketList: marketReducer,
         blockchain: blockchainReducer,
       })
       const middlewares = [

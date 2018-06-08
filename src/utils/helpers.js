@@ -2,7 +2,8 @@ import { mapValues, startsWith, isArray, range } from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
 import moment from 'moment'
-import { HEX_VALUE_REGEX, OUTCOME_TYPES, MARKET_STAGES } from 'utils/constants'
+import { HEX_VALUE_REGEX, OUTCOME_TYPES, REQUEST_STATES } from 'utils/constants'
+import { MARKET_STAGES } from 'store/models/market'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
 import { getConfiguration } from 'utils/features'
@@ -22,6 +23,8 @@ export const add0xPrefix = value => (startsWith(value, '0x') ? value : `0x${valu
 export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix(value) : value)
 
 export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
+
+export const normalizeHex = value => hexWithPrefix(value).toLowerCase()
 
 export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
 
@@ -200,4 +203,15 @@ export const generateWalletName = (account) => {
   const accountAddressNormalized = hexWithPrefix(account).toLowerCase()
 
   return generateDeterministicRandomName(accountAddressNormalized)
+}
+
+export const setRequestStateWrap = async (setRequestState, asyncAction, context, ...params) => {
+  setRequestState(REQUEST_STATES.LOADING)
+  try {
+    await asyncAction.apply(context, params)
+    setRequestState(REQUEST_STATES.SUCCESS)
+  } catch (e) {
+    console.error(e)
+    setRequestState(REQUEST_STATES.ERROR)
+  }
 }

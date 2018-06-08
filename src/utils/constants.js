@@ -84,3 +84,10 @@ export const TRANSACTION_DESCRIPTIONS = {
 }
 
 export const LIMIT_MARGIN = getConstant('LIMIT_MARGIN') || '5'
+
+export const REQUEST_STATES = {
+  UNKNOWN: 'UNKNOWN',
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS',
+  LOADING: 'LOADING',
+}
