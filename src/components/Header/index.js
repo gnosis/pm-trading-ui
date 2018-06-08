@@ -124,7 +124,7 @@ class Header extends Component {
 
       if (gameGuideType === 'link') {
         gameGuideLink = (
-          <a href={gameGuideURL} className={cx('navLink')} target="_blank">
+          <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
             Game Guide
           </a>
         )
