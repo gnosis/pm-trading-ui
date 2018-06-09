@@ -44,7 +44,10 @@ export const tournamentMainnetRegistryAddress = (state) => {
 export const meSelector = createSelector(
   tournamentUsersSelectorAsList,
   getCurrentAccount,
-  (users, account) => (users ? users.find(user => user.account === account) : undefined),
+  (users, account) => {
+    console.log(users, account)
+    return (users ? users.find(user => user.account === account) : undefined)
+  },
 )
 
 export const rankSelector = createSelector(meSelector, account => (account ? account.currentRank : undefined))
