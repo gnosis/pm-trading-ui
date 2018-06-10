@@ -43,10 +43,16 @@ const Metrics = ({
       </Metric>
       {tournamentEnabled && (
         <React.Fragment>
-          <Metric src={arrows} explanation="YOUR RANK">
+          <Metric isLoading={typeof rank === 'undefined'} src={arrows} explanation="YOUR RANK">
             <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
           </Metric>
-          <Metric src={badge.icon} width={47} height={42} explanation="BADGE">
+          <Metric
+            isLoading={typeof badge.icon === 'undefined'}
+            src={badge.icon}
+            width={47}
+            height={42}
+            explanation="BADGE"
+          >
             <Block className={cx('badgeTitle')}>{badge.rank}</Block>
           </Metric>
         </React.Fragment>
