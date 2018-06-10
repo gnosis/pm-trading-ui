@@ -3,15 +3,11 @@ import { getActiveProvider, getCurrentAccount } from 'integrations/store/selecto
 import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 
 const tournamentUsersSelectorAsList = (state) => {
-  if (!state.tournament) {
+  if (!state.users) {
     return undefined
   }
 
-  if (!state.tournament.ranking) {
-    return undefined
-  }
-
-  return state.tournament.ranking.toList()
+  return state.users.toList()
 }
 
 export const firstTournamentUsersSelectorAsList = createSelector(
@@ -44,10 +40,7 @@ export const tournamentMainnetRegistryAddress = (state) => {
 export const meSelector = createSelector(
   tournamentUsersSelectorAsList,
   getCurrentAccount,
-  (users, account) => {
-    console.log(users, account)
-    return (users ? users.find(user => user.account === account) : undefined)
-  },
+  (users, account) => (users ? users.find(user => user.account === account) : undefined),
 )
 
 export const rankSelector = createSelector(meSelector, account => (account ? account.currentRank : undefined))

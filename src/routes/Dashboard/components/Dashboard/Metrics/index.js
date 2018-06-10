@@ -47,7 +47,7 @@ const Metrics = ({
             <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
           </Metric>
           <Metric src={badge.icon} width={47} height={42} explanation="BADGE">
-            <Block className={cx('ol-db-title', 'ol-db-title-badge')}>{badge.rank}</Block>
+            <Block className={cx('badgeTitle')}>{badge.rank}</Block>
           </Metric>
         </React.Fragment>
       )}

@@ -38,7 +38,7 @@ const Dashboard = ({
   collateralToken,
   predictedProfits,
   redeemWinnings,
-  userTournamentData: { predictions, rank },
+  userTournamentData: { predictions, currentRank },
 }) => (
   <div className={cx('dashboard')}>
     <Title />
@@ -46,7 +46,7 @@ const Dashboard = ({
       collateralToken={collateralToken}
       predictedProfits={predictedProfits}
       badge={badgeOf(predictions)}
-      rank={rank}
+      rank={currentRank}
     />
     <Markets
       newestMarkets={marketState === REQUEST_STATES.SUCCESS ? newestMarkets : undefined}
@@ -112,15 +112,17 @@ const enhancer = compose(
     },
 
     async componentDidMount() {
-      await Promise.all([
-        setRequestStateWrap(this.props.setMarketState, this.props.fetchMarkets, this),
-        setRequestStateWrap(
+      const requests = [setRequestStateWrap(this.props.setMarketState, this.props.fetchMarkets, this)]
+
+      if (tournamentEnabled) {
+        requests.push(setRequestStateWrap(
           this.props.setTournamentUserDataState,
           this.props.fetchTournamentUserData,
           this,
           this.props.currentAccount,
-        ),
-      ])
+        ))
+      }
+      await Promise.all(requests)
     },
   }),
 )

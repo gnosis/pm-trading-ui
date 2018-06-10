@@ -6,6 +6,7 @@ import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
+import { List } from 'immutable'
 import { getProviderConfig, isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
@@ -93,7 +94,7 @@ Layout.propTypes = {
 }
 
 Layout.defaultProps = {
-  data: [],
+  data: List(),
   myAccount: '',
   mainnetAddress: undefined,
   rank: '',
