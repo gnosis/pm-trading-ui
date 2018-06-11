@@ -12,6 +12,11 @@ styles:
   media: true
   tables: true
 scripts: false
+styleLoaders:
+- style-loader
+- css-loader?sourceMap
+- postcss-loader?sourceMap
+- sass-loader?sourceMap
 bootstrapVersion: 3
 env:
   production:
@@ -20,3 +25,10 @@ env:
     - css-loader
     - postcss-loader
     - sass-loader
+  development:
+    styleLoaders:
+    - style-loader
+    - css-loader?sourceMap
+    - postcss-loader?sourceMap
+    - sass-loader?sourceMap
+  

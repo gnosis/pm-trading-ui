@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
-import moment from 'moment'
 import Hairline from 'components/layout/Hairline'
 import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
+import { List } from 'immutable'
 import { getProviderConfig, isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
@@ -21,7 +21,7 @@ const trophy = require('../assets/trophy.svg')
 const providerConfig = getProviderConfig()
 
 const rewardsEnabled = isFeatureEnabled('rewards')
-const { levels, claimReward: { claimStart, claimUntil } } = getFeatureConfig('rewards')
+const { levels } = getFeatureConfig('rewards')
 
 const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
 
@@ -43,12 +43,8 @@ class Layout extends React.PureComponent {
     })
 
     const showRewardInfo =
-    rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
-    const showRewardClaim =
-      moment.utc().isBetween(claimStart, claimUntil) &&
-      providerConfig.default === WALLET_PROVIDER.METAMASK &&
-      !!mainnetAddress &&
-      rewardValue > 0
+      rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    const showRewardClaim = rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK && !!mainnetAddress
 
     return (
       <Block>
@@ -98,7 +94,7 @@ Layout.propTypes = {
 }
 
 Layout.defaultProps = {
-  data: [],
+  data: List(),
   myAccount: '',
   mainnetAddress: undefined,
   rank: '',

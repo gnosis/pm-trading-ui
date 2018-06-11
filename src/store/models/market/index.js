@@ -15,6 +15,7 @@ export const BoundsRecord = Record({
 
 export const OutcomeRecord = Record({
   name: undefined, // string
+  index: undefined, // int
   marginalPrice: undefined, // decimal
   outcomeTokensSold: undefined, // int
 }, 'Outcome')

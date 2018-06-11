@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
-import { getMarkets } from 'selectors/market'
-import { getTradesForAccount, enhanceAndSortTrades } from 'selectors/marketTrades'
+import { getMarkets } from 'store/selectors/market'
+import { getTradesForAccount, enhanceAndSortTrades } from 'store/selectors/marketTrades'
 import { hexWithPrefix } from 'utils/helpers'
 
 export const eventMarketSelector = marketAddress => (state) => {

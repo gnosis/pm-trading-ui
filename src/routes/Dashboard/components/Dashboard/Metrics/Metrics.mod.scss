@@ -1,0 +1,36 @@
+.metrics {
+  width: 100%;
+  margin-bottom: 96px;
+
+  .metric {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 100px;
+
+    .img {
+      margin-right: 7px;
+    }
+
+    .panel {
+      font-size: 28px;
+      font-weight: 300;
+      color: #333;
+      font-family: Montserrat;
+      min-height: 32px;
+
+      .badgeTitle {
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 28px;
+      }
+    }
+
+    .explanation {
+      display: block;
+      font-size: 10px;
+      text-align: left;
+      color: #87949c;
+      text-transform: uppercase;
+    }
+  }
+}

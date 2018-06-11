@@ -1,0 +1,199 @@
+import { List } from 'immutable'
+import { requestFromRestAPI } from 'api/utils/fetch'
+import { hexWithoutPrefix } from 'utils/helpers'
+import { getConfiguration } from 'utils/features'
+import { OUTCOME_TYPES } from 'utils/constants'
+import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
+<<<<<<< HEAD:src/routes/MarketList/store/actions/fetchMarkets.js
+import { getCollateralToken } from 'selectors/blockchain'
+=======
+import { getCollateralToken } from 'store/selectors/blockchain'
+>>>>>>> 880cdf87dd6ecd864b76e64cd79ca45ff8867592:src/store/actions/market/fetchMarkets.js
+import addMarkets from './addMarkets'
+import { isMarketClosed } from 'store/utils/marketStatus'
+
+const config = getConfiguration()
+const whitelisted = config.whitelist || {}
+
+const addresses = Object.keys(whitelisted).map(hexWithoutPrefix)
+
+const buildOutcomesFrom = (outcomes, outcomeTokensSold, marginalPrices) => {
+  if (!outcomes) {
+    return List([])
+  }
+
+  const outcomesRecords = outcomes.map((outcome, index) =>
+    new OutcomeRecord({
+      name: outcome,
+<<<<<<< HEAD:src/routes/MarketList/store/actions/fetchMarkets.js
+=======
+      index,
+>>>>>>> 880cdf87dd6ecd864b76e64cd79ca45ff8867592:src/store/actions/market/fetchMarkets.js
+      marginalPrice: marginalPrices[index],
+      outcomeTokensSold: outcomeTokensSold[index],
+    }))
+
+  return List(outcomesRecords)
+}
+
+const buildBoundsFrom = (lower, upper, unit, decimals) =>
+  BoundsRecord({
+    lower,
+    upper,
+    unit,
+    decimals: parseInt(decimals, 10),
+  })
+
+const buildScalarMarket = (market) => {
+  const {
+    stage,
+    contract: { address, creationDate, creator },
+    tradingVolume,
+    funding,
+    netOutcomeTokensSold,
+    event: {
+      contract: {
+        address: eventAddress,
+      },
+      type,
+      collateralToken,
+      lowerBound,
+      upperBound,
+      isWinningOutcomeSet,
+      oracle: {
+        isOutcomeSet,
+        outcome,
+        eventDescription: {
+          title, description, resolutionDate, unit, decimals,
+        },
+      },
+    },
+  } = market
+
+  const outcomesResponse = ['SHORT', 'LONG']
+
+  const outcomes = buildOutcomesFrom(outcomesResponse, netOutcomeTokensSold, market.marginalPrices)
+  const bounds = buildBoundsFrom(lowerBound, upperBound, unit, decimals)
+
+  const resolved = isOutcomeSet || isWinningOutcomeSet
+  const closed = isMarketClosed(stage, resolutionDate, resolved)
+
+  const marketRecord = new ScalarMarketRecord({
+    title,
+    description,
+    creator,
+    collateralToken,
+    address,
+    stage,
+    type,
+    outcomes,
+    bounds,
+    eventAddress,
+    resolution: resolutionDate,
+    creation: creationDate,
+    volume: tradingVolume,
+<<<<<<< HEAD:src/routes/MarketList/store/actions/fetchMarkets.js
+    resolved: isOutcomeSet || isWinningOutcomeSet,
+=======
+    resolved,
+    closed,
+>>>>>>> 880cdf87dd6ecd864b76e64cd79ca45ff8867592:src/store/actions/market/fetchMarkets.js
+    winningOutcome: outcome,
+    funding: funding || 0,
+    outcomeTokensSold: List(netOutcomeTokensSold),
+  })
+
+  return marketRecord
+}
+
+const buildCategoricalMarket = (market) => {
+  const {
+    stage,
+    contract: { address, creationDate, creator },
+    tradingVolume,
+    funding,
+    netOutcomeTokensSold,
+    event: {
+      contract: {
+        address: eventAddress,
+      },
+      collateralToken,
+      isWinningOutcomeSet,
+      oracle: {
+        isOutcomeSet,
+        outcome: winningOutcomeIndex,
+        eventDescription: {
+          title, description, resolutionDate, outcomes: outcomeLabels,
+        },
+      },
+    },
+  } = market
+
+  const outcomes = buildOutcomesFrom(outcomeLabels, netOutcomeTokensSold, market.marginalPrices)
+
+  const resolved = isOutcomeSet || isWinningOutcomeSet
+  const closed = isMarketClosed(stage, resolutionDate, resolved)
+
+  const marketRecord = new CategoricalMarketRecord({
+    title,
+    description,
+    creator,
+    collateralToken,
+    address,
+    stage,
+    outcomes,
+    eventAddress,
+    resolution: resolutionDate,
+    creation: creationDate,
+    volume: tradingVolume,
+    resolved,
+    closed,
+    funding: funding || 0,
+    winningOutcome: outcomes.get(winningOutcomeIndex),
+    outcomeTokensSold: List(netOutcomeTokensSold),
+  })
+
+  return marketRecord
+}
+
+const builderFunctions = {
+  [OUTCOME_TYPES.CATEGORICAL]: buildCategoricalMarket,
+  [OUTCOME_TYPES.SCALAR]: buildScalarMarket,
+}
+
+export const extractMarkets = markets =>
+  markets.map((market) => {
+    const marketType = market.event.type
+
+    const builder = builderFunctions[marketType]
+
+    if (!builder) {
+      throw new Error(`No builder function associated with type '${marketType}'`)
+    }
+
+    return builder.call(builder, market)
+  })
+
+export const processMarketResponse = (dispatch, state, response) => {
+  if (!response || !response.results) {
+    dispatch(addMarkets([]))
+    return
+  }
+
+  const applicationCollateralToken = getCollateralToken(state)
+
+  let marketRecords = extractMarkets(response.results)
+
+  if (applicationCollateralToken.address) {
+    marketRecords = marketRecords.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(applicationCollateralToken.address))
+  }
+
+  dispatch(addMarkets(marketRecords))
+}
+
+export default () => async (dispatch, getState) => {
+  const response = await requestFromRestAPI('markets', { creator: addresses.join() })
+  const state = getState()
+
+  return processMarketResponse(dispatch, state, response)
+}

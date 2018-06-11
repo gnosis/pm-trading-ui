@@ -10,7 +10,7 @@
   "collateralToken":  {
     "source": "contract",
     "options": {
-      "contractName": "EtherToken",
+      "contractName": "etherToken",
       "symbol": "WETH",
       "icon": "/assets/img/icons/icon_etherTokens.svg"
     }
@@ -68,5 +68,10 @@
   "badges": {
     "enabled": false,
     "ranks": []
+  },
+  "constants": {
+    "LIMIT_MARGIN": 5,
+    "NOTIFICATION_TIMEOUT": 60000,
+    "LOWEST_VALUE": 0.001
   }
 }

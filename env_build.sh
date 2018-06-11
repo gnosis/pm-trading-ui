@@ -8,7 +8,7 @@ if [[ ${PROJECT} == "mainnet" ]]; then
   fi
 elif [[ ${PROJECT} == "olympia" ]]; then
   # olympia
-  if [[ ${TRAVIS_BRANCH} == "master" ]]; then
+  if [[ ${TRAVIS_BRANCH} == "master" ]] || [[ ${TRAVIS_BRANCH} == "olympia-qa" ]]; then
     export GNOSIS_ENV=olympia/staging;
     export NODE_ENV=production;
   else

@@ -2,7 +2,7 @@ import { createSelector } from 'reselect'
 import { normalizeScalarPoint, getOutcomeName } from 'utils/helpers'
 import { OUTCOME_TYPES } from 'utils/constants'
 
-import { getMarketTrades } from 'selectors/marketTrades'
+import { getMarketTrades } from 'store/selectors/marketTrades'
 
 const getFirstGraphPoint = (market) => {
   let firstPoint

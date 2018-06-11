@@ -24,3 +24,5 @@ export const isThirdPartyIntegrationEnabled = thirdPartyName =>
 
 export const getThirdPartyConfig = thirdPartyName =>
   (isThirdPartyIntegrationEnabled(thirdPartyName) ? config.thirdparty[thirdPartyName] : {})
+
+export const getConstant = constantName => configInterface.constants?.[constantName]

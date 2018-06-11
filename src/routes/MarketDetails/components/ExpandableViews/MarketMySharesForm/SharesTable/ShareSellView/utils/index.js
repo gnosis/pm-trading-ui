@@ -1,7 +1,7 @@
 import { calcLMSRMarginalPrice, calcLMSRProfit } from 'api'
 import Decimal from 'decimal.js'
 import { weiToEth } from 'utils/helpers'
-import { OUTCOME_TYPES, LIMIT_MARGIN_DEFAULT } from 'utils/constants'
+import { OUTCOME_TYPES, LIMIT_MARGIN } from 'utils/constants'
 import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
 
 /**
@@ -59,7 +59,7 @@ const calculateEarnings = (market, share, selectedSellAmount) => {
       outcomeTokenCount: selectedSellAmount,
       feeFactor: market.fee,
     })
-      .mul(new Decimal(100).sub(LIMIT_MARGIN_DEFAULT))
+      .mul(new Decimal(100).sub(LIMIT_MARGIN))
       .div(100))
   }
 

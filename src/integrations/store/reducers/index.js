@@ -12,10 +12,8 @@ export default handleActions(
     },
     [updateProvider]: (state, { payload }) => {
       const { provider: name, ...provider } = payload
-      const updatedProvider = ({ name, loaded: true, ...provider })
-      const currentProviderState = state.getIn(['providers', name])
-      const newProviderState = currentProviderState.merge(updatedProvider)
-      return state.setIn(['providers', name], newProviderState)
+      const updatedProvider = { name, loaded: true, ...provider }
+      return state.mergeIn(['providers', name], updatedProvider)
     },
     [setTermsAndConditionsStatus]: (state, { payload: docs }) => state.set('termsAndConditionsAccepted', List(docs)),
   },

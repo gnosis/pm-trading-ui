@@ -15,12 +15,16 @@ import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/M
 import Hairline from 'components/layout/Hairline'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { marketShape, marketShareShape } from 'utils/shapes'
-import { LIMIT_MARGIN_DEFAULT, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
+import { LIMIT_MARGIN, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
 import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
 import { calculateCurrentProbability, calculateEarnings, calculateNewProbability } from './utils'
 import style from './ShareSellView.mod.scss'
 
 const cx = cn.bind(style)
+
+const inputErrorStyle = {
+  whiteSpace: 'nowrap',
+}
 
 class ShareSellView extends Component {
   componentDidUpdate() {
@@ -34,24 +38,30 @@ class ShareSellView extends Component {
         .div(1e18)
         .toDP(4, 1)
         .toString()
-      initialize({ sellAmount: fullAmount, limitMargin: LIMIT_MARGIN_DEFAULT })
+      initialize({ sellAmount: fullAmount, limitMargin: LIMIT_MARGIN })
     }
   }
 
   @autobind
   validateTokenCount(val) {
-    const { share } = this.props
-    if (!val || !NUMBER_REGEXP.test(val)) {
+    const { share, market } = this.props
+    if (!val || !NUMBER_REGEXP.test(val) || Decimal(val).lt(1e-18)) {
       return 'Invalid amount'
     }
 
     const decimalValue = Decimal(val)
+    const earnings = calculateEarnings(market, share, web3.utils.toWei(val))
+
     if (decimalValue.lt(0)) {
       return "Number can't be negative."
     }
 
     if (decimalValue.gt(Decimal(share.balance).div(1e18))) {
       return "You're trying to sell more than you invested."
+    }
+
+    if (Decimal(0).eq(earnings)) {
+      return 'This transaction is not permitted because it will result in a loss of an outcome token.'
     }
 
     return undefined
@@ -141,6 +151,7 @@ class ShareSellView extends Component {
                     placeholder="Enter Token Amount"
                     className={cx('sharesSellAmount')}
                     validate={this.validateTokenCount}
+                    errorStyle={inputErrorStyle}
                   />
                 </div>
 
@@ -184,7 +195,7 @@ class ShareSellView extends Component {
                     name="limitMargin"
                     component={Slider}
                     className={cx('formSlider')}
-                    placeholder={LIMIT_MARGIN_DEFAULT}
+                    placeholder={LIMIT_MARGIN}
                     min={0}
                     max={5}
                     unit="%"

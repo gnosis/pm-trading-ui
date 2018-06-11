@@ -1,4 +1,4 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
@@ -51,47 +51,43 @@ module.exports = (env = {}) => {
         },
         {
           test: /\.mod\.(scss|css)$/,
-          use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  modules: true,
-                  localIdentName: '[name]__[local]__[hash:base64:5]',
-                  importLoaders: 2,
-                },
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                localIdentName: '[name]__[local]__[hash:base64:5]',
+                importLoaders: 2,
               },
-              {
-                loader: 'postcss-loader',
-              },
-              {
-                loader: 'sass-loader',
-                options: { includePaths: [path.resolve(__dirname, './src')] },
-              },
-            ],
-          }),
+            },
+            {
+              loader: 'postcss-loader',
+            },
+            {
+              loader: 'sass-loader',
+              options: { includePaths: [path.resolve(__dirname, './src')] },
+            },
+          ],
         },
         {
           test: /^((?!\.mod).)*\.(css|scss)$/,
-          use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  importLoaders: 2,
-                },
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 2,
               },
-              {
-                loader: 'postcss-loader',
-              },
-              {
-                loader: 'sass-loader',
-                options: { includePaths: [path.resolve(__dirname, './src')] },
-              },
-            ],
-          }),
+            },
+            {
+              loader: 'postcss-loader',
+            },
+            {
+              loader: 'sass-loader',
+              options: { includePaths: [path.resolve(__dirname, './src')] },
+            },
+          ],
         },
         {
           test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
@@ -104,7 +100,9 @@ module.exports = (env = {}) => {
       ],
     },
     plugins: [
-      new ExtractTextPlugin('styles.css'),
+      new MiniCssExtractPlugin({
+        filename: 'styles.css',
+      }),
       new FaviconsWebpackPlugin({
         logo: interfaceConfig.logo.favicon,
         // Generate a cache file with control hashes and
@@ -143,9 +141,7 @@ module.exports = (env = {}) => {
         },
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin([
-        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
-      ]),
+      new CopyWebpackPlugin([{ from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') }]),
     ],
   }
 }
