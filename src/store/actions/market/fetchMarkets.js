@@ -4,11 +4,7 @@ import { hexWithoutPrefix } from 'utils/helpers'
 import { getConfiguration } from 'utils/features'
 import { OUTCOME_TYPES } from 'utils/constants'
 import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
-<<<<<<< HEAD:src/routes/MarketList/store/actions/fetchMarkets.js
-import { getCollateralToken } from 'selectors/blockchain'
-=======
 import { getCollateralToken } from 'store/selectors/blockchain'
->>>>>>> 880cdf87dd6ecd864b76e64cd79ca45ff8867592:src/store/actions/market/fetchMarkets.js
 import addMarkets from './addMarkets'
 import { isMarketClosed } from 'store/utils/marketStatus'
 
@@ -25,10 +21,7 @@ const buildOutcomesFrom = (outcomes, outcomeTokensSold, marginalPrices) => {
   const outcomesRecords = outcomes.map((outcome, index) =>
     new OutcomeRecord({
       name: outcome,
-<<<<<<< HEAD:src/routes/MarketList/store/actions/fetchMarkets.js
-=======
       index,
->>>>>>> 880cdf87dd6ecd864b76e64cd79ca45ff8867592:src/store/actions/market/fetchMarkets.js
       marginalPrice: marginalPrices[index],
       outcomeTokensSold: outcomeTokensSold[index],
     }))
@@ -92,12 +85,8 @@ const buildScalarMarket = (market) => {
     resolution: resolutionDate,
     creation: creationDate,
     volume: tradingVolume,
-<<<<<<< HEAD:src/routes/MarketList/store/actions/fetchMarkets.js
-    resolved: isOutcomeSet || isWinningOutcomeSet,
-=======
     resolved,
     closed,
->>>>>>> 880cdf87dd6ecd864b76e64cd79ca45ff8867592:src/store/actions/market/fetchMarkets.js
     winningOutcome: outcome,
     funding: funding || 0,
     outcomeTokensSold: List(netOutcomeTokensSold),
