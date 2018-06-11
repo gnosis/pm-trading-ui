@@ -6,11 +6,11 @@
   },
   "tournament": {
     "enabled": true,
-    "name": "Olympia",
-    "registration": {
+    "name": "Olympia"
+  },
+  "registration": {
       "enabled": true,
-      "contractAddress": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13"
-    }
+      "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
   },
   "collateralToken": {
     "source": "address",
@@ -40,7 +40,13 @@
     "type": "default"
   },
   "termsOfUse": {
-    "url": null
+    "url": "/assets/content/TermsOfService.html"
+  },
+  "riskDisclaimer": {
+    "url": "/assets/content/RiskDisclaimerPolicy.html"
+  },
+  "privacyPolicy": {
+    "url": "/assets/content/PrivacyPolicy.html"
   },
   "footer": {
     "enabled": true,
@@ -85,31 +91,31 @@
     "enabled": true,
     "ranks": [
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/junior-predictor.svg",
+        "icon": "assets/img/badges/junior-predictor.svg",
         "rank": "Junior Predictor",
         "minPredictions": 0,
         "maxPredictions": 4
       },
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/crystal-gazer.svg",
+        "icon": "assets/img/badges/crystal-gazer.svg",
         "rank": "Crystal Gazer",
         "minPredictions": 5,
         "maxPredictions": 9
       },
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/fortune-teller.svg",
+        "icon": "assets/img/badges/fortune-teller.svg",
         "rank": "Fortune Teller",
         "minPredictions": 10,
         "maxPredictions": 14
       },
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/clairvoyant.svg",
+        "icon": "assets/img/badges/clairvoyant.svg",
         "rank": "Clairvoyant",
         "minPredictions": 15,
         "maxPredictions": 19
       },
       {
-        "icon": "components/Dashboard/Metrics/assets/badges/psychic.svg",
+        "icon": "assets/img/badges/psychic.svg",
         "rank": "Psychic",
         "minPredictions": 20
       }

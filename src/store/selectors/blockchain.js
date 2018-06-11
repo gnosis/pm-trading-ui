@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 import { TOKEN_SOURCE_ADDRESS, TOKEN_SOURCE_CONTRACT, TOKEN_SOURCE_ETH } from 'store/actions/blockchain'
 import { getCurrentBalance } from 'integrations/store/selectors'
-import { weiToEth } from 'utils/helpers'
+import { weiToEth, hexWithPrefix } from 'utils/helpers'
 
 /**
  * Returns if gnosis.js is initialized or not
@@ -14,8 +14,9 @@ export const triedToConnect = state => !!state.blockchain.get('connectionTried')
 export const isGasCostFetched = (state, property) => state.blockchain.getIn(['gasCosts', property]) !== undefined
 
 export const getTokenAmount = (state, tokenAddress) => {
-  const tokenAmount = state.blockchain.getIn(['tokenBalances', tokenAddress], 0)
+  const tokenAmount = state.blockchain.getIn(['tokenBalances', hexWithPrefix(tokenAddress)], 0)
   let defaultTokenDecimal
+
   try {
     defaultTokenDecimal = Decimal(tokenAmount)
   } catch (e) {
@@ -25,7 +26,7 @@ export const getTokenAmount = (state, tokenAddress) => {
   return defaultTokenDecimal
 }
 
-export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['tokenSymbols', tokenAddress])
+export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['tokenSymbols', hexWithPrefix(tokenAddress)])
 
 /**
  * @param {*} state - redux state

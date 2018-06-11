@@ -81,11 +81,15 @@ $paddings-inputs: 5px 0;
     transform: rotate(-45deg);  
   }
 
-  &:hover {
+  &:hover, &:focus {
     &::after, &::before {
       background-color: $active-highlight;
       background-color: $active-highlight;
     }
+  }
+
+  &:focus {
+    outline: none;
   }
 }
 

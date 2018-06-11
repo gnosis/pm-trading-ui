@@ -1,7 +1,7 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "gnosisdb-prod.gnosis.pm",
+    "host": "tradingdb.staging.gnosisdev.com",
     "port": 443
   },
   "ethereum": {
@@ -10,11 +10,7 @@
     "port": 443
   },
   "whitelist": {
-    "0xb2e87b8ce41184e0688027f370a972a436abe77e": "Giacomo",
-    "0xb00a24c899f88e5514583cfa8c40e4cdab6c473e": "Andre Metamask",
-    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis Metamask",
-    "0x1df62f291b2e969fb0849d99d9ce41e2f137006e": "Adolfo Metamask",
-    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama",
-    "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail"
-  }
+    "0xf73037eacc54c8d9e3dd2847f76d2022e18746c8": "Lauti",
+    "0x13a1d49d0f5285586373755ec96d0ac81e7a1928": "Denis"
+    }
 }

@@ -3,7 +3,7 @@ import Decimal from 'decimal.js'
 import moment from 'moment'
 
 import { add0xPrefix } from 'utils/helpers'
-import { calcShareWinnings } from 'containers/DashboardPage/store/selectors/utils'
+import { calcShareWinnings } from 'routes/Dashboard/containers/Dashboard/utils'
 import { calcLMSRMarginalPrice, calcLMSROutcomeTokenCount } from 'api'
 
 import { getCurrentAccount } from 'integrations/store/selectors'

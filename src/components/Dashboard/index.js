@@ -2,18 +2,19 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
 import cn from 'classnames'
-import OutcomeColorBox from 'components/OutcomeColorBox'
+import OutcomeColorBox from 'components/Outcome/OutcomeColorBox'
+import { UserRecord } from 'routes/Scoreboard/store'
 import PageFrame from 'components/layout/PageFrame'
 import Block from 'components/layout/Block'
 import Title from 'components/layout/Title'
 import Outcome from 'components/Outcome'
-import DecimalValue from 'components/DecimalValue'
+import DecimalValue, { decimalToText } from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { weiToEth, getOutcomeName, isMarketResolved, isMarketClosed, isModerator } from 'utils/helpers'
 import { marketShareShape } from 'utils/shapes'
 import {
   COLOR_SCHEME_DEFAULT,
-  LOWEST_DISPLAYED_VALUE,
+  LOWEST_VALUE,
   TRANSACTION_DESCRIPTIONS,
   RESOLUTION_TIME,
   OUTCOME_TYPES,
@@ -22,7 +23,7 @@ import {
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
-import { isFeatureEnabled, get } from 'utils/features'
+import { isFeatureEnabled } from 'utils/features'
 
 import Metrics from './Metrics'
 import './dashboard.scss'
@@ -136,7 +137,6 @@ class Dashboard extends Component {
         timeLeft = '> 30 d'
       }
 
-
       return (
         <div
           className="dashboardMarket dashboardMarket--closing dashboardMarket--twoColumns"
@@ -193,10 +193,10 @@ class Dashboard extends Component {
             <div className="col-md-2 dashboardMarket--highlight">
               {Decimal(share.balance)
                 .div(1e18)
-                .gte(LOWEST_DISPLAYED_VALUE) ? (
+                .gte(LOWEST_VALUE) ? (
                   <DecimalValue value={weiToEth(share.balance)} />
                 ) : (
-                  `< ${LOWEST_DISPLAYED_VALUE}`
+                  `< ${LOWEST_VALUE}`
                 )}
             </div>
             <div className="col-md-3 dashboardMarket--highlight">
@@ -327,14 +327,24 @@ class Dashboard extends Component {
 
   render() {
     const {
-      hasWallet, collateralToken, accountPredictiveAssets,
+      hasWallet, collateralToken, accountPredictiveAssets, userTournamentInfo,
     } = this.props
 
     let metricsSection = <div />
     let tradesHoldingsSection = <div className="dashboardWidgets dashboardWidgets--financial" />
-    const predictedProfitFormatted = Decimal(accountPredictiveAssets).toDP(4, 1).toString()
+    const predictedProfitFormatted = decimalToText(accountPredictiveAssets)
+
     if (hasWallet) {
-      metricsSection = <Metrics tokens={collateralToken.balance} tokenSymbol={collateralToken.symbol} tokenIcon={collateralToken.icon} predictedProfit={predictedProfitFormatted} />
+      metricsSection = (
+        <Metrics
+          tokens={collateralToken.balance}
+          tokenSymbol={collateralToken.symbol}
+          tokenIcon={collateralToken.icon}
+          predictedProfit={predictedProfitFormatted}
+          predictionsAmount={userTournamentInfo.predictions}
+          rank={userTournamentInfo.currentRank}
+        />
+      )
 
       tradesHoldingsSection = (
         <div className="dashboardWidgets dashboardWidgets--financial">
@@ -405,12 +415,14 @@ Dashboard.propTypes = {
     balance: PropTypes.string,
     address: PropTypes.string,
   }).isRequired,
+  userTournamentInfo: ImmutablePropTypes.record,
 }
 
 Dashboard.defaultProps = {
   markets: [],
   defaultAccount: undefined,
   accountShares: {},
+  userTournamentInfo: new UserRecord(),
 }
 
 export default Dashboard

@@ -65,6 +65,16 @@ class MarketBuilder {
     return this
   }
 
+  withClosed(closed) {
+    this.market = this.market.set('closed', closed)
+    return this
+  }
+
+  withEventAddress(address) {
+    this.market = this.market.set('eventAddress', address)
+    return this
+  }
+
   withType(type) {
     this.market = this.market.set('type', type)
     return this
@@ -121,6 +131,8 @@ export class MarketFactory {
     .withVolume('9523809523809680')
     .withFunding('10000000000000000')
     .withStage(1)
+    .withClosed(true)
+    .withEventAddress('0x2077708a049f059ee7a7878071b5adca92e6a4ba')
     .withCreation('2017-12-29T13:39:44')
     .withResolved(false)
     .withCollateralToken('c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2')
@@ -140,6 +152,8 @@ export class MarketFactory {
     .withResolution('2018-01-03T12:00:00')
     .withCreation('2017-12-31T13:12:51')
     .withResolved(false)
+    .withClosed(true)
+    .withEventAddress('0x471f34c2b6addf8d501c7b3a157701633be3eb79')
     .withVolume('857142857142872776')
     .withFunding('1000000000000000000')
     .withStage(1)
@@ -164,11 +178,19 @@ export class MarketFactory {
     .withCreation('2017-12-31T13:58:13')
     .withCollateralToken('c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2')
     .withCreator('0x9eab578556de5782445ec036f25a41902ba19eeb')
+    .withEventAddress('0xf43c5e4113aaeb07e4b18a80537ec6cd52213e1e')
     .withResolved(false)
+    .withClosed(true)
     .withOutcomes(
-      new OutcomeRecord({ name: '<20 GWei', marginalPrice: '0.2287', outcomeTokensSold: '0' }),
-      new OutcomeRecord({ name: '20 GWei', marginalPrice: '0.3454', outcomeTokensSold: '375216952973444123' }),
-      new OutcomeRecord({ name: '>20 GWei', marginalPrice: '0.4259', outcomeTokensSold: '566120592814650422' }),
+      new OutcomeRecord({
+        name: '<20 GWei', index: 0, marginalPrice: '0.2287', outcomeTokensSold: '0',
+      }),
+      new OutcomeRecord({
+        name: '20 GWei', index: 1, marginalPrice: '0.3454', outcomeTokensSold: '375216952973444123',
+      }),
+      new OutcomeRecord({
+        name: '>20 GWei', index: 2, marginalPrice: '0.4259', outcomeTokensSold: '566120592814650422',
+      }),
     )
     .withOutcomeTokensSold(
       '0',

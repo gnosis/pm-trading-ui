@@ -2,35 +2,54 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form'
 import integrations from 'integrations/store/reducers'
-import users from 'routes/Scoreboard/store/reducers/users'
-import transactions from 'routes/Transactions/store/reducers/transactions'
-import market, { REDUCER_ID } from 'store/reducers/market'
+
 import { isFeatureEnabled } from 'utils/features'
 import { LOAD_SESSIONSTORAGE } from 'store/middlewares/SessionStorageLoad'
 import { LOAD_LOCALSTORAGE } from 'store/middlewares/LocalStorageLoad'
+
+import * as routeReducers from 'routes/reducers'
 import entities from './entities'
 import modal from './modal'
 import blockchain from './blockchain'
 import notifications from './notifications'
+import marketList from './market'
+import marketShares from './shares'
+import marketTrades from './trades'
 
-const tournamentEnabled = isFeatureEnabled('tournament')
+const reducerConditions = {
+  users: () => isFeatureEnabled('scoreboard'),
+}
+
+let filteredRouteReducers = {}
+Object.keys(routeReducers).forEach((reducerName) => {
+  if (typeof reducerConditions[reducerName] === 'function') {
+    const includeReducer = reducerConditions[reducerName]()
+
+    if (!includeReducer) {
+      return true // continue
+    }
+  }
+
+  filteredRouteReducers = {
+    [reducerName]: routeReducers[reducerName],
+    ...filteredRouteReducers,
+  }
+
+  return true
+})
 
 const reducers = {
   routing: routerReducer,
   form: formReducer,
   modal,
   entities,
-  transactions,
   blockchain,
   notifications,
   integrations,
-  [REDUCER_ID]: market,
-}
-
-if (tournamentEnabled) {
-  reducers.tournament = combineReducers({
-    ranking: users,
-  })
+  marketList,
+  marketShares,
+  marketTrades,
+  ...filteredRouteReducers,
 }
 
 const combinedReducers = combineReducers(reducers)

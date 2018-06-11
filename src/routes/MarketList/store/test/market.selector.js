@@ -1,5 +1,4 @@
 import { List } from 'immutable'
-import { REDUCER_ID } from 'store/reducers/market'
 import { marketListSelector } from '../selectors'
 
 const marketTests = () => {
@@ -7,7 +6,7 @@ const marketTests = () => {
     it('should get empty immutable List when they are not loaded', () => {
       // GIVEN
       const emptyList = List([])
-      const reduxStore = { [REDUCER_ID]: emptyList }
+      const reduxStore = { marketList: emptyList }
 
       // WHEN
       const marketListState = marketListSelector(reduxStore)

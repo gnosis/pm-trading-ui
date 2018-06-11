@@ -32,6 +32,7 @@ const RegisterMainnetAddress = ({
   tosAgreed,
   ppAgreed,
   rdAgreed,
+  collateralToken: { symbol: collateralTokenSymbol },
 }) => {
   const handleRegistration = async () => {
     await updateMainnetAddress(currentAccount)
@@ -42,7 +43,7 @@ const RegisterMainnetAddress = ({
 
   const disabled =
     gasPrice
-      .mul(registrationGasCost)
+      .mul(registrationGasCost || 0)
       .div(1e18)
       .gt(currentBalance || 0) ||
     (!ppAgreed && !!privacyPolicyUrl) ||
@@ -80,19 +81,19 @@ const RegisterMainnetAddress = ({
               </a>
             </Field>
           )}
-          {!!riskDisclaimerUrl && (
+          {!!privacyPolicyUrl && (
             <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')}>
               I agree with{' '}
-              <a href={riskDisclaimerUrl} target="_blank" rel="noopener noreferrer">
+              <a href={privacyPolicyUrl} target="_blank" rel="noopener noreferrer">
                 privacy policy
               </a>
             </Field>
           )}
-          {privacyPolicyUrl && (
+          {!!riskDisclaimerUrl && (
             <Field name="agreedWithRDP" component={Checkbox} className={cx('checkBox')}>
-              I have read the risk{' '}
-              <a href={privacyPolicyUrl} target="_blank" rel="noopener noreferrer">
-                disclaimer policy
+              I have read the{' '}
+              <a href={riskDisclaimerUrl} target="_blank" rel="noopener noreferrer">
+                risk disclaimer policy
               </a>
             </Field>
           )}
@@ -115,8 +116,8 @@ RegisterMainnetAddress.propTypes = {
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
   updateMainnetAddress: PropTypes.func.isRequired,
-  gasPrice: PropTypes.instanceOf(Decimal).isRequired,
-  registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  gasPrice: PropTypes.instanceOf(Decimal),
+  registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   tosAgreed: PropTypes.bool,
   ppAgreed: PropTypes.bool,
   rdAgreed: PropTypes.bool,
@@ -126,6 +127,8 @@ RegisterMainnetAddress.defaultProps = {
   tosAgreed: false,
   ppAgreed: false,
   rdAgreed: false,
+  gasPrice: Decimal(0),
+  registrationGasCost: 0,
 }
 
 const form = {
