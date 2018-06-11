@@ -5,5 +5,3 @@ export const marketSelector = createSelector(
   state => state.marketList,
   marketList => marketList.filter(market => isMarketFunded(market.stage)),
 )
-
-export * from './old'
