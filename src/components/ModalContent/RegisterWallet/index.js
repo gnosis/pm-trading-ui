@@ -39,8 +39,6 @@ const RegisterMainnetAddress = ({
     closeModal()
   }
 
-  const { symbol: collateralTokenSymbol } = getCollateralToken() || {}
-
   const disabled =
     gasPrice
       .mul(registrationGasCost || 0)
