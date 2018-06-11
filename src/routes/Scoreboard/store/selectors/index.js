@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { normalizeHex } from 'utils/helpers'
 import { getActiveProvider, getCurrentAccount } from 'integrations/store/selectors'
 
 const tournamentUsersSelectorAsList = (state) => {
@@ -43,5 +44,5 @@ export const tournamentMainnetRegistryAddress = (state) => {
 export const meSelector = createSelector(
   tournamentUsersSelectorAsList,
   getCurrentAccount,
-  (users, account) => (users ? users.find(user => user.account === account) : undefined),
+  (users, account) => (users ? users.find(user => normalizeHex(user.account) === normalizeHex(account)) : undefined),
 )

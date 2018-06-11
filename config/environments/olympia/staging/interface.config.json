@@ -66,7 +66,7 @@
     "claimReward": {
       "enabled": true,
       "claimStart": "2018-06-01T12:00:00",
-      "claimUntil": "2018-06-31T12:00:00",
+      "claimUntil": "2018-06-30T12:00:00",
       "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
       "networkId": 3
     },
