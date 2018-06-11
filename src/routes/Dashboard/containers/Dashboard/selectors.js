@@ -9,6 +9,7 @@ import { marketSelector } from 'store/selectors/market'
 import { getCollateralToken } from 'store/selectors/blockchain'
 import shareSelector from 'store/selectors/account/shares'
 import tradeSelector from 'store/selectors/account/trades'
+import { meSelector } from 'routes/Scoreboard/store'
 import { calculateProfit } from './utils'
 
 /**
@@ -66,4 +67,5 @@ export default createStructuredSelector({
   hasWallet: checkWalletConnection,
   collateralToken: getCollateralToken,
   predictedProfits: dashboardProfitsSelector,
+  userTournamentData: meSelector,
 })
