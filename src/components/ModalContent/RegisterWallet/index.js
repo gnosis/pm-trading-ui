@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import { lifecycle } from 'recompose'
@@ -8,12 +9,12 @@ import InteractionButton from 'containers/InteractionButton'
 import { Field, reduxForm, propTypes } from 'redux-form'
 import Checkbox from 'components/Form/Checkbox'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
-import { getCollateralToken, getFeatureConfig } from 'utils/features'
+import { getFeatureConfig } from 'utils/features'
+import { getCollateralToken } from 'store/selectors/blockchain'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 import style from './RegisterWallet.mod.scss'
 
 const cx = cn.bind(style)
-const { symbol: collateralTokenSymbol } = getCollateralToken() || {}
 const {
   rewardToken: { symbol: rewardTokenSymbol },
 } = getFeatureConfig('rewards')
@@ -36,6 +37,8 @@ const RegisterMainnetAddress = ({
     await updateMainnetAddress(currentAccount)
     closeModal()
   }
+
+  const { symbol: collateralTokenSymbol } = getCollateralToken() || {}
 
   const disabled =
     gasPrice
@@ -129,9 +132,13 @@ const form = {
   form: 'tosAgreement',
 }
 
-export default reduxForm(form)(lifecycle({
+const mapStateToProps = {
+  collateralToken: getCollateralToken,
+}
+
+export default connect(mapStateToProps)(reduxForm(form)(lifecycle({
   componentDidMount() {
     this.props.requestRegistrationGasCost()
     this.props.requestGasPrice()
   },
-})(RegisterMainnetAddress))
+})(RegisterMainnetAddress)))
