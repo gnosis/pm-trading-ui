@@ -36,7 +36,7 @@ const decimalJsTest = (props, propName, componentName) => {
 }
 
 DecimalValue.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.string, decimalJsTest]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, decimalJsTest, PropTypes.number]).isRequired,
   decimals: PropTypes.number,
   className: PropTypes.string,
 }
