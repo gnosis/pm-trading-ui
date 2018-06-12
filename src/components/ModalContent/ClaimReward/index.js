@@ -35,7 +35,7 @@ const ClaimReward = ({
   if (hasGasCosts) {
     sufficentFunds = Decimal(gasPrice)
       .mul(claimRewardGasCost)
-      .lte(currentBalance)
+      .lt(currentBalance)
   }
 
   const disabled = !sufficentFunds || isWrongNetwork
