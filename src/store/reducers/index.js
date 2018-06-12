@@ -1,17 +1,21 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form'
-import integrations from 'integrations/store/reducers'
-import users from 'routes/Scoreboard/store/reducers/users'
-import transactions from 'routes/Transactions/store/reducers/transactions'
-import market, { REDUCER_ID } from 'store/reducers/market'
 import { isFeatureEnabled } from 'utils/features'
 import { LOAD_SESSIONSTORAGE } from 'store/middlewares/SessionStorageLoad'
 import { LOAD_LOCALSTORAGE } from 'store/middlewares/LocalStorageLoad'
+
+// Reducers
+import integrations from 'integrations/store/reducers'
+import users from 'routes/Scoreboard/store/reducers/users'
+import transactions from 'routes/Transactions/store/reducers/transactions'
+import market from 'store/reducers/market'
 import entities from './entities'
 import modal from './modal'
 import blockchain from './blockchain'
 import notifications from './notifications'
+import shares from './shares'
+import trades from './trades'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 
@@ -24,7 +28,9 @@ const reducers = {
   blockchain,
   notifications,
   integrations,
-  [REDUCER_ID]: market,
+  marketList: market,
+  marketShares: shares,
+  marketTrades: trades,
 }
 
 if (tournamentEnabled) {
