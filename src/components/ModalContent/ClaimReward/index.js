@@ -6,6 +6,7 @@ import { Link, withRouter } from 'react-router-dom'
 import Decimal from 'decimal.js'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import { getFeatureConfig } from 'utils/features'
+import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import style from './ClaimReward.mod.scss'
 
 const cx = cn.bind(style)
@@ -28,10 +29,16 @@ const ClaimReward = ({
 
   const targetNetwork = ETHEREUM_NETWORK_IDS[rewardToken.networkId]
   const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardToken.networkId)
-  const disabled =
-    Decimal(gasPrice)
+  const hasGasCosts = typeof gasPrice === 'undefined' || typeof claimRewardGasCost === 'undefined'
+
+  let sufficentFunds = Decimal(currentBalance).gte(0)
+  if (hasGasCosts) {
+    sufficentFunds = Decimal(gasPrice)
       .mul(claimRewardGasCost)
-      .lt(currentBalance) || isWrongNetwork
+      .lte(currentBalance)
+  }
+
+  const disabled = !sufficentFunds || isWrongNetwork
 
   return (
     <div className={cx('claimRewards')}>
@@ -56,12 +63,17 @@ const ClaimReward = ({
         </div>
         {!isWrongNetwork && (
           <p className={cx('gasCosts')}>
-            Gas Costs:{' '}
-            <b className={cx('gasEstimation')}>
-              {Decimal(gasPrice)
-                .mul(claimRewardGasCost)
-                .toString()}
-            </b>
+            Estimated Gas Costs:{' '}
+            {hasGasCosts ? (
+              <b className={cx('gasEstimation')}>
+                {Decimal(gasPrice)
+                  .mul(claimRewardGasCost)
+                  .toString()}
+              </b>
+            ) : (
+              <IndefiniteSpinner width={18} height={18} />
+            )}
+
           </p>
         )}
         <button onClick={handleRegistration} className={cx('btn', 'btn-primary', 'claim')} disabled={disabled}>
@@ -78,8 +90,8 @@ ClaimReward.propTypes = {
   requestClaimRewardGasCost: PropTypes.func.isRequired,
   currentNetwork: PropTypes.string,
   currentNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  gasPrice: PropTypes.instanceOf(Decimal).isRequired,
-  claimRewardGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  gasPrice: PropTypes.instanceOf(Decimal),
+  claimRewardGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   claimUserRewards: PropTypes.func.isRequired,
   rewardValue: PropTypes.number.isRequired,
 }
@@ -87,6 +99,8 @@ ClaimReward.propTypes = {
 ClaimReward.defaultProps = {
   currentNetworkId: 0,
   currentNetwork: '',
+  gasPrice: Decimal(0),
+  claimRewardGasCost: Decimal(0),
 }
 
 export default withRouter(lifecycle({

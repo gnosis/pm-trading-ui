@@ -21,7 +21,7 @@ const claimEndDate = moment.utc(claimReward.claimUntil)
 
 const ClaimReward = ({ openClaimRewardModal, rewardValue }) => {
   const isInTimeframe = moment.utc().isBetween(claimStartDate, claimEndDate)
-  const hasRewards = Decimal(rewardValue || 0).lte(0)
+  const hasRewards = Decimal(rewardValue || 0).gt(0)
   const hasClaimed = rewardsClaimed
 
   const showRewardValue = isInTimeframe && !hasClaimed
@@ -58,7 +58,7 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue }) => {
       <button
         className={cx('claimButton')}
         onClick={openClaimRewardModal}
-        disabled={enabledClaiming}
+        disabled={!enabledClaiming}
       >
         CLAIM NOW
       </button>

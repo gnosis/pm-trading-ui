@@ -25,10 +25,10 @@ const mapStateToProps = state => ({
   rewardValue: getRewardValue(state),
 })
 
-const mapDispatchToProps = dispatch => ({
-  requestGasPrice: () => dispatch(requestGasPrice()),
-  requestClaimRewardGasCost: () => dispatch(requestClaimRewardGasCost()),
-  claimUserRewards: () => dispatch(claimUserRewards(rewardToken.address)),
-})
+const mapDispatchToProps = {
+  requestGasPrice,
+  requestClaimRewardGasCost,
+  claimUserRewards: () => claimUserRewards(rewardToken.contractAddress),
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClaimReward)

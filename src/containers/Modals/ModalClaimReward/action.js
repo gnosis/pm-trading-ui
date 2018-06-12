@@ -7,7 +7,7 @@ const contractType = GAS_COST.CLAIM_REWARD
 const { rewardToken } = getFeatureConfig('rewards')
 
 const requestClaimRewardGasCost = () => async (dispatch) => {
-  const gasCost = await calcClaimRewardGasCost(rewardToken.address)
+  const gasCost = await calcClaimRewardGasCost(rewardToken.contractAddress)
 
   dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))
 }

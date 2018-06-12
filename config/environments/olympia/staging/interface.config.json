@@ -61,14 +61,13 @@
     "rewardToken": {
       "symbol": "GNO",
       "contractAddress": "0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
-      "networkId": 1
+      "networkId": 3
     },
     "claimReward": {
       "enabled": true,
       "claimStart": "2018-06-01T12:00:00",
       "claimUntil": "2018-06-30T12:00:00",
-      "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
-      "networkId": 3
+      "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2"
     },
     "levels": [
       { "value": 5, "minRank": 1, "maxRank": 1 },

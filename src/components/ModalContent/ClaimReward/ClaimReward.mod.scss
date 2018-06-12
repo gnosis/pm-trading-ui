@@ -18,7 +18,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 0 27px;
+    padding: 18px 27px;
     text-align: center;
     color: #666;
 
@@ -45,7 +45,6 @@
       font-weight: 500;
       text-align: center;
       color: #333333;
-      margin-top: 45px;
     }
 
     .currentNetworkContainer {
@@ -73,6 +72,11 @@
     .gasCosts {
       .gasEstimation {
         color: #333333;
+      }
+
+      svg {
+        position: relative;
+        top: 3px;
       }
     }
 
