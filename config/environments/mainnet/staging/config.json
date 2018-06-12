@@ -10,6 +10,11 @@
     "port": 443
   },
   "whitelist": {
-    "0xb2e87b8ce41184e0688027f370a972a436abe77e": "Giacomo"
+    "0x9eab578556de5782445ec036f25a41902ba19eeb": "Gnosis"
+  },
+  "thirdparty": {
+    "googleAnalytics": {
+      "enabled": false
+    }
   }
 }

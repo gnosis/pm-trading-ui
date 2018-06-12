@@ -2,17 +2,17 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import DashboardPage from 'components/Dashboard'
-import { getMarkets } from 'selectors/market'
+import { getMarkets } from 'store/selectors/market'
 import { profitsSelector } from 'containers/DashboardPage/store/selectors'
-import { getAccountTrades } from 'selectors/marketTrades'
-import { getAccountShares } from 'selectors/marketShares'
-import { isGnosisInitialized, getCollateralToken } from 'selectors/blockchain'
+import { getAccountTrades } from 'store/selectors/marketTrades'
+import { getAccountShares } from 'store/selectors/marketShares'
+import { isGnosisInitialized, getCollateralToken } from 'store/selectors/blockchain'
 import { getCurrentAccount, checkWalletConnection } from 'integrations/store/selectors'
-import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'actions/market'
-import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'actions/blockchain'
+import { requestMarkets, requestAccountTrades, requestAccountShares, redeemWinnings } from 'store/actions/market'
+import { requestGasPrice, requestTokenBalance, requestTokenSymbol } from 'store/actions/blockchain'
 import { weiToEth } from 'utils/helpers'
 import { fetchTournamentUserData, fetchTournamentUsers } from 'routes/Scoreboard/store/actions'
-
+import { meSelector } from 'routes/Scoreboard/store'
 
 const mapStateToProps = (state) => {
   const markets = getMarkets(state)
@@ -23,6 +23,8 @@ const mapStateToProps = (state) => {
   const gnosisInitialized = isGnosisInitialized(state)
   const hasWallet = checkWalletConnection(state)
   const collateralToken = getCollateralToken(state)
+  const userTournamentInfo = meSelector(state)
+
   return {
     hasWallet,
     defaultAccount,
@@ -32,6 +34,7 @@ const mapStateToProps = (state) => {
     gnosisInitialized,
     accountPredictiveAssets,
     collateralToken,
+    userTournamentInfo,
   }
 }
 
@@ -48,4 +51,7 @@ const mapDispatchToProps = dispatch => ({
   fetchTournamentUserData: account => dispatch(fetchTournamentUserData(account)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DashboardPage)

@@ -10,7 +10,7 @@ export default store => next => (action) => {
   try {
     const storedState = JSON.parse(
       // eslint-disable-next-line
-      window.localStorage.getItem(`GNOSIS_${process.env.VERSION}`))
+      window.localStorage.getItem(`GNOSIS_${process.env.VERSION}`),)
 
     if (storedState) {
       // FIX-ME: Temporary to remember ToS Acceptance

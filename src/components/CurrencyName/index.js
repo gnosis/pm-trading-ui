@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { hexWithPrefix } from 'utils/helpers'
 import { getTokenSymbol } from 'store/selectors/blockchain'
 import { requestTokenSymbol } from 'store/actions/blockchain'
 import PropTypes from 'prop-types'

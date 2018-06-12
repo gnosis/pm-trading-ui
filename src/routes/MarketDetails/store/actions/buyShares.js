@@ -80,7 +80,7 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
     await dispatch(closeModal())
   } catch (e) {
     console.error(e)
-    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e.message))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
     await dispatch(closeModal())
     throw e

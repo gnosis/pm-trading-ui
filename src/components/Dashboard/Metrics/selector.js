@@ -1,6 +1,4 @@
-import Decimal from 'decimal.js'
 import { createSelector, createStructuredSelector } from 'reselect'
-import { getCurrentBalance } from 'integrations/store/selectors'
 import { meSelector } from 'routes/Scoreboard/store/selectors'
 import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 
