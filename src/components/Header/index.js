@@ -95,7 +95,7 @@ class Header extends Component {
       showGameGuide,
       gameGuideType,
       gameGuideURL,
-      tokenAddress,
+      tokenSymbol,
       mainnetAddress,
       userTournamentInfo,
       acceptedTOS,
@@ -167,7 +167,7 @@ class Header extends Component {
                   <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
                 )}
                 <DecimalValue value={tokenBalance} className={cx('text')} />&nbsp;
-                {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
+                {<span>{tokenSymbol || 'ETH'}</span>}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
@@ -199,7 +199,7 @@ Header.propTypes = {
   showGameGuide: PropTypes.bool,
   gameGuideType: PropTypes.string,
   gameGuideURL: PropTypes.string,
-  tokenAddress: PropTypes.string,
+  tokenSymbol: PropTypes.string,
   lockedMetamask: PropTypes.bool,
   requestMainnetAddress: PropTypes.func.isRequired,
   requestTokenBalance: PropTypes.func.isRequired,
@@ -224,7 +224,7 @@ Header.defaultProps = {
   mainnetAddress: undefined,
   lockedMetamask: true,
   userTournamentInfo: undefined,
-  tokenAddress: undefined,
+  tokenSymbol: 'ETH',
   acceptedTOS: false,
 }
 
