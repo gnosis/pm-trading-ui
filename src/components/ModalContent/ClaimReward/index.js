@@ -31,7 +31,7 @@ const ClaimReward = ({
   const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardToken.networkId)
   const hasGasCosts = typeof gasPrice === 'undefined' || typeof claimRewardGasCost === 'undefined'
 
-  let sufficentFunds = Decimal(currentBalance).gte(0)
+  let sufficentFunds = Decimal(currentBalance).gt(0)
   if (hasGasCosts) {
     sufficentFunds = Decimal(gasPrice)
       .mul(claimRewardGasCost)
