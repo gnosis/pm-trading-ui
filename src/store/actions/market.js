@@ -3,7 +3,7 @@ import * as api from 'api'
 
 import { receiveEntities, updateEntity } from 'store/actions/entities'
 import { closeModal } from 'store/actions/modal'
-import { requestCollateralTokenBalance } from 'containers/HeaderContainer/store/actions'
+import { requestCollateralTokenBalance } from 'store/actions/blockchain'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 
 import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, TRANSACTION_STATUS } from 'utils/constants'
