@@ -3,6 +3,7 @@ import * as api from 'api'
 
 import { receiveEntities, updateEntity } from 'store/actions/entities'
 import { closeModal } from 'store/actions/modal'
+import { requestCollateralTokenBalance } from 'containers/HeaderContainer/store/actions'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 
 import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, TRANSACTION_STATUS } from 'utils/constants'
@@ -73,6 +74,7 @@ export const redeemWinnings = market => async (dispatch, getState) => {
   const transactionId = uuid()
   const state = getState()
   const redeemedShares = getRedeemedShares(state, market.address)
+  const currentAccount = await api.getCurrentAccount()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Redeeming Winnings for  "${market.eventDescription.title}"`))
@@ -94,6 +96,7 @@ export const redeemWinnings = market => async (dispatch, getState) => {
     throw e
   }
 
+  await dispatch(requestCollateralTokenBalance(currentAccount))
   dispatch(closeModal())
 
   return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
