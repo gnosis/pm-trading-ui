@@ -13,7 +13,7 @@ import { fetchTournamentUserData } from 'routes/Scoreboard/store'
  * @param {function} dispatch
  * @param {function} getState
  */
-const requestCollateralTokenBalance = account => (dispatch, getState) => {
+export const requestCollateralTokenBalance = account => (dispatch, getState) => {
   const state = getState()
   const collateralToken = getCollateralToken(state)
 
