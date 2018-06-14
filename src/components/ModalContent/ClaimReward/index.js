@@ -1,9 +1,9 @@
 import React from 'react'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
-import { compose, lifecycle, withState } from 'recompose'
 import { Link, withRouter } from 'react-router-dom'
 import Decimal from 'decimal.js'
+import { decimalToText } from 'components/DecimalValue'
 
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -38,9 +38,9 @@ class ClaimReward extends React.Component {
       await this.props.claimUserRewards()
       await this.setState({ claimState: 'success' })
     } catch (e) {
+      await this.setState({ claimState: 'error' })
       console.error(e)
     }
-    await this.setState({ claimState: 'error' })
   }
 
   render() {
@@ -54,20 +54,18 @@ class ClaimReward extends React.Component {
       rewardValue,
     } = this.props
 
-    const {
-      claimState,
-    } = this.state
+    const { claimState } = this.state
 
     const targetNetwork = ETHEREUM_NETWORK_IDS[rewardToken.networkId]
     const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardToken.networkId)
-    const hasGasCosts = typeof gasPrice === 'undefined' || typeof claimRewardGasCost === 'undefined'
+    const hasGasCosts = typeof gasPrice !== 'undefined' && typeof claimRewardGasCost !== 'undefined'
+    const gasCosts = Decimal(gasPrice || 0).mul(claimRewardGasCost || 0).div(1e18)
 
-    const balance = Decimal(currentBalance).div(1e18)
+    const balance = Decimal(currentBalance)
+
     let sufficentFunds = balance.gt(0)
     if (hasGasCosts) {
-      sufficentFunds = Decimal(gasPrice)
-        .mul(claimRewardGasCost)
-        .lt(balance)
+      sufficentFunds = gasCosts.lt(balance)
     }
 
     let problemMessage
@@ -89,9 +87,7 @@ class ClaimReward extends React.Component {
     } else if (claimState === 'error') {
       claimButton = (
         <Tooltip overlay="Unfortunately, the transaction failed. Please try again or contact our support for further assistance.">
-          <button className={cx('btn', 'btn-primary', 'claim')}>
-            CLAIM
-          </button>
+          <button className={cx('btn', 'btn-primary', 'claim')}>CLAIM</button>
         </Tooltip>
       )
     } else if (!canClaim) {
@@ -120,9 +116,9 @@ class ClaimReward extends React.Component {
             <span className={cx('rewardInfo')}>
               {rewardValue} {rewardToken.symbol}
             </span>{' '}
-            tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in your
-            MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request. More
-            information in{' '}
+            tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in
+            your MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request.
+            More information in{' '}
             <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
               FAQ
             </Link>.
@@ -136,9 +132,7 @@ class ClaimReward extends React.Component {
               Estimated Gas Costs:{' '}
               {hasGasCosts ? (
                 <b className={cx('gasEstimation')}>
-                  {Decimal(gasPrice)
-                    .mul(claimRewardGasCost)
-                    .toString()}
+                  {decimalToText(gasCosts)}
                 </b>
               ) : (
                 <IndefiniteSpinner width={18} height={18} />
