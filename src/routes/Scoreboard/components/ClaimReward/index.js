@@ -22,12 +22,11 @@ const claimEndDate = moment.utc(claimReward.claimUntil)
 const ClaimReward = ({ openClaimRewardModal, rewardValue }) => {
   const isInTimeframe = moment.utc().isBetween(claimStartDate, claimEndDate)
   const hasRewards = Decimal(rewardValue || 0).gt(0)
-  const hasClaimed = rewardsClaimed
 
-  const showRewardValue = isInTimeframe && !hasClaimed
-  const showAlreadyClaimed = isInTimeframe && hasClaimed
+  const showRewardValue = isInTimeframe && !rewardsClaimed
+  const showAlreadyClaimed = isInTimeframe && rewardsClaimed
 
-  const enabledClaiming = !isInTimeframe || !hasClaimed || !hasRewards
+  const enabledClaiming = !isInTimeframe || !rewardsClaimed || !hasRewards
 
   let rewardValueDisplay = 'N/A'
   if (showRewardValue) {
