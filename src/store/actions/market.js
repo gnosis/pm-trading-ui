@@ -3,6 +3,7 @@ import * as api from 'api'
 
 import { receiveEntities, updateEntity } from 'store/actions/entities'
 import { closeModal } from 'store/actions/modal'
+import { requestCollateralTokenBalance } from 'store/actions/blockchain'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 
 import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, TRANSACTION_STATUS } from 'utils/constants'
@@ -73,12 +74,13 @@ export const redeemWinnings = market => async (dispatch, getState) => {
   const transactionId = uuid()
   const state = getState()
   const redeemedShares = getRedeemedShares(state, market.address)
+  const currentAccount = await api.getCurrentAccount()
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Redeeming Winnings for  "${market.eventDescription.title}"`))
 
-  const marketType = market.event.type
-  const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS]
+  // const marketType = market.event.type
+  // const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS]
 
   try {
     console.log('winnings: ', await api.redeemWinnings(market.event.type, market.event.address))
@@ -94,7 +96,7 @@ export const redeemWinnings = market => async (dispatch, getState) => {
     throw e
   }
 
+  await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
+  await dispatch(requestCollateralTokenBalance(currentAccount))
   dispatch(closeModal())
-
-  return await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }

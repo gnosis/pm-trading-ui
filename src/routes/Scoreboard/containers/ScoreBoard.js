@@ -45,7 +45,7 @@ ScoreBoard.propTypes = {
   })),
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
-  rank: PropTypes.string,
+  rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   fetchTournamentUsers: PropTypes.func.isRequired,
   openSetMainnetAddressModal: PropTypes.func.isRequired,
   openClaimRewardModal: PropTypes.func.isRequired,
