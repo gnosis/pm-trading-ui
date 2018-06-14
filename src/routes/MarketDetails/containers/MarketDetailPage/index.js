@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { formValueSelector } from 'redux-form'
+import { formValueSelector, getFormSyncErrors } from 'redux-form'
 import { replace } from 'react-router-redux'
 import { requestGasPrice, requestTokenSymbol } from 'store/actions/blockchain'
 import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
@@ -46,7 +46,6 @@ const mapStateToProps = (state, ownProps) => {
   const marketGraph = getMarketGraph(market)(state)
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
-  const marketShortSellSelector = formValueSelector('marketShortSell')
   const defaultAccount = getCurrentAccount(state)
   const marketTrades = getMarketTradesForAccount(market.address, defaultAccount)(state)
 
@@ -58,8 +57,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     limitMargin: marketBuySelector(state, 'limitMargin'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
-    selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
-    selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
+    sellFormHasErrors: Object.keys(getFormSyncErrors('marketMyShares')(state)).length > 0,
     hasWallet: checkWalletConnection(state),
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
     isModerator: isModerator(getCurrentAccount(state)),
