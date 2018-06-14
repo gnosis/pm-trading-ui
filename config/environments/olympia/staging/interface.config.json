@@ -64,7 +64,7 @@
       "networkId": 42
     },
     "claimReward": {
-      "enabled": false,
+      "enabled": true,
       "claimStart": "2018-06-01T12:00:00",
       "claimUntil": "2018-07-01T12:00:00",
       "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
