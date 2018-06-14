@@ -2,6 +2,7 @@ import allowedRangePrice from 'utils/marginPrice'
 import uuid from 'uuid/v4'
 import * as api from 'api'
 import Decimal from 'decimal.js'
+import { requestCollateralTokenBalance } from 'store/actions/blockchain'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 import { openModal, closeModal } from 'store/actions/modal'
 import { gaSend } from 'utils/analytics/google'
@@ -71,6 +72,7 @@ const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (
         .toString(),
     },
   }))
+  await dispatch(requestCollateralTokenBalance(currentAccount))
 
   return dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
