@@ -3,6 +3,7 @@ import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import Decimal from 'decimal.js'
+import { decimalToText } from 'components/DecimalValue'
 
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
@@ -57,14 +58,14 @@ class ClaimReward extends React.Component {
 
     const targetNetwork = ETHEREUM_NETWORK_IDS[rewardToken.networkId]
     const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardToken.networkId)
-    const hasGasCosts = typeof gasPrice === 'undefined' || typeof claimRewardGasCost === 'undefined'
+    const hasGasCosts = typeof gasPrice !== 'undefined' && typeof claimRewardGasCost !== 'undefined'
+    const gasCosts = Decimal(gasPrice || 0).mul(claimRewardGasCost || 0).div(1e18)
 
-    const balance = Decimal(currentBalance).div(1e18)
+    const balance = Decimal(currentBalance)
+
     let sufficentFunds = balance.gt(0)
     if (hasGasCosts) {
-      sufficentFunds = Decimal(gasPrice)
-        .mul(claimRewardGasCost)
-        .lt(balance)
+      sufficentFunds = gasCosts.lt(balance)
     }
 
     let problemMessage
@@ -131,9 +132,7 @@ class ClaimReward extends React.Component {
               Estimated Gas Costs:{' '}
               {hasGasCosts ? (
                 <b className={cx('gasEstimation')}>
-                  {Decimal(gasPrice)
-                    .mul(claimRewardGasCost)
-                    .toString()}
+                  {decimalToText(gasCosts)}
                 </b>
               ) : (
                 <IndefiniteSpinner width={18} height={18} />
