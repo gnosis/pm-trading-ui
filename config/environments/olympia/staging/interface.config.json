@@ -17,7 +17,7 @@
     "options": {
       "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
       "symbol": "OLY",
-      "icon": "/assets/img/icons/gno_token.svg"
+      "icon": "/assets/img/icons/olympia_logo_favicon.svg"
     }
   },
   "providers": {
@@ -59,7 +59,7 @@
   "rewards": {
     "enabled": true,
     "rewardToken": {
-      "symbol": "GNO",
+      "symbol": "KOV-GNO",
       "contractAddress": "0xe46637882a11d3c90a24bd7c7529eb101f504705",
       "networkId": 42
     },
