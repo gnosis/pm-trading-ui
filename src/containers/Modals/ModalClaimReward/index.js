@@ -1,5 +1,6 @@
 import ClaimReward from 'components/ModalContent/ClaimReward'
 import { requestGasPrice } from 'store/actions/blockchain'
+import { closeModal } from 'store/actions/modal'
 import { connect } from 'react-redux'
 import {
   getCurrentAccount,
@@ -28,6 +29,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   requestGasPrice,
   requestClaimRewardGasCost,
+  closeModal,
   claimUserRewards: () => claimUserRewards(claimReward.contractAddress),
 }
 
