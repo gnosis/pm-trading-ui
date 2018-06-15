@@ -17,8 +17,7 @@ export default handleActions(
           tournament: { rewards },
         },
       },
-    ) =>
-      Map(rewards || defaultState),
+    ) => state.set('rewardsClaimed', rewards.rewardsClaimed),
   },
   defaultState,
 )
