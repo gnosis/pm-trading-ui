@@ -13,7 +13,6 @@ import style from './ClaimReward.mod.scss'
 const rewardsConfig = getFeatureConfig('rewards')
 const { rewardToken, claimReward } = rewardsConfig
 const claimUntilFormat = 'y[Y] M[M] D[d] h[h] m[m]'
-const rewardsClaimed = window ? window.localStorage.getItem('rewardsClaimed') === 'true' : false
 const cx = cn.bind(style)
 
 const claimStartDate = moment.utc(claimReward.claimStart)
@@ -22,6 +21,7 @@ const claimEndDate = moment.utc(claimReward.claimUntil)
 const ClaimReward = ({ openClaimRewardModal, rewardValue }) => {
   const isInTimeframe = moment.utc().isBetween(claimStartDate, claimEndDate)
   const hasRewards = Decimal(rewardValue || 0).gt(0)
+  const rewardsClaimed = window ? window.localStorage.getItem('rewardsClaimed') === 'true' : false
 
   const showRewardValue = isInTimeframe && !rewardsClaimed
   const showAlreadyClaimed = isInTimeframe && rewardsClaimed

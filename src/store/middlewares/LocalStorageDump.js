@@ -9,19 +9,17 @@ const INIT = 'INIT'
 const forbiddenActions = [INIT, CLEAR_LOCAL_STORAGE, LOAD_LOCALSTORAGE, LOAD_SESSIONSTORAGE]
 
 const PERSIST_PATHS = [
-  'transactions.log',
+  'transactions',
 ]
 
 export default store => next => (action) => {
   const state = store.getState()
 
   if (forbiddenActions.indexOf(action.type) === -1) {
-    let storage = {}
+    const storage = {}
 
     PERSIST_PATHS.forEach((path) => {
-      storage = {
-        ...pick(state, path),
-      }
+      storage[path] = { ...state[path].toJS() }
     })
 
     // FIX-ME: Temporary to remember ToS Acceptance
