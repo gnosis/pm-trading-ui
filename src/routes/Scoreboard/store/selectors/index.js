@@ -46,3 +46,5 @@ export const meSelector = createSelector(
   getCurrentAccount,
   (users, account) => (users ? users.find(user => normalizeHex(user.account) === normalizeHex(account)) : undefined),
 )
+
+export const areRewardsClaimed = state => state.tournament.rewards.get('rewardsClaimed')
