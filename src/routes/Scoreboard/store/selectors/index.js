@@ -44,5 +44,5 @@ export const tournamentMainnetRegistryAddress = (state) => {
 export const meSelector = createSelector(
   tournamentUsersSelectorAsList,
   getCurrentAccount,
-  (users, account) => (users ? users.find(user => normalizeHex(user.account) === normalizeHex(account)) : undefined),
+  (users, account) => (users && account ? users.find(user => normalizeHex(user.account) === normalizeHex(account)) : undefined),
 )
