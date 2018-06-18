@@ -1,4 +1,4 @@
-import Gnosis from '@gnosis.pm/gnosisjs'
+import Gnosis from '@gnosis.pm/pm-js'
 import olympiaArtifacts from '@gnosis.pm/olympia-token'
 import { NETWORK_TIMEOUT } from 'store/actions/blockchain'
 import { isFeatureEnabled } from 'utils/features'

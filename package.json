@@ -40,7 +40,7 @@
   ],
   "dependencies": {
     "@gnosis.pm/pm-contracts": "^1.0.4",
-    "@gnosis.pm/gnosisjs": "^2.0.0",
+    "@gnosis.pm/pm-js": "^2.1.0",
     "@gnosis.pm/olympia-token": "^1.4.0",
     "autobind-decorator": "^2.1.0",
     "babel-polyfill": "^6.23.0",
