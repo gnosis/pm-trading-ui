@@ -11,7 +11,7 @@ cache:
   directories:
   - "$HOME/.npm"
 before_install:
-- npm i -g babel-cli webpack truffle-contract
+- npm i -g babel-cli webpack truffle-contract npm@latest
 after_success:
 - ./env_build.sh
 deploy:
