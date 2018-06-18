@@ -3,6 +3,7 @@ import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form'
 import integrations from 'integrations/store/reducers'
 import users from 'routes/Scoreboard/store/reducers/users'
+import rewards from 'routes/Scoreboard/store/reducers/rewards'
 import transactions from 'routes/Transactions/store/reducers/transactions'
 import market, { REDUCER_ID } from 'store/reducers/market'
 import { isFeatureEnabled } from 'utils/features'
@@ -30,6 +31,7 @@ const reducers = {
 if (tournamentEnabled) {
   reducers.tournament = combineReducers({
     ranking: users,
+    rewards,
   })
 }
 
