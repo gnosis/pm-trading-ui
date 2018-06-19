@@ -1,4 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes'
+import { List } from 'immutable'
 import PropTypes from 'prop-types'
 import * as React from 'react'
 import { connect } from 'react-redux'
@@ -53,7 +54,7 @@ ScoreBoard.propTypes = {
 }
 
 ScoreBoard.defaultProps = {
-  data: [],
+  data: List(),
   myAccount: '',
   mainnetAddress: undefined,
   rank: '',

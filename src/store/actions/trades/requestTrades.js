@@ -6,7 +6,7 @@ import { OUTCOME_TYPES } from 'utils/constants'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
 
-import TradeRecord, { ORDER_TYPE_BUY, ORDER_TYPE_SELL } from 'store/models/trade'
+import TradeRecord from 'store/models/trade'
 import { addTrade } from 'store/actions/trades'
 import { OutcomeRecord } from 'store/models/market'
 

@@ -6,8 +6,7 @@ import { closeModal } from 'store/actions/modal'
 import { requestCollateralTokenBalance } from 'store/actions/blockchain'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 
-import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, TRANSACTION_STATUS } from 'utils/constants'
-import { REVOKE_TOKENS } from 'utils/transactionExplanations'
+import { TRANSACTION_COMPLETE_STATUS, TRANSACTION_STATUS } from 'utils/constants'
 
 import { getRedeemedShares } from 'store/selectors/marketShares'
 import { getCollateralToken } from 'store/selectors/blockchain'
@@ -17,7 +16,7 @@ import { getCollateralToken } from 'store/selectors/blockchain'
  * @readonly
  * @enum {string}
  */
-export const TRANSACTION_STAGES = {
+const TRANSACTION_STAGES = {
   EVENT_DESCRIPTION: 'eventDescription',
   ORACLE: 'oracle',
   EVENT: 'event',
@@ -30,7 +29,7 @@ export const TRANSACTION_STAGES = {
 /**
  * Generic Stage for single-event transactions
  */
-export const TRANSACTION_EVENTS_GENERIC = [
+const TRANSACTION_EVENTS_GENERIC = [
   {
     event: TRANSACTION_STAGES.GENERIC,
     label: 'Sending Transaction',
@@ -83,7 +82,7 @@ export const redeemWinnings = market => async (dispatch, getState) => {
   // const transactions = marketType === OUTCOME_TYPES.CATEGORICAL ? [REVOKE_TOKENS] : [REVOKE_TOKENS, REVOKE_TOKENS]
 
   try {
-    console.log('winnings: ', await api.redeemWinnings(market.event.type, market.event.address))
+    console.warn('winnings: ', await api.redeemWinnings(market.event.type, market.event.address))
     await dispatch(closeEntrySuccess(transactionId, TRANSACTION_STAGES.GENERIC))
 
     Object.keys(redeemedShares).forEach(shareId =>
