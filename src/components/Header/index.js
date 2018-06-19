@@ -107,7 +107,6 @@ class Header extends Component {
       walletConnected = hasWallet && !!mainnetAddress
     }
 
-
     const logoVars = {}
     logoVars['--logoPath'] = `url("${logoPath}")`
     logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`

@@ -16,7 +16,7 @@ class ScoreBoard extends React.Component {
 
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank,
     } = this.props
 
     return (
@@ -26,6 +26,7 @@ class ScoreBoard extends React.Component {
         mainnetAddress={mainnetAddress}
         openSetMainnetAddressModal={openSetMainnetAddressModal}
         openClaimRewardModal={openClaimRewardModal}
+        rank={rank}
       />
     )
   }
@@ -44,6 +45,7 @@ ScoreBoard.propTypes = {
   })),
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
+  rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   fetchTournamentUsers: PropTypes.func.isRequired,
   openSetMainnetAddressModal: PropTypes.func.isRequired,
   openClaimRewardModal: PropTypes.func.isRequired,
@@ -54,6 +56,7 @@ ScoreBoard.defaultProps = {
   data: [],
   myAccount: '',
   mainnetAddress: undefined,
+  rank: '',
 }
 
 export default connect(selector, actions)(ScoreBoard)

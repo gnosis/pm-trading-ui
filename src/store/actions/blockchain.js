@@ -15,6 +15,7 @@ import { findDefaultProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
 import { getFeatureConfig, getConfiguration } from 'utils/features'
+import { getCollateralToken } from 'store/selectors/blockchain'
 
 const collateralTokenFromConfig = getFeatureConfig('collateralToken')
 const config = getConfiguration()
@@ -57,6 +58,30 @@ export const requestTokenBalance = (uTokenAddress, accountAddress) => async (dis
   const tokenAddress = hexWithPrefix(uTokenAddress)
   const tokenBalance = await getTokenBalance(tokenAddress, accountAddress)
   dispatch(setTokenBalance({ tokenAddress, tokenBalance }))
+}
+
+/**
+ * Requests the configured tournaments collateralToken balance. If none is set, does nothing
+ * @param {function} dispatch
+ * @param {function} getState
+ */
+export const requestCollateralTokenBalance = account => (dispatch, getState) => {
+  const state = getState()
+  const collateralToken = getCollateralToken(state)
+
+  // no collateral token defined yet - this information might be asynchronous, if the
+  // defined collateral token is inside a contract.
+  if (!collateralToken || !collateralToken.source) {
+    return undefined
+  }
+
+  // if the collateralToken source is the ETH balance from the users wallet, we don't need
+  // to start a request to fetch the balance, as it is auto updating in the current provider
+  if (collateralToken.source === TOKEN_SOURCE_ETH) {
+    return undefined
+  }
+
+  return dispatch(requestTokenBalance(collateralToken.address, account))
 }
 
 

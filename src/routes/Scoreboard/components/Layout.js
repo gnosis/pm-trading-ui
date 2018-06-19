@@ -90,7 +90,7 @@ Layout.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
-  rank: PropTypes.string,
+  rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 Layout.defaultProps = {

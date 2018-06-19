@@ -8,6 +8,7 @@ import { LOAD_LOCALSTORAGE } from 'store/middlewares/LocalStorageLoad'
 // Reducers
 import integrations from 'integrations/store/reducers'
 import users from 'routes/Scoreboard/store/reducers/users'
+import rewards from 'routes/Scoreboard/store/reducers/rewards'
 import transactions from 'routes/Transactions/store/reducers/transactions'
 import market from 'store/reducers/market'
 import entities from './entities'
@@ -36,6 +37,7 @@ const reducers = {
 if (tournamentEnabled) {
   reducers.tournament = combineReducers({
     ranking: users,
+    rewards,
   })
 }
 

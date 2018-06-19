@@ -53,6 +53,7 @@ class SharesTable extends Component {
       },
       isGasCostFetched,
       isGasPriceFetched,
+      sellFormHasErrors,
     } = this.props
     const tableRows = []
 
@@ -86,6 +87,7 @@ class SharesTable extends Component {
           isGasPriceFetched={isGasPriceFetched}
           selectedSellAmount={selectedSellAmount}
           handleSellShare={this.handleSellShare}
+          sellFormHasErrors={sellFormHasErrors}
         />)
       }
     })
@@ -121,6 +123,7 @@ SharesTable.propTypes = {
   sellShares: PropTypes.func,
   match: ReactRouterMatchShape,
   changeUrl: PropTypes.func.isRequired,
+  sellFormHasErrors: PropTypes.bool,
 }
 
 SharesTable.defaultProps = {
@@ -132,6 +135,7 @@ SharesTable.defaultProps = {
   sellShares: () => {},
   match: {},
   isGasPriceFetched: false,
+  sellFormHasErrors: false,
 }
 
 export default SharesTable
