@@ -9,7 +9,7 @@ import {
   getCurrentNetworkId,
 } from 'integrations/store/selectors'
 import { getGasPrice } from 'routes/MarketDetails/store/selectors'
-import { claimUserRewards } from 'store/actions/rewards'
+import { claimUserRewards } from 'routes/Scoreboard/store/actions'
 import { getFeatureConfig } from 'utils/features'
 import { requestClaimRewardGasCost } from './action'
 import { getClaimRewardGasCost, getRewardValue } from './selectors'
