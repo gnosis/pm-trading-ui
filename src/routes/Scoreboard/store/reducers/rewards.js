@@ -3,10 +3,6 @@ import { handleActions } from 'redux-actions'
 import { LOAD_LOCALSTORAGE } from 'store/middlewares/LocalStorageLoad'
 import { rewardsClaimed } from '../actions'
 
-const defaultState = Map({
-  rewardsClaimed: false,
-})
-
 export default handleActions(
   {
     [rewardsClaimed]: state => state.set('rewardsClaimed', true),
@@ -19,5 +15,7 @@ export default handleActions(
       },
     ) => state.set('rewardsClaimed', rewards.rewardsClaimed),
   },
-  defaultState,
+  Map({
+    rewardsClaimed: false,
+  }),
 )
