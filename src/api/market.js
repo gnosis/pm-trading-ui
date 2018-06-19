@@ -1,4 +1,4 @@
-import Gnosis from '@gnosis.pm/gnosisjs/'
+import Gnosis from '@gnosis.pm/pm-js/'
 import { OUTCOME_TYPES } from 'utils/constants'
 import * as api from './'
 

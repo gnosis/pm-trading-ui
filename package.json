@@ -39,8 +39,8 @@
     "precommit"
   ],
   "dependencies": {
-    "@gnosis.pm/gnosis-core-contracts": "^1.0.4",
-    "@gnosis.pm/gnosisjs": "^2.0.0",
+    "@gnosis.pm/pm-contracts": "^1.0.4",
+    "@gnosis.pm/pm-js": "^2.1.0",
     "@gnosis.pm/olympia-token": "^1.4.0",
     "autobind-decorator": "^2.1.0",
     "babel-polyfill": "^6.23.0",
@@ -77,7 +77,7 @@
     "recompose": "^0.27.1",
     "redux": "^4.0.0",
     "redux-actions": "^2.4.0",
-    "redux-form": "^7.4.0",
+    "redux-form": "^7.4.1",
     "redux-thunk": "^2.3.0",
     "reselect": "^3.0.1",
     "seedrandom": "^2.4.3",

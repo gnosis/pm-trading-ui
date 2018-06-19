@@ -8,18 +8,19 @@ import Span from 'components/layout/Span'
 import Countdown from 'components/Countdown'
 import Paragraph from 'components/layout/Paragraph'
 import { getFeatureConfig } from 'utils/features'
+import { connect } from 'react-redux'
+import { areRewardsClaimed } from '../../store'
 import style from './ClaimReward.mod.scss'
 
 const rewardsConfig = getFeatureConfig('rewards')
 const { rewardToken, claimReward } = rewardsConfig
 const claimUntilFormat = 'y[Y] M[M] D[d] h[h] m[m]'
-const rewardsClaimed = window ? window.localStorage.getItem('rewardsClaimed') === 'true' : false
 const cx = cn.bind(style)
 
 const claimStartDate = moment.utc(claimReward.claimStart)
 const claimEndDate = moment.utc(claimReward.claimUntil)
 
-const ClaimReward = ({ openClaimRewardModal, rewardValue }) => {
+const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardsClaimed }) => {
   const isInTimeframe = moment.utc().isBetween(claimStartDate, claimEndDate)
   const hasRewards = Decimal(rewardValue || 0).gt(0)
 
@@ -68,6 +69,11 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue }) => {
 ClaimReward.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
   rewardValue: PropTypes.number.isRequired,
+  rewardsClaimed: PropTypes.bool.isRequired,
 }
 
-export default ClaimReward
+const mapStateToProps = state => ({
+  rewardsClaimed: areRewardsClaimed(state),
+})
+
+export default connect(mapStateToProps, null)(ClaimReward)
