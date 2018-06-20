@@ -72,7 +72,7 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
   gaSend(['event', 'Transactions', 'trading-interface', 'Buy shares transactions start'])
 
   // Start a new transaction log
-  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.eventDescription.title}"`))
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Buying Shares for "${market.title}"`))
   try {
     await buyShares(market, outcomeIndex, outcomeTokenCount, cost, approvalResetAmount, neededDepositAmount)
     await dispatch(closeEntrySuccess, transactionId, TRANSACTION_STAGES.GENERIC)

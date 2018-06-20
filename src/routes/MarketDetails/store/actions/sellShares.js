@@ -38,7 +38,7 @@ const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (
   }
 
   // Start a new transaction log
-  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.eventDescription.title}"`))
+  await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Selling Shares for "${market.title}"`))
 
   gaSend(['event', 'Transactions', 'trading-interface', 'Sell shares transactions start'])
   const transactions = [

@@ -3,7 +3,7 @@ import { filter, mapValues } from 'lodash'
 import { hexWithPrefix } from 'utils/helpers'
 import moment from 'moment'
 
-import { getMarkets, getMarketById } from 'store/selectors/market'
+import { marketsSelector, getMarketById } from 'store/selectors/market'
 
 export const getTrades = (state) => {
   if (!state.entities) {
@@ -28,10 +28,10 @@ const eventMarketsSelector = (state) => {
   const { markets } = state.entities
   const eventMarkets = {}
 
-  const marketSelector = getMarketById(state)
+  const marketListSelector = getMarketById(state)
 
   Object.keys(markets).forEach((marketAddress) => {
-    eventMarkets[markets[marketAddress].event] = marketSelector(marketAddress)
+    eventMarkets[markets[marketAddress].event] = marketListSelector(marketAddress)
   })
 
   return eventMarkets
@@ -101,14 +101,14 @@ export const enhanceAndSortTrades = (markets, eventMarkets, trades) => Object.ke
   .sort((a, b) => (moment(a.date).isBefore(b.date) ? 1 : -1))
 
 export const getMarketTrades = marketAddress => createSelector(
-  getMarkets,
+  marketsSelector,
   eventMarketSelector(marketAddress),
   getTradesForMarket(marketAddress),
   enhanceAndSortTrades,
 )
 
 export const getAccountTrades = accountAddress => createSelector(
-  getMarkets,
+  marketsSelector,
   eventMarketsSelector,
   getTradesForAccount(accountAddress),
   enhanceAndSortTrades,

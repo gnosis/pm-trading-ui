@@ -5,50 +5,14 @@ import { getEventByAddress } from 'store/selectors/event'
 import { getOracleByAddress } from 'store/selectors/oracle'
 import { getEventDescriptionByAddress } from 'store/selectors/eventDescription'
 
-export const getMarketById = state => (marketAddress) => {
-  const marketEntities = entitySelector(state, 'markets')
-
-  let market = {}
-  if (marketEntities[marketAddress]) {
-    const marketEntity = marketEntities[marketAddress]
-
-    const marketEvent = getEventByAddress(state)(marketEntity.event)
-
-    if (!marketEvent) {
-      return market
-    }
-
-    const eventOracle = getOracleByAddress(state)(marketEvent.oracle)
-
-    if (!eventOracle) {
-      return market
-    }
-
-    const oracleEventDescription = getEventDescriptionByAddress(state)(eventOracle.eventDescription)
-
-    if (!oracleEventDescription) {
-      return market
-    }
-
-    market = {
-      ...marketEntities[marketAddress],
-      event: marketEvent,
-      oracle: eventOracle,
-      eventDescription: oracleEventDescription,
-    }
-  }
-
-  return market
-}
-
-export const getMarkets = (state) => {
+export const marketsSelector = (state) => {
   const marketEntities = entitySelector(state, 'markets')
 
   return Object.keys(marketEntities).map(getMarketById(state))
 }
 
 export const filterMarkets = state => (opts) => {
-  const marketEntities = getMarkets(state)
+  const marketEntities = marketsSelector(state)
 
   const {
     textSearch, resolved, onlyMyMarkets, onlyModeratorsMarkets, defaultAccount,
@@ -56,8 +20,8 @@ export const filterMarkets = state => (opts) => {
 
   return marketEntities.filter(market =>
     (!textSearch ||
-        market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
-        market.eventDescription.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
+        market.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1 ||
+        market.title.toLowerCase().indexOf(textSearch.toLowerCase()) > -1) &&
       (!onlyMyMarkets || market.creator === defaultAccount.toLowerCase()) &&
       (!onlyModeratorsMarkets || isModerator(market.creator) !== undefined) &&
       (typeof resolved === 'undefined' ||

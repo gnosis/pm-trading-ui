@@ -206,7 +206,7 @@ class MarketDetail extends Component {
         <div className={cx('container')}>
           <div className={cx('row')}>
             <div className={cx('col-xs-10 col-xs-offset-1 col-sm-7 col-sm-offset-0')}>
-              <h1 className={cx('marketTitleHeading')}>{market.eventDescription.title}</h1>
+              <h1 className={cx('marketTitleHeading')}>{market.title}</h1>
             </div>
           </div>
         </div>

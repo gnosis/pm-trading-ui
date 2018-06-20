@@ -13,8 +13,8 @@ import modal from './modal'
 import blockchain from './blockchain'
 import notifications from './notifications'
 import marketList from './market'
-import marketShares from './shares'
-import marketTrades from './trades'
+import accountShares from './accountShares'
+import accountTrades from './accountTrades'
 
 const reducerConditions = {
   users: () => isFeatureEnabled('scoreboard'),
@@ -47,8 +47,8 @@ const reducers = {
   notifications,
   integrations,
   marketList,
-  marketShares,
-  marketTrades,
+  accountShares,
+  accountTrades,
   ...filteredRouteReducers,
 }
 

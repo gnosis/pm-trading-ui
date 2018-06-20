@@ -40,10 +40,10 @@ export const eventMarketsSelector = (state) => {
   const { markets } = state.entities
   const eventMarkets = {}
 
-  const marketSelector = getMarketById(state)
+  const marketsSelector = getMarketById(state)
 
   Object.keys(markets).forEach((marketAddress) => {
-    eventMarkets[markets[marketAddress].event] = marketSelector(marketAddress)
+    eventMarkets[markets[marketAddress].event] = marketsSelector(marketAddress)
   })
 
   return eventMarkets
