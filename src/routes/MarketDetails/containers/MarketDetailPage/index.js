@@ -71,8 +71,8 @@ const mapStateToProps = (state, ownProps) => {
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
     currentBalance: getCurrentBalance(state),
-    collateralTokenBalance: getTokenAmount(state, market.event?.collateralToken),
-    collateralTokenSymbol: getTokenSymbol(state, market.event?.collateralToken),
+    collateralTokenBalance: getTokenAmount(state, market.collateralToken),
+    collateralTokenSymbol: getTokenSymbol(state, market.collateralToken),
     mainnetAddress: getRegisteredMainnetAddress(state),
   }
 }

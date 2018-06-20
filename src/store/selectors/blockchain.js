@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 import { TOKEN_SOURCE_ADDRESS, TOKEN_SOURCE_CONTRACT, TOKEN_SOURCE_ETH } from 'store/actions/blockchain'
 import { getCurrentBalance } from 'integrations/store/selectors'
-import { weiToEth, hexWithPrefix } from 'utils/helpers'
+import { weiToEth, hexWithoutPrefix, hexWithPrefix } from 'utils/helpers'
 
 /**
  * Returns if gnosis.js is initialized or not
