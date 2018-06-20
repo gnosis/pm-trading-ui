@@ -1,4 +1,4 @@
-import { isMarketClosed, isMarketResolved } from 'utils/helpers'
+import { isMarketClosed, isMarketResolved } from 'store/utils/marketStatus'
 import { getProviderConfig, isFeatureEnabled } from 'utils/features'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import MarketBuySharesForm from './MarketBuySharesForm'

@@ -7,5 +7,3 @@ export const marketsSelector = createSelector(
 )
 
 export const getMarketById = state => marketAddress => state.marketList.get(marketAddress, {})
-
-export * from './old'

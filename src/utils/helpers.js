@@ -26,8 +26,6 @@ export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substr
 
 export const normalizeHex = value => hexWithPrefix(value).toLowerCase()
 
-export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
-
 export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) =>
   stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
 
@@ -73,9 +71,9 @@ export const getOutcomeName = (market, index) => {
   if (!market.event) {
     return null
   }
-  if (market.event.type === OUTCOME_TYPES.CATEGORICAL) {
+  if (market.type === OUTCOME_TYPES.CATEGORICAL) {
     outcomeName = market.eventDescription.outcomes[index]
-  } else if (market.event.type === OUTCOME_TYPES.SCALAR) {
+  } else if (market.type === OUTCOME_TYPES.SCALAR) {
     outcomeName = index === 0 ? 'Short' : 'Long'
   }
   return outcomeName

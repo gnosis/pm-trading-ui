@@ -92,6 +92,7 @@ const buildCategoricalMarket = (market) => {
     netOutcomeTokensSold,
     event: {
       contract: { address: eventAddress },
+      type,
       collateralToken,
       isWinningOutcomeSet,
       oracle: {
@@ -116,6 +117,7 @@ const buildCategoricalMarket = (market) => {
     collateralToken,
     address,
     stage,
+    type,
     outcomes,
     eventAddress,
     resolution: resolutionDate,

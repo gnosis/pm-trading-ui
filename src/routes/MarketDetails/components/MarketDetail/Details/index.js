@@ -7,7 +7,7 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import { LOWEST_VALUE } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
-import { isMarketClosed, isMarketResolved } from 'utils/helpers'
+import { isMarketClosed, isMarketResolved } from 'store/utils/marketStatus'
 import Outcome from 'components/Outcome'
 import MarketTimer from './MarketTimer'
 import RedeemWinnigs from './RedeemWinnings'
@@ -21,7 +21,7 @@ const Details = ({
   market, marketShares, gasCosts, gasPrice, handleRedeemWinnings,
 }) => {
   const timeToResolution = moment
-    .utc(market.eventDescription.resolutionDate)
+    .utc(market.resolution)
     .local()
     .diff(moment(), 'hours')
   const winningsTotal = Object.keys(marketShares).reduce(
@@ -58,21 +58,21 @@ const Details = ({
     <div className={cx('col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0')}>
       <Markdown
         className={cx('marketDescription')}
-        source={market.eventDescription.description}
+        source={market.description}
         renderers={markdownRenderers}
       />
       <Outcome
         resolved={marketResolved}
-        type={market.event.type}
+        type={market.type}
         outcomeTokensSold={market.netOutcomeTokensSold}
-        resolution={market.eventDescription.resolutionDate}
+        resolution={market.resolution}
         funding={market.funding}
-        outcomes={market.eventDescription.outcomes}
-        winningOutcome={market.event.outcome}
-        upperBound={market.event.upperBound}
-        lowerBound={market.event.lowerBound}
-        decimals={market.eventDescription.decimals}
-        unit={market.eventDescription.unit}
+        outcomes={market.outcomes}
+        winningOutcome={market.winningOutcome}
+        upperBound={market.bounds?.upper}
+        lowerBound={market.bounds?.lower}
+        decimals={market.bounds?.decimals}
+        unit={market.bounds?.unit}
         opts={outcomeOpts}
       />
       <MarketTimer

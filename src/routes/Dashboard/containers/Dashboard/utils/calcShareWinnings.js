@@ -4,7 +4,7 @@ import { OUTCOME_TYPES } from 'utils/constants'
 const SCALAR_OUTCOME_RANGE = 1000000
 
 const calcShareWinningsCategorical = (share, market, outcomeToken) => {
-  const outcome = outcomeToken.index
+  const outcome = market.winningOucome
   const shareOutcome = share.outcomeToken.index
   if (shareOutcome !== outcome) {
     return '0'
@@ -50,12 +50,12 @@ const calcShareWinningsScalar = (share, market, outcomeToken) => {
   throw new Error(`Invalid Outcome for Scalar Event found: ${share.outcomeToken.index}`)
 }
 
-const calcShareWinnings = (share, market, event) => {
-  const isCategorical = event.type === OUTCOME_TYPES.CATEGORICAL
+const calcShareWinnings = (share, market) => {
+  const isCategorical = market.type === OUTCOME_TYPES.CATEGORICAL
 
   return isCategorical
-    ? calcShareWinningsCategorical(share, market, event)
-    : calcShareWinningsScalar(share, market, event)
+    ? calcShareWinningsCategorical(share, market)
+    : calcShareWinningsScalar(share, market)
 }
 
 export default calcShareWinnings

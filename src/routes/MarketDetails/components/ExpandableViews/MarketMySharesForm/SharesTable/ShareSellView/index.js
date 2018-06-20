@@ -104,7 +104,7 @@ class ShareSellView extends Component {
     let newMarginalPrices
     let newScalarPredictedValue
 
-    if (market.event.type === OUTCOME_TYPES.SCALAR) {
+    if (market.type === OUTCOME_TYPES.SCALAR) {
       newMarginalPrices = [new Decimal(1).sub(currentProbability), newProbability]
       newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
     }
@@ -130,7 +130,7 @@ class ShareSellView extends Component {
         console.error(e)
       }
 
-      if (market.event.type === OUTCOME_TYPES.SCALAR) {
+      if (market.type === OUTCOME_TYPES.SCALAR) {
         newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
         newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
       }

@@ -13,7 +13,7 @@ import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/M
  */
 const calculateCurrentProbability = (market, share) => {
   // We can calculate probability for scalar markets without a share
-  const categoricalMarketWithoutShare = !share && market.event && market.event.type === OUTCOME_TYPES.CATEGORCAL
+  const categoricalMarketWithoutShare = !share && market && market.type === OUTCOME_TYPES.CATEGORCAL
   if (!market || categoricalMarketWithoutShare) {
     return new Decimal(0)
   }

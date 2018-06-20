@@ -6,12 +6,12 @@ import { getMarketTrades } from 'store/selectors/marketTrades'
 
 const getFirstGraphPoint = (market) => {
   let firstPoint
-  if (OUTCOME_TYPES.SCALAR === market.event.type) {
+  if (OUTCOME_TYPES.SCALAR === market.type) {
     firstPoint = {
       date: new Date(market.creationDate).valueOf(),
       scalarPoint: normalizeScalarPoint(['0.5', '0.5'], market),
     }
-  } else if (OUTCOME_TYPES.CATEGORICAL === market.event.type) {
+  } else if (OUTCOME_TYPES.CATEGORICAL === market.type) {
     firstPoint = {
       date: new Date(market.creationDate).valueOf(),
       scalarPoint: undefined,

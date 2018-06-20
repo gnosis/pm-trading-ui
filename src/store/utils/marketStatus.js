@@ -21,4 +21,6 @@ export const isNewMarket = (creation) => {
   return threeDaysAgo.isBefore(creation)
 }
 
+export const isMarketResolved = ({ resolved }) => resolved
+
 export const isMarketFunded = stage => stage > MARKET_STAGES.MARKET_CREATED
