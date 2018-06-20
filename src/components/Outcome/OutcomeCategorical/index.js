@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import moment from 'moment'
 import { calcLMSRMarginalPrice } from 'api'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
@@ -16,7 +17,6 @@ const OutcomeCategorical = ({
   funding,
   resolution,
   outcomes,
-  marginalPrices,
   opts = {},
 }) => {
   const {
@@ -24,7 +24,7 @@ const OutcomeCategorical = ({
   } = opts
   const tokenDistribution = outcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: outcomeTokensSold,
+      netOutcomeTokensSold: outcomeTokensSold.toArray(),
       funding,
       outcomeTokenIndex: outcomeIndex,
     })
@@ -78,11 +78,10 @@ const OutcomeCategorical = ({
 
 OutcomeCategorical.propTypes = {
   resolved: PropTypes.bool.isRequired,
-  outcomeTokensSold: PropTypes.array.isRequired,
+  outcomeTokensSold: ImmutablePropTypes.list.isRequired,
   resolution: PropTypes.string.isRequired,
   funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  outcomes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  marginalPrices: PropTypes.arrayOf(PropTypes.string),
+  outcomes: ImmutablePropTypes.list.isRequired,
   opts: PropTypes.shape({
     className: PropTypes.string,
     showOnlyTrendingOutcome: PropTypes.bool,
@@ -92,7 +91,6 @@ OutcomeCategorical.propTypes = {
 }
 
 OutcomeCategorical.defaultProps = {
-  marginalPrices: [],
   opts: {
     className: '',
     showOnlyTrendingOutcome: false,

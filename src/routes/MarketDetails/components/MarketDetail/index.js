@@ -87,11 +87,11 @@ class MarketDetail extends Component {
         }
 
         if (isMarketResolved(this.props.market)) {
-          this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.event.address })
+          this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.eventAddress })
         }
 
-        if (!this.props.collateralTokenSymbol && this.props.market.event.collateralToken) {
-          this.props.requestTokenSymbol(this.props.market.event.collateralToken)
+        if (!this.props.collateralTokenSymbol && this.props.market.collateralToken) {
+          this.props.requestTokenSymbol(this.props.market.collateralToken)
         }
       })
       .catch((err) => {
@@ -236,7 +236,7 @@ class MarketDetail extends Component {
         >
           {this.renderExpandableContent()}
         </div>
-        <MarketGraph data={marketGraph} market={market} />
+        {/* <MarketGraph data={marketGraph} market={market} /> */}
       </div>
     )
   }

@@ -8,8 +8,9 @@ import ScalarGraph from './ScalarGraph'
 const MarketGraph = ({
   data = [],
   market: {
-    event: { type, lowerBound, upperBound },
-    eventDescription,
+    type,
+    bounds: { lower, upper },
+    description,
   },
 }) => {
   if (data.length) {
@@ -17,7 +18,7 @@ const MarketGraph = ({
       return <CategoricalGraph data={data} />
     } else if (type === OUTCOME_TYPES.SCALAR) {
       return (
-        <ScalarGraph data={data} eventDescription={eventDescription} lowerBound={lowerBound} upperBound={upperBound} />
+        <ScalarGraph data={data} eventDescription={description} lowerBound={lower} upperBound={upper} />
       )
     }
   }

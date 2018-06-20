@@ -16,18 +16,12 @@ const Infos = ({
     Token: collateralTokenSymbol,
     Fee: `${decimalToText(market.fee, 2) / 10000} %`,
     Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenSymbol}`,
-    'Trading Volume': `${decimalToText(Decimal(market.tradingVolume).div(1e18))} ${collateralTokenSymbol}`,
+    'Trading Volume': `${decimalToText(Decimal(market.volume).div(1e18))} ${collateralTokenSymbol}`,
   }
-  const showWithdrawFees =
-    defaultAccount && market.oracle.owner === defaultAccount && new Decimal(market.collectedFees).gt(0)
 
   if (moderators[defaultAccount]) {
     // Show creator String
     marketInfos.creator = moderators[market.creator] || market.creator
-  }
-
-  if (showWithdrawFees) {
-    marketInfos['Earnings through market fees'] = `${decimalToText(weiToEth(market.collectedFees))} ${collateralTokenSymbol}`
   }
 
   return (

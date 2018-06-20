@@ -64,7 +64,7 @@ const Details = ({
       <Outcome
         resolved={marketResolved}
         type={market.type}
-        outcomeTokensSold={market.netOutcomeTokensSold}
+        outcomeTokensSold={market.outcomeTokensSold}
         resolution={market.resolution}
         funding={market.funding}
         outcomes={market.outcomes}
