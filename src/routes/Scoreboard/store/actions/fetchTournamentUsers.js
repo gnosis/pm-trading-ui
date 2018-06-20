@@ -5,6 +5,7 @@ export default () => dispatch =>
   requestFromRestAPI('scoreboard').then((response) => {
     if (!response) {
       dispatch(addUsers([]))
+      return
     }
 
     dispatch(addUsers(response.results))
