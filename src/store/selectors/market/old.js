@@ -5,12 +5,6 @@ import { getEventByAddress } from 'store/selectors/event'
 import { getOracleByAddress } from 'store/selectors/oracle'
 import { getEventDescriptionByAddress } from 'store/selectors/eventDescription'
 
-export const marketsSelector = (state) => {
-  const marketEntities = entitySelector(state, 'markets')
-
-  return Object.keys(marketEntities).map(getMarketById(state))
-}
-
 export const filterMarkets = state => (opts) => {
   const marketEntities = marketsSelector(state)
 
