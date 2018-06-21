@@ -213,7 +213,7 @@ class ShareSellView extends Component {
                     </span>
                   </div>
                   <InteractionButton
-                    loading={submitting || market.local}
+                    loading={submitting}
                     disabled={submitDisabled}
                     className={cx('btn', 'btn-block', 'btn-primary')}
                     type="submit"

@@ -53,6 +53,7 @@ const Details = ({
     ),
   }
   /* eslint-enable */
+  const marketOutcomes = market.outcomes ? market.outcomes.map(outcome => outcome.name).toArray() : []
 
   return (
     <div className={cx('col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0')}>
@@ -64,10 +65,10 @@ const Details = ({
       <Outcome
         resolved={marketResolved}
         type={market.type}
-        outcomeTokensSold={market.outcomeTokensSold}
+        outcomeTokensSold={market.outcomeTokensSold.toArray()}
         resolution={market.resolution}
         funding={market.funding}
-        outcomes={market.outcomes}
+        outcomes={marketOutcomes}
         winningOutcome={market.winningOutcome}
         upperBound={market.bounds?.upper}
         lowerBound={market.bounds?.lower}

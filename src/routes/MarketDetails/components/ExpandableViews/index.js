@@ -37,9 +37,8 @@ const expandableViews = {
     component: MarketBuySharesForm,
     showCondition: props =>
       props.market &&
-      !props.market.local &&
       !!props.defaultAccount &&
-      props.defaultAccount !== props.market.owner &&
+      props.defaultAccount !== props.creator &&
       !isMarketClosed(props.market) &&
       !isMarketResolved(props.market) &&
       showExpandableTournament(props),
@@ -48,13 +47,15 @@ const expandableViews = {
     label: MY_TOKENS,
     className: 'btn btn-default',
     component: MarketMySharesForm,
-    showCondition: props => props.market && !!props.defaultAccount && showExpandableTournament(props),
+    showCondition: props =>
+      props.market && !!props.defaultAccount && props.hasWallet && showExpandableTournament(props),
   },
   [EXPAND_MY_TRADES]: {
     label: 'My Trades',
     className: 'btn btn-default',
     component: MarketMyTrades,
-    showCondition: props => props.market && !!props.defaultAccount && showExpandableTournament(props),
+    showCondition: props =>
+      props.market && !!props.defaultAccount && props.hasWallet && showExpandableTournament(props),
   },
 }
 

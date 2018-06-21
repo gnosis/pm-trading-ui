@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import { marketShape } from 'utils/shapes'
+import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { decimalToText } from 'components/DecimalValue'
-import { weiToEth } from 'utils/helpers'
 import style from './Infos.mod.scss'
 
 const cx = cn.bind(style)
@@ -13,10 +13,28 @@ const Infos = ({
   market, defaultAccount, moderators, collateralTokenSymbol,
 }) => {
   const marketInfos = {
-    Token: collateralTokenSymbol,
+    Token: collateralTokenSymbol || <IndefiniteSpinner width={20} height={20} />,
     Fee: `${decimalToText(market.fee, 2) / 10000} %`,
-    Funding: `${decimalToText(Decimal(market.funding).div(1e18))} ${collateralTokenSymbol}`,
-    'Trading Volume': `${decimalToText(Decimal(market.volume).div(1e18))} ${collateralTokenSymbol}`,
+    Funding: (
+      <span>
+        {decimalToText(Decimal(market.funding).div(1e18))}{' '}
+        {collateralTokenSymbol || (
+          <span style={{ position: 'relative', bottom: -4 }}>
+            <IndefiniteSpinner width={20} height={20} />
+          </span>
+        )}
+      </span>
+    ),
+    'Trading Volume': (
+      <span>
+        {decimalToText(Decimal(market.volume).div(1e18))}{' '}
+        {collateralTokenSymbol || (
+          <span style={{ position: 'relative', bottom: -4 }}>
+            <IndefiniteSpinner width={20} height={20} />
+          </span>
+        )}
+      </span>
+    ),
   }
 
   if (moderators[defaultAccount]) {

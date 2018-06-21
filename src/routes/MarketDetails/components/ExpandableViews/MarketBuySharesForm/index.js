@@ -98,10 +98,7 @@ class MarketBuySharesForm extends Component {
       isGasPriceFetched,
       invalid,
       handleSubmit,
-      market: {
-        event: { collateralToken, type },
-        local,
-      },
+      market: { type, collateralToken },
       selectedBuyInvest,
       submitFailed,
       submitting,
@@ -195,8 +192,7 @@ class MarketBuySharesForm extends Component {
                 <div className={cx('col-md-6')}>
                   {isGasPriceFetched && isGasCostFetched(GAS_COST.BUY_SHARES) ? (
                     <React.Fragment>
-                      <DecimalValue value={gasCostEstimation} decimals={4} />{' '}
-                      ETH
+                      <DecimalValue value={gasCostEstimation} decimals={4} /> ETH
                     </React.Fragment>
                   ) : (
                     <IndefiniteSpinner width={16} height={16} />
@@ -210,7 +206,7 @@ class MarketBuySharesForm extends Component {
                   <InteractionButton
                     className={cx('btn', 'btn-primary', 'col-xs-12')}
                     disabled={submitDisabled}
-                    loading={submitting || local}
+                    loading={submitting}
                     type="submit"
                   >
                     Buy Tokens

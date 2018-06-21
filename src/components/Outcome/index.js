@@ -1,7 +1,6 @@
 import React from 'react'
 import OutcomeCategorical from 'components/Outcome/OutcomeCategorical'
 import OutcomeScalar from 'components/Outcome/OutcomeScalar'
-import ImmutablePropTypes from 'react-immutable-proptypes'
 import WinningOutcome from 'components/Outcome/WinningOutcome'
 import { OUTCOME_TYPES } from 'utils/constants'
 import PropTypes from 'prop-types'
@@ -75,10 +74,10 @@ Outcome.propTypes = {
   lowerBound: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   unit: PropTypes.string,
   decimals: PropTypes.number,
-  outcomeTokensSold: ImmutablePropTypes.list,
+  outcomeTokensSold: PropTypes.array.isRequired,
   resolution: PropTypes.string,
   funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  outcomes: ImmutablePropTypes.list,
+  outcomes: PropTypes.array.isRequired,
   marginalPrices: PropTypes.arrayOf(PropTypes.string),
   winningOutcome: PropTypes.number,
   opts: PropTypes.shape({

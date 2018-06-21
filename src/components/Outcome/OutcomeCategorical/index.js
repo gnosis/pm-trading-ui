@@ -24,7 +24,7 @@ const OutcomeCategorical = ({
   } = opts
   const tokenDistribution = outcomes.map((outcome, outcomeIndex) => {
     const marginalPrice = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: outcomeTokensSold.toArray(),
+      netOutcomeTokensSold: outcomeTokensSold,
       funding,
       outcomeTokenIndex: outcomeIndex,
     })
@@ -78,10 +78,10 @@ const OutcomeCategorical = ({
 
 OutcomeCategorical.propTypes = {
   resolved: PropTypes.bool.isRequired,
-  outcomeTokensSold: ImmutablePropTypes.list.isRequired,
+  outcomeTokensSold: PropTypes.array.isRequired,
   resolution: PropTypes.string.isRequired,
   funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  outcomes: ImmutablePropTypes.list.isRequired,
+  outcomes: PropTypes.array.isRequired,
   opts: PropTypes.shape({
     className: PropTypes.string,
     showOnlyTrendingOutcome: PropTypes.bool,
