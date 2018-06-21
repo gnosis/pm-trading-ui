@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import { requestFromRestAPI } from 'api/utils/fetch'
-import { hexWithoutPrefix } from 'utils/helpers'
+import { hexWithoutPrefix, add0xPrefix } from 'utils/helpers'
 import { getConfiguration } from 'utils/features'
 import { OUTCOME_TYPES } from 'utils/constants'
 import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
@@ -9,6 +9,7 @@ import addMarkets from './addMarkets'
 
 const config = getConfiguration()
 const whitelisted = config.whitelist || {}
+const hiddenMarkets = config.hiddenMarkets || []
 
 const addresses = Object.keys(whitelisted).map(hexWithoutPrefix)
 
@@ -157,6 +158,10 @@ export const processMarketResponse = (dispatch, state, response) => {
 
   if (applicationCollateralToken.address) {
     marketRecords = marketRecords.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(applicationCollateralToken.address))
+  }
+
+  if (hiddenMarkets.length > 0) {
+    marketRecords = marketRecords.filter(market => !hiddenMarkets.find(hiddenMarketAddress => hiddenMarketAddress === add0xPrefix(market.address)))
   }
 
   dispatch(addMarkets(marketRecords))

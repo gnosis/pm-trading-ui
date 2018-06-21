@@ -11,5 +11,6 @@
   },
   "whitelist": {
     "0xafdda4e896f543ea60f9d4c72d22f950e8c72812": "Mikhail"
-    }
+  },
+  "hiddenMarkets": ["0x9e1008ff1b30b871701e5527fc4efe339cf96abc", "0x23effcde33bd3100ca038f56ccda0a0c695439da"]
 }
