@@ -28,7 +28,6 @@ const reducer = handleActions(
     [hideTransactionLog]: state => state.set('visible', false),
     [LOAD_LOCALSTORAGE]: (state, action) =>
       state.withMutations((stateMap) => {
-        console.log('loading storage')
         const savedLogs = get(action, 'payload.transactions.log', {})
         Object.keys(savedLogs).forEach((id) => {
           let log = { ...savedLogs[id] }
