@@ -13,7 +13,8 @@ const ScalarMarketRecord = Record({
   winningOutcome: undefined, // int
   funding: undefined, // int
   creation: undefined, // moment
-  stage: undefined, // int
+  stage: undefined,
+  fee: undefined, // int
   resolved: undefined, // boolean
   closed: undefined, // boolean
   creator: undefined, // string

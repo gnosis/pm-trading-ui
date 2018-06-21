@@ -34,6 +34,7 @@ const buildScalarMarket = (market) => {
     tradingVolume,
     funding,
     netOutcomeTokensSold,
+    fee,
     event: {
       contract: { address: eventAddress },
       type,
@@ -67,6 +68,7 @@ const buildScalarMarket = (market) => {
     address,
     stage,
     type,
+    fee,
     outcomes,
     bounds,
     eventAddress,
@@ -89,6 +91,7 @@ const buildCategoricalMarket = (market) => {
     contract: { address, creationDate, creator },
     tradingVolume,
     funding,
+    fee,
     netOutcomeTokensSold,
     event: {
       contract: { address: eventAddress },
@@ -125,6 +128,7 @@ const buildCategoricalMarket = (market) => {
     volume: tradingVolume,
     resolved,
     closed,
+    fee,
     funding: funding || 0,
     winningOutcome: outcomes.get(winningOutcomeIndex),
     outcomeTokensSold: List(netOutcomeTokensSold),

@@ -11,16 +11,17 @@ import ScalarSlider from './ScalarSlider'
 
 const OutcomeSectionScalar = (props) => {
   const {
-    selectedBuyInvest,
     selectedOutcome,
     market: {
       bounds: {
         lower, upper, decimals, unit,
-      }, outcomeTokensSold, funding,
+      },
+      outcomeTokensSold,
+      funding,
     },
     outcomeTokenCount,
+    valid: canRunSimulation,
   } = props
-  const canRunSimulation = selectedBuyInvest && selectedOutcome
 
   const marketTokenCounts = outcomeTokensSold.toArray().map(value => Decimal(value))
   const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) =>
@@ -83,12 +84,12 @@ const OutcomeSectionScalar = (props) => {
 OutcomeSectionScalar.propTypes = {
   market: marketShape.isRequired,
   selectedOutcome: PropTypes.string,
-  selectedBuyInvest: PropTypes.string,
+  valid: PropTypes.bool,
   outcomeTokenCount: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.number]).isRequired,
 }
 
 OutcomeSectionScalar.defaultProps = {
-  selectedBuyInvest: '0',
+  valid: false,
   selectedOutcome: undefined,
 }
 

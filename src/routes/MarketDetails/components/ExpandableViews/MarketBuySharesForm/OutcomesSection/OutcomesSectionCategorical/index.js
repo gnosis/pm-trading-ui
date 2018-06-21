@@ -9,12 +9,11 @@ import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
 const OutcomesSectionCategorical = (props) => {
   const {
-    selectedBuyInvest,
     selectedOutcome,
     market: { funding, outcomeTokensSold, outcomes },
     outcomeTokenCount,
+    valid: canRunSimulation,
   } = props
-  const canRunSimulation = selectedBuyInvest && selectedOutcome
 
   const marketTokenCounts = outcomeTokensSold.toArray().map(value => Decimal(value))
   let marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
@@ -67,12 +66,12 @@ const OutcomesSectionCategorical = (props) => {
 OutcomesSectionCategorical.propTypes = {
   market: marketShape.isRequired,
   selectedOutcome: PropTypes.string,
-  selectedBuyInvest: PropTypes.string,
+  valid: PropTypes.bool,
   outcomeTokenCount: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.number]).isRequired,
 }
 
 OutcomesSectionCategorical.defaultProps = {
-  selectedBuyInvest: '0',
+  valid: false,
   selectedOutcome: undefined,
 }
 

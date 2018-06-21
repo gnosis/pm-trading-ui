@@ -156,7 +156,7 @@ class MarketBuySharesForm extends Component {
           <div className={cx('row')}>
             <OutcomeSection
               market={market}
-              valid={valid}
+              valid={isValid}
               selectedBuyInvest={selectedBuyInvest}
               selectedOutcome={selectedOutcome}
               outcomeTokenCount={outcomeTokenCount}

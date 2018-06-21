@@ -21,13 +21,13 @@ const getOutcomeTokenCount = (market, investment, outcomeIndex, limitMargin) => 
     .div(new Decimal(100).add(limitMargin || LIMIT_MARGIN))
     .mul(100)
     .round()
-  const { funding, netOutcomeTokensSold, fee } = market
+  const { funding, outcomeTokensSold, fee } = market
 
   let outcomeTokenCount
   try {
     outcomeTokenCount = calcLMSROutcomeTokenCount({
       feeFactor: fee,
-      netOutcomeTokensSold,
+      netOutcomeTokensSold: outcomeTokensSold.toArray(),
       funding,
       outcomeTokenIndex: parseInt(outcomeIndex, 10),
       cost: invest.toString(),
