@@ -22,26 +22,12 @@ const saveStorage = throttle((store, storage, options) => {
 
   // only save special paths from whitelist, if exists
   if (whitelist && whitelist.length > 0) {
-    let whitelistedPayload = {}
-
-    whitelist.forEach((path) => {
-      const data = pick(payload, path)
-
-      if (data) {
-        whitelistedPayload = {
-          ...whitelistedPayload,
-          ...data,
-        }
-      }
-    })
-    console.log(whitelistedPayload)
-
-    payload = whitelistedPayload
+    payload = pick(payload, whitelist)
   }
 
+  // omit paths from blacklist, if exists
   if (blacklist && blacklist.length > 0) {
     payload = omit(payload, blacklist)
-    console.log(payload)
   }
 
   const stringStorage = JSON.stringify(payload)

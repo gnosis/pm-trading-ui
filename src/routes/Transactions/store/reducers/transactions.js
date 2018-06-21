@@ -9,7 +9,7 @@ import {
   addTransactionLogEntry,
 } from 'routes/Transactions/store/actions/transactions'
 import TxRecord from 'routes/Transactions/store/models/transaction'
-import { LOAD_LOCALSTORAGE } from 'store/middlewares/LocalStorageLoad'
+import { LOAD_LOCALSTORAGE } from 'store/middlewares/Storage'
 
 const reducer = handleActions(
   {
@@ -28,6 +28,7 @@ const reducer = handleActions(
     [hideTransactionLog]: state => state.set('visible', false),
     [LOAD_LOCALSTORAGE]: (state, action) =>
       state.withMutations((stateMap) => {
+        console.log('loading storage')
         const savedLogs = get(action, 'payload.transactions.log', {})
         Object.keys(savedLogs).forEach((id) => {
           let log = { ...savedLogs[id] }

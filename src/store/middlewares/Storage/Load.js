@@ -16,9 +16,9 @@ const middleware = (storage) => {
       if (stringPayload) {
         let payload
         try {
-          const decoded = Buffer.from(stringPayload).toString('ascii')
+          const decoded = Buffer.from(stringPayload, 'base64').toString('ascii')
           payload = JSON.parse(decoded)
-          store.dispatch(actions.loadLocalstorage(payload))
+          store.dispatch(actions.loadStorage(payload))
         } catch (e) {
           console.error('Could not load saved storage')
         }
