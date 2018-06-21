@@ -5,7 +5,7 @@ import { normalizeHex } from 'utils/helpers'
 
 const tradesWithMarketsSelector = createSelector(
   state => state.marketList,
-  state => state.marketTrades,
+  state => state.accountTrades,
   (marketList, marketTrades) => (
     marketTrades.map((marketTrade) => {
       const tradesMarket = marketList.find(market => normalizeHex(market.eventAddress) === normalizeHex(marketTrade.eventAddress))

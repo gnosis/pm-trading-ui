@@ -7,7 +7,6 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import { LOWEST_VALUE } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
-import { isMarketClosed, isMarketResolved } from 'store/utils/marketStatus'
 import Outcome from 'components/Outcome'
 import MarketTimer from './MarketTimer'
 import RedeemWinnigs from './RedeemWinnings'
@@ -29,8 +28,8 @@ const Details = ({
     Decimal(0),
   )
   const redeemWinningsGasCost = gasCosts.get('redeemWinnings')
-  const marketClosed = isMarketClosed(market)
-  const marketResolved = isMarketResolved(market)
+  const marketClosed = market.closed
+  const marketResolved = market.resolved
   const showWinning = marketResolved && winningsTotal.gt(LOWEST_VALUE)
   const marketClosedOrFinished = marketClosed || marketResolved
   const marketStatus = marketResolved ? 'resolved.' : 'closed.'

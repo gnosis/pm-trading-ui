@@ -6,7 +6,7 @@ import { normalizeHex } from 'utils/helpers'
 
 const sharesWithMarketsSelector = createSelector(
   state => state.marketList,
-  state => state.marketShares,
+  state => state.accountShares,
   (marketList, marketShares) => (
     marketShares.map((marketShare) => {
       const sharesMarket = marketList.find(market => normalizeHex(market.eventAddress) === normalizeHex(marketShare.eventAddress))

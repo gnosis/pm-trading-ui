@@ -173,7 +173,7 @@ class MarketBuySharesForm extends Component {
                     validate={this.validateInvestment}
                     endAdornment={
                       <TextInputAdornment>
-                        <CurrencyName tokenAddress={market.event.collateralToken} />
+                        <CurrencyName tokenAddress={collateralToken} />
                       </TextInputAdornment>
                     }
                   />

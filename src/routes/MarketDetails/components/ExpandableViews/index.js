@@ -39,8 +39,8 @@ const expandableViews = {
       props.market &&
       !!props.defaultAccount &&
       props.defaultAccount !== props.creator &&
-      !isMarketClosed(props.market) &&
-      !isMarketResolved(props.market) &&
+      !props.market.closed &&
+      !props.market.resolved &&
       showExpandableTournament(props),
   },
   [EXPAND_MY_SHARES]: {

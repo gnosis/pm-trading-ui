@@ -11,12 +11,12 @@ const OutcomesSectionCategorical = (props) => {
   const {
     selectedBuyInvest,
     selectedOutcome,
-    market: { funding, netOutcomeTokensSold, eventDescription: { outcomes } },
+    market: { funding, outcomeTokensSold, outcomes },
     outcomeTokenCount,
   } = props
   const canRunSimulation = selectedBuyInvest && selectedOutcome
 
-  const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
+  const marketTokenCounts = outcomeTokensSold.toArray().map(value => Decimal(value))
   let marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
     calcLMSRMarginalPrice({
       netOutcomeTokensSold: marketTokenCounts,
@@ -36,9 +36,9 @@ const OutcomesSectionCategorical = (props) => {
       }))
   }
 
-  const categoricalOutcomes = outcomes.map((label, index) => ({
+  const categoricalOutcomes = outcomes.toArray().map((outcome, index) => ({
     index,
-    label,
+    label: outcome.name,
     color: COLOR_SCHEME_DEFAULT[index],
     probability: marginalPrices[index].mul(100),
   }))
