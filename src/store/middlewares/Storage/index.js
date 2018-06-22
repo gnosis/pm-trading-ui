@@ -4,7 +4,7 @@ import StorageDumper from './Dump'
 export * from './actions'
 
 const localstorageOptions = {
-  whitelist: ['transactions.log', 'rewards.rewardsClaimed'],
+  whitelist: ['transactions.log', 'integrations.accountSettings'],
 }
 export const LocalStorageDump = StorageDumper(window.localStorage, localstorageOptions)
 export const LocalStorageLoad = StorageLoader(window.localStorage, localstorageOptions)

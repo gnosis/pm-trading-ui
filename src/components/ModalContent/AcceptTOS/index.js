@@ -11,11 +11,11 @@ const { name = 'the application' } = getFeatureConfig('tournament')
 const cx = cn.bind(style)
 
 const AcceptTOS = ({
-  closeModal, tosAgreed, ppAgreed, rdAgreed, initProviders, setTermsAndConditionsStatus,
+  closeModal, tosAgreed, ppAgreed, rdAgreed, initProviders, setAccountAcceptedDocuments,
 }) => {
   const disabled = !ppAgreed || !tosAgreed || !rdAgreed
   const login = () => {
-    setTermsAndConditionsStatus(['TermsOfService.html', 'PrivacyPolicy.html', 'RiskDisclaimerPolicy.html'])
+    setAccountAcceptedDocuments(['TermsOfService.html', 'PrivacyPolicy.html', 'RiskDisclaimerPolicy.html'])
     initProviders()
     closeModal()
   }

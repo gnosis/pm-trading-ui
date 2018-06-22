@@ -11,6 +11,7 @@ export const logout = createAction('PROVIDER_LOGOUT')
 export const setActiveProvider = createAction('SET_ACTIVE_PROVIDER')
 export const initProviders = createAction('INIT_PROVIDERS')
 export const setTermsAndConditionsStatus = createAction('SET_TERMS_AND_CONDITION_STATUS')
+export const saveWalletSetting = createAction('SAVE_WALLET_SETTING')
 
 const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
