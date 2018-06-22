@@ -19,7 +19,7 @@ const buyShares = async (
     .toString()
 
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
-  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.eventAddress).collateralToken())
 
   const collateralTokenName = await collateralToken.name()
 

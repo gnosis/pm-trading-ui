@@ -1,15 +1,17 @@
 import allowedRangePrice from 'utils/marginPrice'
 import uuid from 'uuid/v4'
 import * as api from 'api'
-import { fetchMarket, buyShares } from 'routes/MarketDetails/api'
+import { buyShares } from 'routes/MarketDetails/api'
+import { requestFromRestAPI } from 'api/utils/fetch'
 import Decimal from 'decimal.js'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 import { openModal, closeModal } from 'store/actions/modal'
 import { gaSend } from 'utils/analytics/google'
-import { receiveEntities, updateEntity } from 'store/actions/entities'
+import { updateEntity } from 'store/actions/entities'
 import { MAX_ALLOWANCE_WEI, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { SETTING_ALLOWANCE, DEPOSIT } from 'utils/transactionExplanations'
 import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'store/actions/market'
+import { processMarketResponse } from './requestMarket'
 
 /**
  * Buy shares on specific market
@@ -18,12 +20,12 @@ import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'store/actions/ma
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to buy
  * @param {number|string|BigNumber} cost - Max transaction cost allowed in Ether
  */
-const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch) => {
+const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async (dispatch, getState) => {
   const transactionId = uuid()
   const gnosis = await api.getGnosisConnection()
 
   const transactionCost = api.calcLMSRCost(
-    market.netOutcomeTokensSold,
+    market.outcomeTokensSold.toArray(),
     market.funding,
     outcomeIndex,
     outcomeTokenCount,
@@ -35,7 +37,7 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
   const marketAllowance = await gnosis.etherToken.allowance(currentAccount, market.address)
   const approvalResetAmount = transactionCost.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
-  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.event.address).collateralToken())
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.eventAddress).collateralToken())
   const userCollateralTokenBalance = (await collateralToken.balanceOf(currentAccount)).toString()
   const neededDepositAmount = Decimal(cost)
     .mul(1e18)
@@ -60,13 +62,12 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
   }
   if (approvalResetAmount) transactions.unshift(SETTING_ALLOWANCE)
 
-  const payload = await fetchMarket(market.address)
-  const updatedMarket = payload.entities.markets[market.address]
+  const updatedMarket = await requestFromRestAPI(`markets/${market.address}`)
   const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
-  const oldPrice = market.marginalPrices[outcomeIndex]
+  const oldPrice = market.outcomes.toArray()[outcomeIndex].marginalPrice
   if (!allowedRangePrice(oldPrice, updatedPrice)) {
     dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
-    return dispatch(receiveEntities(payload))
+    return processMarketResponse(dispatch, getState(), updatedMarket)
   }
 
   gaSend(['event', 'Transactions', 'trading-interface', 'Buy shares transactions start'])
@@ -86,15 +87,15 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
     throw e
   }
 
-  const { netOutcomeTokensSold } = market
-  const newOutcomeTokenAmount = Decimal(netOutcomeTokensSold[outcomeIndex]).add(outcomeTokenCount)
-  netOutcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
+  const outcomeTokensSold = market.outcomeTokensSold.toArray()
+  const newOutcomeTokenAmount = Decimal(outcomeTokensSold[outcomeIndex]).add(outcomeTokenCount)
+  outcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
 
   await dispatch(updateEntity({
     entityType: 'markets',
     data: {
       id: market.address,
-      netOutcomeTokensSold,
+      outcomeTokensSold,
     },
   }))
 

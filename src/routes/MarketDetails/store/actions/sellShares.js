@@ -62,15 +62,15 @@ const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (
     throw e
   }
 
-  await dispatch(updateEntity({
-    entityType: 'marketShares',
-    data: {
-      id: share.id,
-      balance: Decimal(share.balance)
-        .sub(Decimal(outcomeCountWei))
-        .toString(),
-    },
-  }))
+  // await dispatch(updateEntity({
+  //   entityType: 'marketShares',
+  //   data: {
+  //     id: share.id,
+  //     balance: Decimal(share.balance)
+  //       .sub(Decimal(outcomeCountWei))
+  //       .toString(),
+  //   },
+  // }))
 
   return dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }

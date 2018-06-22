@@ -12,9 +12,10 @@ const OutcomesSectionCategorical = (props) => {
     selectedOutcome,
     market: { funding, outcomeTokensSold, outcomes },
     outcomeTokenCount,
-    valid: canRunSimulation,
+    valid,
   } = props
 
+  const canRunSimulation = valid && selectedOutcome
   const marketTokenCounts = outcomeTokensSold.toArray().map(value => Decimal(value))
   let marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
     calcLMSRMarginalPrice({

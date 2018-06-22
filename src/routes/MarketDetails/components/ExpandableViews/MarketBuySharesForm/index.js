@@ -57,7 +57,8 @@ class MarketBuySharesForm extends Component {
   }
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
-  validateInvestment = (investmentValue) => {
+  validateInvestment = (value = '') => {
+    const investmentValue = value.trim()
     const { currentBalance = 0, collateralTokenBalance, collateralTokenSymbol } = this.props
 
     // check if investment is not undefined and test it against number regexp to prevent errors from decimal.js
@@ -107,18 +108,19 @@ class MarketBuySharesForm extends Component {
       market,
       valid,
     } = this.props
-    const isValid = valid && selectedBuyInvest && typeof selectedOutcome !== 'undefined'
+    const investmentAmount = selectedBuyInvest.trim()
+    const isValid = investmentAmount !== '0' && valid && !!investmentAmount && typeof investmentAmount !== 'undefined'
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.get('buyShares') || 0))
-    const submitDisabled = invalid || !selectedBuyInvest || !selectedOutcome
+    const submitDisabled = invalid || !investmentAmount || !selectedOutcome
 
     let outcomeTokenCount = 0
     let maximumWin = 0
     let percentageWin = 0
 
     if (isValid) {
-      outcomeTokenCount = getOutcomeTokenCount(market, selectedBuyInvest, selectedOutcome, limitMargin)
-      maximumWin = getMaximumWin(outcomeTokenCount, selectedBuyInvest)
-      percentageWin = getPercentageWin(outcomeTokenCount, selectedBuyInvest)
+      outcomeTokenCount = getOutcomeTokenCount(market, investmentAmount, selectedOutcome, limitMargin)
+      maximumWin = getMaximumWin(outcomeTokenCount, investmentAmount)
+      percentageWin = getPercentageWin(outcomeTokenCount, investmentAmount)
     }
 
     let fieldError
@@ -156,8 +158,8 @@ class MarketBuySharesForm extends Component {
           <div className={cx('row')}>
             <OutcomeSection
               market={market}
-              valid={isValid}
-              selectedBuyInvest={selectedBuyInvest}
+              valid={!!isValid}
+              selectedBuyInvest={investmentAmount}
               selectedOutcome={selectedOutcome}
               outcomeTokenCount={outcomeTokenCount}
             />
