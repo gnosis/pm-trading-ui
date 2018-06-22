@@ -109,7 +109,7 @@ class MarketBuySharesForm extends Component {
       valid,
     } = this.props
     const investmentAmount = selectedBuyInvest.trim()
-    const isValid = investmentAmount !== '0' && valid && !!investmentAmount && typeof investmentAmount !== 'undefined'
+    const isValid = this.validateInvestment(investmentAmount) === undefined && valid && !!investmentAmount && typeof investmentAmount !== 'undefined'
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.get('buyShares') || 0))
     const submitDisabled = invalid || !investmentAmount || !selectedOutcome
 

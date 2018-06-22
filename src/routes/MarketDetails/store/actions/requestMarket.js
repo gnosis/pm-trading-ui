@@ -1,8 +1,7 @@
 import { requestFromRestAPI } from 'api/utils/fetch'
-import addMarkets from 'store/actions/market/addMarkets'
+import { addMarkets, extractMarkets } from 'store/actions/market'
 import { getCollateralToken } from 'store/selectors/blockchain'
 import { hexWithoutPrefix } from 'utils/helpers'
-import { extractMarkets } from 'store/actions/market'
 
 export const processMarketResponse = (dispatch, state, response) => {
   if (!response) {

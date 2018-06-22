@@ -40,7 +40,7 @@ const expandableViews = {
       props.defaultAccount !== props.creator &&
       !props.market.closed &&
       !props.market.resolved &&
-      showExpandableTournament(props),
+      props.hasWallet,
   },
   [EXPAND_MY_SHARES]: {
     label: MY_TOKENS,

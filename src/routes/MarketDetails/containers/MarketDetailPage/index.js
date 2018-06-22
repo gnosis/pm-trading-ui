@@ -29,7 +29,6 @@ import {
   getCurrentAccount,
   getCurrentBalance,
   getRegisteredMainnetAddress,
-  hasAcceptedTermsAndConditions,
 } from 'integrations/store/selectors'
 import { isModerator, getModerators } from 'utils/helpers'
 import { getTokenSymbol, getTokenAmount } from 'store/selectors/blockchain'
@@ -75,7 +74,6 @@ const mapStateToProps = (state, ownProps) => {
     collateralTokenBalance: getTokenAmount(state, market.collateralToken),
     collateralTokenSymbol: getTokenSymbol(state, market.collateralToken),
     mainnetAddress: getRegisteredMainnetAddress(state),
-    termsNotRequiredOrAccepted: hasAcceptedTermsAndConditions(state),
   }
 }
 

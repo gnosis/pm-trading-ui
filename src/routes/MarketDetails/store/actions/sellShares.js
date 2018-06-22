@@ -8,7 +8,7 @@ import { gaSend } from 'utils/analytics/google'
 import { receiveEntities, updateEntity } from 'store/actions/entities'
 import { MAX_ALLOWANCE_WEI, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { SETTING_ALLOWANCE, SELL } from 'utils/transactionExplanations'
-import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'store/actions/market'
+import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'store/actions/market/constants'
 import { sellShares, fetchMarket } from '../../api'
 /**
  * Sell shares on a specific market

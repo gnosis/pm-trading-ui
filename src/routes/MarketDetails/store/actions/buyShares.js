@@ -7,10 +7,10 @@ import Decimal from 'decimal.js'
 import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
 import { openModal, closeModal } from 'store/actions/modal'
 import { gaSend } from 'utils/analytics/google'
-import { updateEntity } from 'store/actions/entities'
 import { MAX_ALLOWANCE_WEI, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { SETTING_ALLOWANCE, DEPOSIT } from 'utils/transactionExplanations'
-import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'store/actions/market'
+import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'store/actions/market/constants'
+import { updateMarket } from 'store/actions/market'
 import { processMarketResponse } from './requestMarket'
 
 /**
@@ -81,20 +81,19 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
     await dispatch(closeModal())
   } catch (e) {
     console.error(e)
-    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e.message))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
     await dispatch(closeModal())
     throw e
   }
 
-  const outcomeTokensSold = market.outcomeTokensSold.toArray()
-  const newOutcomeTokenAmount = Decimal(outcomeTokensSold[outcomeIndex]).add(outcomeTokenCount)
-  outcomeTokensSold[outcomeIndex] = newOutcomeTokenAmount.toString()
+  let { outcomeTokensSold } = market
+  const newOutcomeTokenAmount = Decimal(outcomeTokensSold.get(outcomeIndex)).add(outcomeTokenCount)
+  outcomeTokensSold = outcomeTokensSold.set(outcomeIndex, newOutcomeTokenAmount.toString())
 
-  await dispatch(updateEntity({
-    entityType: 'markets',
+  await dispatch(updateMarket({
+    marketAddress: market.address,
     data: {
-      id: market.address,
       outcomeTokensSold,
     },
   }))
