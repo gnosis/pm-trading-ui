@@ -70,6 +70,11 @@ class MarketBuilder {
     return this
   }
 
+  withFee(fee) {
+    this.market = this.market.set('fee', fee)
+    return this
+  }
+
   withEventAddress(address) {
     this.market = this.market.set('eventAddress', address)
     return this
@@ -131,6 +136,7 @@ export class MarketFactory {
     .withVolume('9523809523809680')
     .withFunding('10000000000000000')
     .withStage(1)
+    .withFee(0)
     .withClosed(true)
     .withEventAddress('0x2077708a049f059ee7a7878071b5adca92e6a4ba')
     .withCreation('2017-12-29T13:39:44')
@@ -156,6 +162,7 @@ export class MarketFactory {
     .withEventAddress('0x471f34c2b6addf8d501c7b3a157701633be3eb79')
     .withVolume('857142857142872776')
     .withFunding('1000000000000000000')
+    .withFee(0)
     .withStage(1)
     .withCollateralToken('c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2')
     .withCreator('0x9eab578556de5782445ec036f25a41902ba19eeb')
@@ -175,6 +182,7 @@ export class MarketFactory {
     .withVolume('342952380952380954')
     .withFunding('1000000000000000000')
     .withStage(1)
+    .withFee(0)
     .withCreation('2017-12-31T13:58:13')
     .withCollateralToken('c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2')
     .withCreator('0x9eab578556de5782445ec036f25a41902ba19eeb')
