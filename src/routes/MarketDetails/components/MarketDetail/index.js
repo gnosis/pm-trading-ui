@@ -7,7 +7,9 @@ import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import { GAS_COST } from 'utils/constants'
 import { Map } from 'immutable'
-import { marketShape, marketShareShape, marketTradeShape, ReactRouterMatchShape } from 'utils/shapes'
+import {
+  marketShape, marketShareShape, marketTradeShape, ReactRouterMatchShape,
+} from 'utils/shapes'
 import { isMarketResolved } from 'store/utils/marketStatus'
 import MarketGraph from 'routes/MarketDetails/components/MarketGraph'
 import expandableViews, { EXPAND_MY_SHARES } from 'routes/MarketDetails/components/ExpandableViews'
@@ -50,7 +52,11 @@ class MarketDetail extends Component {
   }
 
   scrollToSharesDiv = () => {
-    const { view = '' } = this.props.match.params
+    const {
+      match: {
+        params: { view },
+      },
+    } = this.props
     const isMySharesView = view.indexOf(EXPAND_MY_SHARES) !== -1
     const shouldScroll = this.divSharesNode && isMySharesView
     if (shouldScroll) {
@@ -75,23 +81,34 @@ class MarketDetail extends Component {
   }
 
   async fetchMarketUpdates() {
-    return this.props
-      .fetchMarket()
+    const {
+      fetchMarket,
+      fetchMarketTrades,
+      market,
+      changeUrl,
+      requestGasCost,
+      requestTokenSymbol,
+      match: {
+        params: { view, id },
+      },
+      collateralTokenSymbol,
+    } = this.props
+    return fetchMarket()
       .then(() => {
-        this.props.fetchMarketTrades(this.props.market)
-        if (this.firstFetch && !this.props.match.params.view) {
+        fetchMarketTrades(market)
+        if (this.firstFetch && !view) {
           const availableView = this.getAvailableView()
           if (availableView) {
-            this.props.changeUrl(`/markets/${this.props.match.params.id}/${availableView}`)
+            changeUrl(`/markets/${id}/${availableView}`)
           }
         }
 
-        if (isMarketResolved(this.props.market)) {
-          this.props.requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: this.props.market.eventAddress })
+        if (isMarketResolved(market)) {
+          requestGasCost(GAS_COST.REDEEM_WINNINGS, { eventAddress: market.eventAddress })
         }
 
-        if (!this.props.collateralTokenSymbol && this.props.market.collateralToken) {
-          this.props.requestTokenSymbol(this.props.market.collateralToken)
+        if (!collateralTokenSymbol && market.collateralToken) {
+          requestTokenSymbol(market.collateralToken)
         }
       })
       .catch((err) => {
@@ -102,22 +119,25 @@ class MarketDetail extends Component {
   }
 
   async fetchGasCosts() {
-    if (this.props.hasWallet) {
-      return Promise.all([
-        this.props.requestGasCost(GAS_COST.BUY_SHARES),
-        this.props.requestGasCost(GAS_COST.SELL_SHARES),
-      ])
+    const { hasWallet, requestGasCost } = this.props
+    if (hasWallet) {
+      return Promise.all([requestGasCost(GAS_COST.BUY_SHARES), requestGasCost(GAS_COST.SELL_SHARES)])
     }
 
     return Promise.resolve()
   }
 
   async fetchMarketShares() {
-    if (this.props.defaultAccount && this.props.match.params.id !== undefined) {
-      return Promise.all([
-        this.props.fetchMarketTradesForAccount(this.props.defaultAccount),
-        this.props.fetchMarketShares(this.props.defaultAccount),
-      ])
+    const {
+      defaultAccount,
+      fetchMarketTradesForAccount,
+      fetchMarketShares,
+      match: {
+        params: { id },
+      },
+    } = this.props
+    if (defaultAccount && id !== undefined) {
+      return Promise.all([fetchMarketTradesForAccount(defaultAccount), fetchMarketShares(defaultAccount)])
     }
 
     return Promise.resolve()
@@ -126,38 +146,48 @@ class MarketDetail extends Component {
   // Check available views on first fetch
   @autobind
   async fetchEssentialData() {
-    await Promise.all([
-      this.fetchMarketUpdates(),
-      this.fetchGasCosts(),
-      this.fetchMarketShares(),
-      this.props.requestGasPrice(),
-    ])
+    const { requestGasPrice } = this.props
+    await Promise.all([this.fetchMarketUpdates(), this.fetchGasCosts(), this.fetchMarketShares(), requestGasPrice()])
   }
 
   @autobind
   handleExpand(view) {
-    if (this.props.match.params.view !== view) {
-      this.props.changeUrl(`/markets/${this.props.match.params.id}/${view}`)
+    const {
+      match: {
+        params: { view: currentView, id },
+      },
+      changeUrl,
+    } = this.props
+    if (currentView !== view) {
+      changeUrl(`/markets/${id}/${view}`)
     } else {
-      this.props.changeUrl(`/markets/${this.props.match.params.id}/`)
+      changeUrl(`/markets/${id}/`)
     }
   }
 
   @autobind
   handleRedeemWinnings() {
-    return this.props.redeemWinnings(this.props.market)
+    const { market, redeemWinnings } = this.props
+    return redeemWinnings(market)
   }
 
   renderLoading() {
     return (
       <div className={cx('container')}>
-        <div>Loading...</div>
+        <div>
+Loading...
+        </div>
       </div>
     )
   }
 
   renderExpandableContent() {
-    const currentView = this.props.match.params.view || false
+    const {
+      match: {
+        params: { view: currentView = false },
+      },
+    } = this.props
+
     if (currentView && expandableViews[currentView] && expandableViews[currentView].component) {
       const view = expandableViews[currentView]
 
@@ -192,7 +222,9 @@ class MarketDetail extends Component {
     if (marketFetchError) {
       return (
         <div className={cx('container')}>
-          <div>This market could not be found.</div>
+          <div>
+            This market could not be found.
+          </div>
         </div>
       )
     }
@@ -206,7 +238,9 @@ class MarketDetail extends Component {
         <div className={cx('container')}>
           <div className={cx('row')}>
             <div className={cx('col-xs-10 col-xs-offset-1 col-sm-7 col-sm-offset-0')}>
-              <h1 className={cx('marketTitleHeading')}>{market.title}</h1>
+              <h1 className={cx('marketTitleHeading')}>
+                {market.title}
+              </h1>
             </div>
           </div>
         </div>

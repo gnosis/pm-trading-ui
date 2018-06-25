@@ -4,7 +4,9 @@ import * as api from 'api'
 import { buyShares } from 'routes/MarketDetails/api'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import Decimal from 'decimal.js'
-import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
+import {
+  startLog, closeLog, closeEntrySuccess, closeEntryError,
+} from 'routes/Transactions/store/actions/transactions'
 import { openModal, closeModal } from 'store/actions/modal'
 import { gaSend } from 'utils/analytics/google'
 import { MAX_ALLOWANCE_WEI, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
@@ -37,7 +39,9 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
   const marketAllowance = await gnosis.etherToken.allowance(currentAccount, market.address)
   const approvalResetAmount = transactionCost.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
-  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.eventAddress).collateralToken())
+  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(
+    await gnosis.contracts.Event.at(market.eventAddress).collateralToken(),
+  )
   const userCollateralTokenBalance = (await collateralToken.balanceOf(currentAccount)).toString()
   const neededDepositAmount = Decimal(cost)
     .mul(1e18)
@@ -51,14 +55,16 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
       .toDP(4, 1)
       .toString()
 
-    transactions.push(DEPOSIT(
-      neededDepositFormatted,
-      'ETH',
-      outcomeTokenCount
-        .div(1e18)
-        .toDP(2)
-        .toNumber(),
-    ))
+    transactions.push(
+      DEPOSIT(
+        neededDepositFormatted,
+        'ETH',
+        outcomeTokenCount
+          .div(1e18)
+          .toDP(2)
+          .toNumber(),
+      ),
+    )
   }
   if (approvalResetAmount) transactions.unshift(SETTING_ALLOWANCE)
 
@@ -91,12 +97,14 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
   const newOutcomeTokenAmount = Decimal(outcomeTokensSold.get(outcomeIndex)).add(outcomeTokenCount)
   outcomeTokensSold = outcomeTokensSold.set(outcomeIndex, newOutcomeTokenAmount.toString())
 
-  await dispatch(updateMarket({
-    marketAddress: market.address,
-    data: {
-      outcomeTokensSold,
-    },
-  }))
+  await dispatch(
+    updateMarket({
+      marketAddress: market.address,
+      data: {
+        outcomeTokensSold,
+      },
+    }),
+  )
 
   return dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }
