@@ -1,12 +1,7 @@
 import { throttle, mapValues, omit, pick } from 'lodash'
-import { NOOP_MIDDLEWARE, LOCALSTORAGE_KEY, IGNORE_ACTIONS, LOCALSTORAGE_SAVE_INTERVAL } from './constants'
+import { NOOP_MIDDLEWARE, STORAGE_KEY, IGNORE_ACTIONS, STORAGE_SAVE_INTERVAL } from './constants'
 
-const OPTIONS_DEFAULT = {
-  whitelist: [],
-  blacklist: [],
-}
-
-// Ensures that saveLocalstorage is only invoked at max every LOCALSTORAGE_SAVE_INTERVAL ms
+// Ensures that saveLocalstorage is only invoked at max every STORAGE_SAVE_INTERVAL ms
 const saveStorage = throttle((store, storage, options) => {
   const whitelist = options.whitelist || []
   const blacklist = options.blacklist || []
@@ -33,8 +28,8 @@ const saveStorage = throttle((store, storage, options) => {
   const stringStorage = JSON.stringify(payload)
   const encoded = Buffer.from(stringStorage).toString('base64')
 
-  storage.setItem(LOCALSTORAGE_KEY, encoded)
-}, LOCALSTORAGE_SAVE_INTERVAL)
+  storage.setItem(STORAGE_KEY, encoded)
+}, STORAGE_SAVE_INTERVAL)
 
 
 const middleware = (storage, whitelist) => {
