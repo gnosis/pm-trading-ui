@@ -16,12 +16,11 @@ const buildOutcomesFrom = (outcomeTokensSold, selectedOutcomeToken, marketOutcom
   // no value for eventDescription.outcomes means we have a scalar market
   const outcomeLabels = marketOutcomeLabels || OUTCOMES_SCALAR
 
-  const outcomes = outcomeLabels.map((label, index) =>
-    new OutcomeRecord({
-      index,
-      name: label,
-      outcomeTokensSold,
-    }))
+  const outcomes = outcomeLabels.map((label, index) => new OutcomeRecord({
+    index,
+    name: label,
+    outcomeTokensSold,
+  }))
 
   return List(outcomes)
 }
@@ -65,7 +64,7 @@ const extractTrade = (payload) => {
   return record
 }
 
-const processTradesResponse = (response, dispatch) => {
+export const processTradesResponse = (response, dispatch) => {
   if (response && response.results.length) {
     const tradeRecords = response.results.map(extractTrade)
     dispatch(addTrade(tradeRecords))

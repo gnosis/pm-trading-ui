@@ -16,13 +16,14 @@ const buildOutcomesFrom = (marginalPrice, selectedOutcomeToken, marketOutcomeLab
   // no value for eventDescription.outcomes means we have a scalar market
   const outcomeLabels = marketOutcomeLabels || OUTCOMES_SCALAR
 
-  const outcomes = outcomeLabels.map((label, index) =>
-    new OutcomeRecord({
+  const outcomes = outcomeLabels.map(
+    (label, index) => new OutcomeRecord({
       index,
       name: label,
       marginalPrice: selectedOutcomeToken.index === index ? marginalPrice : undefined,
       outcomeTokensSold: undefined,
-    }))
+    }),
+  )
 
   return List(outcomes)
 }
@@ -34,11 +35,7 @@ const extractShare = (payload) => {
     owner,
     balance,
     marginalPrice,
-    eventDescription: {
-      title: marketTitle,
-      resolutionDate: marketResolution,
-      outcomes: marketOutcomeLabels,
-    },
+    eventDescription: { title: marketTitle, resolutionDate: marketResolution, outcomes: marketOutcomeLabels },
   } = payload
 
   const outcomes = buildOutcomesFrom(marginalPrice, selectedOutcomeToken, marketOutcomeLabels)
@@ -63,7 +60,7 @@ const extractShare = (payload) => {
   return record
 }
 
-const processSharesResponse = (response, dispatch) => {
+export const processSharesResponse = (response, dispatch) => {
   if (response && response.results.length) {
     const shareRecords = response.results.map(extractShare)
     dispatch(addShare(shareRecords))

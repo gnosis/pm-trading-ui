@@ -1,14 +1,11 @@
-import { receiveEntities } from 'store/actions/entities'
-import { fetchMarketSharesForAccount } from '../../api'
+import { hexWithoutPrefix } from 'utils/helpers'
+import { requestFromRestAPI } from 'api/utils/fetch'
+import { processSharesResponse } from 'store/actions/shares'
 
-/**
- * Requests shares for a specific account on a market from GnosisDB.
- * @param {string} marketAddress - Market Address
- * @param {string} accountAddress - Shareowner Address
- */
-const requestMarketSharesForAccount = (marketAddress, accountAddress) => async (dispatch) => {
-  const payload = await fetchMarketSharesForAccount(marketAddress, accountAddress)
-  return dispatch(receiveEntities(payload))
+export default (marketAddress, account) => async (dispatch) => {
+  const normalizedAccount = hexWithoutPrefix(account)
+  const normalizedMarket = hexWithoutPrefix(marketAddress)
+  const response = await requestFromRestAPI(`/market/${normalizedMarket}/shares/${normalizedAccount}`)
+
+  processSharesResponse(response, dispatch)
 }
-
-export default requestMarketSharesForAccount

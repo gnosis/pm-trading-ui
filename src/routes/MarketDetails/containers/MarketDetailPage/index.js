@@ -8,7 +8,7 @@ import { redeemWinnings } from 'store/actions/market'
 import {
   buyMarketShares,
   sellMarketShares,
-  requestMarketTrades,
+  requestMarketGraphTrades,
   requestMarketSharesForAccount,
   requestMarketTradesForAccount,
   requestMarket,
@@ -81,11 +81,9 @@ const mapDispatchToProps = dispatch => ({
   fetchMarket: () => dispatch(requestMarket(marketId)),
   fetchMarketShares: accountAddress => dispatch(requestMarketSharesForAccount(marketId, accountAddress)),
   fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(marketId, accountAddress)),
-  fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
-  buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
-    dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
-  sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) =>
-    dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
+  fetchMarketTrades: market => dispatch(requestMarketGraphTrades(market)),
+  buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
+  sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
   changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemWinnings(market)),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
