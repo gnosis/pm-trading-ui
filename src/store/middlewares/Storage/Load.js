@@ -1,5 +1,5 @@
 import * as actions from './actions'
-import { NOOP_MIDDLEWARE, LOCALSTORAGE_KEY } from './constants'
+import { NOOP_MIDDLEWARE, STORAGE_KEY } from './constants'
 
 const middleware = (storage) => {
   const storageIsValid = storage instanceof Storage
@@ -12,7 +12,7 @@ const middleware = (storage) => {
   return store => next => (action) => {
     const { type } = action
     if (type === 'INIT') {
-      const stringPayload = storage.getItem(LOCALSTORAGE_KEY)
+      const stringPayload = storage.getItem(STORAGE_KEY)
       if (stringPayload) {
         let payload
         try {
