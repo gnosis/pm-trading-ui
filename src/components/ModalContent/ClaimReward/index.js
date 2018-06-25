@@ -22,7 +22,7 @@ const ClaimReward = ({
   rewardValue,
 }) => {
   const handleRegistration = async () => {
-    await claimUserRewards()
+    await claimUserRewards(rewardValue)
     closeModal()
   }
 

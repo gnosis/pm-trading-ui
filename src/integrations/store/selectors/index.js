@@ -1,5 +1,6 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { getConfiguration, getFeatureConfig } from 'utils/features'
+import { normalizeHex } from 'utils/helpers'
 
 const config = getConfiguration()
 
@@ -40,26 +41,6 @@ export const getCurrentAccount = (state) => {
   }
 
   return undefined
-}
-
-export const hasAcceptedTermsAndConditions = (state) => {
-  if (!requireTOSAccept) {
-    return true
-  }
-
-  // TODO: In the future we can check against which were accepted
-  return !state.integrations.get('termsAndConditionsAccepted').isEmpty()
-}
-
-export const checkWalletConnection = (state) => {
-  const provider = getActiveProvider(state)
-  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
-
-  if (termsNotRequiredOrAccepted && provider && provider.account) {
-    return true
-  }
-
-  return false
 }
 
 /**
@@ -133,6 +114,61 @@ export const isConnectedToCorrectNetwork = (state) => {
   return targetNetworkId === currentNetworkId
 }
 
+export const isMetamaskLocked = (state) => {
+  const metamask = state.integrations.getIn(['providers', WALLET_PROVIDER.METAMASK])
+
+  // If metamask is connected to some network, but there are not account available
+  // Most likeliy it is locked
+
+  return metamask && !metamask.account && !!metamask.network
+}
+
+export const getAccountSetting = (state, account, settingName, settingDefault) => (
+  state.integrations.getIn(['accountSettings', normalizeHex(account), settingName], settingDefault)
+)
+
+export const getRegisteredMainnetAddress = (state) => {
+  const account = getCurrentAccount(state)
+
+  if (!account) {
+    return undefined
+  }
+
+  return getAccountSetting(state, account, 'mainnetAddress')
+}
+
+export const getRewardClaimHash = (state) => {
+  const account = getCurrentAccount(state)
+
+  if (!account) {
+    return undefined
+  }
+
+  return getAccountSetting(state, account, 'rewardClaimHash')
+}
+
+export const hasAcceptedTermsAndConditions = (state) => {
+  if (!requireTOSAccept) {
+    return true
+  }
+
+  const currentAccount = getCurrentAccount(state)
+
+  // TODO: In the future we can check against which were accepted
+  return getAccountSetting(state, currentAccount, 'acceptedDocuments', []).length > 0
+}
+
+export const checkWalletConnection = (state) => {
+  const provider = getActiveProvider(state)
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
+
+  if (termsNotRequiredOrAccepted && provider && provider.account) {
+    return true
+  }
+
+  return false
+}
+
 export const shouldOpenNetworkModal = state =>
   isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
 
@@ -144,19 +180,4 @@ export const isOnWhitelist = (state) => {
   }
 
   return false
-}
-
-export const getRegisteredMainnetAddress = (state) => {
-  const provider = getActiveProvider(state)
-
-  return provider ? provider.mainnetAddress : undefined
-}
-
-export const isMetamaskLocked = (state) => {
-  const metamask = state.integrations.getIn(['providers', WALLET_PROVIDER.METAMASK])
-
-  // If metamask is connected to some network, but there are not account available
-  // Most likeliy it is locked
-
-  return metamask && !metamask.account && !!metamask.network
 }

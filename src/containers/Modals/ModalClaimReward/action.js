@@ -6,7 +6,7 @@ import { calcClaimRewardGasCost } from './api'
 const contractType = GAS_COST.CLAIM_REWARD
 const { rewardToken } = getFeatureConfig('rewards')
 
-const requestClaimRewardGasCost = () => async (dispatch) => {
+const requestClaimRewardGasCost = (account, claimAmount) => async (dispatch) => {
   const gasCost = await calcClaimRewardGasCost(rewardToken.address)
 
   dispatch(setGasCost({ entityType: 'gasCosts', contractType, gasCost }))

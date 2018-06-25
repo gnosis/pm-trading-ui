@@ -1,6 +1,7 @@
 import { Map, List } from 'immutable'
 import { handleActions } from 'redux-actions'
-import { registerProvider, updateProvider, setActiveProvider, setTermsAndConditionsStatus } from 'integrations/store/actions'
+import { normalizeHex } from 'utils/helpers'
+import { registerProvider, updateProvider, setActiveProvider, saveWalletSetting } from 'integrations/store/actions'
 import { ProviderRecord } from 'integrations/store/models'
 
 export default handleActions(
@@ -15,11 +16,17 @@ export default handleActions(
       const updatedProvider = { name, loaded: true, ...provider }
       return state.mergeIn(['providers', name], updatedProvider)
     },
-    [setTermsAndConditionsStatus]: (state, { payload: docs }) => state.set('termsAndConditionsAccepted', List(docs)),
+    [saveWalletSetting]: (state, {
+      payload: {
+        account,
+        key,
+        value,
+      },
+    }) => state.setIn(['accountSettings', normalizeHex(account), key], value),
   },
   Map({
     providers: Map(),
     activeProvider: undefined,
-    termsAndConditionsAccepted: List(),
+    accountSettings: Map(),
   }),
 )
