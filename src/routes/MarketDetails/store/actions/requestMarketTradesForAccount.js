@@ -5,7 +5,6 @@ import { processTradesResponse } from 'store/actions/trades'
 export default (marketAddress, account) => async (dispatch) => {
   const normalizedAccount = hexWithoutPrefix(account)
   const normalizedMarket = hexWithoutPrefix(marketAddress)
-  const response = await requestFromRestAPI(`/market/${normalizedMarket}/trades/${normalizedAccount}`)
-
+  const response = await requestFromRestAPI(`/markets/${normalizedMarket}/trades/${normalizedAccount}`)
   processTradesResponse(response, dispatch)
 }

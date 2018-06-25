@@ -54,7 +54,7 @@ class MarketDetail extends Component {
   scrollToSharesDiv = () => {
     const {
       match: {
-        params: { view },
+        params: { view = [] },
       },
     } = this.props
     const isMySharesView = view.indexOf(EXPAND_MY_SHARES) !== -1

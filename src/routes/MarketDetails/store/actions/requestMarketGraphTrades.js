@@ -6,7 +6,7 @@ export const addTradesForGraph = createAction('ADD_MARKETGRAPH_TRADES')
 
 export default marketAddress => async (dispatch) => {
   const normalizedMarket = hexWithoutPrefix(marketAddress)
-  const response = await requestFromRestAPI(`/market/${normalizedMarket}/trades/`)
+  const response = await requestFromRestAPI(`markets/${normalizedMarket}/trades/`)
 
   dispatch(addTradesForGraph(response))
 }

@@ -5,7 +5,7 @@ import { processSharesResponse } from 'store/actions/shares'
 export default (marketAddress, account) => async (dispatch) => {
   const normalizedAccount = hexWithoutPrefix(account)
   const normalizedMarket = hexWithoutPrefix(marketAddress)
-  const response = await requestFromRestAPI(`/market/${normalizedMarket}/shares/${normalizedAccount}`)
+  const response = await requestFromRestAPI(`/markets/${normalizedMarket}/shares/${normalizedAccount}`)
 
   processSharesResponse(response, dispatch)
 }
