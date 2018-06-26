@@ -51,7 +51,7 @@ export const hasAcceptedTermsAndConditions = (state) => {
   }
 
   const requiredDocuments = List(legalDocuments.map(doc => doc.id))
-  return !state.integrations.get('documentsAccepted').isSubset(requiredDocuments)
+  return state.integrations.get('documentsAccepted').isSuperset(requiredDocuments)
 }
 
 export const checkWalletConnection = (state) => {

@@ -2,6 +2,7 @@ import { Map, List } from 'immutable'
 import { handleActions } from 'redux-actions'
 import { registerProvider, updateProvider, setActiveProvider, setLegalDocumentsAccepted } from 'integrations/store/actions'
 import { ProviderRecord } from 'integrations/store/models'
+import { LOAD_LOCALSTORAGE } from '../../../store/middlewares/LocalStorageLoad'
 
 export default handleActions(
   {
@@ -16,6 +17,7 @@ export default handleActions(
       return state.mergeIn(['providers', name], updatedProvider)
     },
     [setLegalDocumentsAccepted]: (state, { payload: docs }) => state.set('documentsAccepted', List(docs)),
+    [LOAD_LOCALSTORAGE]: (state, { payload: { integrations } }) => integrations,
   },
   Map({
     providers: Map(),
