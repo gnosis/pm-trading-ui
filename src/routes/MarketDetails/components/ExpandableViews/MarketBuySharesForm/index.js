@@ -8,7 +8,7 @@ import { weiToEth } from 'utils/helpers'
 import {
   COLOR_SCHEME_DEFAULT, COLOR_SCHEME_SCALAR, OUTCOME_TYPES, GAS_COST,
 } from 'utils/constants'
-import { marketShape, marketShareShape } from 'utils/shapes'
+import { marketShape } from 'utils/shapes'
 import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
@@ -264,7 +264,6 @@ MarketBuySharesForm.propTypes = {
   ...propTypes,
   market: marketShape.isRequired,
   buyShares: PropTypes.func.isRequired,
-  marketShares: PropTypes.objectOf(marketShareShape),
   selectedOutcome: PropTypes.string,
   selectedBuyInvest: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleSubmit: PropTypes.func.isRequired,
@@ -280,7 +279,6 @@ MarketBuySharesForm.propTypes = {
 }
 
 MarketBuySharesForm.defaultProps = {
-  marketShares: [],
   selectedOutcome: undefined,
   selectedBuyInvest: '',
   submitEnabled: false,
