@@ -5,8 +5,7 @@ import { lifecycle } from 'recompose'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
 import InteractionButton from 'containers/InteractionButton'
-import { Field, reduxForm, propTypes } from 'redux-form'
-import Checkbox from 'components/Form/Checkbox'
+import LegalCompliance from 'containers/LegalCompliance'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
 import { getFeatureConfig } from 'utils/features'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
@@ -16,9 +15,6 @@ const cx = cn.bind(style)
 const {
   rewardToken: { symbol: rewardTokenSymbol },
 } = getFeatureConfig('rewards')
-const { url: termsOfServiceUrl } = getFeatureConfig('termsOfUse') || {}
-const { url: riskDisclaimerUrl } = getFeatureConfig('riskDisclaimer') || {}
-const { url: privacyPolicyUrl } = getFeatureConfig('privacyPolicy') || {}
 
 const RegisterMainnetAddress = ({
   closeModal,
@@ -27,9 +23,6 @@ const RegisterMainnetAddress = ({
   updateMainnetAddress,
   gasPrice,
   registrationGasCost,
-  tosAgreed,
-  ppAgreed,
-  rdAgreed,
   collateralToken: { symbol: collateralTokenSymbol },
 }) => {
   const handleRegistration = async () => {
@@ -41,10 +34,7 @@ const RegisterMainnetAddress = ({
     gasPrice
       .mul(registrationGasCost || 0)
       .div(1e18)
-      .gt(currentBalance || 0) ||
-    (!ppAgreed && !!privacyPolicyUrl) ||
-    (!tosAgreed && !!termsOfServiceUrl) ||
-    (!rdAgreed && !!riskDisclaimerUrl)
+      .gt(currentBalance || 0)
 
   return (
     <div className={cx('registerWallet')}>
@@ -68,72 +58,39 @@ const RegisterMainnetAddress = ({
           </a>
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
         </p>
-        <div className={cx('checkBoxContainer')}>
-          {!!termsOfServiceUrl && (
-            <Field name="agreedWithTOS" component={Checkbox} className={cx('checkBox')}>
-              I agree with{' '}
-              <a href={termsOfServiceUrl} target="_blank" rel="noopener noreferrer">
-                terms of service
-              </a>
-            </Field>
-          )}
-          {!!privacyPolicyUrl && (
-            <Field name="agreedWithPP" component={Checkbox} className={cx('checkBox')}>
-              I agree with{' '}
-              <a href={privacyPolicyUrl} target="_blank" rel="noopener noreferrer">
-                privacy policy
-              </a>
-            </Field>
-          )}
-          {!!riskDisclaimerUrl && (
-            <Field name="agreedWithRDP" component={Checkbox} className={cx('checkBox')}>
-              I have read the{' '}
-              <a href={riskDisclaimerUrl} target="_blank" rel="noopener noreferrer">
-                risk disclaimer policy
-              </a>
-            </Field>
-          )}
-        </div>
-        <InteractionButton
-          onClick={handleRegistration}
-          className={cx('btn', 'btn-primary', 'actionButton')}
+        <LegalCompliance
+          submitButtonComponent={InteractionButton}
+          submitButtonLabel="REGISTER ADDRESS"
+          submitButtonClassName={cx('btn', 'btn-primary', 'actionButton')}
+          submitButtonDisabledClassName={cx('disabled')}
+          onSubmitAcceptedDocs={handleRegistration}
           disabled={disabled}
-        >
-          REGISTER ADDRESS
-        </InteractionButton>
+        />
       </div>
     </div>
   )
 }
 
 RegisterMainnetAddress.propTypes = {
-  ...propTypes,
   closeModal: PropTypes.func.isRequired,
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
   updateMainnetAddress: PropTypes.func.isRequired,
   gasPrice: PropTypes.instanceOf(Decimal),
   registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  tosAgreed: PropTypes.bool,
-  ppAgreed: PropTypes.bool,
-  rdAgreed: PropTypes.bool,
+  collateralToken: PropTypes.shape({
+    symbol: PropTypes.string,
+  }).isRequired,
 }
 
 RegisterMainnetAddress.defaultProps = {
-  tosAgreed: false,
-  ppAgreed: false,
-  rdAgreed: false,
   gasPrice: Decimal(0),
   registrationGasCost: 0,
 }
 
-const form = {
-  form: 'tosAgreement',
-}
-
-export default reduxForm(form)(lifecycle({
+export default lifecycle({
   componentDidMount() {
     this.props.requestRegistrationGasCost()
     this.props.requestGasPrice()
   },
-})(RegisterMainnetAddress))
+})(RegisterMainnetAddress)

@@ -15,7 +15,7 @@ export default store => next => (action) => {
     if (storedState) {
       // FIX-ME: Temporary to remember ToS Acceptance
       storedState.integrations = Map({
-        termsAndConditionsAccepted: List(storedState.integrations.termsAndConditionsAccepted),
+        documentsAccepted: List(storedState.integrations?.documentsAccepted),
       })
 
       store.dispatch({

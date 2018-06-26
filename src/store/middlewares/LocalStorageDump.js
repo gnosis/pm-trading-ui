@@ -22,8 +22,8 @@ export default store => next => (action) => {
     })
 
     // FIX-ME: Temporary to remember ToS Acceptance
-    const tosAccepted = state.integrations.get('termsAndConditionsAccepted').toJS()
-    set(storage, 'integrations.termsAndConditionsAccepted', tosAccepted)
+    const tosAccepted = state.integrations.get('documentsAccepted').toJS()
+    set(storage, 'integrations.documentsAccepted', tosAccepted)
 
     if (isFeatureEnabled('rewards')) {
       set(storage, 'tournament.rewards.rewardsClaimed', state.tournament.rewards.get('rewardsClaimed'))

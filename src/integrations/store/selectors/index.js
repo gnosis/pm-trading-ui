@@ -1,10 +1,13 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { getConfiguration, getFeatureConfig } from 'utils/features'
+import { List } from 'immutable'
+import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
 
 const config = getConfiguration()
 
-const providerConfig = getFeatureConfig('providers')
-const requireTOSAccept = !!providerConfig.requireTOSAccept
+const legalComplianceConfig = getFeatureConfig('legalCompliance')
+const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
+
+const legalDocuments = legalComplianceConfig.documents || []
 
 /**
  * Finds a default provider from all currently available providers. Determined by provider integrations `priority`
@@ -43,12 +46,12 @@ export const getCurrentAccount = (state) => {
 }
 
 export const hasAcceptedTermsAndConditions = (state) => {
-  if (!requireTOSAccept) {
+  if (!legalComplianceEnabled) {
     return true
   }
 
-  // TODO: In the future we can check against which were accepted
-  return !state.integrations.get('termsAndConditionsAccepted').isEmpty()
+  const requiredDocuments = List(legalDocuments.map(doc => doc.id))
+  return !state.integrations.get('documentsAccepted').isSubset(requiredDocuments)
 }
 
 export const checkWalletConnection = (state) => {
