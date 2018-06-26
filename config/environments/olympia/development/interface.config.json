@@ -9,7 +9,7 @@
     "name": "Olympia"
   },
   "registration": {
-    "enabled": false,
+    "enabled": true,
     "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
   },
   "collateralToken": {
