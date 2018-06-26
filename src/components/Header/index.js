@@ -69,10 +69,10 @@ class Header extends Component {
         this.props.openModal('ModalUnlockMetamask')
       } else if (!isConnectedToCorrectNetwork) {
         this.props.openModal('ModalSwitchNetwork')
-      } else if (shouldAcceptTOS) {
-        this.props.openModal('ModalAcceptTOS')
       } else if (requireRegistration) {
         this.props.openModal('ModalRegisterWallet')
+      } else if (shouldAcceptTOS) {
+        this.props.openModal('ModalAcceptTOS')
       } else {
         console.warn('should be connected')
       }
@@ -126,7 +126,7 @@ class Header extends Component {
 
       if (gameGuideType === 'link') {
         gameGuideLink = (
-          <a href={gameGuideURL} className={cx('navLink')} target="_blank">
+          <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
             Game Guide
           </a>
         )

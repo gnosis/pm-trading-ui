@@ -59,7 +59,6 @@ const RegisterMainnetAddress = ({
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
         </p>
         <LegalCompliance
-          submitButtonComponent={InteractionButton}
           submitButtonLabel="REGISTER ADDRESS"
           submitButtonClassName={cx('btn', 'btn-primary', 'actionButton')}
           submitButtonDisabledClassName={cx('disabled')}
