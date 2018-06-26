@@ -23,7 +23,7 @@ const Details = ({
     .utc(market.resolution)
     .local()
     .diff(moment(), 'hours')
-  const winningsTotal = Object.keys(marketShares).reduce(
+  const winningsTotal = marketShares.reduce(
     (acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')),
     Decimal(0),
   )
@@ -95,7 +95,7 @@ const Details = ({
 
 Details.propTypes = {
   market: marketShape.isRequired,
-  marketShares: PropTypes.objectOf(marketShareShape),
+  marketShares: ImmutableProptypes.list,
   handleRedeemWinnings: PropTypes.func,
   gasCosts: ImmutableProptypes.map.isRequired,
   gasPrice: PropTypes.instanceOf(Decimal).isRequired,

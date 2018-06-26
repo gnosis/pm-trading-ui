@@ -6,7 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import { GAS_COST } from 'utils/constants'
-import { Map } from 'immutable'
+import { Map, List } from 'immutable'
 import {
   marketShape, marketShareShape, marketTradeShape, ReactRouterMatchShape,
 } from 'utils/shapes'
@@ -217,6 +217,7 @@ Loading...
       moderators,
       collateralTokenSymbol,
     } = this.props
+    console.log(marketShares)
 
     const { marketFetchError } = this.state
     if (marketFetchError) {
@@ -278,7 +279,7 @@ Loading...
 
 MarketDetail.propTypes = {
   hasWallet: PropTypes.bool,
-  marketShares: PropTypes.objectOf(marketShareShape),
+  marketShares: ImmutablePropTypes.list,
   marketTrades: PropTypes.arrayOf(marketTradeShape),
   marketGraph: PropTypes.arrayOf(PropTypes.object),
   defaultAccount: PropTypes.string,
@@ -306,7 +307,7 @@ MarketDetail.defaultProps = {
   isModerator: false,
   hasWallet: false,
   moderators: {},
-  marketShares: {},
+  marketShares: List(),
   marketTrades: [],
   marketGraph: [],
   defaultAccount: '',

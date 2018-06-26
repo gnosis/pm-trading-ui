@@ -6,7 +6,7 @@ import { OUTCOME_TYPES } from 'utils/constants'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import { hexWithoutPrefix } from 'utils/helpers'
 
-import TradeRecord, { ORDER_TYPE_BUY, ORDER_TYPE_SELL } from 'store/models/trade'
+import TradeRecord from 'store/models/trade'
 import { addTrade } from 'store/actions/trades'
 import { OutcomeRecord } from 'store/models/market'
 
@@ -16,11 +16,13 @@ const buildOutcomesFrom = (outcomeTokensSold, selectedOutcomeToken, marketOutcom
   // no value for eventDescription.outcomes means we have a scalar market
   const outcomeLabels = marketOutcomeLabels || OUTCOMES_SCALAR
 
-  const outcomes = outcomeLabels.map((label, index) => new OutcomeRecord({
-    index,
-    name: label,
-    outcomeTokensSold,
-  }))
+  const outcomes = outcomeLabels.map(
+    (label, index) => new OutcomeRecord({
+      index,
+      name: label,
+      outcomeTokensSold,
+    }),
+  )
 
   return List(outcomes)
 }
@@ -35,10 +37,7 @@ const extractTrade = (payload) => {
     profit: rawProfit,
     orderType,
     date,
-    eventDescription: {
-      title: marketTitle,
-      outcomes: marketOutcomeLabels,
-    },
+    eventDescription: { title: marketTitle, outcomes: marketOutcomeLabels } = {},
   } = payload
 
   const profit = rawProfit === 'None' ? '0' : rawProfit

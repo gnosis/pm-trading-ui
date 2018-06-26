@@ -4,7 +4,7 @@ import Decimal from 'decimal.js'
 import { getCollateralToken } from 'store/selectors/blockchain'
 import { normalizeHex } from 'utils/helpers'
 
-const sharesWithMarketsSelector = createSelector(
+export const sharesWithMarketsSelector = createSelector(
   state => state.marketList,
   state => state.accountShares,
   (marketList, marketShares) => (
@@ -20,9 +20,9 @@ const shareSelector = createSelector(
   getCollateralToken,
   (shares, collateralToken) => List(shares
     .filter(share => (
-      Decimal(share.balance).gt(0) &&
-      typeof share.market !== 'undefined' &&
-      normalizeHex(share.collateralTokenAddress) === normalizeHex(collateralToken.address)
+      Decimal(share.balance).gt(0)
+      && typeof share.market !== 'undefined'
+      && normalizeHex(share.collateralTokenAddress) === normalizeHex(collateralToken.address)
     ))
     .sortBy(share => share.marketResolution, (dateA, dateB) => (dateA.isBefore(dateB) ? -1 : 1)).values()),
 )

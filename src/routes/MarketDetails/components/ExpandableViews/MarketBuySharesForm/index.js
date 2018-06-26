@@ -14,15 +14,15 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { TextInput, TextInputAdornment } from 'components/Form'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import { getOutcomeTokenCount, getMaximumWin, getPercentageWin } from './utils'
+import {
+  getOutcomeTokenCount, getMaximumWin, getPercentageWin, NUMBER_REGEXP,
+} from './utils'
 import OutcomeSection from './OutcomesSection'
 import SubmitError from './SubmitError'
 import LimitMarginAnnotation from './LimitMarginAnnotation'
 import style from './marketBuySharesForm.mod.scss'
 
 const cx = cn.bind(style)
-
-export const NUMBER_REGEXP = /^-?\d+\.?\d*$/
 
 class MarketBuySharesForm extends Component {
   componentDidMount() {
@@ -35,27 +35,6 @@ class MarketBuySharesForm extends Component {
     if (!isGasPriceFetched) {
       requestGasPrice()
     }
-  }
-
-  @autobind
-  handleBuyShares() {
-    const {
-      market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome, limitMargin,
-    } = this.props
-
-    const outcomeTokenCount = getOutcomeTokenCount(market, selectedBuyInvest, selectedOutcome, limitMargin)
-
-    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
-      .then(() => {
-        // Fetch new trades
-        this.props.fetchMarketTrades(market)
-        // Fetch new market participant trades
-        this.props.fetchMarketTradesForAccount(defaultAccount)
-        // Fetch new shares
-        this.props.fetchMarketShares(defaultAccount)
-        return reset()
-      })
-      .catch(e => console.error(e))
   }
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
@@ -93,6 +72,36 @@ class MarketBuySharesForm extends Component {
     return undefined
   }
 
+  @autobind
+  handleBuyShares() {
+    const {
+      market,
+      buyShares,
+      selectedBuyInvest,
+      reset,
+      defaultAccount,
+      selectedOutcome,
+      limitMargin,
+      fetchMarketTrades,
+      fetchMarketTradesForAccount,
+      fetchMarketShares,
+    } = this.props
+
+    const outcomeTokenCount = getOutcomeTokenCount(market, selectedBuyInvest, selectedOutcome, limitMargin)
+
+    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
+      .then(() => {
+        // Fetch new trades
+        fetchMarketTrades(market)
+        // Fetch new market participant trades
+        fetchMarketTradesForAccount(defaultAccount)
+        // Fetch new shares
+        fetchMarketShares(defaultAccount)
+        return reset()
+      })
+      .catch(e => console.error(e))
+  }
+
   render() {
     const {
       gasCosts,
@@ -111,7 +120,10 @@ class MarketBuySharesForm extends Component {
       valid,
     } = this.props
     const investmentAmount = selectedBuyInvest.trim()
-    const isValid = this.validateInvestment(investmentAmount) === undefined && valid && !!investmentAmount && typeof investmentAmount !== 'undefined'
+    const isValid = this.validateInvestment(investmentAmount) === undefined
+      && valid
+      && !!investmentAmount
+      && typeof investmentAmount !== 'undefined'
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.get('buyShares') || 0))
     const submitDisabled = invalid || !investmentAmount || !selectedOutcome
 
@@ -144,9 +156,9 @@ class MarketBuySharesForm extends Component {
       tokenCountField = (
         <span className={cx('marketBuyWin', 'winInfoRow', 'max')}>
           <DecimalValue value={weiToEth(outcomeTokenCount)} />
-&nbsp;
+          &nbsp;
           <div className={cx('marketBuyWin', 'outcomeColor')} style={outcomeColorStyles} />
-&nbsp;
+          &nbsp;
         </span>
       )
 
@@ -158,9 +170,9 @@ class MarketBuySharesForm extends Component {
           {' '}
 %&nbsp; (
           <DecimalValue value={maximumWin} />
-&nbsp;
+          &nbsp;
           <CurrencyName tokenAddress={collateralToken} />
-)
+          )
         </span>
       )
     }
