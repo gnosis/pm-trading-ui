@@ -38,8 +38,20 @@ if (tournamentEnabled) {
 const combinedReducers = combineReducers(reducers)
 
 const rootReducer = (state, action) => {
-  const resultState = state
+  let resultState = state
+  if (action.type === LOAD_LOCALSTORAGE || action.type === LOAD_SESSIONSTORAGE) {
+    resultState = {
+      ...state,
+    }
 
+    Object.keys(action.payload).forEach((key) => {
+      if (resultState[key] && resultState[key].merge) {
+        resultState[key] = resultState[key].merge(action.payload[key])
+      } else {
+        resultState[key] = { ...action.payload[key] }
+      }
+    })
+  }
   return combinedReducers(resultState, action)
 }
 
