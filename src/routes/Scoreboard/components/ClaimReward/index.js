@@ -1,4 +1,5 @@
 import React from 'react'
+import sha1 from 'sha1'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import moment from 'moment'
@@ -20,15 +21,18 @@ const cx = cn.bind(style)
 const claimStartDate = moment.utc(claimReward.claimStart)
 const claimEndDate = moment.utc(claimReward.claimUntil)
 
-const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardsClaimed }) => {
+const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardClaimHash }) => {
   const isInTimeframe = moment.utc().isBetween(claimStartDate, claimEndDate)
   const hasRewards = Decimal(rewardValue || 0).gt(0)
   const claimRewardEnabled = claimReward.enabled
 
-  const showRewardValue = claimRewardEnabled && isInTimeframe && !rewardsClaimed
-  const showAlreadyClaimed = isInTimeframe && rewardsClaimed
+  const currentRewardClaimHash = sha1(claimReward.claimUntil + rewardValue)
+  const hasClaimedRewards = rewardClaimHash === currentRewardClaimHash
 
-  const claimingDisabled = !claimRewardEnabled || !isInTimeframe || !rewardsClaimed || !hasRewards
+  const showRewardValue = claimRewardEnabled && isInTimeframe && !hasClaimedRewards
+  const showAlreadyClaimed = isInTimeframe && hasClaimedRewards
+
+  const claimingDisabled = !claimRewardEnabled || !isInTimeframe || !hasClaimedRewards || !hasRewards
 
   let rewardValueDisplay = 'N/A'
   if (showRewardValue) {
@@ -70,7 +74,11 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardsClaimed }) => {
 ClaimReward.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
   rewardValue: PropTypes.number.isRequired,
-  rewardsClaimed: PropTypes.bool.isRequired,
+  rewardClaimHash: PropTypes.string,
+}
+
+ClaimReward.defaultProps = {
+  rewardClaimHash: '',
 }
 
 const mapStateToProps = state => ({
