@@ -8,14 +8,13 @@ export default store => next => (action) => {
   if (type !== 'INIT') return next(action)
 
   try {
-    const storedState = JSON.parse(
-      // eslint-disable-next-line
-      window.localStorage.getItem(`GNOSIS_${process.env.VERSION}`),)
+    // eslint-disable-next-line
+    const storedState = JSON.parse(window.localStorage.getItem(`GNOSIS_${process.env.VERSION}`))
 
     if (storedState) {
       // FIX-ME: Temporary to remember ToS Acceptance
       storedState.integrations = Map({
-        termsAndConditionsAccepted: List(storedState.integrations.termsAndConditionsAccepted),
+        documentsAccepted: List(storedState.integrations?.documentsAccepted),
       })
 
       store.dispatch({
@@ -23,11 +22,9 @@ export default store => next => (action) => {
         payload: storedState,
       })
     }
-
-    return next(action)
   } catch (e) {
     console.error(e.message)
   }
 
-  return null
+  return next(action)
 }

@@ -1,7 +1,8 @@
 import { Map, List } from 'immutable'
 import { handleActions } from 'redux-actions'
-import { registerProvider, updateProvider, setActiveProvider, setTermsAndConditionsStatus } from 'integrations/store/actions'
+import { registerProvider, updateProvider, setActiveProvider, setLegalDocumentsAccepted } from 'integrations/store/actions'
 import { ProviderRecord } from 'integrations/store/models'
+import { LOAD_LOCALSTORAGE } from '../../../store/middlewares/LocalStorageLoad'
 
 export default handleActions(
   {
@@ -15,11 +16,12 @@ export default handleActions(
       const updatedProvider = { name, loaded: true, ...provider }
       return state.mergeIn(['providers', name], updatedProvider)
     },
-    [setTermsAndConditionsStatus]: (state, { payload: docs }) => state.set('termsAndConditionsAccepted', List(docs)),
+    [setLegalDocumentsAccepted]: (state, { payload: docs }) => state.set('documentsAccepted', List(docs)),
+    [LOAD_LOCALSTORAGE]: (state, { payload: { integrations } }) => integrations,
   },
   Map({
     providers: Map(),
     activeProvider: undefined,
-    termsAndConditionsAccepted: List(),
+    documentsAccepted: List(),
   }),
 )

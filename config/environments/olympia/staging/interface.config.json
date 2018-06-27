@@ -39,14 +39,27 @@
     "enabled": true,
     "type": "default"
   },
-  "termsOfUse": {
-    "url": "/assets/content/TermsOfService.html"
-  },
-  "riskDisclaimer": {
-    "url": "/assets/content/RiskDisclaimerPolicy.html"
-  },
-  "privacyPolicy": {
-    "url": "/assets/content/PrivacyPolicy.html"
+  "legalCompliance": {
+    "enabled": true,
+    "documents": [
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "terms_of_service",
+        "title": "Terms of Service",
+        "file": "/assets/TermsOfService.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "privacy_policy",
+        "title": "Privacy Policy",
+        "file": "/assets/PrivacyPolicy.html"
+      },
+      {
+        "type": "TOS_TEXT",
+        "id": "address_public",
+        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard"
+      }
+    ]
   },
   "footer": {
     "enabled": true,
@@ -64,7 +77,7 @@
       "networkId": 42
     },
     "claimReward": {
-      "enabled": true,
+      "enabled": false,
       "claimStart": "2018-06-01T12:00:00",
       "claimUntil": "2018-07-01T12:00:00",
       "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",

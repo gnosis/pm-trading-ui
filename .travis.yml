@@ -5,10 +5,13 @@ env:
 - PROJECT=mainnet
 - PROJECT=olympia
 install:
-- npm install -s -q
+- npm ci -q
+# keep the npm cache around to speed up installs
+cache:
+  directories:
+  - "$HOME/.npm"
 before_install:
-- rm -rf node_modules
-- npm i -g babel-cli webpack truffle-contract
+- npm i -g babel-cli webpack truffle-contract npm@latest
 after_success:
 - ./env_build.sh
 deploy:

@@ -1,7 +1,9 @@
 {
   "providers": {
-    "default": "METAMASK",
-    "requireTOSAccept": true
+    "default": "METAMASK"
+  },
+  "legalCompliance": {
+    "enabled": true
   },
   "collateralToken":  {
     "source": "contract",

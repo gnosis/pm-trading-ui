@@ -39,8 +39,8 @@
     "precommit"
   ],
   "dependencies": {
-    "@gnosis.pm/gnosis-core-contracts": "^1.0.4",
-    "@gnosis.pm/gnosisjs": "^2.0.0",
+    "@gnosis.pm/pm-contracts": "^1.0.4",
+    "@gnosis.pm/pm-js": "^2.1.0",
     "@gnosis.pm/olympia-token": "^1.4.0",
     "autobind-decorator": "^2.1.0",
     "babel-polyfill": "^6.23.0",
@@ -134,7 +134,7 @@
     "sass-loader": "^7.0.1",
     "style-loader": "^0.21.0",
     "truffle-hdwallet-provider": "0.0.5",
-    "uglifyjs-webpack-plugin": "^1.2.5",
+    "uglifyjs-webpack-plugin": "^1.2.6",
     "url-loader": "^1.0.1",
     "webpack": "^4.10.0",
     "webpack-cli": "^3.0.4",

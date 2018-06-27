@@ -25,8 +25,28 @@
   "gameGuide": {
     "enabled": false
   },
-  "termsOfUse": {
-    "enabled": true
+  "legalCompliance": {
+    "enabled": true,
+    "documents": [
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "terms_of_service",
+        "title": "Terms of Service",
+        "file": "/assets/TermsOfService.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "privacy_policy",
+        "title": "Privacy Policy",
+        "file": "/assets/PrivacyPolicy.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "risk_disclaimer",
+        "title": "Risk Disclaimer",
+        "file": "/assets/RiskDisclaimerPolicy.html"
+      }
+    ]
   },
   "footer": {
     "enabled": true,

@@ -23,11 +23,12 @@ const claimEndDate = moment.utc(claimReward.claimUntil)
 const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardsClaimed }) => {
   const isInTimeframe = moment.utc().isBetween(claimStartDate, claimEndDate)
   const hasRewards = Decimal(rewardValue || 0).gt(0)
+  const claimRewardEnabled = claimReward.enabled
 
-  const showRewardValue = isInTimeframe && !rewardsClaimed
+  const showRewardValue = claimRewardEnabled && isInTimeframe && !rewardsClaimed
   const showAlreadyClaimed = isInTimeframe && rewardsClaimed
 
-  const enabledClaiming = !isInTimeframe || !rewardsClaimed || !hasRewards
+  const claimingDisabled = !claimRewardEnabled || !isInTimeframe || !rewardsClaimed || !hasRewards
 
   let rewardValueDisplay = 'N/A'
   if (showRewardValue) {
@@ -36,7 +37,7 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardsClaimed }) => {
     rewardValueDisplay = 'Already claimed'
   }
 
-  let rewardClaimTimeDisplay = <span>N/A</span>
+  let rewardClaimTimeDisplay = <span className={cx('infoText')}>N/A</span>
   if (showRewardValue || showAlreadyClaimed) {
     rewardClaimTimeDisplay = <Countdown className={cx('infoText')} target={claimReward.claimUntil} format={claimUntilFormat} />
   }
@@ -58,7 +59,7 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardsClaimed }) => {
       <button
         className={cx('claimButton')}
         onClick={openClaimRewardModal}
-        disabled={!enabledClaiming}
+        disabled={claimingDisabled}
       >
         CLAIM NOW
       </button>
