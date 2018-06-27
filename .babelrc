@@ -1,6 +1,6 @@
 {
   "presets": [
-    "@babel/react",
+    "@babel/preset-react",
     [
       "@babel/preset-env",
       {
@@ -29,7 +29,23 @@
       ]
     },
     "test": {
-      "plugins": ["syntax-dynamic-import", "dynamic-import-node"]
+      "plugins": ["syntax-dynamic-import", "dynamic-import-node"],
+      "presets": [
+        "@babel/preset-react", 
+        [
+          "@babel/preset-env",
+          {
+            "forceAllTransforms": true,
+            "modules": "commonjs"
+          }
+        ],
+        [
+          "@babel/preset-stage-0",
+          {
+            "decoratorsLegacy": true
+          }
+        ]
+      ]
     }
   }
 }
