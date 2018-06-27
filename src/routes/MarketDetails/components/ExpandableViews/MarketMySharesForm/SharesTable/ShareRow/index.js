@@ -45,9 +45,6 @@ const ShareRow = ({
 }
 
 ShareRow.propTypes = {
-  outcomeColorStyle: PropTypes.shape({
-    backgroundColor: PropTypes.string.isRequired,
-  }),
   ableToSell: PropTypes.bool,
   share: marketShareShape,
   outcomeName: PropTypes.string,
@@ -55,9 +52,6 @@ ShareRow.propTypes = {
 }
 
 ShareRow.defaultProps = {
-  outcomeColorStyle: {
-    backgroundColor: '#fff',
-  },
   outcomeName: '',
   ableToSell: false,
   share: {},
