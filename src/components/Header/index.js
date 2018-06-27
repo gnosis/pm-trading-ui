@@ -24,7 +24,7 @@ const tournamentEnabled = isFeatureEnabled('tournament')
 const badgesEnabled = isFeatureEnabled('badges')
 const requireRegistration = isFeatureEnabled('registration')
 const providerConfig = getFeatureConfig('providers')
-const requireTOSAccept = !!providerConfig.requireTOSAccept
+const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
 const { default: defaultProvider } = providerConfig
 
 const useMetamask = defaultProvider === WALLET_PROVIDER.METAMASK
@@ -60,7 +60,7 @@ class Header extends Component {
     const { isConnectedToCorrectNetwork, lockedMetamask, acceptedTOS } = this.props
 
     const shouldInstallProviders = !hasMetamask() && !useUport
-    const shouldAcceptTOS = requireTOSAccept && !acceptedTOS
+    const shouldAcceptTOS = !acceptedTOS || !legalComplianceEnabled
 
     if (shouldInstallProviders) {
       this.props.openModal('ModalInstallMetamask')
@@ -69,10 +69,10 @@ class Header extends Component {
         this.props.openModal('ModalUnlockMetamask')
       } else if (!isConnectedToCorrectNetwork) {
         this.props.openModal('ModalSwitchNetwork')
-      } else if (shouldAcceptTOS) {
-        this.props.openModal('ModalAcceptTOS')
       } else if (requireRegistration) {
         this.props.openModal('ModalRegisterWallet')
+      } else if (shouldAcceptTOS) {
+        this.props.openModal('ModalAcceptTOS')
       } else {
         console.warn('should be connected')
       }
@@ -126,14 +126,14 @@ class Header extends Component {
 
       if (gameGuideType === 'link') {
         gameGuideLink = (
-          <a href={gameGuideURL} className={cx('navLink')} target="_blank">
+          <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
             Game Guide
           </a>
         )
       }
     }
 
-    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && !!currentProvider
+    const canInteract = (acceptedTOS || !legalComplianceEnabled) && walletConnected && !!currentProvider
 
     return (
       <div className={cx('headerContainer')}>
