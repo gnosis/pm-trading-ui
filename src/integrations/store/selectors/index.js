@@ -46,7 +46,6 @@ export const getCurrentAccount = (state) => {
 }
 
 export const hasAcceptedTermsAndConditions = (state) => {
-  console.log(legalComplianceEnabled)
   if (!legalComplianceEnabled) {
     return true
   }
