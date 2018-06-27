@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { lifecycle } from 'recompose'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
-import InteractionButton from 'containers/InteractionButton'
 import LegalCompliance from 'containers/LegalCompliance'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
 import { getFeatureConfig } from 'utils/features'
@@ -21,12 +20,14 @@ const RegisterMainnetAddress = ({
   currentAccount,
   currentBalance,
   updateMainnetAddress,
+  setLegalDocumentsAccepted,
   gasPrice,
   registrationGasCost,
   collateralToken: { symbol: collateralTokenSymbol },
 }) => {
-  const handleRegistration = async () => {
+  const handleRegistration = async (documentsAccepted) => {
     await updateMainnetAddress(currentAccount)
+    setLegalDocumentsAccepted(documentsAccepted)
     closeModal()
   }
 
@@ -75,6 +76,7 @@ RegisterMainnetAddress.propTypes = {
   currentAccount: PropTypes.string.isRequired,
   currentBalance: PropTypes.string.isRequired,
   updateMainnetAddress: PropTypes.func.isRequired,
+  setLegalDocumentsAccepted: PropTypes.func.isRequired,
   gasPrice: PropTypes.instanceOf(Decimal),
   registrationGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   collateralToken: PropTypes.shape({

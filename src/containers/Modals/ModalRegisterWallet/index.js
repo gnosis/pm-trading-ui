@@ -6,6 +6,7 @@ import { updateMainnetAddress } from 'store/actions/account'
 import { requestGasPrice } from 'store/actions/blockchain'
 import { getCollateralToken } from 'store/selectors/blockchain'
 import { getCurrentAccount, getCurrentBalance } from 'integrations/store/selectors'
+import { setLegalDocumentsAccepted } from 'integrations/store/actions'
 import { getGasPrice } from 'routes/MarketDetails/store/selectors'
 import { requestRegistrationGasCost } from './actions'
 import { getRegistrationGasCost } from './selectors'
@@ -18,10 +19,11 @@ const mapStateToProps = state => ({
   collateralToken: getCollateralToken(state),
 })
 
-const mapDispatchToProps = dispatch => ({
-  updateMainnetAddress: account => dispatch(updateMainnetAddress(account)),
-  requestRegistrationGasCost: () => dispatch(requestRegistrationGasCost()),
-  requestGasPrice: () => dispatch(requestGasPrice()),
-})
+const mapDispatchToProps = {
+  setLegalDocumentsAccepted,
+  updateMainnetAddress,
+  requestRegistrationGasCost,
+  requestGasPrice,
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterWallet)
