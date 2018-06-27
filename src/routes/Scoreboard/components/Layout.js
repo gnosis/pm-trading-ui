@@ -6,6 +6,7 @@ import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
+import { List } from 'immutable'
 import { getProviderConfig, isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import * as React from 'react'
@@ -89,11 +90,11 @@ Layout.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
-  rank: PropTypes.string,
+  rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 Layout.defaultProps = {
-  data: [],
+  data: List(),
   myAccount: '',
   mainnetAddress: undefined,
   rank: '',

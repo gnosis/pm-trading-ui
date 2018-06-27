@@ -1,8 +1,6 @@
 import { Map } from 'immutable'
 import { handleActions } from 'redux-actions'
-import { ADD_MARKET_LIST } from 'routes/MarketList/store/actions/addMarkets'
-
-export const REDUCER_ID = 'marketList'
+import { ADD_MARKET_LIST } from 'store/actions/market/addMarkets'
 
 export default handleActions(
   {

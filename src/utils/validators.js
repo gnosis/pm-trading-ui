@@ -80,8 +80,7 @@ export const isNumber = ({ decimals, realOnly, decimalsProp }) => (val, vals, pr
     return undefined
   }
 
-  /* global isNan, isFinite */
-  if (/[^.\d]/g.test(val) || isNaN(parseFloat(val)) || !isFinite(val)) {
+  if (/[^.\d]/g.test(val) || Number.isNaN(parseFloat(val)) || !Number.isFinite(val)) {
     return 'Invalid Number'
   }
 

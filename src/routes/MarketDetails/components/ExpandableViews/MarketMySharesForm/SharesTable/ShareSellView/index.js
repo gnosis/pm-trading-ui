@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import PropTypes from 'prop-types'
-import autobind from 'autobind-decorator'
 import web3 from 'web3'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
@@ -11,13 +11,12 @@ import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { Slider, TextInput } from 'components/Form'
-import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
 import Hairline from 'components/layout/Hairline'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { marketShape, marketShareShape } from 'utils/shapes'
 import { LIMIT_MARGIN, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
 import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
-import { calculateCurrentProbability, calculateEarnings, calculateNewProbability } from './utils'
+import { calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount } from './utils'
 import style from './ShareSellView.mod.scss'
 
 const cx = cn.bind(style)
@@ -32,7 +31,6 @@ class ShareSellView extends Component {
     const newShareSellOpened = selectedSellAmount === undefined && share.id !== undefined
 
     if (newShareSellOpened) {
-      this.props.reset()
       // Form reset / reinitialization when switching among shares
       const fullAmount = Decimal(share.balance)
         .div(1e18)
@@ -81,10 +79,11 @@ class ShareSellView extends Component {
       isGasPriceFetched,
       isGasCostFetched,
       valid,
+      sellFormHasErrors,
     } = this.props
 
     const sellSharesGasCost = gasCosts.get('sellShares')
-    const submitDisabled = invalid || submitting
+    const submitDisabled = invalid || submitting || sellFormHasErrors
 
     let selectedSellAmountWei
     try {
@@ -150,7 +149,6 @@ class ShareSellView extends Component {
                     name="sellAmount"
                     placeholder="Enter Token Amount"
                     className={cx('sharesSellAmount')}
-                    validate={this.validateTokenCount}
                     errorStyle={inputErrorStyle}
                   />
                 </div>
@@ -247,6 +245,7 @@ ShareSellView.propTypes = {
   selectedSellAmount: PropTypes.string,
   handleSellShare: PropTypes.func,
   share: marketShareShape,
+  sellFormHasErrors: PropTypes.bool,
 }
 
 ShareSellView.defaultProps = {
@@ -257,10 +256,13 @@ ShareSellView.defaultProps = {
   handleSellShare: () => {},
   share: {},
   isGasPriceFetched: false,
+  sellFormHasErrors: false,
 }
 
-const FORM = {
+export const FORM = {
   form: 'marketMyShares',
+  validate: validateTokenCount,
+  destroyOnUnmount: true,
 }
 
 export default reduxForm(FORM)(ShareSellView)

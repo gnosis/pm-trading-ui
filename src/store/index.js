@@ -7,10 +7,14 @@ import createHistory from 'history/createBrowserHistory'
 import Blockchain from 'store/middlewares/Blockchain'
 import Providers from 'store/middlewares/Providers'
 // import Intercom from 'middlewares/Intercom'
-import LocalStorageDump from 'store/middlewares/LocalStorageDump'
-import LocalStorageLoad from 'store/middlewares/LocalStorageLoad'
-import SessionStorageDump from 'store/middlewares/SessionStorageDump'
-import SessionStorageLoad from 'store/middlewares/SessionStorageLoad'
+
+import {
+  LocalStorageLoad,
+  LocalStorageDump,
+  SessionStorageLoad,
+  SessionStorageDump,
+} from 'store/middlewares/Storage'
+
 import Notifications from 'store/middlewares/Notifications'
 
 import reducer from 'store/reducers'

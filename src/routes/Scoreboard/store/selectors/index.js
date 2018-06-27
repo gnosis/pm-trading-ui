@@ -1,16 +1,14 @@
 import { createSelector } from 'reselect'
+import { normalizeHex } from 'utils/helpers'
 import { getActiveProvider, getCurrentAccount } from 'integrations/store/selectors'
+import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 
 const tournamentUsersSelectorAsList = (state) => {
-  if (!state.tournament) {
+  if (!state.users) {
     return undefined
   }
 
-  if (!state.tournament.ranking) {
-    return undefined
-  }
-
-  return state.tournament.ranking.toList()
+  return state.users.toList()
 }
 
 export const firstTournamentUsersSelectorAsList = createSelector(
@@ -44,7 +42,13 @@ export const meSelector = createSelector(
   tournamentUsersSelectorAsList,
   getCurrentAccount,
   (users, account) => {
-    const foundUser = (users ? users.find(user => user.account === account) : undefined)
+    const foundUser = (users && account ? users.find(user => normalizeHex(user.account) === normalizeHex(account)) : undefined)
     return foundUser ? foundUser.toJS() : undefined
   },
 )
+
+export const rankSelector = createSelector(meSelector, account => (account ? account.currentRank : undefined))
+
+export const badgeSelector = createSelector(meSelector, account => badgeOf(account ? account.predictions : undefined))
+
+export const areRewardsClaimed = state => state.tournament.rewards.get('rewardsClaimed')

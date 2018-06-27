@@ -17,7 +17,7 @@
     "options": {
       "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
       "symbol": "OLY",
-      "icon": "/assets/img/icons/gno_token.svg"
+      "icon": "/assets/img/icons/icon_oly.png"
     }
   },
   "providers": {
@@ -39,14 +39,27 @@
     "enabled": true,
     "type": "default"
   },
-  "termsOfUse": {
-    "url": "/assets/content/TermsOfService.html"
-  },
-  "riskDisclaimer": {
-    "url": "/assets/content/RiskDisclaimerPolicy.html"
-  },
-  "privacyPolicy": {
-    "url": "/assets/content/PrivacyPolicy.html"
+  "legalCompliance": {
+    "enabled": true,
+    "documents": [
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "terms_of_service",
+        "title": "Terms of Service",
+        "file": "/assets/TermsOfService.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "privacy_policy",
+        "title": "Privacy Policy",
+        "file": "/assets/PrivacyPolicy.html"
+      },
+      {
+        "type": "TOS_TEXT",
+        "id": "address_public",
+        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard"
+      }
+    ]
   },
   "footer": {
     "enabled": true,
@@ -59,16 +72,16 @@
   "rewards": {
     "enabled": true,
     "rewardToken": {
-      "symbol": "GNO",
-      "contractAddress": "0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
-      "networkId": 1
+      "symbol": "KOV-GNO",
+      "contractAddress": "0xe46637882a11d3c90a24bd7c7529eb101f504705",
+      "networkId": 42
     },
     "claimReward": {
       "enabled": false,
-      "claimStart": "2018-04-01T12:00:00",
-      "claimUntil": "2018-05-01T12:00:00",
-      "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
-      "networkId": 3
+      "claimStart": "2018-06-01T12:00:00",
+      "claimUntil": "2018-07-01T12:00:00",
+      "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
+      "networkId": 42
     },
     "levels": [
       { "value": 5, "minRank": 1, "maxRank": 1 },

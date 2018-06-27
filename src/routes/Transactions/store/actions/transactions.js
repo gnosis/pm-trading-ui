@@ -1,3 +1,4 @@
+import { List } from 'immutable'
 import { createAction } from 'redux-actions'
 import moment from 'moment'
 
@@ -7,7 +8,7 @@ export const startTransactionLog = createAction('START_TRANSACTION_LOG')
 export const closeTransactionLog = createAction('CLOSE_TRANSACTION_LOG')
 export const addTransactionLogEntry = createAction('ADD_TRANSACTION_LOG_ENTRY')
 
-export const startLog = (id, events, label, time = moment().format()) =>
+export const startLog = (id, events = List(), label, time = moment().format()) =>
   startTransactionLog({
     id,
     label,
