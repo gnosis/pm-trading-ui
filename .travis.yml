@@ -32,6 +32,7 @@ deploy:
     secure: J3V9XlqZwJtSmuUSY+j5wVOEMfrTeYISnjSCT0oOPqgBr06UF52VyaykSW6xUV4N4lKRwbiUp5Y0mkPbg3Sdwz9n24bQr0hKu3GoyMRgFnSSv0XbyFI4dhwCPX3xiFplNt9NqTw2/673ohRMrZEe1GnxxbcPZfBglQz90x/Tt2wRKn9aXnq2NDfZ8Y42vMA1EknkG/Koyw9o33u917zIsoWhIINKtkRC/zovvuGWONmFLu+i1JRFP08GflMqd1uEBhcwj2XHKtgB8Q6/hISxBaFH+RhyfhWY0hEEfuRgDYvxesWoDNGRkJC4SB0lkQ40mdAMOp4xShzsH9HhanLMuNZt6GsMsFQcc4tkFmEsxpyLlwGIL5WKOsHsWLHxyGsKyqqh6ALTlFXxX73CE83A1xUDBhrZQBuam3XC7rWBzYl6mUzvvYmulI7rR1VsYrHD8RqFKikdHNR4Uzp+h2KEDkxZBHI5JUOK4HC7rrQO9dgaM4Cd5lUcEYY5i0CmusoUUWQriOE5QBBnfv1hJrb2SsUF1m7bFSRcl+NL5wtfZooert6ZlA//08BgQGDn3XQHgiOfqlWMOPKxg1m9OW3PMB8bEuy51xwqIdJFBf3Q99yg9GoMtO9xNlOv63GaOjKG8ZdN7m06JwD7fKTR+SBWkDqDhcShifKbbqFfSlg/tRM=
   skip_cleanup: true
   local_dir: dist
+  upload-dir: current
   on:
     branch: olympia-qa
     condition: $PROJECT = olympia
@@ -44,6 +45,7 @@ deploy:
     secure: JTcTdvhpzlwTZtU3D4ldEX97S6r4vhCJND2PvxuCSQ52NZrXB/+AJmyZ9ioYecpxaltUc8iJZ2z/B+8qgN82BG8Cgiw0KmGOS6JLQ8nCsTTM+9dmWpB6ypo76LX1SvogTl2HAjYjVINmEaVTWiIEHaXle970IAL48vr2dhk3DkK/voPekd2PjmuvHyyLGBEYVE/5qC1aDNYxvmISf+zom/7hWaCEIg6jVz5LbWeXI4YvM238HsQZRt+LyDyxFTaLlyoPUZh78Nk36itbsJd08Z7lsYr+qdMkrdQp0Qpg39IjmLz45xr5Ewl/cmOWzY3hsV8p+6Epd220cC+P2aQkKYhtbC+xpjut+TTO51woe+QLhzlupQLRrAcZP5EaB8wS7Xtjbffc6CWHTslNtrQhB9RkoSgYgBWIIRMH9eP0PrwYAvjCbONtwdz0Sk1UR8EsZPwr6maY0fnUHQRNocaDdh/RUYhrvTogBYWqHkLh0bGTxz/O4RpZnpd4yiUaXDb2+N/hZewsKGCbLm4A43WDvrIt2AkyHmPX0woyZm5XWJIX/MUGOjcXiCEgYTFUrrsxBcj4eK5WOHRpXTXMA31cWQ0pFjsP5L5eWl8j1vUMuiHXMJ4U4CHK5JmAAeWZMrhUK9ovqDP193zfI/Yb/gY8Z7Lyd490CTpkKSBR22fhzak=
   skip_cleanup: true
   local_dir: dist
+  upload-dir: current
   on:
     branch: master
     condition: $PROJECT = mainnet
@@ -68,6 +70,7 @@ deploy:
     secure: LjkMioUBLc8j943C186OLjPz9DbEsPJHwdJ1awqDaE0K40dQmWzROP0R3Px3qW8AOnvWmXrhGSYJWY/LbAH+NFhIbPGMlQDLp8kLYmdwW0xvxokprbP4gh2MZQoV4SOdeXSGcpR61LxFlbVubS/RARJ9tVrPtHcMgKqlF75zB65Y+4rSSkRLLIe57jAegpizmOMxdetIyQ2++KqZiZplh8+OIwyTYo/jcOHrJ6pNm+cvzPVD9Ccn0ndEsDYl2u92Ev4lKUqiNA7glfQ2BP8S3omzJhU+VESDWSZyTWsVT3jGVRU3OkHrVYsmKsDdSsVu8lBp6Bso+i5hSN+H52awYI2wYzwpxiExp6jCs6n13fslYOSMDbrtL8Zqa+cq5RCXtF5j4kaHbyhEYgo4ZKYC0r/rSDYG2Co6R8m0ortNEL6oLwAKZsphTP+jVjd0ML+XoNv3XvPfdtA6YXlsIcIh49ixfqPUWbKlTF7dFBfVePvI5bnjh13PGSFggGSrGar0h5mw4r+s8OMvmaWD1yKEd0IbRcYkqjkp0yikIymZtBr9oRDnevJZTM387p02VSxPmFKShLbj7FB4nHx9Dn0XeMVS/Io10s+xTxTD4jV5UeXZacNDTCReiCMU9JhGfQ4LdMDPJp3lIFQWc3JiGjaC8nmWMKBo6Q7L8G3cfadTDU8=
   skip_cleanup: true
   local_dir: dist
+  upload-dir: current
   on:
     branch: master
     condition: -z "$PROJECT"
