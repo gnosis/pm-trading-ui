@@ -20,6 +20,7 @@ const ScalarMarketRecord = Record({
   creator: undefined, // string
   collateralToken: undefined, // string
   outcomeTokensSold: undefined, // List<int>
+  outcomes: undefined,
 }, 'Market')
 
 export default ScalarMarketRecord

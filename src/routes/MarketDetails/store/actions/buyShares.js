@@ -70,6 +70,7 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
 
   const updatedMarket = await requestFromRestAPI(`markets/${market.address}`)
   const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
+  console.log(market.toJS())
   const oldPrice = market.outcomes.toArray()[outcomeIndex].marginalPrice
   if (!allowedRangePrice(oldPrice, updatedPrice)) {
     dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))

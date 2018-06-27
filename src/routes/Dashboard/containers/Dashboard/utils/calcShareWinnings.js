@@ -3,7 +3,7 @@ import { OUTCOME_TYPES } from 'utils/constants'
 
 const SCALAR_OUTCOME_RANGE = 1000000
 
-const calcShareWinningsCategorical = (share, market, outcomeToken) => {
+const calcShareWinningsCategorical = (share, market) => {
   const outcome = market.winningOucome
   const shareOutcome = share.outcomeToken.index
   if (shareOutcome !== outcome) {
@@ -13,7 +13,7 @@ const calcShareWinningsCategorical = (share, market, outcomeToken) => {
   return Decimal(share.balance).toString()
 }
 
-const calcShareWinningsScalar = (share, market, outcomeToken) => {
+const calcShareWinningsScalar = (share, outcomeToken) => {
   const outcomeRange = Decimal(SCALAR_OUTCOME_RANGE)
   const outcome = Decimal(parseInt(outcomeToken.index, 10))
   const lowerBound = Decimal(outcomeToken.bounds.lower)
