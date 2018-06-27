@@ -4,20 +4,22 @@ import { OUTCOME_TYPES } from 'utils/constants'
 const SCALAR_OUTCOME_RANGE = 1000000
 
 const calcShareWinningsCategorical = (share, market) => {
-  const outcome = market.winningOucome
+  const { winningOutcome } = market
   const shareOutcome = share.outcomeToken.index
-  if (shareOutcome !== outcome) {
+  if (shareOutcome !== winningOutcome) {
     return '0'
   }
 
   return Decimal(share.balance).toString()
 }
 
-const calcShareWinningsScalar = (share, outcomeToken) => {
+const calcShareWinningsScalar = (share, market) => {
   const outcomeRange = Decimal(SCALAR_OUTCOME_RANGE)
-  const outcome = Decimal(parseInt(outcomeToken.index, 10))
-  const lowerBound = Decimal(outcomeToken.bounds.lower)
-  const upperBound = Decimal(outcomeToken.bounds.upper)
+  const outcome = Decimal(parseInt(share.outcomeToken.index, 10))
+  const lowerBound = Decimal(market.bounds.lower)
+  const upperBound = Decimal(market.bounds.upper)
+  const isShort = parseInt(share.outcomeToken.index, 10) === 0
+  const isLong = parseInt(share.outcomeToken.index, 10)
 
   let outcomeClamped = Decimal(0)
 
@@ -32,8 +34,6 @@ const calcShareWinningsScalar = (share, outcomeToken) => {
   const factorShort = outcomeRange.sub(outcomeClamped)
   const factorLong = outcomeRange.sub(factorShort.toString())
 
-  const isShort = parseInt(share.outcomeToken.index, 10) === 0
-  const isLong = parseInt(share.outcomeToken.index, 10)
   if (isShort) {
     return Decimal(share.balance)
       .mul(factorShort)

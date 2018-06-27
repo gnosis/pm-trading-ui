@@ -12,7 +12,7 @@ export const MY_TOKENS = 'My Tokens'
 class MarketMySharesForm extends Component {
   componentDidMount() {
     const {
-      gasCosts, gasPrice, requestGasCost, requestGasPrice,
+      gasCosts, gasPrice, requestGasCost, requestGasPrice, defaultAccount, fetchMarketShares,
     } = this.props
 
     if (gasCosts.get('sellShares') === undefined) {
@@ -22,8 +22,8 @@ class MarketMySharesForm extends Component {
       requestGasPrice()
     }
 
-    if (this.props.defaultAccount) {
-      this.props.fetchMarketShares(this.props.defaultAccount)
+    if (defaultAccount) {
+      fetchMarketShares(defaultAccount)
     }
   }
 
@@ -35,7 +35,9 @@ class MarketMySharesForm extends Component {
           <h2>
             You don&apos;t hold any shares for this market.
             <br />
-            <small>It may take some time for the blockchain to mine your share purchase.</small>
+            <small>
+              It may take some time for the blockchain to mine your share purchase.
+            </small>
           </h2>
         </div>
       )
@@ -43,7 +45,9 @@ class MarketMySharesForm extends Component {
 
     return (
       <div>
-        <h2>{MY_TOKENS}</h2>
+        <h2>
+          {MY_TOKENS}
+        </h2>
         <SharesTable marketShares={marketShares} market={market} {...this.props} />
       </div>
     )
@@ -55,7 +59,7 @@ MarketMySharesForm.propTypes = {
   market: marketShape,
   selectedSellAmount: PropTypes.string,
   limitMargin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  marketShares: PropTypes.objectOf(PropTypes.object),
+  marketShares: ImmutablePropTypes.list,
   sellShares: PropTypes.func.isRequired,
   fetchMarketShares: PropTypes.func.isRequired,
   requestGasCost: PropTypes.func.isRequired,

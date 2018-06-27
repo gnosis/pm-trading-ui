@@ -217,7 +217,6 @@ Loading...
       moderators,
       collateralTokenSymbol,
     } = this.props
-    console.log(marketShares)
 
     const { marketFetchError } = this.state
     if (marketFetchError) {

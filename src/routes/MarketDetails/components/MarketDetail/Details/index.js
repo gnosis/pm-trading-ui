@@ -6,7 +6,7 @@ import Markdown from 'react-markdown'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import { LOWEST_VALUE } from 'utils/constants'
-import { marketShape, marketShareShape } from 'utils/shapes'
+import { marketShape } from 'utils/shapes'
 import Outcome from 'components/Outcome'
 import MarketTimer from './MarketTimer'
 import RedeemWinnigs from './RedeemWinnings'
@@ -24,7 +24,7 @@ const Details = ({
     .local()
     .diff(moment(), 'hours')
   const winningsTotal = marketShares.reduce(
-    (acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')),
+    (winnings, share) => winnings.add(Decimal(share.winnings || '0')),
     Decimal(0),
   )
   const redeemWinningsGasCost = gasCosts.get('redeemWinnings')
@@ -56,11 +56,7 @@ const Details = ({
 
   return (
     <div className={cx('col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0')}>
-      <Markdown
-        className={cx('marketDescription')}
-        source={market.description}
-        renderers={markdownRenderers}
-      />
+      <Markdown className={cx('marketDescription')} source={market.description} renderers={markdownRenderers} />
       <Outcome
         resolved={marketResolved}
         type={market.type}
