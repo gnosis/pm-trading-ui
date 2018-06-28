@@ -1,11 +1,15 @@
-import { combineReducers, createStore, applyMiddleware, compose } from 'redux'
+import {
+  combineReducers, createStore, applyMiddleware, compose,
+} from 'redux'
 import thunk from 'redux-thunk'
 import { List } from 'immutable'
 import marketReducer from 'store/reducers/market'
 import blockchainReducer from 'store/reducers/blockchain'
-import { processMarketsResponse } from 'store/actions/market/fetchMarkets'
+import { processMarketsResponse } from 'store/actions/market'
 import { marketListSelector } from '../selectors'
-import { oneMarketData, twoMarketData, realData, MarketFactory } from './builder/index.builder'
+import {
+  oneMarketData, twoMarketData, realData, MarketFactory,
+} from './builder/index.builder'
 
 const marketReducerTests = () => {
   describe('Market List Actions[fetchMarktes -> addMarkets]', () => {
