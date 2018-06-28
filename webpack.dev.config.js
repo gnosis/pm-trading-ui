@@ -22,7 +22,7 @@ module.exports = (env = {}) => {
   const commitId = `${env.TRAVIS_BRANCH || 'local'}@${env.TRAVIS_COMMIT || 'SNAPSHOT'}`
 
   return {
-    context: path.join(__dirname, 'src'),
+    context: `${__dirname}/src`,
     entry: ['bootstrap-loader', 'index.js'],
     devtool: 'eval-source-map',
     mode: 'development',
@@ -95,7 +95,7 @@ module.exports = (env = {}) => {
             },
             {
               loader: 'sass-loader',
-              options: { sourceMap: true, includePaths: [path.resolve(__dirname, './src')] },
+              options: { sourceMap: true, includePaths: [path.resolve(`${__dirname}/src`)] },
             },
           ],
         },
@@ -123,7 +123,7 @@ module.exports = (env = {}) => {
       watchOptions: {
         ignored: /node_modules/,
       },
-      contentBase: [path.join(__dirname, 'dist'), path.join(__dirname, 'src')],
+      contentBase: [`${__dirname}/src`],
     },
     plugins: [
       new CaseSensitivePathsPlugin(),
@@ -147,18 +147,18 @@ module.exports = (env = {}) => {
         inject: true,
       }),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, 'src/html/index.html'),
+        template: `${__dirname}/src/html/index.html`,
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
         NODE_ENV: 'development',
       }),
       new webpack.DefinePlugin({
-        'window.__GNOSIS_CONFIG__': JSON.stringify(config),
+        FALLBACK_CONFIG: `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
       new CopyWebpackPlugin([
-        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
+        { from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` },
       ]),
     ],
   }

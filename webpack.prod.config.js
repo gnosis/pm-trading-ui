@@ -23,7 +23,7 @@ module.exports = (env = {}) => {
 
   return {
     devtool: 'source-map',
-    context: path.join(__dirname, 'src'),
+    context: `${__dirname}/src`,
     entry: ['bootstrap-loader', 'index.js'],
     mode: 'production',
     output: {
@@ -65,7 +65,7 @@ module.exports = (env = {}) => {
             },
             {
               loader: 'sass-loader',
-              options: { includePaths: [path.resolve(__dirname, './src')] },
+              options: { includePaths: [path.resolve(`${__dirname}/src`)] },
             },
           ],
         },
@@ -84,7 +84,7 @@ module.exports = (env = {}) => {
             },
             {
               loader: 'sass-loader',
-              options: { includePaths: [path.resolve(__dirname, './src')] },
+              options: { includePaths: [path.resolve(`${__dirname}/src`)] },
             },
           ],
         },
@@ -122,14 +122,14 @@ module.exports = (env = {}) => {
         inject: true,
       }),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, 'src/html/index.html'),
+        template: `${__dirname}/src/html/index.html`,
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
         NODE_ENV: 'production',
       }),
       new webpack.DefinePlugin({
-        'window.__GNOSIS_CONFIG__': JSON.stringify(config),
+        FALLBACK_CONFIG: `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new UglifyJsWebpackPlugin({
         sourceMap: true,
@@ -139,7 +139,7 @@ module.exports = (env = {}) => {
         },
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin([{ from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') }]),
+      new CopyWebpackPlugin([{ from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` }]),
     ],
   }
 }

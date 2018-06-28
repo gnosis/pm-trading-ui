@@ -9,7 +9,7 @@ module.exports = (env = 'local', envVarsConfig = {}) => {
   const fallbackConfigPath = path.join(root, 'config', 'fallback')
   const configsToLoad = [fallbackConfigPath]
 
-  const envConfigPath = path.join(root, 'config', 'environments', `${env}`)
+  const envConfigPath = path.join(root, 'config', `${env}`)
   const isValidConfig = fs.existsSync(`${envConfigPath}.json`)
 
   if (!isValidConfig) {
