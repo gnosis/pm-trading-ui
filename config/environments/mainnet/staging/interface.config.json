@@ -1,8 +1,0 @@
-{
-  "providers": {
-    "default": "METAMASK"
-  },
-  "legalCompliance": {
-    "enabled": true
-  }
-}

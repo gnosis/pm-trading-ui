@@ -1,4 +1,25 @@
 {
+  "gnosisdb": {
+    "protocol": "https",
+    "host": "tradingdb.staging.gnosisdev.com",
+    "port": 443
+  },
+  "ethereum": {
+    "protocol": "https",
+    "host": "rinkeby.infura.io",
+    "port": 443
+  },
+  "whitelist": {
+    "0xafdda4e896f543ea60f9d4c72d22f950e8c72812": "Mikhail"
+  },
+  "hiddenMarkets": [
+    "0x9e1008ff1b30b871701e5527fc4efe339cf96abc",
+    "0x23effcde33bd3100ca038f56ccda0a0c695439da",
+    "0xe00575db7a639f554f210cf8fc3969ef315c4bc8",
+    "0xbedb8b26ea27a2193baed5d06e6c538b4d413896",
+    "0x71de8eb4d4060f395120fe7499971ad53b526215",
+    "0xf87e40f4dc6936f6f020f42c5286303b8c41eae7"
+  ],
   "logo": {
     "regular": "assets/img/gnosis_logo_olympia.svg",
     "small": "assets/img/gnosis_logo_olympia.svg",
@@ -9,8 +30,8 @@
     "name": "Olympia"
   },
   "registration": {
-    "enabled": true,
-    "contractAddress": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13"
+      "enabled": true,
+      "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
   },
   "collateralToken": {
     "source": "address",
@@ -72,16 +93,16 @@
   "rewards": {
     "enabled": true,
     "rewardToken": {
-      "symbol": "GNO",
-      "contractAddress": "0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
-      "networkId": 1
+      "symbol": "KOV-GNO",
+      "contractAddress": "0xe46637882a11d3c90a24bd7c7529eb101f504705",
+      "networkId": 42
     },
     "claimReward": {
       "enabled": false,
-      "claimStart": "2018-04-01T12:00:00",
-      "claimUntil": "2018-05-01T12:00:00",
-      "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
-      "networkId": 3
+      "claimStart": "2018-06-01T12:00:00",
+      "claimUntil": "2018-07-01T12:00:00",
+      "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
+      "networkId": 42
     },
     "levels": [
       { "value": 5, "minRank": 1, "maxRank": 1 },
