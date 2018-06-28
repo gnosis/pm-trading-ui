@@ -8,19 +8,18 @@ const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
 
-const configLoader = require('./configuration')
+const configLoader = require('./scripts/configuration')
 
 const version = process.env.BUILD_VERSION || pkg.version
 const commitId = `${process.env.TRAVIS_BRANCH}@${process.env.TRAVIS_COMMIT}`
 
 module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
-  const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
   const gnosisEnv = process.env.GNOSIS_ENV || 'development'
 
   console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv}'`)
-  const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
+  const config = configLoader(gnosisEnv, configEnvVars)
 
   return {
     devtool: 'source-map',
@@ -104,7 +103,7 @@ module.exports = (env = {}) => {
         filename: 'styles.css',
       }),
       new FaviconsWebpackPlugin({
-        logo: interfaceConfig.logo.favicon,
+        logo: config.logo.favicon,
         // Generate a cache file with control hashes and
         // don't rebuild the favicons until those hashes change
         persistentCache: true,
@@ -130,8 +129,7 @@ module.exports = (env = {}) => {
         NODE_ENV: 'production',
       }),
       new webpack.DefinePlugin({
-        'window.GNOSIS_CONFIG': JSON.stringify(config),
-        'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
+        'window.__GNOSIS_CONFIG__': JSON.stringify(config),
       }),
       new UglifyJsWebpackPlugin({
         sourceMap: true,

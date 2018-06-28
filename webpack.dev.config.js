@@ -8,16 +8,15 @@ const webpack = require('webpack')
 
 const pkg = require('./package.json')
 
-const configLoader = require('./configuration')
+const configLoader = require('./scripts/configuration')
 
 module.exports = (env = {}) => {
-  const configEnvVars = env.GNOSIS_CONFIG || process.env.GNOSIS_CONFIG || {}
-  const interfaceEnvVars = env.GNOSIS_INTERFACE || process.env.GNOSIS_INTERFACE || {}
+  const configEnvVars = env.GNOSIS_CONFIG || {}
 
-  const gnosisEnv = env.GNOSIS_ENV || process.env.GNOSIS_ENV || 'local'
+  const gnosisEnv = process.env.GNOSIS_ENV || 'development'
 
   console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv}'`)
-  const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
+  const config = configLoader(gnosisEnv, configEnvVars)
 
   const version = env.BUILD_VERSION || pkg.version
   const commitId = `${env.TRAVIS_BRANCH || 'local'}@${env.TRAVIS_COMMIT || 'SNAPSHOT'}`
@@ -129,7 +128,7 @@ module.exports = (env = {}) => {
     plugins: [
       new CaseSensitivePathsPlugin(),
       new FaviconsWebpackPlugin({
-        logo: interfaceConfig.logo.favicon,
+        logo: config.logo.favicon,
         // Generate a cache file with control hashes and
         // don't rebuild the favicons until those hashes change
         persistentCache: true,
@@ -155,8 +154,7 @@ module.exports = (env = {}) => {
         NODE_ENV: 'development',
       }),
       new webpack.DefinePlugin({
-        'window.GNOSIS_CONFIG': JSON.stringify(config),
-        'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
+        'window.__GNOSIS_CONFIG__': JSON.stringify(config),
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
       new CopyWebpackPlugin([

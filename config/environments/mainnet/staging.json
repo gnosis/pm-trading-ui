@@ -16,5 +16,11 @@
     "googleAnalytics": {
       "enabled": false
     }
+  },
+  "providers": {
+    "default": "METAMASK"
+  },
+  "legalCompliance": {
+    "enabled": true
   }
 }

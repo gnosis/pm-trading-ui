@@ -1,23 +1,22 @@
-const config = window.GNOSIS_CONFIG
-const configInterface = window.GNOSIS_INTERFACE
+// eslint-disable-next-line
+const config = window.__GNOSIS_CONFIG__
 
 export const getConfiguration = () => config
-export const getInterfaceConfiguration = () => configInterface
 
-export const getLogoConfig = () => configInterface.logo
+export const getLogoConfig = () => config.logo
 
 export const getGasPriceConfig = () => config.gasPrice || {}
 
-export const isFeatureEnabled = feature => configInterface[feature] && configInterface[feature].enabled
+export const isFeatureEnabled = feature => config[feature] && config[feature].enabled
 
-export const getFeatureConfig = feature => configInterface[feature] && configInterface[feature]
+export const getFeatureConfig = feature => config[feature] && config[feature]
 
-export const getProviderConfig = () => configInterface.providers
+export const getProviderConfig = () => config.providers
 
 export const getProviderIntegrationConfig = providerName =>
-  (configInterface.providers &&
-  configInterface.providers.options &&
-  configInterface.providers.options[providerName.toUpperCase()]) || {}
+  (config.providers &&
+    config.providers.options &&
+    config.providers.options[providerName.toUpperCase()]) || {}
 
 export const isThirdPartyIntegrationEnabled = thirdPartyName =>
   config.thirdparty?.[thirdPartyName]?.enabled === true
@@ -25,4 +24,4 @@ export const isThirdPartyIntegrationEnabled = thirdPartyName =>
 export const getThirdPartyConfig = thirdPartyName =>
   (isThirdPartyIntegrationEnabled(thirdPartyName) ? config.thirdparty[thirdPartyName] : {})
 
-export const getConstant = constantName => configInterface.constants?.[constantName]
+export const getConstant = constantName => config.constants?.[constantName]

@@ -13,7 +13,7 @@
     "lint:fix": "eslint ./src --fix --quiet",
     "test": "jest --no-cache",
     "test:watch": "npm test -- --watch",
-    "precommit": "./precommit.sh"
+    "precommit": "./scripts/precommit.sh"
   },
   "repository": {
     "type": "git",
