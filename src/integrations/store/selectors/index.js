@@ -1,7 +1,6 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { List } from 'immutable'
 import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
-import { getMainnetAddressForRinkebyAccount } from '../../../api'
 
 const config = getConfiguration()
 
