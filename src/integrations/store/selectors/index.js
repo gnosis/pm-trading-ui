@@ -1,6 +1,7 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { List } from 'immutable'
 import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
+import { getMainnetAddressForRinkebyAccount } from '../../../api'
 
 const config = getConfiguration()
 
@@ -53,17 +54,6 @@ export const hasAcceptedTermsAndConditions = (state) => {
   const requiredDocuments = List(legalDocuments.map(doc => doc.id))
   const documentsAccepted = state.integrations.get('documentsAccepted') || List()
   return documentsAccepted.isSuperset(requiredDocuments)
-}
-
-export const checkWalletConnection = (state) => {
-  const provider = getActiveProvider(state)
-  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
-
-  if (termsNotRequiredOrAccepted && provider && provider.account) {
-    return true
-  }
-
-  return false
 }
 
 /**
@@ -130,11 +120,28 @@ export const isRemoteConnectionEstablished = (state) => {
   return remoteProviderRegistered && !!remoteProvider.network
 }
 
+export const getRegisteredMainnetAddress = (state) => {
+  const provider = getActiveProvider(state)
+
+  return provider ? provider.mainnetAddress : undefined
+}
+
 export const isConnectedToCorrectNetwork = (state) => {
   const targetNetworkId = getTargetNetworkId(state)
   const currentNetworkId = getCurrentNetworkId(state)
 
   return targetNetworkId === currentNetworkId
+}
+
+export const checkWalletConnection = (state) => {
+  const provider = getActiveProvider(state)
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state) || !!getRegisteredMainnetAddress(state)
+
+  if (termsNotRequiredOrAccepted && provider?.account) {
+    return true
+  }
+
+  return false
 }
 
 export const shouldOpenNetworkModal = state =>
@@ -148,12 +155,6 @@ export const isOnWhitelist = (state) => {
   }
 
   return false
-}
-
-export const getRegisteredMainnetAddress = (state) => {
-  const provider = getActiveProvider(state)
-
-  return provider ? provider.mainnetAddress : undefined
 }
 
 export const isMetamaskLocked = (state) => {

@@ -101,10 +101,10 @@ class Header extends Component {
       acceptedTOS,
     } = this.props
 
-    let walletConnected = hasWallet
+    let canInteract = (acceptedTOS || !legalComplianceEnabled) && hasWallet && !!currentProvider
 
     if (tournamentEnabled && useMetamask && requireRegistration) {
-      walletConnected = hasWallet && !!mainnetAddress
+      canInteract = hasWallet && !!mainnetAddress
     }
 
     const logoVars = {}
@@ -132,8 +132,6 @@ class Header extends Component {
         )
       }
     }
-
-    const canInteract = (acceptedTOS || !legalComplianceEnabled) && walletConnected && !!currentProvider
 
     return (
       <div className={cx('headerContainer')}>
