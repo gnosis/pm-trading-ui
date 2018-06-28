@@ -5,9 +5,9 @@ import { getProviderIntegrationConfig, isFeatureEnabled, getFeatureConfig } from
 import Bold from 'components/layout/Bold'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
+import { notificationsEnabled } from 'integrations/uport'
 import { isValid as isValidPushNotificaiton } from './uportNotifications'
 import { isValid as isValidQrCredential } from './uportQr'
-import { notificationsEnabled } from './connector'
 
 const termsOfUseConfig = getFeatureConfig('termsOfUse')
 

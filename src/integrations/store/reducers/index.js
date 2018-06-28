@@ -3,7 +3,6 @@ import { handleActions } from 'redux-actions'
 import { normalizeHex } from 'utils/helpers'
 import { registerProvider, updateProvider, setActiveProvider, saveWalletSetting, setLegalDocumentsAccepted } from 'integrations/store/actions'
 import { ProviderRecord } from 'integrations/store/models'
-import { LOAD_LOCALSTORAGE } from '../../../store/middlewares/LocalStorageLoad'
 
 export default handleActions(
   {
@@ -25,7 +24,7 @@ export default handleActions(
         value,
       },
     }) => state.setIn(['accountSettings', normalizeHex(account), key], value),
-    [LOAD_LOCALSTORAGE]: (state, { payload: { integrations } }) => integrations,
+    LOAD_LOCALSTORAGE: (state, { payload: { integrations } }) => integrations,
   },
   Map({
     providers: Map(),
