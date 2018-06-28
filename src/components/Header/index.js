@@ -24,7 +24,7 @@ const tournamentEnabled = isFeatureEnabled('tournament')
 const badgesEnabled = isFeatureEnabled('badges')
 const requireRegistration = isFeatureEnabled('registration')
 const providerConfig = getFeatureConfig('providers')
-const requireTOSAccept = !!providerConfig.requireTOSAccept
+const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
 const { default: defaultProvider } = providerConfig
 
 const useMetamask = defaultProvider === WALLET_PROVIDER.METAMASK
@@ -60,7 +60,7 @@ class Header extends Component {
     const { isConnectedToCorrectNetwork, lockedMetamask, acceptedTOS } = this.props
 
     const shouldInstallProviders = !hasMetamask() && !useUport
-    const shouldAcceptTOS = requireTOSAccept && !acceptedTOS
+    const shouldAcceptTOS = !acceptedTOS || !legalComplianceEnabled
 
     if (shouldInstallProviders) {
       this.props.openModal('ModalInstallMetamask')
@@ -69,10 +69,10 @@ class Header extends Component {
         this.props.openModal('ModalUnlockMetamask')
       } else if (!isConnectedToCorrectNetwork) {
         this.props.openModal('ModalSwitchNetwork')
-      } else if (shouldAcceptTOS) {
-        this.props.openModal('ModalAcceptTOS')
       } else if (requireRegistration) {
         this.props.openModal('ModalRegisterWallet')
+      } else if (shouldAcceptTOS) {
+        this.props.openModal('ModalAcceptTOS')
       } else {
         console.warn('should be connected')
       }
@@ -95,7 +95,7 @@ class Header extends Component {
       showGameGuide,
       gameGuideType,
       gameGuideURL,
-      tokenAddress,
+      tokenSymbol,
       mainnetAddress,
       userTournamentInfo,
       acceptedTOS,
@@ -108,11 +108,8 @@ class Header extends Component {
     }
 
     const logoVars = {}
-    if (tournamentEnabled) {
-      logoVars['--logoAnnotation'] = "'Powered by Gnosis'"
-      logoVars['--logoPath'] = `url("${logoPath}")`
-      logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
-    }
+    logoVars['--logoPath'] = `url("${logoPath}")`
+    logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
 
     let gameGuideLink = <div />
     if (showGameGuide) {
@@ -126,14 +123,14 @@ class Header extends Component {
 
       if (gameGuideType === 'link') {
         gameGuideLink = (
-          <a href={gameGuideURL} className={cx('navLink')} target="_blank">
+          <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
             Game Guide
           </a>
         )
       }
     }
 
-    const canInteract = (!requireTOSAccept || acceptedTOS) && walletConnected && !!currentProvider
+    const canInteract = (acceptedTOS || !legalComplianceEnabled) && walletConnected && !!currentProvider
 
     return (
       <div className={cx('headerContainer')}>
@@ -143,7 +140,9 @@ class Header extends Component {
               <div className={cx('headerLogo', 'beta')} style={logoVars} />
             </NavLink>
           </div>
-          <div className={cx('group', 'left', 'version')}>{version}</div>
+          <div className={cx('group', 'left', 'version')}>
+            {version}
+          </div>
           <div className={cx('group', 'left', 'navLinks')}>
             {canInteract && (
               <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
@@ -164,12 +163,18 @@ class Header extends Component {
           <div className={cx('group', 'right')}>
             {canInteract ? (
               <div className={cx('account')}>
-                {currentNetwork &&
-                  currentNetwork !== 'MAIN' && (
-                  <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
+                {currentNetwork
+                  && currentNetwork !== 'MAIN' && (
+                  <span className={cx('network', 'text')}>
+Network:
+                    {upperFirst(currentNetwork.toLowerCase())}
+                  </span>
                 )}
-                <DecimalValue value={tokenBalance} className={cx('text')} />&nbsp;
-                {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
+                <DecimalValue value={tokenBalance} className={cx('text')} />
+&nbsp;
+                {<span>
+                  {tokenSymbol || 'ETH'}
+                 </span>}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
@@ -201,7 +206,7 @@ Header.propTypes = {
   showGameGuide: PropTypes.bool,
   gameGuideType: PropTypes.string,
   gameGuideURL: PropTypes.string,
-  tokenAddress: PropTypes.string,
+  tokenSymbol: PropTypes.string,
   lockedMetamask: PropTypes.bool,
   requestMainnetAddress: PropTypes.func.isRequired,
   requestTokenBalance: PropTypes.func.isRequired,
@@ -226,7 +231,7 @@ Header.defaultProps = {
   mainnetAddress: undefined,
   lockedMetamask: true,
   userTournamentInfo: undefined,
-  tokenAddress: undefined,
+  tokenSymbol: 'ETH',
   acceptedTOS: false,
 }
 

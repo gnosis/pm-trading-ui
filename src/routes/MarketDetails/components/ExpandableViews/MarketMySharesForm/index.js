@@ -73,7 +73,7 @@ MarketMySharesForm.propTypes = {
 MarketMySharesForm.defaultProps = {
   defaultAccount: undefined,
   market: undefined,
-  selectedSellAmount: '0',
+  selectedSellAmount: undefined,
   limitMargin: '0',
   marketShares: {},
   isGasPriceFetched: false,

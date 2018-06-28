@@ -18,12 +18,14 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 0 27px;
+    padding: 45px 28px 28px 30px;
     text-align: center;
     color: #666;
 
     .annotation {
       margin: 15px 0 0 0;
+      font-size: 14px;
+      line-height: 1.5;
 
       .rewardInfo {
         font-weight: 600;
@@ -45,7 +47,6 @@
       font-weight: 500;
       text-align: center;
       color: #333333;
-      margin-top: 45px;
     }
 
     .currentNetworkContainer {
@@ -71,8 +72,15 @@
     }
 
     .gasCosts {
+      font-size: 13px;
+      margin-top: 0;
       .gasEstimation {
         color: #333333;
+      }
+
+      svg {
+        position: relative;
+        top: 3px;
       }
     }
 

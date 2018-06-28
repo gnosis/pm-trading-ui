@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { hexWithPrefix } from 'utils/helpers'
 import { getTokenSymbol } from 'store/selectors/blockchain'
 import { requestTokenSymbol } from 'store/actions/blockchain'
 import PropTypes from 'prop-types'
@@ -16,10 +15,18 @@ class CurrencyName extends Component {
   render() {
     const { tokenAddress, tokenSymbol, className } = this.props
     if (tokenAddress) {
-      return <span className={className}>{tokenSymbol}</span>
+      return (
+        <span className={className}>
+          {tokenSymbol}
+        </span>
+      )
     }
 
-    return <span className={className}>Unknown</span>
+    return (
+      <span className={className}>
+Unknown
+      </span>
+    )
   }
 }
 

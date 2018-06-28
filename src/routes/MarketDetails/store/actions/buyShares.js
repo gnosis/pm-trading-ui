@@ -7,6 +7,7 @@ import Decimal from 'decimal.js'
 import {
   startLog, closeLog, closeEntrySuccess, closeEntryError,
 } from 'routes/Transactions/store/actions/transactions'
+import { requestCollateralTokenBalance } from 'store/actions/blockchain'
 import { openModal, closeModal } from 'store/actions/modal'
 import { gaSend } from 'utils/analytics/google'
 import { MAX_ALLOWANCE_WEI, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
@@ -70,7 +71,6 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
 
   const updatedMarket = await requestFromRestAPI(`markets/${market.address}`)
   const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
-  console.log(market.toJS())
   const oldPrice = market.outcomes.toArray()[outcomeIndex].marginalPrice
   if (!allowedRangePrice(oldPrice, updatedPrice)) {
     dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
@@ -106,6 +106,7 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
       },
     }),
   )
+  await dispatch(requestCollateralTokenBalance(currentAccount))
 
   return dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }

@@ -2,21 +2,26 @@ import allowedRangePrice from 'utils/marginPrice'
 import uuid from 'uuid/v4'
 import * as api from 'api'
 import Decimal from 'decimal.js'
-import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
+import { requestCollateralTokenBalance } from 'store/actions/blockchain'
+import {
+  startLog, closeLog, closeEntrySuccess, closeEntryError,
+} from 'routes/Transactions/store/actions/transactions'
 import { openModal, closeModal } from 'store/actions/modal'
+import { requestFromRestAPI } from 'api/utils/fetch'
 import { gaSend } from 'utils/analytics/google'
-import { receiveEntities, updateEntity } from 'store/actions/entities'
+import { receiveEntities } from 'store/actions/entities'
 import { MAX_ALLOWANCE_WEI, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { SETTING_ALLOWANCE, SELL } from 'utils/transactionExplanations'
 import { TRANSACTION_EVENTS_GENERIC, TRANSACTION_STAGES } from 'store/actions/market/constants'
-import { sellShares, fetchMarket } from '../../api'
+import { processMarketResponse } from './requestMarket'
+import { sellShares } from '../../api'
 /**
  * Sell shares on a specific market
  * @param {Market} market - Market to sell shares on
  * @param {MarketShare} share - Marketshare object
  * @param {number|string|BigNumber} outcomeTokenCount - Amount of tokenshares to sell
  */
-const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (dispatch) => {
+const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (dispatch, getState) => {
   const transactionId = uuid()
   const gnosis = await api.getGnosisConnection()
   const currentAccount = await api.getCurrentAccount()
@@ -28,13 +33,12 @@ const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (
   const outcomeCountWei = Decimal(outcomeTokenCount).mul(1e18)
   const approvalResetAmount = outcomeCountWei.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
-  const payload = await fetchMarket(market.address)
-  const updatedMarket = payload.entities.markets[market.address]
+  const updatedMarket = await requestFromRestAPI(`markets/${market.address}`)
   const updatedPrice = updatedMarket.marginalPrices[outcomeIndex]
   const oldPrice = market.marginalPrices[outcomeIndex]
   if (!allowedRangePrice(oldPrice, updatedPrice)) {
     dispatch(openModal({ modalName: 'ModalOutcomePriceChanged' }))
-    return dispatch(receiveEntities(payload))
+    return processMarketResponse(dispatch, getState(), updatedMarket)
   }
 
   // Start a new transaction log
@@ -71,6 +75,7 @@ const sellMarketShares = (market, share, outcomeTokenCount, earnings) => async (
   //       .toString(),
   //   },
   // }))
+  await dispatch(requestCollateralTokenBalance(currentAccount))
 
   return dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.NO_ERROR))
 }

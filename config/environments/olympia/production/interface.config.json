@@ -17,7 +17,7 @@
     "options": {
       "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
       "symbol": "OLY",
-      "icon": "/assets/img/icons/gno_token.svg"
+      "icon": "/assets/img/icons/icon_oly.png"
     }
   },
   "providers": {
@@ -39,14 +39,27 @@
     "enabled": true,
     "type": "default"
   },
-  "termsOfUse": {
-    "url": "/assets/content/TermsOfService.html"
-  },
-  "riskDisclaimer": {
-    "url": "/assets/content/RiskDisclaimerPolicy.html"
-  },
-  "privacyPolicy": {
-    "url": "/assets/content/PrivacyPolicy.html"
+  "legalCompliance": {
+    "enabled": true,
+    "documents": [
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "terms_of_service",
+        "title": "Terms of Service",
+        "file": "/assets/TermsOfService.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "privacy_policy",
+        "title": "Privacy Policy",
+        "file": "/assets/PrivacyPolicy.html"
+      },
+      {
+        "type": "TOS_TEXT",
+        "id": "address_public",
+        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard"
+      }
+    ]
   },
   "footer": {
     "enabled": true,

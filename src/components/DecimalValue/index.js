@@ -23,12 +23,16 @@ export const decimalToText = (value, decimals = 4) => {
 
 const DecimalValue = ({ value, decimals = 4, className }) => {
   const text = decimalToText(value, decimals)
-  return <span className={className}>{text}</span>
+  return (
+    <span className={className}>
+      {text}
+    </span>
+  )
 }
 
 // I don't use PropTypes.instanceOf because Decimal can be cloned with different default properties
 // and instanceOf doesn't deal with that situation. In fact, Decimal.clone is used in gnosis.js
-const decimalJsTest = (props, propName, componentName) => {
+export const decimalJsTest = (props, propName, componentName) => {
   if (!/^(Decimal|(Big)?Number)$/.test(props[propName] && props[propName].constructor ? props[propName].constructor.name : null)) {
     return new Error(`Non-numeric \`${propName}\` supplied to \`${componentName}\`. Validation failed.`)
   }

@@ -18,8 +18,14 @@ const UnlockMetamask = ({ closeModal }) => (
   <div className={cx('unlockMetamask')}>
     <button className={cx('closeButton')} onClick={closeModal} />
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
-    <h3 className={cx('heading')}>Unlock your MetaMask wallet</h3>
-    <p className={cx('text')}>Please unlock your MetaMask wallet to start using {tournamentConfig.name}.</p>
+    <h3 className={cx('heading')}>
+Unlock your MetaMask wallet
+    </h3>
+    <p className={cx('text')}>
+Please unlock your MetaMask wallet to start using
+      {tournamentConfig.name || 'the application'}
+.
+    </p>
   </div>
 )
 

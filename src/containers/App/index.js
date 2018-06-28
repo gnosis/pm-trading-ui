@@ -27,7 +27,9 @@ const App = (props) => {
       <div className={cx('appContainer')}>
         <div className={cx('loader-container')}>
           <IndefiniteSpinner width={100} height={100} />
-          <h1>Connecting</h1>
+          <h1>
+Connecting
+          </h1>
         </div>
       </div>
     )
@@ -80,6 +82,4 @@ const mapStateToProps = state => ({
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 
-export default withRouter(connect(mapStateToProps, {
-  connectBlockchain,
-})(App))
+export default withRouter(connect(mapStateToProps, null)(App))

@@ -1,8 +1,9 @@
 import { calcLMSRMarginalPrice, calcLMSRProfit } from 'api'
 import Decimal from 'decimal.js'
+import web3 from 'web3'
 import { weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, LIMIT_MARGIN } from 'utils/constants'
-import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
+import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm/utils'
 
 /**
  * @function
@@ -18,7 +19,9 @@ const calculateCurrentProbability = (market, share) => {
     return new Decimal(0)
   }
 
-  const { event: { type } } = market
+  const {
+    event: { type },
+  } = market
   let currentProbability = new Decimal(0)
 
   // When calculating for SCALAR markets, we need to always calculate for long outcome
@@ -78,7 +81,9 @@ const calculateNewProbability = (market, share, netOutcomeTokensSold) => {
     throw new Error()
   }
 
-  const { event: { type } } = market
+  const {
+    event: { type },
+  } = market
 
   // When calculating for SCALAR markets, we need to always calculate for long outcome
   // For categorical we should calculate for share's outcome
@@ -91,4 +96,32 @@ const calculateNewProbability = (market, share, netOutcomeTokensSold) => {
   })
 }
 
-export { calculateCurrentProbability, calculateEarnings, calculateNewProbability }
+const validateTokenCount = (values, props) => {
+  const { sellAmount } = values
+  const { share, market } = props
+
+  if (!sellAmount || !NUMBER_REGEXP.test(sellAmount) || Decimal(sellAmount).lt(1e-18)) {
+    return { sellAmount: 'Invalid amount' }
+  }
+
+  const decimalValue = Decimal(sellAmount)
+  const earnings = calculateEarnings(market, share, web3.utils.toWei(sellAmount))
+
+  if (decimalValue.lt(0)) {
+    return { sellAmount: "Number can't be negative." }
+  }
+
+  if (decimalValue.gt(Decimal(share.balance).div(1e18))) {
+    return { sellAmount: "You're trying to sell more than you invested." }
+  }
+
+  if (Decimal(0).eq(earnings)) {
+    return { sellAmount: 'This transaction is not permitted because it will result in a loss of an outcome token.' }
+  }
+
+  return {}
+}
+
+export {
+  calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount,
+}

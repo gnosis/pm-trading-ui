@@ -10,7 +10,14 @@
     "port": 443
   },
   "whitelist": {
-    "0xf73037eacc54c8d9e3dd2847f76d2022e18746c8": "Lauti",
-    "0x13a1d49d0f5285586373755ec96d0ac81e7a1928": "Denis"
-    }
+    "0xafdda4e896f543ea60f9d4c72d22f950e8c72812": "Mikhail"
+  },
+  "hiddenMarkets": [
+    "0x9e1008ff1b30b871701e5527fc4efe339cf96abc",
+    "0x23effcde33bd3100ca038f56ccda0a0c695439da",
+    "0xe00575db7a639f554f210cf8fc3969ef315c4bc8",
+    "0xbedb8b26ea27a2193baed5d06e6c538b4d413896",
+    "0x71de8eb4d4060f395120fe7499971ad53b526215",
+    "0xf87e40f4dc6936f6f020f42c5286303b8c41eae7"
+  ]
 }

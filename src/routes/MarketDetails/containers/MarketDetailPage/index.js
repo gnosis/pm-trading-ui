@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
-import { formValueSelector } from 'redux-form'
+import { formValueSelector, getFormSyncErrors } from 'redux-form'
 import { replace } from 'react-router-redux'
 import { requestGasPrice, requestTokenSymbol } from 'store/actions/blockchain'
 import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
-import { redeemWinnings } from 'store/actions/market'
+import redeemMarket from 'store/actions/market/redeemMarket'
 import {
   buyMarketShares,
   sellMarketShares,
@@ -46,7 +46,6 @@ const mapStateToProps = (state, ownProps) => {
   // const marketGraph = getMarketGraph(market)(state)
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
-  const marketShortSellSelector = formValueSelector('marketShortSell')
   const defaultAccount = getCurrentAccount(state)
   const marketTrades = getMarketTradesForAccount(market.address, defaultAccount)(state)
 
@@ -58,8 +57,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedBuyInvest: marketBuySelector(state, 'invest'),
     limitMargin: marketBuySelector(state, 'limitMargin'),
     selectedSellAmount: marketMySharesSelector(state, 'sellAmount'),
-    selectedShortSellAmount: marketShortSellSelector(state, 'shortSellAmount'),
-    selectedShortSellOutcome: marketShortSellSelector(state, 'selectedOutcome'),
+    sellFormHasErrors: Object.keys(getFormSyncErrors('marketMyShares')(state)).length > 0,
     hasWallet: checkWalletConnection(state),
     isConfirmedSell: marketMySharesSelector(state, 'confirm'),
     isModerator: isModerator(getCurrentAccount(state)),
@@ -85,7 +83,7 @@ const mapDispatchToProps = dispatch => ({
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
   sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
   changeUrl: url => dispatch(replace(url)),
-  redeemWinnings: market => dispatch(redeemWinnings(market)),
+  redeemWinnings: market => redeemMarket(market),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
   requestTokenSymbol: tokenAddress => dispatch(requestTokenSymbol(tokenAddress)),

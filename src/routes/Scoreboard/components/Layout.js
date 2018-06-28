@@ -23,7 +23,11 @@ const providerConfig = getProviderConfig()
 const rewardsEnabled = isFeatureEnabled('rewards')
 const { levels } = getFeatureConfig('rewards')
 
-const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
+const NoRows = () => (
+  <Paragraph className={cx('norows')}>
+No rows found
+  </Paragraph>
+)
 
 class Layout extends React.PureComponent {
   render() {
@@ -35,15 +39,14 @@ class Layout extends React.PureComponent {
 
     levels.forEach((rewardLevel) => {
       if (
-        (rank >= rewardLevel.minRank && rank <= rewardLevel.maxRank) || // between min/max
-        (rank >= rewardLevel.minRank && rewardLevel.maxRank == null) // above min
+        (rank >= rewardLevel.minRank && rank <= rewardLevel.maxRank) // between min/max
+        || (rank >= rewardLevel.minRank && rewardLevel.maxRank == null) // above min
       ) {
         rewardValue = rewardLevel.value
       }
     })
 
-    const showRewardInfo =
-      rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    const showRewardInfo = rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
     const showRewardClaim = rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK && !!mainnetAddress
 
     return (
@@ -61,7 +64,9 @@ class Layout extends React.PureComponent {
           {showRewardInfo && <Hairline />}
           <Block className={cx('trophy')}>
             <Img src={trophy} width="100" />
-            <Paragraph>Scoreboard</Paragraph>
+            <Paragraph>
+Scoreboard
+            </Paragraph>
           </Block>
           <Paragraph className={cx('explanation')}>
             The total score is calculated based on the sum of predicted profits and OLY tokens each wallet holds. Scores
@@ -90,7 +95,7 @@ Layout.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
-  rank: PropTypes.string,
+  rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 Layout.defaultProps = {
