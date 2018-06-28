@@ -1,7 +1,7 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "tradingdb.mainnet.gnosis.pm",
+    "host": "tradingdb.mainnet.staging.gnosisdev.com",
     "port": 443
   },
   "ethereum": {

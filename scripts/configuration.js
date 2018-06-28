@@ -3,13 +3,13 @@ const fs = require('fs')
 const _ = require('lodash')
 const path = require('path')
 
-const root = '../'
+const root = path.join(__dirname, '../')
 
 module.exports = (env = 'local', envVarsConfig = {}) => {
   const fallbackConfigPath = path.join(root, 'config', 'fallback')
   const configsToLoad = [fallbackConfigPath]
 
-  const envConfigPath = path.join(root, 'config', `${env}`)
+  const envConfigPath = path.join(root, 'config', 'environments', `${env}`)
   const isValidConfig = fs.existsSync(`${envConfigPath}.json`)
 
   if (!isValidConfig) {
