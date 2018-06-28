@@ -34,7 +34,6 @@ const LegalCompliance = ({
     )
   }
 
-
   const documentIds = documents.map(doc => doc.id)
   const hasAcceptedAll = documentIds.every(docId => !!fields[docId])
   const canSubmit = !disabled && hasAcceptedAll
@@ -44,17 +43,23 @@ const LegalCompliance = ({
       {showHeading && <h4 className={cx('heading')}>Terms of service and privacy policy</h4>}
       {showExplanation && (
         <p className={cx('explanation')}>
-          For using { applicationName }, you have to agree with our&nbsp;
+          For using {applicationName}, you have to agree with our&nbsp;
           <React.Fragment>
-            {documents.map(doc => <DocumentExplanation {...doc} />).reduce((acc, elem) => [...acc, <span> and </span>, elem], [])}
+            {documents
+              .map(doc => <DocumentExplanation key={doc.id} {...doc} />)
+              .reduce((acc, elem) => [...acc, <span> and </span>, elem], [])}
           </React.Fragment>
           .
         </p>
       )}
       <div className={cx('checks')}>
-        {documents.map(doc => <DocumentField {...doc} className={cx('checkBox')} />)}
+        {documents.map(doc => <DocumentField key={doc.id} {...doc} className={cx('checkBox')} />)}
       </div>
-      <ButtonComponent className={cx(submitButtonClassName, { [submitButtonDisabledClassName]: !canSubmit })} disabled={!canSubmit} onClick={() => onSubmitAcceptedDocs(documentIds)}>
+      <ButtonComponent
+        className={cx(submitButtonClassName, { [submitButtonDisabledClassName]: !canSubmit })}
+        disabled={!canSubmit}
+        onClick={() => onSubmitAcceptedDocs(documentIds)}
+      >
         {submitButtonLabel}
       </ButtonComponent>
     </div>

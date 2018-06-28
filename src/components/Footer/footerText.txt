@@ -1,1 +1,2 @@
-Trading on prediction markets carry a high degree of financial risk to your capital. Please read our full [Risk Disclaimer](/assets/RiskDisclaimerPolicy.html), [Privacy Policy](/assets/PrivacyPolicy.html) and [Terms of Service](/assets/TermsOfService.html) before trading. – [Imprint](/assets/Imprint.html)
+Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as "play money" no one will face any financial risks.  
+Please read our full [Privacy Policy](/assets/PrivacyPolicy.html) and [Terms of Service](/assets/TermsOfService.html) before trading. – [Imprint](/assets/Imprint.html)
