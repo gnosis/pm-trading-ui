@@ -14,7 +14,7 @@
     "lint:fix": "eslint ./src --fix --quiet",
     "test": "jest --no-cache",
     "test:watch": "npm test -- --watch",
-    "clean": "rm -rf ./dist/",
+    "clean": "rm -rf ./dist/ && mkdir ./dist",
     "precommit": "./scripts/precommit.sh"
   },
   "repository": {
