@@ -4,10 +4,14 @@ env:
 - PROJECT=''
 - PROJECT=mainnet
 - PROJECT=olympia
+cache:
+  directories:
+  - "$HOME/.npm"
 install:
-- npm install -s -q
+# - npm install -s -q
+- npm ci
 before_install:
-- rm -rf node_modules
+# - rm -rf node_modules
 - npm i -g babel-cli webpack truffle-contract
 after_success:
 - ./env_build.sh
