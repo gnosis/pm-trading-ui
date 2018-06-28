@@ -1,9 +1,8 @@
-import { getTokenBalance } from 'api'
 import { setConnectionStatus } from 'store/actions/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import { fetchTournamentUserData } from 'routes/Scoreboard/store/actions'
-import { weiToEth, hexWithoutPrefix } from 'utils/helpers'
+import { hexWithoutPrefix } from 'utils/helpers'
 import { getProviderIntegrationConfig } from 'utils/features'
 import initUportConnector, { connect, connectorLogOut, isUserConnected } from './connector'
 
