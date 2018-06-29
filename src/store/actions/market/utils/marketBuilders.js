@@ -58,7 +58,7 @@ const buildScalarMarket = (market) => {
   const bounds = buildBoundsFrom(lowerBound, upperBound, unit, decimals)
 
   const resolved = isOutcomeSet || isWinningOutcomeSet
-  const closed = isMarketClosed(stage, resolutionDate, resolved)
+  const closed = isMarketClosed(market)
 
   const marketRecord = new ScalarMarketRecord({
     title,
@@ -111,7 +111,7 @@ const buildCategoricalMarket = (market) => {
   const outcomes = buildOutcomesFrom(outcomeLabels, netOutcomeTokensSold, market.marginalPrices)
 
   const resolved = isOutcomeSet || isWinningOutcomeSet
-  const closed = isMarketClosed(stage, resolutionDate, resolved)
+  const closed = isMarketClosed(market)
 
   const marketRecord = new CategoricalMarketRecord({
     title,

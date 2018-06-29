@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import { createSelector } from 'reselect'
-import { isMarketClosed, isMarketEndingSoon, isNewMarket } from 'store/utils/marketStatus'
+import { isMarketClosedOrResolved, isMarketEndingSoon, isNewMarket } from 'store/utils/marketStatus'
 import { marketsSelector } from 'store/selectors/market'
 
 import filterSelector from './filter'
@@ -18,7 +18,7 @@ export const marketCounterSelector = state => List(state.marketList.values())
 export const newMarketsSelector = createSelector(
   marketCounterSelector,
   (markets) => {
-    const openMarkets = markets.toArray().filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
+    const openMarkets = markets.toArray().filter(market => !isMarketClosedOrResolved(market))
     const newMarkets = openMarkets.filter(market => isNewMarket(market.creation))
 
     return newMarkets.length
@@ -28,7 +28,7 @@ export const newMarketsSelector = createSelector(
 export const endingSoonMarketSelector = createSelector(
   marketCounterSelector,
   (markets) => {
-    const openMarkets = markets.toArray().filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
+    const openMarkets = markets.toArray().filter(market => !isMarketClosedOrResolved(market))
     const endingSoonMarkets = openMarkets.filter(market => isMarketEndingSoon(market.resolution))
     return endingSoonMarkets.length
   },
@@ -37,7 +37,7 @@ export const endingSoonMarketSelector = createSelector(
 export const openMarketSelector = createSelector(
   marketCounterSelector,
   (markets) => {
-    const openMarkets = markets.toArray().filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved))
+    const openMarkets = markets.toArray().filter(market => !isMarketClosedOrResolved(market))
     return openMarkets.length
   },
 )

@@ -64,41 +64,37 @@ class SharesTable extends Component {
       },
       isGasCostFetched,
       isGasPriceFetched,
-      sellFormHasErrors,
     } = this.props
     const tableRows = []
 
     marketShares.map((share) => {
       const isExtended = extendedShareId === share.id
       const ableToSell = !isMarketClosed(market) && !isMarketResolved(market)
+      console.log(isMarketClosed(market), isMarketResolved(market))
       const outcomeName = getOutcomeName(market, share.outcomeToken.index)
 
-      tableRows.push(
-        <ShareRow
-          key={share.id}
-          isExtended={isExtended}
-          market={market}
-          ableToSell={ableToSell}
-          share={share}
-          outcomeName={outcomeName}
-          onSellClick={this.handleShowSellView}
-        />,
-      )
+      tableRows.push(<ShareRow
+        key={share.id}
+        isExtended={isExtended}
+        market={market}
+        ableToSell={ableToSell}
+        share={share}
+        outcomeName={outcomeName}
+        onSellClick={this.handleShowSellView}
+      />)
 
       if (extendedShareId === share.id && ableToSell) {
-        tableRows.push(
-          <ShareSellView
-            key={`${share.id}-sellView`}
-            share={share}
-            market={market}
-            gasCosts={gasCosts}
-            gasPrice={gasPrice}
-            isGasCostFetched={isGasCostFetched}
-            isGasPriceFetched={isGasPriceFetched}
-            selectedSellAmount={selectedSellAmount}
-            handleSellShare={this.handleSellShare}
-          />,
-        )
+        tableRows.push(<ShareSellView
+          key={`${share.id}-sellView`}
+          share={share}
+          market={market}
+          gasCosts={gasCosts}
+          gasPrice={gasPrice}
+          isGasCostFetched={isGasCostFetched}
+          isGasPriceFetched={isGasPriceFetched}
+          selectedSellAmount={selectedSellAmount}
+          handleSellShare={this.handleSellShare}
+        />)
       }
     })
 

@@ -26,7 +26,8 @@ export const getTokenAmount = (state, tokenAddress) => {
   return defaultTokenDecimal
 }
 
-export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['tokenSymbols', hexWithPrefix(tokenAddress)])
+export const getTokenSymbol = (state, tokenAddress) =>
+  state.blockchain.getIn(['tokenSymbols', hexWithPrefix(tokenAddress)])
 
 /**
  * @param {*} state - redux state

@@ -1,6 +1,4 @@
-import {
-  mapValues, startsWith, isArray, range,
-} from 'lodash'
+import { mapValues, startsWith, isArray, range } from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
 import moment from 'moment'
@@ -27,24 +25,6 @@ export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix
 export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
 
 export const normalizeHex = value => hexWithPrefix(value).toLowerCase()
-
-export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) => stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
-
-export const toEntity = (data, entityType, idKey = 'address') => {
-  const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
-
-  return {
-    entities: {
-      [entityType]: {
-        [id]: {
-          [idKey]: id,
-          ...entityPayload,
-        },
-      },
-    },
-    result: [id],
-  }
-}
 
 /**
  * Converts a value from WEI to ETH
