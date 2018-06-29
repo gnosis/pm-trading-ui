@@ -1,9 +1,7 @@
 import { Map, List } from 'immutable'
 import { handleActions } from 'redux-actions'
 import { normalizeHex } from 'utils/helpers'
-import {
-  registerProvider, updateProvider, setActiveProvider, saveWalletSetting, setLegalDocumentsAccepted,
-} from 'integrations/store/actions'
+import { registerProvider, updateProvider, setActiveProvider, saveWalletSetting, setLegalDocumentsAccepted } from 'integrations/store/actions'
 import { ProviderRecord } from 'integrations/store/models'
 import { loadStorage } from 'store/middlewares/Storage'
 
@@ -27,7 +25,7 @@ export default handleActions(
         value,
       },
     }) => state.setIn(['accountSettings', normalizeHex(account), key], value),
-    [loadStorage]: (state, { payload: { integrations } }) => integrations,
+    [loadStorage]: (state, { payload: { integrations } }) => Map(integrations),
   },
   Map({
     providers: Map(),
