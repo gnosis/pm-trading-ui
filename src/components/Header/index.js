@@ -141,9 +141,7 @@ class Header extends Component {
               <div className={cx('headerLogo', 'beta')} style={logoVars} />
             </NavLink>
           </div>
-          <div className={cx('group', 'left', 'version')}>
-            {version}
-          </div>
+          <div className={cx('group', 'left', 'version')}>{version}</div>
           <div className={cx('group', 'left', 'navLinks')}>
             <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
               Markets
@@ -164,20 +162,12 @@ class Header extends Component {
           <div className={cx('group', 'right')}>
             {canInteract ? (
               <div className={cx('account')}>
-                {currentNetwork
-                  && currentNetwork !== 'MAIN' && (
-                  <span className={cx('network', 'text')}>
-Network:
-                    {upperFirst(currentNetwork.toLowerCase())}
-                  </span>
+                {currentNetwork &&
+                  currentNetwork !== 'MAIN' && (
+                  <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
                 )}
-                <DecimalValue value={tokenBalance} className={cx('text')} />
-&nbsp;
-                {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : (
-                  <span>
-ETH
-                  </span>
-                )}
+                <DecimalValue value={tokenBalance} className={cx('text')} />&nbsp;
+                {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
