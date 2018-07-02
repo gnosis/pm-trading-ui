@@ -21,20 +21,22 @@ const OutcomeSectionScalar = (props) => {
   const canRunSimulation = selectedBuyInvest && selectedOutcome
 
   const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-  const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
-    netOutcomeTokensSold: marketTokenCounts,
-    outcomeTokenIndex,
-    funding,
-  }))
-  let marginalPriceSelected = marginalPricesCurrent
-
-  if (canRunSimulation) {
-    marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
-    marginalPriceSelected = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+  const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) => 
+    calcLMSRMarginalPrice({
       netOutcomeTokensSold: marketTokenCounts,
       outcomeTokenIndex,
       funding,
     }))
+  let marginalPriceSelected = marginalPricesCurrent
+
+  if (canRunSimulation) {
+    marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
+    marginalPriceSelected = marketTokenCounts.map((value, outcomeTokenIndex) => 
+      calcLMSRMarginalPrice({
+        netOutcomeTokensSold: marketTokenCounts,
+        outcomeTokenIndex,
+        funding,
+      }))
   }
 
   const scalarOutcomes = [
@@ -57,7 +59,7 @@ const OutcomeSectionScalar = (props) => {
       <div className={cn('row')}>
         <div className={cn('col-md-12')}>
           <h2>
-Your Trade
+            Your Trade
           </h2>
           <Field component={OutcomeSelection} name="selectedOutcome" outcomes={scalarOutcomes} hideBars hidePercentage />
         </div>
