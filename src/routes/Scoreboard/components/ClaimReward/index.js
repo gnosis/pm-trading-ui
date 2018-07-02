@@ -41,7 +41,7 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardsClaimed }) => {
 
   let rewardClaimTimeDisplay = (
     <span className={cx('infoText')}>
-N/A
+      N/A
     </span>
   )
   if (showRewardValue || showAlreadyClaimed) {
@@ -56,14 +56,15 @@ N/A
             {rewardValueDisplay}
           </Span>
           <Paragraph className={cx('annotation')}>
-CLAIMABLE
+            CLAIMABLE
+            {' '}
             {rewardToken.symbol}
           </Paragraph>
         </Block>
         <Block className={cx('timeToClaim')}>
           {rewardClaimTimeDisplay}
           <Paragraph className={cx('annotation')}>
-TIME LEFT TO CLAIM
+            TIME LEFT TO CLAIM
           </Paragraph>
         </Block>
       </Block>
