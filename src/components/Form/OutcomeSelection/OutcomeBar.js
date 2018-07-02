@@ -10,13 +10,15 @@ import css from './OutcomeSelection.mod.scss'
 const cx = classNames.bind(css)
 
 const Outcome = ({
-  onSelect, selected, index, label, probability, color,
+  onSelect, selected, index, label, probability, color, hidePercentage,
 }) => {
   const inputId = `formOutcomeBar_${index}`
 
   return (
     <div className={cx('outcome', { selected })}>
-      <span className={cx('outcomeLabel')}>{label}</span>
+      <span className={cx('outcomeLabel')}>
+        {label}
+      </span>
       <label htmlFor={inputId}>
         <input
           type="radio"
@@ -35,7 +37,13 @@ const Outcome = ({
             }}
           />
           <div className={cx('outcomeDescription')}>
-            <span className={cx('outcomeProbability')}>{decimalToText(probability, 2)}%</span>
+            {!hidePercentage && (
+              <span className={cx('outcomeProbability')}>
+                {decimalToText(probability, 2)}
+                {' '}
+                %
+              </span>
+            )}
           </div>
         </div>
       </label>
@@ -49,6 +57,7 @@ Outcome.propTypes = {
   index: PropTypes.number.isRequired,
   selected: PropTypes.bool,
   color: PropTypes.string,
+  hidePercentage: PropTypes.bool,
   label: PropTypes.string,
 }
 
@@ -56,6 +65,7 @@ Outcome.defaultProps = {
   label: 'Outcome',
   selected: false,
   color: '#fff',
+  hidePercentage: false,
 }
 
 export default Outcome

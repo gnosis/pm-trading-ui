@@ -17,17 +17,23 @@ class OutcomeSelection extends PureComponent {
       outcomes,
       label,
       hideBars,
+      hidePercentage,
       input: { value, onChange },
     } = this.props
 
     return (
       <div className={cx('formOutcomeSelection', { hideBars })}>
-        {label && <label>{label}</label>}
+        {label && (
+          <label>
+            {label}
+          </label>
+        )}
         {outcomes.map(outcome => (
           <OutcomeBar
             {...outcome}
             key={outcome.index}
             onSelect={onChange}
+            hidePercentage={hidePercentage}
             selected={outcome.index.toString() === value}
           />
         ))}
@@ -39,6 +45,7 @@ class OutcomeSelection extends PureComponent {
 OutcomeSelection.propTypes = {
   input: PropTypes.shape(fieldPropTypes.input).isRequired,
   hideBars: PropTypes.bool,
+  hidePercentage: PropTypes.bool,
   outcomes: PropTypes.arrayOf(PropTypes.shape({
     probability: PropTypes.instanceOf(Decimal).isRequired,
     index: PropTypes.number.isRequired,
@@ -50,6 +57,7 @@ OutcomeSelection.propTypes = {
 
 OutcomeSelection.defaultProps = {
   hideBars: false,
+  hidePercentage: false,
   outcomes: [],
   label: '',
 }
