@@ -2,7 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { reduxForm, Field } from 'redux-form'
 import cn from 'classnames/bind'
-import { TextInput, Checkbox, Select, RadioButtonGroup } from 'components/Form'
+import {
+  TextInput, Checkbox, Select, RadioButtonGroup,
+} from 'components/Form'
 import style from './Filter.mod.scss'
 
 const cx = cn.bind(style)
@@ -61,11 +63,6 @@ const Form = ({ userAccount }) => (
       options={MARKETFILTER_STATUS_OPTIONS}
       light
     />
-    {userAccount && (
-      <Field label="Show Only" name="filterMyMarkets" component={Checkbox} light>
-        My Markets
-      </Field>
-    )}
   </form>
 )
 
