@@ -46,60 +46,53 @@
         "type": "TOS_DOCUMENT",
         "id": "terms_of_service",
         "title": "Terms of Service",
-        "file": "/assets/TermsOfService.html"
+        "file": "/assets/content/TermsOfService.html"
       },
       {
         "type": "TOS_DOCUMENT",
         "id": "privacy_policy",
         "title": "Privacy Policy",
-        "file": "/assets/PrivacyPolicy.html"
+        "file": "/assets/content/PrivacyPolicy.html"
       },
       {
         "type": "TOS_TEXT",
         "id": "address_public",
-        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard",
-        "short": "agree that your wallet address will be publicily displayed"
+        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard"
       }
     ]
   },
   "footer": {
     "enabled": true,
     "content": {
-      "type": "text",
-      "source":
-        "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
+      "type": "file",
+      "source": "",
       "markdown": true
+    }
+  },
+  "rewardClaiming": {
+    "enabled": false,
+    "claimReward": {
+      "enabled": false,
+      "claimStart": "2018-06-01T12:00:00",
+      "claimUntil": "2018-07-01T12:00:00",
+      "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
+      "networkId": 42
     }
   },
   "rewards": {
     "enabled": true,
     "rewardToken": {
       "symbol": "GNO",
-      "contractAddress": "0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
-      "networkId": 1
-    },
-    "claimReward": {
-      "enabled": false,
-      "claimStart": "2018-04-01T12:00:00",
-      "claimUntil": "2018-05-01T12:00:00",
-      "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
-      "networkId": 3
+      "contractAddress": "0xe46637882a11d3c90a24bd7c7529eb101f504705",
+      "networkId": 42
     },
     "levels": [
-      { "value": 5, "minRank": 1, "maxRank": 1 },
-      { "value": 4, "minRank": 2, "maxRank": 2 },
-      { "value": 3, "minRank": 3, "maxRank": 3 },
-      { "value": 2, "minRank": 4, "maxRank": 4 },
-      { "value": 1, "minRank": 5, "maxRank": 5 },
-      { "value": 0.9, "minRank": 6, "maxRank": 7 },
-      { "value": 0.8, "minRank": 8, "maxRank": 9 },
-      { "value": 0.7, "minRank": 10, "maxRank": 11 },
-      { "value": 0.6, "minRank": 12, "maxRank": 13 },
-      { "value": 0.5, "minRank": 14, "maxRank": 15 },
-      { "value": 0.4, "minRank": 16, "maxRank": 17 },
-      { "value": 0.3, "minRank": 18, "maxRank": 19 },
-      { "value": 0.2, "minRank": 19, "maxRank": 34 },
-      { "value": 0.1, "minRank": 34, "maxRank": 100 }
+      { "value": 30, "minRank": 1, "maxRank": 1 },
+      { "value": 20, "minRank": 2, "maxRank": 2 },
+      { "value": 10, "minRank": 3, "maxRank": 3 },
+      { "value": 8, "minRank": 4, "maxRank": 4 },
+      { "value": 7, "minRank": 5, "maxRank": 5 },
+      { "value": 5, "minRank": 6, "maxRank": 10 }
     ]
   },
   "badges": {

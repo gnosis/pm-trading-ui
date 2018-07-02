@@ -24,7 +24,11 @@ export const rankCell = (props) => {
   const diff = props.row.diffRank
   const color = diff == 0 ? 'neutralRank' : diff > 0 ? 'greenRank' : 'redRank'
   const value = diff == 0 ? '-' : diff > 0 ? `+${diff}` : diff
-  return <span className={cx(color)}>{value}</span>
+  return (
+    <span className={cx(color)}>
+      {value}
+    </span>
+  )
 }
 
 export const olyCell = prop => (props) => {
@@ -33,7 +37,11 @@ export const olyCell = prop => (props) => {
     .div(1e18)
     .toDP(4, 1)
     .toString()
-  return <span>{result}</span>
+  return (
+    <span>
+      {result}
+    </span>
+  )
 }
 
 export const badgeOf = (value) => {
@@ -41,8 +49,8 @@ export const badgeOf = (value) => {
 
   ranks.forEach((badgeLevel) => {
     if (
-      (value >= badgeLevel.minPredictions && value <= badgeLevel.maxPredictions) || // between min/max
-      (value >= badgeLevel.minPredictions && badgeLevel.maxPredictions == null) // above min
+      (value >= badgeLevel.minPredictions && value <= badgeLevel.maxPredictions) // between min/max
+      || (value >= badgeLevel.minPredictions && badgeLevel.maxPredictions == null) // above min
     ) {
       badge = badgeLevel
       return false // break
@@ -60,7 +68,11 @@ export const badgeCell = (props) => {
       return null
     }
 
-    return <span>{badge.rank}</span>
+    return (
+      <span>
+        {badge.rank}
+      </span>
+    )
   }
 }
 
@@ -72,8 +84,8 @@ export const rewardCell = (props) => {
 
     levels.forEach((rewardLevel) => {
       if (
-        (value >= rewardLevel.minRank && value <= rewardLevel.maxRank) || // between min/max
-        (value >= rewardLevel.minRank && rewardLevel.maxRank == null) // above min
+        (value >= rewardLevel.minRank && value <= rewardLevel.maxRank) // between min/max
+        || (value >= rewardLevel.minRank && rewardLevel.maxRank == null) // above min
       ) {
         reward = rewardLevel
       }
@@ -82,7 +94,7 @@ export const rewardCell = (props) => {
 
     return (
       <span style={style}>
-        {reward.value} {rewardToken.symbol}
+        {reward.value ? `${reward.value} ${rewardToken.symbol}` : '--'}
       </span>
     )
   }
