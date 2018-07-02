@@ -69,35 +69,30 @@
       "markdown": true
     }
   },
-  "rewards": {
-    "enabled": true,
-    "rewardToken": {
-      "symbol": "KOV-GNO",
-      "contractAddress": "0xe46637882a11d3c90a24bd7c7529eb101f504705",
-      "networkId": 42
-    },
+  "rewardClaiming": {
+    "enabled": false,
     "claimReward": {
       "enabled": false,
       "claimStart": "2018-06-01T12:00:00",
       "claimUntil": "2018-07-01T12:00:00",
       "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
       "networkId": 42
+    }
+  },
+  "rewards": {
+    "enabled": true,
+    "rewardToken": {
+      "symbol": "GNO",
+      "contractAddress": "0xe46637882a11d3c90a24bd7c7529eb101f504705",
+      "networkId": 42
     },
     "levels": [
-      { "value": 5, "minRank": 1, "maxRank": 1 },
-      { "value": 4, "minRank": 2, "maxRank": 2 },
-      { "value": 3, "minRank": 3, "maxRank": 3 },
-      { "value": 2, "minRank": 4, "maxRank": 4 },
-      { "value": 1, "minRank": 5, "maxRank": 5 },
-      { "value": 0.9, "minRank": 6, "maxRank": 7 },
-      { "value": 0.8, "minRank": 8, "maxRank": 9 },
-      { "value": 0.7, "minRank": 10, "maxRank": 11 },
-      { "value": 0.6, "minRank": 12, "maxRank": 13 },
-      { "value": 0.5, "minRank": 14, "maxRank": 15 },
-      { "value": 0.4, "minRank": 16, "maxRank": 17 },
-      { "value": 0.3, "minRank": 18, "maxRank": 19 },
-      { "value": 0.2, "minRank": 19, "maxRank": 34 },
-      { "value": 0.1, "minRank": 34, "maxRank": 100 }
+      { "value": 30, "minRank": 1, "maxRank": 1 },
+      { "value": 20, "minRank": 2, "maxRank": 2 },
+      { "value": 10, "minRank": 3, "maxRank": 3 },
+      { "value": 8, "minRank": 4, "maxRank": 4 },
+      { "value": 7, "minRank": 5, "maxRank": 5 },
+      { "value": 5, "minRank": 6, "maxRank": 10 }
     ]
   },
   "badges": {

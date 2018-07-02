@@ -13,7 +13,9 @@ import { areRewardsClaimed } from '../../store'
 import style from './ClaimReward.mod.scss'
 
 const rewardsConfig = getFeatureConfig('rewards')
-const { rewardToken, claimReward } = rewardsConfig
+const rewardClaimingConfig = getFeatureConfig('rewardClaiming')
+const { rewardToken } = rewardsConfig
+const { claimReward } = rewardClaimingConfig
 const claimUntilFormat = 'y[Y] M[M] D[d] h[h] m[m]'
 const cx = cn.bind(style)
 
@@ -37,7 +39,11 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardsClaimed }) => {
     rewardValueDisplay = 'Already claimed'
   }
 
-  let rewardClaimTimeDisplay = <span className={cx('infoText')}>N/A</span>
+  let rewardClaimTimeDisplay = (
+    <span className={cx('infoText')}>
+N/A
+    </span>
+  )
   if (showRewardValue || showAlreadyClaimed) {
     rewardClaimTimeDisplay = <Countdown className={cx('infoText')} target={claimReward.claimUntil} format={claimUntilFormat} />
   }
@@ -49,11 +55,16 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardsClaimed }) => {
           <Span className={cx('infoText', 'amount')}>
             {rewardValueDisplay}
           </Span>
-          <Paragraph className={cx('annotation')}>CLAIMABLE {rewardToken.symbol}</Paragraph>
+          <Paragraph className={cx('annotation')}>
+CLAIMABLE
+            {rewardToken.symbol}
+          </Paragraph>
         </Block>
         <Block className={cx('timeToClaim')}>
           {rewardClaimTimeDisplay}
-          <Paragraph className={cx('annotation')}>TIME LEFT TO CLAIM</Paragraph>
+          <Paragraph className={cx('annotation')}>
+TIME LEFT TO CLAIM
+          </Paragraph>
         </Block>
       </Block>
       <button
