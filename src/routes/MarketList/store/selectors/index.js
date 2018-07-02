@@ -12,8 +12,7 @@ export const marketListSelector = createSelector(
   (markets, filter, sorter) => List(markets.filter(filter).sort(sorter).values()),
 )
 
-export const marketCounterSelector = state =>
-  List(state.marketList.values())
+export const marketCounterSelector = state => List(state.marketList.values())
 
 export const newMarketsSelector = createSelector(
   marketCounterSelector,

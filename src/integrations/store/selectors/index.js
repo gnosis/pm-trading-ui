@@ -6,6 +6,8 @@ const config = getConfiguration()
 
 const legalComplianceConfig = getFeatureConfig('legalCompliance')
 const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
+const isTournament = isFeatureEnabled('tournament')
+const requireRegistration = isFeatureEnabled('registration')
 
 const legalDocuments = legalComplianceConfig.documents || []
 
@@ -32,6 +34,12 @@ export const getActiveProvider = (state) => {
   return activeProvider
 }
 
+export const getRegisteredMainnetAddress = (state) => {
+  const provider = getActiveProvider(state)
+
+  return provider ? provider.mainnetAddress : undefined
+}
+
 /**
  * Returns the currently selected account for the current provider
  * @param {*} state - redux state
@@ -47,6 +55,10 @@ export const getCurrentAccount = (state) => {
 
 export const hasAcceptedTermsAndConditions = (state) => {
   if (!legalComplianceEnabled) {
+    return true
+  }
+
+  if (isTournament && requireRegistration && getRegisteredMainnetAddress(state)) {
     return true
   }
 
@@ -119,12 +131,6 @@ export const isRemoteConnectionEstablished = (state) => {
   return remoteProviderRegistered && !!remoteProvider.network
 }
 
-export const getRegisteredMainnetAddress = (state) => {
-  const provider = getActiveProvider(state)
-
-  return provider ? provider.mainnetAddress : undefined
-}
-
 export const isConnectedToCorrectNetwork = (state) => {
   const targetNetworkId = getTargetNetworkId(state)
   const currentNetworkId = getCurrentNetworkId(state)
@@ -143,8 +149,7 @@ export const checkWalletConnection = (state) => {
   return false
 }
 
-export const shouldOpenNetworkModal = state =>
-  isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
+export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
 
 export const isOnWhitelist = (state) => {
   const account = getCurrentAccount(state)
