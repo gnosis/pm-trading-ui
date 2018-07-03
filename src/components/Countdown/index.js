@@ -43,12 +43,13 @@ class Countdown extends Component {
 
 Countdown.propTypes = {
   target: PropTypes.string.isRequired,
-  format: PropTypes.string.isRequired,
+  format: PropTypes.string,
   className: PropTypes.string,
 }
 
 Countdown.defaultProps = {
   className: '',
+  format: undefined,
 }
 
 export default Countdown
