@@ -26,11 +26,13 @@ const addOlympiaContracts = async (gnosisJsInstance) => {
  */
 export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
-    gnosisInstance = await Gnosis.create(GNOSIS_OPTIONS)
+    const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
 
     if (tournamentEnabled) {
-      await addOlympiaContracts(gnosisInstance)
+      await addOlympiaContracts(gnosis)
     }
+
+    gnosisInstance = gnosis
 
     if (process.env.NODE_ENV === 'development') {
       window.gnosis = gnosisInstance
@@ -45,11 +47,13 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
 
 export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
   try {
-    gnosisROInstance = await Gnosis.create(GNOSIS_OPTIONS)
+    const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
 
     if (tournamentEnabled) {
-      await addOlympiaContracts(gnosisROInstance)
+      await addOlympiaContracts(gnosis)
     }
+
+    gnosisROInstance = gnosis
 
     if (process.env.NODE_ENV === 'development') {
       window.gnosisRO = gnosisROInstance
