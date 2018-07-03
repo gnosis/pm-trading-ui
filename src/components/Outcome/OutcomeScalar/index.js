@@ -29,12 +29,11 @@ const OutcomeScalar = ({
 
   const decimals = Math.max(decimalsRaw, 2)
 
-  const upper = Decimal(upperBound).div(10 ** decimals)
   const lower = Decimal(lowerBound).div(10 ** decimals)
 
-  const bounds = upper.sub(lower)
+  const bounds = Decimal(upperBound).sub(lowerBound)
   let value = Decimal(marginalPrice)
-    .times(upperBound - lowerBound)
+    .times(bounds)
     .add(lower)
 
   if (showOnlyWinningOutcome) {
