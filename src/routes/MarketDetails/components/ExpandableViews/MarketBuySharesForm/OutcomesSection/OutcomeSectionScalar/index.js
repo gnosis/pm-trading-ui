@@ -4,7 +4,7 @@ import cn from 'classnames'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice } from 'api'
 import { Field } from 'redux-form'
-import { OutcomeSelection } from 'components/Form'
+import { OutcomeSelection, MandatoryHint } from 'components/Form'
 import { COLOR_SCHEME_SCALAR } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import ScalarSlider from './ScalarSlider'
@@ -21,7 +21,7 @@ const OutcomeSectionScalar = (props) => {
   const canRunSimulation = selectedBuyInvest && selectedOutcome
 
   const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-  const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) => 
+  const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) =>
     calcLMSRMarginalPrice({
       netOutcomeTokensSold: marketTokenCounts,
       outcomeTokenIndex,
@@ -31,7 +31,7 @@ const OutcomeSectionScalar = (props) => {
 
   if (canRunSimulation) {
     marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
-    marginalPriceSelected = marketTokenCounts.map((value, outcomeTokenIndex) => 
+    marginalPriceSelected = marketTokenCounts.map((value, outcomeTokenIndex) =>
       calcLMSRMarginalPrice({
         netOutcomeTokensSold: marketTokenCounts,
         outcomeTokenIndex,
@@ -59,7 +59,7 @@ const OutcomeSectionScalar = (props) => {
       <div className={cn('row')}>
         <div className={cn('col-md-12')}>
           <h2>
-            Your Trade
+            Your Trade<MandatoryHint />
           </h2>
           <Field component={OutcomeSelection} name="selectedOutcome" outcomes={scalarOutcomes} hideBars hidePercentage />
         </div>

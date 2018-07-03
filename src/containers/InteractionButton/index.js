@@ -50,6 +50,7 @@ class InteractionButton extends Component {
       targetNetworkId,
       loading,
       termsNotRequiredOrAccepted,
+      error,
     } = this.props
 
     if (whitelistRequired && !whitelisted) {
@@ -110,6 +111,15 @@ class InteractionButton extends Component {
       )
     }
 
+    // disabled from props (passed)
+    if (disabled && error) {
+      return (
+        <Tooltip overlay={error}>
+          {btn}
+        </Tooltip>
+      )
+    }
+
     if (termsAndConditionsError) {
       return (
         <Tooltip overlay="You need to accept our terms and conditions before you can interact with this application.">
@@ -147,6 +157,7 @@ InteractionButton.propTypes = {
   loading: PropTypes.bool,
   targetNetworkId: PropTypes.number,
   termsNotRequiredOrAccepted: PropTypes.bool,
+  error: PropTypes.node,
 }
 
 InteractionButton.defaultProps = {
@@ -163,6 +174,7 @@ InteractionButton.defaultProps = {
   loading: false,
   termsNotRequiredOrAccepted: false,
   targetNetworkId: 0,
+  error: '',
 }
 
 export default connect(state => ({

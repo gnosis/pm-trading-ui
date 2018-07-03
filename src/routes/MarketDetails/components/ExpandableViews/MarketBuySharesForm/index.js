@@ -10,7 +10,7 @@ import { marketShape, marketShareShape } from 'utils/shapes'
 import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import { TextInput, TextInputAdornment } from 'components/Form'
+import { TextInput, TextInputAdornment, MandatoryHint } from 'components/Form'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { getOutcomeTokenCount, getMaximumWin, getPercentageWin } from './utils'
 import OutcomeSection from './OutcomesSection'
@@ -112,6 +112,16 @@ class MarketBuySharesForm extends Component {
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.get('buyShares') || 0))
     const submitDisabled = invalid || !selectedBuyInvest || !selectedOutcome
 
+    let submitDisabledReason
+
+    if (invalid) {
+      submitDisabledReason = 'Your investment is invalid'
+    } else if (!selectedBuyInvest) {
+      submitDisabledReason = 'Please enter an investment amount'
+    } else if (!selectedOutcome) {
+      submitDisabledReason = 'Please select an outcome'
+    }
+
     let outcomeTokenCount = 0
     let maximumWin = 0
     let percentageWin = 0
@@ -175,6 +185,7 @@ class MarketBuySharesForm extends Component {
                     endAdornment={
                       <TextInputAdornment>
                         <CurrencyName tokenAddress={market.event.collateralToken} />
+                        <MandatoryHint />
                       </TextInputAdornment>
                     }
                   />
@@ -208,6 +219,7 @@ class MarketBuySharesForm extends Component {
                   <InteractionButton
                     className={cx('btn', 'btn-primary', 'col-xs-12')}
                     disabled={submitDisabled}
+                    error={submitDisabledReason}
                     loading={submitting || local}
                     type="submit"
                   >
