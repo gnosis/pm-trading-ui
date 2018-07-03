@@ -13,7 +13,7 @@ $expandable-margin: 40px;
   display: block;
   position: relative;
   background-color: white;
-  padding: 20px 20px;
+  padding: 20px 20px 10px 20px;
   margin: 2px 0;
   overflow: hidden;
   text-align: left;
@@ -71,13 +71,16 @@ $expandable-margin: 40px;
   }
 
   .info {
+    margin-top: 10px;
+  
     .group {
       display: inline-block;
-      color: $font-color-dark;
+      color: darken($font-color-dark, 30%);
       opacity: 0.6;
+      font-weight: 500;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      font-size: 10px;
+      font-size: 11px;
       vertical-align: middle;
 
       .title {
