@@ -41,25 +41,14 @@ const LegalCompliance = ({
 
   return (
     <div>
-      {showHeading && (
-        <h4 className={cx('heading')}>
-Terms of service and privacy policy
-        </h4>
-      )}
+      {showHeading && <h4 className={cx('heading')}>Terms of service and privacy policy</h4>}
       {showExplanation && (
         <p className={cx('explanation')}>
-          For using
-          {' '}
-          {applicationName}
-, you have to agree with our&nbsp;
+          For using {applicationName}, you have to agree with our&nbsp;
           <React.Fragment>
             {documents
               .map(doc => <DocumentExplanation key={doc.id} {...doc} />)
-              .reduce((acc, elem) => [...acc, <span>
-                {' '}
-and
-                {' '}
-              </span>, elem], [])}
+              .reduce((acc, elem) => [...acc, <span> and </span>, elem], [])}
           </React.Fragment>
           .
         </p>
