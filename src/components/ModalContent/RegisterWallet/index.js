@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { lifecycle } from 'recompose'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
+import InteractionButton from 'containers/InteractionButton'
 import LegalCompliance from 'containers/LegalCompliance'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
 import { getFeatureConfig } from 'utils/features'
@@ -63,6 +64,11 @@ const RegisterMainnetAddress = ({
           submitButtonLabel="REGISTER ADDRESS"
           submitButtonClassName={cx('btn', 'btn-primary', 'actionButton')}
           submitButtonDisabledClassName={cx('disabled')}
+          submitButtonOpts={{
+            disableLegalCheck: true,
+            disableWalletCheck: true,
+          }}
+          submitButtonComponent={InteractionButton}
           onSubmitAcceptedDocs={handleRegistration}
           disabled={disabled}
         />
