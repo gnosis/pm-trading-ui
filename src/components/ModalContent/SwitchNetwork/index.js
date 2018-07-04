@@ -19,25 +19,25 @@ const SwitchNetwork = ({ closeModal, targetNetwork }) => (
     <button className={cx('closeButton')} onClick={() => closeModal()} />
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
     <h3 className={cx('heading')}>
-Switch to the
+      Switch to the
+      {' '}
       {targetNetwork}
       {' '}
-Network
+      Network
     </h3>
     <p className={cx('text')}>
       Your provider is not currently set to the
       {' '}
       {targetNetwork}
       {' '}
-network. Please switch to
+      network. Please switch to
       {' '}
       {targetNetwork}
       {' '}
-and make sure your wallet is
-      unlocked to start using
+      and make sure your wallet is unlocked to start using
       {' '}
       {applicationName}
-.
+      .
     </p>
   </div>
 )
