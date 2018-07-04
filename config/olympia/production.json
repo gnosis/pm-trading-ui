@@ -1,4 +1,17 @@
 {
+  "gnosisdb": {
+    "protocol": "https",
+    "host": "tradingdb.staging.gnosisdev.com",
+    "port": 443
+  },
+  "ethereum": {
+    "protocol": "https",
+    "host": "rinkeby.infura.io",
+    "port": 443
+  },
+  "whitelist": {
+    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama"
+  },
   "logo": {
     "regular": "assets/img/gnosis_logo_olympia.svg",
     "small": "assets/img/gnosis_logo_olympia.svg",
@@ -10,7 +23,7 @@
   },
   "registration": {
     "enabled": true,
-    "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
+    "contractAddress": "0x79da1c9ef6bf6bc64e66f8abffddc1a093e50f13"
   },
   "collateralToken": {
     "source": "address",
@@ -57,8 +70,7 @@
       {
         "type": "TOS_TEXT",
         "id": "address_public",
-        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard",
-        "short": "agree that your wallet address will be publicily displayed"
+        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard"
       }
     ]
   },
@@ -66,8 +78,7 @@
     "enabled": true,
     "content": {
       "type": "text",
-      "source":
-        "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
+      "source": "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
       "markdown": true
     }
   },

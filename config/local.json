@@ -15,6 +15,10 @@
     "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis",
     "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama",
     "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail",
-    "0x95db47d3e9d574cd15b0f02c845bc2971b0fc3e1": "Lauti"
+    "0x95db47d3e9d574cd15b0f02c845bc2971b0fc3e1": "Lauti",
+    "0x2865be1f71dda04fc9a596fa70a7db4f82890343": "Giacomo 2"
+  },
+  "legalCompliance": {
+    "enabled": false
   }
 }

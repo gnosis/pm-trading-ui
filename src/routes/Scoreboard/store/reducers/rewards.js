@@ -10,7 +10,7 @@ export default handleActions(
       state,
       {
         payload: {
-          tournament: { rewards },
+          tournament: { rewards = {} },
         },
       },
     ) => state.set('rewardsClaimed', rewards.rewardsClaimed),

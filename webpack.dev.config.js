@@ -8,22 +8,21 @@ const webpack = require('webpack')
 
 const pkg = require('./package.json')
 
-const configLoader = require('./configuration')
+const configLoader = require('./scripts/configuration')
 
 module.exports = (env = {}) => {
-  const configEnvVars = env.GNOSIS_CONFIG || process.env.GNOSIS_CONFIG || {}
-  const interfaceEnvVars = env.GNOSIS_INTERFACE || process.env.GNOSIS_INTERFACE || {}
+  const configEnvVars = env.GNOSIS_CONFIG || {}
 
-  const gnosisEnv = env.GNOSIS_ENV || process.env.GNOSIS_ENV || 'local'
+  const gnosisEnv = process.env.GNOSIS_ENV || 'development'
 
   console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv}'`)
-  const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
+  const config = configLoader(gnosisEnv, configEnvVars)
 
   const version = env.BUILD_VERSION || pkg.version
   const commitId = `${env.TRAVIS_BRANCH || 'local'}@${env.TRAVIS_COMMIT || 'SNAPSHOT'}`
 
   return {
-    context: path.join(__dirname, 'src'),
+    context: `${__dirname}/src`,
     entry: ['bootstrap-loader', 'index.js'],
     devtool: 'eval-source-map',
     mode: 'development',
@@ -96,7 +95,7 @@ module.exports = (env = {}) => {
             },
             {
               loader: 'sass-loader',
-              options: { sourceMap: true, includePaths: [path.resolve(__dirname, './src')] },
+              options: { sourceMap: true, includePaths: [path.resolve(`${__dirname}/src`)] },
             },
           ],
         },
@@ -124,12 +123,12 @@ module.exports = (env = {}) => {
       watchOptions: {
         ignored: /node_modules/,
       },
-      contentBase: [path.join(__dirname, 'dist'), path.join(__dirname, 'src')],
+      contentBase: [`${__dirname}/src`],
     },
     plugins: [
       new CaseSensitivePathsPlugin(),
       new FaviconsWebpackPlugin({
-        logo: interfaceConfig.logo.favicon,
+        logo: config.logo.favicon,
         // Generate a cache file with control hashes and
         // don't rebuild the favicons until those hashes change
         persistentCache: true,
@@ -148,19 +147,18 @@ module.exports = (env = {}) => {
         inject: true,
       }),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, 'src/html/index.html'),
+        template: `${__dirname}/src/html/index.html`,
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
         NODE_ENV: 'development',
       }),
       new webpack.DefinePlugin({
-        'window.GNOSIS_CONFIG': JSON.stringify(config),
-        'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
+        FALLBACK_CONFIG: `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
       new CopyWebpackPlugin([
-        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
+        { from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` },
       ]),
     ],
   }

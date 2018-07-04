@@ -1,4 +1,22 @@
 {
+  "gnosisdb": {
+    "protocol": "https",
+    "host": "tradingdb.staging.gnosisdev.com",
+    "port": 443
+  },
+  "ethereum": {
+    "protocol": "https",
+    "host": "rinkeby.infura.io",
+    "port": 443
+  },
+  "whitelist": {
+    "0xb2e87b8ce41184e0688027f370a972a436abe77e": "Giacomo",
+    "0xb00a24c899f88e5514583cfa8c40e4cdab6c473e": "Andre",
+    "0x65039084cc6f4773291a6ed7dcf5bc3a2e894ff3": "Denis",
+    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama",
+    "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail",
+    "0x95db47d3e9d574cd15b0f02c845bc2971b0fc3e1": "Lauti"
+  },
   "logo": {
     "regular": "assets/img/gnosis_logo_olympia.svg",
     "small": "assets/img/gnosis_logo_olympia.svg",
@@ -9,8 +27,8 @@
     "name": "Olympia"
   },
   "registration": {
-      "enabled": true,
-      "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
+    "enabled": true,
+    "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
   },
   "collateralToken": {
     "source": "address",
@@ -57,7 +75,8 @@
       {
         "type": "TOS_TEXT",
         "id": "address_public",
-        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard"
+        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard",
+        "short": "agree that your wallet address will be publicily displayed"
       }
     ]
   },
@@ -65,23 +84,24 @@
     "enabled": true,
     "content": {
       "type": "text",
-      "source": "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
+      "source":
+        "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks.",
       "markdown": true
     }
   },
   "rewards": {
     "enabled": true,
     "rewardToken": {
-      "symbol": "KOV-GNO",
-      "contractAddress": "0xe46637882a11d3c90a24bd7c7529eb101f504705",
-      "networkId": 42
+      "symbol": "GNO",
+      "contractAddress": "0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
+      "networkId": 1
     },
     "claimReward": {
       "enabled": false,
-      "claimStart": "2018-06-01T12:00:00",
-      "claimUntil": "2018-07-01T12:00:00",
-      "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
-      "networkId": 42
+      "claimStart": "2018-04-01T12:00:00",
+      "claimUntil": "2018-05-01T12:00:00",
+      "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
+      "networkId": 3
     },
     "levels": [
       { "value": 5, "minRank": 1, "maxRank": 1 },

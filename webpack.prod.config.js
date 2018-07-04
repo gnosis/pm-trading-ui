@@ -8,23 +8,22 @@ const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
 
-const configLoader = require('./configuration')
+const configLoader = require('./scripts/configuration')
 
 const version = process.env.BUILD_VERSION || pkg.version
 const commitId = `${process.env.TRAVIS_BRANCH}@${process.env.TRAVIS_COMMIT}`
 
 module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
-  const interfaceEnvVars = env.GNOSIS_INTERFACE || {}
 
   const gnosisEnv = process.env.GNOSIS_ENV || 'development'
 
   console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv}'`)
-  const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
+  const config = configLoader(gnosisEnv, configEnvVars)
 
   return {
     devtool: 'source-map',
-    context: path.join(__dirname, 'src'),
+    context: `${__dirname}/src`,
     entry: ['bootstrap-loader', 'index.js'],
     mode: 'production',
     output: {
@@ -66,7 +65,7 @@ module.exports = (env = {}) => {
             },
             {
               loader: 'sass-loader',
-              options: { includePaths: [path.resolve(__dirname, './src')] },
+              options: { includePaths: [path.resolve(`${__dirname}/src`)] },
             },
           ],
         },
@@ -85,7 +84,7 @@ module.exports = (env = {}) => {
             },
             {
               loader: 'sass-loader',
-              options: { includePaths: [path.resolve(__dirname, './src')] },
+              options: { includePaths: [path.resolve(`${__dirname}/src`)] },
             },
           ],
         },
@@ -104,7 +103,7 @@ module.exports = (env = {}) => {
         filename: 'styles.css',
       }),
       new FaviconsWebpackPlugin({
-        logo: interfaceConfig.logo.favicon,
+        logo: config.logo.favicon,
         // Generate a cache file with control hashes and
         // don't rebuild the favicons until those hashes change
         persistentCache: true,
@@ -123,15 +122,14 @@ module.exports = (env = {}) => {
         inject: true,
       }),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, 'src/html/index.html'),
+        template: `${__dirname}/src/html/index.html`,
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
         NODE_ENV: 'production',
       }),
       new webpack.DefinePlugin({
-        'window.GNOSIS_CONFIG': JSON.stringify(config),
-        'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
+        FALLBACK_CONFIG: `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new UglifyJsWebpackPlugin({
         sourceMap: true,
@@ -141,7 +139,7 @@ module.exports = (env = {}) => {
         },
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin([{ from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') }]),
+      new CopyWebpackPlugin([{ from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` }]),
     ],
   }
 }
