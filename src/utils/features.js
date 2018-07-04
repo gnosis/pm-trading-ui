@@ -1,4 +1,4 @@
-/* globals FALLBACK_CONFIG */
+/* globals process */
 /* eslint-disable no-underscore-dangle */
 
 /* How configuration loading works:
