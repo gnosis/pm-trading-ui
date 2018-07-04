@@ -154,7 +154,7 @@ module.exports = (env = {}) => {
         NODE_ENV: 'development',
       }),
       new webpack.DefinePlugin({
-        FALLBACK_CONFIG: `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
+        'process.env.FALLBACK_CONFIG': `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
       new CopyWebpackPlugin([

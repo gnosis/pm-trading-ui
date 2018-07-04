@@ -129,7 +129,7 @@ module.exports = (env = {}) => {
         NODE_ENV: 'production',
       }),
       new webpack.DefinePlugin({
-        FALLBACK_CONFIG: `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
+        'process.env.FALLBACK_CONFIG': `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new UglifyJsWebpackPlugin({
         sourceMap: true,

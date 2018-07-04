@@ -15,6 +15,7 @@ let fallbackConfig
 if (fallbackConfigEncoded) {
   fallbackConfig = JSON.parse(atob(fallbackConfigEncoded))
 }
+
 const externalConfig = window.__GNOSIS_CONFIG__
 
 window.__GNOSIS_CONFIG_FALLBACK__ = fallbackConfig
