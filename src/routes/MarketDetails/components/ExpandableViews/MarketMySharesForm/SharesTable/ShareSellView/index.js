@@ -9,7 +9,7 @@ import { Map } from 'immutable'
 import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import { Slider, TextInput } from 'components/Form'
+import { Slider, TextInput, MandatoryHint } from 'components/Form'
 import Hairline from 'components/layout/Hairline'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { marketShape, marketShareShape } from 'utils/shapes'
@@ -54,10 +54,17 @@ class ShareSellView extends Component {
       isGasCostFetched,
       valid,
       sellFormHasErrors,
+      error,
     } = this.props
 
     const sellSharesGasCost = gasCosts.get('sellShares')
     const submitDisabled = invalid || submitting || sellFormHasErrors
+    let submitDisabledReason
+    if (invalid) {
+      submitDisabledReason = 'Your sell amount is invalid'
+    } else if (sellFormHasErrors) {
+      submitDisabledReason = error
+    }
 
     let selectedSellAmountWei
     try {
@@ -117,7 +124,7 @@ class ShareSellView extends Component {
             <form onSubmit={submitHandler}>
               <div className={cx('row', 'sellRow')}>
                 <div className={cx('col-md-4', 'sellColumn')}>
-                  <label htmlFor="sellAmount">Amount to Sell</label>
+                  <label htmlFor="sellAmount">Amount to Sell<MandatoryHint /></label>
                   <Field
                     component={TextInput}
                     name="sellAmount"
@@ -187,6 +194,7 @@ class ShareSellView extends Component {
                   <InteractionButton
                     loading={submitting || market.local}
                     disabled={submitDisabled}
+                    error={submitDisabledReason}
                     className={cx('btn', 'btn-block', 'btn-primary')}
                     type="submit"
                   >

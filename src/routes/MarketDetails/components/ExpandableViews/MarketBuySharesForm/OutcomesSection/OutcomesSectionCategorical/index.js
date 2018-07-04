@@ -4,7 +4,7 @@ import Decimal from 'decimal.js'
 import { Field } from 'redux-form'
 import { marketShape } from 'utils/shapes'
 import { calcLMSRMarginalPrice } from 'api'
-import { OutcomeSelection } from 'components/Form'
+import { OutcomeSelection, MandatoryHint } from 'components/Form'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
 const OutcomesSectionCategorical = (props) => {
@@ -47,7 +47,7 @@ const OutcomesSectionCategorical = (props) => {
     <div className="col-md-7">
       <div className="row">
         <div className="col-md-12">
-          <h2>Your Trade</h2>
+          <h2>Your Trade<MandatoryHint /></h2>
         </div>
       </div>
       <div className="row">
