@@ -23,12 +23,13 @@ const LegalCompliance = ({
   submitButtonDisabledClassName,
   submitButtonLabel,
   submitButtonComponent: ButtonComponent,
+  submitButtonOpts,
   disabled,
   onSubmitAcceptedDocs,
 }) => {
   if (!legalComplianceEnabled) {
     return (
-      <ButtonComponent className={cx(submitButtonClassName)} onClick={() => onSubmitAcceptedDocs()}>
+      <ButtonComponent className={cx(submitButtonClassName)} onClick={() => onSubmitAcceptedDocs()} {...submitButtonOpts}>
         {submitButtonLabel}
       </ButtonComponent>
     )
@@ -59,6 +60,7 @@ const LegalCompliance = ({
         className={cx(submitButtonClassName, { [submitButtonDisabledClassName]: !canSubmit })}
         disabled={!canSubmit}
         onClick={() => onSubmitAcceptedDocs(documentIds)}
+        {...submitButtonOpts}
       >
         {submitButtonLabel}
       </ButtonComponent>
@@ -78,6 +80,7 @@ LegalCompliance.propTypes = {
   submitButtonComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   submitButtonClassName: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   submitButtonDisabledClassName: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  submitButtonOpts: PropTypes.object,
   disabled: PropTypes.bool,
   onSubmitAcceptedDocs: PropTypes.func,
 }
@@ -89,6 +92,7 @@ LegalCompliance.defaultProps = {
   submitButtonLabel: 'LOGIN',
   submitButtonComponent: 'button',
   submitButtonClassName: '',
+  submitButtonOpts: {},
   submitButtonDisabledClassName: 'disabled',
   disabled: false,
   onSubmitAcceptedDocs: () => {},

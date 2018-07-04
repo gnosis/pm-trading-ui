@@ -14,29 +14,32 @@ const OutcomeSectionScalar = (props) => {
     selectedBuyInvest,
     selectedOutcome,
     market: {
-      event: { lowerBound, upperBound }, eventDescription: { decimals, unit }, netOutcomeTokensSold, funding,
+      event: { lowerBound, upperBound },
+      eventDescription: { decimals, unit },
+      netOutcomeTokensSold,
+      funding,
     },
     outcomeTokenCount,
   } = props
   const canRunSimulation = selectedBuyInvest && selectedOutcome
 
   const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-  const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) =>
-    calcLMSRMarginalPrice({
-      netOutcomeTokensSold: marketTokenCounts,
-      outcomeTokenIndex,
-      funding,
-    }))
+
+  const marginalPricesCurrent = calcLMSRMarginalPrice({
+    netOutcomeTokensSold: marketTokenCounts,
+    outcomeTokenIndex: 1,
+    funding,
+  })
+  
   let marginalPriceSelected = marginalPricesCurrent
 
   if (canRunSimulation) {
     marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
-    marginalPriceSelected = marketTokenCounts.map((value, outcomeTokenIndex) =>
-      calcLMSRMarginalPrice({
-        netOutcomeTokensSold: marketTokenCounts,
-        outcomeTokenIndex,
-        funding,
-      }))
+    marginalPriceSelected = calcLMSRMarginalPrice({
+      netOutcomeTokensSold: marketTokenCounts,
+      outcomeTokenIndex: 1,
+      funding,
+    })
   }
 
   const scalarOutcomes = [
@@ -44,13 +47,13 @@ const OutcomeSectionScalar = (props) => {
       index: 0,
       label: 'Short',
       color: COLOR_SCHEME_SCALAR[0],
-      probability: marginalPriceSelected[0].mul(100),
+      probability: Decimal(1).sub(marginalPriceSelected).mul(100),
     },
     {
       index: 1,
       label: 'Long',
       color: COLOR_SCHEME_SCALAR[1],
-      probability: marginalPriceSelected[1].mul(100),
+      probability: marginalPriceSelected.mul(100),
     },
   ]
 
@@ -61,7 +64,13 @@ const OutcomeSectionScalar = (props) => {
           <h2>
             Your Trade<MandatoryHint />
           </h2>
-          <Field component={OutcomeSelection} name="selectedOutcome" outcomes={scalarOutcomes} hideBars hidePercentage />
+          <Field
+            component={OutcomeSelection}
+            name="selectedOutcome"
+            outcomes={scalarOutcomes}
+            hideBars
+            hidePercentage
+          />
         </div>
       </div>
       <div className={cn('row')}>
@@ -71,8 +80,8 @@ const OutcomeSectionScalar = (props) => {
             upperBound={parseInt(upperBound, 10)}
             unit={unit}
             decimals={decimals}
-            marginalPriceCurrent={marginalPricesCurrent[1].toString()}
-            marginalPriceSelected={marginalPriceSelected[1].toString()}
+            marginalPriceCurrent={marginalPricesCurrent.toString()}
+            marginalPriceSelected={marginalPriceSelected.toString()}
           />
         </div>
       </div>

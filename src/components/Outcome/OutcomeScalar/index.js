@@ -27,15 +27,14 @@ const OutcomeScalar = ({
     outcomeTokenIndex: 1, // always calc for long when calculating estimation
   })
 
-  const decimals = parseInt(decimalsRaw, 10)
+  const decimals = Math.max(decimalsRaw, 2)
 
-  const upper = Decimal(upperBound).div(10 ** decimals)
   const lower = Decimal(lowerBound).div(10 ** decimals)
 
-  const bounds = upper.sub(lower)
-  let value = Decimal(marginalPrice.toString())
+  const bounds = Decimal(upperBound).sub(lowerBound)
+  let value = Decimal(marginalPrice)
     .times(bounds)
-    .add(lowerBound)
+    .add(lower)
 
   if (showOnlyWinningOutcome) {
     value = Decimal(winningOutcome).div(10 ** decimals)
@@ -57,18 +56,21 @@ const OutcomeScalar = ({
       <div className={cx('scalarOutcome')}>
         <div className={cx('outcomeBound', 'lower')}>
           <DecimalValue value={lowerBound} decimals={decimals} />
-          &nbsp;{unit}
+          &nbsp;
+          {unit}
         </div>
         <div className={cx('currentPrediction')}>
           <div className={cx('currentPredictionLine')} />
           <div className={cx('currentPredictionValue')} style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>
             <DecimalValue value={value} decimals={decimals} />
-            &nbsp;{unit}
+            &nbsp;
+            {unit}
           </div>
         </div>
         <div className={cx('outcomeBound', 'upper')}>
           <DecimalValue value={upperBound} decimals={decimals} />
-          &nbsp;{unit}
+          &nbsp;
+          {unit}
         </div>
       </div>
     </div>

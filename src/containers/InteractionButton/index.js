@@ -50,6 +50,8 @@ class InteractionButton extends Component {
       targetNetworkId,
       loading,
       termsNotRequiredOrAccepted,
+      disableLegalCheck,
+      disableWalletCheck,
       error,
     } = this.props
 
@@ -58,10 +60,10 @@ class InteractionButton extends Component {
     }
 
     // "you need to accept our ToS"
-    const termsAndConditionsError = !termsNotRequiredOrAccepted
+    const termsAndConditionsError = !termsNotRequiredOrAccepted && !disableLegalCheck
 
     // "you need a wallet"
-    const walletError = !hasWallet || !gnosisInitialized
+    const walletError = !disableWalletCheck && (!hasWallet || !gnosisInitialized)
 
     // "you are on the wrong chain"
     const networkError = !correctNetwork
@@ -98,14 +100,18 @@ class InteractionButton extends Component {
 
     const btn = (
       <button className={classNames} type={type || 'button'} onClick={onClickHandler} disabled={isDisabled}>
-        <div className={cx('interactionButtonInner')}>{children}</div>
+        <div className={cx('interactionButtonInner')}>
+          {children}
+        </div>
       </button>
     )
 
     if (isLoading) {
       return (
         <button className={classNames} type="button" disabled>
-          <div className={cx('interactionButtonInner')}>{children}</div>
+          <div className={cx('interactionButtonInner')}>
+            {children}
+          </div>
           <IndefiniteSpinner width={28} height={28} centered />
         </button>
       )
@@ -130,13 +136,19 @@ class InteractionButton extends Component {
 
     if (walletError) {
       return (
-        <Tooltip overlay="You need a wallet connected before you can interact with this application.">{btn}</Tooltip>
+        <Tooltip overlay="You need a wallet connected before you can interact with this application.">
+          {btn}
+        </Tooltip>
       )
     }
 
     if (networkError) {
       const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst((ETHEREUM_NETWORK_IDS[targetNetworkId] || '').toLowerCase())} network.`
-      return <Tooltip overlay={wrongNetworkText}>{btn}</Tooltip>
+      return (
+        <Tooltip overlay={wrongNetworkText}>
+          {btn}
+        </Tooltip>
+      )
     }
 
     return btn
@@ -157,6 +169,8 @@ InteractionButton.propTypes = {
   loading: PropTypes.bool,
   targetNetworkId: PropTypes.number,
   termsNotRequiredOrAccepted: PropTypes.bool,
+  disableLegalCheck: PropTypes.bool,
+  disableWalletCheck: PropTypes.bool,
   error: PropTypes.node,
 }
 
@@ -173,6 +187,8 @@ InteractionButton.defaultProps = {
   disabled: false,
   loading: false,
   termsNotRequiredOrAccepted: false,
+  disableLegalCheck: false,
+  disableWalletCheck: false,
   targetNetworkId: 0,
   error: '',
 }
