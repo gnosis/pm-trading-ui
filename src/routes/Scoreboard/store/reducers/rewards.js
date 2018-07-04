@@ -6,14 +6,12 @@ import { rewardsClaimed } from '../actions'
 export default handleActions(
   {
     [rewardsClaimed]: state => state.set('rewardsClaimed', true),
-    [loadStorage]: (
-      state,
-      {
-        payload: {
-          tournament: { rewards = {} },
-        },
-      },
-    ) => state.set('rewardsClaimed', rewards.rewardsClaimed),
+    [loadStorage]: (state, { payload }) => {
+      if (payload?.tournament?.rewards) {
+        return state.set('rewardsClaimed', payload.tournament.rewards.rewardsClaimed)
+      }
+      return state
+    },
   },
   Map({
     rewardsClaimed: false,
