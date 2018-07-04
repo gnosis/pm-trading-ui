@@ -40,7 +40,7 @@ const CategoricalGraph = ({ data }) => {
               ))}
             </defs>
             <XAxis className="axis axis--x" dataKey="date" tickSize={0} tick={DateAxisTick} />
-            <YAxis className="axis axis--y" tickFormatter={percentageFormatter} unit="%" type="number" />
+            <YAxis className="axis axis--y" tickFormatter={percentageFormatter} domain={[0, 1]} unit="%" type="number" />
             <Tooltip className="tooltip" content={<CustomTooltip />} />
             <Legend />
             {stacks.map((key, keyIndex) => (
