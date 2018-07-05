@@ -107,10 +107,10 @@ class SharesTable extends Component {
           <tr>
             <th className={cx('sharesTableHeading', 'index')} />
             <th className={cx('sharesTableHeading', 'group')}>
-Outcome
+              Outcome
             </th>
             <th className={cx('sharesTableHeading', 'group')}>
-Outcome Token Count
+              Outcome Token Count
             </th>
             <th className={cx('sharesTableHeading', 'group')} />
           </tr>
@@ -134,7 +134,6 @@ SharesTable.propTypes = {
   sellShares: PropTypes.func,
   match: ReactRouterMatchShape,
   changeUrl: PropTypes.func.isRequired,
-  sellFormHasErrors: PropTypes.bool,
 }
 
 SharesTable.defaultProps = {
@@ -146,7 +145,6 @@ SharesTable.defaultProps = {
   sellShares: () => {},
   match: {},
   isGasPriceFetched: false,
-  sellFormHasErrors: false,
 }
 
 export default SharesTable

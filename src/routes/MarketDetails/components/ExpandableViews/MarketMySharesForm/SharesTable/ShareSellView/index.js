@@ -148,7 +148,7 @@ class ShareSellView extends Component {
               <div className={cx('row', 'sellRow')}>
                 <div className={cx('col-md-4', 'sellColumn')}>
                   <label htmlFor="sellAmount">
-Amount to Sell
+                    Amount to Sell
                   </label>
                   <Field
                     component={TextInput}
@@ -162,11 +162,11 @@ Amount to Sell
                 {market.type === 'SCALAR' ? (
                   <div className={cx('col-md-4', 'sellColumn')}>
                     <label>
-New predicted value
+                      New predicted value
                     </label>
                     <span>
                       <DecimalValue value={newScalarPredictedValue} />
-&nbsp;
+                      &nbsp;
                       <span>
                         {market.eventDescription.unit}
                       </span>
@@ -175,24 +175,24 @@ New predicted value
                 ) : (
                   <div className={cx('col-md-4', 'sellColumn')}>
                     <label>
-New Probability
+                      New Probability
                     </label>
                     <span>
                       <DecimalValue value={newProbability.mul(100)} />
                       {' '}
-%
+                      %
                     </span>
                   </div>
                 )}
                 <div className={cx('col-md-3', 'sellColumn')}>
                   <label>
-Gas costs
+                    Gas costs
                   </label>
                   <span>
                     {isGasPriceFetched && isGasCostFetched(GAS_COST.SELL_SHARES) ? (
                       <React.Fragment>
                         <DecimalValue value={gasCostEstimation} decimals={5} />
-&nbsp;
+                        &nbsp;
                         <CurrencyName tokenAddress={market.collateralToken} />
                       </React.Fragment>
                     ) : (
@@ -205,7 +205,7 @@ Gas costs
               <div className={cx('row', 'sellRow')}>
                 <div className={cx('col-md-2')}>
                   <label htmlFor="limitMargin">
-Limit Margin
+                    Limit Margin
                   </label>
                 </div>
                 <div className={cx('col-md-3')}>
@@ -225,11 +225,11 @@ Limit Margin
                 <div className={cx('col-md-4', 'sellColumn')}>
                   <div className={cx('sellColumnInfo')}>
                     <label>
-Earnings
+                      Earnings
                     </label>
                     <span>
                       <DecimalValue value={earnings} />
-&nbsp;
+                        &nbsp;
                       <CurrencyName tokenAddress={market.collateralToken} />
                     </span>
                   </div>
