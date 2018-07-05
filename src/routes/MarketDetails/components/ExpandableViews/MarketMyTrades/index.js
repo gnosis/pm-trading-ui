@@ -3,12 +3,13 @@ import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import moment from 'moment'
+import { Map } from 'immutable'
 import CurrencyName from 'components/CurrencyName'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import {
   RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES,
 } from 'utils/constants'
 import { getOutcomeName, weiToEth } from 'utils/helpers'
-import { marketShape, marketTradeShape } from 'utils/shapes'
 import TableHeader from './TableHeader'
 import TradeRow from './TradeRow'
 
@@ -18,18 +19,14 @@ const cx = cn.bind(style)
 
 class MarketMyTrades extends Component {
   static propTypes = {
-    market: marketShape,
-    marketTrades: PropTypes.arrayOf(marketTradeShape),
+    market: ImmutablePropTypes.record.isRequired,
+    marketTrades: ImmutablePropTypes.map,
     defaultAccount: PropTypes.string.isRequired,
     fetchMarketTradesForAccount: PropTypes.func,
   }
 
   static defaultProps = {
-    market: {
-      event: {},
-      eventDescription: {},
-    },
-    marketTrades: [],
+    marketTrades: Map(),
     fetchMarketTradesForAccount: () => {},
   }
 
@@ -37,7 +34,7 @@ class MarketMyTrades extends Component {
     const {
       marketTrades, defaultAccount, fetchMarketTradesForAccount,
     } = this.props
-    if (!marketTrades || marketTrades.length === 0 || !defaultAccount) {
+    if (!marketTrades || marketTrades.isEmpty() || !defaultAccount) {
       fetchMarketTradesForAccount(defaultAccount)
     }
   }
@@ -47,13 +44,13 @@ class MarketMyTrades extends Component {
       market,
       marketTrades,
       market: {
-        event: { type },
+        type,
       },
     } = this.props
     const colorScheme = type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
 
     const tableRowElements = marketTrades.map((trade) => {
-      const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.index] }
+      const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.get('index')] }
       const tradeDate = moment
         .utc(trade.date)
         .local()
@@ -61,14 +58,14 @@ class MarketMyTrades extends Component {
       const outcomeName = getOutcomeName(market, trade.outcomeToken.index)
 
       let tradeCost = '0'
-      if (trade.cost !== 'None') {
+      if (trade.price !== 'None') {
         tradeCost = (
           <Fragment>
-            {Decimal(weiToEth(trade.cost))
+            {Decimal(weiToEth(trade.price))
               .toDP(2, 1)
               .toString()}
 &nbsp;
-            <CurrencyName tokenAddress={market.event.collateralToken} />
+            <CurrencyName tokenAddress={market.collateralToken} />
           </Fragment>
         )
       }
@@ -81,7 +78,7 @@ class MarketMyTrades extends Component {
           outcomeColorStyle={outcomeColorStyle}
           tradeDate={tradeDate}
           outcomeName={outcomeName}
-          collateralToken={market.event.collateralToken}
+          collateralToken={market.collateralToken}
         />
       )
     })
@@ -91,7 +88,7 @@ class MarketMyTrades extends Component {
 
   render() {
     const { marketTrades } = this.props
-    if (marketTrades && marketTrades.length > 0) {
+    if (marketTrades && !marketTrades.isEmpty()) {
       return (
         <div className={cx('marketMyTrades')}>
           <h2>

@@ -47,7 +47,7 @@ const mapStateToProps = (state, ownProps) => {
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const defaultAccount = getCurrentAccount(state)
-  const marketTrades = getMarketTradesForAccount(market.address, defaultAccount)(state)
+  const marketTrades = getMarketTradesForAccount(market.eventAddress, defaultAccount)(state)
 
   return {
     market,

@@ -279,7 +279,7 @@ Loading...
 MarketDetail.propTypes = {
   hasWallet: PropTypes.bool,
   marketShares: ImmutablePropTypes.list,
-  marketTrades: PropTypes.arrayOf(marketTradeShape),
+  marketTrades: ImmutablePropTypes.map,
   marketGraph: PropTypes.arrayOf(PropTypes.object),
   defaultAccount: PropTypes.string,
   market: marketShape.isRequired,
@@ -291,10 +291,6 @@ MarketDetail.propTypes = {
   fetchMarketTradesForAccount: PropTypes.func.isRequired,
   redeemWinnings: PropTypes.func.isRequired,
   requestGasCost: PropTypes.func.isRequired,
-  isModerator: PropTypes.bool,
-  moderators: PropTypes.shape({
-    address: PropTypes.string,
-  }),
   gasCosts: ImmutablePropTypes.map,
   gasPrice: PropTypes.instanceOf(Decimal),
   match: ReactRouterMatchShape.isRequired,
@@ -303,11 +299,9 @@ MarketDetail.propTypes = {
 }
 
 MarketDetail.defaultProps = {
-  isModerator: false,
   hasWallet: false,
-  moderators: {},
   marketShares: List(),
-  marketTrades: [],
+  marketTrades: Map(),
   marketGraph: [],
   defaultAccount: '',
   gasCosts: Map({}),

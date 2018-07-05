@@ -12,7 +12,7 @@ import { OutcomeRecord } from 'store/models/market'
 
 const OUTCOMES_SCALAR = ['Short', 'Long']
 
-const buildOutcomesFrom = (outcomeTokensSold, selectedOutcomeToken, marketOutcomeLabels) => {
+const buildOutcomesFrom = (outcomeTokensSold, marketOutcomeLabels) => {
   // no value for eventDescription.outcomes means we have a scalar market
   const outcomeLabels = marketOutcomeLabels || OUTCOMES_SCALAR
 
@@ -44,8 +44,9 @@ const extractTrade = (payload) => {
   const price = orderType === 'BUY' ? cost : profit
   const id = sha1(`${owner}-${orderType}-${price}-${date}-${selectedOutcomeToken.index}-${selectedOutcomeTokenCount}`)
   const marketType = typeof marketOutcomeLabels !== 'undefined' ? OUTCOME_TYPES.CATEGORICAL : OUTCOME_TYPES.SCALAR
-
-  const outcomes = buildOutcomesFrom(selectedOutcomeTokenCount, selectedOutcomeToken, marketOutcomeLabels)
+  const outcomes = buildOutcomesFrom(selectedOutcomeTokenCount, marketOutcomeLabels)
+  console.log(outcomes.toJS())
+  console.log(payload)
 
   const record = new TradeRecord({
     id,
@@ -56,6 +57,7 @@ const extractTrade = (payload) => {
     price,
     marketTitle,
     marketType,
+    owner,
     marketOutcomes: outcomes,
     orderType,
   })

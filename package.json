@@ -4,7 +4,7 @@
   "description": "Gnosis Prediction Market Trading UI",
   "main": "src/index.js",
   "scripts": {
-    "build-dev": "./node_modules/.bin/webpack -p --config webpack.dev.config.js",
+    "build-dev": "node --max_old_space_size=8192 ./node_modules/.bin/webpack -p --config webpack.dev.config.js",
     "build-prod": "./node_modules/.bin/webpack -p --config webpack.prod.config.js",
     "build": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
     "build-config": "node scripts/configuration.browser.js --",

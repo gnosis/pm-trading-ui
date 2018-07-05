@@ -5,8 +5,7 @@ $footer-bottom: 44px;
 .appContainer {
   background-color: $bg-color;
   height: calc(100vh - #{$footer-bottom});
-
-  padding-bottom: $footer-bottom;
+  overflow-y: scroll;
 
   .loader-container {
     height: 100%;

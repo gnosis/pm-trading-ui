@@ -1,9 +1,9 @@
-import { mapValues, startsWith, isArray, range } from 'lodash'
+import {
+  mapValues, startsWith, isArray, range,
+} from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
-import moment from 'moment'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES, REQUEST_STATES } from 'utils/constants'
-import { MARKET_STAGES } from 'store/models/market'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
 import { getConfiguration } from 'utils/features'
