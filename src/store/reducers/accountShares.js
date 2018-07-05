@@ -1,13 +1,14 @@
 import { Map } from 'immutable'
 import { handleActions } from 'redux-actions'
-import { ADD_ACCOUNT_SHARE, REDEEM_ACCOUNT_SHARE } from 'store/actions/shares'
+import { addShare, updateShare, redeemShare } from 'store/actions/shares'
 
 export default handleActions(
   {
-    [ADD_ACCOUNT_SHARE]: (state, { payload }) => Map().withMutations((map) => {
+    [addShare]: (state, { payload }) => state.withMutations((map) => {
       payload.forEach(share => map.set(share.id, share))
     }),
-    [REDEEM_ACCOUNT_SHARE]: (state, { payload: shareId }) => state.setIn([shareId, 'balance'], '0'),
+    [redeemShare]: (state, { payload: shareId }) => state.setIn([shareId, 'balance'], '0'),
+    [updateShare]: (state, { payload: { shareId, data } }) => state.mergeIn([shareId], data),
   },
   Map(),
 )

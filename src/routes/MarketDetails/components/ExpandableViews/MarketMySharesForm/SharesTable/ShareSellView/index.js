@@ -16,6 +16,7 @@ import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { marketShape, marketShareShape } from 'utils/shapes'
 import { LIMIT_MARGIN, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
 import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
+import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm/utils'
 import {
   calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount,
 } from './utils'
@@ -82,6 +83,7 @@ class ShareSellView extends Component {
       isGasCostFetched,
       valid,
       sellFormHasErrors,
+      handleSellShare,
     } = this.props
 
     const sellSharesGasCost = gasCosts.get('sellShares')
@@ -114,7 +116,7 @@ class ShareSellView extends Component {
     if (valid) {
       newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
       earnings = calculateEarnings(market, share, selectedSellAmountWei)
-      newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
+      newNetOutcomeTokensSold = market.outcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
         if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
           return Decimal(outcomeTokenAmount)
             .sub(currentTokenBalance.sub(newTokenBalance))
@@ -126,7 +128,7 @@ class ShareSellView extends Component {
       })
 
       try {
-        newProbability = calculateNewProbability(market, share, newNetOutcomeTokensSold)
+        newProbability = calculateNewProbability(market, share, newNetOutcomeTokensSold.toArray())
       } catch (e) {
         console.error(e)
       }
@@ -136,7 +138,7 @@ class ShareSellView extends Component {
         newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
       }
     }
-    const submitHandler = handleSubmit(() => this.props.handleSellShare(share.id, selectedSellAmount, earnings))
+    const submitHandler = handleSubmit(() => handleSellShare(share.id, selectedSellAmount, earnings))
 
     return (
       <tr className={cx('sellView')}>
@@ -157,7 +159,7 @@ Amount to Sell
                   />
                 </div>
 
-                {market.event.type === 'SCALAR' ? (
+                {market.type === 'SCALAR' ? (
                   <div className={cx('col-md-4', 'sellColumn')}>
                     <label>
 New predicted value
@@ -191,7 +193,7 @@ Gas costs
                       <React.Fragment>
                         <DecimalValue value={gasCostEstimation} decimals={5} />
 &nbsp;
-                        <CurrencyName tokenAddress={market.event.collateralToken} />
+                        <CurrencyName tokenAddress={market.collateralToken} />
                       </React.Fragment>
                     ) : (
                       <IndefiniteSpinner width={16} height={16} />
@@ -228,7 +230,7 @@ Earnings
                     <span>
                       <DecimalValue value={earnings} />
 &nbsp;
-                      <CurrencyName tokenAddress={market.event.collateralToken} />
+                      <CurrencyName tokenAddress={market.collateralToken} />
                     </span>
                   </div>
                   <InteractionButton

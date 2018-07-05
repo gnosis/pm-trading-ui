@@ -70,7 +70,6 @@ class SharesTable extends Component {
     marketShares.map((share) => {
       const isExtended = extendedShareId === share.id
       const ableToSell = !isMarketClosed(market) && !isMarketResolved(market)
-      console.log(isMarketClosed(market), isMarketResolved(market))
       const outcomeName = getOutcomeName(market, share.outcomeToken.index)
 
       tableRows.push(<ShareRow

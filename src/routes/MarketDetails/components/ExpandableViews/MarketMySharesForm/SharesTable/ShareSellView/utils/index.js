@@ -79,9 +79,7 @@ const calculateNewProbability = (market, share, netOutcomeTokensSold) => {
     throw new Error()
   }
 
-  const {
-    event: { type },
-  } = market
+  const { type } = market
 
   // When calculating for SCALAR markets, we need to always calculate for long outcome
   // For categorical we should calculate for share's outcome
@@ -120,4 +118,6 @@ const validateTokenCount = (values, props) => {
   return {}
 }
 
-export { calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount }
+export {
+  calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount,
+}
