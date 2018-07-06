@@ -16,7 +16,7 @@ import {
   getTargetNetworkId,
 } from 'integrations/store/selectors'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
-import style from './interactionButton.scss'
+import style from './interactionButton.mod.scss'
 
 const cx = cn.bind(style)
 
