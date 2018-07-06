@@ -20,6 +20,24 @@ const addOlympiaContracts = async (gnosisJsInstance) => {
   })
 }
 
+const waitForGnosisConnection = instance => new Promise((resolve, reject) => {
+  let stillRunning = true
+  const instanceCheck = setInterval(() => {
+    if (instance) {
+      stillRunning = false
+      clearInterval(instanceCheck)
+      return resolve(instance)
+    }
+  }, 50)
+
+  setTimeout(() => {
+    if (stillRunning) {
+      clearInterval(instanceCheck)
+      reject(new Error('Connection to RO Gnosis.js timed out'))
+    }
+  }, NETWORK_TIMEOUT)
+})
+
 /**
  * Initializes connection to GnosisJS
  * @param {*dictionary} GNOSIS_OPTIONS
@@ -74,25 +92,15 @@ export const getGnosisConnection = async () => {
     return gnosisInstance
   }
 
-  return new Promise((resolve, reject) => {
-    let stillRunning = true
-    const instanceCheck = setInterval(() => {
-      if (gnosisInstance) {
-        stillRunning = false
-        clearInterval(instanceCheck)
-        return resolve(gnosisInstance)
-      }
-    }, 50)
-
-    setTimeout(() => {
-      if (stillRunning) {
-        clearInterval(instanceCheck)
-        reject(new Error('Connection to Gnosis.js timed out'))
-      }
-    }, NETWORK_TIMEOUT)
-  })
+  return waitForGnosisConnection(gnosisInstance)
 }
 
-export const getROGnosisConnection = async () => gnosisROInstance || undefined
+export const getROGnosisConnection = async () => {
+  if (gnosisROInstance) {
+    return gnosisROInstance
+  }
+
+  return waitForGnosisConnection(gnosisROInstance)
+}
 
 export default Gnosis

@@ -10,7 +10,8 @@
     "port": 443
   },
   "whitelist": {
-    "0xafdda4e896f543ea60f9d4c72d22f950e8c72812": "Mikhail"
+    "0xafdda4e896f543ea60f9d4c72d22f950e8c72812": "Mikhail",
+    "0x1cf68b261cc15a64e0ba8c94da4b4cb491b3074f": "Lama"
   },
   "hiddenMarkets": [
     "0x9e1008ff1b30b871701e5527fc4efe339cf96abc",
