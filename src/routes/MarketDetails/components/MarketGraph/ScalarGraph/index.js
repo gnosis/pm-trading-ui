@@ -52,6 +52,7 @@ const ScalarGraph = ({
             <YAxis
               className="axis axis--y"
               tickFormatter={scalarTickFormatter}
+              padding={{ bottom: 30 }}
               domain={[
                 Decimal(lowerBound)
                   .div(10 ** eventDescription.decimals)
