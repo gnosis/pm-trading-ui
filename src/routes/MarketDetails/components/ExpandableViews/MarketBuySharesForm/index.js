@@ -5,12 +5,14 @@ import { Field, reduxForm, propTypes } from 'redux-form'
 import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
 import { weiToEth } from 'utils/helpers'
-import { COLOR_SCHEME_DEFAULT, COLOR_SCHEME_SCALAR, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
+import {
+  COLOR_SCHEME_DEFAULT, COLOR_SCHEME_SCALAR, OUTCOME_TYPES, GAS_COST,
+} from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import { TextInput, TextInputAdornment } from 'components/Form'
+import { TextInput, TextInputAdornment, MandatoryHint } from 'components/Form'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { getOutcomeTokenCount, getMaximumWin, getPercentageWin } from './utils'
 import OutcomeSection from './OutcomesSection'
@@ -112,6 +114,16 @@ class MarketBuySharesForm extends Component {
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.get('buyShares') || 0))
     const submitDisabled = invalid || !selectedBuyInvest || !selectedOutcome
 
+    let submitDisabledReason
+
+    if (invalid) {
+      submitDisabledReason = 'Your investment is invalid'
+    } else if (!selectedBuyInvest) {
+      submitDisabledReason = 'Please enter an investment amount'
+    } else if (!selectedOutcome) {
+      submitDisabledReason = 'Please select an outcome'
+    }
+
     let outcomeTokenCount = 0
     let maximumWin = 0
     let percentageWin = 0
@@ -127,7 +139,11 @@ class MarketBuySharesForm extends Component {
     let maxReturnField
 
     if (!isValid) {
-      fieldError = <span className={cx('invalidParam')}>--</span>
+      fieldError = (
+        <span className={cx('invalidParam')}>
+--
+        </span>
+      )
     } else {
       const colorSource = type === OUTCOME_TYPES.CATEGORICAL ? COLOR_SCHEME_DEFAULT : COLOR_SCHEME_SCALAR
       const outcomeColorStyles = {
@@ -136,8 +152,10 @@ class MarketBuySharesForm extends Component {
 
       tokenCountField = (
         <span className={cx('marketBuyWin', 'winInfoRow', 'max')}>
-          <DecimalValue value={weiToEth(outcomeTokenCount)} />&nbsp;
-          <div className={cx('marketBuyWin', 'outcomeColor')} style={outcomeColorStyles} />&nbsp;
+          <DecimalValue value={weiToEth(outcomeTokenCount)} />
+&nbsp;
+          <div className={cx('marketBuyWin', 'outcomeColor')} style={outcomeColorStyles} />
+&nbsp;
         </span>
       )
 
@@ -145,8 +163,13 @@ class MarketBuySharesForm extends Component {
       maxReturnField = (
         <span className={cx('marketBuyWin', 'winInfoRow', 'max')}>
           {returnSign}
-          <DecimalValue value={percentageWin} /> %&nbsp; (<DecimalValue value={maximumWin} />&nbsp;
-          <CurrencyName tokenAddress={collateralToken} />)
+          <DecimalValue value={percentageWin} />
+          {' '}
+%&nbsp; (
+          <DecimalValue value={maximumWin} />
+&nbsp;
+          <CurrencyName tokenAddress={collateralToken} />
+)
         </span>
       )
     }
@@ -172,28 +195,40 @@ class MarketBuySharesForm extends Component {
                     decoration="underlined"
                     placeholder="Investment"
                     validate={this.validateInvestment}
-                    endAdornment={
+                    endAdornment={(
                       <TextInputAdornment>
                         <CurrencyName tokenAddress={market.event.collateralToken} />
+                        <MandatoryHint />
                       </TextInputAdornment>
-                    }
+                    )}
                   />
                 </div>
               </div>
               <div className={cx('row', 'infoRow')}>
-                <div className={cx('col-md-6')}>Token Count</div>
-                <div className={cx('col-md-6')}>{fieldError || tokenCountField}</div>
+                <div className={cx('col-md-6')}>
+Token Count
+                </div>
+                <div className={cx('col-md-6')}>
+                  {fieldError || tokenCountField}
+                </div>
               </div>
               <div className={cx('row', 'infoRow')}>
-                <div className={cx('col-md-6')}>Maximum return</div>
-                <div className={cx('col-md-6')}>{fieldError || maxReturnField}</div>
+                <div className={cx('col-md-6')}>
+Maximum return
+                </div>
+                <div className={cx('col-md-6')}>
+                  {fieldError || maxReturnField}
+                </div>
               </div>
               <div className={cx('row', 'infoRow')}>
-                <div className={cx('col-md-6')}>Gas Costs</div>
+                <div className={cx('col-md-6')}>
+Gas Costs
+                </div>
                 <div className={cx('col-md-6')}>
                   {isGasPriceFetched && isGasCostFetched(GAS_COST.BUY_SHARES) ? (
                     <React.Fragment>
-                      <DecimalValue value={gasCostEstimation} decimals={4} />{' '}
+                      <DecimalValue value={gasCostEstimation} decimals={4} />
+                      {' '}
                       ETH
                     </React.Fragment>
                   ) : (
@@ -208,6 +243,7 @@ class MarketBuySharesForm extends Component {
                   <InteractionButton
                     className={cx('btn', 'btn-primary', 'col-xs-12')}
                     disabled={submitDisabled}
+                    error={submitDisabledReason}
                     loading={submitting || local}
                     type="submit"
                   >

@@ -23,12 +23,13 @@ const LegalCompliance = ({
   submitButtonDisabledClassName,
   submitButtonLabel,
   submitButtonComponent: ButtonComponent,
+  submitButtonOpts,
   disabled,
   onSubmitAcceptedDocs,
 }) => {
   if (!legalComplianceEnabled) {
     return (
-      <ButtonComponent className={cx(submitButtonClassName)} onClick={() => onSubmitAcceptedDocs()}>
+      <ButtonComponent className={cx(submitButtonClassName)} onClick={() => onSubmitAcceptedDocs()} {...submitButtonOpts}>
         {submitButtonLabel}
       </ButtonComponent>
     )
@@ -40,14 +41,25 @@ const LegalCompliance = ({
 
   return (
     <div>
-      {showHeading && <h4 className={cx('heading')}>Terms of service and privacy policy</h4>}
+      {showHeading && (
+        <h4 className={cx('heading')}>
+Terms of service and privacy policy
+        </h4>
+      )}
       {showExplanation && (
         <p className={cx('explanation')}>
-          For using {applicationName}, you have to agree with our&nbsp;
+          For using
+          {' '}
+          {applicationName}
+, you have to agree with our&nbsp;
           <React.Fragment>
             {documents
               .map(doc => <DocumentExplanation key={doc.id} {...doc} />)
-              .reduce((acc, elem) => [...acc, <span> and </span>, elem], [])}
+              .reduce((acc, elem) => [...acc, <span>
+                {' '}
+and
+                {' '}
+              </span>, elem], [])}
           </React.Fragment>
           .
         </p>
@@ -59,6 +71,7 @@ const LegalCompliance = ({
         className={cx(submitButtonClassName, { [submitButtonDisabledClassName]: !canSubmit })}
         disabled={!canSubmit}
         onClick={() => onSubmitAcceptedDocs(documentIds)}
+        {...submitButtonOpts}
       >
         {submitButtonLabel}
       </ButtonComponent>
@@ -78,6 +91,7 @@ LegalCompliance.propTypes = {
   submitButtonComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   submitButtonClassName: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   submitButtonDisabledClassName: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  submitButtonOpts: PropTypes.object,
   disabled: PropTypes.bool,
   onSubmitAcceptedDocs: PropTypes.func,
 }
@@ -89,6 +103,7 @@ LegalCompliance.defaultProps = {
   submitButtonLabel: 'LOGIN',
   submitButtonComponent: 'button',
   submitButtonClassName: '',
+  submitButtonOpts: {},
   submitButtonDisabledClassName: 'disabled',
   disabled: false,
   onSubmitAcceptedDocs: () => {},

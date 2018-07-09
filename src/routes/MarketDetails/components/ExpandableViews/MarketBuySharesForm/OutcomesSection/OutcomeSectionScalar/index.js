@@ -4,7 +4,7 @@ import cn from 'classnames'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice } from 'api'
 import { Field } from 'redux-form'
-import { OutcomeSelection } from 'components/Form'
+import { OutcomeSelection, MandatoryHint } from 'components/Form'
 import { COLOR_SCHEME_SCALAR } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import ScalarSlider from './ScalarSlider'
@@ -61,6 +61,7 @@ const OutcomeSectionScalar = (props) => {
         <div className={cn('col-md-12')}>
           <h2>
             Your Trade
+            <MandatoryHint />
           </h2>
           <Field
             component={OutcomeSelection}

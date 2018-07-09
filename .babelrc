@@ -10,11 +10,12 @@
     [
       "@babel/preset-stage-0",
       {
+        "pipelineProposal": "minimal",
         "decoratorsLegacy": true
       }
     ]
   ],
-  "plugins": ["react-hot-loader/babel", "lodash", "transform-optional-chaining"],
+  "plugins": ["react-hot-loader/babel", ["lodash", { "id": ["lodash", "recompose"] }], "transform-optional-chaining"],
   "env": {
     "production": {
       "plugins": [
