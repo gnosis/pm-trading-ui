@@ -4,7 +4,7 @@ import Decimal from 'decimal.js'
 import { Field } from 'redux-form'
 import { marketShape } from 'utils/shapes'
 import { calcLMSRMarginalPrice } from 'api'
-import { OutcomeSelection } from 'components/Form'
+import { OutcomeSelection, MandatoryHint } from 'components/Form'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
 const OutcomesSectionCategorical = (props) => {
@@ -17,23 +17,21 @@ const OutcomesSectionCategorical = (props) => {
   const canRunSimulation = selectedBuyInvest && selectedOutcome
 
   const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-  let marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
-    calcLMSRMarginalPrice({
-      netOutcomeTokensSold: marketTokenCounts,
-      outcomeTokenIndex,
-      funding,
-    }))
+  let marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+    netOutcomeTokensSold: marketTokenCounts,
+    outcomeTokenIndex,
+    funding,
+  }))
 
   // Run the simulation only if the amount user wants to invest is valid, by default values are set to current
   // Market's paramteters
   if (canRunSimulation) {
     marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
-    marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
-      calcLMSRMarginalPrice({
-        netOutcomeTokensSold: marketTokenCounts,
-        outcomeTokenIndex,
-        funding,
-      }))
+    marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+      netOutcomeTokensSold: marketTokenCounts,
+      outcomeTokenIndex,
+      funding,
+    }))
   }
 
   const categoricalOutcomes = outcomes.map((label, index) => ({
@@ -47,7 +45,10 @@ const OutcomesSectionCategorical = (props) => {
     <div className="col-md-7">
       <div className="row">
         <div className="col-md-12">
-          <h2>Your Trade</h2>
+          <h2>
+Your Trade
+            <MandatoryHint />
+          </h2>
         </div>
       </div>
       <div className="row">

@@ -30,54 +30,66 @@ const { default: defaultProvider } = providerConfig
 const useMetamask = defaultProvider === WALLET_PROVIDER.METAMASK
 const useUport = defaultProvider === WALLET_PROVIDER.UPORT
 
+const BALANCE_FETCH_INTERVAL = 5000
+
 class Header extends Component {
   componentDidMount() {
-    const { currentAccount } = this.props
+    const {
+      currentAccount, requestMainnetAddress, requestTokenBalance, fetchTournamentUserData,
+    } = this.props
 
     if (requireRegistration && currentAccount) {
-      this.props.requestMainnetAddress()
+      requestMainnetAddress()
     }
 
     if (currentAccount) {
-      this.props.requestTokenBalance(currentAccount)
+      this.balanceFetcher = setInterval(() => requestTokenBalance(currentAccount), BALANCE_FETCH_INTERVAL)
 
       if (tournamentEnabled) {
-        this.props.fetchTournamentUserData(currentAccount)
+        fetchTournamentUserData(currentAccount)
       }
     }
   }
 
   componentDidUpdate(prevProps) {
+    const {
+      currentAccount, requestTokenBalance, requestMainnetAddress, fetchTournamentUserData,
+    } = this.props
     // If user unlocks metamask, changes his account, we need to check if the account was registered
-    const shouldRequestMainnetAddress = requireRegistration && this.props.currentAccount !== prevProps.currentAccount
-    if (shouldRequestMainnetAddress) {
-      this.props.requestMainnetAddress()
+    const shouldRequestMainnetAddress = requireRegistration && currentAccount !== prevProps.currentAccount
+    if (shouldRequestMainnetAddress && currentAccount) {
+      clearInterval(this.balanceFetcher)
+      this.balanceFetcher = setInterval(() => requestTokenBalance(currentAccount), BALANCE_FETCH_INTERVAL)
+      requestMainnetAddress()
+      fetchTournamentUserData(currentAccount)
     }
   }
 
   @autobind
   async handleConnectWalletClick() {
-    const { isConnectedToCorrectNetwork, lockedMetamask, acceptedTOS } = this.props
+    const {
+      isConnectedToCorrectNetwork, lockedMetamask, acceptedTOS, openModal, initUport,
+    } = this.props
 
     const shouldInstallProviders = !hasMetamask() && !useUport
     const shouldAcceptTOS = !acceptedTOS || !legalComplianceEnabled
 
     if (shouldInstallProviders) {
-      this.props.openModal('ModalInstallMetamask')
+      openModal('ModalInstallMetamask')
     } else if (useMetamask) {
       if (lockedMetamask) {
-        this.props.openModal('ModalUnlockMetamask')
+        openModal('ModalUnlockMetamask')
       } else if (!isConnectedToCorrectNetwork) {
-        this.props.openModal('ModalSwitchNetwork')
+        openModal('ModalSwitchNetwork')
       } else if (requireRegistration) {
-        this.props.openModal('ModalRegisterWallet')
+        openModal('ModalRegisterWallet')
       } else if (shouldAcceptTOS) {
-        this.props.openModal('ModalAcceptTOS')
+        openModal('ModalAcceptTOS')
       } else {
         console.warn('should be connected')
       }
     } else if (useUport) {
-      this.props.initUport()
+      initUport()
     }
   }
 
@@ -141,7 +153,9 @@ class Header extends Component {
               <div className={cx('headerLogo', 'beta')} style={logoVars} />
             </NavLink>
           </div>
-          <div className={cx('group', 'left', 'version')}>{version}</div>
+          <div className={cx('group', 'left', 'version')}>
+            {version}
+          </div>
           <div className={cx('group', 'left', 'navLinks')}>
             <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
               Markets
@@ -162,12 +176,20 @@ class Header extends Component {
           <div className={cx('group', 'right')}>
             {canInteract ? (
               <div className={cx('account')}>
-                {currentNetwork &&
-                  currentNetwork !== 'MAIN' && (
-                  <span className={cx('network', 'text')}>Network: {upperFirst(currentNetwork.toLowerCase())}</span>
+                {currentNetwork
+                  && currentNetwork !== 'MAIN' && (
+                  <span className={cx('network', 'text')}>
+                      Network:
+                    {upperFirst(currentNetwork.toLowerCase())}
+                  </span>
                 )}
-                <DecimalValue value={tokenBalance} className={cx('text')} />&nbsp;
-                {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : <span>ETH</span>}
+                <DecimalValue value={tokenBalance} className={cx('text')} />
+                &nbsp;
+                {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : (
+                  <span>
+ETH
+                  </span>
+                )}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
