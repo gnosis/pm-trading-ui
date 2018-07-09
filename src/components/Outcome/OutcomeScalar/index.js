@@ -27,11 +27,12 @@ const OutcomeScalar = ({
     outcomeTokenIndex: 1, // always calc for long when calculating estimation
   })
 
-  const decimals = Math.max(decimalsRaw, 2)
+  const decimals = Math.max(decimalsRaw, 0)
 
   const lower = Decimal(lowerBound).div(10 ** decimals)
+  const upper = Decimal(upperBound).div(10 ** decimals)
 
-  const bounds = Decimal(upperBound).sub(lowerBound)
+  const bounds = Decimal(upper).sub(lower)
   let value = Decimal(marginalPrice)
     .times(bounds)
     .add(lower)
@@ -55,7 +56,7 @@ const OutcomeScalar = ({
     <div className={className}>
       <div className={cx('scalarOutcome')}>
         <div className={cx('outcomeBound', 'lower')}>
-          <DecimalValue value={lowerBound} decimals={decimals} />
+          <DecimalValue value={lower} decimals={decimals} />
           &nbsp;
           {unit}
         </div>
@@ -68,7 +69,7 @@ const OutcomeScalar = ({
           </div>
         </div>
         <div className={cx('outcomeBound', 'upper')}>
-          <DecimalValue value={upperBound} decimals={decimals} />
+          <DecimalValue value={upper} decimals={decimals} />
           &nbsp;
           {unit}
         </div>

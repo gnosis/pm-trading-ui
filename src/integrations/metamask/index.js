@@ -14,6 +14,7 @@ class Metamask extends InjectedWeb3 {
    * This allows "fallback providers" like a remote etherium host to be used as a last resort.
    */
   static providerPriority = 90
+
   static watcherInterval = 1000
 
   constructor() {
@@ -31,9 +32,9 @@ class Metamask extends InjectedWeb3 {
   initWeb3() {
     try {
       if (
-        typeof window.web3 !== 'undefined' &&
-        (window.web3.currentProvider.constructor.name === 'MetamaskInpageProvider' ||
-          window.web3.currentProvider.isMetaMask)
+        typeof window.web3 !== 'undefined'
+        && (window.web3.currentProvider.constructor.name === 'MetamaskInpageProvider'
+          || window.web3.currentProvider.isMetaMask)
       ) {
         this.web3 = new Web3(window.web3.currentProvider)
         window.web3 = this.web3
@@ -83,7 +84,7 @@ class Metamask extends InjectedWeb3 {
     }
 
     return this.runProviderUpdate(this, {
-      available: this.walletEnabled && this.account != null,
+      available: this.walletEnabled && !!this.account,
       networkId: this.networkId,
       network: this.network,
       account: this.account,
