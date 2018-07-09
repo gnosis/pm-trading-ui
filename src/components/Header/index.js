@@ -30,6 +30,8 @@ const { default: defaultProvider } = providerConfig
 const useMetamask = defaultProvider === WALLET_PROVIDER.METAMASK
 const useUport = defaultProvider === WALLET_PROVIDER.UPORT
 
+const BALANCE_FETCH_INTERVAL = 5000
+
 class Header extends Component {
   componentDidMount() {
     const {
@@ -41,7 +43,7 @@ class Header extends Component {
     }
 
     if (currentAccount) {
-      requestTokenBalance(currentAccount)
+      this.balanceFetcher = setInterval(() => requestTokenBalance(currentAccount), BALANCE_FETCH_INTERVAL)
 
       if (tournamentEnabled) {
         fetchTournamentUserData(currentAccount)
@@ -56,7 +58,8 @@ class Header extends Component {
     // If user unlocks metamask, changes his account, we need to check if the account was registered
     const shouldRequestMainnetAddress = requireRegistration && currentAccount !== prevProps.currentAccount
     if (shouldRequestMainnetAddress && currentAccount) {
-      requestTokenBalance(currentAccount)
+      clearInterval(this.balanceFetcher)
+      this.balanceFetcher = setInterval(() => requestTokenBalance(currentAccount), BALANCE_FETCH_INTERVAL)
       requestMainnetAddress()
       fetchTournamentUserData(currentAccount)
     }
@@ -184,7 +187,7 @@ class Header extends Component {
                 &nbsp;
                 {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : (
                   <span>
-                    ETH
+ETH
                   </span>
                 )}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
