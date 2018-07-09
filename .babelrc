@@ -10,6 +10,7 @@
     [
       "@babel/preset-stage-0",
       {
+        "pipelineProposal": "minimal",
         "decoratorsLegacy": true
       }
     ]
