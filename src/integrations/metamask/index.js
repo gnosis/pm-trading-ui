@@ -1,6 +1,5 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
-import { hasMetamask } from 'integrations/utils'
 import { timeoutCondition } from 'utils/helpers'
 import Web3 from 'web3'
 
