@@ -24,13 +24,11 @@ const OutcomeSectionScalar = (props) => {
   const canRunSimulation = selectedBuyInvest && selectedOutcome
 
   const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-
   const marginalPricesCurrent = calcLMSRMarginalPrice({
     netOutcomeTokensSold: marketTokenCounts,
     outcomeTokenIndex: 1,
     funding,
   })
-  
   let marginalPriceSelected = marginalPricesCurrent
 
   if (canRunSimulation) {
@@ -62,7 +60,8 @@ const OutcomeSectionScalar = (props) => {
       <div className={cn('row')}>
         <div className={cn('col-md-12')}>
           <h2>
-            Your Trade<MandatoryHint />
+            Your Trade
+            <MandatoryHint />
           </h2>
           <Field
             component={OutcomeSelection}

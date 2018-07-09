@@ -1,4 +1,4 @@
-export { default as OutcomeSelection } from './OutcomeSelection/'
+export { default as OutcomeSelection } from './OutcomeSelection'
 export { default as RadioButton } from './RadioButton'
 export { default as Checkbox } from './Checkbox'
 export { default as RadioButtonGroup } from './RadioButtonGroup'

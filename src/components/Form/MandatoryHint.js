@@ -8,8 +8,15 @@ import styles from './MandatoryHint.mod.scss'
 const cx = classnames.bind(styles)
 
 const MandatoryHint = () => (
-  <Tooltip overlay={<span>This field is required</span>}>
-    <span className={cx('mandatoryHint')}>*</span>
+  <Tooltip overlay={(
+    <span>
+This field is required
+    </span>
+  )}
+  >
+    <span className={cx('mandatoryHint')}>
+*
+    </span>
   </Tooltip>
 )
 
