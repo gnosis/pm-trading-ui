@@ -22,18 +22,18 @@ describe('Blockchain selectors', () => {
   })
 
   describe('isConnectedToBlockchain', () => {
-    it('Should return falsy if not tried to connect / Map doesnt have connectionTried key', () => {
-      const state = { blockchain: Map({ connectionTried: false }) }
+    it('Should return falsy if none or one of gnosis.js instances was initialized', () => {
+      const state = { blockchain: Map({ gnosisInitialized: false, gnosisROInitialized: false }) }
 
-      expect(isConnectedToBlockchain(state)).toBeFalsy()
-      state.blockchain.clear()
-      expect(isConnectedToBlockchain(state)).toBeFalsy()
+      expect(isConnectedToBlockchain(state)).toBe(false)
+      state.blockchain.set('gnosisInitialized', true)
+      expect(isConnectedToBlockchain(state)).toBe(false)
     })
 
-    it('Should return falsy if we tried to connect', () => {
-      const state = { blockchain: Map({ connectionTried: true }) }
+    it('Should return truthy value if both gnosis.js instances are initialized', () => {
+      const state = { blockchain: Map({ gnosisInitialized: true, gnosisROInitialized: true }) }
 
-      expect(isConnectedToBlockchain(state)).toBeTruthy()
+      expect(isConnectedToBlockchain(state)).toBe(true)
     })
   })
 

@@ -126,5 +126,5 @@ export default lifecycle({
     if (this.props.mainnetAddress) {
       this.props.closeModal()
     }
-  }
+  },
 })(RegisterMainnetAddress)
