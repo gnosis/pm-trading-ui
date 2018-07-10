@@ -24,7 +24,6 @@
     "import/extensions": 0,
     "import/prefer-default-export": 0,
     "jsx-a11y/label-has-for": 0,
-    "react/jsx-one-expression-per-line": "off",
     "indent": ["error", 2],
     "no-console": ["error", { "allow": ["warn", "error"] }]
   },

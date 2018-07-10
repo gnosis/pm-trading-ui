@@ -32,34 +32,32 @@ const RegisterMainnetAddress = ({
     closeModal()
   }
 
-  const insufficientFunds = gasPrice
+  const disabled = gasPrice
     .mul(registrationGasCost || 0)
     .div(1e18)
     .gt(currentBalance || 0)
-
-  const disabled = insufficientFunds
 
   return (
     <div className={cx('registerWallet')}>
       <button className={cx('closeButton')} onClick={closeModal} />
       <div className={cx('registerContainer')}>
         <h4 className={cx('heading')}>
-Register wallet address
+          Register wallet address
         </h4>
         <p className={cx('annotation')}>
           Please register your wallet address, where we can send you
           {' '}
           {collateralTokenSymbol}
           {' '}
-tokens, and subsequently
+          tokens, and subsequently
           your
           {' '}
           {rewardTokenSymbol}
           {' '}
-reward. Read our terms of service for more information
+          reward. Read our terms of service for more information
         </p>
         <p className={cx('walletAnnotation')}>
-Your current Metamask address is:
+          Your current Metamask address is:
         </p>
         <div className={cx('walletAddressContainer')}>
           <img src={WalletIcon} className={cx('walletIcon')} alt="" />
@@ -75,18 +73,13 @@ Your current Metamask address is:
           {' '}
           <DecimalValue value={currentBalance} className={cx('walletBalance')} />
           {' '}
--
+          -
           {' '}
           <a className={cx('faucetLink')} href="https://faucet.rinkeby.io/" target="_blank" rel="noopener noreferrer">
             Request Rinkeby Ether
           </a>
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
         </p>
-        {insufficientFunds && (
-          <span className={cx('insufficientETH')}>
-            Note: Not enough ETH balance in your MetaMask wallet to submit this transaction.
-          </span>
-        )}
         <LegalCompliance
           submitButtonLabel="REGISTER ADDRESS"
           submitButtonClassName={cx('btn', 'btn-primary', 'actionButton')}
