@@ -9,7 +9,7 @@ import { weiToEth } from 'utils/helpers'
  */
 export const isGnosisInitialized = state => !!state.blockchain.get('gnosisInitialized')
 
-export const triedToConnect = state => !!state.blockchain.get('connectionTried')
+export const isConnectedToBlockchain = state => !!state.blockchain.get('gnosisInitialized') && !!state.blockchain.get('gnosisROInitialized')
 
 export const isGasCostFetched = (state, property) => state.blockchain.getIn(['gasCosts', property]) !== undefined
 

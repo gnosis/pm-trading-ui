@@ -1,4 +1,4 @@
-import { isGnosisInitialized, triedToConnect, getTokenAmount, getCollateralToken } from 'store/selectors/blockchain'
+import { isGnosisInitialized, isConnectedToBlockchain, getTokenAmount, getCollateralToken } from 'store/selectors/blockchain'
 import { getGasPrice, getGasCosts, isGasCostFetched, isGasPriceFetched } from 'routes/MarketDetails/store/selectors'
 import { ProviderRecord } from 'integrations/store/models'
 
@@ -21,19 +21,19 @@ describe('Blockchain selectors', () => {
     })
   })
 
-  describe('triedToConnect', () => {
+  describe('isConnectedToBlockchain', () => {
     it('Should return falsy if not tried to connect / Map doesnt have connectionTried key', () => {
       const state = { blockchain: Map({ connectionTried: false }) }
 
-      expect(triedToConnect(state)).toBeFalsy()
+      expect(isConnectedToBlockchain(state)).toBeFalsy()
       state.blockchain.clear()
-      expect(triedToConnect(state)).toBeFalsy()
+      expect(isConnectedToBlockchain(state)).toBeFalsy()
     })
 
     it('Should return falsy if we tried to connect', () => {
       const state = { blockchain: Map({ connectionTried: true }) }
 
-      expect(triedToConnect(state)).toBeTruthy()
+      expect(isConnectedToBlockchain(state)).toBeTruthy()
     })
   })
 
