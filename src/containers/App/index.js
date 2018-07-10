@@ -12,7 +12,7 @@ import Footer from 'components/Footer'
 import { providerPropType } from 'utils/shapes'
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
-import { triedToConnect } from 'store/selectors/blockchain'
+import { isConnectedToBlockchain } from 'store/selectors/blockchain'
 import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
 import 'normalize.css'
 
@@ -22,12 +22,17 @@ import transitionStyles from './transitions.mod.scss'
 const cx = cn.bind(style)
 
 const App = (props) => {
-  if (!props.blockchainConnection) {
+  const {
+    provider, blockchainConnection, children, location,
+  } = props
+  if (!blockchainConnection) {
     return (
       <div className={cx('appContainer')}>
         <div className={cx('loader-container')}>
           <IndefiniteSpinner width={100} height={100} />
-          <h1>Connecting</h1>
+          <h1>
+            Connecting to the blockchain
+          </h1>
         </div>
       </div>
     )
@@ -44,10 +49,10 @@ const App = (props) => {
   return (
     <div className={cx('appContainer')}>
       <HeaderContainer version={process.env.VERSION} />
-      {props.provider && props.provider.account && <TransactionFloaterContainer />}
+      {provider && provider.account && <TransactionFloaterContainer />}
       <TransitionGroup>
-        <CSSTransition key={props.location.pathname.split('/')[1]} classNames={transitionClassNames} timeout={timeout}>
-          {props.children}
+        <CSSTransition key={location.pathname.split('/')[1]} classNames={transitionClassNames} timeout={timeout}>
+          {children}
         </CSSTransition>
       </TransitionGroup>
       <Footer />
@@ -76,10 +81,15 @@ App.defaultProps = {
 
 const mapStateToProps = state => ({
   provider: getActiveProvider(state),
-  blockchainConnection: triedToConnect(state),
+  blockchainConnection: isConnectedToBlockchain(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
 })
 
-export default withRouter(connect(mapStateToProps, {
-  connectBlockchain,
-})(App))
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      connectBlockchain,
+    },
+  )(App),
+)

@@ -1,11 +1,10 @@
 import { connect } from 'react-redux'
-import { formValueSelector } from 'redux-form'
 import RegisterWallet from 'components/ModalContent/RegisterWallet'
 
 import { updateMainnetAddress } from 'store/actions/account'
 import { requestGasPrice } from 'store/actions/blockchain'
 import { getCollateralToken } from 'store/selectors/blockchain'
-import { getCurrentAccount, getCurrentBalance } from 'integrations/store/selectors'
+import { getCurrentAccount, getCurrentBalance, getRegisteredMainnetAddress } from 'integrations/store/selectors'
 import { setLegalDocumentsAccepted } from 'integrations/store/actions'
 import { getGasPrice } from 'routes/MarketDetails/store/selectors'
 import { requestRegistrationGasCost } from './actions'
@@ -17,6 +16,7 @@ const mapStateToProps = state => ({
   registrationGasCost: getRegistrationGasCost(state),
   gasPrice: getGasPrice(state),
   collateralToken: getCollateralToken(state),
+  mainnetAddress: getRegisteredMainnetAddress(state),
 })
 
 const mapDispatchToProps = {
