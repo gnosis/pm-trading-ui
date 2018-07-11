@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { triedToConnect } from 'store/selectors/blockchain'
+import { isConnectedToBlockchain } from 'store/selectors/blockchain'
 import { closeModal } from 'store/actions/modal'
 import * as modals from 'containers/Modals'
 import style from './backdrop.mod.scss'
@@ -65,7 +65,7 @@ BackdropProvider.propTypes = {
 
 const mapStateToProps = state => ({
   modal: state.modal,
-  blockchainConnection: triedToConnect(state),
+  blockchainConnection: isConnectedToBlockchain(state),
 })
 
 const mapDispatchToProps = dispatch => ({

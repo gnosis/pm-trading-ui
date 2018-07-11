@@ -1,6 +1,7 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import { timeoutCondition } from 'utils/helpers'
+import { hasMetamask } from 'integrations/metamask/utils'
 import Web3 from 'web3'
 
 const NETWORK_TIMEOUT = 10000
@@ -30,11 +31,15 @@ class Metamask extends InjectedWeb3 {
    */
   initWeb3() {
     try {
+<<<<<<< HEAD
       if (
         typeof window.web3 !== 'undefined'
         && (window.web3.currentProvider.constructor.name === 'MetamaskInpageProvider'
           || window.web3.currentProvider.isMetaMask)
       ) {
+=======
+      if (hasMetamask()) {
+>>>>>>> 49b1fbf66af7b1d1176763bb68b01c4d9b7090cf
         this.web3 = new Web3(window.web3.currentProvider)
         window.web3 = this.web3
         return true
