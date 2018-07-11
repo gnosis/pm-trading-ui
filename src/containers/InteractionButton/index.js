@@ -54,6 +54,7 @@ class InteractionButton extends Component {
       disableWalletCheck,
       error,
     } = this.props
+    const { loading: loadingState } = this.state
 
     if (whitelistRequired && !whitelisted) {
       return null
@@ -69,7 +70,7 @@ class InteractionButton extends Component {
     const networkError = !correctNetwork
 
     // loading from props or uninitialized gnosisjs
-    const isLoading = loading || !gnosisInitialized || this.state.loading
+    const isLoading = loading || !gnosisInitialized || loadingState
 
     // disabled from props or wallet error or network error
     const isDisabled = disabled || walletError || networkError
@@ -100,18 +101,14 @@ class InteractionButton extends Component {
 
     const btn = (
       <button className={classNames} type={type || 'button'} onClick={onClickHandler} disabled={isDisabled}>
-        <div className={cx('interactionButtonInner')}>
-          {children}
-        </div>
+        <div className={cx('interactionButtonInner')}>{children}</div>
       </button>
     )
 
     if (isLoading) {
       return (
         <button className={classNames} type="button" disabled>
-          <div className={cx('interactionButtonInner')}>
-            {children}
-          </div>
+          <div className={cx('interactionButtonInner')}>{children}</div>
           <IndefiniteSpinner width={28} height={28} centered />
         </button>
       )
@@ -119,9 +116,20 @@ class InteractionButton extends Component {
 
     // disabled from props (passed)
     if (disabled && error) {
+      // button is wrapped in span because of https://github.com/react-component/tooltip/issues/18
+      // https://github.com/ant-design/ant-design/commit/f5d697988a9e130379f7506eafee85acca3c030b#diff-186839a30bf8b9d67a4b10bf7c091d5fR88
+      const button = React.cloneElement(btn, {
+        style: {
+          pointerEvents: 'none',
+        },
+      })
       return (
         <Tooltip overlay={error}>
-          {btn}
+          <span style={{
+            display: 'inline-block', cursor: 'not-allowed', width: '100%', height: '100%',
+          }}
+          >{button}
+          </span>
         </Tooltip>
       )
     }
@@ -136,19 +144,15 @@ class InteractionButton extends Component {
 
     if (walletError) {
       return (
-        <Tooltip overlay="You need a wallet connected before you can interact with this application.">
-          {btn}
-        </Tooltip>
+        <Tooltip overlay="You need a wallet connected before you can interact with this application.">{btn}</Tooltip>
       )
     }
 
     if (networkError) {
-      const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst((ETHEREUM_NETWORK_IDS[targetNetworkId] || '').toLowerCase())} network.`
-      return (
-        <Tooltip overlay={wrongNetworkText}>
-          {btn}
-        </Tooltip>
-      )
+      const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst(
+        (ETHEREUM_NETWORK_IDS[targetNetworkId] || '').toLowerCase(),
+      )} network.`
+      return <Tooltip overlay={wrongNetworkText}>{btn}</Tooltip>
     }
 
     return btn

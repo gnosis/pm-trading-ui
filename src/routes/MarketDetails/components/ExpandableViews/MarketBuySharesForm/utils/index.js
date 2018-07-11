@@ -1,7 +1,8 @@
 import Decimal from 'decimal.js'
 import { calcLMSROutcomeTokenCount } from 'api'
 import { LIMIT_MARGIN } from 'utils/constants'
-import { NUMBER_REGEXP } from '../'
+
+export const NUMBER_REGEXP = /^-?\d+\.?\d*$/
 
 /**
  *  Calculates how much outcome tokens you get for value you want to invest
