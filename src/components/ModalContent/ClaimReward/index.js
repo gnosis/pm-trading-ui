@@ -27,21 +27,23 @@ class ClaimReward extends React.Component {
   }
 
   componentDidMount() {
-    this.props.requestGasPrice()
-    this.props.requestClaimRewardGasCost()
+    const { requestGasPrice, requestClaimRewardGasCost } = this.props
+    requestGasPrice()
+    requestClaimRewardGasCost()
   }
 
   async handleClaim() {
+    const { closeModal, claimUserRewards } = this.props
     await this.setState({ claimState: 'loading' })
     try {
-      await this.props.claimUserRewards()
+      await claimUserRewards()
       await this.setState({ claimState: 'success' })
     } catch (e) {
       await this.setState({ claimState: 'error' })
       console.error(e)
     }
 
-    await this.props.closeModal()
+    await closeModal()
   }
 
   render() {
@@ -59,8 +61,11 @@ class ClaimReward extends React.Component {
 
     const targetNetwork = ETHEREUM_NETWORK_IDS[rewardToken.networkId]
     const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardToken.networkId)
-    const hasGasCosts = typeof gasPrice !== 'undefined' && typeof claimRewardGasCost !== 'undefined'
-    const gasCosts = Decimal(gasPrice || 0).mul(claimRewardGasCost || 0).div(1e18)
+    const hasGasCosts = typeof gasPrice !== 'undefined'
+      && typeof claimRewardGasCost !== 'undefined'
+    const gasCosts = Decimal(gasPrice || 0)
+      .mul(claimRewardGasCost || 0)
+      .div(1e18)
 
     const balance = Decimal(currentBalance)
 
@@ -81,7 +86,10 @@ class ClaimReward extends React.Component {
     let claimButton
     if (claimState === 'loading') {
       claimButton = (
-        <button className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
+        <button
+          className={cx('btn', 'btn-primary', 'claim', 'disabled')}
+          disabled
+        >
           <IndefiniteSpinner width={16} height={16} />
         </button>
       )
@@ -94,14 +102,20 @@ class ClaimReward extends React.Component {
     } else if (!canClaim) {
       claimButton = (
         <Tooltip overlay={problemMessage}>
-          <button className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
+          <button
+            className={cx('btn', 'btn-primary', 'claim', 'disabled')}
+            disabled
+          >
             CLAIM
           </button>
         </Tooltip>
       )
     } else {
       claimButton = (
-        <button onClick={this.handleClaim} className={cx('btn', 'btn-primary', 'claim')}>
+        <button
+          onClick={this.handleClaim}
+          className={cx('btn', 'btn-primary', 'claim')}
+        >
           CLAIM
         </button>
       )
@@ -117,24 +131,26 @@ class ClaimReward extends React.Component {
             <span className={cx('rewardInfo')}>
               {rewardValue} {rewardToken.symbol}
             </span>{' '}
-            tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in
-            your MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request.
-            More information in{' '}
+            tokens, you first have to switch to the{' '}
+            <span className={cx('network')}>{targetNetwork}</span> network in
+            your MetaMask wallet. Also make sure you have enough ETH to submit
+            the transaction with the claim request. More information in{' '}
             <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
               FAQ
-            </Link>.
+            </Link>
+            .
           </p>
           <div className={cx('currentNetworkContainer')}>
             Current network:
-            <span className={cx('network', { wrongNetwork: isWrongNetwork })}>{currentNetwork}</span>
+            <span className={cx('network', { wrongNetwork: isWrongNetwork })}>
+              {currentNetwork}
+            </span>
           </div>
           {!isWrongNetwork && (
             <p className={cx('gasCosts')}>
               Estimated Gas Costs:{' '}
               {hasGasCosts ? (
-                <b className={cx('gasEstimation')}>
-                  {decimalToText(gasCosts)}
-                </b>
+                <b className={cx('gasEstimation')}>{decimalToText(gasCosts)}</b>
               ) : (
                 <IndefiniteSpinner width={18} height={18} />
               )}
@@ -156,7 +172,11 @@ ClaimReward.propTypes = {
   currentNetwork: PropTypes.string,
   currentNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   gasPrice: PropTypes.instanceOf(Decimal),
-  claimRewardGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number, decimalJsTest]),
+  claimRewardGasCost: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    decimalJsTest,
+  ]),
   rewardValue: PropTypes.number.isRequired,
 }
 

@@ -23,6 +23,7 @@ const ethereumUrl = `${config.ethereum.protocol}://${config.ethereum.host}`
 
 // TODO define reducer for GnosisStatus
 export const setGnosisInitialized = createAction('SET_GNOSIS_CONNECTION')
+export const setGnosisROInitialized = createAction('SET_GNOSIS_RO_CONNECTION')
 export const setConnectionStatus = createAction('SET_CONNECTION_STATUS')
 export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setTokenBalance = createAction('SET_TOKEN_BALANCE')
@@ -82,13 +83,13 @@ export const requestCollateralTokenBalance = account => (dispatch, getState) => 
   return dispatch(requestTokenBalance(collateralToken.address, account))
 }
 
-
-export const initReadOnlyGnosis = () => async () => {
+export const initReadOnlyGnosis = () => async (dispatch) => {
   // initialize
   try {
     await initReadOnlyGnosisConnection({
       ethereum: new Web3(new Web3.providers.HttpProvider(ethereumUrl)).currentProvider,
     })
+    await dispatch(setGnosisROInitialized({ initialized: true }))
   } catch (error) {
     console.error(`Gnosis.js RO initialization Error: ${error}`)
   }
@@ -96,43 +97,50 @@ export const initReadOnlyGnosis = () => async () => {
 
 export const updateCollateralToken = () => async (dispatch) => {
   if (typeof collateralTokenFromConfig === 'undefined') {
-    return dispatch(setCollateralToken({
-      source: TOKEN_SOURCE_ETH,
-    }))
+    return dispatch(
+      setCollateralToken({
+        source: TOKEN_SOURCE_ETH,
+      }),
+    )
   }
 
-  const {
-    source,
-    options,
-  } = collateralTokenFromConfig
+  const { source, options } = collateralTokenFromConfig
 
   if (source === TOKEN_SOURCE_ETH) {
     // options are optional here
     const { icon = ETH_TOKEN_ICON, symbol = 'ETH' } = options || {}
 
-    return dispatch(setCollateralToken({
-      source: TOKEN_SOURCE_ETH,
-      symbol,
-      icon,
-    }))
-  } else if (source === TOKEN_SOURCE_CONTRACT) {
+    return dispatch(
+      setCollateralToken({
+        source: TOKEN_SOURCE_ETH,
+        symbol,
+        icon,
+      }),
+    )
+  } if (source === TOKEN_SOURCE_CONTRACT) {
     const { contractName, symbol, icon } = options
 
     if (!contractName) {
-      throw new Error(`Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': No contractName defined`)
+      throw new Error(
+        `Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': No contractName defined`,
+      )
     }
 
     await dispatch(initReadOnlyGnosis())
     const gnosisROInstance = await getROGnosisConnection()
 
     if (!gnosisROInstance) {
-      throw new Error(`Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': Couldn't initialize RO connection to fetch contract`)
+      throw new Error(
+        `Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': Couldn't initialize RO connection to fetch contract`,
+      )
     }
 
     const contractInstance = gnosisROInstance[contractName]
 
     if (!contractInstance) {
-      throw new Error(`Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': Contract "${contractName}" not found in pm-js. Please check https://github.com/gnosis/pm-js`)
+      throw new Error(
+        `Invalid configuration for 'collateralToken.source': '${TOKEN_SOURCE_CONTRACT}': Contract "${contractName}" not found in pm-js. Please check https://github.com/gnosis/pm-js`,
+      )
     }
 
     // use from config or fetch from contract
@@ -141,20 +149,24 @@ export const updateCollateralToken = () => async (dispatch) => {
       tokenSymbol = await contractInstance.symbol()
     }
 
-    return dispatch(setCollateralToken({
-      source: TOKEN_SOURCE_CONTRACT,
-      address: contractInstance.address,
-      symbol: tokenSymbol,
-      icon: icon || ETH_TOKEN_ICON,
-    }))
-  } else if (source === TOKEN_SOURCE_ADDRESS) {
+    return dispatch(
+      setCollateralToken({
+        source: TOKEN_SOURCE_CONTRACT,
+        address: contractInstance.address,
+        symbol: tokenSymbol,
+        icon: icon || ETH_TOKEN_ICON,
+      }),
+    )
+  } if (source === TOKEN_SOURCE_ADDRESS) {
     const { address, symbol, icon } = options
-    return dispatch(setCollateralToken({
-      source: TOKEN_SOURCE_ADDRESS,
-      address,
-      symbol,
-      icon,
-    }))
+    return dispatch(
+      setCollateralToken({
+        source: TOKEN_SOURCE_ADDRESS,
+        address,
+        symbol,
+        icon,
+      }),
+    )
   }
 
   return undefined
