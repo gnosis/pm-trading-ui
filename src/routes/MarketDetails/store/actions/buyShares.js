@@ -4,7 +4,9 @@ import * as api from 'api'
 import { fetchMarket, buyShares } from 'routes/MarketDetails/api'
 import Decimal from 'decimal.js'
 import { requestCollateralTokenBalance } from 'store/actions/blockchain'
-import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
+import {
+  startLog, closeLog, closeEntrySuccess, closeEntryError,
+} from 'routes/Transactions/store/actions/transactions'
 import { openModal, closeModal } from 'store/actions/modal'
 import { gaSend } from 'utils/analytics/google'
 import { receiveEntities, updateEntity } from 'store/actions/entities'
@@ -81,7 +83,7 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
     await dispatch(closeModal())
   } catch (e) {
     console.error(e)
-    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e))
+    await dispatch(closeEntryError(transactionId, TRANSACTION_STAGES.GENERIC, e.message))
     await dispatch(closeLog(transactionId, TRANSACTION_COMPLETE_STATUS.ERROR))
     await dispatch(closeModal())
     throw e

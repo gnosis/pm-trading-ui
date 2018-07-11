@@ -118,7 +118,14 @@ class InteractionButton extends Component {
     }
 
     // disabled from props (passed)
-    if (disabled && error) {
+    if (disabled && !!error) {
+      // button is wrapped in span because of https://github.com/react-component/tooltip/issues/18
+      // https://github.com/ant-design/ant-design/commit/f5d697988a9e130379f7506eafee85acca3c030b#diff-186839a30bf8b9d67a4b10bf7c091d5fR88
+      const button = React.cloneElement(btn, {
+        style: {
+          pointerEvents: 'none',
+        },
+      })
       return (
         <Tooltip overlay={error}>
           {btn}

@@ -6,10 +6,6 @@
   align-items: center;
   height: 45px;
 
-  &:disabled {
-    pointer-events: none;
-  }
-
   &.loading {
     .interactionButtonInner {
       visibility: hidden;

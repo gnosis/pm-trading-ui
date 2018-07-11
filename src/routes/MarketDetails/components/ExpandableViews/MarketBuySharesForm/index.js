@@ -241,7 +241,7 @@ Gas Costs
               <div className={cx('row', 'infoRow')}>
                 <div className={cx('col-xs-10', 'col-xs-offset-1')}>
                   <InteractionButton
-                    className={cx('btn', 'btn-primary', 'col-xs-12')}
+                    className={cx('btn', 'btn-primary', 'buyButton')}
                     disabled={submitDisabled}
                     error={submitDisabledReason}
                     loading={submitting || local}
