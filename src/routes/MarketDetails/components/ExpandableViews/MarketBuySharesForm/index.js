@@ -116,8 +116,8 @@ class MarketBuySharesForm extends Component {
 
     let submitDisabledReason
 
-    if (invalid) {
-      submitDisabledReason = 'Your investment is invalid'
+    if (!selectedBuyInvest && !selectedOutcome) {
+      submitDisabledReason = 'Please fill all mandatory fields'
     } else if (!selectedBuyInvest) {
       submitDisabledReason = 'Please enter an investment amount'
     } else if (!selectedOutcome) {
@@ -139,11 +139,7 @@ class MarketBuySharesForm extends Component {
     let maxReturnField
 
     if (!isValid) {
-      fieldError = (
-        <span className={cx('invalidParam')}>
---
-        </span>
-      )
+      fieldError = <span className={cx('invalidParam')}>--</span>
     } else {
       const colorSource = type === OUTCOME_TYPES.CATEGORICAL ? COLOR_SCHEME_DEFAULT : COLOR_SCHEME_SCALAR
       const outcomeColorStyles = {
@@ -153,9 +149,9 @@ class MarketBuySharesForm extends Component {
       tokenCountField = (
         <span className={cx('marketBuyWin', 'winInfoRow', 'max')}>
           <DecimalValue value={weiToEth(outcomeTokenCount)} />
-&nbsp;
+          &nbsp;
           <div className={cx('marketBuyWin', 'outcomeColor')} style={outcomeColorStyles} />
-&nbsp;
+          &nbsp;
         </span>
       )
 
@@ -163,13 +159,11 @@ class MarketBuySharesForm extends Component {
       maxReturnField = (
         <span className={cx('marketBuyWin', 'winInfoRow', 'max')}>
           {returnSign}
-          <DecimalValue value={percentageWin} />
-          {' '}
-%&nbsp; (
+          <DecimalValue value={percentageWin} /> %&nbsp; (
           <DecimalValue value={maximumWin} />
-&nbsp;
+          &nbsp;
           <CurrencyName tokenAddress={collateralToken} />
-)
+          )
         </span>
       )
     }
@@ -205,31 +199,19 @@ class MarketBuySharesForm extends Component {
                 </div>
               </div>
               <div className={cx('row', 'infoRow')}>
-                <div className={cx('col-md-6')}>
-Token Count
-                </div>
-                <div className={cx('col-md-6')}>
-                  {fieldError || tokenCountField}
-                </div>
+                <div className={cx('col-md-6')}>Token Count</div>
+                <div className={cx('col-md-6')}>{fieldError || tokenCountField}</div>
               </div>
               <div className={cx('row', 'infoRow')}>
-                <div className={cx('col-md-6')}>
-Maximum return
-                </div>
-                <div className={cx('col-md-6')}>
-                  {fieldError || maxReturnField}
-                </div>
+                <div className={cx('col-md-6')}>Maximum return</div>
+                <div className={cx('col-md-6')}>{fieldError || maxReturnField}</div>
               </div>
               <div className={cx('row', 'infoRow')}>
-                <div className={cx('col-md-6')}>
-Gas Costs
-                </div>
+                <div className={cx('col-md-6')}>Gas Costs</div>
                 <div className={cx('col-md-6')}>
                   {isGasPriceFetched && isGasCostFetched(GAS_COST.BUY_SHARES) ? (
                     <React.Fragment>
-                      <DecimalValue value={gasCostEstimation} decimals={4} />
-                      {' '}
-                      ETH
+                      <DecimalValue value={gasCostEstimation} decimals={4} /> ETH
                     </React.Fragment>
                   ) : (
                     <IndefiniteSpinner width={16} height={16} />
@@ -241,7 +223,7 @@ Gas Costs
               <div className={cx('row', 'infoRow')}>
                 <div className={cx('col-xs-10', 'col-xs-offset-1')}>
                   <InteractionButton
-                    className={cx('btn', 'btn-primary', 'col-xs-12')}
+                    className={cx('btn', 'btn-primary')}
                     disabled={submitDisabled}
                     error={submitDisabledReason}
                     loading={submitting || local}
