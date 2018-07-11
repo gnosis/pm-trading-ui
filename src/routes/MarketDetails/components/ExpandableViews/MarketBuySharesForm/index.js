@@ -14,15 +14,15 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { TextInput, TextInputAdornment, MandatoryHint } from 'components/Form'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import { getOutcomeTokenCount, getMaximumWin, getPercentageWin } from './utils'
+import {
+  getOutcomeTokenCount, getMaximumWin, getPercentageWin, NUMBER_REGEXP,
+} from './utils'
 import OutcomeSection from './OutcomesSection'
 import SubmitError from './SubmitError'
 import LimitMarginAnnotation from './LimitMarginAnnotation'
 import style from './marketBuySharesForm.mod.scss'
 
 const cx = cn.bind(style)
-
-export const NUMBER_REGEXP = /^-?\d+\.?\d*$/
 
 class MarketBuySharesForm extends Component {
   componentDidMount() {
@@ -35,27 +35,6 @@ class MarketBuySharesForm extends Component {
     if (!isGasPriceFetched) {
       requestGasPrice()
     }
-  }
-
-  @autobind
-  handleBuyShares() {
-    const {
-      market, buyShares, selectedBuyInvest, reset, defaultAccount, selectedOutcome, limitMargin,
-    } = this.props
-
-    const outcomeTokenCount = getOutcomeTokenCount(market, selectedBuyInvest, selectedOutcome, limitMargin)
-
-    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
-      .then(() => {
-        // Fetch new trades
-        this.props.fetchMarketTrades(market)
-        // Fetch new market participant trades
-        this.props.fetchMarketTradesForAccount(market.address, defaultAccount)
-        // Fetch new shares
-        this.props.fetchMarketShares(defaultAccount)
-        return reset()
-      })
-      .catch(e => console.error(e))
   }
 
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
@@ -88,6 +67,36 @@ class MarketBuySharesForm extends Component {
     }
 
     return undefined
+  }
+
+  @autobind
+  handleBuyShares() {
+    const {
+      market,
+      buyShares,
+      selectedBuyInvest,
+      reset,
+      defaultAccount,
+      selectedOutcome,
+      limitMargin,
+      fetchMarketTrades,
+      fetchMarketTradesForAccount,
+      fetchMarketShares,
+    } = this.props
+
+    const outcomeTokenCount = getOutcomeTokenCount(market, selectedBuyInvest, selectedOutcome, limitMargin)
+
+    return buyShares(market, selectedOutcome, outcomeTokenCount, selectedBuyInvest)
+      .then(() => {
+        // Fetch new trades
+        fetchMarketTrades(market)
+        // Fetch new market participant trades
+        fetchMarketTradesForAccount(market.address, defaultAccount)
+        // Fetch new shares
+        fetchMarketShares(defaultAccount)
+        return reset()
+      })
+      .catch(e => console.error(e))
   }
 
   render() {

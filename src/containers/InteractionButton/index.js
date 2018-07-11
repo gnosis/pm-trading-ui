@@ -54,6 +54,7 @@ class InteractionButton extends Component {
       disableWalletCheck,
       error,
     } = this.props
+    const { loading: loadingState } = this.state
 
     if (whitelistRequired && !whitelisted) {
       return null
@@ -69,7 +70,7 @@ class InteractionButton extends Component {
     const networkError = !correctNetwork
 
     // loading from props or uninitialized gnosisjs
-    const isLoading = loading || !gnosisInitialized || this.state.loading
+    const isLoading = loading || !gnosisInitialized || loadingState
 
     // disabled from props or wallet error or network error
     const isDisabled = disabled || walletError || networkError
