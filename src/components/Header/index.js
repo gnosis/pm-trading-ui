@@ -43,6 +43,7 @@ class Header extends Component {
     }
 
     if (currentAccount) {
+      requestTokenBalance(currentAccount)
       this.balanceFetcher = setInterval(() => requestTokenBalance(currentAccount), BALANCE_FETCH_INTERVAL)
 
       if (tournamentEnabled) {
