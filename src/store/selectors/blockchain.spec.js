@@ -1,5 +1,9 @@
-import { isGnosisInitialized, isConnectedToBlockchain, getTokenAmount, getCollateralToken } from 'store/selectors/blockchain'
-import { getGasPrice, getGasCosts, isGasCostFetched, isGasPriceFetched } from 'routes/MarketDetails/store/selectors'
+import {
+  isGnosisInitialized, isConnectedToBlockchain, getTokenAmount, getCollateralToken,
+} from 'store/selectors/blockchain'
+import {
+  getGasPrice, getGasCosts, isGasCostFetched, isGasPriceFetched,
+} from 'routes/MarketDetails/store/selectors'
 import { ProviderRecord } from 'integrations/store/models'
 
 import { Map } from 'immutable'

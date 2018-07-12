@@ -14,12 +14,13 @@ const ScalarSlider = ({
   const bigUpperBound = new Decimal(upperBound)
 
   // for the value we show atleast 2 decimalplaces, so users can see a change when they enter an investment
-  const displayDecimals = Math.max(decimals, 2)
+  const displayDecimals = Math.max(decimals, 0)
+  const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
 
   // current value
-  const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
   const value = new Decimal(marginalPriceCurrent).mul(bounds).add(bigLowerBound.div(10 ** displayDecimals))
   const percentage = new Decimal(marginalPriceCurrent).mul(100)
+
   const selectedValue = new Decimal(marginalPriceSelected).mul(bounds).add(bigLowerBound.div(10 ** displayDecimals))
   const selectedPercentage = new Decimal(marginalPriceSelected).mul(100)
 

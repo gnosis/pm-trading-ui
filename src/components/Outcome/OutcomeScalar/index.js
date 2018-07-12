@@ -37,6 +37,8 @@ const OutcomeScalar = ({
     .times(bounds)
     .add(lower)
 
+  const currentValueStyle = { left: `${marginalPrice.mul(100).toFixed(5)}%` }
+
   if (showOnlyWinningOutcome) {
     value = Decimal(winningOutcome).div(10 ** decimals)
     marginalPrice = value.div(upperBound)
@@ -62,7 +64,7 @@ const OutcomeScalar = ({
         </div>
         <div className={cx('currentPrediction')}>
           <div className={cx('currentPredictionLine')} />
-          <div className={cx('currentPredictionValue')} style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>
+          <div className={cx('currentPredictionValue')} style={currentValueStyle}>
             <DecimalValue value={value} decimals={decimals} />
             &nbsp;
             {unit}
