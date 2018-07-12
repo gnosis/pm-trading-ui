@@ -3,7 +3,7 @@ import Decimal from 'decimal.js'
 import web3 from 'web3'
 import { weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, LIMIT_MARGIN } from 'utils/constants'
-import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
+import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm/utils'
 
 /**
  * @function
@@ -122,4 +122,6 @@ const validateTokenCount = (values, props) => {
   return {}
 }
 
-export { calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount }
+export {
+  calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount,
+}
