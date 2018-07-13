@@ -12,6 +12,7 @@ cache:
   - "$HOME/.npm"
 before_install:
 - npm i -g babel-cli webpack truffle-contract npm@latest
+- export REVIEW_FOLDER=$(basename $TRAVIS_BRANCH)
 after_success:
 - ./env_build.sh
 deploy:
@@ -113,7 +114,8 @@ deploy:
     secure: J3V9XlqZwJtSmuUSY+j5wVOEMfrTeYISnjSCT0oOPqgBr06UF52VyaykSW6xUV4N4lKRwbiUp5Y0mkPbg3Sdwz9n24bQr0hKu3GoyMRgFnSSv0XbyFI4dhwCPX3xiFplNt9NqTw2/673ohRMrZEe1GnxxbcPZfBglQz90x/Tt2wRKn9aXnq2NDfZ8Y42vMA1EknkG/Koyw9o33u917zIsoWhIINKtkRC/zovvuGWONmFLu+i1JRFP08GflMqd1uEBhcwj2XHKtgB8Q6/hISxBaFH+RhyfhWY0hEEfuRgDYvxesWoDNGRkJC4SB0lkQ40mdAMOp4xShzsH9HhanLMuNZt6GsMsFQcc4tkFmEsxpyLlwGIL5WKOsHsWLHxyGsKyqqh6ALTlFXxX73CE83A1xUDBhrZQBuam3XC7rWBzYl6mUzvvYmulI7rR1VsYrHD8RqFKikdHNR4Uzp+h2KEDkxZBHI5JUOK4HC7rrQO9dgaM4Cd5lUcEYY5i0CmusoUUWQriOE5QBBnfv1hJrb2SsUF1m7bFSRcl+NL5wtfZooert6ZlA//08BgQGDn3XQHgiOfqlWMOPKxg1m9OW3PMB8bEuy51xwqIdJFBf3Q99yg9GoMtO9xNlOv63GaOjKG8ZdN7m06JwD7fKTR+SBWkDqDhcShifKbbqFfSlg/tRM=
   skip_cleanup: true
   local_dir: dist
-  upload-dir: pmtrading/test
+  upload-dir: pmtrading/$REVIEW_FOLDER
   on:
     branch: feature/review-pull-requests
+    condition: -z "$PROJECT" && $TRAVIS_PULL_REQUEST = false
     # condition: $TRAVIS_PULL_REQUEST != false
