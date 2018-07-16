@@ -14,20 +14,12 @@ const MarketOverview = () => (
       <Img src={marketoverview1} width={1140} bordered />
     </Block>
     <Paragraph>
-      Once logged in, you&apos;ll find <Bold>200 OLY tokens</Bold> in your wallet which you can use to make predictions
-      on various topics.
-    </Paragraph>
-    <Paragraph>
       Using your OLY tokens, you can participate in prediction markets of your choice via the Markets page. The Markets
       page provides an overview of all prediction markets. Throughout the tournament, new prediction markets with
       varying resolution dates will be offered to keep challenging your predictive skills.
     </Paragraph>
     <Paragraph>
-      Every two days, we will topup your balance with new OLY tokens that can be used to trade, unlock new badges, and
-      climb up the scoreboard.
-    </Paragraph>
-    <Paragraph>
-      The tournament runs for an entire month, after which the final scoreboard will be released and winners announced.
+    The tournament runs for two days during DappCon. At the end of the conference, the final scoreboard will be released and winners announced and rewarded.
     </Paragraph>
   </Block>
 )

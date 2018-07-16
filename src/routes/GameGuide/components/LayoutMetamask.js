@@ -16,7 +16,6 @@ const GameGuide = () => (
     <DashboardOverview />
     <MakePrediction />
     <Profits />
-    <ClaimRewards />
   </PageFrame>
 )
 
