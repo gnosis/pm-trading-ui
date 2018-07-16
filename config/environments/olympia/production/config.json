@@ -1,7 +1,7 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "gnosisdb-olympia.gnosis.pm",
+    "host": "tradingdb.staging.gnosisdev.com",
     "port": 443
   },
   "ethereum": {
@@ -10,6 +10,7 @@
     "port": 443
   },
   "whitelist": {
-    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama"
-  }
+    "0xd3b2b921AdE239cE4c571853d11b7C117EEffeF5": "Gnosis"
+  },
+  "hiddenMarkets": []
 }
