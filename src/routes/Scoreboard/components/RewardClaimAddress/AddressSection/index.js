@@ -10,7 +10,7 @@ const cx = cn.bind(style)
 
 const AddressSection = ({ hasRegistered, mainnetAddress, openSetMainnetAddressModal }) => (
   <Block className={cx('addressSection')}>
-    <Title className={cx('rewardClaimTitle')}>Your address</Title>
+    <Title className={cx('rewardClaimTitle')}>Your Address</Title>
     <Paragraph color="soft">{hasRegistered ? mainnetAddress : 'No address specified yet.'}</Paragraph>
     {!hasRegistered && (
       <button className={cx('button')} onClick={openSetMainnetAddressModal}>
