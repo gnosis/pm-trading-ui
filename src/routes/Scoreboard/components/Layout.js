@@ -34,7 +34,7 @@ class Layout extends React.PureComponent {
     const {
       data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank,
     } = this.props
-    const hasRows = data && data.size > 1
+    const hasRows = data && data.size > 0
     let rewardValue = 0
 
     levels.forEach((rewardLevel) => {
