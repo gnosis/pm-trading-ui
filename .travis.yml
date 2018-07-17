@@ -117,7 +117,7 @@ deploy:
   skip_cleanup: true
   local_dir: dist
   upload-dir: $REVIEW_FEATURE_FOLDER
-  on:  
+  on:
     branch: feature/review-pull-requests
     condition: -z "$PROJECT" && $TRAVIS_PULL_REQUEST = false
     # condition: $TRAVIS_PULL_REQUEST != false
