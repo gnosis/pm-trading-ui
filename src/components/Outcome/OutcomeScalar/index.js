@@ -45,20 +45,14 @@ const OutcomeScalar = ({
   }
 
   if (showOnlyTrendingOutcome) {
-    return (
-      <TrendingOutcomeScalar
-        predictedValue={value}
-        decimals={decimals}
-        unit={unit}
-      />
-    )
+    return <TrendingOutcomeScalar predictedValue={value} decimals={decimals} unit={unit} />
   }
 
   return (
     <div className={className}>
       <div className={cx('scalarOutcome')}>
         <div className={cx('outcomeBound', 'lower')}>
-          <DecimalValue value={lower} decimals={decimals} />
+          {lower.toNumber().toLocaleString()}
           &nbsp;
           {unit}
         </div>
@@ -71,7 +65,7 @@ const OutcomeScalar = ({
           </div>
         </div>
         <div className={cx('outcomeBound', 'upper')}>
-          <DecimalValue value={upper} decimals={decimals} />
+          {upper.toNumber().toLocaleString()}
           &nbsp;
           {unit}
         </div>
