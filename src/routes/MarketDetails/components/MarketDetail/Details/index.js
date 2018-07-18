@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import ImmutableProptypes from 'react-immutable-proptypes'
 import moment from 'moment'
 import Decimal from 'decimal.js'
+import Markdown from 'react-markdown'
 import { LOWEST_VALUE } from 'utils/constants'
 import { marketShape, marketShareShape } from 'utils/shapes'
 import { isMarketClosed, isMarketResolved } from 'utils/helpers'
@@ -43,11 +44,23 @@ const Details = ({
     className: cx('outcomes'),
   }
 
+  /* eslint-disable */
+  const markdownRenderers = {
+    link: props => (
+      <a href={props.href} target="_blank" rel="noopener noreferrer">
+        {props.children}
+      </a>
+    ),
+  }
+  /* eslint-enable */
+
   return (
     <div className={cx('col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0')}>
-      <div className={cx('marketDescription')}>
-        <p className={cx('text')}>{market.eventDescription.description}</p>
-      </div>
+      <Markdown
+        className={cx('marketDescription')}
+        source={market.eventDescription.description}
+        renderers={markdownRenderers}
+      />
       <Outcome
         resolved={marketResolved}
         type={market.event.type}

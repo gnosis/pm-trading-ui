@@ -1,12 +1,19 @@
 .marketDescription {
   margin-bottom: 40px;
-  .text {
-    font-size: 18px;
-    line-height: 30px;
-    letter-spacing: 0.25px;
-    font-weight: 300;
+  font-size: 18px;
+  line-height: 30px;
+  letter-spacing: 0.25px;
+  font-weight: 300;
+
+  a {
+    color: #00a6c4;
+
+    &:focus, &:visited {
+      color: #00a6c4;
+    }
   }
 }
+
 
 .outcomes {
   margin-bottom: 40px;
