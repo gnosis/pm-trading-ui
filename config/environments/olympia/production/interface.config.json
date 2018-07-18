@@ -10,12 +10,12 @@
   },
   "registration": {
     "enabled": true,
-    "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
+    "contractAddress": "0xc1b7c0468987f78eb0d8744c6c78faf44b5b3783"
   },
   "collateralToken": {
     "source": "address",
     "options": {
-      "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
+      "address": "0x05bd5d6c4f4040cf6de3b18fcf18eda474a58b9c",
       "symbol": "OLY",
       "icon": "/assets/img/icons/icon_oly.png"
     }
@@ -57,7 +57,7 @@
       {
         "type": "TOS_TEXT",
         "id": "address_public",
-        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard"
+        "text": "I understand and agree that my wallet address will be publicly displayed on the scoreboard"
       }
     ]
   },
