@@ -10,7 +10,7 @@
   },
   "registration": {
     "enabled": true,
-    "contractAddress": "0xc1b7c0468987f78eb0d8744c6C78faf44b5b3783"
+    "contractAddress": "0x6427D856450b20F6FaB88bE18d949FaF9C4DA512"
   },
   "collateralToken": {
     "source": "address",
