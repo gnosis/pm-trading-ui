@@ -4,7 +4,7 @@ import { getConstant } from 'utils/features'
 export const RESOLUTION_TIME = {
   RELATIVE_FORMAT: 'y[Y] M[M] D[D] h[hrs] m[mins]',
   RELATIVE_LONG_FORMAT: 'y[ years] M[ months] D[ days] h[ hours] m[ minutes and] s[ seconds left]',
-  ABSOLUTE_FORMAT: 'D MMM Y LT',
+  ABSOLUTE_FORMAT: 'D MMM Y HH:mm',
 }
 
 export const OUTCOME_TYPES = {
