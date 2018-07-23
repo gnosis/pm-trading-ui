@@ -11,7 +11,11 @@ const OutcomesSectionCategorical = (props) => {
   const {
     selectedBuyInvest,
     selectedOutcome,
-    market: { funding, netOutcomeTokensSold, eventDescription: { outcomes } },
+    market: {
+      funding,
+      netOutcomeTokensSold,
+      eventDescription: { outcomes },
+    },
     outcomeTokenCount,
   } = props
   const canRunSimulation = selectedBuyInvest && selectedOutcome
@@ -46,7 +50,7 @@ const OutcomesSectionCategorical = (props) => {
       <div className="row">
         <div className="col-md-12">
           <h2>
-Your Trade
+            Your Trade
             <MandatoryHint />
           </h2>
         </div>

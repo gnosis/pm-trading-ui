@@ -4,7 +4,10 @@ import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import moment from 'moment'
 import CurrencyName from 'components/CurrencyName'
-import { RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES } from 'utils/constants'
+import DecimalValue from 'components/DecimalValue'
+import {
+  RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES,
+} from 'utils/constants'
 import { getOutcomeName, weiToEth } from 'utils/helpers'
 import { marketShape, marketTradeShape } from 'utils/shapes'
 import TableHeader from './TableHeader'
@@ -33,14 +36,20 @@ class MarketMyTrades extends Component {
   }
 
   componentDidMount() {
-    const { market, marketTrades, defaultAccount } = this.props
-    if (!marketTrades || marketTrades.length === 0) {
-      this.props.fetchMarketTradesForAccount(market.address, defaultAccount)
-    }
+    const {
+      market, defaultAccount, fetchMarketTradesForAccount,
+    } = this.props
+    fetchMarketTradesForAccount(market.address, defaultAccount)
   }
 
   renderTrades() {
-    const { market, marketTrades, market: { event: { type } } } = this.props
+    const {
+      market,
+      marketTrades,
+      market: {
+        event: { type },
+      },
+    } = this.props
     const colorScheme = type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
 
     const tableRowElements = marketTrades.map((trade) => {
@@ -53,13 +62,12 @@ class MarketMyTrades extends Component {
 
       let tradeCost = '0'
       if (trade.cost !== 'None') {
+        const tradeCostEth = Decimal(weiToEth(trade.cost))
         tradeCost = (
-          <Fragment>
-            {Decimal(weiToEth(trade.cost))
-              .toDP(2, 1)
-              .toString()}&nbsp;
+          <>
+            {tradeCostEth.lt(0.0001) ? '< 0.0001' : <DecimalValue value={tradeCostEth} />}&nbsp;
             <CurrencyName tokenAddress={market.event.collateralToken} />
-          </Fragment>
+          </>
         )
       }
 
