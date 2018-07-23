@@ -10,7 +10,7 @@
     "port": 443
   },
   "whitelist": {
-    "0xd3b2b921AdE239cE4c571853d11b7C117EEffeF5": "Gnosis"
+    "0xd3b2b921ade239ce4c571853d11b7c117eeffef5": "Gnosis"
   },
   "hiddenMarkets": []
 }

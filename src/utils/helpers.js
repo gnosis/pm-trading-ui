@@ -1,4 +1,6 @@
-import { mapValues, startsWith, isArray, range } from 'lodash'
+import {
+  mapValues, startsWith, isArray, range,
+} from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
 import moment from 'moment'
@@ -27,8 +29,7 @@ export const normalizeHex = value => hexWithPrefix(value).toLowerCase()
 
 export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
 
-export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) =>
-  stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
+export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) => stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
 
 export const toEntity = (data, entityType, idKey = 'address') => {
   const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
@@ -97,15 +98,13 @@ export const normalizeScalarPoint = (
     .toNumber()
 }
 
-export const restFetch = url =>
-  fetch(url)
-    .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
-    .then(res => res.json())
-    .catch(err =>
-      new Promise((resolve, reject) => {
-        console.warn(`Gnosis DB: ${err}`)
-        reject(err)
-      }))
+export const restFetch = url => fetch(url)
+  .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
+  .then(res => res.json())
+  .catch(err => new Promise((resolve, reject) => {
+    console.warn(`Gnosis DB: ${err}`)
+    reject(err)
+  }))
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
@@ -130,19 +129,17 @@ export const bemifyClassName = (className, element, modifier) => {
   return ''
 }
 
-export const timeoutCondition = (timeout, rejectReason) =>
-  new Promise((_, reject) => {
-    setTimeout(() => {
-      reject(rejectReason)
-    }, timeout)
-  })
+export const timeoutCondition = (timeout, rejectReason) => new Promise((_, reject) => {
+  setTimeout(() => {
+    reject(rejectReason)
+  }, timeout)
+})
 
 /**
  * Determines if an account is a Moderator
  * @param {*string} accountAddress
  */
-export const isModerator = accountAddress =>
-  (Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false)
+export const isModerator = accountAddress => (Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false)
 
 export const getModerators = () => config.whitelist
 
@@ -168,7 +165,7 @@ export const getGnosisJsOptions = (provider) => {
   return opts
 }
 
-const BLOCKED_WORD_LIST = ['sexual', 'african', 'american', 'european', 'asian', 'israeli']
+const BLOCKED_WORD_LIST = ['sexual', 'african', 'american', 'european', 'asian', 'israeli', 'jewish', 'arab', 'christian', 'slave', 'russian']
 
 export const generateDeterministicRandomName = (seed) => {
   const rng = seedrandom(seed.toLowerCase(), { state: true })
