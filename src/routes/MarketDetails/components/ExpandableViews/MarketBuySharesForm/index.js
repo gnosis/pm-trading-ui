@@ -142,11 +142,7 @@ class MarketBuySharesForm extends Component {
     let maxReturnField
 
     if (!isValid) {
-      fieldError = (
-        <span className={cx('invalidParam')}>
---
-        </span>
-      )
+      fieldError = <span className={cx('invalidParam')}>--</span>
     } else {
       const colorSource = type === OUTCOME_TYPES.CATEGORICAL ? COLOR_SCHEME_DEFAULT : COLOR_SCHEME_SCALAR
       const outcomeColorStyles = {
@@ -166,9 +162,7 @@ class MarketBuySharesForm extends Component {
       maxReturnField = (
         <span className={cx('marketBuyWin', 'winInfoRow', 'max')}>
           {returnSign}
-          <DecimalValue value={percentageWin} />
-          {' '}
-%&nbsp; (
+          <DecimalValue value={percentageWin} /> %&nbsp; (
           <DecimalValue value={maximumWin} />
           &nbsp;
           <CurrencyName tokenAddress={collateralToken} />
@@ -207,31 +201,19 @@ class MarketBuySharesForm extends Component {
                 </div>
               </div>
               <div className={cx('row', 'infoRow')}>
-                <div className={cx('col-md-6')}>
-Token Count
-                </div>
-                <div className={cx('col-md-6')}>
-                  {fieldError || tokenCountField}
-                </div>
+                <div className={cx('col-md-6')}>Token Count</div>
+                <div className={cx('col-md-6')}>{fieldError || tokenCountField}</div>
               </div>
               <div className={cx('row', 'infoRow')}>
-                <div className={cx('col-md-6')}>
-Maximum return
-                </div>
-                <div className={cx('col-md-6')}>
-                  {fieldError || maxReturnField}
-                </div>
+                <div className={cx('col-md-6')}>Maximum return</div>
+                <div className={cx('col-md-6')}>{fieldError || maxReturnField}</div>
               </div>
               <div className={cx('row', 'infoRow')}>
-                <div className={cx('col-md-6')}>
-Gas Costs
-                </div>
+                <div className={cx('col-md-6')}>Gas Costs</div>
                 <div className={cx('col-md-6')}>
                   {isGasPriceFetched && isGasCostFetched(GAS_COST.BUY_SHARES) ? (
                     <React.Fragment>
-                      <DecimalValue value={gasCostEstimation} decimals={4} />
-                      {' '}
-ETH
+                      <DecimalValue value={gasCostEstimation} decimals={4} /> ETH
                     </React.Fragment>
                   ) : (
                     <IndefiniteSpinner width={16} height={16} />
