@@ -1,5 +1,7 @@
 import { List } from 'immutable'
-import { BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord } from 'store/models'
+import {
+  BoundsRecord, CategoricalMarketRecord, ScalarMarketRecord, OutcomeRecord,
+} from 'store/models'
 import { isMarketClosed } from 'store/utils/marketStatus'
 import { OUTCOME_TYPES } from 'utils/constants'
 
@@ -8,24 +10,22 @@ const buildOutcomesFrom = (outcomes, outcomeTokensSold, marginalPrices) => {
     return List([])
   }
 
-  const outcomesRecords = outcomes.map((outcome, index) =>
-    new OutcomeRecord({
-      name: outcome,
-      index,
-      marginalPrice: marginalPrices[index],
-      outcomeTokensSold: outcomeTokensSold[index],
-    }))
+  const outcomesRecords = outcomes.map((outcome, index) => new OutcomeRecord({
+    name: outcome,
+    index,
+    marginalPrice: marginalPrices[index],
+    outcomeTokensSold: outcomeTokensSold[index],
+  }))
 
   return List(outcomesRecords)
 }
 
-const buildBoundsFrom = (lower, upper, unit, decimals) =>
-  BoundsRecord({
-    lower,
-    upper,
-    unit,
-    decimals: parseInt(decimals, 10),
-  })
+const buildBoundsFrom = (lower, upper, unit, decimals) => BoundsRecord({
+  lower,
+  upper,
+  unit,
+  decimals: parseInt(decimals, 10),
+})
 
 const buildScalarMarket = (market) => {
   const {
@@ -58,7 +58,7 @@ const buildScalarMarket = (market) => {
   const bounds = buildBoundsFrom(lowerBound, upperBound, unit, decimals)
 
   const resolved = isOutcomeSet || isWinningOutcomeSet
-  const closed = isMarketClosed(market)
+  const closed = isMarketClosed({ stage, resolution: resolutionDate })
 
   const marketRecord = new ScalarMarketRecord({
     title,
@@ -111,7 +111,7 @@ const buildCategoricalMarket = (market) => {
   const outcomes = buildOutcomesFrom(outcomeLabels, netOutcomeTokensSold, market.marginalPrices)
 
   const resolved = isOutcomeSet || isWinningOutcomeSet
-  const closed = isMarketClosed(market)
+  const closed = isMarketClosed({ stage, resolution: resolutionDate })
 
   const marketRecord = new CategoricalMarketRecord({
     title,

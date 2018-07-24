@@ -1,9 +1,9 @@
 import moment from 'moment'
 import { MARKET_STAGES } from 'store/models'
 
-export const isMarketClosed = ({ stage, resolutionDate }) => {
+export const isMarketClosed = ({ stage, resolution }) => {
   const stageClosed = stage !== MARKET_STAGES.MARKET_FUNDED
-  const marketExpired = moment.utc(resolutionDate).isBefore(moment.utc())
+  const marketExpired = moment.utc(resolution).isBefore(moment.utc())
 
   const marketClosed = stageClosed || marketExpired
   return marketClosed
