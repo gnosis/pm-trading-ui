@@ -8,7 +8,6 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { Link } from 'react-router-dom'
 import { RESOLUTION_TIME } from 'utils/constants'
-import { marketRecordShape } from 'utils/shapes'
 import { ORDER_TYPE_BUY, ORDER_TYPE_SELL } from 'store/models/trade'
 import { OutcomeRecord } from 'store/models/market'
 
