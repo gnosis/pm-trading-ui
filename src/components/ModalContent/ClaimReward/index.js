@@ -60,7 +60,9 @@ class ClaimReward extends React.Component {
     const targetNetwork = ETHEREUM_NETWORK_IDS[rewardToken.networkId]
     const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardToken.networkId)
     const hasGasCosts = typeof gasPrice !== 'undefined' && typeof claimRewardGasCost !== 'undefined'
-    const gasCosts = Decimal(gasPrice || 0).mul(claimRewardGasCost || 0).div(1e18)
+    const gasCosts = Decimal(gasPrice || 0)
+      .mul(claimRewardGasCost || 0)
+      .div(1e18)
 
     const balance = Decimal(currentBalance)
 
@@ -88,9 +90,7 @@ class ClaimReward extends React.Component {
     } else if (claimState === 'error') {
       claimButton = (
         <Tooltip overlay="Unfortunately, the transaction failed. Please try again or contact our support for further assistance.">
-          <button className={cx('btn', 'btn-primary', 'claim')}>
-CLAIM
-          </button>
+          <button className={cx('btn', 'btn-primary', 'claim')}>CLAIM</button>
         </Tooltip>
       )
     } else if (!canClaim) {
@@ -114,47 +114,31 @@ CLAIM
         <button className={cx('closeButton')} onClick={closeModal} />
         <div className={cx('claimContainer')}>
           <h4 className={cx('heading')}>
-Claim
+            Claim
             {rewardToken.symbol}
           </h4>
           <p className={cx('annotation')}>
-            In order to claim your
-            {' '}
+            In order to claim your{' '}
             <span className={cx('rewardInfo')}>
-              {rewardValue}
-              {' '}
-              {rewardToken.symbol}
-            </span>
-            {' '}
-            tokens, you first have to switch to the
-            {' '}
-            <span className={cx('network')}>
-              {targetNetwork}
-            </span>
-            {' '}
-network in
+              {rewardValue} {rewardToken.symbol}
+            </span>{' '}
+            tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in
             your MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request.
-            More information in
-            {' '}
+            More information in{' '}
             <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
               FAQ
             </Link>
-.
+            .
           </p>
           <div className={cx('currentNetworkContainer')}>
             Current network:
-            <span className={cx('network', { wrongNetwork: isWrongNetwork })}>
-              {currentNetwork}
-            </span>
+            <span className={cx('network', { wrongNetwork: isWrongNetwork })}>{currentNetwork}</span>
           </div>
           {!isWrongNetwork && (
             <p className={cx('gasCosts')}>
-              Estimated Gas Costs:
-              {' '}
+              Estimated Gas Costs:{' '}
               {hasGasCosts ? (
-                <b className={cx('gasEstimation')}>
-                  {decimalToText(gasCosts)}
-                </b>
+                <b className={cx('gasEstimation')}>{decimalToText(gasCosts)}</b>
               ) : (
                 <IndefiniteSpinner width={18} height={18} />
               )}

@@ -212,9 +212,9 @@ class MarketBuySharesForm extends Component {
                 <div className={cx('col-md-6')}>Gas Costs</div>
                 <div className={cx('col-md-6')}>
                   {isGasPriceFetched && isGasCostFetched(GAS_COST.BUY_SHARES) ? (
-                    <React.Fragment>
+                    <>
                       <DecimalValue value={gasCostEstimation} decimals={4} /> ETH
-                    </React.Fragment>
+                    </>
                   ) : (
                     <IndefiniteSpinner width={16} height={16} />
                   )}

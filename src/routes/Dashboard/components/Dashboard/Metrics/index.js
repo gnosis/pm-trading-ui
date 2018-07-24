@@ -42,7 +42,7 @@ const Metrics = ({
         <CurrencyName tokenAddress={collateralToken.address} />
       </Metric>
       {tournamentEnabled && (
-        <React.Fragment>
+        <>
           <Metric isLoading={typeof rank === 'undefined'} src={arrows} explanation="YOUR RANK">
             <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
           </Metric>
@@ -55,7 +55,7 @@ const Metrics = ({
           >
             <Block className={cx('badgeTitle')}>{badge.rank}</Block>
           </Metric>
-        </React.Fragment>
+        </>
       )}
     </div>
   </div>

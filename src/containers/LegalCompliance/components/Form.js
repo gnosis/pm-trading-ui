@@ -45,11 +45,11 @@ const LegalCompliance = ({
         <p className={cx('explanation')}>
           For using {applicationName}
           , you have to agree with our&nbsp;
-          <React.Fragment>
+          <>
             {documents
               .map(doc => <DocumentExplanation {...doc} />)
               .reduce((acc, elem) => [...acc, <span> and </span>, elem], [])}
-          </React.Fragment>
+          </>
           .
         </p>
       )}

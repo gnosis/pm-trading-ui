@@ -190,11 +190,11 @@ class ShareSellView extends Component {
                   </label>
                   <span>
                     {isGasPriceFetched && isGasCostFetched(GAS_COST.SELL_SHARES) ? (
-                      <React.Fragment>
+                      <>
                         <DecimalValue value={gasCostEstimation} decimals={5} />
                         &nbsp;
                         <CurrencyName tokenAddress={market.collateralToken} />
-                      </React.Fragment>
+                      </>
                     ) : (
                       <IndefiniteSpinner width={16} height={16} />
                     )}
