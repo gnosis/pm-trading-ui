@@ -36,7 +36,7 @@ const Trade = ({
         {outcomeToken.name}
       </div>
       <div className={cx('tradeAmount', 'col-md-4')}>
-        <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokensSold)} />&nbsp;
+        <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokenCount)} />&nbsp;
         {collateralTokenAddress ? <CurrencyName tokenAddress={collateralTokenAddress} /> : <span>ETH</span> }
       </div>
       <div className={cx('tradePrice', 'col-md-5')}>

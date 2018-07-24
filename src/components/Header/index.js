@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
 import { upperFirst } from 'lodash'
 import className from 'classnames/bind'
-import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
@@ -101,10 +100,10 @@ class Header extends Component {
       acceptedTOS,
     } = this.props
 
-    let walletConnected = hasWallet
+    let canInteract = (acceptedTOS || !legalComplianceEnabled) && hasWallet && !!currentProvider
 
     if (tournamentEnabled && useMetamask && requireRegistration) {
-      walletConnected = hasWallet && !!mainnetAddress
+      canInteract = hasWallet && !!mainnetAddress
     }
 
     const logoVars = {}
@@ -129,8 +128,6 @@ class Header extends Component {
         )
       }
     }
-
-    const canInteract = (acceptedTOS || !legalComplianceEnabled) && walletConnected && !!currentProvider
 
     return (
       <div className={cx('headerContainer')}>
@@ -166,12 +163,12 @@ class Header extends Component {
                 {currentNetwork
                   && currentNetwork !== 'MAIN' && (
                   <span className={cx('network', 'text')}>
-Network:
+                      Network:
                     {upperFirst(currentNetwork.toLowerCase())}
                   </span>
                 )}
                 <DecimalValue value={tokenBalance} className={cx('text')} />
-&nbsp;
+                &nbsp;
                 {<span>
                   {tokenSymbol || 'ETH'}
                  </span>}

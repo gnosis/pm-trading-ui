@@ -31,9 +31,7 @@ class MarketMyTrades extends Component {
   }
 
   componentDidMount() {
-    const {
-      marketTrades, defaultAccount, fetchMarketTradesForAccount,
-    } = this.props
+    const { marketTrades, defaultAccount, fetchMarketTradesForAccount } = this.props
     if (!marketTrades || marketTrades.isEmpty() || !defaultAccount) {
       fetchMarketTradesForAccount(defaultAccount)
     }
@@ -43,14 +41,12 @@ class MarketMyTrades extends Component {
     const {
       market,
       marketTrades,
-      market: {
-        type,
-      },
+      market: { type },
     } = this.props
     const colorScheme = type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
 
     const tableRowElements = marketTrades.map((trade) => {
-      const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.get('index')] }
+      const outcomeColorStyle = { backgroundColor: colorScheme[trade.outcomeToken.index] }
       const tradeDate = moment
         .utc(trade.date)
         .local()
@@ -64,7 +60,7 @@ class MarketMyTrades extends Component {
             {Decimal(weiToEth(trade.price))
               .toDP(2, 1)
               .toString()}
-&nbsp;
+            &nbsp;
             <CurrencyName tokenAddress={market.collateralToken} />
           </Fragment>
         )
@@ -91,14 +87,10 @@ class MarketMyTrades extends Component {
     if (marketTrades && !marketTrades.isEmpty()) {
       return (
         <div className={cx('marketMyTrades')}>
-          <h2>
-My Trades
-          </h2>
+          <h2>My Trades</h2>
           <table className={cx('shareTable', 'table')}>
             <TableHeader />
-            <tbody>
-              {this.renderTrades()}
-            </tbody>
+            <tbody>{this.renderTrades()}</tbody>
           </table>
         </div>
       )
@@ -109,9 +101,7 @@ My Trades
         <h2>
           You haven&apos;t interacted with this market yet.
           <br />
-          <small>
-Every transaction that happens on this market will be shown here.
-          </small>
+          <small>Every transaction that happens on this market will be shown here.</small>
         </h2>
       </div>
     )

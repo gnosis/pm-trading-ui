@@ -6,6 +6,8 @@ const config = getConfiguration()
 
 const legalComplianceConfig = getFeatureConfig('legalCompliance')
 const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
+const isTournament = isFeatureEnabled('tournament')
+const requireRegistration = isFeatureEnabled('registration')
 
 const legalDocuments = legalComplianceConfig.documents || []
 
@@ -45,25 +47,24 @@ export const getCurrentAccount = (state) => {
   return undefined
 }
 
+export const getRegisteredMainnetAddress = (state) => {
+  const account = getCurrentAccount(state)
+
+  return account ? state.integrations.getIn(['accountSettings', account, 'mainnetAddress']) : undefined
+}
+
 export const hasAcceptedTermsAndConditions = (state) => {
   if (!legalComplianceEnabled) {
+    return true
+  }
+
+  if (isTournament && requireRegistration && getRegisteredMainnetAddress(state)) {
     return true
   }
 
   const requiredDocuments = List(legalDocuments.map(doc => doc.id))
   const documentsAccepted = state.integrations.get('documentsAccepted') || List()
   return documentsAccepted.isSuperset(requiredDocuments)
-}
-
-export const checkWalletConnection = (state) => {
-  const provider = getActiveProvider(state)
-  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
-
-  if (termsNotRequiredOrAccepted && provider && provider.account) {
-    return true
-  }
-
-  return false
 }
 
 /**
@@ -137,6 +138,17 @@ export const isConnectedToCorrectNetwork = (state) => {
   return targetNetworkId === currentNetworkId
 }
 
+export const checkWalletConnection = (state) => {
+  const provider = getActiveProvider(state)
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state) || !!getRegisteredMainnetAddress(state)
+
+  if (termsNotRequiredOrAccepted && provider?.account) {
+    return true
+  }
+
+  return false
+}
+
 export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
 
 export const isOnWhitelist = (state) => {
@@ -147,12 +159,6 @@ export const isOnWhitelist = (state) => {
   }
 
   return false
-}
-
-export const getRegisteredMainnetAddress = (state) => {
-  const provider = getActiveProvider(state)
-
-  return provider ? provider.mainnetAddress : undefined
 }
 
 export const isMetamaskLocked = (state) => {

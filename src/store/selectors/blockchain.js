@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 import { TOKEN_SOURCE_ADDRESS, TOKEN_SOURCE_CONTRACT, TOKEN_SOURCE_ETH } from 'store/actions/blockchain'
 import { getCurrentBalance } from 'integrations/store/selectors'
-import { weiToEth, hexWithPrefix } from 'utils/helpers'
+import { weiToEth, hexWithPrefix, normalizeHex } from 'utils/helpers'
 
 /**
  * Returns if gnosis.js is initialized or not
@@ -26,8 +26,7 @@ export const getTokenAmount = (state, tokenAddress) => {
   return defaultTokenDecimal
 }
 
-export const getTokenSymbol = (state, tokenAddress) =>
-  state.blockchain.getIn(['tokenSymbols', hexWithPrefix(tokenAddress)])
+export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['tokenSymbols', hexWithPrefix(tokenAddress)])
 
 /**
  * @param {*} state - redux state
@@ -43,7 +42,7 @@ export const getCollateralToken = (state) => {
     if (address) {
       return {
         ...collateralToken,
-        balance: weiToEth(getTokenAmount(state, address)),
+        balance: weiToEth(getTokenAmount(state, normalizeHex(address))),
       }
     }
   } else if (source === TOKEN_SOURCE_CONTRACT) {
@@ -51,7 +50,7 @@ export const getCollateralToken = (state) => {
     if (address) {
       return {
         ...collateralToken,
-        balance: weiToEth(getTokenAmount(state, address)),
+        balance: weiToEth(getTokenAmount(state, normalizeHex(address))),
       }
     }
   } else if (source === TOKEN_SOURCE_ETH) {
