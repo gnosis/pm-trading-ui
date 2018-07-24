@@ -3,7 +3,7 @@ import { MARKET_STAGES } from 'store/models'
 
 export const isMarketClosed = (stage, resolutionDate, resolved) => {
   const stageClosed = stage !== MARKET_STAGES.MARKET_FUNDED
-  const marketExpired = moment.utc(resolutionDate).isBefore(moment.utc())
+  const marketExpired = moment.utc(resolutionDate).local().isBefore(moment.utc().local())
   const marketResolved = resolved === true
 
   const marketClosed = stageClosed || marketExpired || marketResolved
