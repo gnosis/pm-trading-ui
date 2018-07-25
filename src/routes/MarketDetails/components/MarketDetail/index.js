@@ -8,7 +8,7 @@ import Decimal from 'decimal.js'
 import { GAS_COST } from 'utils/constants'
 import { Map, List } from 'immutable'
 import {
-  marketShape, marketShareShape, marketTradeShape, ReactRouterMatchShape,
+  marketShape, ReactRouterMatchShape,
 } from 'utils/shapes'
 import { isMarketResolved } from 'store/utils/marketStatus'
 import MarketGraph from 'routes/MarketDetails/components/MarketGraph'
@@ -174,9 +174,7 @@ class MarketDetail extends Component {
   renderLoading() {
     return (
       <div className={cx('container')}>
-        <div>
-Loading...
-        </div>
+        <div>Loading...</div>
       </div>
     )
   }
@@ -222,9 +220,7 @@ Loading...
     if (marketFetchError) {
       return (
         <div className={cx('container')}>
-          <div>
-            This market could not be found.
-          </div>
+          <div>This market could not be found.</div>
         </div>
       )
     }
@@ -238,9 +234,7 @@ Loading...
         <div className={cx('container')}>
           <div className={cx('row')}>
             <div className={cx('col-xs-10 col-xs-offset-1 col-sm-7 col-sm-offset-0')}>
-              <h1 className={cx('marketTitleHeading')}>
-                {market.title}
-              </h1>
+              <h1 className={cx('marketTitleHeading')}>{market.title}</h1>
             </div>
           </div>
         </div>
@@ -270,7 +264,7 @@ Loading...
         >
           {this.renderExpandableContent()}
         </div>
-        {/* <MarketGraph data={marketGraph} market={market} /> */}
+        <MarketGraph data={marketGraph} market={market} />
       </div>
     )
   }
@@ -279,7 +273,7 @@ Loading...
 MarketDetail.propTypes = {
   hasWallet: PropTypes.bool,
   marketShares: ImmutablePropTypes.list,
-  marketTrades: ImmutablePropTypes.map,
+  marketTrades: ImmutablePropTypes.list,
   marketGraph: PropTypes.arrayOf(PropTypes.object),
   defaultAccount: PropTypes.string,
   market: marketShape.isRequired,
@@ -301,7 +295,7 @@ MarketDetail.propTypes = {
 MarketDetail.defaultProps = {
   hasWallet: false,
   marketShares: List(),
-  marketTrades: Map(),
+  marketTrades: List(),
   marketGraph: [],
   defaultAccount: '',
   gasCosts: Map({}),

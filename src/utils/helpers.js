@@ -61,14 +61,11 @@ export const getOutcomeName = (market, index) => {
   return outcomeName
 }
 
-export const normalizeScalarPoint = (
-  marginalPrices,
-  { event: { lowerBound, upperBound }, eventDescription: { decimals } },
-) => {
+export const normalizeScalarPoint = (marginalPrices, { bounds: { lower, upper, decimals } }) => {
   const bigDecimals = parseInt(decimals, 10)
 
-  const bigUpperBound = Decimal(upperBound).div(10 ** bigDecimals)
-  const bigLowerBound = Decimal(lowerBound).div(10 ** bigDecimals)
+  const bigUpperBound = Decimal(upper).div(10 ** bigDecimals)
+  const bigLowerBound = Decimal(lower).div(10 ** bigDecimals)
 
   const bounds = bigUpperBound.sub(bigLowerBound)
   return Decimal(marginalPrices[1].toString())
@@ -81,10 +78,12 @@ export const normalizeScalarPoint = (
 export const restFetch = url => fetch(url)
   .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
   .then(res => res.json())
-  .catch(err => new Promise((resolve, reject) => {
-    console.warn(`Gnosis DB: ${err}`)
-    reject(err)
-  }))
+  .catch(
+    err => new Promise((resolve, reject) => {
+      console.warn(`Gnosis DB: ${err}`)
+      reject(err)
+    }),
+  )
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''

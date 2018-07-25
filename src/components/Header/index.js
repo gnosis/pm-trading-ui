@@ -137,9 +137,7 @@ class Header extends Component {
               <div className={cx('headerLogo', 'beta')} style={logoVars} />
             </NavLink>
           </div>
-          <div className={cx('group', 'left', 'version')}>
-            {version}
-          </div>
+          <div className={cx('group', 'left', 'version')}>{version}</div>
           <div className={cx('group', 'left', 'navLinks')}>
             {canInteract && (
               <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
@@ -169,9 +167,7 @@ class Header extends Component {
                 )}
                 <DecimalValue value={tokenBalance} className={cx('text')} />
                 &nbsp;
-                {<span>
-                  {tokenSymbol || 'ETH'}
-                 </span>}
+                {<span>{tokenSymbol || 'ETH'}</span>}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />

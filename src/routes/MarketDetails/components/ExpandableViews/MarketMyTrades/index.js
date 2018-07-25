@@ -3,7 +3,7 @@ import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import moment from 'moment'
-import { Map } from 'immutable'
+import { List } from 'immutable'
 import CurrencyName from 'components/CurrencyName'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import {
@@ -20,13 +20,13 @@ const cx = cn.bind(style)
 class MarketMyTrades extends Component {
   static propTypes = {
     market: ImmutablePropTypes.record.isRequired,
-    marketTrades: ImmutablePropTypes.map,
+    marketTrades: ImmutablePropTypes.list,
     defaultAccount: PropTypes.string.isRequired,
     fetchMarketTradesForAccount: PropTypes.func,
   }
 
   static defaultProps = {
-    marketTrades: Map(),
+    marketTrades: List(),
     fetchMarketTradesForAccount: () => {},
   }
 

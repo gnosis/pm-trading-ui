@@ -43,7 +43,7 @@ const mapStateToProps = (state, ownProps) => {
     return { market }
   }
 
-  // const marketGraph = getMarketGraph(market)(state)
+  const marketGraph = getMarketGraph(market)(state)
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const defaultAccount = getCurrentAccount(state)
@@ -63,7 +63,7 @@ const mapStateToProps = (state, ownProps) => {
     isModerator: isModerator(getCurrentAccount(state)),
     moderators: getModerators(),
     marketTrades,
-    // marketGraph,
+    marketGraph,
     isGasCostFetched: property => isGasCostFetched(state, property),
     isGasPriceFetched: isGasPriceFetched(state),
     gasCosts: getGasCosts(state),

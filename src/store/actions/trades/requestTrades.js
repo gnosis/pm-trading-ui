@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { List } from 'immutable'
 import sha1 from 'sha1'
 
 import { OUTCOME_TYPES } from 'utils/constants'

@@ -1,56 +1,70 @@
-// import { createSelector } from 'reselect'
-// import { normalizeScalarPoint, getOutcomeName } from 'utils/helpers'
-// import { OUTCOME_TYPES } from 'utils/constants'
+import { createSelector } from 'reselect'
+import { normalizeScalarPoint, getOutcomeName, normalizeHex } from 'utils/helpers'
+import { OUTCOME_TYPES } from 'utils/constants'
+import tradeSelector from 'store/selectors/account/trades'
 
-// import { getMarketTrades } from 'store/selectors/marketTrades'
+const getFirstGraphPoint = (market) => {
+  let firstPoint
+  if (OUTCOME_TYPES.SCALAR === market.type) {
+    firstPoint = {
+      date: new Date(market.creationDate).valueOf(),
+      scalarPoint: normalizeScalarPoint(['0.5', '0.5'], market),
+    }
+  } else if (OUTCOME_TYPES.CATEGORICAL === market.type) {
+    firstPoint = {
+      date: new Date(market.creationDate).valueOf(),
+      scalarPoint: undefined,
+      ...market.outcomes.reduce((prev, current) => {
+        const toReturn = {
+          ...prev,
+        }
+        toReturn[current] = 1 / market.outcomes.size
+        return toReturn
+      }, {}),
+    }
+  }
+  return firstPoint
+}
 
-// const getFirstGraphPoint = (market) => {
-//   let firstPoint
-//   if (OUTCOME_TYPES.SCALAR === market.type) {
-//     firstPoint = {
-//       date: new Date(market.creationDate).valueOf(),
-//       scalarPoint: normalizeScalarPoint(['0.5', '0.5'], market),
+const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().valueOf() })
+
+// const getMarketGraph = market => createSelector(
+//     tradeSelector,
+//     trades => {
+//         console.log(trades)
 //     }
-//   } else if (OUTCOME_TYPES.CATEGORICAL === market.type) {
-//     firstPoint = {
-//       date: new Date(market.creationDate).valueOf(),
-//       scalarPoint: undefined,
-//       ...market.eventDescription.outcomes.reduce((prev, current) => {
-//         const toReturn = {
-//           ...prev,
-//         }
-//         toReturn[current] = 1 / market.eventDescription.outcomes.length
-//         return toReturn
-//       }, {}),
-//     }
-//   }
-//   return firstPoint
-// }
+// )
 
-// const getLastGraphPoint = trades => ({ ...trades[trades.length - 1], date: new Date().valueOf() })
+const getMarketGraph = market => createSelector(tradeSelector, (trades) => {
+  const filteredTrades = trades.filter(
+    trade => normalizeHex(trade.eventAddress) === normalizeHex(market.eventAddress),
+  )
+  const firstPoint = getFirstGraphPoint(market)
 
-// const getMarketGraph = market => createSelector(getMarketTrades(market.address), (trades) => {
-//   const firstPoint = getFirstGraphPoint(market)
+  if (filteredTrades.isEmpty()) {
+    return [firstPoint, firstPoint]
+  }
 
-//   if (!trades.length) {
-//     return [firstPoint, firstPoint]
-//   }
+  const graphPoints = filteredTrades.reverse().map((trade) => {
+    const marginalPrices = trade.market.outcomes.map(outcome => outcome.marginalPrices)
+    return marginalPrices.reduce(
+      (prev, current, outcomeIndex) => {
+        const toReturn = { ...prev }
+        toReturn[getOutcomeName(market, outcomeIndex)] = current
+        return toReturn
+      },
+      {
+        date: new Date(trade.date).valueOf(),
+        scalarPoint:
+            OUTCOME_TYPES.SCALAR === market.type ? normalizeScalarPoint(trade.marginalPrices, market) : undefined,
+      },
+    )
+  })
+  const lastPoint = filteredTrades.length
+    ? getLastGraphPoint(graphPoints)
+    : { ...firstPoint, date: new Date().valueOf() }
 
-//   const graphPoints = trades.reverse().map(trade => trade.marginalPrices.reduce(
-//     (prev, current, outcomeIndex) => {
-//       const toReturn = { ...prev }
-//       toReturn[getOutcomeName(market, outcomeIndex)] = current
-//       return toReturn
-//     },
-//     {
-//       date: new Date(trade.date).valueOf(),
-//       scalarPoint:
-//             OUTCOME_TYPES.SCALAR === market.event.type ? normalizeScalarPoint(trade.marginalPrices, market) : undefined,
-//     },
-//   ))
-//   const lastPoint = trades.length ? getLastGraphPoint(graphPoints) : { ...firstPoint, date: new Date().valueOf() }
+  return [firstPoint, ...graphPoints, lastPoint]
+})
 
-//   return [firstPoint, ...graphPoints, lastPoint]
-// })
-
-// export default getMarketGraph
+export default getMarketGraph
