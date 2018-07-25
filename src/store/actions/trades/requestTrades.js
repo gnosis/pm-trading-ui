@@ -19,6 +19,7 @@ const extractTrade = (payload) => {
     owner,
     profit: rawProfit,
     orderType,
+    marginalPrices,
     date,
     eventDescription: { title: marketTitle, outcomes: marketOutcomeLabels } = {},
   } = payload
@@ -45,6 +46,7 @@ const extractTrade = (payload) => {
     marketType,
     owner,
     orderType,
+    marginalPrices,
   })
 
   return record

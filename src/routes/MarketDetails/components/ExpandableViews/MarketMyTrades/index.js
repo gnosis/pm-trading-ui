@@ -31,8 +31,8 @@ class MarketMyTrades extends Component {
   }
 
   componentDidMount() {
-    const { marketTrades, defaultAccount, fetchMarketTradesForAccount } = this.props
-    if (!marketTrades || marketTrades.isEmpty() || !defaultAccount) {
+    const { defaultAccount, fetchMarketTradesForAccount } = this.props
+    if (defaultAccount) {
       fetchMarketTradesForAccount(defaultAccount)
     }
   }

@@ -170,6 +170,7 @@ export const updateCollateralToken = () => async (dispatch) => {
 export const initGnosis = () => async (dispatch, getState) => {
   // initialize
   let newProvider
+  await dispatch(updateCollateralToken())
 
   try {
     const state = getState()
@@ -184,10 +185,6 @@ export const initGnosis = () => async (dispatch, getState) => {
       const opts = getGnosisJsOptions(newProvider)
       await initGnosisConnection(opts)
       await dispatch(setGnosisInitialized({ initialized: true }))
-
-      if (newProvider.account) {
-        await dispatch(updateCollateralToken())
-      }
     }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)
