@@ -14,15 +14,11 @@ const tradesWithMarketsSelector = createSelector(
   }),
 )
 
-const tradeSelector = createSelector(tradesWithMarketsSelector, getCollateralToken, (trades, collateralToken) => {
-  console.log(trades.toJS())
-  console.log(collateralToken)
-  return List(
-    trades
-      .filter(trade => typeof trade.market !== 'undefined' && trade.collateralTokenAddress === collateralToken.address)
-      .sortBy(trade => trade.date, (dateA, dateB) => (dateA.isBefore(dateB) ? 1 : -1))
-      .values(),
-  )
-})
+const tradeSelector = createSelector(tradesWithMarketsSelector, getCollateralToken, (trades, collateralToken) => List(
+  trades
+    .filter(trade => typeof trade.market !== 'undefined' && trade.collateralTokenAddress === collateralToken.address)
+    .sortBy(trade => trade.date, (dateA, dateB) => (dateA.isBefore(dateB) ? 1 : -1))
+    .values(),
+))
 
 export default tradeSelector
