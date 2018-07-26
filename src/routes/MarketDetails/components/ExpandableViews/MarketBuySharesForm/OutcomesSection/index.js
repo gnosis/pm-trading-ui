@@ -5,7 +5,9 @@ import OutcomesSectionCategorical from './OutcomesSectionCategorical'
 import OutcomesSectionScalar from './OutcomeSectionScalar'
 
 const BuySharesOutcomeSection = (props) => {
-  const { market: { event: { type } } } = props
+  const {
+    market: { type },
+  } = props
   if (type === OUTCOME_TYPES.CATEGORICAL) {
     return <OutcomesSectionCategorical {...props} />
   }

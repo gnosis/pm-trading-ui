@@ -60,4 +60,4 @@ Running Ganache-Cli
 In order to run this on a local blockchain, install ganache-cli `npm install ganache-cli -g` and run ganache-cli like so:
 `ganache-cli --gasLimit 400000000 -d -h 0.0.0.0`
 
-Afterwards, go into your gnosis folder (either `../gnosis.js` or `./node_modules/@gnosis.pm/gnosisjs/`) and run `npm run migrate` this will deploy all contracts to Ganache.
+Afterwards, go into your gnosis folder (either `../gnosis.js` or `./node_modules/@gnosis.pm/pm-js/`) and run `npm run migrate` this will deploy all contracts to Ganache.

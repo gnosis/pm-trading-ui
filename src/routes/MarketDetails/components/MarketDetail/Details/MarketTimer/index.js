@@ -20,14 +20,14 @@ const MarketTimer = ({
       })}
     >
       {showCountdown ? (
-        <Countdown target={market.eventDescription.resolutionDate} />
+        <Countdown target={market.resolution} />
       ) : (
         <div className={cx('timerLabel')}>Resolution Time</div>
       )}
     </div>
     <div className={cx({ marketTimerLive: !showCountdown, marketTimerAbsolute: showCountdown })}>
       {moment
-        .utc(market.eventDescription.resolutionDate)
+        .utc(market.resolution)
         .local()
         .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
     </div>

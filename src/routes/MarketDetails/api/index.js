@@ -1,7 +1,3 @@
 export { default as buyShares } from './buyShares'
 export { default as sellShares } from './sellShares'
-export { default as fetchMarketTrades } from './fetchMarketTrades'
-export { default as fetchMarketTradesForAccount } from './fetchMarketTradesForAccount'
-export { default as fetchMarketSharesForAccount } from './fetchMarketSharesForAccount'
-export { default as fetchMarket } from './fetchMarket'
 export * from './calculateGasCost'

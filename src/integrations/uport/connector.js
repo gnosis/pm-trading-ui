@@ -5,9 +5,9 @@ import { getProviderIntegrationConfig, isFeatureEnabled, getFeatureConfig } from
 import Bold from 'components/layout/Bold'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
+import { notificationsEnabled } from 'integrations/uport'
 import { isValid as isValidPushNotificaiton } from './uportNotifications'
 import { isValid as isValidQrCredential } from './uportQr'
-import { notificationsEnabled } from './connector'
 
 const termsOfUseConfig = getFeatureConfig('termsOfUse')
 
@@ -33,11 +33,15 @@ const LoginUport = () => (
   <Block id={UPORT_QR_TEXT}>
     <Paragraph style={UportStyle}>
       {'Log into '}
-      <Bold>{appName}</Bold>
+      <Bold>
+        {appName}
+      </Bold>
     </Paragraph>
     {!!termsOfUseConfig.url && (
       <Paragraph size="small">
-        By logging in via uPort, <br />
+        By logging in via uPort,
+        {' '}
+        <br />
         {` you agree to ${appName}'s `}
         <Bold>
           {/* <Link>s rendered outside of a router context cannot navigate */}

@@ -9,36 +9,34 @@ import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 
 const OutcomesSectionCategorical = (props) => {
   const {
-    selectedBuyInvest,
     selectedOutcome,
-    market: { funding, netOutcomeTokensSold, eventDescription: { outcomes } },
+    market: { funding, outcomeTokensSold, outcomes },
     outcomeTokenCount,
+    valid,
   } = props
-  const canRunSimulation = selectedBuyInvest && selectedOutcome
 
-  const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-  let marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
-    calcLMSRMarginalPrice({
-      netOutcomeTokensSold: marketTokenCounts,
-      outcomeTokenIndex,
-      funding,
-    }))
+  const canRunSimulation = valid && selectedOutcome
+  const marketTokenCounts = outcomeTokensSold.toArray().map(value => Decimal(value))
+  let marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+    netOutcomeTokensSold: marketTokenCounts,
+    outcomeTokenIndex,
+    funding,
+  }))
 
   // Run the simulation only if the amount user wants to invest is valid, by default values are set to current
   // Market's paramteters
   if (canRunSimulation) {
     marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
-    marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) =>
-      calcLMSRMarginalPrice({
-        netOutcomeTokensSold: marketTokenCounts,
-        outcomeTokenIndex,
-        funding,
-      }))
+    marginalPrices = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+      netOutcomeTokensSold: marketTokenCounts,
+      outcomeTokenIndex,
+      funding,
+    }))
   }
 
-  const categoricalOutcomes = outcomes.map((label, index) => ({
+  const categoricalOutcomes = outcomes.toArray().map((outcome, index) => ({
     index,
-    label,
+    label: outcome.name,
     color: COLOR_SCHEME_DEFAULT[index],
     probability: marginalPrices[index].mul(100),
   }))
@@ -67,12 +65,12 @@ const OutcomesSectionCategorical = (props) => {
 OutcomesSectionCategorical.propTypes = {
   market: marketShape.isRequired,
   selectedOutcome: PropTypes.string,
-  selectedBuyInvest: PropTypes.string,
+  valid: PropTypes.bool,
   outcomeTokenCount: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.number]).isRequired,
 }
 
 OutcomesSectionCategorical.defaultProps = {
-  selectedBuyInvest: '0',
+  valid: false,
   selectedOutcome: undefined,
 }
 

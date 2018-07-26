@@ -4,7 +4,9 @@ import cn from 'classnames/bind'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import {
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
+} from 'recharts'
 import CustomTooltip from '../CustomTooltip'
 import DateAxisTick from '../DateAxisTick'
 import style from '../MarketGraph.mod.scss'
@@ -21,7 +23,7 @@ const lineChartMargins = {
 }
 
 const CategoricalGraph = ({ data }) => {
-  const stacks = Object.keys(data[0]).slice(2)
+  const stacks = Object.keys(data[0]).filter(key => key !== 'date' && key !== 'scalarPoint')
   const z = scaleOrdinal(schemeDark2)
   z.domain(stacks)
   return (

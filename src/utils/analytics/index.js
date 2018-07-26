@@ -1,11 +1,11 @@
 import { isThirdPartyIntegrationEnabled, getThirdPartyConfig } from 'utils/features'
 
 import loadGoogleAnalytics, { THIRD_PARTY_ID as GOOGLE_ANALYTICS } from './google'
-import loadIntercom, { THIRD_PARTY_ID as INTERCOM } from './intercom'
+// import loadIntercom, { THIRD_PARTY_ID as INTERCOM } from './intercom'
 
 const THIRD_PARTY_INTEGRATIONS = {
   [GOOGLE_ANALYTICS]: loadGoogleAnalytics,
-  [INTERCOM]: () => {}, // TBD
+//  [INTERCOM]: () => {}, // TBD
 }
 
 const initAnalytics = () => {

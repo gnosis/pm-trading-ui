@@ -1,0 +1,145 @@
+{
+  "gnosisdb": {
+    "protocol": "https",
+    "host": "tradingdb.staging.gnosisdev.com",
+    "port": 443
+  },
+  "ethereum": {
+    "protocol": "https",
+    "host": "rinkeby.infura.io",
+    "port": 443
+  },
+  "whitelist": {
+    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama"
+  },
+  "logo": {
+    "regular": "assets/img/gnosis_logo_olympia.svg",
+    "small": "assets/img/gnosis_logo_olympia.svg",
+    "favicon": "assets/img/olympia_logo_favicon.png"
+  },
+  "tournament": {
+    "enabled": true,
+    "name": "Olympia"
+  },
+  "registration": {
+    "enabled": true,
+    "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
+  },
+  "collateralToken": {
+    "source": "address",
+    "options": {
+      "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
+      "symbol": "OLY",
+      "icon": "/assets/img/icons/icon_oly.png"
+    }
+  },
+  "providers": {
+    "default": "METAMASK",
+    "options": {
+      "UPORT": {
+        "appName": "Olympia",
+        "clientId": "2ooNzwDvjgZTPswkrewUnxokRUH8KYpRNNL",
+        "network": "rinkeby",
+        "privateKey": "a42611a039cad931c41e072953cb7dcaaa6b2dfefeff6a459d9ce4281acf0c01",
+        "useNotifications": false
+      }
+    }
+  },
+  "scoreboard": {
+    "enabled": true
+  },
+  "gameGuide": {
+    "enabled": true,
+    "type": "default"
+  },
+  "legalCompliance": {
+    "enabled": true,
+    "documents": [
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "terms_of_service",
+        "title": "Terms of Service",
+        "file": "/assets/content/TermsOfService.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "privacy_policy",
+        "title": "Privacy Policy",
+        "file": "/assets/content/PrivacyPolicy.html"
+      },
+      {
+        "type": "TOS_TEXT",
+        "id": "address_public",
+        "text": "I understand and agree that my wallet address will be pulblicily displayed on the scoreboard"
+      }
+    ]
+  },
+  "footer": {
+    "enabled": true,
+    "content": {
+      "type": "file",
+      "source": "",
+      "markdown": true
+    }
+  },
+  "rewardClaiming": {
+    "enabled": false,
+    "claimReward": {
+      "enabled": false,
+      "claimStart": "2018-06-01T12:00:00",
+      "claimUntil": "2018-07-01T12:00:00",
+      "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
+      "networkId": 42
+    }
+  },
+  "rewards": {
+    "enabled": true,
+    "rewardToken": {
+      "symbol": "GNO",
+      "contractAddress": "0xe46637882a11d3c90a24bd7c7529eb101f504705",
+      "networkId": 42
+    },
+    "levels": [
+      { "value": 30, "minRank": 1, "maxRank": 1 },
+      { "value": 20, "minRank": 2, "maxRank": 2 },
+      { "value": 10, "minRank": 3, "maxRank": 3 },
+      { "value": 8, "minRank": 4, "maxRank": 4 },
+      { "value": 7, "minRank": 5, "maxRank": 5 },
+      { "value": 5, "minRank": 6, "maxRank": 10 }
+    ]
+  },
+  "badges": {
+    "enabled": true,
+    "ranks": [
+      {
+        "icon": "assets/img/badges/junior-predictor.svg",
+        "rank": "Junior Predictor",
+        "minPredictions": 0,
+        "maxPredictions": 4
+      },
+      {
+        "icon": "assets/img/badges/crystal-gazer.svg",
+        "rank": "Crystal Gazer",
+        "minPredictions": 5,
+        "maxPredictions": 9
+      },
+      {
+        "icon": "assets/img/badges/fortune-teller.svg",
+        "rank": "Fortune Teller",
+        "minPredictions": 10,
+        "maxPredictions": 14
+      },
+      {
+        "icon": "assets/img/badges/clairvoyant.svg",
+        "rank": "Clairvoyant",
+        "minPredictions": 15,
+        "maxPredictions": 19
+      },
+      {
+        "icon": "assets/img/badges/psychic.svg",
+        "rank": "Psychic",
+        "minPredictions": 20
+      }
+    ]
+  }
+}

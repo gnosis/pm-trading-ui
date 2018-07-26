@@ -32,5 +32,4 @@ chrome-user-data
 /semantic
 yarn-error.log
 yarn.lock
-package-lock.json
 /config/environments/local

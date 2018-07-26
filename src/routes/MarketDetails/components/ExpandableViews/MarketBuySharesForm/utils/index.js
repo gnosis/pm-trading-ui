@@ -1,7 +1,8 @@
 import Decimal from 'decimal.js'
 import { calcLMSROutcomeTokenCount } from 'api'
 import { LIMIT_MARGIN } from 'utils/constants'
-import { NUMBER_REGEXP } from '../'
+
+const NUMBER_REGEXP = /^-?\d+\.?\d*$/
 
 /**
  *  Calculates how much outcome tokens you get for value you want to invest
@@ -21,13 +22,13 @@ const getOutcomeTokenCount = (market, investment, outcomeIndex, limitMargin) => 
     .div(new Decimal(100).add(limitMargin || LIMIT_MARGIN))
     .mul(100)
     .round()
-  const { funding, netOutcomeTokensSold, fee } = market
+  const { funding, outcomeTokensSold, fee } = market
 
   let outcomeTokenCount
   try {
     outcomeTokenCount = calcLMSROutcomeTokenCount({
       feeFactor: fee,
-      netOutcomeTokensSold,
+      netOutcomeTokensSold: outcomeTokensSold.toArray(),
       funding,
       outcomeTokenIndex: parseInt(outcomeIndex, 10),
       cost: invest.toString(),
@@ -73,4 +74,6 @@ const getPercentageWin = (outcomeTokenCount, investment) => {
     .sub(100)
 }
 
-export { getOutcomeTokenCount, getMaximumWin, getPercentageWin }
+export {
+  getOutcomeTokenCount, getMaximumWin, getPercentageWin, NUMBER_REGEXP,
+}

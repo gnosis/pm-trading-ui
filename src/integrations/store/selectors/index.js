@@ -1,10 +1,15 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { getConfiguration, getFeatureConfig } from 'utils/features'
+import { List } from 'immutable'
+import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
 
 const config = getConfiguration()
 
-const providerConfig = getFeatureConfig('providers')
-const requireTOSAccept = !!providerConfig.requireTOSAccept
+const legalComplianceConfig = getFeatureConfig('legalCompliance')
+const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
+const isTournament = isFeatureEnabled('tournament')
+const requireRegistration = isFeatureEnabled('registration')
+
+const legalDocuments = legalComplianceConfig.documents || []
 
 /**
  * Finds a default provider from all currently available providers. Determined by provider integrations `priority`
@@ -42,24 +47,24 @@ export const getCurrentAccount = (state) => {
   return undefined
 }
 
-export const hasAcceptedTermsAndConditions = (state) => {
-  if (!requireTOSAccept) {
-    return true
-  }
+export const getRegisteredMainnetAddress = (state) => {
+  const account = getCurrentAccount(state)
 
-  // TODO: In the future we can check against which were accepted
-  return !state.integrations.get('termsAndConditionsAccepted').isEmpty()
+  return account ? state.integrations.getIn(['accountSettings', account, 'mainnetAddress']) : undefined
 }
 
-export const checkWalletConnection = (state) => {
-  const provider = getActiveProvider(state)
-  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
-
-  if (termsNotRequiredOrAccepted && provider && provider.account) {
+export const hasAcceptedTermsAndConditions = (state) => {
+  if (!legalComplianceEnabled) {
     return true
   }
 
-  return false
+  if (isTournament && requireRegistration && getRegisteredMainnetAddress(state)) {
+    return true
+  }
+
+  const requiredDocuments = List(legalDocuments.map(doc => doc.id))
+  const documentsAccepted = state.integrations.get('documentsAccepted') || List()
+  return documentsAccepted.isSuperset(requiredDocuments)
 }
 
 /**
@@ -133,8 +138,18 @@ export const isConnectedToCorrectNetwork = (state) => {
   return targetNetworkId === currentNetworkId
 }
 
-export const shouldOpenNetworkModal = state =>
-  isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
+export const checkWalletConnection = (state) => {
+  const provider = getActiveProvider(state)
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state) || !!getRegisteredMainnetAddress(state)
+
+  if (termsNotRequiredOrAccepted && provider?.account) {
+    return true
+  }
+
+  return false
+}
+
+export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
 
 export const isOnWhitelist = (state) => {
   const account = getCurrentAccount(state)
@@ -144,12 +159,6 @@ export const isOnWhitelist = (state) => {
   }
 
   return false
-}
-
-export const getRegisteredMainnetAddress = (state) => {
-  const provider = getActiveProvider(state)
-
-  return provider ? provider.mainnetAddress : undefined
 }
 
 export const isMetamaskLocked = (state) => {

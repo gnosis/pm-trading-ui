@@ -1,4 +1,4 @@
-import { openModal } from 'store/actions/modal'
+// import { openModal } from 'store/actions/modal'
 
 import { shouldOpenNetworkModal, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
 

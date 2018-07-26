@@ -10,11 +10,14 @@ import {
 } from 'api'
 import Web3 from 'web3'
 
-import { timeoutCondition, getGnosisJsOptions } from 'utils/helpers'
+import {
+  timeoutCondition, getGnosisJsOptions, hexWithoutPrefix, hexWithPrefix,
+} from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
 import { getFeatureConfig, getConfiguration } from 'utils/features'
+import { getCollateralToken } from 'store/selectors/blockchain'
 
 const collateralTokenFromConfig = getFeatureConfig('collateralToken')
 const config = getConfiguration()
@@ -41,7 +44,8 @@ export const requestGasPrice = () => async (dispatch) => {
   dispatch(setGasPrice({ entityType: 'gasPrice', gasPrice }))
 }
 
-export const requestTokenSymbol = tokenAddress => async (dispatch) => {
+export const requestTokenSymbol = uTokenAddress => async (dispatch) => {
+  const tokenAddress = hexWithPrefix(uTokenAddress)
   let tokenSymbol
   try {
     tokenSymbol = await getTokenSymbol(tokenAddress)
@@ -52,9 +56,34 @@ export const requestTokenSymbol = tokenAddress => async (dispatch) => {
   }
 }
 
-export const requestTokenBalance = (tokenAddress, accountAddress) => async (dispatch) => {
+export const requestTokenBalance = (uTokenAddress, accountAddress) => async (dispatch) => {
+  const tokenAddress = hexWithPrefix(uTokenAddress)
   const tokenBalance = await getTokenBalance(tokenAddress, accountAddress)
   dispatch(setTokenBalance({ tokenAddress, tokenBalance }))
+}
+
+/**
+ * Requests the configured tournaments collateralToken balance. If none is set, does nothing
+ * @param {function} dispatch
+ * @param {function} getState
+ */
+export const requestCollateralTokenBalance = account => (dispatch, getState) => {
+  const state = getState()
+  const collateralToken = getCollateralToken(state)
+
+  // no collateral token defined yet - this information might be asynchronous, if the
+  // defined collateral token is inside a contract.
+  if (!collateralToken || !collateralToken.source) {
+    return undefined
+  }
+
+  // if the collateralToken source is the ETH balance from the users wallet, we don't need
+  // to start a request to fetch the balance, as it is auto updating in the current provider
+  if (collateralToken.source === TOKEN_SOURCE_ETH) {
+    return undefined
+  }
+
+  return dispatch(requestTokenBalance(collateralToken.address, account))
 }
 
 
@@ -70,7 +99,7 @@ export const initReadOnlyGnosis = () => async () => {
 }
 
 export const updateCollateralToken = () => async (dispatch) => {
-  if (typeof collateralTokenFromConfig === 'undefined') {
+  if (!collateralTokenFromConfig) {
     return dispatch(setCollateralToken({
       source: TOKEN_SOURCE_ETH,
     }))
@@ -90,7 +119,7 @@ export const updateCollateralToken = () => async (dispatch) => {
       symbol,
       icon,
     }))
-  } else if (source === TOKEN_SOURCE_CONTRACT) {
+  } if (source === TOKEN_SOURCE_CONTRACT) {
     const { contractName, symbol, icon } = options
 
     if (!contractName) {
@@ -118,15 +147,15 @@ export const updateCollateralToken = () => async (dispatch) => {
 
     return dispatch(setCollateralToken({
       source: TOKEN_SOURCE_CONTRACT,
-      address: contractInstance.address,
+      address: hexWithoutPrefix(contractInstance.address),
       symbol: tokenSymbol,
       icon: icon || ETH_TOKEN_ICON,
     }))
-  } else if (source === TOKEN_SOURCE_ADDRESS) {
+  } if (source === TOKEN_SOURCE_ADDRESS) {
     const { address, symbol, icon } = options
     return dispatch(setCollateralToken({
       source: TOKEN_SOURCE_ADDRESS,
-      address,
+      address: hexWithoutPrefix(address),
       symbol,
       icon,
     }))
@@ -141,6 +170,7 @@ export const updateCollateralToken = () => async (dispatch) => {
 export const initGnosis = () => async (dispatch, getState) => {
   // initialize
   let newProvider
+  await dispatch(updateCollateralToken())
 
   try {
     const state = getState()
@@ -155,10 +185,6 @@ export const initGnosis = () => async (dispatch, getState) => {
       const opts = getGnosisJsOptions(newProvider)
       await initGnosisConnection(opts)
       await dispatch(setGnosisInitialized({ initialized: true }))
-
-      if (newProvider.account) {
-        await dispatch(updateCollateralToken())
-      }
     }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)

@@ -1,39 +1,25 @@
-import { createSelector } from 'reselect'
-import { getEvents } from 'store/selectors/event'
-import { getOracles } from 'store/selectors/oracle'
-import { getEventDescriptions } from 'store/selectors/eventDescription'
-import { eventSharesSelector, enhanceShares } from 'store/selectors/marketShares'
 import { getCurrentAccount } from 'integrations/store/selectors'
-import { hexWithPrefix } from 'utils/helpers'
+import Decimal from 'decimal.js'
+import { createSelector } from 'reselect'
+import { sharesWithMarketsSelector } from 'store/selectors/account/shares'
+import { hexWithoutPrefix } from 'utils/helpers'
+import { calcShareWinnings } from 'routes/Dashboard/containers/Dashboard/utils'
 
-const eventMarketSelector = marketAddress => (state) => {
-  if (!state.entities) {
-    return {}
-  }
-
-  if (!state.entities.markets) {
-    return {}
-  }
-
-  if (!state.entities.markets[marketAddress]) {
-    return {}
-  }
-
-  const market = state.entities.markets[marketAddress]
-  const eventAddress = hexWithPrefix(market.event)
-
-  return { [eventAddress]: market }
-}
-
-const getMarketShares = marketAddress =>
-  createSelector(
-    getOracles,
-    getEvents,
-    getEventDescriptions,
-    eventMarketSelector(marketAddress),
-    eventSharesSelector,
-    getCurrentAccount,
-    enhanceShares,
+const getMarketShares = marketAddress => createSelector(sharesWithMarketsSelector, getCurrentAccount, (shares, account) => shares
+  .filter(
+    share => Decimal(share.balance).gt(0)
+          && share.owner === hexWithoutPrefix(account)
+          && share.market?.address === marketAddress,
   )
+  .map((share) => {
+    let shareWinnings = '0'
+
+    if (share.market.resolved) {
+      shareWinnings = calcShareWinnings(share, share.market)
+    }
+
+    return share.set('winnings', shareWinnings)
+  })
+  .toList())
 
 export default getMarketShares
