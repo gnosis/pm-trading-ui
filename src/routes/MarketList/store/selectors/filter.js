@@ -29,8 +29,8 @@ const MARKET_STATUS_FILTERS = {
 const FILTER_FUNCTIONS = {
   [FIELD_FILTER_MARKETSTATUS]: params => market => MARKET_STATUS_FILTERS[params.filterValue](market),
   [FIELD_FILTER_QUERY]: params => market => (
-    market.title.toLowerCase().indexOf(params.filterValue.toLowerCase()) > -1 ||
-    market.description.toLowerCase().indexOf(params.filterValue.toLowerCase()) > -1
+    market.title.toLowerCase().indexOf(params.filterValue.toLowerCase()) > -1
+    || market.description.toLowerCase().indexOf(params.filterValue.toLowerCase()) > -1
   ),
 }
 

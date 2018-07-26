@@ -36,8 +36,6 @@ deploy:
   skip_cleanup: true
   local_dir: dist
   upload-dir: current
-  #before_deploy:
-  #  - npm run build-config olympia/staging
   on:
     branch: olympia-qa
   ### mainnet deployments

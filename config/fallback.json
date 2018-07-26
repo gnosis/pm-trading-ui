@@ -89,23 +89,7 @@
       "claimUntil": "2018-05-01T12:00:00",
       "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
       "networkId": 3
-    },
-    "levels": [
-      { "value": 5, "minRank": 1, "maxRank": 1 },
-      { "value": 4, "minRank": 2, "maxRank": 2 },
-      { "value": 3, "minRank": 3, "maxRank": 3 },
-      { "value": 2, "minRank": 4, "maxRank": 4 },
-      { "value": 1, "minRank": 5, "maxRank": 5 },
-      { "value": 0.9, "minRank": 6, "maxRank": 7 },
-      { "value": 0.8, "minRank": 8, "maxRank": 9 },
-      { "value": 0.7, "minRank": 10, "maxRank": 11 },
-      { "value": 0.6, "minRank": 12, "maxRank": 13 },
-      { "value": 0.5, "minRank": 14, "maxRank": 15 },
-      { "value": 0.4, "minRank": 16, "maxRank": 17 },
-      { "value": 0.3, "minRank": 18, "maxRank": 19 },
-      { "value": 0.2, "minRank": 19, "maxRank": 34 },
-      { "value": 0.1, "minRank": 34, "maxRank": 100 }
-    ]
+    }
   },
   "badges": {
     "enabled": false,

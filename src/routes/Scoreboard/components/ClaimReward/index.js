@@ -41,7 +41,11 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardClaimHash }) => 
     rewardValueDisplay = 'Already claimed'
   }
 
-  let rewardClaimTimeDisplay = <span className={cx('infoText')}>N/A</span>
+  let rewardClaimTimeDisplay = (
+    <span className={cx('infoText')}>
+      N/A
+    </span>
+  )
   if (showRewardValue || showAlreadyClaimed) {
     rewardClaimTimeDisplay = <Countdown className={cx('infoText')} target={claimReward.claimUntil} format={claimUntilFormat} />
   }
@@ -53,11 +57,17 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardClaimHash }) => 
           <Span className={cx('infoText', 'amount')}>
             {rewardValueDisplay}
           </Span>
-          <Paragraph className={cx('annotation')}>CLAIMABLE {rewardToken.symbol}</Paragraph>
+          <Paragraph className={cx('annotation')}>
+            CLAIMABLE
+            {' '}
+            {rewardToken.symbol}
+          </Paragraph>
         </Block>
         <Block className={cx('timeToClaim')}>
           {rewardClaimTimeDisplay}
-          <Paragraph className={cx('annotation')}>TIME LEFT TO CLAIM</Paragraph>
+          <Paragraph className={cx('annotation')}>
+            TIME LEFT TO CLAIM
+          </Paragraph>
         </Block>
       </Block>
       <button

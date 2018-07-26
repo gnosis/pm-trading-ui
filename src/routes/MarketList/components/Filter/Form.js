@@ -1,7 +1,9 @@
 import React from 'react'
 import { reduxForm, Field } from 'redux-form'
 import cn from 'classnames/bind'
-import { TextInput, Select, RadioButtonGroup } from 'components/Form'
+import {
+  TextInput, Select, RadioButtonGroup,
+} from 'components/Form'
 import style from './Filter.mod.scss'
 
 const cx = cn.bind(style)

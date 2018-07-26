@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const TOS_DOCUMENT = 'TOS_DOCUMENT'
 const TOS_TEXT = 'TOS_TEXT'
@@ -27,6 +28,22 @@ const LegalDocumentTitle = ({
       </span>
     )
   }
+
+  return null
 }
+
+LegalDocumentTitle.propTypes = {
+  type: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  file: PropTypes.string,
+  short: PropTypes.string,
+}
+
+LegalDocumentTitle.defaultProps = {
+  title: '',
+  file: '',
+  short: '',
+}
+
 
 export default LegalDocumentTitle
