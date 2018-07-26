@@ -20,9 +20,8 @@ const trophy = require('../assets/trophy.svg')
 
 const providerConfig = getProviderConfig()
 
-const regisrationEnabled = isFeatureEnabled('registration')
-const { levels, claimReward } = getFeatureConfig('rewards')
-const claimingEnabled = claimReward && claimReward.enabled
+const rewardsEnabled = isFeatureEnabled('rewards')
+const { levels } = getFeatureConfig('rewards')
 
 const NoRows = () => (
   <Paragraph className={cx('norows')}>

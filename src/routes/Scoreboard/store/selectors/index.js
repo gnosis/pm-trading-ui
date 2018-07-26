@@ -4,11 +4,11 @@ import { getActiveProvider, getCurrentAccount } from 'integrations/store/selecto
 import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 
 const tournamentUsersSelectorAsList = (state) => {
-  if (!state.users) {
+  if (!state?.tournament?.ranking) {
     return undefined
   }
 
-  return state.users.toList()
+  return state.tournament.ranking.toList()
 }
 
 export const firstTournamentUsersSelectorAsList = createSelector(

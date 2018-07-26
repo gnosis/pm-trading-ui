@@ -17,6 +17,7 @@ import Metric from './Metric'
 import style from './Metrics.mod.scss'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
+const badgesEnabled = isFeatureEnabled('badges')
 
 const cx = classnames.bind(style)
 
@@ -46,15 +47,17 @@ const Metrics = ({
           <Metric isLoading={typeof rank === 'undefined'} src={arrows} explanation="YOUR RANK">
             <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
           </Metric>
-          <Metric
-            isLoading={typeof badge.icon === 'undefined'}
-            src={badge.icon}
-            width={47}
-            height={42}
-            explanation="BADGE"
-          >
-            <Block className={cx('badgeTitle')}>{badge.rank}</Block>
-          </Metric>
+          {badgesEnabled && (
+            <Metric
+              isLoading={typeof badge.icon === 'undefined'}
+              src={badge.icon}
+              width={47}
+              height={42}
+              explanation="BADGE"
+            >
+              <Block className={cx('badgeTitle')}>{badge.rank}</Block>
+            </Metric>
+          )}
         </>
       )}
     </div>
