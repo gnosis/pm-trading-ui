@@ -34,12 +34,6 @@ export const getActiveProvider = (state) => {
   return activeProvider
 }
 
-export const getRegisteredMainnetAddress = (state) => {
-  const provider = getActiveProvider(state)
-
-  return provider ? provider.mainnetAddress : undefined
-}
-
 /**
  * Returns the currently selected account for the current provider
  * @param {*} state - redux state
@@ -51,6 +45,12 @@ export const getCurrentAccount = (state) => {
   }
 
   return undefined
+}
+
+export const getRegisteredMainnetAddress = (state) => {
+  const account = getCurrentAccount(state)
+
+  return account ? state.integrations.getIn(['accountSettings', account, 'mainnetAddress']) : undefined
 }
 
 export const hasAcceptedTermsAndConditions = (state) => {

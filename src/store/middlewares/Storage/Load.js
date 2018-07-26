@@ -20,7 +20,7 @@ const middleware = (storage) => {
           payload = JSON.parse(decoded)
           store.dispatch(actions.loadStorage(payload))
         } catch (e) {
-          console.error('Could not load saved storage')
+          console.error('Could not load saved storage: ', e)
         }
       }
     }

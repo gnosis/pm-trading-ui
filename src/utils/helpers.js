@@ -1,9 +1,9 @@
-import { mapValues, startsWith, isArray, range } from 'lodash'
+import {
+  mapValues, startsWith, isArray, range,
+} from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
-import moment from 'moment'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES, REQUEST_STATES } from 'utils/constants'
-import { MARKET_STAGES } from 'store/models/market'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
 import { getConfiguration } from 'utils/features'
@@ -25,27 +25,6 @@ export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix
 export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
 
 export const normalizeHex = value => hexWithPrefix(value).toLowerCase()
-
-export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
-
-export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) =>
-  stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
-
-export const toEntity = (data, entityType, idKey = 'address') => {
-  const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
-
-  return {
-    entities: {
-      [entityType]: {
-        [id]: {
-          [idKey]: id,
-          ...entityPayload,
-        },
-      },
-    },
-    result: [id],
-  }
-}
 
 /**
  * Converts a value from WEI to ETH
@@ -70,25 +49,23 @@ export const weiToEth = (value) => {
 
 export const getOutcomeName = (market, index) => {
   let outcomeName
-  if (!market.event) {
+  if (!market.outcomes) {
     return null
   }
-  if (market.event.type === OUTCOME_TYPES.CATEGORICAL) {
-    outcomeName = market.eventDescription.outcomes[index]
-  } else if (market.event.type === OUTCOME_TYPES.SCALAR) {
+
+  if (market.type === OUTCOME_TYPES.CATEGORICAL) {
+    outcomeName = market.outcomes.get(index).name
+  } else if (market.type === OUTCOME_TYPES.SCALAR) {
     outcomeName = index === 0 ? 'Short' : 'Long'
   }
   return outcomeName
 }
 
-export const normalizeScalarPoint = (
-  marginalPrices,
-  { event: { lowerBound, upperBound }, eventDescription: { decimals } },
-) => {
+export const normalizeScalarPoint = (marginalPrices, { bounds: { lower, upper, decimals } }) => {
   const bigDecimals = parseInt(decimals, 10)
 
-  const bigUpperBound = Decimal(upperBound).div(10 ** bigDecimals)
-  const bigLowerBound = Decimal(lowerBound).div(10 ** bigDecimals)
+  const bigUpperBound = Decimal(upper).div(10 ** bigDecimals)
+  const bigLowerBound = Decimal(lower).div(10 ** bigDecimals)
 
   const bounds = bigUpperBound.sub(bigLowerBound)
   return Decimal(marginalPrices[1].toString())
@@ -98,15 +75,15 @@ export const normalizeScalarPoint = (
     .toNumber()
 }
 
-export const restFetch = url =>
-  fetch(url)
-    .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
-    .then(res => res.json())
-    .catch(err =>
-      new Promise((resolve, reject) => {
-        console.warn(`Gnosis DB: ${err}`)
-        reject(err)
-      }))
+export const restFetch = url => fetch(url)
+  .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
+  .then(res => res.json())
+  .catch(
+    err => new Promise((resolve, reject) => {
+      console.warn(`Gnosis DB: ${err}`)
+      reject(err)
+    }),
+  )
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
@@ -131,19 +108,17 @@ export const bemifyClassName = (className, element, modifier) => {
   return ''
 }
 
-export const timeoutCondition = (timeout, rejectReason) =>
-  new Promise((_, reject) => {
-    setTimeout(() => {
-      reject(rejectReason)
-    }, timeout)
-  })
+export const timeoutCondition = (timeout, rejectReason) => new Promise((_, reject) => {
+  setTimeout(() => {
+    reject(rejectReason)
+  }, timeout)
+})
 
 /**
  * Determines if an account is a Moderator
  * @param {*string} accountAddress
  */
-export const isModerator = accountAddress =>
-  (Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false)
+export const isModerator = accountAddress => (Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false)
 
 export const getModerators = () => config.whitelist
 

@@ -47,7 +47,9 @@ class BackdropProvider extends Component {
         {isOpen && blockchainConnection && (
           <div>
             <div className={cx('below')} />
-            <div className={cx('above')}>{this.renderBackdropContent()}</div>
+            <div className={cx('above')}>
+              {this.renderBackdropContent()}
+            </div>
           </div>
         )}
       </div>

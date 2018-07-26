@@ -10,7 +10,7 @@ export const LocalStorageDump = StorageDumper(window.localStorage, localstorageO
 export const LocalStorageLoad = StorageLoader(window.localStorage, localstorageOptions)
 
 const sessionstorageOptions = {
-  whitelist: ['modal'],
+  whitelist: ['modal', 'integrations.documentsAccepted'],
 }
 export const SessionStorageDump = StorageDumper(window.sessionStorage, sessionstorageOptions)
 export const SessionStorageLoad = StorageLoader(window.sessionStorage, sessionstorageOptions)

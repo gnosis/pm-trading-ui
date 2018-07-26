@@ -31,11 +31,10 @@ const RegisterMainnetAddress = ({
     closeModal()
   }
 
-  const disabled =
-    gasPrice
-      .mul(registrationGasCost || 0)
-      .div(1e18)
-      .gt(currentBalance || 0)
+  const disabled = gasPrice
+    .mul(registrationGasCost || 0)
+    .div(1e18)
+    .gt(currentBalance || 0)
 
   return (
     <div className={cx('registerWallet')}>
@@ -52,8 +51,8 @@ const RegisterMainnetAddress = ({
           <h4 className={cx('walletAddress')}>{currentAccount}</h4>
         </div>
         <p className={cx('rinkebyEthAnnotation')}>
-          You need Rinkeby ETH to register your wallet address. <br />Rinkeby ETH balance:{' '}
-          <DecimalValue value={currentBalance} className={cx('walletBalance')} /> -{' '}
+          You need Rinkeby ETH to register your wallet address. <br />
+          Rinkeby ETH balance: <DecimalValue value={currentBalance} className={cx('walletBalance')} /> -{' '}
           <a className={cx('faucetLink')} href="https://faucet.rinkeby.io/" target="_blank" rel="noopener noreferrer">
             Request Rinkeby Ether
           </a>

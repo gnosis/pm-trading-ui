@@ -2,10 +2,10 @@ import moment from 'moment'
 import Decimal from 'decimal.js'
 import { List } from 'immutable'
 import { createSelector, createStructuredSelector } from 'reselect'
-import { isMarketClosed } from 'store/utils/marketStatus'
+import { isMarketClosedOrResolved } from 'store/utils/marketStatus'
 import { checkWalletConnection, getCurrentAccount } from 'integrations/store/selectors'
 
-import { marketSelector } from 'store/selectors/market'
+import { marketsSelector } from 'store/selectors/market'
 import { getCollateralToken } from 'store/selectors/blockchain'
 import shareSelector from 'store/selectors/account/shares'
 import tradeSelector from 'store/selectors/account/trades'
@@ -18,8 +18,8 @@ import { calculateProfit } from './utils'
 const MARKET_OVERVIEW_PREVIEW_NUM = 5
 
 export const dashboardMarketsSelector = createSelector(
-  marketSelector,
-  markets => markets.filter(market => !isMarketClosed(market.stage, market.resolution, market.resolved)),
+  marketsSelector,
+  markets => markets.filter(market => !isMarketClosedOrResolved(market)),
 )
 
 /**

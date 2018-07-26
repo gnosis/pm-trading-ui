@@ -31,8 +31,12 @@ class Countdown extends Component {
   }
 
   render() {
+    const { className } = this.props
+    const { output } = this.state
     return (
-      <span className={this.props.className}>{this.state.output}</span>
+      <span className={className}>
+        {output}
+      </span>
     )
   }
 }

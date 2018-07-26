@@ -16,7 +16,9 @@ class Uport extends InjectedWeb3 {
    * This allows "fallback providers" like a remote ethereum host to be used as a last resort.
    */
   static providerPriority = 100
+
   static watcherInterval = 5000
+
   static USE_NOTIFICATIONS = notificationsEnabled
 
   constructor() {

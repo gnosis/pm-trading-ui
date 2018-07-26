@@ -47,25 +47,17 @@ Terms of service and privacy policy
       )}
       {showExplanation && (
         <p className={cx('explanation')}>
-          For using
-          {' '}
-          {applicationName}
-, you have to agree with our&nbsp;
-          <React.Fragment>
+          For using {applicationName}
+          , you have to agree with our&nbsp;
+          <>
             {documents
-              .map(doc => <DocumentExplanation key={doc.id} {...doc} />)
-              .reduce((acc, elem) => [...acc, <span>
-                {' '}
-and
-                {' '}
-              </span>, elem], [])}
-          </React.Fragment>
+              .map(doc => <DocumentExplanation {...doc} />)
+              .reduce((acc, elem) => [...acc, <span> and </span>, elem], [])}
+          </>
           .
         </p>
       )}
-      <div className={cx('checks')}>
-        {documents.map(doc => <DocumentField key={doc.id} {...doc} className={cx('checkBox')} />)}
-      </div>
+      <div className={cx('checks')}>{documents.map(doc => <DocumentField {...doc} className={cx('checkBox')} />)}</div>
       <ButtonComponent
         className={cx(submitButtonClassName, { [submitButtonDisabledClassName]: !canSubmit })}
         disabled={!canSubmit}
@@ -78,9 +70,11 @@ and
 }
 
 LegalCompliance.propTypes = {
-  documents: PropTypes.arrayOf(PropTypes.shape({
-    type: PropTypes.string,
-  })).isRequired,
+  documents: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string,
+    }),
+  ).isRequired,
   fields: PropTypes.objectOf(PropTypes.bool).isRequired,
   showHeading: PropTypes.bool,
   showExplanation: PropTypes.bool,

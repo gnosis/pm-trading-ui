@@ -13,7 +13,8 @@ const CategoricalMarketRecord = Record({
   winningOutcome: undefined, // OutcomeRecord
   funding: undefined, // int
   creation: undefined, // moment
-  stage: undefined, // int
+  stage: undefined,
+  fee: undefined, // int
   resolved: undefined, // boolean
   closed: undefined, // boolean
   creator: undefined, // string

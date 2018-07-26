@@ -10,7 +10,9 @@ import {
 } from 'api'
 import Web3 from 'web3'
 
-import { timeoutCondition, getGnosisJsOptions, hexWithoutPrefix, hexWithPrefix } from 'utils/helpers'
+import {
+  timeoutCondition, getGnosisJsOptions, hexWithoutPrefix, hexWithPrefix,
+} from 'utils/helpers'
 import { findDefaultProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
@@ -117,7 +119,7 @@ export const updateCollateralToken = () => async (dispatch) => {
       symbol,
       icon,
     }))
-  } else if (source === TOKEN_SOURCE_CONTRACT) {
+  } if (source === TOKEN_SOURCE_CONTRACT) {
     const { contractName, symbol, icon } = options
 
     if (!contractName) {
@@ -149,7 +151,7 @@ export const updateCollateralToken = () => async (dispatch) => {
       symbol: tokenSymbol,
       icon: icon || ETH_TOKEN_ICON,
     }))
-  } else if (source === TOKEN_SOURCE_ADDRESS) {
+  } if (source === TOKEN_SOURCE_ADDRESS) {
     const { address, symbol, icon } = options
     return dispatch(setCollateralToken({
       source: TOKEN_SOURCE_ADDRESS,
@@ -168,6 +170,7 @@ export const updateCollateralToken = () => async (dispatch) => {
 export const initGnosis = () => async (dispatch, getState) => {
   // initialize
   let newProvider
+  await dispatch(updateCollateralToken())
 
   try {
     const state = getState()
@@ -182,10 +185,6 @@ export const initGnosis = () => async (dispatch, getState) => {
       const opts = getGnosisJsOptions(newProvider)
       await initGnosisConnection(opts)
       await dispatch(setGnosisInitialized({ initialized: true }))
-
-      if (newProvider.account) {
-        await dispatch(updateCollateralToken())
-      }
     }
   } catch (error) {
     console.warn(`Gnosis.js initialization Error: ${error}`)

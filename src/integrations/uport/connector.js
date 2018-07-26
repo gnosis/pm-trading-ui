@@ -33,11 +33,15 @@ const LoginUport = () => (
   <Block id={UPORT_QR_TEXT}>
     <Paragraph style={UportStyle}>
       {'Log into '}
-      <Bold>{appName}</Bold>
+      <Bold>
+        {appName}
+      </Bold>
     </Paragraph>
     {!!termsOfUseConfig.url && (
       <Paragraph size="small">
-        By logging in via uPort, <br />
+        By logging in via uPort,
+        {' '}
+        <br />
         {` you agree to ${appName}'s `}
         <Bold>
           {/* <Link>s rendered outside of a router context cannot navigate */}

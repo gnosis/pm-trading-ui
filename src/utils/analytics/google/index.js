@@ -7,10 +7,9 @@ const config = getThirdPartyConfig(THIRD_PARTY_ID)
 
 const GOOGLE_ANALYTICS_URL = 'https://www.google-analytics.com/analytics.js'
 
-export const ga = (...args) =>
-  (window.ga && window.ga.q && window.ga.q(...args)) ||
-  (window.ga && window.ga(...args)) ||
-  (() => {})(...args) // no-op
+export const ga = (...args) => (window.ga && window.ga.q && window.ga.q(...args))
+  || (window.ga && window.ga(...args))
+  || (() => {})(...args) // no-op
 
 const loadGoogleAnalytics = () => new Promise((resolve) => {
   const script = document.createElement('script')

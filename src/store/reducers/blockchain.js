@@ -16,18 +16,15 @@ import { GAS_COST } from 'utils/constants'
 
 const reducer = handleActions(
   {
-    [setConnectionStatus]: (state, { payload: { connection } }) =>
-      state.withMutations((stateMap) => {
-        stateMap.set('connection', connection)
-        stateMap.set('connectionTried', true)
-      }),
+    [setConnectionStatus]: (state, { payload: { connection } }) => state.withMutations((stateMap) => {
+      stateMap.set('connection', connection)
+      stateMap.set('connectionTried', true)
+    }),
     [setGnosisInitialized]: (state, { payload: { initialized } }) => state.set('gnosisInitialized', initialized),
     [setGasCost]: (state, { payload: { contractType, gasCost } }) => state.setIn(['gasCosts', contractType], gasCost),
     [setGasPrice]: (state, { payload: { entityType, gasPrice } }) => state.set(entityType, gasPrice),
-    [setTokenSymbol]: (state, { payload: { tokenAddress, tokenSymbol } }) =>
-      state.setIn(['tokenSymbols', tokenAddress], tokenSymbol),
-    [setTokenBalance]: (state, { payload: { tokenAddress, tokenBalance } }) =>
-      state.setIn(['tokenBalances', tokenAddress], tokenBalance),
+    [setTokenSymbol]: (state, { payload: { tokenAddress, tokenSymbol } }) => state.setIn(['tokenSymbols', tokenAddress], tokenSymbol),
+    [setTokenBalance]: (state, { payload: { tokenAddress, tokenBalance } }) => state.setIn(['tokenBalances', tokenAddress], tokenBalance),
     [setCollateralToken]: (state, {
       payload: {
         address,

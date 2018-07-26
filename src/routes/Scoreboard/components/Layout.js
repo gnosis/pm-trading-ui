@@ -47,8 +47,8 @@ class Layout extends React.PureComponent {
       }
     })
 
-    const showRewardInfo = regisrationEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
-    const showRewardClaim = claimingEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK && !!mainnetAddress
+    const showRewardInfo = rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    const showRewardClaim = rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK && !!mainnetAddress
 
     return (
       <Block>

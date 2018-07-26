@@ -61,8 +61,7 @@ export const didTransactionSucceed = (state, transactionId) => {
   return transaction && transaction.completed && transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR
 }
 
-export const getAllTransactions = state =>
-  state.transactions.get('log').map(tx => tx.set('progress', getTransactionProgress(state, tx.id)))
+export const getAllTransactions = state => state.transactions.get('log').map(tx => tx.set('progress', getTransactionProgress(state, tx.id)))
 
 export const getRunningTransactions = state => getAllTransactions(state).filter(transaction => !transaction.completed)
 

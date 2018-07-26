@@ -3,7 +3,7 @@ import Decimal from 'decimal.js'
 import web3 from 'web3'
 import { weiToEth } from 'utils/helpers'
 import { OUTCOME_TYPES, LIMIT_MARGIN } from 'utils/constants'
-import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
+import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm/utils'
 
 /**
  * @function
@@ -14,14 +14,12 @@ import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/M
  */
 const calculateCurrentProbability = (market, share) => {
   // We can calculate probability for scalar markets without a share
-  const categoricalMarketWithoutShare = !share && market.event && market.event.type === OUTCOME_TYPES.CATEGORCAL
+  const categoricalMarketWithoutShare = !share && market && market.type === OUTCOME_TYPES.CATEGORCAL
   if (!market || categoricalMarketWithoutShare) {
     return new Decimal(0)
   }
 
-  const {
-    event: { type },
-  } = market
+  const { type } = market
   let currentProbability = new Decimal(0)
 
   // When calculating for SCALAR markets, we need to always calculate for long outcome
@@ -30,7 +28,7 @@ const calculateCurrentProbability = (market, share) => {
 
   try {
     currentProbability = calcLMSRMarginalPrice({
-      netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+      netOutcomeTokensSold: market.outcomeTokensSold.toArray(),
       funding: market.funding,
       outcomeTokenIndex,
     })
@@ -56,7 +54,7 @@ const calculateEarnings = (market, share, selectedSellAmount) => {
   let earnings = new Decimal(0)
   if (share.balance && NUMBER_REGEXP.test(selectedSellAmount) && parseFloat(selectedSellAmount) > 0) {
     earnings = weiToEth(calcLMSRProfit({
-      netOutcomeTokensSold: market.netOutcomeTokensSold.slice(),
+      netOutcomeTokensSold: market.outcomeTokensSold.toArray(),
       funding: market.funding,
       outcomeTokenIndex: share.outcomeToken.index,
       outcomeTokenCount: selectedSellAmount,
@@ -76,14 +74,12 @@ const calculateEarnings = (market, share, selectedSellAmount) => {
  * @returns {Decimal}
  */
 const calculateNewProbability = (market, share, netOutcomeTokensSold) => {
-  const categoricalMarketWithoutShare = !share && market.event && market.event.type === OUTCOME_TYPES.CATEGORCAL
+  const categoricalMarketWithoutShare = !share && market?.type === OUTCOME_TYPES.CATEGORCAL
   if (!market || categoricalMarketWithoutShare) {
     throw new Error()
   }
 
-  const {
-    event: { type },
-  } = market
+  const { type } = market
 
   // When calculating for SCALAR markets, we need to always calculate for long outcome
   // For categorical we should calculate for share's outcome
@@ -122,4 +118,6 @@ const validateTokenCount = (values, props) => {
   return {}
 }
 
-export { calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount }
+export {
+  calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount,
+}

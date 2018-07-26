@@ -13,23 +13,22 @@ const tournamentUsersSelectorAsList = (state) => {
 
 export const firstTournamentUsersSelectorAsList = createSelector(
   tournamentUsersSelectorAsList,
-  users =>
-    (users
-      ? users
-        .filter(user => user.currentRank > 0)
-        .sort((userA, userB) => {
-          if (userA.currentRank > userB.currentRank) {
-            return 1
-          }
+  users => (users
+    ? users
+      .filter(user => user.currentRank > 0)
+      .sort((userA, userB) => {
+        if (userA.currentRank > userB.currentRank) {
+          return 1
+        }
 
-          if (userA.currentRank < userB.currentRank) {
-            return -1
-          }
+        if (userA.currentRank < userB.currentRank) {
+          return -1
+        }
 
-          return 0
-        })
-        .take(100)
-      : undefined),
+        return 0
+      })
+      .take(100)
+    : undefined),
 )
 
 export const tournamentMainnetRegistryAddress = (state) => {

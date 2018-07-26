@@ -4,11 +4,11 @@ import { replace } from 'react-router-redux'
 import { requestGasPrice, requestTokenSymbol } from 'store/actions/blockchain'
 import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
-import { redeemWinnings } from 'store/actions/market'
+import redeemMarket from 'store/actions/market/redeemMarket'
 import {
   buyMarketShares,
   sellMarketShares,
-  requestMarketTrades,
+  requestMarketGraphTrades,
   requestMarketSharesForAccount,
   requestMarketTradesForAccount,
   requestMarket,
@@ -47,7 +47,7 @@ const mapStateToProps = (state, ownProps) => {
   const marketBuySelector = formValueSelector('marketBuyShares')
   const marketMySharesSelector = formValueSelector('marketMyShares')
   const defaultAccount = getCurrentAccount(state)
-  const marketTrades = getMarketTradesForAccount(market.address, defaultAccount)(state)
+  const marketTrades = getMarketTradesForAccount(market.eventAddress, defaultAccount)(state)
 
   return {
     market,
@@ -69,8 +69,8 @@ const mapStateToProps = (state, ownProps) => {
     gasCosts: getGasCosts(state),
     gasPrice: getGasPrice(state),
     currentBalance: getCurrentBalance(state),
-    collateralTokenBalance: getTokenAmount(state, market.event?.collateralToken),
-    collateralTokenSymbol: getTokenSymbol(state, market.event?.collateralToken),
+    collateralTokenBalance: getTokenAmount(state, market.collateralToken),
+    collateralTokenSymbol: getTokenSymbol(state, market.collateralToken),
     mainnetAddress: getRegisteredMainnetAddress(state),
   }
 }
@@ -79,16 +79,17 @@ const mapDispatchToProps = dispatch => ({
   fetchMarket: () => dispatch(requestMarket(marketId)),
   fetchMarketShares: accountAddress => dispatch(requestMarketSharesForAccount(marketId, accountAddress)),
   fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(marketId, accountAddress)),
-  fetchMarketTrades: market => dispatch(requestMarketTrades(market)),
-  buyShares: (market, outcomeIndex, outcomeTokenCount, cost) =>
-    dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
-  sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) =>
-    dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
+  fetchMarketTrades: () => dispatch(requestMarketGraphTrades(marketId)),
+  buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
+  sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
   changeUrl: url => dispatch(replace(url)),
-  redeemWinnings: market => dispatch(redeemWinnings(market)),
+  redeemWinnings: market => redeemMarket(market),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
   requestTokenSymbol: tokenAddress => dispatch(requestTokenSymbol(tokenAddress)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MarketDetail)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MarketDetail)

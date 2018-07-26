@@ -6,7 +6,6 @@ import OutcomeColorBox from 'components/Outcome/OutcomeColorBox'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { weiToEth } from 'utils/helpers'
-import { marketRecordShape } from 'utils/shapes'
 import { OutcomeRecord } from 'store/models/market'
 
 import style from './style.mod.scss'

@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect'
 import { isMarketFunded } from 'store/utils/marketStatus'
 
-export const marketSelector = createSelector(
+export const marketsSelector = createSelector(
   state => state.marketList,
   marketList => marketList.filter(market => isMarketFunded(market.stage)),
 )
 
-export * from './old'
+export const getMarketById = state => marketAddress => state.marketList.get(marketAddress, {})

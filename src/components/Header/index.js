@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
 import { upperFirst } from 'lodash'
 import className from 'classnames/bind'
-import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
@@ -164,22 +163,20 @@ class Header extends Component {
                 {currentNetwork
                   && currentNetwork !== 'MAIN' && (
                   <span className={cx('network', 'text')}>
-Network:
+                      Network:
                     {upperFirst(currentNetwork.toLowerCase())}
                   </span>
                 )}
                 <DecimalValue value={tokenBalance} className={cx('text')} />
-&nbsp;
-                {<span>
-                  {tokenSymbol || 'ETH'}
-                 </span>}
+                &nbsp;
+                {<span>{tokenSymbol || 'ETH'}</span>}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
                 {useUport && <MenuAccountDropdown />}
               </div>
             ) : (
-              <button className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
+              <button type="button" className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
                 Connect a wallet
               </button>
             )}

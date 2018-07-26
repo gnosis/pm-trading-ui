@@ -15,10 +15,18 @@ class CurrencyName extends Component {
   render() {
     const { tokenAddress, tokenSymbol, className } = this.props
     if (tokenAddress) {
-      return <span className={className}>{tokenSymbol}</span>
+      return (
+        <span className={className}>
+          {tokenSymbol}
+        </span>
+      )
     }
 
-    return <span className={className}>Unknown</span>
+    return (
+      <span className={className}>
+Unknown
+      </span>
+    )
   }
 }
 

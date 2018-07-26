@@ -74,6 +74,7 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardClaimHash }) => 
         className={cx('claimButton')}
         onClick={openClaimRewardModal}
         disabled={claimingDisabled}
+        type="button"
       >
         CLAIM NOW
       </button>

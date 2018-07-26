@@ -1,39 +1,15 @@
 import uuid from 'uuid/v4'
-import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, TRANSACTION_STATUS } from 'utils/constants'
+import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import { hexWithPrefix } from 'utils/helpers'
 import { closeModal } from 'store/actions/modal'
 import { redeemShare } from 'store/actions/shares'
-import { startLog, closeLog, closeEntrySuccess, closeEntryError } from 'routes/Transactions/store/actions/transactions'
+import {
+  startLog, closeLog, closeEntrySuccess, closeEntryError,
+} from 'routes/Transactions/store/actions/transactions'
 import * as marketContractAPI from 'api/market'
 import { CategoricalMarketRecord } from 'store/models/market'
-
+import { TRANSACTION_STAGES, TRANSACTION_EVENTS_GENERIC } from 'store/actions/market/constants'
 import { sharesForMarketSelector } from 'store/selectors/market/shares'
-
-/**
- * Constant names for marketcreation stages
- * @readonly
- * @enum {string}
- */
-export const TRANSACTION_STAGES = {
-  EVENT_DESCRIPTION: 'eventDescription',
-  ORACLE: 'oracle',
-  EVENT: 'event',
-  MARKET: 'market',
-  FUNDING: 'funding',
-  // Others
-  GENERIC: 'generic',
-}
-
-/**
- * Generic Stage for single-event transactions
- */
-export const TRANSACTION_EVENTS_GENERIC = [
-  {
-    event: TRANSACTION_STAGES.GENERIC,
-    label: 'Sending Transaction',
-    status: TRANSACTION_STATUS.RUNNING,
-  },
-]
 
 /**
  * Redeem winnings of a market

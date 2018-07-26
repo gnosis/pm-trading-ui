@@ -8,7 +8,6 @@ import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
 import { Link } from 'react-router-dom'
 import { RESOLUTION_TIME } from 'utils/constants'
-import { marketRecordShape } from 'utils/shapes'
 import { ORDER_TYPE_BUY, ORDER_TYPE_SELL } from 'store/models/trade'
 import { OutcomeRecord } from 'store/models/market'
 
@@ -36,7 +35,7 @@ const Trade = ({
         {outcomeToken.name}
       </div>
       <div className={cx('tradeAmount', 'col-md-4')}>
-        <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokensSold)} />&nbsp;
+        <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokenCount)} />&nbsp;
         {collateralTokenAddress ? <CurrencyName tokenAddress={collateralTokenAddress} /> : <span>ETH</span> }
       </div>
       <div className={cx('tradePrice', 'col-md-5')}>

@@ -34,15 +34,12 @@ export const getFeatureConfig = feature => config[feature] && config[feature]
 
 export const getProviderConfig = () => config.providers
 
-export const getProviderIntegrationConfig = providerName =>
-  (config.providers &&
-    config.providers.options &&
-    config.providers.options[providerName.toUpperCase()]) || {}
+export const getProviderIntegrationConfig = providerName => (config.providers
+    && config.providers.options
+    && config.providers.options[providerName.toUpperCase()]) || {}
 
-export const isThirdPartyIntegrationEnabled = thirdPartyName =>
-  config.thirdparty?.[thirdPartyName]?.enabled === true
+export const isThirdPartyIntegrationEnabled = thirdPartyName => config.thirdparty?.[thirdPartyName]?.enabled === true
 
-export const getThirdPartyConfig = thirdPartyName =>
-  (isThirdPartyIntegrationEnabled(thirdPartyName) ? config.thirdparty[thirdPartyName] : {})
+export const getThirdPartyConfig = thirdPartyName => (isThirdPartyIntegrationEnabled(thirdPartyName) ? config.thirdparty[thirdPartyName] : {})
 
 export const getConstant = constantName => config.constants?.[constantName]

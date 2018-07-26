@@ -1,5 +1,9 @@
-import { throttle, mapValues, omit, pick } from 'lodash'
-import { NOOP_MIDDLEWARE, STORAGE_KEY, IGNORE_ACTIONS, STORAGE_SAVE_INTERVAL } from './constants'
+import {
+  throttle, mapValues, omit, pick,
+} from 'lodash'
+import {
+  NOOP_MIDDLEWARE, STORAGE_KEY, IGNORE_ACTIONS, STORAGE_SAVE_INTERVAL,
+} from './constants'
 
 // Ensures that saveLocalstorage is only invoked at max every STORAGE_SAVE_INTERVAL ms
 const saveStorage = throttle((store, storage, options) => {

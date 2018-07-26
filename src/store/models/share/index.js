@@ -13,6 +13,7 @@ const ShareRecord = Record({
   marginalPrice: undefined, // decimal
   outcomeToken: undefined, // OutcomeRecord
   market: undefined, // MarketRecord
+  winnings: undefined,
 }, 'Share')
 
 export default ShareRecord
