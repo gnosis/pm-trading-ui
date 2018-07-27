@@ -68,7 +68,7 @@ $navbarHeight: 40px;
   .group {
     &.version {
       top: -13px;
-      position: absolute;
+      position: fixed;
       line-height: $navbarHeight;
       color: white !important;
       font-size: 12px;

@@ -32,6 +32,7 @@ export const processMarketsResponse = (dispatch, state, response) => {
   const applicationCollateralToken = getCollateralToken(state)
 
   let marketRecords = extractMarkets(response.results)
+  console.log(marketRecords)
 
   if (applicationCollateralToken.address) {
     marketRecords = marketRecords.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(applicationCollateralToken.address))

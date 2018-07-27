@@ -3,6 +3,7 @@
 $footer-bottom: 60px;
 
 .appContainer {
+  position: relative;
   background-color: $bg-color;
   height: calc(100vh - #{$footer-bottom});
   overflow-y: scroll;
