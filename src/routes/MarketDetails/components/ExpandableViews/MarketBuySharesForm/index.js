@@ -126,8 +126,6 @@ class MarketBuySharesForm extends Component {
       && typeof investmentAmount !== 'undefined'
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.get('buyShares') || 0))
     const submitDisabled = invalid || !investmentAmount || !selectedOutcome
-<<<<<<< Updated upstream
-=======
 
     let submitDisabledReason
 
@@ -138,7 +136,6 @@ class MarketBuySharesForm extends Component {
     } else if (!selectedOutcome) {
       submitDisabledReason = 'Please select an outcome'
     }
->>>>>>> Stashed changes
 
     let outcomeTokenCount = 0
     let maximumWin = 0
@@ -208,10 +205,7 @@ class MarketBuySharesForm extends Component {
                     endAdornment={(
                       <TextInputAdornment>
                         <CurrencyName tokenAddress={collateralToken} />
-<<<<<<< Updated upstream
-=======
                         <MandatoryHint />
->>>>>>> Stashed changes
                       </TextInputAdornment>
                     )}
                   />
