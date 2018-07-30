@@ -1,10 +1,6 @@
 {
   "name": "@gnosis.pm/pm-trading-ui",
-<<<<<<< HEAD
-  "version": "0.3.3",
-=======
   "version": "0.4.0",
->>>>>>> backmerge/dappcon
   "description": "Gnosis Prediction Market Trading UI",
   "main": "src/index.js",
   "scripts": {
