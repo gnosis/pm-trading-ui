@@ -126,6 +126,19 @@ class MarketBuySharesForm extends Component {
       && typeof investmentAmount !== 'undefined'
     const gasCostEstimation = weiToEth(gasPrice.mul(gasCosts.get('buyShares') || 0))
     const submitDisabled = invalid || !investmentAmount || !selectedOutcome
+<<<<<<< Updated upstream
+=======
+
+    let submitDisabledReason
+
+    if (!selectedBuyInvest && !selectedOutcome) {
+      submitDisabledReason = 'Please fill all mandatory fields'
+    } else if (!selectedBuyInvest) {
+      submitDisabledReason = 'Please enter an investment amount'
+    } else if (!selectedOutcome) {
+      submitDisabledReason = 'Please select an outcome'
+    }
+>>>>>>> Stashed changes
 
     let outcomeTokenCount = 0
     let maximumWin = 0
@@ -195,6 +208,10 @@ class MarketBuySharesForm extends Component {
                     endAdornment={(
                       <TextInputAdornment>
                         <CurrencyName tokenAddress={collateralToken} />
+<<<<<<< Updated upstream
+=======
+                        <MandatoryHint />
+>>>>>>> Stashed changes
                       </TextInputAdornment>
                     )}
                   />
@@ -227,6 +244,7 @@ class MarketBuySharesForm extends Component {
                   <InteractionButton
                     className={cx('btn', 'btn-primary', 'col-xs-12')}
                     disabled={submitDisabled}
+                    error={submitDisabledReason}
                     loading={submitting}
                     type="submit"
                   >

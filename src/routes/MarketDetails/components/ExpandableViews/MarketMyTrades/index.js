@@ -6,6 +6,7 @@ import moment from 'moment'
 import { List } from 'immutable'
 import CurrencyName from 'components/CurrencyName'
 import ImmutablePropTypes from 'react-immutable-proptypes'
+
 import {
   RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES,
 } from 'utils/constants'

@@ -83,6 +83,7 @@ class ShareSellView extends Component {
       isGasCostFetched,
       valid,
       sellFormHasErrors,
+      error,
       handleSellShare,
     } = this.props
 
@@ -149,6 +150,7 @@ class ShareSellView extends Component {
                 <div className={cx('col-md-4', 'sellColumn')}>
                   <label htmlFor="sellAmount">
                     Amount to Sell
+                    <MandatoryHint />
                   </label>
                   <Field
                     component={TextInput}
