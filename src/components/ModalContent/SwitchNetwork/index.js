@@ -20,8 +20,9 @@ const SwitchNetwork = ({ closeModal, targetNetwork }) => (
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
     <h3 className={cx('heading')}>Switch to the {targetNetwork} Network</h3>
     <p className={cx('text')}>
-      Your provider is not currently set to the {targetNetwork} network. Please switch to {targetNetwork} and make sure your wallet is
-      unlocked to start using {applicationName}.
+      Your provider is not currently set to the {targetNetwork} network. Please switch to {targetNetwork} and make sure
+      your wallet is unlocked to start using {applicationName}
+      .
     </p>
   </div>
 )

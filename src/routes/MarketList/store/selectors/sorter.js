@@ -2,15 +2,15 @@ import moment from 'moment'
 import { get } from 'lodash'
 import { createSelector } from 'reselect'
 import { getFormValues } from 'redux-form'
-import { isMarketClosed } from 'store/utils/marketStatus'
+import { isMarketClosedOrResolved } from 'store/utils/marketStatus'
 
 import { MARKETFILTER_FORM_NAME } from 'routes/MarketList/components/Filter/Form'
 
 const formFilterSelector = getFormValues(MARKETFILTER_FORM_NAME)
 
 const defaultSorting = (marketA, marketB) => {
-  const isAClosed = isMarketClosed(marketA.stage, marketA.resolution, marketA.resolved)
-  const isBClosed = isMarketClosed(marketB.stage, marketB.resolution, marketB.resolved)
+  const isAClosed = isMarketClosedOrResolved(marketA)
+  const isBClosed = isMarketClosedOrResolved(marketB)
 
   if (isAClosed && !isBClosed) {
     return 1

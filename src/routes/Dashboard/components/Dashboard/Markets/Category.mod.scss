@@ -1,0 +1,15 @@
+@import "~style/vars.scss";
+
+.marketList {
+  min-height: 200px;
+  margin-bottom: 30px;
+  >.title {
+    margin: 0 0 12px 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: $font-color-dark;
+
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  } 
+}

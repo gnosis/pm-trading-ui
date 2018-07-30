@@ -1,4 +1,3 @@
-import { isMarketClosed, isMarketResolved } from 'utils/helpers'
 import { getProviderConfig, isFeatureEnabled } from 'utils/features'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import MarketBuySharesForm from './MarketBuySharesForm'
@@ -18,9 +17,9 @@ const showExpandableTournament = (props) => {
   const providerConfig = getProviderConfig()
   let showExpandable = false
   if (
-    providerConfig.default === WALLET_PROVIDER.METAMASK &&
-    !!props.defaultAccount &&
-    (!requireRegistration || !!props.mainnetAddress)
+    providerConfig.default === WALLET_PROVIDER.METAMASK
+    && !!props.defaultAccount
+    && (!requireRegistration || !!props.mainnetAddress)
   ) {
     showExpandable = true
   } else if (providerConfig === WALLET_PROVIDER.UPORT && !!props.defaultAccount) {
@@ -35,26 +34,24 @@ const expandableViews = {
     label: 'Buy Tokens',
     className: 'btn btn-default',
     component: MarketBuySharesForm,
-    showCondition: props =>
-      props.market &&
-      !props.market.local &&
-      !!props.defaultAccount &&
-      props.defaultAccount !== props.market.owner &&
-      !isMarketClosed(props.market) &&
-      !isMarketResolved(props.market) &&
-      showExpandableTournament(props),
+    showCondition: props => props.market
+      && !!props.defaultAccount
+      && props.defaultAccount !== props.creator
+      && !props.market.closed
+      && !props.market.resolved
+      && props.hasWallet,
   },
   [EXPAND_MY_SHARES]: {
     label: MY_TOKENS,
     className: 'btn btn-default',
     component: MarketMySharesForm,
-    showCondition: props => props.market && !!props.defaultAccount && showExpandableTournament(props),
+    showCondition: props => props.market && !!props.defaultAccount && props.hasWallet && showExpandableTournament(props),
   },
   [EXPAND_MY_TRADES]: {
     label: 'My Trades',
     className: 'btn btn-default',
     component: MarketMyTrades,
-    showCondition: props => props.market && !!props.defaultAccount && showExpandableTournament(props),
+    showCondition: props => props.market && !!props.defaultAccount && props.hasWallet && showExpandableTournament(props),
   },
 }
 

@@ -1,18 +1,22 @@
-import { combineReducers, createStore, applyMiddleware, compose } from 'redux'
+import {
+  combineReducers, createStore, applyMiddleware, compose,
+} from 'redux'
 import thunk from 'redux-thunk'
 import { List } from 'immutable'
-import marketReducer, { REDUCER_ID } from 'store/reducers/market'
+import marketReducer from 'store/reducers/market'
 import blockchainReducer from 'store/reducers/blockchain'
-import { processMarketResponse } from '../actions/fetchMarkets'
+import { processMarketsResponse } from 'store/actions/market'
 import { marketListSelector } from '../selectors'
-import { oneMarketData, twoMarketData, realData, MarketFactory } from './builder/index.builder'
+import {
+  oneMarketData, twoMarketData, realData, MarketFactory,
+} from './builder/index.builder'
 
 const marketReducerTests = () => {
   describe('Market List Actions[fetchMarktes -> addMarkets]', () => {
     let store
     beforeEach(() => {
       const reducers = combineReducers({
-        [REDUCER_ID]: marketReducer,
+        marketList: marketReducer,
         blockchain: blockchainReducer,
       })
       const middlewares = [
@@ -30,7 +34,7 @@ const marketReducerTests = () => {
       const emptyResponse = { }
 
       // WHEN
-      processMarketResponse(store.dispatch, store.getState(), emptyResponse)
+      processMarketsResponse(store.dispatch, store.getState(), emptyResponse)
 
       // THEN
       const emptyList = List([])
@@ -43,7 +47,7 @@ const marketReducerTests = () => {
       const threeMarketsResponse = realData
 
       // WHEN
-      processMarketResponse(store.dispatch, store.getState(), threeMarketsResponse)
+      processMarketsResponse(store.dispatch, store.getState(), threeMarketsResponse)
 
       // THEN
       const markets = marketListSelector(store.getState())
@@ -60,11 +64,11 @@ const marketReducerTests = () => {
     it('should replace markets in store when fetch data', () => {
       // GIVEN
       const kittiesResponse = oneMarketData
-      processMarketResponse(store.dispatch, store.getState(), kittiesResponse)
+      processMarketsResponse(store.dispatch, store.getState(), kittiesResponse)
 
       // WHEN
       const etherAndGasMarketsResponse = twoMarketData
-      processMarketResponse(store.dispatch, store.getState(), etherAndGasMarketsResponse)
+      processMarketsResponse(store.dispatch, store.getState(), etherAndGasMarketsResponse)
 
       // THEN
       const markets = marketListSelector(store.getState())

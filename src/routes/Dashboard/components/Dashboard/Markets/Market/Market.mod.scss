@@ -1,0 +1,89 @@
+@import "~style/vars.scss";
+
+.market {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: white;
+  appearance: none;
+  padding: 10px;
+  transition: all 0.2s ease;
+  text-align: left;
+  border: none;
+
+
+  // Borderradius on first Market
+  &:first-child {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+
+  // Borderradius on last Market
+  &:last-child {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+
+  // Put upper Border on next "market"
+  & + & {
+    border-top: 1px solid $bg-color-muted;
+  }
+
+  .title {
+    text-align: left;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    font-weight: 300;
+    padding: 2px 0;
+    @media (min-width: $screen-sm) {
+      font-size: 18px;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    outline: 0;
+    color: inherit;
+    cursor: pointer;
+    padding-left: 13px;
+  }
+
+  // Display as flex to show time next to title/outcome
+  &.closingSoon {
+    text-align: left;
+    flex-direction: row;
+    align-items: center;
+
+    .timeUntilResolution {
+      min-width: 120px;
+      text-align: center;
+      color: black;
+      font-size: 20px;
+      letter-spacing: -1px;
+      line-height: 1;
+      @media (min-width: $screen-sm) {
+        font-size: 30px;
+      }
+    }
+  }
+
+  &.none {
+    justify-content: center;
+    min-height: inherit;
+    font-size: 12px;
+    color: $font-color-dark;
+
+    font-weight: 400;
+    letter-spacing: 0.5px;
+
+    &:focus,&:hover {
+      cursor: default;
+      padding-left: 10px;
+      color: $font-color-dark;
+    }
+
+    .title {
+      text-align: center;
+    }
+  }
+}
