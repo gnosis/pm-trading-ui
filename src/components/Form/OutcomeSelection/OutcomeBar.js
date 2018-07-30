@@ -39,7 +39,8 @@ const Outcome = ({
           <div className={cx('outcomeDescription')}>
             {!hidePercentage && (
               <span className={cx('outcomeProbability')}>
-                {decimalToText(probability, 2)}%
+                {decimalToText(probability, 2)}
+%
               </span>
             )}
           </div>

@@ -7,8 +7,9 @@ import GameGuidePage from 'routes/GameGuide/containers/GameGuide'
 import MarketListPage from 'routes/MarketList/containers/MarketList'
 import ScoreboardPage from 'routes/Scoreboard/containers/ScoreBoard'
 import MarketDetailPage from 'routes/MarketDetails/containers/MarketDetailPage'
+
 import TransactionsPage from 'routes/Transactions/containers/TransactionsPage'
-import DashboardPage from 'containers/DashboardPage'
+import DashboardPage from 'routes/Dashboard/containers/Dashboard'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
 
 const gameGuideConfig = getFeatureConfig('gameGuide')

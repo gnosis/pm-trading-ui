@@ -9,13 +9,18 @@ const DocumentField = ({
   <Field name={id} component={Checkbox} className={className}>
     {type === 'TOS_DOCUMENT' && (
       <span>
-        I have read and understood the{' '}
+        I have read and understood the
+        {' '}
         <a href={`${file}`} target="_blank" rel="noopener noreferrer">
           {title}
         </a>
       </span>
     )}
-    {type === 'TOS_TEXT' && <span>{text}</span>}
+    {type === 'TOS_TEXT' && (
+      <span>
+        {text}
+      </span>
+    )}
   </Field>
 )
 

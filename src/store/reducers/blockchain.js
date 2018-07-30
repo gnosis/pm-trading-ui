@@ -10,6 +10,7 @@ import {
   setCollateralToken,
   ETH_TOKEN_ICON,
 } from 'store/actions/blockchain'
+
 import { setGasCost } from 'routes/MarketDetails/store/actions'
 
 import { GAS_COST } from 'utils/constants'

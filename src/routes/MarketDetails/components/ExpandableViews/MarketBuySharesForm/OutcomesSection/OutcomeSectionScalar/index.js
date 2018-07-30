@@ -11,33 +11,33 @@ import ScalarSlider from './ScalarSlider'
 
 const OutcomeSectionScalar = (props) => {
   const {
-    selectedBuyInvest,
     selectedOutcome,
     market: {
-      event: { lowerBound, upperBound },
-      eventDescription: { decimals, unit },
-      netOutcomeTokensSold,
+      bounds: {
+        lower, upper, decimals, unit,
+      },
+      outcomeTokensSold,
       funding,
     },
     outcomeTokenCount,
+    valid: canRunSimulation,
   } = props
-  const canRunSimulation = selectedBuyInvest && selectedOutcome
 
-  const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-  const marginalPricesCurrent = calcLMSRMarginalPrice({
+  const marketTokenCounts = outcomeTokensSold.toArray().map(value => Decimal(value))
+  const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
     netOutcomeTokensSold: marketTokenCounts,
-    outcomeTokenIndex: 1,
+    outcomeTokenIndex,
     funding,
-  })
+  }))
   let marginalPriceSelected = marginalPricesCurrent
 
   if (canRunSimulation) {
     marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
-    marginalPriceSelected = calcLMSRMarginalPrice({
+    marginalPriceSelected = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
       netOutcomeTokensSold: marketTokenCounts,
-      outcomeTokenIndex: 1,
+      outcomeTokenIndex,
       funding,
-    })
+    }))
   }
 
   const scalarOutcomes = [
@@ -75,8 +75,8 @@ const OutcomeSectionScalar = (props) => {
       <div className={cn('row')}>
         <div className={cn('col-md-12')}>
           <ScalarSlider
-            lowerBound={parseInt(lowerBound, 10)}
-            upperBound={parseInt(upperBound, 10)}
+            lowerBound={parseInt(lower, 10)}
+            upperBound={parseInt(upper, 10)}
             unit={unit}
             decimals={decimals}
             marginalPriceCurrent={marginalPricesCurrent.toString()}
@@ -91,12 +91,12 @@ const OutcomeSectionScalar = (props) => {
 OutcomeSectionScalar.propTypes = {
   market: marketShape.isRequired,
   selectedOutcome: PropTypes.string,
-  selectedBuyInvest: PropTypes.string,
+  valid: PropTypes.bool,
   outcomeTokenCount: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.number]).isRequired,
 }
 
 OutcomeSectionScalar.defaultProps = {
-  selectedBuyInvest: '0',
+  valid: false,
   selectedOutcome: undefined,
 }
 

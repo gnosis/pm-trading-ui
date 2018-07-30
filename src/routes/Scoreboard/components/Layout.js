@@ -7,6 +7,7 @@ import PageFrame from 'components/layout/PageFrame'
 import Paragraph from 'components/layout/Paragraph'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
+import { List } from 'immutable'
 import { getProviderConfig, isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import css from './Layout.mod.scss'
@@ -19,8 +20,7 @@ const trophy = require('../assets/trophy.svg')
 
 const providerConfig = getProviderConfig()
 
-const claimingEnabled = isFeatureEnabled('rewardClaiming')
-const regisrationEnabled = isFeatureEnabled('registration')
+const rewardsEnabled = isFeatureEnabled('rewards')
 const { levels } = getFeatureConfig('rewards')
 
 const NoRows = () => (
@@ -46,8 +46,8 @@ class Layout extends React.PureComponent {
       }
     })
 
-    const showRewardInfo = regisrationEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
-    const showRewardClaim = claimingEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK && !!mainnetAddress
+    const showRewardInfo = rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK ? !!mainnetAddress : myAccount
+    const showRewardClaim = rewardsEnabled && providerConfig.default === WALLET_PROVIDER.METAMASK && !!mainnetAddress
 
     return (
       <Block>
@@ -101,7 +101,7 @@ Layout.propTypes = {
 }
 
 Layout.defaultProps = {
-  data: [],
+  data: List(),
   myAccount: '',
   mainnetAddress: undefined,
   rank: '',

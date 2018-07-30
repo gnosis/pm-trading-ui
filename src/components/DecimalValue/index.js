@@ -23,7 +23,11 @@ export const decimalToText = (value, decimals = 4) => {
 
 const DecimalValue = ({ value, decimals = 4, className }) => {
   const text = decimalToText(value, decimals)
-  return <span className={className}>{text}</span>
+  return (
+    <span className={className}>
+      {text}
+    </span>
+  )
 }
 
 // I don't use PropTypes.instanceOf because Decimal can be cloned with different default properties

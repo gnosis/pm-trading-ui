@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import PropTypes from 'prop-types'
 import web3 from 'web3'
@@ -15,6 +16,7 @@ import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { marketShape, marketShareShape } from 'utils/shapes'
 import { LIMIT_MARGIN, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
 import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
+import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm/utils'
 import {
   calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount,
 } from './utils'
@@ -41,6 +43,31 @@ class ShareSellView extends Component {
     }
   }
 
+  @autobind
+  validateTokenCount(val) {
+    const { share, market } = this.props
+    if (!val || !NUMBER_REGEXP.test(val) || Decimal(val).lt(1e-18)) {
+      return 'Invalid amount'
+    }
+
+    const decimalValue = Decimal(val)
+    const earnings = calculateEarnings(market, share, web3.utils.toWei(val))
+
+    if (decimalValue.lt(0)) {
+      return "Number can't be negative."
+    }
+
+    if (decimalValue.gt(Decimal(share.balance).div(1e18))) {
+      return "You're trying to sell more than you invested."
+    }
+
+    if (Decimal(0).eq(earnings)) {
+      return 'This transaction is not permitted because it will result in a loss of an outcome token.'
+    }
+
+    return undefined
+  }
+
   render() {
     const {
       market,
@@ -57,6 +84,7 @@ class ShareSellView extends Component {
       valid,
       sellFormHasErrors,
       error,
+      handleSellShare,
     } = this.props
 
     const sellSharesGasCost = gasCosts.get('sellShares')
@@ -86,7 +114,7 @@ class ShareSellView extends Component {
     let newMarginalPrices
     let newScalarPredictedValue
 
-    if (market.event.type === OUTCOME_TYPES.SCALAR) {
+    if (market.type === OUTCOME_TYPES.SCALAR) {
       newMarginalPrices = [new Decimal(1).sub(currentProbability), newProbability]
       newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
     }
@@ -95,7 +123,7 @@ class ShareSellView extends Component {
     if (valid) {
       newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
       earnings = calculateEarnings(market, share, selectedSellAmountWei)
-      newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
+      newNetOutcomeTokensSold = market.outcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
         if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
           return Decimal(outcomeTokenAmount)
             .sub(currentTokenBalance.sub(newTokenBalance))
@@ -107,17 +135,17 @@ class ShareSellView extends Component {
       })
 
       try {
-        newProbability = calculateNewProbability(market, share, newNetOutcomeTokensSold)
+        newProbability = calculateNewProbability(market, share, newNetOutcomeTokensSold.toArray())
       } catch (e) {
         console.error(e)
       }
 
-      if (market.event.type === OUTCOME_TYPES.SCALAR) {
+      if (market.type === OUTCOME_TYPES.SCALAR) {
         newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
         newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
       }
     }
-    const submitHandler = handleSubmit(() => this.props.handleSellShare(share.id, selectedSellAmount, earnings))
+    const submitHandler = handleSubmit(() => handleSellShare(share.id, selectedSellAmount, earnings))
 
     return (
       <tr className={cx('sellView')}>
@@ -127,7 +155,7 @@ class ShareSellView extends Component {
               <div className={cx('row', 'sellRow')}>
                 <div className={cx('col-md-4', 'sellColumn')}>
                   <label htmlFor="sellAmount">
-Amount to Sell
+                    Amount to Sell
                     <MandatoryHint />
                   </label>
                   <Field
@@ -139,14 +167,14 @@ Amount to Sell
                   />
                 </div>
 
-                {market.event.type === 'SCALAR' ? (
+                {market.type === 'SCALAR' ? (
                   <div className={cx('col-md-4', 'sellColumn')}>
                     <label>
-New predicted value
+                      New predicted value
                     </label>
                     <span>
                       <DecimalValue value={newScalarPredictedValue} />
-&nbsp;
+                      &nbsp;
                       <span>
                         {market.eventDescription.unit}
                       </span>
@@ -155,26 +183,26 @@ New predicted value
                 ) : (
                   <div className={cx('col-md-4', 'sellColumn')}>
                     <label>
-New Probability
+                      New Probability
                     </label>
                     <span>
                       <DecimalValue value={newProbability.mul(100)} />
                       {' '}
-%
+                      %
                     </span>
                   </div>
                 )}
                 <div className={cx('col-md-3', 'sellColumn')}>
                   <label>
-Gas costs
+                    Gas costs
                   </label>
                   <span>
                     {isGasPriceFetched && isGasCostFetched(GAS_COST.SELL_SHARES) ? (
-                      <React.Fragment>
+                      <>
                         <DecimalValue value={gasCostEstimation} decimals={5} />
-&nbsp;
-                        <CurrencyName tokenAddress={market.event.collateralToken} />
-                      </React.Fragment>
+                        &nbsp;
+                        <CurrencyName tokenAddress={market.collateralToken} />
+                      </>
                     ) : (
                       <IndefiniteSpinner width={16} height={16} />
                     )}
@@ -185,7 +213,7 @@ Gas costs
               <div className={cx('row', 'sellRow')}>
                 <div className={cx('col-md-2')}>
                   <label htmlFor="limitMargin">
-Limit Margin
+                    Limit Margin
                   </label>
                 </div>
                 <div className={cx('col-md-3')}>
@@ -205,16 +233,16 @@ Limit Margin
                 <div className={cx('col-md-4', 'sellColumn')}>
                   <div className={cx('sellColumnInfo')}>
                     <label>
-Earnings
+                      Earnings
                     </label>
                     <span>
                       <DecimalValue value={earnings} />
-&nbsp;
-                      <CurrencyName tokenAddress={market.event.collateralToken} />
+                        &nbsp;
+                      <CurrencyName tokenAddress={market.collateralToken} />
                     </span>
                   </div>
                   <InteractionButton
-                    loading={submitting || market.local}
+                    loading={submitting}
                     disabled={submitDisabled}
                     error={submitDisabledReason}
                     className={cx('btn', 'btn-block', 'btn-primary')}

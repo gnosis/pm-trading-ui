@@ -49,6 +49,7 @@ export default (state) => {
     gameGuideURL: gameGuideConfig.url,
     tokenAddress: collateralToken.address,
     tokenBalance: collateralToken.balance,
+    tokenSymbol: collateralToken.symbol,
     acceptedTOS: hasAcceptedTermsAndConditions(state),
   }
 }

@@ -3,8 +3,7 @@ import {
 } from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
-import moment from 'moment'
-import { HEX_VALUE_REGEX, OUTCOME_TYPES, MARKET_STAGES } from 'utils/constants'
+import { HEX_VALUE_REGEX, OUTCOME_TYPES, REQUEST_STATES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
 import { getConfiguration } from 'utils/features'
@@ -27,6 +26,7 @@ export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substr
 
 export const normalizeHex = value => hexWithPrefix(value).toLowerCase()
 
+<<<<<<< HEAD
 export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
 
 export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) => stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
@@ -47,6 +47,8 @@ export const toEntity = (data, entityType, idKey = 'address') => {
   }
 }
 
+=======
+>>>>>>> backmerge/dappcon
 /**
  * Converts a value from WEI to ETH
  * @param {String|Number|Decimal} value
@@ -70,25 +72,23 @@ export const weiToEth = (value) => {
 
 export const getOutcomeName = (market, index) => {
   let outcomeName
-  if (!market.event) {
+  if (!market.outcomes) {
     return null
   }
-  if (market.event.type === OUTCOME_TYPES.CATEGORICAL) {
-    outcomeName = market.eventDescription.outcomes[index]
-  } else if (market.event.type === OUTCOME_TYPES.SCALAR) {
+
+  if (market.type === OUTCOME_TYPES.CATEGORICAL) {
+    outcomeName = market.outcomes.get(index).name
+  } else if (market.type === OUTCOME_TYPES.SCALAR) {
     outcomeName = index === 0 ? 'Short' : 'Long'
   }
   return outcomeName
 }
 
-export const normalizeScalarPoint = (
-  marginalPrices,
-  { event: { lowerBound, upperBound }, eventDescription: { decimals } },
-) => {
+export const normalizeScalarPoint = (marginalPrices, { bounds: { lower, upper, decimals } }) => {
   const bigDecimals = parseInt(decimals, 10)
 
-  const bigUpperBound = Decimal(upperBound).div(10 ** bigDecimals)
-  const bigLowerBound = Decimal(lowerBound).div(10 ** bigDecimals)
+  const bigUpperBound = Decimal(upper).div(10 ** bigDecimals)
+  const bigLowerBound = Decimal(lower).div(10 ** bigDecimals)
 
   const bounds = bigUpperBound.sub(bigLowerBound)
   return Decimal(marginalPrices[1].toString())
@@ -101,10 +101,19 @@ export const normalizeScalarPoint = (
 export const restFetch = url => fetch(url)
   .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
   .then(res => res.json())
+<<<<<<< HEAD
   .catch(err => new Promise((resolve, reject) => {
     console.warn(`Gnosis DB: ${err}`)
     reject(err)
   }))
+=======
+  .catch(
+    err => new Promise((resolve, reject) => {
+      console.warn(`Gnosis DB: ${err}`)
+      reject(err)
+    }),
+  )
+>>>>>>> backmerge/dappcon
 
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
@@ -199,4 +208,15 @@ export const generateWalletName = (account) => {
   const accountAddressNormalized = hexWithPrefix(account).toLowerCase()
 
   return generateDeterministicRandomName(accountAddressNormalized)
+}
+
+export const setRequestStateWrap = async (setRequestState, asyncAction, context, ...params) => {
+  setRequestState(REQUEST_STATES.LOADING)
+  try {
+    await asyncAction.apply(context, params)
+    setRequestState(REQUEST_STATES.SUCCESS)
+  } catch (e) {
+    console.error(e)
+    setRequestState(REQUEST_STATES.ERROR)
+  }
 }

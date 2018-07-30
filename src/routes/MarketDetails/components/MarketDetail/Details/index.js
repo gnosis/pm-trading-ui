@@ -2,12 +2,12 @@ import React from 'react'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import ImmutableProptypes from 'react-immutable-proptypes'
+import Markdown from 'react-markdown'
 import moment from 'moment'
 import Decimal from 'decimal.js'
 import Markdown from 'react-markdown'
 import { LOWEST_VALUE } from 'utils/constants'
-import { marketShape, marketShareShape } from 'utils/shapes'
-import { isMarketClosed, isMarketResolved } from 'utils/helpers'
+import { marketShape } from 'utils/shapes'
 import Outcome from 'components/Outcome'
 import MarketTimer from './MarketTimer'
 import RedeemWinnigs from './RedeemWinnings'
@@ -21,16 +21,16 @@ const Details = ({
   market, marketShares, gasCosts, gasPrice, handleRedeemWinnings,
 }) => {
   const timeToResolution = moment
-    .utc(market.eventDescription.resolutionDate)
+    .utc(market.resolution)
     .local()
     .diff(moment(), 'hours')
-  const winningsTotal = Object.keys(marketShares).reduce(
-    (acc, shareId) => acc.add(Decimal(marketShares[shareId].winnings || '0')),
+  const winningsTotal = marketShares.reduce(
+    (winnings, share) => winnings.add(Decimal(share.winnings || '0')),
     Decimal(0),
   )
   const redeemWinningsGasCost = gasCosts.get('redeemWinnings')
-  const marketClosed = isMarketClosed(market)
-  const marketResolved = isMarketResolved(market)
+  const marketClosed = market.closed
+  const marketResolved = market.resolved
   const showWinning = marketResolved && winningsTotal.gt(LOWEST_VALUE)
   const marketClosedOrFinished = marketClosed || marketResolved
   const marketStatus = marketResolved ? 'resolved.' : 'closed.'
@@ -53,26 +53,23 @@ const Details = ({
     ),
   }
   /* eslint-enable */
+  const marketOutcomes = market.outcomes ? market.outcomes.map(outcome => outcome.name).toArray() : []
 
   return (
     <div className={cx('col-xs-10 col-xs-offset-1 col-sm-9 col-sm-offset-0')}>
-      <Markdown
-        className={cx('marketDescription')}
-        source={market.eventDescription.description}
-        renderers={markdownRenderers}
-      />
+      <Markdown className={cx('marketDescription')} source={market.description} renderers={markdownRenderers} />
       <Outcome
         resolved={marketResolved}
-        type={market.event.type}
-        outcomeTokensSold={market.netOutcomeTokensSold}
-        resolution={market.eventDescription.resolutionDate}
+        type={market.type}
+        outcomeTokensSold={market.outcomeTokensSold.toArray()}
+        resolution={market.resolution}
         funding={market.funding}
-        outcomes={market.eventDescription.outcomes}
-        winningOutcome={market.event.outcome}
-        upperBound={market.event.upperBound}
-        lowerBound={market.event.lowerBound}
-        decimals={market.eventDescription.decimals}
-        unit={market.eventDescription.unit}
+        outcomes={marketOutcomes}
+        winningOutcome={market.winningOutcome}
+        upperBound={market.bounds?.upper}
+        lowerBound={market.bounds?.lower}
+        decimals={market.bounds?.decimals}
+        unit={market.bounds?.unit}
         opts={outcomeOpts}
       />
       <MarketTimer
@@ -95,7 +92,7 @@ const Details = ({
 
 Details.propTypes = {
   market: marketShape.isRequired,
-  marketShares: PropTypes.objectOf(marketShareShape),
+  marketShares: ImmutableProptypes.list,
   handleRedeemWinnings: PropTypes.func,
   gasCosts: ImmutableProptypes.map.isRequired,
   gasPrice: PropTypes.instanceOf(Decimal).isRequired,

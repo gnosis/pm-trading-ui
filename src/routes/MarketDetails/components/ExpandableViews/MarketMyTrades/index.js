@@ -3,13 +3,18 @@ import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import moment from 'moment'
+import { List } from 'immutable'
 import CurrencyName from 'components/CurrencyName'
+<<<<<<< HEAD
 import DecimalValue from 'components/DecimalValue'
+=======
+import ImmutablePropTypes from 'react-immutable-proptypes'
+
+>>>>>>> backmerge/dappcon
 import {
   RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES,
 } from 'utils/constants'
 import { getOutcomeName, weiToEth } from 'utils/helpers'
-import { marketShape, marketTradeShape } from 'utils/shapes'
 import TableHeader from './TableHeader'
 import TradeRow from './TradeRow'
 
@@ -19,36 +24,42 @@ const cx = cn.bind(style)
 
 class MarketMyTrades extends Component {
   static propTypes = {
-    market: marketShape,
-    marketTrades: PropTypes.arrayOf(marketTradeShape),
-    defaultAccount: PropTypes.string,
+    market: ImmutablePropTypes.record.isRequired,
+    marketTrades: ImmutablePropTypes.list,
+    defaultAccount: PropTypes.string.isRequired,
     fetchMarketTradesForAccount: PropTypes.func,
   }
 
   static defaultProps = {
-    market: {
-      event: {},
-      eventDescription: {},
-    },
-    marketTrades: [],
-    defaultAccount: '',
+    marketTrades: List(),
     fetchMarketTradesForAccount: () => {},
   }
 
   componentDidMount() {
+<<<<<<< HEAD
     const {
       market, defaultAccount, fetchMarketTradesForAccount,
     } = this.props
     fetchMarketTradesForAccount(market.address, defaultAccount)
+=======
+    const { defaultAccount, fetchMarketTradesForAccount } = this.props
+    if (defaultAccount) {
+      fetchMarketTradesForAccount(defaultAccount)
+    }
+>>>>>>> backmerge/dappcon
   }
 
   renderTrades() {
     const {
       market,
       marketTrades,
+<<<<<<< HEAD
       market: {
         event: { type },
       },
+=======
+      market: { type },
+>>>>>>> backmerge/dappcon
     } = this.props
     const colorScheme = type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
 
@@ -61,6 +72,7 @@ class MarketMyTrades extends Component {
       const outcomeName = getOutcomeName(market, trade.outcomeToken.index)
 
       let tradeCost = '0'
+<<<<<<< HEAD
       if (trade.cost !== 'None') {
         const tradeCostEth = Decimal(weiToEth(trade.cost))
         tradeCost = (
@@ -68,6 +80,17 @@ class MarketMyTrades extends Component {
             {tradeCostEth.lt(0.0001) ? '< 0.0001' : <DecimalValue value={tradeCostEth} />}&nbsp;
             <CurrencyName tokenAddress={market.event.collateralToken} />
           </>
+=======
+      if (trade.price !== 'None') {
+        tradeCost = (
+          <Fragment>
+            {Decimal(weiToEth(trade.price))
+              .toDP(2, 1)
+              .toString()}
+            &nbsp;
+            <CurrencyName tokenAddress={market.collateralToken} />
+          </Fragment>
+>>>>>>> backmerge/dappcon
         )
       }
 
@@ -79,7 +102,7 @@ class MarketMyTrades extends Component {
           outcomeColorStyle={outcomeColorStyle}
           tradeDate={tradeDate}
           outcomeName={outcomeName}
-          collateralToken={market.event.collateralToken}
+          collateralToken={market.collateralToken}
         />
       )
     })
@@ -89,7 +112,7 @@ class MarketMyTrades extends Component {
 
   render() {
     const { marketTrades } = this.props
-    if (marketTrades && marketTrades.length > 0) {
+    if (marketTrades && !marketTrades.isEmpty()) {
       return (
         <div className={cx('marketMyTrades')}>
           <h2>My Trades</h2>
@@ -104,7 +127,8 @@ class MarketMyTrades extends Component {
     return (
       <div className={cx('marketMyTrades')}>
         <h2>
-          You haven&apos;t interacted with this market yet.<br />
+          You haven&apos;t interacted with this market yet.
+          <br />
           <small>Every transaction that happens on this market will be shown here.</small>
         </h2>
       </div>

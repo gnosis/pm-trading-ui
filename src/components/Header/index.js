@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
 import { upperFirst } from 'lodash'
 import className from 'classnames/bind'
-import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
@@ -108,7 +107,7 @@ class Header extends Component {
       showGameGuide,
       gameGuideType,
       gameGuideURL,
-      tokenAddress,
+      tokenSymbol,
       mainnetAddress,
       userTournamentInfo,
       acceptedTOS,
@@ -121,11 +120,8 @@ class Header extends Component {
     }
 
     const logoVars = {}
-    if (tournamentEnabled) {
-      logoVars['--logoAnnotation'] = "'Powered by Gnosis'"
-      logoVars['--logoPath'] = `url("${logoPath}")`
-      logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
-    }
+    logoVars['--logoPath'] = `url("${logoPath}")`
+    logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
 
     let gameGuideLink = <div />
     if (showGameGuide) {
@@ -188,7 +184,7 @@ class Header extends Component {
                 &nbsp;
                 {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : (
                   <span>
-ETH
+                    ETH
                   </span>
                 )}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
@@ -197,7 +193,7 @@ ETH
                 {useUport && <MenuAccountDropdown />}
               </div>
             ) : (
-              <button className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
+              <button type="button" className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
                 Connect a wallet
               </button>
             )}
@@ -222,7 +218,7 @@ Header.propTypes = {
   showGameGuide: PropTypes.bool,
   gameGuideType: PropTypes.string,
   gameGuideURL: PropTypes.string,
-  tokenAddress: PropTypes.string,
+  tokenSymbol: PropTypes.string,
   lockedMetamask: PropTypes.bool,
   requestMainnetAddress: PropTypes.func.isRequired,
   requestTokenBalance: PropTypes.func.isRequired,
@@ -247,7 +243,7 @@ Header.defaultProps = {
   mainnetAddress: undefined,
   lockedMetamask: true,
   userTournamentInfo: undefined,
-  tokenAddress: undefined,
+  tokenSymbol: 'ETH',
   acceptedTOS: false,
 }
 

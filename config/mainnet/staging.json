@@ -1,0 +1,26 @@
+{
+  "gnosisdb": {
+    "protocol": "https",
+    "host": "tradingdb.mainnet.staging.gnosisdev.com",
+    "port": 443
+  },
+  "ethereum": {
+    "protocol": "https",
+    "host": "mainnet.infura.io",
+    "port": 443
+  },
+  "whitelist": {
+    "0x9eab578556de5782445ec036f25a41902ba19eeb": "Gnosis"
+  },
+  "thirdparty": {
+    "googleAnalytics": {
+      "enabled": false
+    }
+  },
+  "providers": {
+    "default": "METAMASK"
+  },
+  "legalCompliance": {
+    "enabled": true
+  }
+}

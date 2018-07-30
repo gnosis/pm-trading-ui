@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
-import OutcomeColorBox from 'components/OutcomeColorBox'
+import OutcomeColorBox from 'components/Outcome/OutcomeColorBox'
 import { marketShareShape } from 'utils/shapes'
 import { LOWEST_VALUE } from 'utils/constants'
 import style from './ShareRow.mod.scss'
@@ -11,7 +11,7 @@ import style from './ShareRow.mod.scss'
 const cx = cn.bind(style)
 
 const ShareRow = ({
-  outcomeColorStyle, ableToSell, share, outcomeName, onSellClick,
+  ableToSell, share, outcomeName, onSellClick,
 }) => {
   const shareBalance = Decimal(share.balance)
     .div(1e18)
@@ -25,10 +25,14 @@ const ShareRow = ({
   return (
     <tr>
       <td>
-        <OutcomeColorBox style={outcomeColorStyle} />
+        <OutcomeColorBox outcomeIndex={share.outcomeToken.index} />
       </td>
-      <td>{outcomeName}</td>
-      <td>{shareBalance}</td>
+      <td>
+        {outcomeName}
+      </td>
+      <td>
+        {shareBalance}
+      </td>
       <td>
         {ableToSell && (
           <button className={cx('ShareSellButton')} onClick={onClickHandler}>
@@ -41,9 +45,6 @@ const ShareRow = ({
 }
 
 ShareRow.propTypes = {
-  outcomeColorStyle: PropTypes.shape({
-    backgroundColor: PropTypes.string.isRequired,
-  }),
   ableToSell: PropTypes.bool,
   share: marketShareShape,
   outcomeName: PropTypes.string,
@@ -51,9 +52,6 @@ ShareRow.propTypes = {
 }
 
 ShareRow.defaultProps = {
-  outcomeColorStyle: {
-    backgroundColor: '#fff',
-  },
   outcomeName: '',
   ableToSell: false,
   share: {},

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Tooltip from 'rc-tooltip'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import Icon from 'components/Icon'

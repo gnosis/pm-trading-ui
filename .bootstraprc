@@ -7,6 +7,11 @@ styles:
   media: true
   tables: true
 scripts: false
+styleLoaders:
+- style-loader
+- css-loader?sourceMap
+- postcss-loader?sourceMap
+- sass-loader?sourceMap
 bootstrapVersion: 3
 env:
   production:

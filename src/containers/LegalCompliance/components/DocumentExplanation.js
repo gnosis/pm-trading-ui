@@ -22,7 +22,11 @@ const LegalDocumentTitle = ({
     )
   }
   if (type === DOCUMENT_TYPES.TEXT) {
-    return <span>{short}</span>
+    return (
+      <span>
+        {short}
+      </span>
+    )
   }
 
   return null

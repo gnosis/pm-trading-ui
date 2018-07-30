@@ -1,19 +1,17 @@
 import { Map } from 'immutable'
 import { handleActions } from 'redux-actions'
-import { LOAD_LOCALSTORAGE } from 'store/middlewares/LocalStorageLoad'
+import { loadStorage } from 'store/middlewares/Storage'
 import { rewardsClaimed } from '../actions'
 
 export default handleActions(
   {
     [rewardsClaimed]: state => state.set('rewardsClaimed', true),
-    [LOAD_LOCALSTORAGE]: (
-      state,
-      {
-        payload: {
-          tournament: { rewards },
-        },
-      },
-    ) => state.set('rewardsClaimed', rewards.rewardsClaimed),
+    [loadStorage]: (state, { payload }) => {
+      if (payload?.tournament?.rewards) {
+        return state.set('rewardsClaimed', payload.tournament.rewards.rewardsClaimed)
+      }
+      return state
+    },
   },
   Map({
     rewardsClaimed: false,

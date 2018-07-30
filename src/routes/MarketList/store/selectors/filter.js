@@ -2,7 +2,7 @@ import { createSelector } from 'reselect'
 import { getFormValues } from 'redux-form'
 
 import { getCurrentAccount } from 'integrations/store/selectors'
-import { isMarketFunded, isMarketClosed } from 'store/utils/marketStatus'
+import { isMarketFunded, isMarketClosedOrResolved } from 'store/utils/marketStatus'
 
 import { MARKETFILTER_FORM_NAME } from 'routes/MarketList/components/Filter/Form'
 
@@ -21,8 +21,8 @@ const FILTER_DEFAULTS = {}
 
 // Functions for RadioButton Filters for MarketStatus
 const MARKET_STATUS_FILTERS = {
-  isClosed: market => isMarketClosed(market.stage, market.resolution, market.resolved),
-  isOpen: market => !isMarketClosed(market.stage, market.resolution, market.resolved),
+  isClosed: market => isMarketClosedOrResolved(market),
+  isOpen: market => !isMarketClosedOrResolved(market),
 }
 
 // Functions for each filter field

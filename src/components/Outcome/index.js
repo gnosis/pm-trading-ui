@@ -20,33 +20,32 @@ const Outcome = ({
   funding,
   opts = { showOnlyTrendingOutcome: false },
 }) => {
-  let outcomeComponent =
-    type === OUTCOME_TYPES.CATEGORICAL ? (
-      <OutcomeCategorical
-        opts={opts}
-        resolved={resolved}
-        outcomeTokensSold={outcomeTokensSold}
-        resolution={resolution}
-        funding={funding}
-        outcomes={outcomes}
-        marginalPrices={marginalPrices}
-        winningOutcome={winningOutcome}
-      />
-    ) : (
-      <OutcomeScalar
-        opts={opts}
-        upperBound={upperBound}
-        lowerBound={lowerBound}
-        unit={unit}
-        decimals={decimals}
-        resolved={resolved}
-        outcomeTokensSold={outcomeTokensSold}
-        resolution={resolution}
-        funding={funding}
-        marginalPrices={marginalPrices}
-        winningOutcome={winningOutcome}
-      />
-    )
+  let outcomeComponent = type === OUTCOME_TYPES.CATEGORICAL ? (
+    <OutcomeCategorical
+      opts={opts}
+      resolved={resolved}
+      outcomeTokensSold={outcomeTokensSold}
+      resolution={resolution}
+      funding={funding}
+      outcomes={outcomes}
+      marginalPrices={marginalPrices}
+      winningOutcome={winningOutcome}
+    />
+  ) : (
+    <OutcomeScalar
+      opts={opts}
+      upperBound={upperBound}
+      lowerBound={lowerBound}
+      unit={unit}
+      decimals={decimals}
+      resolved={resolved}
+      outcomeTokensSold={outcomeTokensSold}
+      resolution={resolution}
+      funding={funding}
+      marginalPrices={marginalPrices}
+      winningOutcome={winningOutcome}
+    />
+  )
 
   if (resolved) {
     outcomeComponent = (
@@ -74,10 +73,10 @@ Outcome.propTypes = {
   lowerBound: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   unit: PropTypes.string,
   decimals: PropTypes.number,
-  outcomeTokensSold: PropTypes.array,
+  outcomeTokensSold: PropTypes.array.isRequired,
   resolution: PropTypes.string,
   funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  outcomes: PropTypes.arrayOf(PropTypes.string),
+  outcomes: PropTypes.array.isRequired,
   marginalPrices: PropTypes.arrayOf(PropTypes.string),
   winningOutcome: PropTypes.number,
   opts: PropTypes.shape({

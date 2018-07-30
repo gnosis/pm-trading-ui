@@ -8,7 +8,7 @@ export const getTransactionProgress = (state, transactionId) => {
   const transaction = transactionSelector(state, transactionId)
 
   if (transaction) {
-    const events = transaction.get ? transaction.get('events', []) : []
+    const events = transaction.get('events')
 
     if (events.length > 0) {
       const doneEvents = events.reduce((acc, event) => {
@@ -30,7 +30,7 @@ export const getTransactionLogs = (state, transactionId) => {
   const transaction = transactionSelector(state, transactionId)
 
   if (transaction) {
-    const events = transaction.get('events', [])
+    const events = transaction.get('events')
 
     if (events.length > 0) {
       return events.map(event => ({
@@ -61,8 +61,7 @@ export const didTransactionSucceed = (state, transactionId) => {
   return transaction && transaction.completed && transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR
 }
 
-export const getAllTransactions = state =>
-  state.transactions.get('log', {}).map(tx => tx.set('progress', getTransactionProgress(state, tx.id)))
+export const getAllTransactions = state => state.transactions.get('log').map(tx => tx.set('progress', getTransactionProgress(state, tx.id)))
 
 export const getRunningTransactions = state => getAllTransactions(state).filter(transaction => !transaction.completed)
 

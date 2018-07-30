@@ -1,9 +1,6 @@
+
 language: node_js
 dist: trusty
-env:
-- PROJECT=''
-- PROJECT=mainnet
-- PROJECT=olympia
 install:
 - npm ci -q
 # keep the npm cache around to speed up installs
@@ -13,20 +10,23 @@ cache:
 before_install:
 - npm i -g babel-cli webpack truffle-contract npm@latest
 after_success:
-- ./env_build.sh
+- ./scripts/env_build.sh
 deploy:
-  # olympia deployments
+  ### olympia deployments
+  # https://olympia.dev.gnosisdev.com/
 - provider: s3
   bucket: olympia-development
   secret_access_key:
     secure: wN2R97RkkSB3zjZGt/omEO9RnPyPz3oDKfLAwKioFPniDuaRspJoCJhkpDRrqqTcRSHnjsmgv0DILj/JCVZ9u7XKr+AE1a1QGNrGuRzgKK2rcShIWl+Q8J6+SWd03UuUINEZUd5QJLesnQmly/dtBzEZl966qEL4GSviKb5S3il1TvK2tj+nVKtmunkcM2tb7oYrystklRDo19hvTBq754RXJSvo4YAM5raFUSlxHFFuYIkPrzl/HoW2d4NMtBnY7OtAErabmzOPFqYieQC3KaBxQgybuuaQHmo0+r6aSDTKpxOyRT/kmWvt4PdUl5FdC2B75lJEFeuJZDsr9kRRXmqa93JywHsc4ZzL2yNcN3MsBN3Xos9VxrM7Jf30UNZUNmorE2hPaDe5gjnjmfkQEQe/Y0tvImgMdeC0N69oRIPtXCRfZtnXEgI+6zG2/0ghj/0dtADsm4WwnpEx8SEeBjZOVqnXayplDb7RUy/H7opVXYvhw67jRHRwXVfLZdMIqGXpMZ+FWbDd969Fv0t06N7HRjE1tGMsPvpg6B9Tuv/cBg1CPLYw5okwSiSYfzY8EzAMndr0nGVJjf/VUnU0eSbfeGIXSxedaNK28U1lYW9Xdwi2oLNmQaGp2nyyySYcyH49dUoXUlwvFHmNPh4xXPGfaEjUAvXXK6NyQBsWSJM=
   access_key_id:
     secure: J3V9XlqZwJtSmuUSY+j5wVOEMfrTeYISnjSCT0oOPqgBr06UF52VyaykSW6xUV4N4lKRwbiUp5Y0mkPbg3Sdwz9n24bQr0hKu3GoyMRgFnSSv0XbyFI4dhwCPX3xiFplNt9NqTw2/673ohRMrZEe1GnxxbcPZfBglQz90x/Tt2wRKn9aXnq2NDfZ8Y42vMA1EknkG/Koyw9o33u917zIsoWhIINKtkRC/zovvuGWONmFLu+i1JRFP08GflMqd1uEBhcwj2XHKtgB8Q6/hISxBaFH+RhyfhWY0hEEfuRgDYvxesWoDNGRkJC4SB0lkQ40mdAMOp4xShzsH9HhanLMuNZt6GsMsFQcc4tkFmEsxpyLlwGIL5WKOsHsWLHxyGsKyqqh6ALTlFXxX73CE83A1xUDBhrZQBuam3XC7rWBzYl6mUzvvYmulI7rR1VsYrHD8RqFKikdHNR4Uzp+h2KEDkxZBHI5JUOK4HC7rrQO9dgaM4Cd5lUcEYY5i0CmusoUUWQriOE5QBBnfv1hJrb2SsUF1m7bFSRcl+NL5wtfZooert6ZlA//08BgQGDn3XQHgiOfqlWMOPKxg1m9OW3PMB8bEuy51xwqIdJFBf3Q99yg9GoMtO9xNlOv63GaOjKG8ZdN7m06JwD7fKTR+SBWkDqDhcShifKbbqFfSlg/tRM=
-  skip_cleanup: true
   local_dir: dist
+  skip_cleanup: true
+  #before_deploy:
+  #  - npm run build-config olympia/development
   on:
     branch: development
-    condition: $PROJECT = olympia
+  # https://olympia.staging.gnosisdev.com/
 - provider: s3
   bucket: olympia-staging
   secret_access_key:
@@ -39,32 +39,35 @@ deploy:
   on:
     branch: olympia-qa
     condition: $PROJECT = olympia
+
 - provider: s3
-  bucket: olympia-dappcon-staging
+  bucket: olympia-staging
   secret_access_key:
     secure: wN2R97RkkSB3zjZGt/omEO9RnPyPz3oDKfLAwKioFPniDuaRspJoCJhkpDRrqqTcRSHnjsmgv0DILj/JCVZ9u7XKr+AE1a1QGNrGuRzgKK2rcShIWl+Q8J6+SWd03UuUINEZUd5QJLesnQmly/dtBzEZl966qEL4GSviKb5S3il1TvK2tj+nVKtmunkcM2tb7oYrystklRDo19hvTBq754RXJSvo4YAM5raFUSlxHFFuYIkPrzl/HoW2d4NMtBnY7OtAErabmzOPFqYieQC3KaBxQgybuuaQHmo0+r6aSDTKpxOyRT/kmWvt4PdUl5FdC2B75lJEFeuJZDsr9kRRXmqa93JywHsc4ZzL2yNcN3MsBN3Xos9VxrM7Jf30UNZUNmorE2hPaDe5gjnjmfkQEQe/Y0tvImgMdeC0N69oRIPtXCRfZtnXEgI+6zG2/0ghj/0dtADsm4WwnpEx8SEeBjZOVqnXayplDb7RUy/H7opVXYvhw67jRHRwXVfLZdMIqGXpMZ+FWbDd969Fv0t06N7HRjE1tGMsPvpg6B9Tuv/cBg1CPLYw5okwSiSYfzY8EzAMndr0nGVJjf/VUnU0eSbfeGIXSxedaNK28U1lYW9Xdwi2oLNmQaGp2nyyySYcyH49dUoXUlwvFHmNPh4xXPGfaEjUAvXXK6NyQBsWSJM=
   access_key_id:
     secure: J3V9XlqZwJtSmuUSY+j5wVOEMfrTeYISnjSCT0oOPqgBr06UF52VyaykSW6xUV4N4lKRwbiUp5Y0mkPbg3Sdwz9n24bQr0hKu3GoyMRgFnSSv0XbyFI4dhwCPX3xiFplNt9NqTw2/673ohRMrZEe1GnxxbcPZfBglQz90x/Tt2wRKn9aXnq2NDfZ8Y42vMA1EknkG/Koyw9o33u917zIsoWhIINKtkRC/zovvuGWONmFLu+i1JRFP08GflMqd1uEBhcwj2XHKtgB8Q6/hISxBaFH+RhyfhWY0hEEfuRgDYvxesWoDNGRkJC4SB0lkQ40mdAMOp4xShzsH9HhanLMuNZt6GsMsFQcc4tkFmEsxpyLlwGIL5WKOsHsWLHxyGsKyqqh6ALTlFXxX73CE83A1xUDBhrZQBuam3XC7rWBzYl6mUzvvYmulI7rR1VsYrHD8RqFKikdHNR4Uzp+h2KEDkxZBHI5JUOK4HC7rrQO9dgaM4Cd5lUcEYY5i0CmusoUUWQriOE5QBBnfv1hJrb2SsUF1m7bFSRcl+NL5wtfZooert6ZlA//08BgQGDn3XQHgiOfqlWMOPKxg1m9OW3PMB8bEuy51xwqIdJFBf3Q99yg9GoMtO9xNlOv63GaOjKG8ZdN7m06JwD7fKTR+SBWkDqDhcShifKbbqFfSlg/tRM=
   skip_cleanup: true
   local_dir: dist
-  upload-dir: current
+  upload-dir: releases/$TRAVIS_TAG
   on:
-    branch: dappcon-olympia-release
+    tags: true
     condition: $PROJECT = olympia
+
 # mainnet deployments
 - provider: s3
-  bucket: management-mainnet
+  bucket: management-mainnet 
   secret_access_key:
     secure: nnPdoDavpLHEkTlmujDglozOlupqvM5ouNyAHVKKnVHB5tMhNawUfEBoKRJ5tx25sI8J6r5CdUW4MYUsZhdMManD10HacSmn2vMoB9rRIjkptFinYIJ3XFG+abLr2+OcZv6HIua8bxB+rfQ7a3YV6X0zMWev7fx1sosM4bIWRnZwDYzESno4wfQNHb5mnteZIfhl/i6trH3z9iQC/QClW9uzsN9P1uM6EfZn1nto9RlnaPS7Nc8b2+bp/OjZ7IjdGp8JquNi4oGJfBn24LkUcv8YSB3ruUU9kYfwieECbH3yJiRJ7C/plZ/qSUu72cgNl/ngzLgpq0IME5wZJ5k50cNbe1ngnOM1ksmuFx/656a2wdfM1EFsoF+amAPm7StyM7PEGNDWRjeR239of4iCsoQc6JGqePPb99rkrhNGy5GK3Le1ASS4NJBPwSAsh71aIl7igPiB5UEU3cNbWiA0AbegSGzS0AjRSLsg7r7bjbY9ROOeTaJ4NWR5eBZO+n818cokwsmGmpURV9e1GIMyJeihEBwqxDVRkrFIkN47W8TX6PZIGGuUoKK2OBXR9C+iWK0psCflsFE/Tcf7o4BhP5PAVnCBhae1WncoJ5Bw+eNpGQI8klvBx+T7sKue4PyNZm9Db4svqwiQa9HpBhwuISG9FbbjdwJz85e4PbWWH2w=
   access_key_id:
     secure: meEa6ZfhrAdTrbzBXnAs67YU/FYsBv64bjK95FOtQsnGT+iT3jhTbrcch9EWxOVUvKvh+HU9Pr1nGDdETsjPqdfA9vQqoWonDZHzErMbOO4xH4osj0R9IuFxJMCnMjKk9ypFFDJ6xpHWmbxXHgHlRHyktkWpNoIrxdUdmKfe6QhX0wmIuLSO/8aN4ZPfoBxIIr8/5xuDLs+krfANFU90v7QOfndNjjn/r/P5EO5wphCDFtvyd5ipIBIUSMMfSdpNwSIzbdtMQQY8U3Tce/6UPEnTNJAy70TloVLbwOIHTUwQT8QZ0oTk4kzX+jhv/n9l+I5XsXyFpHqq8VTh+ZQ5d7U4bFZBcILiZyZXdSffGC4pu/eIvcsFXKy+2BjIG+w+3Tm2A40e9IyXzvRUIBQ+5fPWMtb38JvWuGg86pY+OnRJ3UZ7i0fEub77pJFknlN6SyO4D97yHyKxFQIxCtm7ppf1R9CphFxjjBseaHN07rAGwZ2WpG8ZYOn/HWmSiQU319mxQj3Pn7lJ6PB5Kw4NAiUodol/2HwoKl3QtWqmfGIVrzPkwFEoMLdSKXVrn8ediL2+NrtSoxxHGE9NyHZeF7wyy6JROh0/pz+21Zt1h+rtS+WcaqV6ZDoHhbNkPuPQXw9VlPAJ0n8f27hII01qgDiDx9C+hktneGeY0MPhX68=
   skip_cleanup: true
   local_dir: dist
+  upload-dir: current
+  #before_deploy:
+  #  - npm run build-config mainnet/production
   on:
     branch: master
-    condition: $PROJECT = mainnet
-
-# testnet deployments
+  # https://trading.dev.gnosisdev.com/
 - provider: s3
   bucket: management-development
   secret_access_key:
@@ -73,9 +76,11 @@ deploy:
     secure: LjkMioUBLc8j943C186OLjPz9DbEsPJHwdJ1awqDaE0K40dQmWzROP0R3Px3qW8AOnvWmXrhGSYJWY/LbAH+NFhIbPGMlQDLp8kLYmdwW0xvxokprbP4gh2MZQoV4SOdeXSGcpR61LxFlbVubS/RARJ9tVrPtHcMgKqlF75zB65Y+4rSSkRLLIe57jAegpizmOMxdetIyQ2++KqZiZplh8+OIwyTYo/jcOHrJ6pNm+cvzPVD9Ccn0ndEsDYl2u92Ev4lKUqiNA7glfQ2BP8S3omzJhU+VESDWSZyTWsVT3jGVRU3OkHrVYsmKsDdSsVu8lBp6Bso+i5hSN+H52awYI2wYzwpxiExp6jCs6n13fslYOSMDbrtL8Zqa+cq5RCXtF5j4kaHbyhEYgo4ZKYC0r/rSDYG2Co6R8m0ortNEL6oLwAKZsphTP+jVjd0ML+XoNv3XvPfdtA6YXlsIcIh49ixfqPUWbKlTF7dFBfVePvI5bnjh13PGSFggGSrGar0h5mw4r+s8OMvmaWD1yKEd0IbRcYkqjkp0yikIymZtBr9oRDnevJZTM387p02VSxPmFKShLbj7FB4nHx9Dn0XeMVS/Io10s+xTxTD4jV5UeXZacNDTCReiCMU9JhGfQ4LdMDPJp3lIFQWc3JiGjaC8nmWMKBo6Q7L8G3cfadTDU8=
   skip_cleanup: true
   local_dir: dist
+  #before_deploy:
+  #  - npm run build-config mainnet/development
   on:
     branch: development
-    condition: -z "$PROJECT"
+  # https://trading.staging.gnosisdev.com/
 - provider: s3
   bucket: management-staging
   secret_access_key:
@@ -84,6 +89,8 @@ deploy:
     secure: LjkMioUBLc8j943C186OLjPz9DbEsPJHwdJ1awqDaE0K40dQmWzROP0R3Px3qW8AOnvWmXrhGSYJWY/LbAH+NFhIbPGMlQDLp8kLYmdwW0xvxokprbP4gh2MZQoV4SOdeXSGcpR61LxFlbVubS/RARJ9tVrPtHcMgKqlF75zB65Y+4rSSkRLLIe57jAegpizmOMxdetIyQ2++KqZiZplh8+OIwyTYo/jcOHrJ6pNm+cvzPVD9Ccn0ndEsDYl2u92Ev4lKUqiNA7glfQ2BP8S3omzJhU+VESDWSZyTWsVT3jGVRU3OkHrVYsmKsDdSsVu8lBp6Bso+i5hSN+H52awYI2wYzwpxiExp6jCs6n13fslYOSMDbrtL8Zqa+cq5RCXtF5j4kaHbyhEYgo4ZKYC0r/rSDYG2Co6R8m0ortNEL6oLwAKZsphTP+jVjd0ML+XoNv3XvPfdtA6YXlsIcIh49ixfqPUWbKlTF7dFBfVePvI5bnjh13PGSFggGSrGar0h5mw4r+s8OMvmaWD1yKEd0IbRcYkqjkp0yikIymZtBr9oRDnevJZTM387p02VSxPmFKShLbj7FB4nHx9Dn0XeMVS/Io10s+xTxTD4jV5UeXZacNDTCReiCMU9JhGfQ4LdMDPJp3lIFQWc3JiGjaC8nmWMKBo6Q7L8G3cfadTDU8=
   skip_cleanup: true
   local_dir: dist
+  upload-dir: current
+  #before_deploy:
+  #  - npm run build-config mainnet/staging
   on:
     branch: master
-    condition: -z "$PROJECT"

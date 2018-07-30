@@ -1,5 +1,5 @@
 import { GAS_COST } from 'utils/constants'
-import { rankSelector } from 'components/Dashboard/Metrics/selector'
+import { rankSelector } from 'routes/Scoreboard/store/selectors'
 import { createSelector } from 'reselect'
 import { getFeatureConfig } from 'utils/features'
 

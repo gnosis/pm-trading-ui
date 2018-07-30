@@ -61,8 +61,7 @@ class ClaimReward extends React.Component {
 
     const targetNetwork = ETHEREUM_NETWORK_IDS[rewardToken.networkId]
     const isWrongNetwork = !Decimal(currentNetworkId).eq(rewardToken.networkId)
-    const hasGasCosts = typeof gasPrice !== 'undefined'
-      && typeof claimRewardGasCost !== 'undefined'
+    const hasGasCosts = typeof gasPrice !== 'undefined' && typeof claimRewardGasCost !== 'undefined'
     const gasCosts = Decimal(gasPrice || 0)
       .mul(claimRewardGasCost || 0)
       .div(1e18)
@@ -125,7 +124,10 @@ class ClaimReward extends React.Component {
       <div className={cx('claimRewards')}>
         <button className={cx('closeButton')} onClick={closeModal} />
         <div className={cx('claimContainer')}>
-          <h4 className={cx('heading')}>Claim {rewardToken.symbol}</h4>
+          <h4 className={cx('heading')}>
+            Claim
+            {rewardToken.symbol}
+          </h4>
           <p className={cx('annotation')}>
             In order to claim your{' '}
             <span className={cx('rewardInfo')}>

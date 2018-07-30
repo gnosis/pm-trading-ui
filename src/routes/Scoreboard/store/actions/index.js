@@ -1,6 +1,5 @@
 export { default as fetchTournamentUserData } from './fetchTournamentUserData'
 export { default as fetchTournamentUsers } from './fetchTournamentUsers'
 export * from './addUsers'
-export * from './mainnetRegistry'
 export { default as addUsers } from './addUsers'
 export * from './rewards'

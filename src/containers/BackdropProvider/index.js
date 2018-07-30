@@ -37,16 +37,19 @@ class BackdropProvider extends Component {
     const {
       children,
       modal,
+      blockchainConnection,
     } = this.props
     const isOpen = modal.get('isOpen', false)
 
     return (
       <div>
         {children}
-        {isOpen && (
+        {isOpen && blockchainConnection && (
           <div>
             <div className={cx('below')} />
-            <div className={cx('above')}>{this.renderBackdropContent()}</div>
+            <div className={cx('above')}>
+              {this.renderBackdropContent()}
+            </div>
           </div>
         )}
       </div>
