@@ -7,15 +7,22 @@
         "forceAllTransforms": true,
         "modules": false
       }
-    ],
-    [
-      "@babel/preset-stage-0",
-      {
-        "decoratorsLegacy": true
-      }
     ]
   ],
-  "plugins": ["react-hot-loader/babel", "lodash", "transform-optional-chaining"],
+  "plugins": [
+    "react-hot-loader/babel", "lodash",
+    "@babel/plugin-proposal-export-default-from",
+    ["@babel/plugin-proposal-optional-chaining", { "loose": false }],
+    ["@babel/plugin-proposal-nullish-coalescing-operator", { "loose": false }],
+    "@babel/plugin-proposal-do-expressions",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "@babel/plugin-proposal-export-namespace-from",
+    "@babel/plugin-proposal-numeric-separator",
+    "@babel/plugin-proposal-throw-expressions",
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-syntax-import-meta",
+    "@babel/plugin-proposal-class-properties"
+  ],
   "env": {
     "production": {
       "plugins": [
@@ -29,7 +36,7 @@
       ]
     },
     "test": {
-      "plugins": ["syntax-dynamic-import", "dynamic-import-node"],
+      "plugins": ["@babel/plugin-syntax-dynamic-import", "dynamic-import-node"],
       "presets": [
         "@babel/preset-react", 
         [
@@ -49,3 +56,4 @@
     }
   }
 }
+
