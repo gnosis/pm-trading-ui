@@ -45,12 +45,6 @@
             "forceAllTransforms": true,
             "modules": "commonjs"
           }
-        ],
-        [
-          "@babel/preset-stage-0",
-          {
-            "decoratorsLegacy": true
-          }
         ]
       ]
     }

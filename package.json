@@ -24,7 +24,7 @@
   "author": "Gnosis",
   "license": "ISC",
   "jest": {
-    "testEnvironment": "node",
+    "testURL": "http://localhost",
     "verbose": true,
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
