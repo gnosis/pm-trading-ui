@@ -137,16 +137,6 @@ class MarketBuySharesForm extends Component {
       submitDisabledReason = 'Please select an outcome'
     }
 
-    let submitDisabledReason
-
-    if (!selectedBuyInvest && !selectedOutcome) {
-      submitDisabledReason = 'Please fill all mandatory fields'
-    } else if (!selectedBuyInvest) {
-      submitDisabledReason = 'Please enter an investment amount'
-    } else if (!selectedOutcome) {
-      submitDisabledReason = 'Please select an outcome'
-    }
-
     let outcomeTokenCount = 0
     let maximumWin = 0
     let percentageWin = 0
