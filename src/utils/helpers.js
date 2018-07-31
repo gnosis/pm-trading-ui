@@ -26,29 +26,6 @@ export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substr
 
 export const normalizeHex = value => hexWithPrefix(value).toLowerCase()
 
-<<<<<<< HEAD
-export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
-
-export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) => stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
-
-export const toEntity = (data, entityType, idKey = 'address') => {
-  const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
-
-  return {
-    entities: {
-      [entityType]: {
-        [id]: {
-          [idKey]: id,
-          ...entityPayload,
-        },
-      },
-    },
-    result: [id],
-  }
-}
-
-=======
->>>>>>> backmerge/dappcon
 /**
  * Converts a value from WEI to ETH
  * @param {String|Number|Decimal} value
@@ -101,20 +78,12 @@ export const normalizeScalarPoint = (marginalPrices, { bounds: { lower, upper, d
 export const restFetch = url => fetch(url)
   .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
   .then(res => res.json())
-<<<<<<< HEAD
-  .catch(err => new Promise((resolve, reject) => {
-    console.warn(`Gnosis DB: ${err}`)
-    reject(err)
-  }))
-=======
   .catch(
     err => new Promise((resolve, reject) => {
       console.warn(`Gnosis DB: ${err}`)
       reject(err)
     }),
   )
->>>>>>> backmerge/dappcon
-
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
   const classNames = isArray(classNameDefined) ? classNameDefined : classNameDefined.split(' ')

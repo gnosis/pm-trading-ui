@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+<<<<<<< HEAD
 import { isConnectedToBlockchain } from 'store/selectors/blockchain'
+=======
+import { triedToConnect } from 'store/selectors/blockchain'
+>>>>>>> 519c8b64223f3a9a3ed16fe3fe82579862dcfa43
 import { closeModal } from 'store/actions/modal'
 import * as modals from 'containers/Modals'
 import style from './backdrop.mod.scss'

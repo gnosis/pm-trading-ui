@@ -5,12 +5,9 @@ import Decimal from 'decimal.js'
 import moment from 'moment'
 import { List } from 'immutable'
 import CurrencyName from 'components/CurrencyName'
-<<<<<<< HEAD
 import DecimalValue from 'components/DecimalValue'
-=======
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
->>>>>>> backmerge/dappcon
 import {
   RESOLUTION_TIME, COLOR_SCHEME_SCALAR, COLOR_SCHEME_DEFAULT, OUTCOME_TYPES,
 } from 'utils/constants'
@@ -36,30 +33,17 @@ class MarketMyTrades extends Component {
   }
 
   componentDidMount() {
-<<<<<<< HEAD
-    const {
-      market, defaultAccount, fetchMarketTradesForAccount,
-    } = this.props
-    fetchMarketTradesForAccount(market.address, defaultAccount)
-=======
     const { defaultAccount, fetchMarketTradesForAccount } = this.props
     if (defaultAccount) {
       fetchMarketTradesForAccount(defaultAccount)
     }
->>>>>>> backmerge/dappcon
   }
 
   renderTrades() {
     const {
       market,
       marketTrades,
-<<<<<<< HEAD
-      market: {
-        event: { type },
-      },
-=======
       market: { type },
->>>>>>> backmerge/dappcon
     } = this.props
     const colorScheme = type === OUTCOME_TYPES.SCALAR ? COLOR_SCHEME_SCALAR : COLOR_SCHEME_DEFAULT
 
@@ -72,15 +56,6 @@ class MarketMyTrades extends Component {
       const outcomeName = getOutcomeName(market, trade.outcomeToken.index)
 
       let tradeCost = '0'
-<<<<<<< HEAD
-      if (trade.cost !== 'None') {
-        const tradeCostEth = Decimal(weiToEth(trade.cost))
-        tradeCost = (
-          <>
-            {tradeCostEth.lt(0.0001) ? '< 0.0001' : <DecimalValue value={tradeCostEth} />}&nbsp;
-            <CurrencyName tokenAddress={market.event.collateralToken} />
-          </>
-=======
       if (trade.price !== 'None') {
         tradeCost = (
           <Fragment>
@@ -90,7 +65,6 @@ class MarketMyTrades extends Component {
             &nbsp;
             <CurrencyName tokenAddress={market.collateralToken} />
           </Fragment>
->>>>>>> backmerge/dappcon
         )
       }
 

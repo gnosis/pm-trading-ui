@@ -61,6 +61,7 @@ const OutcomeSectionScalar = (props) => {
         <div className={cn('col-md-12')}>
           <h2>
             Your Trade
+<<<<<<< HEAD
             <MandatoryHint />
           </h2>
           <Field
@@ -70,6 +71,10 @@ const OutcomeSectionScalar = (props) => {
             hideBars
             hidePercentage
           />
+=======
+          </h2>
+          <Field component={OutcomeSelection} name="selectedOutcome" outcomes={scalarOutcomes} hideBars hidePercentage />
+>>>>>>> 519c8b64223f3a9a3ed16fe3fe82579862dcfa43
         </div>
       </div>
       <div className={cn('row')}>

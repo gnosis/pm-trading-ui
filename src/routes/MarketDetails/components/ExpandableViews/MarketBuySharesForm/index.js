@@ -136,6 +136,7 @@ class MarketBuySharesForm extends Component {
     } else if (!selectedOutcome) {
       submitDisabledReason = 'Please select an outcome'
     }
+<<<<<<< HEAD
 
     let submitDisabledReason
 
@@ -146,6 +147,8 @@ class MarketBuySharesForm extends Component {
     } else if (!selectedOutcome) {
       submitDisabledReason = 'Please select an outcome'
     }
+=======
+>>>>>>> 519c8b64223f3a9a3ed16fe3fe82579862dcfa43
 
     let outcomeTokenCount = 0
     let maximumWin = 0
