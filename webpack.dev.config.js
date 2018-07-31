@@ -17,6 +17,7 @@ module.exports = (env = {}) => {
 
   console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv}'`)
   const config = configLoader(gnosisEnv, configEnvVars)
+  const { htmlConfig = {} } = config
 
   const version = env.BUILD_VERSION || pkg.version
   const commitId = `${env.TRAVIS_BRANCH || 'local'}@${env.TRAVIS_COMMIT || 'SNAPSHOT'}`
@@ -150,7 +151,10 @@ module.exports = (env = {}) => {
         inject: true,
       }),
       new HtmlWebpackPlugin({
-        template: `${__dirname}/src/html/index.html`,
+        template: `${__dirname}/src/html/index.ejs`,
+        templateParameters: {
+          title: htmlConfig.title || 'Gnosis Trading Interface',
+        },
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
@@ -160,9 +164,7 @@ module.exports = (env = {}) => {
         'process.env.FALLBACK_CONFIG': `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin([
-        { from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` },
-      ]),
+      new CopyWebpackPlugin([{ from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` }]),
     ],
   }
 }
