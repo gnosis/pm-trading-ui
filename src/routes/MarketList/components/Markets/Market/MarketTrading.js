@@ -6,7 +6,7 @@ import { hexWithPrefix } from 'utils/helpers'
 
 import Icon from 'components/Icon'
 
-import css from './Market.mod.scss'
+import css from './Market.scss'
 
 const cx = classNames.bind(css)
 

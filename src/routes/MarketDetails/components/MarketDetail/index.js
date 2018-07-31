@@ -16,7 +16,7 @@ import expandableViews, { EXPAND_MY_SHARES } from 'routes/MarketDetails/componen
 import Controls from './Controls'
 import Details from './Details'
 import Infos from './Infos'
-import style from './marketDetail.mod.scss'
+import style from './marketDetail.scss'
 
 const cx = cn.bind(style)
 

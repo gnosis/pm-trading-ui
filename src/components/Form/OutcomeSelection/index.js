@@ -7,7 +7,7 @@ import classNames from 'classnames/bind'
 
 import OutcomeBar from './OutcomeBar'
 
-import css from './OutcomeSelection.mod.scss'
+import css from './OutcomeSelection.scss'
 
 const cx = classNames.bind(css)
 

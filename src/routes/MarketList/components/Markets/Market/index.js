@@ -14,7 +14,7 @@ import MarketResolution from './MarketResolution'
 import MarketStatus from './MarketStatus'
 import MarketTrading from './MarketTrading'
 
-import css from './Market.mod.scss'
+import css from './Market.scss'
 
 const cx = classNames.bind(css)
 

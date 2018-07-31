@@ -15,7 +15,7 @@ import { getOutcomeName, weiToEth } from 'utils/helpers'
 import TableHeader from './TableHeader'
 import TradeRow from './TradeRow'
 
-import style from './marketMyTrades.mod.scss'
+import style from './marketMyTrades.scss'
 
 const cx = cn.bind(style)
 

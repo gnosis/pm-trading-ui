@@ -9,7 +9,7 @@ import LegalCompliance from 'containers/LegalCompliance'
 import LinkIcon from 'assets/img/icons/icon_link.svg'
 import { getFeatureConfig } from 'utils/features'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
-import style from './RegisterWallet.mod.scss'
+import style from './RegisterWallet.scss'
 
 const cx = cn.bind(style)
 const {

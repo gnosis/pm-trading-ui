@@ -3,7 +3,7 @@ import classnames from 'classnames/bind'
 import Tooltip from 'rc-tooltip'
 
 
-import styles from './MandatoryHint.mod.scss'
+import styles from './MandatoryHint.scss'
 
 const cx = classnames.bind(styles)
 

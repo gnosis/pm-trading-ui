@@ -19,7 +19,7 @@ import Title from './Title'
 import Markets from './Markets'
 import UserSection from './UserSection'
 
-import styles from './Dashboard.mod.scss'
+import styles from './Dashboard.scss'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 

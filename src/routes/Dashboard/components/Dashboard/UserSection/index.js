@@ -8,7 +8,7 @@ import { setRequestStateWrap } from 'utils/helpers'
 import ShareRecord from 'store/models/share'
 import TradeRecord from 'store/models/trade'
 
-import style from './UserSection.mod.scss'
+import style from './UserSection.scss'
 
 import Holdings, { Share, Trade } from './Holdings'
 import Category from './Category'
@@ -58,4 +58,3 @@ const enhance = compose(
 )
 
 export default enhance(UserSection)
-

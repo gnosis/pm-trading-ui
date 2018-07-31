@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 
 import classnames from 'classnames/bind'
-import style from './Metrics.mod.scss'
+import style from './Metrics.scss'
 
 const cx = classnames.bind(style)
 

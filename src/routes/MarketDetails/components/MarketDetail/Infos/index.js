@@ -5,7 +5,7 @@ import Decimal from 'decimal.js'
 import { marketShape } from 'utils/shapes'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { decimalToText } from 'components/DecimalValue'
-import style from './Infos.mod.scss'
+import style from './Infos.scss'
 
 const cx = cn.bind(style)
 
