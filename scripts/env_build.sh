@@ -8,7 +8,7 @@ if [[ ${PROJECT} == "mainnet" ]]; then
   fi
 elif [[ ${PROJECT} == "olympia" ]]; then
   # olympia
-  if [[ ${TRAVIS_BRANCH} == "master" ]] || [[ ${TRAVIS_BRANCH} == "olympia-qa" ]] || [[ ${TRAVIS_BRANCH} == ${TRAVIS_TAG} ]]; then
+  if [[ ${TRAVIS_BRANCH} == "master" ]] || [[ ${TRAVIS_BRANCH} == ${TRAVIS_TAG} ]]; then
     export GNOSIS_ENV=olympia/staging;
     export NODE_ENV=production;
   elif [[ ${TRAVIS_BRANCH} == "dappcon-olympia-release" ]]; then
@@ -21,10 +21,10 @@ elif [[ ${PROJECT} == "olympia" ]]; then
 else
   # testnet
   if [[ ${TRAVIS_BRANCH} == "master" ]]; then
-    export GNOSIS_ENV=staging;
+    export GNOSIS_ENV=mainnet/staging;
     export NODE_ENV=production;
   else
-    export GNOSIS_ENV=development;
+    export GNOSIS_ENV=mainnet/development;
     export NODE_ENV=development;
   fi
 fi
