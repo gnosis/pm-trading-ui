@@ -10,7 +10,7 @@
     "port": 443
   },
   "htmlConfig": {
-    "title": "Gnosis Trading Interface"
+    "title": "Gnosis Interface"
   },
   "whitelist": {
     "0xb2e87b8ce41184e0688027f370a972a436abe77e": "Giacomo",

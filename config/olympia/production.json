@@ -12,6 +12,9 @@
   "whitelist": {
     "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama"
   },
+  "htmlConfig": {
+    "title": "Gnosis Olympia"
+  },
   "logo": {
     "regular": "assets/img/gnosis_logo_olympia.svg",
     "small": "assets/img/gnosis_logo_olympia.svg",
