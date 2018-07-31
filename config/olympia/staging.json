@@ -12,6 +12,9 @@
   "whitelist": {
     "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail"
   },
+  "htmlConfig": {
+    "title": "Gnosis Olympia"
+  },
   "hiddenMarkets": [
     "0x9e1008ff1b30b871701e5527fc4efe339cf96abc",
     "0x23effcde33bd3100ca038f56ccda0a0c695439da",
