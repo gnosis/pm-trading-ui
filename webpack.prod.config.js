@@ -20,7 +20,6 @@ module.exports = (env = {}) => {
 
   console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv}'`)
   const config = configLoader(gnosisEnv, configEnvVars)
-  const { htmlConfig = {} } = config
 
   return {
     devtool: 'source-map',
@@ -126,10 +125,7 @@ module.exports = (env = {}) => {
         inject: true,
       }),
       new HtmlWebpackPlugin({
-        template: `${__dirname}/src/html/index.ejs`,
-        templateParameters: {
-          title: htmlConfig.title || 'Gnosis Trading Interface',
-        },
+        template: `${__dirname}/src/html/index.html`,
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
