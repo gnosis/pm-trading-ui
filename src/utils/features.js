@@ -26,6 +26,8 @@ export const getConfiguration = () => config
 
 export const getLogoConfig = () => config.logo
 
+export const getHtmlConfig = () => config.htmlConfig || {}
+
 export const getGasPriceConfig = () => config.gasPrice || {}
 
 export const isFeatureEnabled = feature => config[feature] && config[feature].enabled

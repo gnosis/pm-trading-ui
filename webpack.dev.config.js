@@ -160,9 +160,7 @@ module.exports = (env = {}) => {
         'process.env.FALLBACK_CONFIG': `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin([
-        { from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` },
-      ]),
+      new CopyWebpackPlugin([{ from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` }]),
     ],
   }
 }
