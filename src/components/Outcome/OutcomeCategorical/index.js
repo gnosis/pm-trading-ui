@@ -6,7 +6,7 @@ import { calcLMSRMarginalPrice } from 'api'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import TrendingOutcomeCategorical from './TrendingOutcomeCategorical'
 
-import style from './outcomeCategorical.mod.scss'
+import style from './outcomeCategorical.scss'
 
 const cx = cn.bind(style)
 

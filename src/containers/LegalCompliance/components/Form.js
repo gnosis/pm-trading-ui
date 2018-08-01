@@ -7,7 +7,7 @@ import { getFeatureConfig } from 'utils/features'
 import DocumentExplanation from './DocumentExplanation'
 import DocumentField from './DocumentField'
 
-import style from './Form.mod.scss'
+import style from './Form.scss'
 
 const legalComplianceEnabled = getFeatureConfig('legalCompliance')
 

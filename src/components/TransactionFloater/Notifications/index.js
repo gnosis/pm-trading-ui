@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import Icon from 'components/Icon'
-import style from './Notifications.mod.scss'
+import style from './Notifications.scss'
 
 const cx = cn.bind(style)
 

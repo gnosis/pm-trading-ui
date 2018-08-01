@@ -8,7 +8,7 @@ import CurrencyName from 'components/CurrencyName'
 import { weiToEth } from 'utils/helpers'
 import { OutcomeRecord } from 'store/models/market'
 
-import style from './style.mod.scss'
+import style from './style.scss'
 
 const cx = className.bind(style)
 

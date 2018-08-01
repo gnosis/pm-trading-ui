@@ -10,7 +10,7 @@ import ProgressSpinner from 'components/Spinner/Transaction'
 import Icon from 'components/Icon'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import Notifications from './Notifications'
-import style from './transactionFloater.mod.scss'
+import style from './transactionFloater.scss'
 
 const cx = cn.bind(style)
 
@@ -38,8 +38,8 @@ const TransactionFloater = ({
         showLabel={runningTransactions.length > 0}
       />
     </button>
-    {!showLogs &&
-      !notifications.isEmpty() && (
+    {!showLogs
+      && !notifications.isEmpty() && (
       <div className={cx('popover', 'notifications')}>
         <Notifications notifications={notifications.takeLast(5)} onClick={showTransactionLog} />
       </div>
@@ -48,8 +48,8 @@ const TransactionFloater = ({
       <div className={cx('heading')}>Transactions</div>
       <button className={cx('closeButton')} onClick={() => hideTransactionLog()} />
       <div className={cx('logs')}>
-        {runningTransactions.isEmpty() &&
-          completedTransactions.isEmpty() && (
+        {runningTransactions.isEmpty()
+          && completedTransactions.isEmpty() && (
           <div className={cx('transactionLog', 'empty')}>
             <div className={cx('label')}>You have no active or past transactions.</div>
             <div className={cx('hint')}>
@@ -80,10 +80,9 @@ const TransactionFloater = ({
         })}
         {completedTransactions.toArray().map((transaction) => {
           const endTime = transaction.endTime ? moment(transaction.endTime).format('LLL') : ''
-          const timeDiff =
-            transaction.startTime && transaction.endTime
-              ? moment(transaction.startTime).to(moment(transaction.endTime), true)
-              : undefined
+          const timeDiff = transaction.startTime && transaction.endTime
+            ? moment(transaction.startTime).to(moment(transaction.endTime), true)
+            : undefined
 
           const icon = transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR ? 'checkmark' : 'cross'
           return (

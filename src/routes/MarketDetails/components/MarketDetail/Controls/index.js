@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames/bind'
 import expandableViews from 'routes/MarketDetails/components/ExpandableViews'
 import { ReactRouterMatchShape } from 'utils/shapes'
-import style from './Controls.mod.scss'
+import style from './Controls.scss'
 
 const cx = cn.bind(style)
 
@@ -10,8 +10,7 @@ const Controls = props => (
   <div className={cx('marketControls', 'controlsContainer', 'container')}>
     <div className={cx('row')}>
       {Object.keys(expandableViews)
-        .filter(view =>
-          typeof expandableViews[view].showCondition !== 'function' || expandableViews[view].showCondition(props))
+        .filter(view => typeof expandableViews[view].showCondition !== 'function' || expandableViews[view].showCondition(props))
         .map(view => (
           <button
             key={view}

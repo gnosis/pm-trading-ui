@@ -3,16 +3,15 @@ import PropTypes from 'prop-types'
 
 import className from 'classnames/bind'
 
-import styles from './InputError.mod.scss'
+import styles from './InputError.scss'
 
 const cx = className.bind(styles)
 
-const InputError = ({ error, style }) =>
-  (error ? (
-    <span className={cx('inputError')} style={style}>
-      {error}
-    </span>
-  ) : null)
+const InputError = ({ error, style }) => (error ? (
+  <span className={cx('inputError')} style={style}>
+    {error}
+  </span>
+) : null)
 
 InputError.propTypes = {
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),

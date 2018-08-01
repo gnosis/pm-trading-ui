@@ -6,27 +6,20 @@ import PropTypes from 'prop-types'
 
 class CurrencyName extends Component {
   componentDidMount() {
-    const unknownTokenSymbol = !this.props.tokenSymbol && this.props.tokenAddress
+    const { tokenSymbol, tokenAddress, requestTokenSymbol: fetchTokenSymbol } = this.props
+    const unknownTokenSymbol = !tokenSymbol && tokenAddress
     if (unknownTokenSymbol) {
-      this.props.requestTokenSymbol()
+      fetchTokenSymbol()
     }
   }
 
   render() {
     const { tokenAddress, tokenSymbol, className } = this.props
     if (tokenAddress) {
-      return (
-        <span className={className}>
-          {tokenSymbol}
-        </span>
-      )
+      return <span className={className}>{tokenSymbol}</span>
     }
 
-    return (
-      <span className={className}>
-Unknown
-      </span>
-    )
+    return <span className={className}>Unknown</span>
   }
 }
 
@@ -50,4 +43,7 @@ CurrencyName.defaultProps = {
   className: '',
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CurrencyName)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CurrencyName)

@@ -5,7 +5,7 @@ import { Map } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import Icon from 'components/Icon'
 import Transaction from './Transaction'
-import style from './Transactions.mod.scss'
+import style from './Transactions.scss'
 
 const cx = cn.bind(style)
 

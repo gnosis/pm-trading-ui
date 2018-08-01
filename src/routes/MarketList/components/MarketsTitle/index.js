@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 
-import css from './MarketsTitle.mod.scss'
+import css from './MarketsTitle.scss'
 
 const cx = classNames.bind(css)
 

@@ -11,7 +11,7 @@ import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import { eventDescriptionShape } from 'utils/shapes'
 import CustomTooltip from '../CustomTooltip'
 import DateAxisTick from '../DateAxisTick'
-import style from '../MarketGraph.mod.scss'
+import style from '../MarketGraph.scss'
 
 const cx = cn.bind(style)
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames/bind'
-import style from '../marketBuySharesForm.mod.scss'
+import style from '../marketBuySharesForm.scss'
 
 const cx = cn.bind(style)
 

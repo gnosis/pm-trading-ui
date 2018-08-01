@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 import { decimalToText } from 'components/DecimalValue'
 import Decimal from 'decimal.js'
 
-import css from './OutcomeSelection.mod.scss'
+import css from './OutcomeSelection.scss'
 
 const cx = classNames.bind(css)
 

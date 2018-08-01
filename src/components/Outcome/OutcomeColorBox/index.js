@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import { COLOR_SCHEME_DEFAULT, COLOR_SCHEME_SCALAR, OUTCOME_TYPES } from 'utils/constants'
 
-import styles from './OutcomeColorBox.mod.scss'
+import styles from './OutcomeColorBox.scss'
 
 const cx = cn.bind(styles)
 
