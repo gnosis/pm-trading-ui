@@ -9,14 +9,6 @@
     "host": "rinkeby.infura.io",
     "port": 443
   },
-  "collateralToken": {
-    "source": "address",
-    "options": {
-      "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
-      "symbol": "OLY",
-      "icon": "/assets/img/icons/icon_oly.png"
-    }
-  },
   "htmlConfig": {
     "title": "Gnosis Interface"
   },

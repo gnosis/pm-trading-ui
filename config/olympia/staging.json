@@ -90,7 +90,7 @@
     "enabled": true,
     "content": {
       "type": "file",
-      "source": "",
+      "fileName": "footerOlympia",
       "markdown": true
     }
   },
