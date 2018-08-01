@@ -58,24 +58,51 @@ module.exports = (env = {}) => {
 
         {
           test: /\.(scss|css)$/,
-          use: [
-            'style-loader',
+          oneOf: [
             {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                modules: true,
-                localIdentName: '[name]__[local]___[hash:base64:5]',
-                importLoaders: 2,
-              },
+              resourceQuery: /^\?raw$/,
+              use: [
+                'style-loader',
+                {
+                  loader: 'css-loader',
+                  options: {
+                    sourceMap: true,
+                    importLoaders: 2,
+                  },
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: {
+                    sourceMap: true,
+                  },
+                },
+                {
+                  loader: 'sass-loader',
+                  options: { sourceMap: true, includePaths: [path.resolve(`${__dirname}/src`)] },
+                },
+              ],
             },
             {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-              },
+              use: [
+                'style-loader',
+                {
+                  loader: 'css-loader',
+                  options: {
+                    sourceMap: true,
+                    modules: true,
+                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                    importLoaders: 2,
+                  },
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: {
+                    sourceMap: true,
+                  },
+                },
+                { loader: 'sass-loader', options: { sourceMap: true } },
+              ],
             },
-            { loader: 'sass-loader', options: { sourceMap: true } },
           ],
         },
         {

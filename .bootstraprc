@@ -12,6 +12,7 @@ styleLoaders:
 - css-loader?sourceMap
 - postcss-loader?sourceMap
 - sass-loader?sourceMap
+appStyles: ./src/scss/style.scss
 bootstrapVersion: 3
 env:
   production:
