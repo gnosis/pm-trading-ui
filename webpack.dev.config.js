@@ -55,50 +55,53 @@ module.exports = (env = {}) => {
           test: /\.(jpe?g|png|svg)$/i,
           loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
         },
-        // TODO: Remove this special rule for css-modules when all globally scoped CSS is removed
-        // change the RegEx to: `/*.(scss|css)$/`
+
         {
-          test: /\.mod\.(scss|css)$/,
-          use: [
-            'style-loader',
+          test: /\.(scss|css)$/,
+          oneOf: [
             {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                modules: true,
-                localIdentName: '[name]__[local]___[hash:base64:5]',
-                importLoaders: 2,
-              },
+              resourceQuery: /^\?raw$/,
+              use: [
+                'style-loader',
+                {
+                  loader: 'css-loader',
+                  options: {
+                    sourceMap: true,
+                    importLoaders: 2,
+                  },
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: {
+                    sourceMap: true,
+                  },
+                },
+                {
+                  loader: 'sass-loader',
+                  options: { sourceMap: true, includePaths: [path.resolve(`${__dirname}/src`)] },
+                },
+              ],
             },
             {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-              },
-            },
-            { loader: 'sass-loader', options: { sourceMap: true } },
-          ],
-        },
-        {
-          test: /^((?!\.mod).)*\.(css|scss)$/,
-          use: [
-            'style-loader',
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                importLoaders: 2,
-              },
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-              },
-            },
-            {
-              loader: 'sass-loader',
-              options: { sourceMap: true, includePaths: [path.resolve(`${__dirname}/src`)] },
+              use: [
+                'style-loader',
+                {
+                  loader: 'css-loader',
+                  options: {
+                    sourceMap: true,
+                    modules: true,
+                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                    importLoaders: 2,
+                  },
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: {
+                    sourceMap: true,
+                  },
+                },
+                { loader: 'sass-loader', options: { sourceMap: true } },
+              ],
             },
           ],
         },

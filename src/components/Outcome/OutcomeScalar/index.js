@@ -6,7 +6,7 @@ import DecimalValue from 'components/DecimalValue'
 import { calcLMSRMarginalPrice } from 'api'
 import TrendingOutcomeScalar from './TrendingOutcomeScalar'
 
-import style from './outcomeScalar.mod.scss'
+import style from './outcomeScalar.scss'
 
 const cx = cn.bind(style)
 

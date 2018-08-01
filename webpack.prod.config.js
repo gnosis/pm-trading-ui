@@ -52,42 +52,50 @@ module.exports = (env = {}) => {
           loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
         },
         {
-          test: /\.mod\.(scss|css)$/,
-          use: [
-            MiniCssExtractPlugin.loader,
+          test: /\.(scss|css)$/,
+          oneOf: [
             {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-                importLoaders: 2,
-              },
+              resourceQuery: /^\?raw$/,
+              use: [
+                MiniCssExtractPlugin.loader,
+                {
+                  loader: 'css-loader',
+                  options: {
+                    sourceMap: true,
+                    importLoaders: 2,
+                  },
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: {
+                    sourceMap: true,
+                  },
+                },
+                {
+                  loader: 'sass-loader',
+                  options: { sourceMap: true, includePaths: [path.resolve(`${__dirname}/src`)] },
+                },
+              ],
             },
             {
-              loader: 'postcss-loader',
-            },
-            {
-              loader: 'sass-loader',
-              options: { includePaths: [path.resolve(`${__dirname}/src`)] },
-            },
-          ],
-        },
-        {
-          test: /^((?!\.mod).)*\.(css|scss)$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            {
-              loader: 'css-loader',
-              options: {
-                importLoaders: 2,
-              },
-            },
-            {
-              loader: 'postcss-loader',
-            },
-            {
-              loader: 'sass-loader',
-              options: { includePaths: [path.resolve(`${__dirname}/src`)] },
+              use: [
+                MiniCssExtractPlugin.loader,
+                {
+                  loader: 'css-loader',
+                  options: {
+                    modules: true,
+                    localIdentName: '[name]__[local]__[hash:base64:5]',
+                    importLoaders: 2,
+                  },
+                },
+                {
+                  loader: 'postcss-loader',
+                },
+                {
+                  loader: 'sass-loader',
+                  options: { includePaths: [path.resolve(`${__dirname}/src`)] },
+                },
+              ],
             },
           ],
         },

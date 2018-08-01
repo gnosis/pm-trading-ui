@@ -20,7 +20,7 @@ import {
 import OutcomeSection from './OutcomesSection'
 import SubmitError from './SubmitError'
 import LimitMarginAnnotation from './LimitMarginAnnotation'
-import style from './marketBuySharesForm.mod.scss'
+import style from './marketBuySharesForm.scss'
 
 const cx = cn.bind(style)
 

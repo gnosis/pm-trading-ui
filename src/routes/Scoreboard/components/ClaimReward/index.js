@@ -11,7 +11,7 @@ import Paragraph from 'components/layout/Paragraph'
 import { getFeatureConfig } from 'utils/features'
 import { connect } from 'react-redux'
 import { areRewardsClaimed } from '../../store'
-import style from './ClaimReward.mod.scss'
+import style from './ClaimReward.scss'
 
 const rewardsConfig = getFeatureConfig('rewards')
 const { rewardToken, claimReward } = rewardsConfig

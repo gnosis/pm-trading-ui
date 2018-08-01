@@ -5,7 +5,7 @@ import moment from 'moment'
 import Countdown from 'components/Countdown'
 import { RESOLUTION_TIME } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
-import style from './MarketTimer.mod.scss'
+import style from './MarketTimer.scss'
 
 const cx = cn.bind(style)
 

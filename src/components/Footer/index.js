@@ -3,7 +3,7 @@ import Markdown from 'react-markdown'
 import cn from 'classnames/bind'
 import Paragraph from 'components/layout/Paragraph'
 import { getFeatureConfig } from 'utils/features'
-import style from './Footer.mod.scss'
+import style from './Footer.scss'
 
 const cx = cn.bind(style)
 const {

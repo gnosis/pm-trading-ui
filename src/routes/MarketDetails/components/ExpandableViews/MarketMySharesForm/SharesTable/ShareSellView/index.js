@@ -20,7 +20,7 @@ import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/M
 import {
   calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount,
 } from './utils'
-import style from './ShareSellView.mod.scss'
+import style from './ShareSellView.scss'
 
 const cx = cn.bind(style)
 

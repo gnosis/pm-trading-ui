@@ -15,7 +15,7 @@ import ProviderIcon from './ProviderIcon'
 import BadgeIcon from './BadgeIcon'
 import MenuAccountDropdown from './MenuAccountDropdown'
 
-import css from './Header.mod.scss'
+import css from './Header.scss'
 
 const cx = className.bind(css)
 

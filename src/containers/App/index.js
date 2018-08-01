@@ -17,8 +17,9 @@ import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/sto
 import 'normalize.css'
 
 import { lifecycle } from 'recompose'
-import style from './app.mod.scss'
-import transitionStyles from './transitions.mod.scss'
+import style from './app.scss'
+import transitionStyles from './transitions.scss'
+import 'rc-tooltip/assets/bootstrap.css?raw'
 
 const cx = cn.bind(style)
 

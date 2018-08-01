@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom'
 import { isConnectedToBlockchain } from 'store/selectors/blockchain'
 import { closeModal } from 'store/actions/modal'
 import * as modals from 'containers/Modals'
-import style from './backdrop.mod.scss'
+import style from './backdrop.scss'
 
 const cx = cn.bind(style)
 

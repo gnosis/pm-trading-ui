@@ -5,7 +5,7 @@ import classnames from 'classnames/bind'
 import { marketRecordListShape } from 'utils/shapes'
 import ConditionalList from './ConditionalList'
 
-import style from './Category.mod.scss'
+import style from './Category.scss'
 
 const cx = classnames.bind(style)
 

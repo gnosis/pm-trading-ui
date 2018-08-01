@@ -3,7 +3,7 @@ import { List } from 'immutable'
 import PropTypes from 'prop-types'
 import classnames from 'classnames/bind'
 
-import style from './style.mod.scss'
+import style from './style.scss'
 
 const cx = classnames.bind(style)
 

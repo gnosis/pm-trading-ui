@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 
 import OutcomeColorBox from 'components/Outcome/OutcomeColorBox'
-import style from '../outcomeCategorical.mod.scss'
+import style from '../outcomeCategorical.scss'
 
 const cx = cn.bind(style)
 

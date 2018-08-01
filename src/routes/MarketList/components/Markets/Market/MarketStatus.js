@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 import { RESOLUTION_TIME } from 'utils/constants'
 import Icon from 'components/Icon'
 
-import css from './Market.mod.scss'
+import css from './Market.scss'
 
 const cx = classNames.bind(css)
 

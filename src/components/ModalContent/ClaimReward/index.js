@@ -10,7 +10,7 @@ import 'rc-tooltip/assets/bootstrap.css'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import { getFeatureConfig } from 'utils/features'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import style from './ClaimReward.mod.scss'
+import style from './ClaimReward.scss'
 
 const cx = cn.bind(style)
 const { rewardToken } = getFeatureConfig('rewards')

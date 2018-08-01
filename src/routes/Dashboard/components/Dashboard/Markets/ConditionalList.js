@@ -6,7 +6,7 @@ import { marketRecordListShape } from 'utils/shapes'
 import Spinner from 'components/Spinner/Indefinite'
 import { NoMarket } from './Market'
 
-import style from './ConditionalList.mod.scss'
+import style from './ConditionalList.scss'
 
 const cx = classnames.bind(style)
 
