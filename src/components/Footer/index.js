@@ -3,11 +3,16 @@ import Markdown from 'react-markdown'
 import cn from 'classnames/bind'
 import Paragraph from 'components/layout/Paragraph'
 import { getFeatureConfig } from 'utils/features'
-import footerText from './footerText.txt'
 import style from './Footer.scss'
 
 const cx = cn.bind(style)
-const { content: { type, source, markdown } } = getFeatureConfig('footer')
+const {
+  content: {
+    type, fileName, source, markdown,
+  },
+} = getFeatureConfig('footer')
+
+const footerText = require(`assets/content/${fileName || 'footer'}.md`)
 
 const Footer = () => {
   let text

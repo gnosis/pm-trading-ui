@@ -104,7 +104,7 @@ module.exports = (env = {}) => {
           loader: 'file-loader?name=fonts/[name].[ext]',
         },
         {
-          test: /\.txt$/,
+          test: /\.(md|txt)$/,
           use: 'raw-loader',
         },
       ],

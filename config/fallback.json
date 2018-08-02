@@ -33,7 +33,7 @@
     "source": "contract",
     "options": {
       "contractName": "etherToken",
-      "symbol": "WETH",
+      "symbol": "ETH",
       "icon": "/assets/img/icons/icon_etherTokens.svg"
     }
   },
@@ -74,6 +74,7 @@
     "enabled": true,
     "content": {
       "type": "file",
+      "fileName": "footer",
       "markdown": true
     }
   },
