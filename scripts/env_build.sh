@@ -11,9 +11,6 @@ elif [[ ${PROJECT} == "olympia" ]]; then
   if [[ ${TRAVIS_BRANCH} == "master" ]] || [[ ${TRAVIS_BRANCH} == ${TRAVIS_TAG} ]]; then
     export GNOSIS_ENV=olympia/staging;
     export NODE_ENV=production;
-  elif [[ ${TRAVIS_BRANCH} == "dappcon-olympia-release" ]]; then
-    export GNOSIS_ENV=olympia/production;
-    export NODE_ENV=production;
   else
     export GNOSIS_ENV=olympia/development;
     export NODE_ENV=development;
