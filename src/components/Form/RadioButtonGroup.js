@@ -7,7 +7,7 @@ import classNames from 'classnames/bind'
 import RadioButton from './RadioButton'
 import InputError from './InputError'
 
-import styles from './RadioButtonGroup.mod.scss'
+import styles from './RadioButtonGroup.scss'
 
 const cx = classNames.bind(styles)
 

@@ -29,7 +29,7 @@ class MarketMySharesForm extends Component {
 
   render() {
     const { marketShares, market } = this.props
-    if (!marketShares || !Object.keys(marketShares).length) {
+    if (!marketShares.size) {
       return (
         <div>
           <h2>

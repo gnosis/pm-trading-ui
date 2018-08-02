@@ -11,7 +11,7 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import { ORDER_TYPE_BUY, ORDER_TYPE_SELL } from 'store/models/trade'
 import { OutcomeRecord } from 'store/models/market'
 
-import style from './style.mod.scss'
+import style from './style.scss'
 
 const cx = className.bind(style)
 

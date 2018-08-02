@@ -15,7 +15,7 @@ import ProviderIcon from './ProviderIcon'
 import BadgeIcon from './BadgeIcon'
 import MenuAccountDropdown from './MenuAccountDropdown'
 
-import css from './Header.mod.scss'
+import css from './Header.scss'
 
 const cx = className.bind(css)
 
@@ -182,11 +182,7 @@ class Header extends Component {
                 )}
                 <DecimalValue value={tokenBalance} className={cx('text')} />
                 &nbsp;
-                {tokenAddress ? <CurrencyName className={cx('text')} tokenAddress={tokenAddress} /> : (
-                  <span>
-                    ETH
-                  </span>
-                )}
+                {<span>{tokenSymbol || 'ETH'}</span>}
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />

@@ -14,7 +14,7 @@ import { isFeatureEnabled } from 'utils/features'
 import arrows from 'routes/Dashboard/assets/arrows.svg'
 
 import Metric from './Metric'
-import style from './Metrics.mod.scss'
+import style from './Metrics.scss'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 const badgesEnabled = isFeatureEnabled('badges')

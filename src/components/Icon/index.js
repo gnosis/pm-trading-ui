@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
 
-import css from './Icon.mod.scss'
+import css from './Icon.scss'
 
 const cx = classNames.bind(css)
 

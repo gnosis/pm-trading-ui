@@ -10,7 +10,7 @@ import { marketShape } from 'utils/shapes'
 import Outcome from 'components/Outcome'
 import MarketTimer from './MarketTimer'
 import RedeemWinnigs from './RedeemWinnings'
-import style from './Details.mod.scss'
+import style from './Details.scss'
 
 const cx = cn.bind(style)
 

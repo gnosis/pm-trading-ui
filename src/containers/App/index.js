@@ -9,14 +9,17 @@ import CSSTransition from 'react-transition-group/CSSTransition'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import Footer from 'components/Footer'
 import { providerPropType } from 'utils/shapes'
+import { getHtmlConfig } from 'utils/features'
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import { isConnectedToBlockchain } from 'store/selectors/blockchain'
 import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
 import 'normalize.css'
 
-import style from './app.mod.scss'
-import transitionStyles from './transitions.mod.scss'
+import { lifecycle } from 'recompose'
+import style from './app.scss'
+import transitionStyles from './transitions.scss'
+import 'rc-tooltip/assets/bootstrap.css?raw'
 
 const cx = cn.bind(style)
 
@@ -29,9 +32,7 @@ const App = (props) => {
       <div className={cx('appContainer')}>
         <div className={cx('loader-container')}>
           <IndefiniteSpinner width={100} height={100} />
-          <h1>
-            Connecting to the blockchain
-          </h1>
+          <h1>Connecting to the blockchain</h1>
         </div>
       </div>
     )
@@ -85,7 +86,11 @@ const mapStateToProps = state => ({
 })
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-  )(App),
+  connect(mapStateToProps)(
+    lifecycle({
+      componentDidMount() {
+        document.title = getHtmlConfig().title || 'Gnosis Trading Interface'
+      },
+    })(App),
+  ),
 )

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import classname from 'classnames/bind'
-import style from './DashboardTitle.mod.scss'
+import style from './DashboardTitle.scss'
 
 const cx = classname.bind(style)
 

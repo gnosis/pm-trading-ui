@@ -7,7 +7,7 @@ import Bold from 'components/layout/Bold'
 import Img from 'components/layout/Img'
 import ConnectWalletScreenshot from 'routes/GameGuide/assets/connectWallet.png'
 import RegisterWalletScreenshot from 'routes/GameGuide/assets/registerWallet.png'
-import style from './SignUp.mod.scss'
+import style from './SignUp.scss'
 
 const cx = cn.bind(style)
 

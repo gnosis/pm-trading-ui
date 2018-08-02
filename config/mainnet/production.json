@@ -9,6 +9,9 @@
     "host": "mainnet.infura.io",
     "port": 443
   },
+  "htmlConfig": {
+    "title": "Gnosis Trading Interface"
+  },
   "whitelist": {
     "0x9eab578556de5782445ec036f25a41902ba19eeb": "Gnosis"
   },
