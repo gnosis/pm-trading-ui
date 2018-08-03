@@ -70,6 +70,10 @@
       }
     ]
   },
+  "verification": {
+    "enabled": true,
+    "handler": "onfido"
+  },
   "footer": {
     "enabled": true,
     "content": {
