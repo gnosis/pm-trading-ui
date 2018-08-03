@@ -29,21 +29,21 @@ const Trade = ({
         {marketTitle}
       </Link>
     </div>
-    <div className={cx('outcome', 'row')}>
-      <div className={cx('tradeOutcome', 'col-md-3')}>
+    <div className={cx('outcome')}>
+      <div className={cx('tradeOutcome')}>
         <OutcomeColorBox scheme={marketType} outcomeIndex={outcomeToken.index} />&nbsp;
         {outcomeToken.name}
       </div>
-      <div className={cx('tradeAmount', 'col-md-4')}>
+      <div className={cx('tradeAmount')}>
         <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokenCount)} />&nbsp;
         {collateralTokenAddress ? <CurrencyName tokenAddress={collateralTokenAddress} /> : <span>ETH</span> }
       </div>
-      <div className={cx('tradePrice', 'col-md-5')}>
+      <div className={cx('tradePrice')}>
         <span title={moment.utc(date).format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}>
           {moment.utc(date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
         </span>
       </div>
-      <div className={cx('orderType', 'col-md-1')}>{WORDING_ORDER_TYPE[orderType]}</div>
+      <div className={cx('orderType')}>{WORDING_ORDER_TYPE[orderType]}</div>
     </div>
   </div>
 )
