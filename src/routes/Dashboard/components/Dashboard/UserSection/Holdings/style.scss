@@ -75,24 +75,19 @@
     margin-right: 10px;
     align-items: center;
     justify-content: space-between;
+    margin-top: 6px;
   }
 
-  .outcomeBox,
-  .shareAmount,
-  .sharePrice,
-  .shareAction,
-  .tradeAmount,
-  .tradePrice,
-  .orderType {
-    display: inline-block;
-    margin-top: 6px;
+  .outcomeBox {
+    display: flex;
+    align-items: center;
+  }
 
-    .outcomeText {
-      white-space: nowrap;
-    }
+  .outcomeText {
+    white-space: nowrap;
+  }
 
-    .redeemWinnings {
-      padding: 0;
-    }
+  .redeemWinnings {
+    padding: 0;
   }
 }

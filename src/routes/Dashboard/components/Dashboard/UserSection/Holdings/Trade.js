@@ -38,7 +38,7 @@ const Trade = ({
         <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokenCount)} />&nbsp;
         {collateralTokenAddress ? <CurrencyName tokenAddress={collateralTokenAddress} /> : <span>ETH</span> }
       </div>
-      <div className={cx('tradePrice')}>
+      <div className={cx('tradeDate')}>
         <span title={moment.utc(date).format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}>
           {moment.utc(date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
         </span>
