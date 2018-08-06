@@ -1,6 +1,14 @@
+import Loadable from 'react-loadable'
 import { connect } from 'react-redux'
-import MarketList from '../../components/MarketList'
 import actions from './actions'
 import selector from './selector'
 
-export default connect(selector, actions)(MarketList)
+const LoadableMarketList = Loadable({
+  loader: () => import('../../components/MarketList'),
+  loading: () => null,
+})
+
+export default connect(
+  selector,
+  actions,
+)(LoadableMarketList)

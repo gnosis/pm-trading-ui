@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const AutoDllPlugin = require('autodll-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -135,6 +136,37 @@ module.exports = (env = {}) => {
       new HtmlWebpackPlugin({
         template: `${__dirname}/src/html/index.html`,
       }),
+      new AutoDllPlugin({
+        inject: true, // will inject the DLL bundles to index.html
+        filename: '[name]_[hash].js',
+        entry: {
+          vendor: [
+            'react',
+            'react-dom',
+            'redux',
+            'react-redux',
+            'immutable',
+            'react-router-dom',
+            'recharts',
+            'redux-actions',
+            'reselect',
+            'web3',
+            'moment-duration-format',
+            '@gnosis.pm/pm-js',
+          ],
+        },
+        plugins: [
+          new UglifyJsWebpackPlugin({
+            sourceMap: true,
+            parallel: true,
+            uglifyOptions: {
+              compress: false,
+            },
+          }),
+
+          new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+        ],
+      }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
         NODE_ENV: 'production',
@@ -149,7 +181,6 @@ module.exports = (env = {}) => {
           compress: false,
         },
       }),
-      new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
       new CopyWebpackPlugin([{ from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` }]),
     ],
   }
