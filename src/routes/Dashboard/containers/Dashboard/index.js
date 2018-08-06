@@ -1,8 +1,15 @@
 import { connect } from 'react-redux'
+import Loadable from 'react-loadable'
 
 import actions from './actions'
 import selector from './selectors'
 
-import Dashboard from '../../components/Dashboard'
+const LoadableDashboard = Loadable({
+  loader: () => import('../../components/Dashboard'),
+  loading: () => null,
+})
 
-export default connect(selector, actions)(Dashboard)
+export default connect(
+  selector,
+  actions,
+)(LoadableDashboard)
