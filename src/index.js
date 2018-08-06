@@ -13,12 +13,13 @@ import initAnalytics from 'utils/analytics'
 import { isFeatureEnabled, getProviderConfig } from 'utils/features'
 import store from 'store'
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { setMomentRelativeTime } from './setup'
+import { setMomentRelativeTime, setMomentDurationFormat } from './setup'
 
 const providerConfig = getProviderConfig()
 const tournamentEnabled = isFeatureEnabled('tournament')
 
 setMomentRelativeTime()
+setMomentDurationFormat()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })

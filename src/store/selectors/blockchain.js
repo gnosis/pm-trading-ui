@@ -14,7 +14,7 @@ export const isConnectedToBlockchain = state => !!state.blockchain.get('gnosisIn
 export const isGasCostFetched = (state, property) => state.blockchain.getIn(['gasCosts', property]) !== undefined
 
 export const getTokenAmount = (state, tokenAddress) => {
-  const tokenAmount = state.blockchain.getIn(['tokenBalances', tokenAddress], 0)
+  const tokenAmount = state.blockchain.getIn(['tokenBalances', normalizeHex(tokenAddress)], 0)
   let defaultTokenDecimal
 
   try {
