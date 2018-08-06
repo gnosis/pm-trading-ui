@@ -1,11 +1,9 @@
+import Loadable from 'react-loadable'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import { getRunningTransactions, getCompletedTransactions } from 'routes/Transactions/store/selectors/transactions'
-
 import { getCurrentAccount } from 'integrations/store/selectors'
-
-import Transactions from '../../components/Transactions'
 
 const mapStateToProps = state => ({
   currentAccount: getCurrentAccount(state),
@@ -17,4 +15,12 @@ const mapDispatchToProps = {
   changeUrl: push,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Transactions)
+const LoadableTransactions = Loadable({
+  loader: () => import('../../components/Transactions'),
+  loading: () => null,
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LoadableTransactions)

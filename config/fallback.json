@@ -78,17 +78,21 @@
       "markdown": true
     }
   },
+  "rewardClaiming": {
+    "enabled": false,
+    "claimReward": {
+      "enabled": false,
+      "claimStart": "2018-06-01T12:00:00",
+      "claimUntil": "2018-07-01T12:00:00",
+      "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
+      "networkId": 42
+    }
+  },
   "rewards": {
     "enabled": false,
     "rewardToken": {
       "symbol": "RWD",
       "contractAddress": "0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
-      "networkId": 3
-    },
-    "claimReward": {
-      "claimStart": "2018-04-01T12:00:00",
-      "claimUntil": "2018-05-01T12:00:00",
-      "contractAddress": "0xd8d232c0fe5992e391806e67cc20db384cb7b6e2",
       "networkId": 3
     }
   },

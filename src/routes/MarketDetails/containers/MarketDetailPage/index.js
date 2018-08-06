@@ -1,8 +1,8 @@
+import Loadable from 'react-loadable'
 import { connect } from 'react-redux'
 import { formValueSelector, getFormSyncErrors } from 'redux-form'
 import { replace } from 'react-router-redux'
 import { requestGasPrice, requestTokenSymbol } from 'store/actions/blockchain'
-import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
 import redeemMarket from 'store/actions/market/redeemMarket'
 import {
@@ -89,7 +89,12 @@ const mapDispatchToProps = dispatch => ({
   requestTokenSymbol: tokenAddress => dispatch(requestTokenSymbol(tokenAddress)),
 })
 
+const LoadableMarketDetails = Loadable({
+  loader: () => import('routes/MarketDetails/components/MarketDetail'),
+  loading: () => null,
+})
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MarketDetail)
+)(LoadableMarketDetails)
