@@ -1,7 +1,7 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "tradingdb.staging.gnosisdev.com",
+    "host": "tradingdb.rinkeby.gnosis.pm",
     "port": 443
   },
   "ethereum": {
