@@ -1,12 +1,12 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "tradingdb.mainnet.staging.gnosisdev.com",
+    "host": "tradingdb.staging.gnosisdev.com",
     "port": 443
   },
   "ethereum": {
     "protocol": "https",
-    "host": "mainnet.infura.io",
+    "host": "rinkeby.infura.io",
     "port": 443
   },
   "htmlConfig": {
