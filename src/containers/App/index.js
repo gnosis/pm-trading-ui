@@ -9,7 +9,7 @@ import CSSTransition from 'react-transition-group/CSSTransition'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import Footer from 'components/Footer'
 import { providerPropType } from 'utils/shapes'
-import { getHtmlConfig } from 'utils/features'
+import { getHtmlConfig, isFeatureEnabled } from 'utils/features'
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
 import { isConnectedToBlockchain } from 'store/selectors/blockchain'
@@ -20,6 +20,10 @@ import { lifecycle } from 'recompose'
 import style from './app.scss'
 import transitionStyles from './transitions.scss'
 import 'rc-tooltip/assets/bootstrap.css?raw'
+
+if (isFeatureEnabled('tournament')) {
+  import('react-table/react-table.css?raw')
+}
 
 const cx = cn.bind(style)
 

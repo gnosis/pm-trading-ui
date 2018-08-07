@@ -2,9 +2,7 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
 import { getRunningTransactions, getCompletedTransactions } from 'routes/Transactions/store/selectors/transactions'
-
 import { getCurrentAccount } from 'integrations/store/selectors'
-
 import Transactions from '../../components/Transactions'
 
 const mapStateToProps = state => ({
@@ -17,4 +15,7 @@ const mapDispatchToProps = {
   changeUrl: push,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Transactions)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Transactions)

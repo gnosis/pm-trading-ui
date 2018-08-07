@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import { formValueSelector, getFormSyncErrors } from 'redux-form'
 import { replace } from 'react-router-redux'
 import { requestGasPrice, requestTokenSymbol } from 'store/actions/blockchain'
-import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
 import redeemMarket from 'store/actions/market/redeemMarket'
 import {
@@ -32,6 +31,7 @@ import {
 } from 'integrations/store/selectors'
 import { isModerator, getModerators } from 'utils/helpers'
 import { getTokenSymbol, getTokenAmount } from 'store/selectors/blockchain'
+import MarketDetails from '../../components/MarketDetail'
 
 let marketId
 
@@ -92,4 +92,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MarketDetail)
+)(MarketDetails)

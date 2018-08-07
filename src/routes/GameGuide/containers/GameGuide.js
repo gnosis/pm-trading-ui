@@ -1,4 +1,6 @@
-import GameGuide from '../components'
+import Loadable from 'react-loadable'
 
-export default GameGuide
-
+export default Loadable({
+  loader: () => import('../components'),
+  loading: () => null,
+})
