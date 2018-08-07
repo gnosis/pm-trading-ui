@@ -35,15 +35,15 @@ deploy:
   on:
     branch: master
 
-- provider: s3
-  bucket: olympia-staging
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  access_key_id: $AWS_ACCESS_KEY_ID
-  skip_cleanup: true
-  local_dir: dist
-  upload-dir: releases/$TRAVIS_TAG
-  on:
-    tags: true
+# - provider: s3
+#   bucket: olympia-staging
+#   secret_access_key: $AWS_SECRET_ACCESS_KEY
+#   access_key_id: $AWS_ACCESS_KEY_ID
+#   skip_cleanup: true
+#   local_dir: dist
+#   upload-dir: releases/$TRAVIS_TAG
+#   on:
+#     tags: true
 
 # mainnet deployments
 - provider: s3
