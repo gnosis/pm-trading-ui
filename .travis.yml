@@ -33,8 +33,7 @@ deploy:
   local_dir: dist
   upload-dir: current
   on:
-    branch: olympia-qa
-    condition: $PROJECT = olympia
+    branch: master
 
 - provider: s3
   bucket: olympia-staging
@@ -45,7 +44,6 @@ deploy:
   upload-dir: releases/$TRAVIS_TAG
   on:
     tags: true
-    condition: $PROJECT = olympia
 
 # mainnet deployments
 - provider: s3
