@@ -36,6 +36,11 @@
     }
   }
 
+  label {
+    margin: 20px 0 6px 0;
+    display: block;
+  }
+
   &.error {
     input {
       color: $active-highlight-error;
@@ -47,6 +52,9 @@
     }
 
     label {
+      margin: 20px 0 6px 0;
+      letter-spacing: 1px;
+      display: block;
       color: $active-highlight-error;
     }
   }
