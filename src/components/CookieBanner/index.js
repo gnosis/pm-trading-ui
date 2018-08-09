@@ -15,8 +15,8 @@ const CookieBanner = () => (
     <div className={cx('settings')}>
       <span className={cx('options')}>
         <div className={cx('checkbox')}>
-          <input id="cb-1" name="neccesary" type="checkbox" disabled="disabled" checked />
-          <label htmlFor="cb-1">Necessary</label>
+          <input id="cb-1" name="neccesary" type="checkbox" />
+          <label htmlFor="cb-1">Intercom</label>
         </div>
         <div className={cx('checkbox')}>
           <input id="cb-2" name="analytics" type="checkbox" />
