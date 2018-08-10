@@ -15,14 +15,15 @@ const ThirdPartyIntegrations = [
 class CookieBannerContainer extends Component {
   state = {
     selectedValues: ['Chat support', 'Analytics'],
+    showBanner: false,
   }
 
   componentDidMount() {}
 
   render() {
-    const { selectedValues } = this.state
+    const { selectedValues, showBanner } = this.state
 
-    return <CookieBanner options={ThirdPartyIntegrations} selected={selectedValues} />
+    return <CookieBanner display={showBanner} options={ThirdPartyIntegrations} selected={selectedValues} />
   }
 }
 

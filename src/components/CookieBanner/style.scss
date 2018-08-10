@@ -1,3 +1,5 @@
+@import '~style/vars.scss';
+
 $bgColor: #21435a;
 $textColor: #ffffff;
 $acceptButtonColor: #23d160;
@@ -5,16 +7,26 @@ $acceptButtonColor: #23d160;
 .cookieBar {
   display: flex;
   border: 0;
+  margin-top: -64px;
   justify-content: center;
   background-color: $bgColor;
   animation-duration: 0.3s;
-  animation-name: float-down;
   animation-timing-function: ease-in-out;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   padding: 10px 0 15px;
   box-sizing: border-box;
+
+  &.shown {
+    margin-top:0;
+    animation-name: float-down;
+  }
+
+  &.hidden {
+    margin-top: -64px;
+    animation-name: float-up;
+  }
 
   & > p {
     color: $textColor;
@@ -81,6 +93,17 @@ $acceptButtonColor: #23d160;
       }
     }
   }
+
+  .closeButton {
+    @include closeButton(15px, 3px);
+    top: 10px;
+    right: 3px;
+    cursor: pointer;
+
+    &:before, &:after {
+      background-color: #fff;
+    }
+  }
 }
 
 .cb-checkbox {
@@ -106,9 +129,9 @@ $acceptButtonColor: #23d160;
 
 @keyframes float-up {
   0% {
-    bottom: 0;
+    margin-top: 0;
   }
   100% {
-    bottom: -100px;
+    margin-top: -64px;
   }
 }
