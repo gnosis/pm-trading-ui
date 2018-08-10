@@ -1,13 +1,28 @@
 import React, { Component } from 'react'
 import CookieBanner from 'components/CookieBanner'
 
-class CookieBannerContainer extends Component {
-  componentDidMount() {
+const ThirdPartyIntegrations = [
+  {
+    label: 'Chat support',
+    initFunc: () => {},
+  },
+  {
+    label: 'Analytics',
+    initFunc: () => {},
+  },
+]
 
+class CookieBannerContainer extends Component {
+  state = {
+    selectedValues: ['Chat support', 'Analytics'],
   }
 
+  componentDidMount() {}
+
   render() {
-    return <CookieBanner />
+    const { selectedValues } = this.state
+
+    return <CookieBanner options={ThirdPartyIntegrations} selected={selectedValues} />
   }
 }
 

@@ -5,7 +5,7 @@ import style from './style.scss'
 
 const cx = cn.bind(style)
 
-const CookieBanner = () => (
+const CookieBanner = ({ options, selected }) => (
   <div className={cx('cookieBar')}>
     <p>
       We use cookies to give you the best experience and to help improve our website. Please read our{' '}
@@ -14,14 +14,12 @@ const CookieBanner = () => (
     </p>
     <div className={cx('settings')}>
       <span className={cx('options')}>
-        <div className={cx('checkbox')}>
-          <input id="cb-1" name="neccesary" type="checkbox" />
-          <label htmlFor="cb-1">Intercom</label>
-        </div>
-        <div className={cx('checkbox')}>
-          <input id="cb-2" name="analytics" type="checkbox" />
-          <label htmlFor="cb-2">Analytics</label>
-        </div>
+        {options.map(({ label }) => (
+          <div key={label} className={cx('checkbox')}>
+            <input id="cb-1" name="neccesary" type="checkbox" checked={selected.indexOf(label) > -1} />
+            <label htmlFor="cb-1">{label}</label>
+          </div>
+        ))}
       </span>
       <button type="button" id="{config.banner.accept_button}" className={cx('button', 'accept')}>
         Accept Cookies
@@ -30,8 +28,18 @@ const CookieBanner = () => (
   </div>
 )
 
-CookieBanner.propTypes = {}
+CookieBanner.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      initFunc: PropTypes.func.isRequired,
+    }),
+  ).isRequired,
+  selected: PropTypes.arrayOf(PropTypes.string),
+}
 
-CookieBanner.defaultProps = {}
+CookieBanner.defaultProps = {
+  selected: [],
+}
 
 export default CookieBanner
