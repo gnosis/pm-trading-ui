@@ -12,6 +12,7 @@ export const setAccountAcceptedDocuments = (account, documentNames) => saveWalle
 export const setAccountRewardClaimState = (account, rewardClaimEnd, rewardClaimValue) => (
   saveWalletSetting({ account, key: 'rewardClaimHash', value: sha1(rewardClaimEnd + rewardClaimValue) })
 )
+export const setVerificationHash = (account, hash) => saveWalletSetting({ account, key: 'verificationHash', value: hash })
 
 export const requestMainnetAddress = () => async (dispatch, getState) => {
   const state = getState()

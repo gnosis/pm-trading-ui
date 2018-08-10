@@ -51,5 +51,6 @@ export default (state) => {
     tokenBalance: collateralToken.balance,
     tokenSymbol: collateralToken.symbol,
     acceptedTOS: hasAcceptedTermsAndConditions(state),
+    hasVerified: false,
   }
 }

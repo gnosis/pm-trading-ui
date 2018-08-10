@@ -22,6 +22,7 @@ const cx = className.bind(css)
 const tournamentEnabled = isFeatureEnabled('tournament')
 const badgesEnabled = isFeatureEnabled('badges')
 const requireRegistration = isFeatureEnabled('registration')
+const requireVerification = isFeatureEnabled('verification')
 const providerConfig = getFeatureConfig('providers')
 const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
 const { default: defaultProvider } = providerConfig
@@ -81,12 +82,20 @@ class Header extends Component {
         openModal('ModalUnlockMetamask')
       } else if (!isConnectedToCorrectNetwork) {
         openModal('ModalSwitchNetwork')
+      } else if (requireVerification) {
+        // Verification has to implement the modals below:
+        // - Registration
+        // - Accept TOS
+        openModal('ModalVerification')
       } else if (requireRegistration) {
+        // Registration has to implement the modals below
+        // - Accept TOS
         openModal('ModalRegisterWallet')
       } else if (shouldAcceptTOS) {
         openModal('ModalAcceptTOS')
       } else {
-        console.warn('should be connected')
+        console.warn('should be connected, try refresh')
+        window.location.reload()
       }
     } else if (useUport) {
       initUport()
@@ -111,9 +120,10 @@ class Header extends Component {
       mainnetAddress,
       userTournamentInfo,
       acceptedTOS,
+      hasVerified,
     } = this.props
 
-    let canInteract = (acceptedTOS || !legalComplianceEnabled) && hasWallet && !!currentProvider
+    let canInteract = (acceptedTOS || !legalComplianceEnabled) && (hasVerified || !requireVerification) && hasWallet && !!currentProvider
 
     if (tournamentEnabled && useMetamask && requireRegistration) {
       canInteract = hasWallet && !!mainnetAddress
@@ -222,6 +232,7 @@ Header.propTypes = {
   initUport: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   acceptedTOS: PropTypes.bool,
+  hasVerified: PropTypes.bool,
   fetchTournamentUserData: PropTypes.func.isRequired,
 }
 
@@ -241,6 +252,7 @@ Header.defaultProps = {
   userTournamentInfo: undefined,
   tokenSymbol: 'ETH',
   acceptedTOS: false,
+  hasVerified: false,
 }
 
 export default Header
