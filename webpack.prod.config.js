@@ -35,6 +35,7 @@ module.exports = (env = {}) => {
       symlinks: false,
       alias: {
         '~style': `${__dirname}/src/scss`,
+        '~assets': `${__dirname}/src/assets`,
       },
       modules: [
         `${__dirname}/src`,

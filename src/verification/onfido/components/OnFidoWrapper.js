@@ -1,13 +1,18 @@
 import React from 'react'
+import classnames from 'classnames/bind'
 import { lifecycle } from 'recompose'
 import { getFeatureConfig } from 'utils/features'
 
 import Onfido from 'onfido-sdk-ui'
 
+import styles from './OnFidoWrapper.scss'
+
+const cx = classnames.bind(styles)
+
 const tournamentConfig = getFeatureConfig('tournament')
 
 const OnFidoWrapper = () => (
-  <div id="onfido-mount" />
+  <div id="onfido-mount" className={cx('onfido-wrapper')} />
 )
 
 const enhancer = lifecycle({

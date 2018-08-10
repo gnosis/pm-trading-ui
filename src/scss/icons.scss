@@ -3,7 +3,7 @@
 @mixin svgIcon($iconName) {
   $iconClass: 'icon--#{$iconName}';
   .icon.#{$iconClass} {
-    $url: '../assets/img/icons/icon_#{$iconName}.svg';
+    $url: '/assets/img/icons/icon_#{$iconName}.svg';
     background-image: url('#{$url}');
     mask-image: url('#{$url}');
   }
@@ -64,7 +64,7 @@
 @include svgIcon('logout');
 
 .icon--error {
-  $url: '../assets/img/icons/icon_cross.svg';
+  $url: '/assets/img/icons/icon_cross.svg';
   background-image: url('#{$url}');
   mask-image: url('#{$url}');
 }

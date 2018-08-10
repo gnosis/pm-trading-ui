@@ -1,0 +1,61 @@
+@import '~style/style.scss';
+
+.onfido-wrapper {
+  // Global Font
+  :global .onfido-sdk-ui-Modal-inner {
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  // To select which type of identification you want to use, the icons need to be replaced
+  :global .onfido-sdk-ui-DocumentSelector-option:hover {
+    :global .onfido-sdk-ui-DocumentSelector-icon {
+      &-passport {
+        background-image: url('~assets/verification/onfido/id-type-passport.svg');
+      }
+
+      &-license {
+        background-image: url('~assets/verification/onfido/id-type-driverlicense.svg');
+      }
+
+      &-identity {
+        background-image: url('~assets/verification/onfido/id-type-id.svg');
+      }
+
+      &::after {
+        border-color: $brand-primary;
+      }
+    }
+  }
+
+  // The Icons for the steps on how to use on mobile
+  :global .onfido-sdk-ui-Intro-stageIcon {
+    &-sms {
+      background-image: url('~assets/verification/onfido/step1.svg');
+    }
+
+    &-take-photos {
+      background-image: url('~assets/verification/onfido/step2.svg');
+    }
+
+    &-return-computer {
+      background-image: url('~assets/verification/onfido/step3.svg');
+    }
+  }
+
+  // "Switch to Mobile Icon"
+  :global .onfido-sdk-ui-SwitchDevice-icon {
+    background-color: $brand-primary;
+  }
+
+  // "Append"-Style button for mobile number
+  :global button.onfido-sdk-ui-CrossDeviceLink-btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 0;
+  }
+
+  /* We need to overwrite some styles from OnFido here */
+  :global .onfido-sdk-ui-Theme-btn-primary {
+    @include interfaceButton;
+  }
+}

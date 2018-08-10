@@ -35,6 +35,7 @@ module.exports = (env = {}) => {
       symlinks: false,
       alias: {
         '~style': `${__dirname}/src/scss`,
+        '~assets': `${__dirname}/src/assets`,
       },
       modules: [
         `${__dirname}/src`,
@@ -52,7 +53,7 @@ module.exports = (env = {}) => {
           use: 'babel-loader',
         },
         {
-          test: /\.(jpe?g|png|svg)$/i,
+          test: /\.(jpe?g|png)$/i,
           loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
         },
 
