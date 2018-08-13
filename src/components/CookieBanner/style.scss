@@ -7,7 +7,7 @@ $acceptButtonColor: #23d160;
 .cookieBar {
   display: flex;
   border: 0;
-  margin-top: -64px;
+  margin-top: 0;
   justify-content: center;
   background-color: $bgColor;
   animation-duration: 0.3s;
@@ -17,16 +17,6 @@ $acceptButtonColor: #23d160;
   align-items: center;
   padding: 10px 0 15px;
   box-sizing: border-box;
-
-  &.shown {
-    margin-top:0;
-    animation-name: float-down;
-  }
-
-  &.hidden {
-    margin-top: -64px;
-    animation-name: float-up;
-  }
 
   & > p {
     color: $textColor;
@@ -134,4 +124,20 @@ $acceptButtonColor: #23d160;
   100% {
     margin-top: -64px;
   }
+}
+
+.float-enter {
+  margin-top: -64px;
+}
+.float-enter-active {
+  margin-top: 0;
+  transition: all 300ms ease-out;
+}
+.float-exit {
+  margin-top: 0;
+  transform: scale(1) translateY(0%);
+}
+.float-exit-active {
+  margin-top: -64px;
+  transition: all 300ms ease-out;
 }
