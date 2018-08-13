@@ -17,7 +17,14 @@ class CookieBanner extends Component {
     const { display, options } = this.props
 
     const noCookiesSet = !options.filter(({ label }) => getCookie(label) !== '').length
-    const shouldShow = display || noCookiesSet
+
+    let shouldShow = display
+
+    // if display property wasn't provided, that means we take care of displaying the component
+    // if there are no cookies set, then the component will be displayed
+    if (typeof shouldShow === 'undefined') {
+      shouldShow = noCookiesSet
+    }
 
     if (shouldShow) {
       this.setState({ shown: true })
@@ -32,7 +39,10 @@ class CookieBanner extends Component {
   }
 
   @autobind
-  handleOptionClick() {}
+  handleOptionClick({ target: { id } }) {
+    const { onChange } = this.props
+    onChange(id)
+  }
 
   render() {
     const { options, selected } = this.props
@@ -57,8 +67,8 @@ class CookieBanner extends Component {
             <span className={cx('options')}>
               {options.map(({ label }) => (
                 <div key={label} className={cx('checkbox')}>
-                  <input name={label} type="checkbox" checked={selected.indexOf(label) > -1} />
-                  <label htmlFor="cb-1">{label}</label>
+                  <input id={label} type="checkbox" onChange={this.handleOptionClick} checked={selected.indexOf(label) > -1} />
+                  <label htmlFor={label}>{label}</label>
                 </div>
               ))}
             </span>
@@ -82,11 +92,13 @@ CookieBanner.propTypes = {
   ).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string),
   display: PropTypes.bool,
+  onChange: PropTypes.func,
 }
 
 CookieBanner.defaultProps = {
   selected: [],
   display: undefined,
+  onChange: () => {},
 }
 
 export default CookieBanner

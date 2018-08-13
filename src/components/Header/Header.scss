@@ -35,6 +35,7 @@ $navbarHeight: 40px;
 
   .containerFlex {
     display: flex;
+    position: relative;
   }
 
   .account {
@@ -67,7 +68,7 @@ $navbarHeight: 40px;
 
   .group {
     &.version {
-      top: 55px;
+      top: -25px;
       position: absolute;
       line-height: $navbarHeight;
       color: white !important;
