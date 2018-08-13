@@ -32,7 +32,22 @@ class CookieBanner extends Component {
   }
 
   @autobind
+  handleSettingsSave() {
+    const { options, selected } = this.props
+
+    options.forEach((option) => {
+      if (selected.indexOf(option.label) > -1) {
+        setCookie(option.label, 'yes', 10000)
+      } else {
+        setCookie(option.label, 'no', 3)
+      }
+    })
+  }
+
+  @autobind
   handleClose() {
+    this.handleSettingsSave()
+
     this.setState({
       shown: false,
     })
@@ -67,12 +82,17 @@ class CookieBanner extends Component {
             <span className={cx('options')}>
               {options.map(({ label }) => (
                 <div key={label} className={cx('checkbox')}>
-                  <input id={label} type="checkbox" onChange={this.handleOptionClick} checked={selected.indexOf(label) > -1} />
+                  <input
+                    id={label}
+                    type="checkbox"
+                    onChange={this.handleOptionClick}
+                    checked={selected.indexOf(label) > -1}
+                  />
                   <label htmlFor={label}>{label}</label>
                 </div>
               ))}
             </span>
-            <button type="button" id="{config.banner.accept_button}" className={cx('button', 'accept')}>
+            <button type="button" onClick={this.handleSettingsSave} className={cx('button', 'accept')}>
               Accept Cookies
             </button>
           </div>
