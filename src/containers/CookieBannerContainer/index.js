@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import CookieBanner from 'components/CookieBanner'
+import loadGoogleAnalytics from 'utils/analytics/google'
+import loadIntercom from 'utils/analytics/intercom'
 
 const ThirdPartyIntegrations = [
   {
     label: 'Chat support',
-    initFunc: () => {},
+    initFunc: loadGoogleAnalytics,
   },
   {
     label: 'Analytics',
-    initFunc: () => {},
+    initFunc: loadIntercom,
   },
 ]
 
