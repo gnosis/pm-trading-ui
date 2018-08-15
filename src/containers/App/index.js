@@ -53,7 +53,7 @@ const App = (props) => {
 
   return (
     <div className={cx('appContainer')}>
-      <CookieBannerContainer />
+      {isFeatureEnabled('cookieBanner') && <CookieBannerContainer />}
       <HeaderContainer version={process.env.VERSION} />
       {provider && provider.account && <TransactionFloaterContainer />}
       <TransitionGroup>

@@ -1,5 +1,10 @@
+import { getThirdPartyConfig } from 'utils/features'
+
+export const THIRD_PARTY_ID = 'intercom'
+
+const { id: APP_ID } = getThirdPartyConfig(THIRD_PARTY_ID)
+
 export default () => {
-  const APP_ID = 'km54f6ih'
   const d = document
 
   const s = d.createElement('script')
@@ -9,9 +14,9 @@ export default () => {
   const x = d.getElementsByTagName('script')[0]
   x.parentNode.insertBefore(s, x)
 
-  s.onload = (_) => {
+  s.onload = () => {
     window.Intercom('boot', {
-      app_id: 'km54f6ih',
+      app_id: APP_ID,
       consent: true,
     })
   }
