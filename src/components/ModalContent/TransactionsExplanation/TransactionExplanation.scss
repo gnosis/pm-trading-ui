@@ -7,13 +7,13 @@
   flex-direction: column;
   min-height: 100vh;
 
-  &__close {
+  .closeButton {
     @include closeButton(32px, 5px);
     top: 20px;
     right: 10px;
   }
 
-  &__transaction-list {
+  .transactionList {
     font-size: 16px;
     list-style: none;
     margin-top: 20px;
