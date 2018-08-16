@@ -73,8 +73,7 @@ class Header extends Component {
 
     const shouldInstallProviders = !hasMetamask() && !useUport
     const shouldAcceptTOS = !acceptedTOS || !legalComplianceEnabled
-    openModal('ModalOutcomePriceChanged')
-    return
+
     if (shouldInstallProviders) {
       openModal('ModalInstallMetamask')
     } else if (useMetamask) {
