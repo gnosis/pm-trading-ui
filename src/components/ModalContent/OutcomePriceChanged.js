@@ -8,11 +8,7 @@ const cx = cn.bind(style)
 const OutcomePriceChanged = ({ closeModal }) => (
   <div className={cx('transactionsExplanation')}>
     <div className={cx('closeButton')} onClick={closeModal} />
-    <h3
-      style={{
-        color: '#fff',
-      }}
-    >
+    <h3>
       The transaction could not be processed because the trading price changed. <br />
       Please check the new price and try again.
     </h3>

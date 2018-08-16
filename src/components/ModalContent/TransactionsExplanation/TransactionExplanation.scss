@@ -6,6 +6,7 @@
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
+  color: #fff;
 
   .closeButton {
     @include closeButton(32px, 5px);
