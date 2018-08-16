@@ -16,6 +16,7 @@ const cx = classnames.bind(style)
 const LegalCompliance = ({
   documents,
   fields,
+  className,
   showHeading,
   showExplanation,
   applicationName,
@@ -40,7 +41,7 @@ const LegalCompliance = ({
   const canSubmit = !disabled && hasAcceptedAll
 
   return (
-    <div>
+    <div className={className}>
       {showHeading && (
         <h4 className={cx('heading')}>
 Terms of service and privacy policy
@@ -52,16 +53,17 @@ Terms of service and privacy policy
           <React.Fragment>
             {documents
               .map(doc => <DocumentExplanation key={doc.id} {...doc} />)
-              .reduce((acc, elem) => [...acc, <span>
-                {' '}
-                  and
-                {' '}
-              </span>, elem], [])}
+              .reduce((acc, elem, i) => [...acc,
+                <span key={i}>
+                  {' '}
+                    and
+                  {' '}
+                </span>, elem], [])}
           </React.Fragment>
           .
         </p>
       )}
-      <div className={cx('checks')}>{documents.map(doc => <DocumentField {...doc} className={cx('checkBox')} />)}</div>
+      <div className={cx('checks')}>{documents.map(doc => <DocumentField {...doc} key={doc.id} className={cx('checkBox')} />)}</div>
       <ButtonComponent
         className={cx(submitButtonClassName, { [submitButtonDisabledClassName]: !canSubmit })}
         disabled={!canSubmit}
@@ -75,6 +77,7 @@ Terms of service and privacy policy
 }
 
 LegalCompliance.propTypes = {
+  className: PropTypes.string,
   documents: PropTypes.arrayOf(
     PropTypes.shape({
       type: PropTypes.string,
@@ -94,6 +97,7 @@ LegalCompliance.propTypes = {
 }
 
 LegalCompliance.defaultProps = {
+  className: '',
   showHeading: false,
   showExplanation: false,
   applicationName: 'the application',

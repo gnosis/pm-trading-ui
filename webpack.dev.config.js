@@ -53,7 +53,7 @@ module.exports = (env = {}) => {
           use: 'babel-loader',
         },
         {
-          test: /\.(jpe?g|png)$/i,
+          test: /\.(jpe?g|png|svg)$/i,
           loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
         },
 

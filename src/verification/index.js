@@ -6,9 +6,14 @@ import { getFeatureConfig, isFeatureEnabled } from 'utils/features'
 import onfido from './onfido'
 
 const verificationEnabled = isFeatureEnabled('verification')
-const verificationHandlers = {
+const verificationComponents = {
   onfido,
 }
+
+const {
+  handler,
+  config,
+} = getFeatureConfig('verification')
 
 class VerificationHandler extends React.Component {
   constructor(props) {
@@ -17,31 +22,23 @@ class VerificationHandler extends React.Component {
     this.enabled = verificationEnabled
     this.verificator = undefined
 
-    const {
-      handler,
-      config,
-    } = getFeatureConfig('verification')
-
-    if (verificationEnabled && typeof verificationHandlers[handler] !== 'undefined') {
-      this.verificator = verificationHandlers[handler]
-      try {
-        this.verificator.initialize(config)
-      } catch (err) {
-        console.warn(`Verification could not be enabled: "${err}"`)
+    if (verificationEnabled) {
+      if (typeof verificationComponents[handler] !== 'undefined') {
+        this.VerificationComponent = verificationComponents[handler]
+      } else {
+        console.warn(`unknown verification ${handler}`)
       }
     }
   }
 
   render() {
-    const VerificationComponent = this.verificator?.DisplayComponent
-
-    if (!VerificationComponent) {
+    if (!this.VerificationComponent) {
       const { errorComponent: ErrorComponent } = this.props
       return <ErrorComponent />
     }
 
     return (
-      <VerificationComponent />
+      <this.VerificationComponent {...config} />
     )
   }
 }

@@ -54,6 +54,11 @@
     padding: 0;
   }
 
+  // "Connected to mobile" icon
+  :global .onfido-sdk-ui-MobileConnected-icon {
+    background-image: url('~assets/verification/onfido/mobile-connected.svg')
+  }
+
   /* We need to overwrite some styles from OnFido here */
   :global .onfido-sdk-ui-Theme-btn-primary {
     @include interfaceButton;

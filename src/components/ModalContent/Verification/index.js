@@ -15,10 +15,9 @@ const ErrorComponent = () => (
   </>
 )
 
-const ModalVerification = ({ closeModal }) => (
+const ModalVerification = props => (
   <div className={cx('verification')}>
-    <button className={cx('closeButton')} type="button" onClick={closeModal} />
-    <VerificationHandler errorComponent={ErrorComponent} />
+    <VerificationHandler errorComponent={ErrorComponent} {...props} />
   </div>
 )
 

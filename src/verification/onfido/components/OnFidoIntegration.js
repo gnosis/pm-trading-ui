@@ -5,13 +5,13 @@ import { getFeatureConfig } from 'utils/features'
 
 import Onfido from 'onfido-sdk-ui'
 
-import styles from './OnFidoWrapper.scss'
+import styles from './OnFidoIntegration.scss'
 
 const cx = classnames.bind(styles)
 
 const tournamentConfig = getFeatureConfig('tournament')
 
-const OnFidoWrapper = () => (
+const OnFidoIntegration = () => (
   <div id="onfido-mount" className={cx('onfido-wrapper')} />
 )
 
@@ -49,4 +49,4 @@ const enhancer = lifecycle({
   },
 })
 
-export default enhancer(OnFidoWrapper)
+export default enhancer(OnFidoIntegration)
