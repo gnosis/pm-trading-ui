@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import autobind from 'autobind-decorator'
 import CSSTransition from 'react-transition-group/CSSTransition'
-import { getCookie, setCookie } from './utils'
+import Cookies from 'js-cookie'
 import style from './style.scss'
 
 const cx = cn.bind(style)
@@ -15,8 +15,8 @@ class CookieBanner extends Component {
 
   componentDidMount() {
     const { display, options } = this.props
-    const cookies = options.map(({ label }) => ({ label, cookie: getCookie(label) }))
-    const noCookiesSet = !cookies.filter(({ cookie }) => cookie !== '').length
+    const cookies = options.map(({ label }) => ({ label, cookie: Cookies.get(label) }))
+    const noCookiesSet = !cookies.filter(({ cookie }) => typeof cookie !== 'undefined').length
 
     let shouldShow = display
 
@@ -42,7 +42,7 @@ class CookieBanner extends Component {
     const { options } = this.props
 
     options.forEach((option) => {
-      setCookie(option.label, 'no', 3)
+      Cookies.set(option.label, 'no', { expires: 3 })
     })
   }
 
@@ -52,10 +52,10 @@ class CookieBanner extends Component {
 
     options.forEach((option) => {
       if (selected.indexOf(option.label) > -1) {
-        setCookie(option.label, 'yes', 10000)
+        Cookies.set(option.label, 'yes', { expires: 1000 })
         option.initFunc()
       } else {
-        setCookie(option.label, 'no', 3)
+        Cookies.set(option.label, 'no', { expires: 3 })
       }
     })
 
@@ -94,10 +94,9 @@ class CookieBanner extends Component {
       <CSSTransition in={shown} classNames={animationClassNames} timeout={300} unmountOnExit>
         <div className={cx('cookieBar')}>
           <p>
-            We use cookies to give you the best experience and to help improve our website. Please
-            read our <a href="/cookies">Cookie Policy</a> for more information. By clicking
-            &quot;Accept Cookies,&quot; you agree to the storing of cookies on your device to
-            enhance site navigation and analyze site usage.
+            We use cookies to give you the best experience and to help improve our website. Please read our{' '}
+            <a href="/cookies">Cookie Policy</a> for more information. By clicking &quot;Accept Cookies,&quot; you agree
+            to the storing of cookies on your device to enhance site navigation and analyze site usage.
           </p>
           <div className={cx('settings')}>
             <span className={cx('options')}>
@@ -113,11 +112,7 @@ class CookieBanner extends Component {
                 </div>
               ))}
             </span>
-            <button
-              type="button"
-              onClick={this.handleAcceptCookies}
-              className={cx('button', 'accept')}
-            >
+            <button type="button" onClick={this.handleAcceptCookies} className={cx('button', 'accept')}>
               Accept Cookies
             </button>
           </div>
