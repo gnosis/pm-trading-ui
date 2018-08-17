@@ -95,7 +95,7 @@
     }
   },
   "rewardClaiming": {
-    "enabled": false,
+    "enabled": true,
     "claimReward": {
       "enabled": false,
       "claimStart": "2018-06-01T12:00:00",
