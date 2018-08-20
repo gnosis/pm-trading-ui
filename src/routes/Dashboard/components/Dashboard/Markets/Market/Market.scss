@@ -71,7 +71,7 @@
     justify-content: center;
     min-height: inherit;
     font-size: 12px;
-    color: $font-color-dark;
+    color: $font-color-light;
 
     font-weight: 400;
     letter-spacing: 0.5px;
@@ -79,7 +79,7 @@
     &:focus,&:hover {
       cursor: default;
       padding-left: 10px;
-      color: $font-color-dark;
+      color: $font-color-light;
     }
 
     .title {
