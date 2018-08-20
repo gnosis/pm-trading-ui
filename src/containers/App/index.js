@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { lifecycle } from 'recompose'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
 
@@ -13,11 +14,12 @@ import { providerPropType } from 'utils/shapes'
 import { getHtmlConfig, isFeatureEnabled } from 'utils/features'
 import HeaderContainer from 'containers/HeaderContainer'
 import TransactionFloaterContainer from 'containers/TransactionFloaterContainer'
+import EnableIntercom from 'containers/EnableIntercom'
 import { isConnectedToBlockchain } from 'store/selectors/blockchain'
 import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/store/selectors'
-import 'normalize.css'
+import { getUiState } from 'store/selectors/interface'
 
-import { lifecycle } from 'recompose'
+import 'normalize.css'
 import style from './app.scss'
 import transitionStyles from './transitions.scss'
 import 'rc-tooltip/assets/bootstrap.css?raw'
@@ -30,7 +32,7 @@ const cx = cn.bind(style)
 
 const App = (props) => {
   const {
-    provider, blockchainConnection, children, location,
+    provider, blockchainConnection, children, location, showIntercomReminder,
   } = props
   if (!blockchainConnection) {
     return (
@@ -61,6 +63,7 @@ const App = (props) => {
           {children}
         </CSSTransition>
       </TransitionGroup>
+      <EnableIntercom />
       <Footer />
     </div>
   )

@@ -4,6 +4,7 @@ import cn from 'classnames/bind'
 import autobind from 'autobind-decorator'
 import CSSTransition from 'react-transition-group/CSSTransition'
 import Cookies from 'js-cookie'
+import { THIRD_PARTY_ID as IntercomLabel } from 'utils/analytics/intercom'
 import style from './style.scss'
 
 const cx = cn.bind(style)
@@ -29,7 +30,7 @@ class CookieBanner extends Component {
     if (shouldShow) {
       this.setState({ shown: true })
     } else {
-      cookies.map(({ label: thirdPartyName, cookie }) => {
+      cookies.forEach(({ label: thirdPartyName, cookie }) => {
         if (cookie === 'yes') {
           options.find(({ label }) => label === thirdPartyName).initFunc()
         }
@@ -39,16 +40,21 @@ class CookieBanner extends Component {
 
   @autobind
   handleDeclineCookies() {
-    const { options } = this.props
+    const { options, changeIntercomVisibility } = this.props
 
     options.forEach((option) => {
       Cookies.set(option.label, 'no', { expires: 3 })
+      console.log(option, IntercomLabel)
+      if (option.thirdParty === IntercomLabel) {
+        console.log('visibility changed')
+        changeIntercomVisibility(true)
+      }
     })
   }
 
   @autobind
   handleAcceptCookies() {
-    const { options, selected } = this.props
+    const { options, selected, changeIntercomVisibility } = this.props
 
     options.forEach((option) => {
       if (selected.indexOf(option.label) > -1) {
@@ -56,6 +62,10 @@ class CookieBanner extends Component {
         option.initFunc()
       } else {
         Cookies.set(option.label, 'no', { expires: 3 })
+
+        if (option.thirdParty === IntercomLabel) {
+          changeIntercomVisibility(true)
+        }
       }
     })
 
@@ -133,12 +143,14 @@ CookieBanner.propTypes = {
   selected: PropTypes.arrayOf(PropTypes.string),
   display: PropTypes.bool,
   onChange: PropTypes.func,
+  changeIntercomVisibility: PropTypes.func,
 }
 
 CookieBanner.defaultProps = {
   selected: [],
   display: undefined,
   onChange: () => {},
+  changeIntercomVisibility: () => {},
 }
 
 export default CookieBanner
