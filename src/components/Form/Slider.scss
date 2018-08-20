@@ -87,7 +87,7 @@
 .formSliderValueInput {
   text-align: center;
   text-transform: none;
-  color: $font-color-light;
+  color: $font-color-dark;
 }
 
 .formSliderContainer {
@@ -109,7 +109,7 @@
   &.max {
     display: inline-block;
     text-transform: none;
-    color: $font-color-light;
+    color: $font-color-dark;
     margin: 0;
   }
 }
