@@ -24,6 +24,16 @@
     "0xf87e40f4dc6936f6f020f42c5286303b8c41eae7",
     "0xb6cd050544b07355f0f55a3123c1832d50ed4885"
   ],
+  "thirdparty": {
+    "googleAnalytics": {
+      "enabled": true,
+      "id": "UA-83220550-2"
+    },
+    "intercom": {
+      "enabled": true,
+      "id": "km54f6ih"
+    }
+  },
   "logo": {
     "regular": "assets/img/gnosis_logo_olympia.svg",
     "small": "assets/img/gnosis_logo_olympia.svg",
@@ -86,6 +96,19 @@
       }
     ]
   },
+  "cookieBanner": {
+    "enabled": true,
+    "options": [
+      {
+        "label": "Chat support",
+        "thirdParty": "intercom"
+      },
+      {
+        "label": "Analytics",
+        "thirdParty": "googleAnalytics"
+      }
+    ]
+  },
   "footer": {
     "enabled": true,
     "content": {
@@ -95,7 +118,7 @@
     }
   },
   "rewardClaiming": {
-    "enabled": false,
+    "enabled": true,
     "claimReward": {
       "enabled": false,
       "claimStart": "2018-06-01T12:00:00",

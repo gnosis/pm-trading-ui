@@ -177,6 +177,11 @@ module.exports = (env = {}) => {
             '@gnosis.pm/pm-js',
           ],
         },
+        plugins: [
+          new webpack.EnvironmentPlugin({
+            NODE_ENV: 'development',
+          }),
+        ],
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,

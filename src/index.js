@@ -31,7 +31,6 @@ if (!tournamentEnabled) {
   store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE, tournamentProvider] }))
 }
 
-initAnalytics()
 Decimal.set({ toExpPos: 9999, precision: 50 })
 
 /* global document */

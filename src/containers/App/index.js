@@ -8,6 +8,7 @@ import CSSTransition from 'react-transition-group/CSSTransition'
 
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import Footer from 'components/Footer'
+import CookieBannerContainer from 'containers/CookieBannerContainer'
 import { providerPropType } from 'utils/shapes'
 import { getHtmlConfig, isFeatureEnabled } from 'utils/features'
 import HeaderContainer from 'containers/HeaderContainer'
@@ -52,6 +53,7 @@ const App = (props) => {
 
   return (
     <div className={cx('appContainer')}>
+      {isFeatureEnabled('cookieBanner') && <CookieBannerContainer />}
       <HeaderContainer version={process.env.VERSION} />
       {provider && provider.account && <TransactionFloaterContainer />}
       <TransitionGroup>
