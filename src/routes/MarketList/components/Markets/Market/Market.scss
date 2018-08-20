@@ -40,7 +40,7 @@ $expandable-margin: 40px;
 
   &.resolved, &.closed {
     .title {
-      color: $font-color-dark;
+      color: $font-color-light;
       opacity: 0.6;
       font-weight: 300;
     }
@@ -75,7 +75,7 @@ $expandable-margin: 40px;
   
     .group {
       display: inline-block;
-      color: darken($font-color-dark, 30%);
+      color: darken($font-color-light, 30%);
       opacity: 0.6;
       font-weight: 500;
       letter-spacing: 0.5px;

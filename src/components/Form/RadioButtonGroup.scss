@@ -1,11 +1,17 @@
-@import "~style/vars.scss";
+@import '~style/vars.scss';
 
 .formRadioButtonGroup {
+  & > label {
+    margin: 20px 0 6px 0;
+    display: block;
+  }
+
+
   &.error {
     label {
       color: $active-highlight-error;
     }
-    
+
     color: $active-highlight-error;
   }
 }

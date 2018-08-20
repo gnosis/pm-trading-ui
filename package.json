@@ -68,6 +68,7 @@
     "decimal.js": "^10.0.1",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
+    "js-cookie": "^2.2.0",
     "jsontokens": "^0.7.8",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
