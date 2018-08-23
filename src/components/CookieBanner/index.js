@@ -19,15 +19,10 @@ class CookieBanner extends Component {
     const cookies = options.map(({ label }) => ({ label, cookie: Cookies.get(label) }))
     const noCookiesSet = !cookies.filter(({ cookie }) => typeof cookie !== 'undefined').length
 
-    let shouldShow = display
-
     // if display property wasn't provided, that means we take care of displaying the component
     // if there are no cookies set, then the component will be displayed
-    if (typeof shouldShow === 'undefined') {
-      shouldShow = noCookiesSet
-    }
 
-    if (shouldShow) {
+    if (display || noCookiesSet) {
       this.setState({ shown: true })
     } else {
       cookies.forEach(({ label: thirdPartyName, cookie }) => {
@@ -38,15 +33,23 @@ class CookieBanner extends Component {
     }
   }
 
+  static getDerivedStateFromProps(props) {
+    if (props.display) {
+      return {
+        shown: true,
+      }
+    }
+
+    return null
+  }
+
   @autobind
   handleDeclineCookies() {
     const { options, changeIntercomVisibility } = this.props
 
     options.forEach((option) => {
       Cookies.set(option.label, 'no', { expires: 3 })
-      console.log(option, IntercomLabel)
       if (option.thirdParty === IntercomLabel) {
-        console.log('visibility changed')
         changeIntercomVisibility(true)
       }
     })
@@ -54,7 +57,9 @@ class CookieBanner extends Component {
 
   @autobind
   handleAcceptCookies() {
-    const { options, selected, changeIntercomVisibility } = this.props
+    const {
+      options, selected, changeIntercomVisibility, onHide,
+    } = this.props
 
     options.forEach((option) => {
       if (selected.indexOf(option.label) > -1) {
@@ -69,6 +74,7 @@ class CookieBanner extends Component {
       }
     })
 
+    onHide()
     this.setState({
       shown: false,
     })
@@ -76,8 +82,10 @@ class CookieBanner extends Component {
 
   @autobind
   handleClose() {
+    const { onHide } = this.props
     this.handleDeclineCookies()
 
+    onHide()
     this.setState({
       shown: false,
     })
@@ -144,6 +152,7 @@ CookieBanner.propTypes = {
   display: PropTypes.bool,
   onChange: PropTypes.func,
   changeIntercomVisibility: PropTypes.func,
+  onHide: PropTypes.func,
 }
 
 CookieBanner.defaultProps = {
@@ -151,6 +160,7 @@ CookieBanner.defaultProps = {
   display: undefined,
   onChange: () => {},
   changeIntercomVisibility: () => {},
+  onHide: () => {},
 }
 
 export default CookieBanner

@@ -1,8 +1,8 @@
 import Loadable from 'react-loadable'
 
-const LoadableDashboard = Loadable({
+const LoadableCookieBanner = Loadable({
   loader: () => import('./CookieBannerContainer'),
   loading: () => null,
 })
 
-export default LoadableDashboard
+export default LoadableCookieBanner

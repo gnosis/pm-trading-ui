@@ -38,14 +38,15 @@ class CookieBannerContainer extends Component {
   }
 
   render() {
-    const { selectedValues, showBanner } = this.state
-    const { changeIntercomVisibility } = this.props
+    const { selectedValues } = this.state
+    const { changeIntercomVisibility, showCookieBanner, hideCookieBanner } = this.props
 
     return (
       <CookieBanner
-        display={showBanner}
+        display={showCookieBanner}
         options={ThirdPartyIntegrations}
         onChange={this.onChange}
+        onHide={hideCookieBanner}
         selected={selectedValues}
         changeIntercomVisibility={changeIntercomVisibility}
       />
@@ -55,6 +56,12 @@ class CookieBannerContainer extends Component {
 
 CookieBannerContainer.propTypes = {
   changeIntercomVisibility: PropTypes.func.isRequired,
+  hideCookieBanner: PropTypes.func.isRequired,
+  showCookieBanner: PropTypes.bool,
+}
+
+CookieBannerContainer.defaultProps = {
+  showCookieBanner: false,
 }
 
 const mapStateToProps = state => ({
@@ -62,6 +69,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  hideCookieBanner: () => dispatch(changeUiState({ showCookieBanner: false })),
   changeIntercomVisibility: isVisible => dispatch(changeUiState({ showIntercomReminder: isVisible })),
 })
 
