@@ -164,7 +164,7 @@ module.exports = (env = {}) => {
             },
           }),
           new webpack.EnvironmentPlugin({
-            NODE_ENV: 'development',
+            NODE_ENV: 'production',
           }),
           new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
         ],
