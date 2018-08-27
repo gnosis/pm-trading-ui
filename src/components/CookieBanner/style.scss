@@ -28,6 +28,10 @@ $acceptButtonColor: #23d160;
     margin-right: 25px;
   }
 
+  a:visited {
+    color: #00a6c4;
+  }
+
   .button {
     color: $font-color-bright;
     cursor: pointer;

@@ -10,7 +10,8 @@
     ]
   ],
   "plugins": [
-    "react-hot-loader/babel", "lodash",
+    "react-hot-loader/babel",
+    "lodash",
     "@babel/plugin-proposal-export-default-from",
     ["@babel/plugin-proposal-optional-chaining", { "loose": false }],
     ["@babel/plugin-proposal-nullish-coalescing-operator", { "loose": false }],
@@ -38,7 +39,7 @@
     "test": {
       "plugins": ["@babel/plugin-syntax-dynamic-import", "dynamic-import-node"],
       "presets": [
-        "@babel/preset-react", 
+        "@babel/preset-react",
         [
           "@babel/preset-env",
           {
@@ -50,4 +51,3 @@
     }
   }
 }
-

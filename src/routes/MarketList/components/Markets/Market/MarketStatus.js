@@ -21,7 +21,7 @@ const MarketStatus = ({ resolved, closed, resolution }) => {
       <div className={cx('label')}>
         { hasStatus
           ? status
-          : <Countdown target={resolution} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
+          : <Countdown target={resolution} format={RESOLUTION_TIME.RELATIVE_FORMAT} interval={10000} />
         }
       </div>
     </div>
