@@ -11,6 +11,11 @@
     border-radius: unset;
   }
 
+  label {
+    margin: 20px 0 6px 0;
+    display: block;
+  }
+
   &.error {
     .Select-value span {
       color: $active-highlight-error !important;

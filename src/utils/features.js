@@ -32,7 +32,7 @@ export const getGasPriceConfig = () => config.gasPrice || {}
 
 export const isFeatureEnabled = feature => config[feature] && config[feature].enabled
 
-export const getFeatureConfig = feature => config[feature] && config[feature]
+export const getFeatureConfig = feature => config?.[feature]
 
 export const getProviderConfig = () => config.providers
 

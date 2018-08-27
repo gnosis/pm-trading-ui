@@ -24,6 +24,16 @@
     "0xf87e40f4dc6936f6f020f42c5286303b8c41eae7",
     "0xb6cd050544b07355f0f55a3123c1832d50ed4885"
   ],
+  "thirdparty": {
+    "googleAnalytics": {
+      "enabled": true,
+      "id": "UA-83220550-2"
+    },
+    "intercom": {
+      "enabled": true,
+      "id": "km54f6ih"
+    }
+  },
   "logo": {
     "regular": "assets/img/gnosis_logo_olympia.svg",
     "small": "assets/img/gnosis_logo_olympia.svg",
@@ -86,6 +96,19 @@
       }
     ]
   },
+  "cookieBanner": {
+    "enabled": true,
+    "options": [
+      {
+        "label": "Chat support",
+        "thirdParty": "intercom"
+      },
+      {
+        "label": "Analytics",
+        "thirdParty": "googleAnalytics"
+      }
+    ]
+  },
   "footer": {
     "enabled": true,
     "content": {
@@ -95,7 +118,7 @@
     }
   },
   "rewardClaiming": {
-    "enabled": false,
+    "enabled": true,
     "claimReward": {
       "enabled": false,
       "claimStart": "2018-06-01T12:00:00",
@@ -112,12 +135,13 @@
       "networkId": 42
     },
     "levels": [
-      { "value": 30, "minRank": 1, "maxRank": 1 },
-      { "value": 20, "minRank": 2, "maxRank": 2 },
-      { "value": 10, "minRank": 3, "maxRank": 3 },
-      { "value": 8, "minRank": 4, "maxRank": 4 },
-      { "value": 7, "minRank": 5, "maxRank": 5 },
-      { "value": 5, "minRank": 6, "maxRank": 10 }
+      { "value": 5, "minRank": 1, "maxRank": 1 },
+      { "value": 4, "minRank": 2, "maxRank": 2 },
+      { "value": 3, "minRank": 3, "maxRank": 3 },
+      { "value": 2, "minRank": 4, "maxRank": 4 },
+      { "value": 1, "minRank": 5, "maxRank": 5 },
+      { "value": 0.2, "minRank": 6, "maxRank": 10 },
+      { "value": 0.1, "minRank": 11, "maxRank": 50 }
     ]
   },
   "badges": {

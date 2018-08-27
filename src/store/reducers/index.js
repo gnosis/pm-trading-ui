@@ -14,6 +14,7 @@ import notifications from './notifications'
 import marketList from './market'
 import accountShares from './accountShares'
 import accountTrades from './accountTrades'
+import interfaceState from './interface'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 
@@ -28,6 +29,7 @@ const reducers = {
   marketList,
   accountShares,
   accountTrades,
+  interfaceState,
 }
 
 if (tournamentEnabled) {
