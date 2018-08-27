@@ -4,6 +4,7 @@ import cn from 'classnames/bind'
 import autobind from 'autobind-decorator'
 import CSSTransition from 'react-transition-group/CSSTransition'
 import Cookies from 'js-cookie'
+import { THIRD_PARTY_ID as IntercomLabel } from 'utils/analytics/intercom'
 import style from './style.scss'
 
 const cx = cn.bind(style)
@@ -18,18 +19,13 @@ class CookieBanner extends Component {
     const cookies = options.map(({ label }) => ({ label, cookie: Cookies.get(label) }))
     const noCookiesSet = !cookies.filter(({ cookie }) => typeof cookie !== 'undefined').length
 
-    let shouldShow = display
-
     // if display property wasn't provided, that means we take care of displaying the component
     // if there are no cookies set, then the component will be displayed
-    if (typeof shouldShow === 'undefined') {
-      shouldShow = noCookiesSet
-    }
 
-    if (shouldShow) {
+    if (display || noCookiesSet) {
       this.setState({ shown: true })
     } else {
-      cookies.map(({ label: thirdPartyName, cookie }) => {
+      cookies.forEach(({ label: thirdPartyName, cookie }) => {
         if (cookie === 'yes') {
           options.find(({ label }) => label === thirdPartyName).initFunc()
         }
@@ -37,18 +33,33 @@ class CookieBanner extends Component {
     }
   }
 
+  static getDerivedStateFromProps(props) {
+    if (props.display) {
+      return {
+        shown: true,
+      }
+    }
+
+    return null
+  }
+
   @autobind
   handleDeclineCookies() {
-    const { options } = this.props
+    const { options, changeIntercomVisibility } = this.props
 
     options.forEach((option) => {
       Cookies.set(option.label, 'no', { expires: 3 })
+      if (option.thirdParty === IntercomLabel) {
+        changeIntercomVisibility(true)
+      }
     })
   }
 
   @autobind
   handleAcceptCookies() {
-    const { options, selected } = this.props
+    const {
+      options, selected, changeIntercomVisibility, onHide,
+    } = this.props
 
     options.forEach((option) => {
       if (selected.indexOf(option.label) > -1) {
@@ -56,9 +67,14 @@ class CookieBanner extends Component {
         option.initFunc()
       } else {
         Cookies.set(option.label, 'no', { expires: 3 })
+
+        if (option.thirdParty === IntercomLabel) {
+          changeIntercomVisibility(true)
+        }
       }
     })
 
+    onHide()
     this.setState({
       shown: false,
     })
@@ -66,8 +82,10 @@ class CookieBanner extends Component {
 
   @autobind
   handleClose() {
+    const { onHide } = this.props
     this.handleDeclineCookies()
 
+    onHide()
     this.setState({
       shown: false,
     })
@@ -133,12 +151,16 @@ CookieBanner.propTypes = {
   selected: PropTypes.arrayOf(PropTypes.string),
   display: PropTypes.bool,
   onChange: PropTypes.func,
+  changeIntercomVisibility: PropTypes.func,
+  onHide: PropTypes.func,
 }
 
 CookieBanner.defaultProps = {
   selected: [],
   display: undefined,
   onChange: () => {},
+  changeIntercomVisibility: () => {},
+  onHide: () => {},
 }
 
 export default CookieBanner

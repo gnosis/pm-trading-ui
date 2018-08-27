@@ -1,0 +1,13 @@
+.container {
+  position: fixed;
+  bottom: 10px;
+  right: 15px;
+  z-index: 11;
+
+  & > div {
+    transition: transform 0.2s ease-in-out;
+    &:hover {
+      transform: scale(1.15);
+    }
+  }
+}

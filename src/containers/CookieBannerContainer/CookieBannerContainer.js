@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import autobind from 'autobind-decorator'
+import { connect } from 'react-redux'
 import CookieBanner from 'components/CookieBanner'
+import { getUiState } from 'store/selectors/interface'
 import { THIRD_PARTY_INTEGRATIONS } from 'utils/analytics'
 import { getFeatureConfig } from 'utils/features'
+import { changeUiState } from 'store/actions/interface'
 
 const { options } = getFeatureConfig('cookieBanner')
 const ThirdPartyIntegrations = options.map(integration => ({
@@ -34,17 +38,42 @@ class CookieBannerContainer extends Component {
   }
 
   render() {
-    const { selectedValues, showBanner } = this.state
+    const { selectedValues } = this.state
+    const { changeIntercomVisibility, showCookieBanner, hideCookieBanner } = this.props
 
     return (
       <CookieBanner
-        display={showBanner}
+        display={showCookieBanner}
         options={ThirdPartyIntegrations}
         onChange={this.onChange}
+        onHide={hideCookieBanner}
         selected={selectedValues}
+        changeIntercomVisibility={changeIntercomVisibility}
       />
     )
   }
 }
 
-export default CookieBannerContainer
+CookieBannerContainer.propTypes = {
+  changeIntercomVisibility: PropTypes.func.isRequired,
+  hideCookieBanner: PropTypes.func.isRequired,
+  showCookieBanner: PropTypes.bool,
+}
+
+CookieBannerContainer.defaultProps = {
+  showCookieBanner: false,
+}
+
+const mapStateToProps = state => ({
+  showCookieBanner: getUiState(state, 'showCookieBanner'),
+})
+
+const mapDispatchToProps = dispatch => ({
+  hideCookieBanner: () => dispatch(changeUiState({ showCookieBanner: false })),
+  changeIntercomVisibility: isVisible => dispatch(changeUiState({ showIntercomReminder: isVisible })),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CookieBannerContainer)
