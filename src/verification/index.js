@@ -32,13 +32,13 @@ class VerificationHandler extends React.Component {
   }
 
   render() {
+    const { errorComponent: ErrorComponent, ...props } = this.props
     if (!this.VerificationComponent) {
-      const { errorComponent: ErrorComponent } = this.props
       return <ErrorComponent />
     }
 
     return (
-      <this.VerificationComponent {...config} />
+      <this.VerificationComponent {...config} {...props} />
     )
   }
 }

@@ -1,3 +1,4 @@
+@import "~style/vars.scss";
 @import '~style/style.scss';
 
 .onfido-wrapper {
@@ -62,5 +63,54 @@
   /* We need to overwrite some styles from OnFido here */
   :global .onfido-sdk-ui-Theme-btn-primary {
     @include interfaceButton;
+  }
+}
+
+.modal.welcome {
+  position: relative;
+  max-width: 540px;
+  
+  border-radius: 9px;
+  background-color: #ffffff;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+
+  align-items: center;
+  padding: 24px 40px;
+  color: #666;
+}
+
+.heading {
+  font-size: 21px;
+  font-weight: 500;
+  text-align: center;
+  color: #333333;
+  margin-top: 45px;
+}
+
+.submitButton {
+  @include interfaceButton();
+
+  margin: auto;
+  display: block;
+  width: 200px;
+  cursor: pointer;
+
+  &.disabled {
+    opacity: 0.6;
+  }
+}
+
+.closeButton {
+  @include closeButton(32px, 5px);
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+
+  &:hover {
+    &::after,
+    &::before {
+      background-color: #fff;
+    }
   }
 }

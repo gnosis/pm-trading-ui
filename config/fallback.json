@@ -72,7 +72,10 @@
   },
   "verification": {
     "enabled": true,
-    "handler": "onfido"
+    "handler": "onfido",
+    "options": {
+      "url": "https://kyc.staging.gnosisdev.com/v1"
+    }
   },
   "footer": {
     "enabled": true,

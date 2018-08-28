@@ -7,7 +7,7 @@ import { Field } from 'redux-form'
 import { TextInput, MandatoryHint } from 'components/Form'
 import LegalCompliance from 'containers/LegalCompliance'
 
-import style from './Welcome.scss'
+import style from './style.scss'
 
 const required = val => (val && val.length > 0 ? undefined : 'This field is required')
 const isEmail = val => ((!val || EMAIL_REGEXP.test(val)) ? undefined : 'Requires a valid E-Mail address')
@@ -35,7 +35,7 @@ const ERROR_STYLE = {
 }
 
 const Welcome = ({
-  setLegalDocumentsAccepted, setStep, closeModal, invalid, submit,
+  setLegalDocumentsAccepted, closeModal, invalid, submit,
 }) => (
   <div className={cx('modal', 'onfido', 'welcome')}>
     <h4 className={cx('heading')}>Start verification process</h4>

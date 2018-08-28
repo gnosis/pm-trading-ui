@@ -5,7 +5,7 @@ import { getFeatureConfig } from 'utils/features'
 
 import Onfido from 'onfido-sdk-ui'
 
-import styles from './OnFidoIntegration.scss'
+import styles from './style.scss'
 
 const cx = classnames.bind(styles)
 
@@ -17,9 +17,10 @@ const OnFidoIntegration = () => (
 
 const enhancer = lifecycle({
   componentDidMount() {
-    Onfido.init({
+    const { token, startUserReport, account } = this.props
+    const instance = Onfido.init({
       // the JWT token that you generated earlier on
-      token: 'YOUR_JWT_TOKEN',
+      token,
       // id of the element you want to mount the component on
       containerId: 'onfido-mount',
       useModal: false,
@@ -36,13 +37,13 @@ const enhancer = lifecycle({
         {
           type: 'complete',
           options: {
-            title: 'Thank you for verifying your Identity',
-            descriptions: ['Please come back later when your Identity was confirmed by OnFido.'],
+            message: 'Documents submitted',
+            submessage: 'Please check your email to continue with the process.',
           },
         },
       ],
-      onComplete: () => {
-        console.log('everything is complete')
+      onComplete: async () => {
+        await startUserReport(account)
         // You can now trigger your backend to start a new check
       },
     })
