@@ -113,7 +113,7 @@ class CookieBanner extends Component {
         <div className={cx('cookieBar')}>
           <p>
             We use cookies to give you the best experience and to help improve our website. Please read our{' '}
-            <a href="/cookies">Cookie Policy</a> for more information. By clicking &quot;Accept Cookies,&quot; you agree
+            <a href="/assets/content/CookiePolicy.html">Cookie Policy</a> for more information. By clicking &quot;Accept Cookies,&quot; you agree
             to the storing of cookies on your device to enhance site navigation and analyze site usage.
           </p>
           <div className={cx('settings')}>
