@@ -10,7 +10,7 @@
     "port": 443
   },
   "whitelist": {
-    "0x13a1D49d0f5285586373755eC96D0AC81e7a1928": "Gnosis"
+    "0x13a1d49d0f5285586373755ec96d0ac81e7a1928": "Gnosis"
   },
   "htmlConfig": {
     "title": "Gnosis Olympia"
