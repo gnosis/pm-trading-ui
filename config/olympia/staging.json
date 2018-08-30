@@ -124,7 +124,7 @@
       "claimStart": "2018-06-01T12:00:00",
       "claimUntil": "2018-07-01T12:00:00",
       "contractAddress": "0x8f0d2efa1374b14256709edb747c73399e9ff424",
-      "networkId": 42
+      "networkId": 3
     }
   },
   "rewards": {
@@ -132,7 +132,7 @@
     "rewardToken": {
       "symbol": "RWD",
       "contractAddress": "0xcd87814c7b0fcc6b2e973065b7a8ffadda6faceb",
-      "networkId": 42
+      "networkId": 3
     },
     "levels": [
       { "value": 5, "minRank": 1, "maxRank": 1 },
