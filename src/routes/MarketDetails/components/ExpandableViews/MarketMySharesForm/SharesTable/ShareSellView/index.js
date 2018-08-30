@@ -176,7 +176,7 @@ class ShareSellView extends Component {
                       <DecimalValue value={newScalarPredictedValue} />
                       &nbsp;
                       <span>
-                        {market.eventDescription.unit}
+                        {market.bounds.unit}
                       </span>
                     </span>
                   </div>
