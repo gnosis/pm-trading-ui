@@ -1,6 +1,7 @@
 import React from 'react'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import {
@@ -8,7 +9,7 @@ import {
 } from 'recharts'
 import Decimal from 'decimal.js'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-import { eventDescriptionShape } from 'utils/shapes'
+import { BoundsRecord } from 'store/models/market'
 import CustomTooltip from '../CustomTooltip'
 import DateAxisTick from '../DateAxisTick'
 import style from '../MarketGraph.scss'
@@ -23,11 +24,11 @@ const lineChartMargins = {
 }
 
 const ScalarGraph = ({
-  data, eventDescription, lowerBound, upperBound,
+  data, bounds,
 }) => {
-  const stacks = [`Current ${eventDescription.unit}`]
+  const stacks = [`Current ${bounds.unit}`]
   const z = scaleOrdinal(schemeDark2)
-  const scalarTickFormatter = val => `${val} ${eventDescription.unit}`
+  const scalarTickFormatter = val => `${val} ${bounds.unit}`
   z.domain(stacks)
 
   return (
@@ -54,18 +55,18 @@ const ScalarGraph = ({
               tickFormatter={scalarTickFormatter}
               padding={{ bottom: 30 }}
               domain={[
-                Decimal(lowerBound)
-                  .div(10 ** eventDescription.decimals)
-                  .toDP(eventDescription.decimals)
+                Decimal(bounds.lower)
+                  .div(10 ** bounds.decimals)
+                  .toDP(bounds.decimals)
                   .toNumber(),
-                Decimal(upperBound)
-                  .div(10 ** eventDescription.decimals)
-                  .toDP(eventDescription.decimals)
+                Decimal(bounds.upper)
+                  .div(10 ** bounds.decimals)
+                  .toDP(bounds.decimals)
                   .toNumber(),
               ]}
             />
             <CartesianGrid className="grid" vertical />
-            <Tooltip className="tooltip" content={<CustomTooltip isScalar unit={eventDescription.unit} />} />
+            <Tooltip className="tooltip" content={<CustomTooltip isScalar unit={bounds.unit} />} />
             <Line
               type="stepAfter"
               dataKey="scalarPoint"
@@ -82,16 +83,12 @@ const ScalarGraph = ({
 
 ScalarGraph.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
-  eventDescription: eventDescriptionShape,
-  lowerBound: PropTypes.string,
-  upperBound: PropTypes.string,
+  bounds: ImmutablePropTypes.recordOf(),
 }
 
 ScalarGraph.defaultProps = {
   data: [],
-  eventDescription: {},
-  lowerBound: '',
-  upperBound: '',
+  bounds: BoundsRecord({}),
 }
 
 export default ScalarGraph
