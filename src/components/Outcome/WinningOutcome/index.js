@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { OUTCOME_TYPES } from 'utils/constants'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import style from './WinningOutcome.scss'
@@ -8,28 +9,28 @@ import style from './WinningOutcome.scss'
 const cx = cn.bind(style)
 
 const WinningOutcome = ({
-  type,
-  unit,
-  decimals,
-  outcomes,
-  winningOutcome,
+  type, unit, decimals, winningOutcome,
 }) => {
   let outcomeText
 
   if (type === OUTCOME_TYPES.CATEGORICAL) {
-    if (typeof outcomes[winningOutcome] === 'undefined') {
-      outcomeText = <Fragment><span title={winningOutcome}>Invalid Outcome</span></Fragment>
+    if (typeof winningOutcome === 'undefined') {
+      outcomeText = (
+        <>
+          <span title={winningOutcome}>Invalid Outcome</span>
+        </>
+      )
     } else {
-      outcomeText = `${outcomes[winningOutcome]}`
+      outcomeText = winningOutcome.name
     }
   } else if (type === OUTCOME_TYPES.SCALAR) {
     const outcomeValue = Decimal(winningOutcome)
       .div(10 ** decimals)
       .toString()
     outcomeText = (
-      <Fragment>
+      <>
         {outcomeValue} <span className={cx('winningOutcomeUnit')}>{unit}</span>
-      </Fragment>
+      </>
     )
   }
 
@@ -37,7 +38,9 @@ const WinningOutcome = ({
     <div className={cx('winningOutcomeContainer')}>
       <div className={cx('winningOutcomeIcon')} />
       <span className={cx('winningOutcomeLabel')}>
-        Winning<br />outcome
+        Winning
+        <br />
+        outcome
       </span>
       <div className={cx('winningOutcomeText')}>{outcomeText}</div>
     </div>
@@ -46,10 +49,9 @@ const WinningOutcome = ({
 
 WinningOutcome.propTypes = {
   type: PropTypes.oneOf(Object.keys(OUTCOME_TYPES)).isRequired,
-  winningOutcome: PropTypes.number.isRequired,
+  winningOutcome: PropTypes.oneOfType([PropTypes.number, ImmutablePropTypes.record]).isRequired,
   unit: PropTypes.string,
   decimals: PropTypes.number,
-  outcomes: PropTypes.array.isRequired,
 }
 
 WinningOutcome.defaultProps = {
