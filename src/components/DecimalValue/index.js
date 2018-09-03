@@ -44,8 +44,8 @@ export const decimalJsTest = (props, propName, componentName) => {
     namesToCheck.push(value.constructor.prototype.name)
   }
 
-  const testResults = namesToCheck.map(name => /^(Decimal|(Big)?Number)$/.test(name))
-  console.log(testResults)
+  const testResults = namesToCheck.map(name => /(Decimal|(Big)?Number)/.test(name))
+
   return testResults.indexOf(true) > -1
     ? undefined
     : new Error(`Non-numeric \`${propName}\` supplied to \`${componentName}\`. Validation failed.`)
