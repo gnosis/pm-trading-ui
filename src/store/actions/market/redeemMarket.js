@@ -19,7 +19,7 @@ const redeemWinnings = market => async (dispatch, getState) => {
   const transactionId = uuid()
   const state = getState()
   const sharesToRedeem = getMarketShares(market.address)(state).filter(share => share.winnings > LOWEST_VALUE)
-  console.log(sharesToRedeem.toJS())
+
   const outcomeType = market instanceof CategoricalMarketRecord ? OUTCOME_TYPES.CATEGORICAL : OUTCOME_TYPES.SCALAR
 
   // Start a new transaction log
