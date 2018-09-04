@@ -140,7 +140,7 @@ export const isConnectedToCorrectNetwork = (state) => {
 
 export const checkWalletConnection = (state) => {
   const provider = getActiveProvider(state)
-  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state) || !!getRegisteredMainnetAddress(state)
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state) || (isTournament && !!getRegisteredMainnetAddress(state))
 
   if (termsNotRequiredOrAccepted && provider?.account) {
     return true

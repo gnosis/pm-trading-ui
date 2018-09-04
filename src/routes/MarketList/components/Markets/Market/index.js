@@ -9,7 +9,7 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import moment from 'moment'
 import React from 'react'
-import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
+import { RESOLUTION_TIME } from 'utils/constants'
 import MarketResolution from './MarketResolution'
 import MarketStatus from './MarketStatus'
 import MarketTrading from './MarketTrading'
@@ -21,7 +21,9 @@ const cx = classNames.bind(css)
 class Market extends React.PureComponent {
   @autobind
   handleViewMarket() {
-    this.props.viewMarket(this.props.address)
+    const { viewMarket, address } = this.props
+
+    viewMarket(address)
   }
 
   render() {
@@ -46,8 +48,6 @@ class Market extends React.PureComponent {
 
     const outcomes = market.outcomes ? market.outcomes.map(outcome => outcome.name).toArray() : []
 
-    const winningOutcome = market.type === OUTCOME_TYPES.CATEGORICAL ? market.outcomes.keyOf(market.winningOutcome) : market.winningOutcome
-
     return (
       <button
         onClick={this.handleViewMarket}
@@ -67,7 +67,7 @@ class Market extends React.PureComponent {
           resolution={market.resolution}
           funding={market.funding}
           outcomes={outcomes}
-          winningOutcome={winningOutcome}
+          winningOutcome={market.winningOutcome}
           {...bounds}
         />
         <div className={cx('info', 'row')}>
