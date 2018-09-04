@@ -82,7 +82,7 @@ const Details = ({
           winningsAmount={winningsTotal}
           handleRedeemWinnings={handleRedeemWinnings}
           transactionGas={redeemWinningsTransactionGas}
-          collateralToken={market.event.collateralToken}
+          collateralToken={market.collateralToken}
         />
       )}
     </div>

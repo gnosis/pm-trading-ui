@@ -6,10 +6,10 @@ export const sharesForMarketSelector = (state, marketAddress) => {
   const market = state.marketList.get(marketAddress)
 
   if (market) {
-    const marketShares = state.marketShares.filter(marketShare => (
-      marketShare.eventAddress === market.eventAddress &&
-      marketShare.collateralTokenAddress === collateralToken.address
-    ))
+    const marketShares = state.accountShares.filter(
+      marketShare => marketShare.eventAddress === market.eventAddress
+        && marketShare.collateralTokenAddress === collateralToken.address,
+    )
 
     return List(marketShares.values())
   }
