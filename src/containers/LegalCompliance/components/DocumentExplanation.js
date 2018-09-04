@@ -22,11 +22,7 @@ const LegalDocumentTitle = ({
     )
   }
   if (type === DOCUMENT_TYPES.TEXT) {
-    return (
-      <span>
-        {short}
-      </span>
-    )
+    return <span>{short}</span>
   }
 
   return null
@@ -44,6 +40,5 @@ LegalDocumentTitle.defaultProps = {
   file: '',
   short: '',
 }
-
 
 export default LegalDocumentTitle
