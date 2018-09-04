@@ -17,7 +17,7 @@ const cx = cn.bind(style)
 const ONE_WEEK_IN_HOURS = 168
 
 const Details = ({
-  market, marketShares, gasCosts, gasPrice, handleRedeemWinnings,
+  market, marketShares, gasCosts, gasPrice, handleRedeemWinnings, hasWallet,
 }) => {
   const timeToResolution = moment
     .utc(market.resolution)
@@ -30,7 +30,7 @@ const Details = ({
   const redeemWinningsGasCost = gasCosts.get('redeemWinnings')
   const marketClosed = market.closed
   const marketResolved = market.resolved
-  const showWinning = marketResolved && winningsTotal.gt(LOWEST_VALUE)
+  const showWinning = marketResolved && winningsTotal.gt(LOWEST_VALUE) && hasWallet
   const marketClosedOrFinished = marketClosed || marketResolved
   const marketStatus = marketResolved ? 'resolved.' : 'closed.'
   const showCountdown = !marketClosedOrFinished && timeToResolution < ONE_WEEK_IN_HOURS
@@ -95,6 +95,7 @@ Details.propTypes = {
   handleRedeemWinnings: PropTypes.func,
   gasCosts: ImmutableProptypes.map.isRequired,
   gasPrice: PropTypes.instanceOf(Decimal).isRequired,
+  hasWallet: PropTypes.bool.isRequired,
 }
 
 Details.defaultProps = {
