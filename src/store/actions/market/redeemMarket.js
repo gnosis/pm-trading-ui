@@ -1,5 +1,5 @@
 import uuid from 'uuid/v4'
-import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
+import { OUTCOME_TYPES, TRANSACTION_COMPLETE_STATUS, LOWEST_VALUE } from 'utils/constants'
 import { hexWithPrefix } from 'utils/helpers'
 import { closeModal } from 'store/actions/modal'
 import { redeemShare } from 'store/actions/shares'
@@ -9,7 +9,7 @@ import {
 import * as marketContractAPI from 'api/market'
 import { CategoricalMarketRecord } from 'store/models/market'
 import { TRANSACTION_STAGES, TRANSACTION_EVENTS_GENERIC } from 'store/actions/market/constants'
-import { sharesForMarketSelector } from 'store/selectors/market/shares'
+import { getMarketShares } from 'routes/MarketDetails/store/selectors'
 
 /**
  * Redeem winnings of a market
@@ -18,9 +18,9 @@ import { sharesForMarketSelector } from 'store/selectors/market/shares'
 const redeemWinnings = market => async (dispatch, getState) => {
   const transactionId = uuid()
   const state = getState()
-  const sharesToRedeem = sharesForMarketSelector(state, market.address)
-
-  const outcomeType = ((market instanceof CategoricalMarketRecord) ? OUTCOME_TYPES.CATEGORICAL : OUTCOME_TYPES.SCALAR)
+  const sharesToRedeem = getMarketShares(market.address)(state).filter(share => share.winnings > LOWEST_VALUE)
+  console.log(sharesToRedeem.toJS())
+  const outcomeType = market instanceof CategoricalMarketRecord ? OUTCOME_TYPES.CATEGORICAL : OUTCOME_TYPES.SCALAR
 
   // Start a new transaction log
   await dispatch(startLog(transactionId, TRANSACTION_EVENTS_GENERIC, `Redeeming Winnings for  "${market.title}"`))
