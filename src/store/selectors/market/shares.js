@@ -1,5 +1,6 @@
 import { getCollateralToken } from 'store/selectors/blockchain'
 import { List } from 'immutable'
+import { normalizeHex } from 'utils/helpers'
 
 export const sharesForMarketSelector = (state, marketAddress) => {
   const collateralToken = getCollateralToken(state)
@@ -7,8 +8,8 @@ export const sharesForMarketSelector = (state, marketAddress) => {
 
   if (market) {
     const marketShares = state.accountShares.filter(
-      marketShare => marketShare.eventAddress === market.eventAddress
-        && marketShare.collateralTokenAddress === collateralToken.address,
+      marketShare => normalizeHex(marketShare.eventAddress) === normalizeHex(market.eventAddress)
+        && normalizeHex(marketShare.collateralTokenAddress) === normalizeHex(collateralToken.address),
     )
 
     return List(marketShares.values())
