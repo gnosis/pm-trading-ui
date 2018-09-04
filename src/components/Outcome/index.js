@@ -1,9 +1,10 @@
 import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
 import OutcomeCategorical from 'components/Outcome/OutcomeCategorical'
 import OutcomeScalar from 'components/Outcome/OutcomeScalar'
 import WinningOutcome from 'components/Outcome/WinningOutcome'
 import { OUTCOME_TYPES } from 'utils/constants'
-import PropTypes from 'prop-types'
 
 const Outcome = ({
   resolved,
@@ -78,7 +79,7 @@ Outcome.propTypes = {
   funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   outcomes: PropTypes.array.isRequired,
   marginalPrices: PropTypes.arrayOf(PropTypes.string),
-  winningOutcome: PropTypes.number,
+  winningOutcome: PropTypes.oneOfType([PropTypes.number, ImmutablePropTypes.record]),
   opts: PropTypes.shape({
     showOnlyTrendingOutcome: PropTypes.bool,
     showDate: PropTypes.bool,
