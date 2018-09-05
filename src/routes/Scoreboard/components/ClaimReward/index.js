@@ -84,11 +84,11 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, alreadyClaimed }) => {
 ClaimReward.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
   rewardValue: PropTypes.number.isRequired,
-  rewardClaimHash: PropTypes.string,
+  alreadyClaimed: PropTypes.string,
 }
 
 ClaimReward.defaultProps = {
-  rewardClaimHash: '',
+  alreadyClaimed: false,
 }
 
 const mapStateToProps = state => ({
