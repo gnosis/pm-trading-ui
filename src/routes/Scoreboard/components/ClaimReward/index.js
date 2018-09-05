@@ -1,5 +1,4 @@
 import React from 'react'
-import sha1 from 'sha1'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import moment from 'moment'
