@@ -23,18 +23,15 @@ const cx = cn.bind(style)
 const claimStartDate = moment.utc(claimReward.claimStart)
 const claimEndDate = moment.utc(claimReward.claimUntil)
 
-const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardClaimHash }) => {
+const ClaimReward = ({ openClaimRewardModal, rewardValue, alreadyClaimed }) => {
   const isInTimeframe = moment.utc().isBetween(claimStartDate, claimEndDate)
   const hasRewards = Decimal(rewardValue || 0).gt(0)
   const claimRewardEnabled = claimReward.enabled
 
-  const currentRewardClaimHash = sha1(claimReward.claimUntil + rewardValue)
-  const hasClaimedRewards = rewardClaimHash === currentRewardClaimHash
+  const showRewardValue = claimRewardEnabled && isInTimeframe && !alreadyClaimed
+  const showAlreadyClaimed = isInTimeframe && alreadyClaimed
 
-  const showRewardValue = claimRewardEnabled && isInTimeframe && !hasClaimedRewards
-  const showAlreadyClaimed = isInTimeframe && hasClaimedRewards
-
-  const claimingDisabled = !claimRewardEnabled || !isInTimeframe || !hasClaimedRewards || !hasRewards
+  const claimingDisabled = !claimRewardEnabled || !isInTimeframe || alreadyClaimed || !hasRewards
 
   let rewardValueDisplay = 'N/A'
   if (showRewardValue) {

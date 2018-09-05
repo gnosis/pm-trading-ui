@@ -33,10 +33,10 @@ class ClaimReward extends React.Component {
   }
 
   async handleClaim() {
-    const { closeModal, claimUserRewards } = this.props
+    const { closeModal, claimUserRewards, rewardValue } = this.props
     await this.setState({ claimState: 'loading' })
     try {
-      await claimUserRewards()
+      await claimUserRewards(rewardValue)
       await this.setState({ claimState: 'success' })
     } catch (e) {
       await this.setState({ claimState: 'error' })
@@ -55,6 +55,7 @@ class ClaimReward extends React.Component {
       claimRewardGasCost,
       currentBalance,
       rewardValue,
+      hasClaimedReward,
     } = this.props
 
     const { claimState } = this.state
@@ -83,7 +84,16 @@ class ClaimReward extends React.Component {
     const canClaim = sufficentFunds && !isWrongNetwork
 
     let claimButton
-    if (claimState === 'loading') {
+    if (hasClaimedReward) {
+      claimButton = (
+        <button
+          className={cx('btn', 'btn-primary', 'claim', 'disabled')}
+          disabled
+        >
+          ALREADY CLAIMED
+        </button>
+      )
+    } else if (claimState === 'loading') {
       claimButton = (
         <button
           className={cx('btn', 'btn-primary', 'claim', 'disabled')}
