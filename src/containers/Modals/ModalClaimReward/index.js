@@ -12,7 +12,7 @@ import { getGasPrice } from 'routes/MarketDetails/store/selectors'
 import { claimUserRewards } from 'routes/Scoreboard/store/actions'
 import { getFeatureConfig } from 'utils/features'
 import { requestClaimRewardGasCost } from './action'
-import { getClaimRewardGasCost, getRewardValue } from './selectors'
+import { getClaimRewardGasCost, getRewardValue, hasClaimedReward } from './selectors'
 
 const { claimReward } = getFeatureConfig('rewardClaiming')
 
@@ -24,13 +24,14 @@ const mapStateToProps = state => ({
   currentNetworkId: getCurrentNetworkId(state),
   claimRewardGasCost: getClaimRewardGasCost(state),
   rewardValue: getRewardValue(state),
+  hasClaimedReward: hasClaimedReward(state),
 })
 
 const mapDispatchToProps = {
   requestGasPrice,
   requestClaimRewardGasCost,
   closeModal,
-  claimUserRewards: () => claimUserRewards(claimReward.contractAddress),
+  claimUserRewards: rewardAmount => claimUserRewards(claimReward.contractAddress, rewardAmount),
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClaimReward)
