@@ -87,7 +87,7 @@
   margin-top: 45px;
 }
 
-.submitButton {
+.retryButton, .submitButton {
   @include interfaceButton();
 
   margin: auto;

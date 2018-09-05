@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import classnames from 'classnames/bind'
 import { lifecycle } from 'recompose'
 import { getFeatureConfig } from 'utils/features'
@@ -11,14 +12,29 @@ const cx = classnames.bind(styles)
 
 const tournamentConfig = getFeatureConfig('tournament')
 
-const OnFidoIntegration = () => (
-  <div id="onfido-mount" className={cx('onfido-wrapper')} />
+const OnFidoIntegration = ({ closeModal, canClose }) => (
+  <>
+    {canClose && <button type="button" className={cx('closeButton')} onClick={closeModal} />}
+    <div id="onfido-mount" className={cx('onfido-wrapper')} />
+  </>
 )
 
+OnFidoIntegration.propTypes = {
+  canClose: PropTypes.bool,
+  closeModal: PropTypes.func.isRequired,
+}
+
+OnFidoIntegration.defaultProps = {
+  canClose: false,
+}
+
 const enhancer = lifecycle({
-  componentDidMount() {
-    const { token, startUserReport, account } = this.props
-    const instance = Onfido.init({
+  async componentDidMount() {
+    const {
+      token, startUserReport, account, setStep,
+    } = this.props
+    
+    Onfido.init({
       // the JWT token that you generated earlier on
       token,
       // id of the element you want to mount the component on
@@ -44,6 +60,7 @@ const enhancer = lifecycle({
       ],
       onComplete: async () => {
         await startUserReport(account)
+        setStep({ page: 'integration', options: { canClose: true, token } })
         // You can now trigger your backend to start a new check
       },
     })

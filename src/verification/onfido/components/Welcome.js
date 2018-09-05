@@ -35,10 +35,15 @@ const ERROR_STYLE = {
 }
 
 const Welcome = ({
-  setLegalDocumentsAccepted, closeModal, invalid, submit,
+  setLegalDocumentsAccepted, closeModal, invalid, submit, existingUser, tosAccepted,
 }) => (
   <div className={cx('modal', 'onfido', 'welcome')}>
     <h4 className={cx('heading')}>Start verification process</h4>
+    {existingUser && (
+      <p>
+        <strong>You already created a check before, if you finished the instructions in the E-Mail, please wait until the check is finished and come back to this screen later.</strong>
+      </p>
+    )}
     <button type="button" className={cx('closeButton')} onClick={closeModal} />
     <div className={cx('form')}>
       <div className={cx('row')}>
@@ -56,18 +61,25 @@ const Welcome = ({
       </div>
       <div className={cx('row')}>
         <div className={cx('col-md-12')}>
-          <LegalCompliance
-            showExplanation
-            submitButtonClassName={cx('submitButton')}
-            submitButtonDisabledClassName={cx('disabled')}
-            submitButtonLabel="Verify"
-            applicationName={name}
-            disabled={invalid}
-            onSubmitAcceptedDocs={(docs) => {
-              setLegalDocumentsAccepted(docs)
-              submit()
-            }}
-          />
+          {!tosAccepted ? (
+            <LegalCompliance
+              showExplanation
+              submitButtonClassName={cx('submitButton')}
+              submitButtonDisabledClassName={cx('disabled')}
+              submitButtonLabel="Verify"
+              applicationName={name}
+              disabled={invalid}
+              onSubmitAcceptedDocs={(docs) => {
+                setLegalDocumentsAccepted(docs)
+                submit()
+              }}
+            />
+          ) : (
+            <div>
+              <br />
+              <button type="button" className={cx('submitButton', { disabled: invalid })} disabled={invalid} onClick={submit}>Verify</button>
+            </div>
+          )}
         </div>
       </div>
     </div>

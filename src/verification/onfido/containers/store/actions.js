@@ -13,16 +13,16 @@ const updateUserVerification = account => async (dispatch) => {
   if (verificationUser) {
     if (verificationUser.isVerified) {
       // user is verified, close the modal and save the setting
-      dispatch(setVerificationStatus('onfido'))
-      return true
+      dispatch(setVerificationStatus(account, 'onfido'))
+      return 'ACCEPTED'
     }
 
     // user exists but is not verified, push report generation (incase it didnt work the first time)
     await api.startUserReport(account)
-    return false
+    return 'DENIED'
   }
 
-  return false
+  return 'PENDING'
 }
 
 const promptSignMessage = msg => async () => signMessage(msg)

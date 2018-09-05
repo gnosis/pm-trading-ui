@@ -1,6 +1,7 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { List } from 'immutable'
 import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
+import { normalizeHex } from 'utils/helpers'
 
 const config = getConfiguration()
 
@@ -177,5 +178,5 @@ export const isVerified = (state) => {
 
   if (!requireVerification) return true
 
-  return account && state.integrations.getIn(['accountSettings', account, 'verificatedWith']) === verificationConfig.handler
+  return account && state.integrations.getIn(['accountSettings', normalizeHex(account), 'verificatedWith']) === verificationConfig.handler
 }

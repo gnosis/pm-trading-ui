@@ -35,7 +35,7 @@ export const startUserReport = async (account) => {
     const { status } = await fetch(`${API_URL}/users/${account}`, {
       method: 'PUT',
     })
-    console.log({ status })
+
     return status === 201 || status === 204
   } catch (err) {}
 
