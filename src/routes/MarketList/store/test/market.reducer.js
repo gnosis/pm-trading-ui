@@ -19,19 +19,14 @@ const marketReducerTests = () => {
         marketList: marketReducer,
         blockchain: blockchainReducer,
       })
-      const middlewares = [
-        thunk,
-      ]
-      const enhancers = [
-        applyMiddleware(...middlewares),
-      ]
+      const middlewares = [thunk]
+      const enhancers = [applyMiddleware(...middlewares)]
       store = createStore(reducers, compose(...enhancers))
     })
 
-
     it('should return empty Immutable list when no markets are available', () => {
       // GIVEN
-      const emptyResponse = { }
+      const emptyResponse = {}
 
       // WHEN
       processMarketsResponse(store.dispatch, store.getState(), emptyResponse)
@@ -72,12 +67,14 @@ const marketReducerTests = () => {
 
       // THEN
       const markets = marketListSelector(store.getState())
-      const firstMarketRecord = markets.find(market => market.address === MarketFactory.aEthereumMarket.address)
-      const secondMarketRecord = markets.find(market => market.address === MarketFactory.aGasPriceMarket.address)
+      const firstMarketRecord = markets.find(market => market.address === MarketFactory.aKittiesMarket.address)
+      const secondMarketRecord = markets.find(market => market.address === MarketFactory.aEthereumMarket.address)
+      const thirdMarketRecord = markets.find(market => market.address === MarketFactory.aGasPriceMarket.address)
 
-      expect(store.getState().marketList.size).toEqual(2)
-      expect(firstMarketRecord).toEqual(MarketFactory.aEthereumMarket)
-      expect(secondMarketRecord).toEqual(MarketFactory.aGasPriceMarket)
+      expect(store.getState().marketList.size).toEqual(3)
+      expect(firstMarketRecord).toEqual(MarketFactory.aKittiesMarket)
+      expect(secondMarketRecord).toEqual(MarketFactory.aEthereumMarket)
+      expect(thirdMarketRecord).toEqual(MarketFactory.aGasPriceMarket)
     })
   })
 }

@@ -14,7 +14,9 @@ import { areRewardsClaimed } from '../../store'
 import style from './ClaimReward.scss'
 
 const rewardsConfig = getFeatureConfig('rewards')
-const { rewardToken, claimReward } = rewardsConfig
+const rewardClaimingConfig = getFeatureConfig('rewardClaiming')
+const { rewardToken } = rewardsConfig
+const { claimReward } = rewardClaimingConfig
 const claimUntilFormat = 'y[Y] M[M] D[d] h[h] m[m]'
 const cx = cn.bind(style)
 
@@ -32,7 +34,7 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardClaimHash }) => 
   const showRewardValue = claimRewardEnabled && isInTimeframe && !hasClaimedRewards
   const showAlreadyClaimed = isInTimeframe && hasClaimedRewards
 
-  const claimingDisabled = !claimRewardEnabled || !isInTimeframe || !hasClaimedRewards || !hasRewards
+  const claimingDisabled = !claimRewardEnabled || !isInTimeframe || hasClaimedRewards || !hasRewards
 
   let rewardValueDisplay = 'N/A'
   if (showRewardValue) {

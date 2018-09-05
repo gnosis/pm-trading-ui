@@ -1,4 +1,5 @@
 import moment from 'moment'
+import momentDurationFormatSetup from 'moment-duration-format'
 
 export const setMomentRelativeTime = () => {
   moment.updateLocale('en', {
@@ -19,6 +20,7 @@ export const setMomentRelativeTime = () => {
       yy: '%d years',
     },
   })
+
   // Set new thresholds
   moment.relativeTimeThreshold('ss', 3)
   moment.relativeTimeThreshold('s', 59)
@@ -26,4 +28,8 @@ export const setMomentRelativeTime = () => {
   moment.relativeTimeThreshold('h', 20)
   moment.relativeTimeThreshold('d', 25)
   moment.relativeTimeThreshold('M', 10)
+}
+
+export const setMomentDurationFormat = () => {
+  momentDurationFormatSetup(moment)
 }

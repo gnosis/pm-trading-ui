@@ -1,7 +1,7 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "tradingdb.dev.gnosisdev.com",
+    "host": "tradingdb.rinkeby.gnosis.pm",
     "port": 443
   },
   "ethereum": {
@@ -10,20 +10,22 @@
     "port": 443
   },
   "whitelist": {
-    "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail"
+    "0x13a1d49d0f5285586373755ec96d0ac81e7a1928": "Gnosis"
   },
   "htmlConfig": {
     "title": "Gnosis Olympia"
   },
-  "hiddenMarkets": [
-    "0x9e1008ff1b30b871701e5527fc4efe339cf96abc",
-    "0x23effcde33bd3100ca038f56ccda0a0c695439da",
-    "0xe00575db7a639f554f210cf8fc3969ef315c4bc8",
-    "0xbedb8b26ea27a2193baed5d06e6c538b4d413896",
-    "0x71de8eb4d4060f395120fe7499971ad53b526215",
-    "0xf87e40f4dc6936f6f020f42c5286303b8c41eae7",
-    "0xb6cd050544b07355f0f55a3123c1832d50ed4885"
-  ],
+  "hiddenMarkets": [],
+  "thirdparty": {
+    "googleAnalytics": {
+      "enabled": true,
+      "id": "UA-83220550-2"
+    },
+    "intercom": {
+      "enabled": true,
+      "id": "km54f6ih"
+    }
+  },
   "logo": {
     "regular": "assets/img/gnosis_logo_olympia.svg",
     "small": "assets/img/gnosis_logo_olympia.svg",
@@ -35,12 +37,12 @@
   },
   "registration": {
     "enabled": true,
-    "contractAddress": "0x6427D856450b20F6FaB88bE18d949FaF9C4DA512"
+    "contractAddress": "0x938315974063b9bbe278632352d56128e1f17e95"
   },
   "collateralToken": {
     "source": "address",
     "options": {
-      "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
+      "address": "0xf68c8c544573eba69ec03d133c81dee9f407a92d",
       "symbol": "OLY",
       "icon": "/assets/img/icons/icon_oly.png"
     }
@@ -86,6 +88,19 @@
       }
     ]
   },
+  "cookieBanner": {
+    "enabled": true,
+    "options": [
+      {
+        "label": "Chat support",
+        "thirdParty": "intercom"
+      },
+      {
+        "label": "Analytics",
+        "thirdParty": "googleAnalytics"
+      }
+    ]
+  },
   "footer": {
     "enabled": true,
     "content": {
@@ -95,29 +110,30 @@
     }
   },
   "rewardClaiming": {
-    "enabled": false,
+    "enabled": true,
     "claimReward": {
-      "enabled": false,
-      "claimStart": "2018-06-01T12:00:00",
-      "claimUntil": "2018-07-01T12:00:00",
-      "contractAddress": "0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
-      "networkId": 42
+      "enabled": true,
+      "claimStart": "2018-09-05T10:23:00",
+      "claimUntil": "2018-09-05T15:10:00",
+      "contractAddress": "0x4aba86cd7de8195b38179c62f3bd2f1bcda357a5",
+      "networkId": 3
     }
   },
   "rewards": {
     "enabled": true,
     "rewardToken": {
-      "symbol": "GNO",
-      "contractAddress": "0xe46637882a11d3c90a24bd7c7529eb101f504705",
-      "networkId": 42
+      "symbol": "RWD",
+      "contractAddress": "0x774f7c10db6f1ee5ea7dea5d0d302862983b84fb",
+      "networkId": 3
     },
     "levels": [
-      { "value": 30, "minRank": 1, "maxRank": 1 },
-      { "value": 20, "minRank": 2, "maxRank": 2 },
-      { "value": 10, "minRank": 3, "maxRank": 3 },
-      { "value": 8, "minRank": 4, "maxRank": 4 },
-      { "value": 7, "minRank": 5, "maxRank": 5 },
-      { "value": 5, "minRank": 6, "maxRank": 10 }
+      { "value": 5, "minRank": 1, "maxRank": 1 },
+      { "value": 4, "minRank": 2, "maxRank": 2 },
+      { "value": 3, "minRank": 3, "maxRank": 3 },
+      { "value": 2, "minRank": 4, "maxRank": 4 },
+      { "value": 1, "minRank": 5, "maxRank": 5 },
+      { "value": 0.2, "minRank": 6, "maxRank": 10 },
+      { "value": 0.1, "minRank": 11, "maxRank": 50 }
     ]
   },
   "badges": {

@@ -14,30 +14,31 @@ const OutcomeSectionScalar = (props) => {
     selectedOutcome,
     market: {
       bounds: {
-        lower, upper, decimals, unit,
+        lower: lowerBound, upper: upperBound, unit, decimals,
       },
       outcomeTokensSold,
       funding,
     },
     outcomeTokenCount,
-    valid: canRunSimulation,
+    valid,
   } = props
+  const canRunSimulation = valid && selectedOutcome
 
-  const marketTokenCounts = outcomeTokensSold.toArray().map(value => Decimal(value))
-  const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+  const marketTokenCounts = outcomeTokensSold.map(value => Decimal(value)).toArray()
+  const marginalPricesCurrent = calcLMSRMarginalPrice({
     netOutcomeTokensSold: marketTokenCounts,
-    outcomeTokenIndex,
+    outcomeTokenIndex: 1,
     funding,
-  }))
+  })
   let marginalPriceSelected = marginalPricesCurrent
 
   if (canRunSimulation) {
     marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
-    marginalPriceSelected = marketTokenCounts.map((value, outcomeTokenIndex) => calcLMSRMarginalPrice({
+    marginalPriceSelected = calcLMSRMarginalPrice({
       netOutcomeTokensSold: marketTokenCounts,
-      outcomeTokenIndex,
+      outcomeTokenIndex: 1,
       funding,
-    }))
+    })
   }
 
   const scalarOutcomes = [
@@ -75,8 +76,8 @@ const OutcomeSectionScalar = (props) => {
       <div className={cn('row')}>
         <div className={cn('col-md-12')}>
           <ScalarSlider
-            lowerBound={parseInt(lower, 10)}
-            upperBound={parseInt(upper, 10)}
+            lowerBound={parseInt(lowerBound, 10)}
+            upperBound={parseInt(upperBound, 10)}
             unit={unit}
             decimals={decimals}
             marginalPriceCurrent={marginalPricesCurrent.toString()}

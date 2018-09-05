@@ -14,7 +14,8 @@ class Countdown extends Component {
   }
 
   componentDidMount() {
-    this.updateInterval = setInterval(this.updateDuration, 1000)
+    const { interval = 1000 } = this.props
+    this.updateInterval = setInterval(this.updateDuration, interval)
     this.updateDuration()
   }
 
@@ -43,13 +44,14 @@ class Countdown extends Component {
 
 Countdown.propTypes = {
   target: PropTypes.string.isRequired,
-  format: PropTypes.string,
+  format: PropTypes.string.isRequired,
   className: PropTypes.string,
+  interval: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 Countdown.defaultProps = {
   className: '',
-  format: undefined,
+  interval: 1000,
 }
 
 export default Countdown

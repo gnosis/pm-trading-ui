@@ -47,7 +47,8 @@ class MarketBuySharesForm extends Component {
       return 'Enter the investment value'
     }
 
-    const validInvestment = NUMBER_REGEXP.test(investmentValue)
+    const validInvestment = NUMBER_REGEXP.test(investmentValue) && Decimal(investmentValue).gte(1e-18)
+
     if (!validInvestment) {
       return 'Invalid amount'
     }

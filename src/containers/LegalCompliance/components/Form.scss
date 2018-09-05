@@ -23,13 +23,3 @@
     border: 1px solid #09697b;
   }
 }
-
-a {
-  text-decoration: underline;
-
-  color: $active-highlight;
-
-  &:visited, &:active, &:link {
-    color: $active-highlight !important;
-  }
-}

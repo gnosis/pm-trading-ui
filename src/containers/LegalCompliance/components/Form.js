@@ -30,40 +30,47 @@ const LegalCompliance = ({
 }) => {
   if (!legalComplianceEnabled) {
     return (
-      <ButtonComponent className={cx(submitButtonClassName)} onClick={() => onSubmitAcceptedDocs()} {...submitButtonOpts}>
+      <ButtonComponent
+        className={cx(submitButtonClassName)}
+        onClick={() => onSubmitAcceptedDocs()}
+        {...submitButtonOpts}
+      >
         {submitButtonLabel}
       </ButtonComponent>
     )
   }
+
+  const documentList = []
+  documents.forEach((doc, index) => {
+    documentList.push(<DocumentExplanation key={doc.id} {...doc} />)
+    if (index === documents.length - 2) {
+      documentList.push(<span key={`${doc.id}-separator`}> and </span>)
+      return
+    }
+
+    if (index !== documents.length - 1) {
+      documentList.push(<span key={`${doc.id}-separator`}>, </span>)
+    }
+  })
 
   const documentIds = documents.map(doc => doc.id)
   const hasAcceptedAll = documentIds.every(docId => !!fields[docId])
   const canSubmit = !disabled && hasAcceptedAll
 
   return (
-    <div className={className}>
-      {showHeading && (
-        <h4 className={cx('heading')}>
-Terms of service and privacy policy
-        </h4>
-      )}
+    <div>
+      {showHeading && <h4 className={cx('heading')}>Terms of service and privacy policy</h4>}
       {showExplanation && (
         <p className={cx('explanation')}>
           For using {applicationName}, you have to agree with our&nbsp;
-          <React.Fragment>
-            {documents
-              .map(doc => <DocumentExplanation key={doc.id} {...doc} />)
-              .reduce((acc, elem, i) => [...acc,
-                <span key={i}>
-                  {' '}
-                    and
-                  {' '}
-                </span>, elem], [])}
-          </React.Fragment>
-          .
+          <>{documentList}</>.
         </p>
       )}
-      <div className={cx('checks')}>{documents.map(doc => <DocumentField {...doc} key={doc.id} className={cx('checkBox')} />)}</div>
+      <div className={cx('checks')}>
+        {documents.map(doc => (
+          <DocumentField key={doc.id} {...doc} className={cx('checkBox')} />
+        ))}
+      </div>
       <ButtonComponent
         className={cx(submitButtonClassName, { [submitButtonDisabledClassName]: !canSubmit })}
         disabled={!canSubmit}

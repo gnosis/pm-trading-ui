@@ -14,7 +14,7 @@ import { getFeatureConfig } from 'utils/features'
 import { requestClaimRewardGasCost } from './action'
 import { getClaimRewardGasCost, getRewardValue } from './selectors'
 
-const { claimReward } = getFeatureConfig('rewards')
+const { claimReward } = getFeatureConfig('rewardClaiming')
 
 const mapStateToProps = state => ({
   currentAccount: getCurrentAccount(state),

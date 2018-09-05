@@ -214,6 +214,7 @@ class MarketDetail extends Component {
       defaultAccount,
       moderators,
       collateralTokenSymbol,
+      hasWallet,
     } = this.props
 
     const { marketFetchError } = this.state
@@ -246,6 +247,7 @@ class MarketDetail extends Component {
               gasCosts={gasCosts}
               gasPrice={gasPrice}
               handleRedeemWinnings={this.handleRedeemWinnings}
+              hasWallet={hasWallet}
             />
             <Infos
               market={market}
