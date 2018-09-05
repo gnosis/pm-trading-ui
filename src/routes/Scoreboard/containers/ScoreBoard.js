@@ -17,7 +17,7 @@ class ScoreBoard extends React.Component {
 
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank, hasClaimedReward,
     } = this.props
 
     return (
@@ -28,6 +28,7 @@ class ScoreBoard extends React.Component {
         openSetMainnetAddressModal={openSetMainnetAddressModal}
         openClaimRewardModal={openClaimRewardModal}
         rank={rank}
+        hasClaimedReward={hasClaimedReward}
       />
     )
   }

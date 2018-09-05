@@ -28,7 +28,7 @@ const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragrap
 class Layout extends React.PureComponent {
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank, hasClaimedReward,
     } = this.props
     const hasRows = data && data.size > 0
     let rewardValue = 0
@@ -56,7 +56,11 @@ class Layout extends React.PureComponent {
                   openSetMainnetAddressModal={openSetMainnetAddressModal}
                 />
                 {showRewardClaim && (
-                  <ClaimReward openClaimRewardModal={openClaimRewardModal} rewardValue={rewardValue} />
+                  <ClaimReward
+                    openClaimRewardModal={openClaimRewardModal}
+                    rewardValue={rewardValue}
+                    alreadyClaimed={hasClaimedReward}
+                  />
                 )}
               </Block>
               <Hairline />

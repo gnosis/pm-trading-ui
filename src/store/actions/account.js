@@ -10,7 +10,7 @@ const registrationConfig = getFeatureConfig('registration')
 export const setMainnetAddress = (account, mainnetAddress) => saveWalletSetting({ account, key: 'mainnetAddress', value: mainnetAddress })
 export const setAccountAcceptedDocuments = (account, documentNames) => saveWalletSetting({ account, key: 'acceptedDocuments', value: documentNames })
 export const setAccountRewardClaimState = (account, rewardClaimEnd, rewardClaimValue) => (
-  saveWalletSetting({ account, key: 'rewardClaimHash', value: sha1(rewardClaimEnd + rewardClaimValue) })
+  saveWalletSetting({ account, key: 'rewardClaimHash', value: sha1(`${rewardClaimEnd}${rewardClaimValue}`) })
 )
 
 export const requestMainnetAddress = () => async (dispatch, getState) => {
