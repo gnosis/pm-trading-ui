@@ -112,10 +112,10 @@
   "rewardClaiming": {
     "enabled": true,
     "claimReward": {
-      "enabled": false,
-      "claimStart": "2018-06-01T12:00:00",
-      "claimUntil": "2018-07-01T12:00:00",
-      "contractAddress": "0x8f0d2efa1374b14256709edb747c73399e9ff424",
+      "enabled": true,
+      "claimStart": "2018-09-05T10:23:00",
+      "claimUntil": "2018-09-05T15:10:00",
+      "contractAddress": "0x4aba86cd7de8195b38179c62f3bd2f1bcda357a5",
       "networkId": 3
     }
   },
@@ -123,7 +123,7 @@
     "enabled": true,
     "rewardToken": {
       "symbol": "RWD",
-      "contractAddress": "0xcd87814c7b0fcc6b2e973065b7a8ffadda6faceb",
+      "contractAddress": "0x774f7c10db6f1ee5ea7dea5d0d302862983b84fb",
       "networkId": 3
     },
     "levels": [
