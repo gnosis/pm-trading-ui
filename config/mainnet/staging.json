@@ -20,6 +20,13 @@
       "enabled": false
     }
   },
+  "verification": {
+    "enabled": true,
+    "handler": "onfido",
+    "options": {
+      "url": "https://kyc.staging.gnosisdev.com/v1"
+    }
+  },
   "providers": {
     "default": "METAMASK"
   },
