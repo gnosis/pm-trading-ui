@@ -3,10 +3,9 @@ import { OUTCOME_TYPES } from 'utils/constants'
 
 const SCALAR_OUTCOME_RANGE = 1000000
 
-const calcShareWinningsCategorical = (share, market) => {
-  const { winningOutcome } = market
+const calcShareWinningsCategorical = (share, { winningOutcome }) => {
   const shareOutcome = share.outcomeToken.index
-  if (shareOutcome !== winningOutcome) {
+  if (shareOutcome !== winningOutcome.index) {
     return '0'
   }
 

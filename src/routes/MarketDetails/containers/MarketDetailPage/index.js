@@ -83,7 +83,7 @@ const mapDispatchToProps = dispatch => ({
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
   sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
   changeUrl: url => dispatch(replace(url)),
-  redeemWinnings: market => redeemMarket(market),
+  redeemWinnings: market => dispatch(redeemMarket(market)),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
   requestTokenSymbol: tokenAddress => dispatch(requestTokenSymbol(tokenAddress)),
