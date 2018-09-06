@@ -49,5 +49,3 @@ export const meSelector = createSelector(
 export const rankSelector = createSelector(meSelector, account => (account ? account.currentRank : undefined))
 
 export const badgeSelector = createSelector(meSelector, account => badgeOf(account ? account.predictions : undefined))
-
-export const areRewardsClaimed = state => state.tournament.rewards.get('rewardsClaimed')
