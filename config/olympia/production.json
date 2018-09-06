@@ -10,7 +10,7 @@
     "port": 443
   },
   "whitelist": {
-    "0x4b07f5a08639bcde3b7275a98dae265cbda608ca": "Lama"
+    "0xa0d26f5f9d825bdf0f6c1431719bdc34aca7d54c": "Gnosis"
   },
   "htmlConfig": {
     "title": "Gnosis Olympia"
@@ -26,12 +26,12 @@
   },
   "registration": {
     "enabled": true,
-    "contractAddress": "0x6427d856450b20f6fab88be18d949faf9c4da512"
+    "contractAddress": "0x4aedc2dc93340603e1dd875f77bd23029fdbb193"
   },
   "collateralToken": {
     "source": "address",
     "options": {
-      "address": "0x979861df79c7408553aaf20c01cfb3f81ccf9341",
+      "address": "0x645f854cd7dedc5ecd51f4ae02fcf871b982a2b6",
       "symbol": "OLY",
       "icon": "/assets/img/icons/icon_oly.png"
     }
@@ -146,13 +146,5 @@
       }
     ]
   },
-  "hiddenMarkets": [
-    "0x9e1008ff1b30b871701e5527fc4efe339cf96abc",
-    "0x23effcde33bd3100ca038f56ccda0a0c695439da",
-    "0xe00575db7a639f554f210cf8fc3969ef315c4bc8",
-    "0xbedb8b26ea27a2193baed5d06e6c538b4d413896",
-    "0x71de8eb4d4060f395120fe7499971ad53b526215",
-    "0xf87e40f4dc6936f6f020f42c5286303b8c41eae7",
-    "0xb6cd050544b07355f0f55a3123c1832d50ed4885"
-  ]
+  "hiddenMarkets": []
 }

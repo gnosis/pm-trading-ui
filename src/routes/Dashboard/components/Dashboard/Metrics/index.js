@@ -28,7 +28,7 @@ const Metrics = ({
     <div className={cx('container')}>
       <Metric
         isLoading={collateralToken.symbol === '/'}
-        src={etherTokensIcon}
+        src={collateralToken.icon}
         explanation={`${collateralToken.symbol} tokens`}
       >
         <DecimalValue value={collateralToken.balance} className={cx('metric-value')} />&nbsp;

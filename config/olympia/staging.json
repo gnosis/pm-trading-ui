@@ -1,7 +1,7 @@
 {
   "gnosisdb": {
     "protocol": "https",
-    "host": "tradingdb.rinkeby.gnosis.pm",
+    "host": "tradingdb.staging.gnosisdev.com",
     "port": 443
   },
   "ethereum": {
@@ -10,7 +10,7 @@
     "port": 443
   },
   "whitelist": {
-    "0x13a1d49d0f5285586373755ec96d0ac81e7a1928": "Gnosis"
+    "0x30c2674afc792c7cbb4154352c594811b82264fa": "Gnosis"
   },
   "htmlConfig": {
     "title": "Gnosis Olympia"
@@ -42,7 +42,7 @@
   "collateralToken": {
     "source": "address",
     "options": {
-      "address": "0xf68c8c544573eba69ec03d133c81dee9f407a92d",
+      "address": "0x645f854cd7dedc5ecd51f4ae02fcf871b982a2b6",
       "symbol": "OLY",
       "icon": "/assets/img/icons/icon_oly.png"
     }
@@ -122,7 +122,7 @@
   "rewards": {
     "enabled": true,
     "rewardToken": {
-      "symbol": "RWD",
+      "symbol": "GNO",
       "contractAddress": "0x774f7c10db6f1ee5ea7dea5d0d302862983b84fb",
       "networkId": 3
     },
