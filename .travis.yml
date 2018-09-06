@@ -45,6 +45,12 @@ deploy:
   on:
     tags: true
 
+# Prepare manual production deployment
+- provider: script
+  script: bash .travis/scripts/prepare_olympia_production_deployment.sh
+  on:
+    tags: true
+
 # mainnet deployments
 - provider: s3
   bucket: management-mainnet
