@@ -6,7 +6,6 @@ import { isFeatureEnabled } from 'utils/features'
 // Reducers
 import integrations from 'integrations/store/reducers'
 import users from 'routes/Scoreboard/store/reducers/users'
-import rewards from 'routes/Scoreboard/store/reducers/rewards'
 import transactions from 'routes/Transactions/store/reducers/transactions'
 import modal from './modal'
 import blockchain from './blockchain'
@@ -35,7 +34,6 @@ const reducers = {
 if (tournamentEnabled) {
   reducers.tournament = combineReducers({
     ranking: users,
-    rewards,
   })
 }
 

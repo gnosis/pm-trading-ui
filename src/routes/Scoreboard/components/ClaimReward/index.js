@@ -8,8 +8,6 @@ import Span from 'components/layout/Span'
 import Countdown from 'components/Countdown'
 import Paragraph from 'components/layout/Paragraph'
 import { getFeatureConfig } from 'utils/features'
-import { connect } from 'react-redux'
-import { areRewardsClaimed } from '../../store'
 import style from './ClaimReward.scss'
 
 const rewardsConfig = getFeatureConfig('rewards')
@@ -90,8 +88,4 @@ ClaimReward.defaultProps = {
   alreadyClaimed: false,
 }
 
-const mapStateToProps = state => ({
-  rewardsClaimed: areRewardsClaimed(state),
-})
-
-export default connect(mapStateToProps, null)(ClaimReward)
+export default ClaimReward
