@@ -10,6 +10,7 @@ import { getCollateralToken } from 'store/selectors/blockchain'
 import shareSelector from 'store/selectors/account/shares'
 import tradeSelector from 'store/selectors/account/trades'
 import { meSelector } from 'routes/Scoreboard/store'
+import { normalizeHex } from 'utils/helpers'
 import { calculateProfit } from './utils'
 
 /**
@@ -58,11 +59,17 @@ export const dashboardProfitsSelector = createSelector(
   },
 )
 
+export const myTradesSelector = createSelector(
+  getCurrentAccount,
+  tradeSelector,
+  (account, trades) => trades.filter(({ owner }) => normalizeHex(owner) === normalizeHex(account)),
+)
+
 export default createStructuredSelector({
   closingSoonMarkets: closingSoonMarketsSelector,
   newestMarkets: newestMarketsSelector,
   myShares: shareSelector,
-  myTrades: tradeSelector,
+  myTrades: myTradesSelector,
   currentAccount: getCurrentAccount,
   hasWallet: checkWalletConnection,
   collateralToken: getCollateralToken,

@@ -31,12 +31,14 @@ const Trade = ({
     </div>
     <div className={cx('outcome')}>
       <div className={cx('tradeOutcome')}>
-        <OutcomeColorBox scheme={marketType} outcomeIndex={outcomeToken.index} />&nbsp;
+        <OutcomeColorBox scheme={marketType} outcomeIndex={outcomeToken.index} />
+        &nbsp;
         {outcomeToken.name}
       </div>
       <div className={cx('tradeAmount')}>
-        <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokenCount)} />&nbsp;
-        {collateralTokenAddress ? <CurrencyName tokenAddress={collateralTokenAddress} /> : <span>ETH</span> }
+        <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokenCount)} />
+        &nbsp;
+        {collateralTokenAddress ? <CurrencyName tokenAddress={collateralTokenAddress} /> : <span>ETH</span>}
       </div>
       <div className={cx('tradeDate')}>
         <span title={moment.utc(date).format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}>
