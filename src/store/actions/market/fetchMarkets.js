@@ -1,5 +1,5 @@
 import { requestFromRestAPI } from 'api/utils/fetch'
-import { hexWithoutPrefix, add0xPrefix } from 'utils/helpers'
+import { hexWithoutPrefix, normalizeHex } from 'utils/helpers'
 import { getConfiguration } from 'utils/features'
 import { getCollateralToken } from 'store/selectors/blockchain'
 import builderFunctions from 'store/actions/market/utils/marketBuilders'
@@ -34,11 +34,15 @@ export const processMarketsResponse = (dispatch, state, response) => {
   let marketRecords = extractMarkets(response.results)
 
   if (applicationCollateralToken.address) {
-    marketRecords = marketRecords.filter(({ collateralToken }) => collateralToken === hexWithoutPrefix(applicationCollateralToken.address))
+    marketRecords = marketRecords.filter(
+      ({ collateralToken }) => normalizeHex(collateralToken) === normalizeHex(applicationCollateralToken.address),
+    )
   }
 
   if (hiddenMarkets.length > 0) {
-    marketRecords = marketRecords.filter(market => !hiddenMarkets.find(hiddenMarketAddress => hiddenMarketAddress === add0xPrefix(market.address)))
+    marketRecords = marketRecords.filter(
+      market => !hiddenMarkets.find(hiddenMarketAddress => normalizeHex(hiddenMarketAddress) === normalizeHex(market.address)),
+    )
   }
 
   dispatch(addMarkets(marketRecords))
