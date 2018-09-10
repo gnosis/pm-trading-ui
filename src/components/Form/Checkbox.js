@@ -27,7 +27,7 @@ const Checkbox = ({
 
   return (
     <div className={checkboxClasses}>
-      <label htmlFor={inputId}>{ label }</label>
+      {label && <label htmlFor={inputId}>{ label }</label>}
       <label htmlFor={inputId} className={cx('formCheckboxLabel')}>
         <input
           id={inputId}
