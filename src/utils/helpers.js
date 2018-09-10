@@ -1,6 +1,4 @@
-import {
-  mapValues, startsWith, isArray, range,
-} from 'lodash'
+import { startsWith, isArray, range } from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
 import { HEX_VALUE_REGEX, OUTCOME_TYPES, REQUEST_STATES } from 'utils/constants'
