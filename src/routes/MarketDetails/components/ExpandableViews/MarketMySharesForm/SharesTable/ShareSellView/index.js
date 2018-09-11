@@ -196,8 +196,7 @@ class ShareSellView extends Component {
                     {isGasPriceFetched && isGasCostFetched(GAS_COST.SELL_SHARES) ? (
                       <>
                         <DecimalValue value={gasCostEstimation} decimals={5} />
-                        &nbsp;
-                        <CurrencyName tokenAddress={market.collateralToken} />
+                        &nbsp;ETH
                       </>
                     ) : (
                       <IndefiniteSpinner width={16} height={16} />

@@ -5,7 +5,7 @@ import moment from 'moment'
 const DateAxisTick = ({ x, y, payload }) => (
   <g transform={`translate(${x}, ${y})`}>
     <text x={0} y={0} dy={16} fill="white" textAnchor="middle">
-      {moment(payload.value).format('L')}
+      {moment(payload.value).format('DD/MM/YYYY')}
     </text>
   </g>
 )
