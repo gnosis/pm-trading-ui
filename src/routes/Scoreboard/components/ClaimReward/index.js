@@ -81,7 +81,7 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, alreadyClaimed }) => {
 ClaimReward.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
   rewardValue: PropTypes.number.isRequired,
-  alreadyClaimed: PropTypes.string,
+  alreadyClaimed: PropTypes.bool,
 }
 
 ClaimReward.defaultProps = {
