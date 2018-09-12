@@ -1,7 +1,9 @@
 /* globals fetch */
 import { getFeatureConfig } from 'utils/features'
 
-const { options: { url: API_URL } } = getFeatureConfig('verification') || {}
+const verificationConfig = getFeatureConfig('verification') || {}
+
+const API_URL = verificationConfig?.options?.url
 
 export const createUserVerification = async (firstName, lastName, email, signature, account) => {
   const response = await fetch(`${API_URL}/users/${account}`, {
