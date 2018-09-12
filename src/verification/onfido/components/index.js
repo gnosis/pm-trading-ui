@@ -17,7 +17,7 @@ const SignMessage = () => (
 const DeniedMessage = ({ reason, closeModal, setStep }) => (
   <div>
     <button type="button" className={cx('closeButton')} onClick={closeModal} />
-    <h2>Sorry, you currently can't interact with Gnosis.</h2>
+    <h2>Sorry, you currently can&apos;t interact with Gnosis.</h2>
     <p>{reason}</p>
 
     <button type="button" className={cx('retryButton')} onClick={() => setStep({ page: 'welcome' })}>Try again</button>
