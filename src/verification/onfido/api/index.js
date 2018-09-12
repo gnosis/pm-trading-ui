@@ -39,7 +39,7 @@ export const startUserReport = async (account) => {
     })
 
     return status === 201 || status === 204
-  } catch (err) {}
-
-  return false
+  } catch (err) {
+    return false
+  }
 }
