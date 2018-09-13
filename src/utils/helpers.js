@@ -1,11 +1,9 @@
-import { mapValues, startsWith, isArray, range } from 'lodash'
+import { startsWith, isArray, range } from 'lodash'
 import seedrandom from 'seedrandom'
 import Decimal from 'decimal.js'
-import moment from 'moment'
-import { HEX_VALUE_REGEX, OUTCOME_TYPES, MARKET_STAGES } from 'utils/constants'
+import { HEX_VALUE_REGEX, OUTCOME_TYPES, REQUEST_STATES } from 'utils/constants'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import Web3 from 'web3'
-import Uport from 'integrations/uport'
 import { getConfiguration } from 'utils/features'
 
 import dictionary from 'assets/randomNames.json'
@@ -24,26 +22,7 @@ export const hexWithPrefix = value => (HEX_VALUE_REGEX.test(value) ? add0xPrefix
 
 export const hexWithoutPrefix = value => (startsWith(value, '0x') ? value.substring(2) : value)
 
-export const isMarketResolved = ({ oracle: { isOutcomeSet } }) => isOutcomeSet
-
-export const isMarketClosed = ({ stage, eventDescription: { resolutionDate } }) =>
-  stage === MARKET_STAGES.MARKET_CLOSED || moment.utc(resolutionDate).isBefore(moment().utc())
-
-export const toEntity = (data, entityType, idKey = 'address') => {
-  const { [idKey]: id, ...entityPayload } = mapValues(data, hexWithoutPrefix)
-
-  return {
-    entities: {
-      [entityType]: {
-        [id]: {
-          [idKey]: id,
-          ...entityPayload,
-        },
-      },
-    },
-    result: [id],
-  }
-}
+export const normalizeHex = value => hexWithPrefix(value).toLowerCase()
 
 /**
  * Converts a value from WEI to ETH
@@ -68,25 +47,23 @@ export const weiToEth = (value) => {
 
 export const getOutcomeName = (market, index) => {
   let outcomeName
-  if (!market.event) {
+  if (!market.outcomes) {
     return null
   }
-  if (market.event.type === OUTCOME_TYPES.CATEGORICAL) {
-    outcomeName = market.eventDescription.outcomes[index]
-  } else if (market.event.type === OUTCOME_TYPES.SCALAR) {
+
+  if (market.type === OUTCOME_TYPES.CATEGORICAL) {
+    outcomeName = market.outcomes.get(index).name
+  } else if (market.type === OUTCOME_TYPES.SCALAR) {
     outcomeName = index === 0 ? 'Short' : 'Long'
   }
   return outcomeName
 }
 
-export const normalizeScalarPoint = (
-  marginalPrices,
-  { event: { lowerBound, upperBound }, eventDescription: { decimals } },
-) => {
+export const normalizeScalarPoint = (marginalPrices, { bounds: { lower, upper, decimals } }) => {
   const bigDecimals = parseInt(decimals, 10)
 
-  const bigUpperBound = Decimal(upperBound).div(10 ** bigDecimals)
-  const bigLowerBound = Decimal(lowerBound).div(10 ** bigDecimals)
+  const bigUpperBound = Decimal(upper).div(10 ** bigDecimals)
+  const bigLowerBound = Decimal(lower).div(10 ** bigDecimals)
 
   const bounds = bigUpperBound.sub(bigLowerBound)
   return Decimal(marginalPrices[1].toString())
@@ -96,16 +73,15 @@ export const normalizeScalarPoint = (
     .toNumber()
 }
 
-export const restFetch = url =>
-  fetch(url)
-    .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
-    .then(res => res.json())
-    .catch(err =>
-      new Promise((resolve, reject) => {
-        console.warn(`Gnosis DB: ${err}`)
-        reject(err)
-      }))
-
+export const restFetch = url => fetch(url)
+  .then(res => new Promise((resolve, reject) => (res.status >= 400 ? reject(res.statusText) : resolve(res))))
+  .then(res => res.json())
+  .catch(
+    err => new Promise((resolve, reject) => {
+      console.warn(`Gnosis DB: ${err}`)
+      reject(err)
+    }),
+  )
 export const bemifyClassName = (className, element, modifier) => {
   const classNameDefined = className || ''
   const classNames = isArray(classNameDefined) ? classNameDefined : classNameDefined.split(' ')
@@ -129,19 +105,17 @@ export const bemifyClassName = (className, element, modifier) => {
   return ''
 }
 
-export const timeoutCondition = (timeout, rejectReason) =>
-  new Promise((_, reject) => {
-    setTimeout(() => {
-      reject(rejectReason)
-    }, timeout)
-  })
+export const timeoutCondition = (timeout, rejectReason) => new Promise((_, reject) => {
+  setTimeout(() => {
+    reject(rejectReason)
+  }, timeout)
+})
 
 /**
  * Determines if an account is a Moderator
  * @param {*string} accountAddress
  */
-export const isModerator = accountAddress =>
-  (Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false)
+export const isModerator = accountAddress => (Object.keys(config.whitelist).length ? config.whitelist[accountAddress] !== undefined : false)
 
 export const getModerators = () => config.whitelist
 
@@ -154,7 +128,8 @@ export const getGnosisJsOptions = (provider) => {
     // Inject window.web3
     opts.ethereum = window.web3.currentProvider
   } else if (provider && provider.name === WALLET_PROVIDER.UPORT) {
-    const { uport } = Uport
+    // eslint-disable-next-line
+    const { uport } = require('integrations/uport')
     opts.ethereum = uport.getProvider()
     opts.defaultAccount = provider.account
   } else {
@@ -166,7 +141,7 @@ export const getGnosisJsOptions = (provider) => {
   return opts
 }
 
-const BLOCKED_WORD_LIST = ['sexual', 'african', 'american', 'european', 'asian', 'israeli']
+const BLOCKED_WORD_LIST = ['sexual', 'african', 'american', 'european', 'asian', 'israeli', 'jewish', 'arab', 'christian', 'slave', 'russian']
 
 export const generateDeterministicRandomName = (seed) => {
   const rng = seedrandom(seed.toLowerCase(), { state: true })
@@ -200,4 +175,15 @@ export const generateWalletName = (account) => {
   const accountAddressNormalized = hexWithPrefix(account).toLowerCase()
 
   return generateDeterministicRandomName(accountAddressNormalized)
+}
+
+export const setRequestStateWrap = async (setRequestState, asyncAction, context, ...params) => {
+  setRequestState(REQUEST_STATES.LOADING)
+  try {
+    await asyncAction.apply(context, params)
+    setRequestState(REQUEST_STATES.SUCCESS)
+  } catch (e) {
+    console.error(e)
+    setRequestState(REQUEST_STATES.ERROR)
+  }
 }

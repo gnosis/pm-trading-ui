@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
+import { List } from 'immutable'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
 import ScoreTable from './ScoreTable'
-import style from './Table.mod.scss'
+import style from './Table.scss'
 
 const cx = cn.bind(style)
 
@@ -36,7 +37,7 @@ Table.propTypes = {
 }
 
 Table.defaultProps = {
-  data: [],
+  data: List(),
   myAccount: '',
 }
 

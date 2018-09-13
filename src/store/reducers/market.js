@@ -1,13 +1,13 @@
 import { Map } from 'immutable'
 import { handleActions } from 'redux-actions'
-import { ADD_MARKET_LIST } from 'routes/MarketList/store/actions/addMarkets'
+import { addMarkets, updateMarket } from 'store/actions/market'
 
-export const REDUCER_ID = 'marketList'
-
-export default handleActions({
-  [ADD_MARKET_LIST]: (state, { payload }) =>
-    Map().withMutations((map) => {
-      payload.forEach(market =>
-        map.set(market.address, market))
+export default handleActions(
+  {
+    [addMarkets]: (state, { payload }) => state.withMutations((stateMap) => {
+      payload.forEach(market => stateMap.set(market.address, market))
     }),
-}, Map())
+    [updateMarket]: (state, { payload: { marketAddress, data } }) => state.mergeIn([marketAddress], data),
+  },
+  Map(),
+)

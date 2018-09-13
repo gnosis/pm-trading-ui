@@ -6,7 +6,7 @@ import { calcLMSRMarginalPrice } from 'api'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
 import TrendingOutcomeCategorical from './TrendingOutcomeCategorical'
 
-import style from './outcomeCategorical.mod.scss'
+import style from './outcomeCategorical.scss'
 
 const cx = cn.bind(style)
 
@@ -16,7 +16,6 @@ const OutcomeCategorical = ({
   funding,
   resolution,
   outcomes,
-  marginalPrices,
   opts = {},
 }) => {
   const {
@@ -36,16 +35,13 @@ const OutcomeCategorical = ({
   if (showOnlyTrendingOutcome && !resolved) {
     const tokenDistributionInt = tokenDistribution.map(outcome => parseInt(parseFloat(outcome) * 10000, 10))
     const trendingOutcomeIndex = tokenDistributionInt.indexOf(Math.max(...tokenDistributionInt))
-    const outcomeEntryStyle = {
-      backgroundColor: COLOR_SCHEME_DEFAULT[trendingOutcomeIndex],
-    }
     const trendingMarginalPricePercent = Math.round(tokenDistribution[trendingOutcomeIndex] * 100).toFixed(0)
     const resolutionDateFormatted = showDate ? moment(resolution).format(dateFormat) : ''
 
     return (
       <TrendingOutcomeCategorical
-        entryStyle={outcomeEntryStyle}
         outcome={outcomes[trendingOutcomeIndex]}
+        outcomeIndex={trendingOutcomeIndex}
         percentage={trendingMarginalPricePercent}
         resolutionDate={resolutionDateFormatted}
       />
@@ -84,8 +80,7 @@ OutcomeCategorical.propTypes = {
   outcomeTokensSold: PropTypes.array.isRequired,
   resolution: PropTypes.string.isRequired,
   funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  outcomes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  marginalPrices: PropTypes.arrayOf(PropTypes.string),
+  outcomes: PropTypes.array.isRequired,
   opts: PropTypes.shape({
     className: PropTypes.string,
     showOnlyTrendingOutcome: PropTypes.bool,
@@ -95,7 +90,6 @@ OutcomeCategorical.propTypes = {
 }
 
 OutcomeCategorical.defaultProps = {
-  marginalPrices: [],
   opts: {
     className: '',
     showOnlyTrendingOutcome: false,

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
-import { closeModal } from 'actions/modal'
-import { updateMainnetAddress, requestMainnetAddress } from 'actions/blockchain'
+import { closeModal } from 'store/actions/modal'
+import { updateMainnetAddress, requestMainnetAddress } from 'store/actions/account'
 
 import RegisterWalletUport from 'components/ModalContent/RegisterWalletUport'
 

@@ -6,7 +6,7 @@ import DecimalValue from 'components/DecimalValue'
 import { calcLMSRMarginalPrice } from 'api'
 import TrendingOutcomeScalar from './TrendingOutcomeScalar'
 
-import style from './outcomeScalar.mod.scss'
+import style from './outcomeScalar.scss'
 
 const cx = cn.bind(style)
 
@@ -27,15 +27,17 @@ const OutcomeScalar = ({
     outcomeTokenIndex: 1, // always calc for long when calculating estimation
   })
 
-  const decimals = parseInt(decimalsRaw, 10)
+  const decimals = Math.max(decimalsRaw, 0)
 
-  const upper = Decimal(upperBound).div(10 ** decimals)
   const lower = Decimal(lowerBound).div(10 ** decimals)
+  const upper = Decimal(upperBound).div(10 ** decimals)
 
-  const bounds = upper.sub(lower)
-  let value = Decimal(marginalPrice.toString())
+  const bounds = Decimal(upper).sub(lower)
+  let value = Decimal(marginalPrice)
     .times(bounds)
-    .add(lowerBound)
+    .add(lower)
+
+  const currentValueStyle = { left: `${marginalPrice.mul(100).toFixed(5)}%` }
 
   if (showOnlyWinningOutcome) {
     value = Decimal(winningOutcome).div(10 ** decimals)
@@ -43,32 +45,29 @@ const OutcomeScalar = ({
   }
 
   if (showOnlyTrendingOutcome) {
-    return (
-      <TrendingOutcomeScalar
-        predictedValue={value}
-        decimals={decimals}
-        unit={unit}
-      />
-    )
+    return <TrendingOutcomeScalar predictedValue={value} decimals={decimals} unit={unit} />
   }
 
   return (
     <div className={className}>
       <div className={cx('scalarOutcome')}>
         <div className={cx('outcomeBound', 'lower')}>
-          <DecimalValue value={lowerBound} decimals={decimals} />
-          &nbsp;{unit}
+          {lower.toNumber().toLocaleString()}
+          &nbsp;
+          {unit}
         </div>
         <div className={cx('currentPrediction')}>
           <div className={cx('currentPredictionLine')} />
-          <div className={cx('currentPredictionValue')} style={{ left: `${marginalPrice.mul(100).toFixed(5)}%` }}>
+          <div className={cx('currentPredictionValue')} style={currentValueStyle}>
             <DecimalValue value={value} decimals={decimals} />
-            &nbsp;{unit}
+            &nbsp;
+            {unit}
           </div>
         </div>
         <div className={cx('outcomeBound', 'upper')}>
-          <DecimalValue value={upperBound} decimals={decimals} />
-          &nbsp;{unit}
+          {upper.toNumber().toLocaleString()}
+          &nbsp;
+          {unit}
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import PropTypes from 'prop-types'
-import autobind from 'autobind-decorator'
 import web3 from 'web3'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
@@ -10,17 +10,23 @@ import { Map } from 'immutable'
 import InteractionButton from 'containers/InteractionButton'
 import DecimalValue from 'components/DecimalValue'
 import CurrencyName from 'components/CurrencyName'
-import { Slider, TextInput } from 'components/Form'
-import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm'
+import { Slider, TextInput, MandatoryHint } from 'components/Form'
 import Hairline from 'components/layout/Hairline'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { marketShape, marketShareShape } from 'utils/shapes'
-import { LIMIT_MARGIN_DEFAULT, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
+import { LIMIT_MARGIN, OUTCOME_TYPES, GAS_COST } from 'utils/constants'
 import { weiToEth, normalizeScalarPoint } from 'utils/helpers'
-import { calculateCurrentProbability, calculateEarnings, calculateNewProbability } from './utils'
-import style from './ShareSellView.mod.scss'
+import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/MarketBuySharesForm/utils'
+import {
+  calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount,
+} from './utils'
+import style from './ShareSellView.scss'
 
 const cx = cn.bind(style)
+
+const inputErrorStyle = {
+  whiteSpace: 'nowrap',
+}
 
 class ShareSellView extends Component {
   componentDidUpdate() {
@@ -28,30 +34,35 @@ class ShareSellView extends Component {
     const newShareSellOpened = selectedSellAmount === undefined && share.id !== undefined
 
     if (newShareSellOpened) {
-      this.props.reset()
       // Form reset / reinitialization when switching among shares
       const fullAmount = Decimal(share.balance)
         .div(1e18)
         .toDP(4, 1)
         .toString()
-      initialize({ sellAmount: fullAmount, limitMargin: LIMIT_MARGIN_DEFAULT })
+      initialize({ sellAmount: fullAmount, limitMargin: LIMIT_MARGIN })
     }
   }
 
   @autobind
   validateTokenCount(val) {
-    const { share } = this.props
-    if (!val || !NUMBER_REGEXP.test(val)) {
+    const { share, market } = this.props
+    if (!val || !NUMBER_REGEXP.test(val) || Decimal(val).lt(1e-18)) {
       return 'Invalid amount'
     }
 
     const decimalValue = Decimal(val)
+    const earnings = calculateEarnings(market, share, web3.utils.toWei(val))
+
     if (decimalValue.lt(0)) {
       return "Number can't be negative."
     }
 
     if (decimalValue.gt(Decimal(share.balance).div(1e18))) {
       return "You're trying to sell more than you invested."
+    }
+
+    if (Decimal(0).eq(earnings)) {
+      return 'This transaction is not permitted because it will result in a loss of an outcome token.'
     }
 
     return undefined
@@ -71,10 +82,19 @@ class ShareSellView extends Component {
       isGasPriceFetched,
       isGasCostFetched,
       valid,
+      sellFormHasErrors,
+      error,
+      handleSellShare,
     } = this.props
 
     const sellSharesGasCost = gasCosts.get('sellShares')
-    const submitDisabled = invalid || submitting
+    const submitDisabled = invalid || submitting || sellFormHasErrors
+    let submitDisabledReason
+    if (invalid) {
+      submitDisabledReason = 'Your sell amount is invalid'
+    } else if (sellFormHasErrors) {
+      submitDisabledReason = error
+    }
 
     let selectedSellAmountWei
     try {
@@ -94,7 +114,7 @@ class ShareSellView extends Component {
     let newMarginalPrices
     let newScalarPredictedValue
 
-    if (market.event.type === OUTCOME_TYPES.SCALAR) {
+    if (market.type === OUTCOME_TYPES.SCALAR) {
       newMarginalPrices = [new Decimal(1).sub(currentProbability), newProbability]
       newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
     }
@@ -103,7 +123,7 @@ class ShareSellView extends Component {
     if (valid) {
       newTokenBalance = currentTokenBalance.sub(selectedSellAmountWei)
       earnings = calculateEarnings(market, share, selectedSellAmountWei)
-      newNetOutcomeTokensSold = market.netOutcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
+      newNetOutcomeTokensSold = market.outcomeTokensSold.map((outcomeTokenAmount, outcomeTokenIndex) => {
         if (outcomeTokenIndex === share.outcomeToken.index && !currentTokenBalance.sub(newTokenBalance).isZero()) {
           return Decimal(outcomeTokenAmount)
             .sub(currentTokenBalance.sub(newTokenBalance))
@@ -115,17 +135,23 @@ class ShareSellView extends Component {
       })
 
       try {
-        newProbability = calculateNewProbability(market, share, newNetOutcomeTokensSold)
+        newProbability = calculateNewProbability(market, share, newNetOutcomeTokensSold.toArray())
       } catch (e) {
         console.error(e)
       }
 
-      if (market.event.type === OUTCOME_TYPES.SCALAR) {
+      if (market.type === OUTCOME_TYPES.SCALAR) {
         newMarginalPrices = [new Decimal(1).sub(newProbability), newProbability]
         newScalarPredictedValue = normalizeScalarPoint(newMarginalPrices, market)
       }
     }
-    const submitHandler = handleSubmit(() => this.props.handleSellShare(share.id, selectedSellAmount, earnings))
+    const submitHandler = handleSubmit(() => handleSellShare(share.id, selectedSellAmount, earnings))
+
+    const hairlineStyle = {
+      backgroundColor: '#d5d4d6',
+      height: '0.5px',
+      marginTop: '40px',
+    }
 
     return (
       <tr className={cx('sellView')}>
@@ -134,22 +160,26 @@ class ShareSellView extends Component {
             <form onSubmit={submitHandler}>
               <div className={cx('row', 'sellRow')}>
                 <div className={cx('col-md-4', 'sellColumn')}>
-                  <label htmlFor="sellAmount">Amount to Sell</label>
+                  <label htmlFor="sellAmount">
+                    Amount to Sell
+                    <MandatoryHint />
+                  </label>
                   <Field
                     component={TextInput}
                     name="sellAmount"
                     placeholder="Enter Token Amount"
                     className={cx('sharesSellAmount')}
-                    validate={this.validateTokenCount}
+                    errorStyle={inputErrorStyle}
                   />
                 </div>
 
-                {market.event.type === 'SCALAR' ? (
+                {market.type === 'SCALAR' ? (
                   <div className={cx('col-md-4', 'sellColumn')}>
                     <label>New predicted value</label>
                     <span>
-                      <DecimalValue value={newScalarPredictedValue} />&nbsp;
-                      <span>{market.eventDescription.unit}</span>
+                      <DecimalValue value={newScalarPredictedValue} />
+                      &nbsp;
+                      <span>{market.bounds.unit}</span>
                     </span>
                   </div>
                 ) : (
@@ -164,27 +194,25 @@ class ShareSellView extends Component {
                   <label>Gas costs</label>
                   <span>
                     {isGasPriceFetched && isGasCostFetched(GAS_COST.SELL_SHARES) ? (
-                      <React.Fragment>
-                        <DecimalValue value={gasCostEstimation} decimals={5} />&nbsp;
-                        <CurrencyName tokenAddress={market.event.collateralToken} />
-                      </React.Fragment>
+                      <>
+                        <DecimalValue value={gasCostEstimation} decimals={5} />
+                        &nbsp;ETH
+                      </>
                     ) : (
                       <IndefiniteSpinner width={16} height={16} />
                     )}
                   </span>
                 </div>
               </div>
-              <Hairline />
+              <Hairline style={hairlineStyle} />
               <div className={cx('row', 'sellRow')}>
-                <div className={cx('col-md-2')}>
+                <div className={cx('col-md-4')} style={{ paddingLeft: 8 }}>
                   <label htmlFor="limitMargin">Limit Margin</label>
-                </div>
-                <div className={cx('col-md-3')}>
                   <Field
                     name="limitMargin"
                     component={Slider}
                     className={cx('formSlider')}
-                    placeholder={LIMIT_MARGIN_DEFAULT}
+                    placeholder={LIMIT_MARGIN}
                     min={0}
                     max={5}
                     unit="%"
@@ -193,17 +221,20 @@ class ShareSellView extends Component {
                     light
                   />
                 </div>
+                <div className={cx('col-md-2')} />
                 <div className={cx('col-md-4', 'sellColumn')}>
                   <div className={cx('sellColumnInfo')}>
                     <label>Earnings</label>
                     <span>
-                      <DecimalValue value={earnings} />&nbsp;
-                      <CurrencyName tokenAddress={market.event.collateralToken} />
+                      <DecimalValue value={earnings} />
+                      &nbsp;
+                      <CurrencyName tokenAddress={market.collateralToken} />
                     </span>
                   </div>
                   <InteractionButton
-                    loading={submitting || market.local}
+                    loading={submitting}
                     disabled={submitDisabled}
+                    error={submitDisabledReason}
                     className={cx('btn', 'btn-block', 'btn-primary')}
                     type="submit"
                   >
@@ -236,6 +267,7 @@ ShareSellView.propTypes = {
   selectedSellAmount: PropTypes.string,
   handleSellShare: PropTypes.func,
   share: marketShareShape,
+  sellFormHasErrors: PropTypes.bool,
 }
 
 ShareSellView.defaultProps = {
@@ -246,10 +278,13 @@ ShareSellView.defaultProps = {
   handleSellShare: () => {},
   share: {},
   isGasPriceFetched: false,
+  sellFormHasErrors: false,
 }
 
-const FORM = {
+export const FORM = {
   form: 'marketMyShares',
+  validate: validateTokenCount,
+  destroyOnUnmount: true,
 }
 
 export default reduxForm(FORM)(ShareSellView)

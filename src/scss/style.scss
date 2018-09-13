@@ -1,6 +1,24 @@
 @import './icons.scss';
 @import './vars.scss';
 
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 300;
+  src: url('/assets/fonts/Montserrat-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 400;
+  src: url('/assets/fonts/Montserrat-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 500;
+  src: url('/assets/fonts/Montserrat-Medium.ttf') format('truetype');
+}
+
 * {
   box-sizing: border-box;
 }
@@ -39,20 +57,6 @@ a {
   }
 }
 
-label {
-  display: block;
-  text-transform: uppercase;
-  margin: 20px 0 6px 0;
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: #92979b;
-  font-weight: 400;
-
-  &:empty {
-    display: none;
-  }
-}
-
 textarea {
   resize: none;
 }
@@ -72,9 +76,16 @@ input:not([type='submit']):not([type='file']):not([type='radio']):not([type='che
   }
 }
 
-.inputField {
-  margin-bottom: 30px;
-  position: relative;
+label {
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #92979b;
+  font-weight: 400;
+
+  &:empty {
+    display: none;
+  }
 }
 
 .btn,

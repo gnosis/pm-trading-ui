@@ -1,14 +1,10 @@
-import { receiveEntities } from 'actions/entities'
-import { fetchMarketTradesForAccount } from '../../api'
+import { hexWithoutPrefix } from 'utils/helpers'
+import { requestFromRestAPI } from 'api/utils/fetch'
+import { processTradesResponse } from 'store/actions/trades'
 
-/**
- * Requests users trades (tradehistory) for a specific account on a market from GnosisDB.
- * @param {string} marketAddress - Market Address
- * @param {string} accountAddress - Tradeowner Address
- */
-const requestMarketTradesForAccount = (marketAddress, accountAddress) => async (dispatch) => {
-  const payload = await fetchMarketTradesForAccount(marketAddress, accountAddress)
-  return dispatch(receiveEntities(payload))
+export default (marketAddress, account) => async (dispatch) => {
+  const normalizedAccount = hexWithoutPrefix(account)
+  const normalizedMarket = hexWithoutPrefix(marketAddress)
+  const response = await requestFromRestAPI(`/markets/${normalizedMarket}/trades/${normalizedAccount}`)
+  processTradesResponse(response, dispatch)
 }
-
-export default requestMarketTradesForAccount

@@ -1,4 +1,8 @@
 import PropTypes from 'prop-types'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+
+import { CategoricalMarketRecord, ScalarMarketRecord } from 'store/models/market'
+
 import { ETHEREUM_NETWORK, WALLET_PROVIDER } from 'integrations/constants'
 import { TRANSACTION_COMPLETE_STATUS } from './constants'
 
@@ -77,3 +81,10 @@ export const ReactRouterMatchShape = PropTypes.shape({
   url: PropTypes.string,
   params: PropTypes.object,
 })
+
+export const marketRecordShape = PropTypes.oneOfType([
+  ImmutablePropTypes.recordOf(CategoricalMarketRecord),
+  ImmutablePropTypes.recordOf(ScalarMarketRecord),
+])
+
+export const marketRecordListShape = ImmutablePropTypes.listOf(marketRecordShape)

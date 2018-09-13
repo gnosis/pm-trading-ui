@@ -7,7 +7,7 @@ import { upperFirst } from 'lodash'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import { isGnosisInitialized } from 'selectors/blockchain'
+import { isGnosisInitialized } from 'store/selectors/blockchain'
 import {
   isConnectedToCorrectNetwork,
   isOnWhitelist,
@@ -50,23 +50,27 @@ class InteractionButton extends Component {
       targetNetworkId,
       loading,
       termsNotRequiredOrAccepted,
+      disableLegalCheck,
+      disableWalletCheck,
+      error,
     } = this.props
+    const { loading: loadingState } = this.state
 
     if (whitelistRequired && !whitelisted) {
       return null
     }
 
     // "you need to accept our ToS"
-    const termsAndConditionsError = !termsNotRequiredOrAccepted
+    const termsAndConditionsError = !termsNotRequiredOrAccepted && !disableLegalCheck
 
     // "you need a wallet"
-    const walletError = !hasWallet || !gnosisInitialized
+    const walletError = !disableWalletCheck && (!hasWallet || !gnosisInitialized)
 
     // "you are on the wrong chain"
     const networkError = !correctNetwork
 
     // loading from props or uninitialized gnosisjs
-    const isLoading = loading || !gnosisInitialized || this.state.loading
+    const isLoading = loading || !gnosisInitialized || loadingState
 
     // disabled from props or wallet error or network error
     const isDisabled = disabled || walletError || networkError
@@ -110,9 +114,29 @@ class InteractionButton extends Component {
       )
     }
 
+    // disabled from props (passed)
+    if (disabled && !!error) {
+      // button is wrapped in span because of https://github.com/react-component/tooltip/issues/18
+      // https://github.com/ant-design/ant-design/commit/f5d697988a9e130379f7506eafee85acca3c030b#diff-186839a30bf8b9d67a4b10bf7c091d5fR88
+      const button = React.cloneElement(btn, {
+        style: {
+          pointerEvents: 'none',
+        },
+      })
+      return (
+        <Tooltip overlay={error}>
+          <span style={{
+            display: 'inline-block', cursor: 'not-allowed', width: '100%', height: '100%',
+          }}
+          >{button}
+          </span>
+        </Tooltip>
+      )
+    }
+
     if (termsAndConditionsError) {
       return (
-        <Tooltip overlay="You need to accept our terms and conditions before you can with this application.">
+        <Tooltip overlay="You need to accept our terms and conditions before you can interact with this application.">
           {btn}
         </Tooltip>
       )
@@ -125,7 +149,9 @@ class InteractionButton extends Component {
     }
 
     if (networkError) {
-      const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst((ETHEREUM_NETWORK_IDS[targetNetworkId] || '').toLowerCase())} network.`
+      const wrongNetworkText = `You are connected to the wrong ethereum network. You can only interact using ${upperFirst(
+        (ETHEREUM_NETWORK_IDS[targetNetworkId] || '').toLowerCase(),
+      )} network.`
       return <Tooltip overlay={wrongNetworkText}>{btn}</Tooltip>
     }
 
@@ -147,6 +173,9 @@ InteractionButton.propTypes = {
   loading: PropTypes.bool,
   targetNetworkId: PropTypes.number,
   termsNotRequiredOrAccepted: PropTypes.bool,
+  disableLegalCheck: PropTypes.bool,
+  disableWalletCheck: PropTypes.bool,
+  error: PropTypes.node,
 }
 
 InteractionButton.defaultProps = {
@@ -162,7 +191,10 @@ InteractionButton.defaultProps = {
   disabled: false,
   loading: false,
   termsNotRequiredOrAccepted: false,
+  disableLegalCheck: false,
+  disableWalletCheck: false,
   targetNetworkId: 0,
+  error: '',
 }
 
 export default connect(state => ({

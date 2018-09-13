@@ -9,54 +9,33 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import moment from 'moment'
 import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
+import { RESOLUTION_TIME } from 'utils/constants'
 import MarketResolution from './MarketResolution'
 import MarketStatus from './MarketStatus'
 import MarketTrading from './MarketTrading'
 
-import css from './Market.mod.scss'
+import css from './Market.scss'
 
 const cx = classNames.bind(css)
-
-const onResolve = event => event.stopPropagation()
-
-const ResolveButton = ({ url }) => (
-  <div className={cx('resolve')}>
-    <NavLink to={url} onClick={onResolve}>
-      Resolve
-    </NavLink>
-  </div>)
-
-ResolveButton.propTypes = {
-  url: PropTypes.string,
-}
-
-ResolveButton.defaultProps = {
-  url: '',
-}
 
 class Market extends React.PureComponent {
   @autobind
   handleViewMarket() {
-    this.props.viewMarket(this.props.address)
+    const { viewMarket, address } = this.props
+
+    viewMarket(address)
   }
 
   render() {
     const { market } = this.props
     const {
-      address,
       resolved,
       closed,
-      isOwner,
       title,
       resolution,
       volume,
       collateralToken,
     } = this.props
-
-    const showResolveButton = isOwner && !resolved
-    const resolveUrl = `/markets/${address}/resolve`
     const resolutionDate = moment(resolution).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)
     const tradingVolume = decimalToText(new Decimal(volume).div(1e18))
 
@@ -68,8 +47,6 @@ class Market extends React.PureComponent {
     } : {}
 
     const outcomes = market.outcomes ? market.outcomes.map(outcome => outcome.name).toArray() : []
-
-    const winningOutcome = market.type === OUTCOME_TYPES.CATEGORICAL ? market.outcomes.keyOf(market.winningOutcome) : market.winningOutcome
 
     return (
       <button
@@ -90,7 +67,7 @@ class Market extends React.PureComponent {
           resolution={market.resolution}
           funding={market.funding}
           outcomes={outcomes}
-          winningOutcome={winningOutcome}
+          winningOutcome={market.winningOutcome}
           {...bounds}
         />
         <div className={cx('info', 'row')}>

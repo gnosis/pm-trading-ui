@@ -1,6 +1,6 @@
-$font-color-light: #182a36;
-$font-color-dark: #87949c;
-$font-color-muted: lighten($font-color-dark, 10%);
+$font-color-dark: #182a36;
+$font-color-light: #87949c;
+$font-color-muted: lighten($font-color-light, 10%);
 $font-color-bright: #f0f1f1;
 
 $brand-primary: #00a6c4;
@@ -81,11 +81,15 @@ $paddings-inputs: 5px 0;
     transform: rotate(-45deg);  
   }
 
-  &:hover {
+  &:hover, &:focus {
     &::after, &::before {
       background-color: $active-highlight;
       background-color: $active-highlight;
     }
+  }
+
+  &:focus {
+    outline: none;
   }
 }
 

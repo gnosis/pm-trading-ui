@@ -1,9 +1,10 @@
 import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
 import OutcomeCategorical from 'components/Outcome/OutcomeCategorical'
 import OutcomeScalar from 'components/Outcome/OutcomeScalar'
 import WinningOutcome from 'components/Outcome/WinningOutcome'
 import { OUTCOME_TYPES } from 'utils/constants'
-import PropTypes from 'prop-types'
 
 const Outcome = ({
   resolved,
@@ -20,33 +21,32 @@ const Outcome = ({
   funding,
   opts = { showOnlyTrendingOutcome: false },
 }) => {
-  let outcomeComponent =
-    type === OUTCOME_TYPES.CATEGORICAL ? (
-      <OutcomeCategorical
-        opts={opts}
-        resolved={resolved}
-        outcomeTokensSold={outcomeTokensSold}
-        resolution={resolution}
-        funding={funding}
-        outcomes={outcomes}
-        marginalPrices={marginalPrices}
-        winningOutcome={winningOutcome}
-      />
-    ) : (
-      <OutcomeScalar
-        opts={opts}
-        upperBound={upperBound}
-        lowerBound={lowerBound}
-        unit={unit}
-        decimals={decimals}
-        resolved={resolved}
-        outcomeTokensSold={outcomeTokensSold}
-        resolution={resolution}
-        funding={funding}
-        marginalPrices={marginalPrices}
-        winningOutcome={winningOutcome}
-      />
-    )
+  let outcomeComponent = type === OUTCOME_TYPES.CATEGORICAL ? (
+    <OutcomeCategorical
+      opts={opts}
+      resolved={resolved}
+      outcomeTokensSold={outcomeTokensSold}
+      resolution={resolution}
+      funding={funding}
+      outcomes={outcomes}
+      marginalPrices={marginalPrices}
+      winningOutcome={winningOutcome}
+    />
+  ) : (
+    <OutcomeScalar
+      opts={opts}
+      upperBound={upperBound}
+      lowerBound={lowerBound}
+      unit={unit}
+      decimals={decimals}
+      resolved={resolved}
+      outcomeTokensSold={outcomeTokensSold}
+      resolution={resolution}
+      funding={funding}
+      marginalPrices={marginalPrices}
+      winningOutcome={winningOutcome}
+    />
+  )
 
   if (resolved) {
     outcomeComponent = (
@@ -74,12 +74,12 @@ Outcome.propTypes = {
   lowerBound: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   unit: PropTypes.string,
   decimals: PropTypes.number,
-  outcomeTokensSold: PropTypes.array,
+  outcomeTokensSold: PropTypes.array.isRequired,
   resolution: PropTypes.string,
   funding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  outcomes: PropTypes.arrayOf(PropTypes.string),
+  outcomes: PropTypes.array.isRequired,
   marginalPrices: PropTypes.arrayOf(PropTypes.string),
-  winningOutcome: PropTypes.number,
+  winningOutcome: PropTypes.oneOfType([PropTypes.number, ImmutablePropTypes.record]),
   opts: PropTypes.shape({
     showOnlyTrendingOutcome: PropTypes.bool,
     showDate: PropTypes.bool,

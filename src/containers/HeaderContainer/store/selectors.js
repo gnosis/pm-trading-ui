@@ -16,7 +16,7 @@ import {
   getFeatureConfig,
 } from 'utils/features'
 
-import { getCollateralToken } from 'selectors/blockchain'
+import { getCollateralToken } from 'store/selectors/blockchain'
 
 import { meSelector } from 'routes/Scoreboard/store/selectors'
 
@@ -49,6 +49,7 @@ export default (state) => {
     gameGuideURL: gameGuideConfig.url,
     tokenAddress: collateralToken.address,
     tokenBalance: collateralToken.balance,
+    tokenSymbol: collateralToken.symbol,
     acceptedTOS: hasAcceptedTermsAndConditions(state),
   }
 }

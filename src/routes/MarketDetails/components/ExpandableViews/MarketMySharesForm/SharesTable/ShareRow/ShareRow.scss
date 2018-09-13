@@ -1,0 +1,14 @@
+@import '~style/vars.scss';
+
+.ShareSellButton {
+    color: $link-color !important;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    border: none;
+    background: transparent;
+
+    &:focus {
+        outline: none;
+        font-weight: bold;
+    }
+  }

@@ -4,16 +4,20 @@ import { routerMiddleware } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory'
 // import RavenIntegration from 'utils/raven'
 
-import Blockchain from 'middlewares/Blockchain'
-import Providers from 'middlewares/Providers'
+import Blockchain from 'store/middlewares/Blockchain'
+import Providers from 'store/middlewares/Providers'
 // import Intercom from 'middlewares/Intercom'
-import LocalStorageDump from 'middlewares/LocalStorageDump'
-import LocalStorageLoad from 'middlewares/LocalStorageLoad'
-import SessionStorageDump from 'middlewares/SessionStorageDump'
-import SessionStorageLoad from 'middlewares/SessionStorageLoad'
-import Notifications from 'middlewares/Notifications'
 
-import reducer from 'reducers'
+import {
+  LocalStorageLoad,
+  LocalStorageDump,
+  SessionStorageLoad,
+  SessionStorageDump,
+} from 'store/middlewares/Storage'
+
+import Notifications from 'store/middlewares/Notifications'
+
+import reducer from 'store/reducers'
 
 export const history = createHistory()
 

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import classNames from 'classnames/bind'
 
-import { isMarketClosed } from 'store/utils/marketStatus'
+import { isMarketClosedOrResolved } from 'store/utils/marketStatus'
 
 import Market from './Market'
-import css from './Markets.mod.scss'
+import css from './Markets.scss'
 
 const cx = classNames.bind(css)
 
@@ -17,7 +17,7 @@ const Markets = ({ markets, userAccount, viewMarket }) => (
     </div>
     <div>
       {markets.map((market) => {
-        const closed = isMarketClosed(market.stage, market.resolution, market.resolved)
+        const closedOrResolved = isMarketClosedOrResolved(market)
         const isOwner = !!(userAccount && market.creator === userAccount)
 
         return (
@@ -26,7 +26,7 @@ const Markets = ({ markets, userAccount, viewMarket }) => (
             market={market}
             address={market.address}
             resolved={market.resolved}
-            closed={closed}
+            closed={closedOrResolved}
             isOwner={isOwner}
             title={market.title}
             resolution={market.resolution}

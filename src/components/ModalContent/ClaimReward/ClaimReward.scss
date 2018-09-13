@@ -1,0 +1,108 @@
+@import '~style/vars.scss';
+
+.claimRewards {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .claimContainer {
+    width: 520px;
+    height: 350px;
+    border-radius: 9px;
+    background-color: #ffffff;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 45px 28px 28px 30px;
+    text-align: center;
+    color: #666;
+
+    .annotation {
+      margin: 15px 0 0 0;
+      font-size: 14px;
+      line-height: 1.5;
+
+      .rewardInfo {
+        font-weight: 600;
+        color: #90712b;
+      }
+
+      .network {
+        text-decoration: underline;
+      }
+
+      .faqLink {
+        text-decoration: underline;
+        color: #00a5c5;
+      }
+    }
+
+    .heading {
+      font-size: 21px;
+      font-weight: 500;
+      text-align: center;
+      color: #333333;
+    }
+
+    .currentNetworkContainer {
+      border-radius: 3px;
+      background-color: #f0f1f1;
+      padding: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0 20px 0;
+
+
+      .network {
+        font-weight: bold;
+        margin-left: 5px;
+        color: #333;
+
+        &.wrongNetwork {
+          color: red;
+        }
+      }
+    }
+
+    .gasCosts {
+      font-size: 13px;
+      margin-top: 0;
+      .gasEstimation {
+        color: #333333;
+      }
+
+      svg {
+        position: relative;
+        top: 3px;
+      }
+    }
+
+
+  }
+
+  .claim {
+    width: 220px;
+  }
+
+  .closeButton {
+    @include closeButton(32px, 5px);
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+
+    &:hover {
+      &::after,
+      &::before {
+        background-color: #fff;
+      }
+    }
+  }
+}

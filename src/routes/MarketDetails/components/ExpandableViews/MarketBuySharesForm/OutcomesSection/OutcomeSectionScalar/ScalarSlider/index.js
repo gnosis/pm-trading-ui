@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import cn from 'classnames/bind'
 import { decimalToText } from 'components/DecimalValue'
-import style from './scalarSlider.mod.scss'
+import style from './scalarSlider.scss'
 
 const cx = cn.bind(style)
 
@@ -14,11 +14,10 @@ const ScalarSlider = ({
   const bigUpperBound = new Decimal(upperBound)
 
   // for the value we show atleast 2 decimalplaces, so users can see a change when they enter an investment
-  const displayDecimals = Math.max(decimals, 2)
-
-  // current value
+  const displayDecimals = Math.max(decimals, 0)
   const bounds = bigUpperBound.sub(bigLowerBound).div(10 ** decimals)
 
+  // current value
   const value = new Decimal(marginalPriceCurrent).mul(bounds).add(bigLowerBound.div(10 ** displayDecimals))
   const percentage = new Decimal(marginalPriceCurrent).mul(100)
 
@@ -33,7 +32,7 @@ const ScalarSlider = ({
     <div className={cx('scalarSlider')}>
       <div className={cx('inner')}>
         <div className={cx('lowerBound')}>
-          <div className={cx('boundValue')}>{`${bigLowerBound.div(10 ** decimals).toFixed(0)} ${unit}`}</div>
+          <div className={cx('boundValue')}>{`${parseInt(lowerBound, 10).toLocaleString()} ${unit}`}</div>
           <div className={cx('boundLabel')}>Lower Bound</div>
         </div>
         <div className={cx('bar')} title="Please enter a value on the right!">
@@ -51,7 +50,7 @@ const ScalarSlider = ({
           </div>
         </div>
         <div className={cx('upperBound')}>
-          <div className={cx('boundValue')}>{`${bigUpperBound.div(10 ** decimals).toFixed(0)} ${unit}`}</div>
+          <div className={cx('boundValue')}>{`${parseInt(upperBound, 10).toLocaleString()} ${unit}`}</div>
           <div className={cx('boundLabel')}>Upper Bound</div>
         </div>
       </div>

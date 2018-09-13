@@ -1,0 +1,30 @@
+{
+  "gnosisdb": {
+    "protocol": "https",
+    "host": "tradingdb.staging.gnosisdev.com",
+    "port": 443
+  },
+  "ethereum": {
+    "protocol": "https",
+    "host": "rinkeby.infura.io",
+    "port": 443
+  },
+  "htmlConfig": {
+    "title": "Gnosis Trading Interface"
+  },
+  "whitelist": {
+    "0x9eab578556de5782445ec036f25a41902ba19eeb": "Gnosis",
+    "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail"
+  },
+  "thirdparty": {
+    "googleAnalytics": {
+      "enabled": false
+    }
+  },
+  "providers": {
+    "default": "METAMASK"
+  },
+  "legalCompliance": {
+    "enabled": true
+  }
+}

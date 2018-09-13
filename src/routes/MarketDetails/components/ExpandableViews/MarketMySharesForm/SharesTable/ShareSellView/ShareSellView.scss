@@ -1,0 +1,60 @@
+@import '../../../../../../../components/Form/Slider.scss';
+@import '~style/vars.scss';
+
+.sellView {
+  td {
+    border-top: 0 !important;
+  }
+}
+
+.sellViewContainer {
+  padding-left: 36px;
+}
+
+.sellRow {
+  margin: 10px 0px 0px;
+}
+
+.sellColumn {
+  label {
+    margin: 20px 0 6px 0;
+    display: block;
+  }
+
+  padding: 0 8px;
+}
+
+.sellColumnInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  padding: 7px 0px;
+  label {
+    display: inline;
+    margin: 0;
+    font-size: 14px;
+    padding: 0px 7px;
+    font-weight: bold;
+  }
+}
+
+.sharesSellAmount {
+  input {
+    border-bottom-color: #d5d4d6;
+    border-bottom-width: 1px;
+    border-bottom-style: inset;
+  }
+}
+
+.sellErrorField {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.sellAmount {
+  input {
+    font-size: 14px;
+    border-bottom-color: darken($bg-color-muted, 10%) !important;
+  }
+}

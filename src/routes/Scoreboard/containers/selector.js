@@ -1,7 +1,8 @@
 import { createSelector, createStructuredSelector } from 'reselect'
-import { getCurrentAccount } from 'integrations/store/selectors'
-import { firstTournamentUsersSelectorAsList, meSelector, tournamentMainnetRegistryAddress } from '../store/selectors'
-import { rankSelector } from 'components/Dashboard/Metrics/selector'
+import { getCurrentAccount, getRegisteredMainnetAddress } from 'integrations/store/selectors'
+import { rankSelector } from 'routes/Scoreboard/store/selectors'
+import { hasClaimedReward } from 'containers/Modals/ModalClaimReward/selectors'
+import { firstTournamentUsersSelectorAsList, meSelector } from '../store/selectors'
 
 const usersSelector = createSelector(firstTournamentUsersSelectorAsList, meSelector, (firstUsers, me) => {
   if (!me) {
@@ -20,7 +21,8 @@ const usersSelector = createSelector(firstTournamentUsersSelectorAsList, meSelec
 
 export default createStructuredSelector({
   data: usersSelector,
-  mainnetAddress: tournamentMainnetRegistryAddress,
+  mainnetAddress: getRegisteredMainnetAddress,
   myAccount: getCurrentAccount,
   rank: rankSelector,
+  hasClaimedReward,
 })

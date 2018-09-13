@@ -1,9 +1,8 @@
-import { getTokenBalance } from 'api'
-import { setConnectionStatus } from 'actions/blockchain'
+import { setConnectionStatus } from 'store/actions/blockchain'
 import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import { fetchTournamentUserData } from 'routes/Scoreboard/store/actions'
-import { weiToEth, hexWithoutPrefix } from 'utils/helpers'
+import { hexWithoutPrefix } from 'utils/helpers'
 import { getProviderIntegrationConfig } from 'utils/features'
 import initUportConnector, { connect, connectorLogOut, isUserConnected } from './connector'
 
@@ -17,7 +16,9 @@ class Uport extends InjectedWeb3 {
    * This allows "fallback providers" like a remote ethereum host to be used as a last resort.
    */
   static providerPriority = 100
+
   static watcherInterval = 5000
+
   static USE_NOTIFICATIONS = notificationsEnabled
 
   constructor() {

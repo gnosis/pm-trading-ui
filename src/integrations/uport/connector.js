@@ -5,14 +5,14 @@ import { getProviderIntegrationConfig, isFeatureEnabled, getFeatureConfig } from
 import Bold from 'components/layout/Bold'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
+import { notificationsEnabled } from 'integrations/uport'
 import { isValid as isValidPushNotificaiton } from './uportNotifications'
 import { isValid as isValidQrCredential } from './uportQr'
-import { notificationsEnabled } from './connector'
 
 const termsOfUseConfig = getFeatureConfig('termsOfUse')
 
 const {
-  clientId = '', appName = '', network = 0, privateKey = '',
+  clientId, appName, network, privateKey,
 } = getProviderIntegrationConfig('uport')
 const tournamentEnabled = isFeatureEnabled('tournament')
 
@@ -33,18 +33,24 @@ const LoginUport = () => (
   <Block id={UPORT_QR_TEXT}>
     <Paragraph style={UportStyle}>
       {'Log into '}
-      <Bold>{appName}</Bold>
-    </Paragraph>
-    <Paragraph size="small">
-      By logging in via uPort, <br />
-      {` you agree to ${appName}'s `}
       <Bold>
-        {/* <Link>s rendered outside of a router context cannot navigate */}
-        <a style={TermsStyle} href={termsOfUseConfig.url} target="_blank">
-          {'terms of use'}
-        </a>
+        {appName}
       </Bold>
     </Paragraph>
+    {!!termsOfUseConfig.url && (
+      <Paragraph size="small">
+        By logging in via uPort,
+        {' '}
+        <br />
+        {` you agree to ${appName}'s `}
+        <Bold>
+          {/* <Link>s rendered outside of a router context cannot navigate */}
+          <a style={TermsStyle} href={termsOfUseConfig.url} target="_blank">
+            {'terms of use'}
+          </a>
+        </Bold>
+      </Paragraph>
+    )}
   </Block>
 )
 
@@ -58,12 +64,14 @@ export const connect = () => {
       network: 'rinkeby',
       signer: SimpleSigner('80b6d12233a5dc01ea46ebf773919f2418b44412c6318d0f2b676b3a1c6b634a'),
     })
-  } else {
+  } else if (clientId && network && privateKey) {
     uport = new Connect(appName, {
       clientId,
       network,
       signer: SimpleSigner(privateKey),
     })
+  } else {
+    console.error('No options were specified for uPort')
   }
 }
 

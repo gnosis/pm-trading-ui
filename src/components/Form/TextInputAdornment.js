@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import className from 'classnames/bind'
 
-import styles from './TextInputAdornment.mod.scss'
+import styles from './TextInputAdornment.scss'
 
 const cx = className.bind(styles)
 

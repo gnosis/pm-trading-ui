@@ -1,0 +1,61 @@
+@import "~style/vars.scss";
+
+.wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+
+  border-bottom: 1px solid $bg-color-muted;
+}
+
+.formTextInput {
+  &.underlined {
+    input {
+      border-color: $font-color-dark;
+      border-bottom-style: dotted;
+      border-bottom-width: 2px;
+      padding-bottom: 10px;
+    }
+  }
+
+  input {
+    -webkit-appearance: none !important;
+    border: none;
+    background: none;
+    color: black;
+    transition: border-bottom-color 0.2s ease, color 0.2s ease;
+
+    font-size: $font-size-inputs;
+    letter-spacing: $letter-spacing-inputs;
+    font-weight: $font-weight-inputs;
+    padding: $paddings-inputs;
+
+    &:active,
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  label {
+    margin: 20px 0 6px 0;
+    display: block;
+  }
+
+  &.error {
+    input {
+      color: $active-highlight-error;
+    }
+
+    .wrapper {
+      border-bottom-color: lighten($color: $active-highlight-error, $amount: 30);
+      margin-bottom: 5px;
+    }
+
+    label {
+      margin: 20px 0 6px 0;
+      letter-spacing: 1px;
+      display: block;
+      color: $active-highlight-error;
+    }
+  }
+}

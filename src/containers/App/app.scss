@@ -1,0 +1,19 @@
+@import "~style/vars.scss";
+
+$footer-bottom: 60px;
+
+.appContainer {
+  position: relative;
+  background-color: $bg-color;
+  height: calc(100vh - #{$footer-bottom});
+  overflow-y: scroll;
+
+  .loader-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+}

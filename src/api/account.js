@@ -1,5 +1,5 @@
 import { weiToEth, hexWithPrefix } from 'utils/helpers'
-import Gnosis from '@gnosis.pm/gnosisjs/'
+import Gnosis from '@gnosis.pm/pm-js/'
 import * as api from 'api'
 
 const zeroAccount = '0x0000000000000000000000000000000000000000'

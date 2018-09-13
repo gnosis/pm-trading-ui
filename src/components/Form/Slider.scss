@@ -1,0 +1,120 @@
+@import "~style/vars.scss";
+
+@mixin slider($color) {
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+  height: 5px;
+  margin: 10px 0;
+  background-color: $color;
+  line-height: 12px;
+}
+
+@mixin sliderCrossBrowser($color) {
+  &::slider-runnable-track {
+    @include slider($color);
+  }
+  &::-webkit-slider-runnable-track {
+    @include slider($color);
+  }
+  &::-moz-range-track {
+    @include slider($color);
+  }
+  &::-ms-track {
+    @include slider($color);
+  }
+}
+
+@mixin thumb($bg-color, $border-color) {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: $bg-color;
+  line-height: 0;
+  vertical-align: middle;
+  margin-top: -6px;
+  border: 4px solid $border-color;
+  border-radius: 9999px;
+}
+
+@mixin thumbCrossBrowser($bg-color, $border-color) {
+  &::slider-thumb {
+    @include thumb($bg-color, $border-color);
+  }
+  &::-webkit-slider-thumb {
+    @include thumb($bg-color, $border-color);
+  }
+  &::-moz-range-thumb {
+    @include thumb($bg-color, $border-color);
+  }
+  &::-ms-thumb {
+    @include thumb($bg-color, $border-color);
+  }
+}
+
+.formSlider {
+  &.light {
+    input[type="range"] {
+      @include sliderCrossBrowser($bg-color);
+  
+      @include thumbCrossBrowser($active-highlight, $bg-color);
+    }
+  }
+
+  input[type="range"] {
+    width: auto;
+    display: inline-block;
+    background-color: transparent;
+
+    margin: 0 8px;
+
+    appearance: none;
+    vertical-align: middle;
+
+    @include sliderCrossBrowser($bg-color-muted);
+
+    @include thumbCrossBrowser($active-highlight, $bg-color-muted);
+  }
+
+  &.error {
+    .formSliderLabel {
+      color: $active-highlight-error;
+    }
+    color: $active-highlight-error;
+  }
+}
+
+.formSliderValueInput {
+  text-align: center;
+  text-transform: none;
+  color: $font-color-dark;
+}
+
+.formSliderContainer {
+  position: relative;
+  text-align: center;
+
+  &.showDefaultUnit:after {
+    content: "%";
+    position: absolute;
+    display: inline-block;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-56%);
+  }
+}
+
+.formSliderLabel {
+  &.min,
+  &.max {
+    display: inline-block;
+    text-transform: none;
+    color: $font-color-dark;
+    margin: 0;
+  }
+}
+
+.formSliderInputContainer {
+  display: flex;
+  align-items: center;
+}

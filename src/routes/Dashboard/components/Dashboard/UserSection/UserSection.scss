@@ -1,0 +1,9 @@
+@import '~style/vars.scss';
+
+.userSection {
+  padding: 40px 0 66px 0;
+
+  background-color: $bg-color-dark;
+  min-height: 200px;
+  color: $font-color-bright;
+}

@@ -8,7 +8,7 @@ import Block from 'components/layout/Block'
 import AddressSection from './AddressSection'
 import CheckboxIcon from '../../assets/ok.svg'
 
-import * as css from './RewardClaim.mod.scss'
+import * as css from './RewardClaim.scss'
 
 const cx = classNames.bind(css)
 

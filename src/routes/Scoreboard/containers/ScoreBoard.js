@@ -1,4 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes'
+import { List } from 'immutable'
 import PropTypes from 'prop-types'
 import * as React from 'react'
 import { connect } from 'react-redux'
@@ -16,7 +17,7 @@ class ScoreBoard extends React.Component {
 
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank, hasClaimedReward,
     } = this.props
 
     return (
@@ -26,6 +27,8 @@ class ScoreBoard extends React.Component {
         mainnetAddress={mainnetAddress}
         openSetMainnetAddressModal={openSetMainnetAddressModal}
         openClaimRewardModal={openClaimRewardModal}
+        rank={rank}
+        hasClaimedReward={hasClaimedReward}
       />
     )
   }
@@ -44,6 +47,7 @@ ScoreBoard.propTypes = {
   })),
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
+  rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   fetchTournamentUsers: PropTypes.func.isRequired,
   openSetMainnetAddressModal: PropTypes.func.isRequired,
   openClaimRewardModal: PropTypes.func.isRequired,
@@ -51,9 +55,10 @@ ScoreBoard.propTypes = {
 }
 
 ScoreBoard.defaultProps = {
-  data: [],
+  data: List(),
   myAccount: '',
   mainnetAddress: undefined,
+  rank: '',
 }
 
 export default connect(selector, actions)(ScoreBoard)

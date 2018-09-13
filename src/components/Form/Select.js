@@ -1,15 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
-
 import OriginalSelect from 'react-select'
-
 import { fieldPropTypes } from 'redux-form'
 
-import 'react-select/dist/react-select.css'
-
 import InputError from './InputError'
-import styles from './Select.mod.scss'
+import styles from './Select.scss'
 
 const cx = classNames.bind(styles)
 

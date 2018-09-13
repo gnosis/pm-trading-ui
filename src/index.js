@@ -3,7 +3,7 @@ import 'whatwg-fetch'
 import Raven from 'raven-js'
 import RootComponent from 'components/Root'
 import { initProviders } from 'integrations/store/actions'
-import { initReadOnlyGnosis } from 'actions/blockchain'
+import { initReadOnlyGnosis } from 'store/actions/blockchain'
 import Decimal from 'decimal.js'
 import React from 'react'
 
@@ -13,24 +13,24 @@ import initAnalytics from 'utils/analytics'
 import { isFeatureEnabled, getProviderConfig } from 'utils/features'
 import store from 'store'
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { setMomentRelativeTime } from './setup'
+import { setMomentRelativeTime, setMomentDurationFormat } from './setup'
 
 const providerConfig = getProviderConfig()
 const tournamentEnabled = isFeatureEnabled('tournament')
 
 setMomentRelativeTime()
+setMomentDurationFormat()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 store.dispatch(initReadOnlyGnosis())
-if (tournamentEnabled) {
+if (!tournamentEnabled) {
   store.dispatch(initProviders())
 } else {
   const tournamentProvider = WALLET_PROVIDER[providerConfig.default]
   store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE, tournamentProvider] }))
 }
 
-initAnalytics()
 Decimal.set({ toExpPos: 9999, precision: 50 })
 
 /* global document */

@@ -1,11 +1,15 @@
-/* global ga */
+/* globals ga */
 import { getThirdPartyConfig } from 'utils/features'
 
 export const THIRD_PARTY_ID = 'googleAnalytics'
 
-const config = getThirdPartyConfig(THIRD_PARTY_ID)
+const { id } = getThirdPartyConfig(THIRD_PARTY_ID)
 
 const GOOGLE_ANALYTICS_URL = 'https://www.google-analytics.com/analytics.js'
+
+export const ga = (...args) => (window.ga && window.ga.q && window.ga.q(...args))
+  || (window.ga && window.ga(...args))
+  || (() => {})(...args) // no-op
 
 const loadGoogleAnalytics = () => new Promise((resolve) => {
   const script = document.createElement('script')
@@ -15,18 +19,13 @@ const loadGoogleAnalytics = () => new Promise((resolve) => {
   document.head.appendChild(script)
 
   script.onload = () => {
-    ga('create', '', 'auto', config.name)
+    ga('create', id, 'auto')
     ga('send', 'pageview')
 
     resolve()
   }
 })
 
-export const ga = (...args) =>
-  (window.ga && window.ga.q && window.ga.q(...args)) ||
-  (window.ga && window.ga(...args)) ||
-  (() => {})(...args) // no-op
-
-export const gaSend = (...args) => ga(config.name, ...args)
+export const gaSend = (...args) => ga(id, ...args)
 
 export default loadGoogleAnalytics

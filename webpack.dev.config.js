@@ -2,28 +2,28 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const AutoDllPlugin = require('autodll-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
 
 const pkg = require('./package.json')
 
-const configLoader = require('./configuration')
+const configLoader = require('./scripts/configuration')
 
 module.exports = (env = {}) => {
-  const configEnvVars = env.GNOSIS_CONFIG || process.env.GNOSIS_CONFIG || {}
-  const interfaceEnvVars = env.GNOSIS_INTERFACE || process.env.GNOSIS_INTERFACE || {}
+  const configEnvVars = env.GNOSIS_CONFIG || {}
 
-  const gnosisEnv = env.GNOSIS_ENV || process.env.GNOSIS_ENV || 'local'
+  const gnosisEnv = process.env.GNOSIS_ENV || 'development'
 
   console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv}'`)
-  const { config, interfaceConfig } = configLoader(gnosisEnv, configEnvVars, interfaceEnvVars)
+  const config = configLoader(gnosisEnv, configEnvVars)
 
   const version = env.BUILD_VERSION || pkg.version
   const commitId = `${env.TRAVIS_BRANCH || 'local'}@${env.TRAVIS_COMMIT || 'SNAPSHOT'}`
 
   return {
-    context: path.join(__dirname, 'src'),
+    context: `${__dirname}/src`,
     entry: ['bootstrap-loader', 'index.js'],
     devtool: 'eval-source-map',
     mode: 'development',
@@ -34,6 +34,9 @@ module.exports = (env = {}) => {
     },
     resolve: {
       symlinks: false,
+      alias: {
+        '~style': `${__dirname}/src/scss`,
+      },
       modules: [
         `${__dirname}/src`,
         `${__dirname}/package.json`,
@@ -53,50 +56,53 @@ module.exports = (env = {}) => {
           test: /\.(jpe?g|png|svg)$/i,
           loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
         },
-        // TODO: Remove this special rule for css-modules when all globally scoped CSS is removed
-        // change the RegEx to: `/*.(scss|css)$/`
+
         {
-          test: /\.mod\.(scss|css)$/,
-          use: [
-            'style-loader',
+          test: /\.(scss|css)$/,
+          oneOf: [
             {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                modules: true,
-                localIdentName: '[name]__[local]___[hash:base64:5]',
-                importLoaders: 2,
-              },
+              resourceQuery: /^\?raw$/,
+              use: [
+                'style-loader',
+                {
+                  loader: 'css-loader',
+                  options: {
+                    sourceMap: true,
+                    importLoaders: 2,
+                  },
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: {
+                    sourceMap: true,
+                  },
+                },
+                {
+                  loader: 'sass-loader',
+                  options: { sourceMap: true, includePaths: [path.resolve(`${__dirname}/src`)] },
+                },
+              ],
             },
             {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-              },
-            },
-            { loader: 'sass-loader', options: { sourceMap: true } },
-          ],
-        },
-        {
-          test: /^((?!\.mod).)*\.(css|scss)$/,
-          use: [
-            'style-loader',
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                importLoaders: 2,
-              },
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-              },
-            },
-            {
-              loader: 'sass-loader',
-              options: { sourceMap: true, includePaths: [path.resolve(__dirname, './src')] },
+              use: [
+                'style-loader',
+                {
+                  loader: 'css-loader',
+                  options: {
+                    sourceMap: true,
+                    modules: true,
+                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                    importLoaders: 2,
+                  },
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: {
+                    sourceMap: true,
+                  },
+                },
+                { loader: 'sass-loader', options: { sourceMap: true } },
+              ],
             },
           ],
         },
@@ -105,7 +111,7 @@ module.exports = (env = {}) => {
           loader: 'file-loader?name=fonts/[name].[ext]',
         },
         {
-          test: /\.txt$/,
+          test: /\.(md|txt)$/,
           use: 'raw-loader',
         },
       ],
@@ -124,12 +130,12 @@ module.exports = (env = {}) => {
       watchOptions: {
         ignored: /node_modules/,
       },
-      contentBase: [path.join(__dirname, 'dist'), path.join(__dirname, 'src')],
+      contentBase: [`${__dirname}/src`],
     },
     plugins: [
       new CaseSensitivePathsPlugin(),
       new FaviconsWebpackPlugin({
-        logo: interfaceConfig.logo.favicon,
+        logo: config.logo.favicon,
         // Generate a cache file with control hashes and
         // don't rebuild the favicons until those hashes change
         persistentCache: true,
@@ -148,20 +154,44 @@ module.exports = (env = {}) => {
         inject: true,
       }),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, 'src/html/index.html'),
+        template: `${__dirname}/src/html/index.html`,
+      }),
+      new AutoDllPlugin({
+        inject: true, // will inject the DLL bundles to index.html
+        filename: '[name]_[hash].js',
+        entry: {
+          vendor: [
+            'react',
+            'react-dom',
+            'moment',
+            'lodash',
+            'redux',
+            'react-redux',
+            'immutable',
+            'react-router-dom',
+            'recharts',
+            'redux-actions',
+            'reselect',
+            'web3',
+            'moment-duration-format',
+            '@gnosis.pm/pm-js',
+          ],
+        },
+        plugins: [
+          new webpack.EnvironmentPlugin({
+            NODE_ENV: 'development',
+          }),
+        ],
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
         NODE_ENV: 'development',
       }),
       new webpack.DefinePlugin({
-        'window.GNOSIS_CONFIG': JSON.stringify(config),
-        'window.GNOSIS_INTERFACE': JSON.stringify(interfaceConfig),
+        'process.env.FALLBACK_CONFIG': `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-      new CopyWebpackPlugin([
-        { from: path.join(__dirname, 'src/assets'), to: path.join(__dirname, 'dist/assets') },
-      ]),
+      new CopyWebpackPlugin([{ from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` }]),
     ],
   }
 }

@@ -1,4 +1,4 @@
-@import "../../../scss/vars.scss";
+@import "~style/vars.scss";
 
 .transactionsExplanation {
   display: flex;
@@ -6,14 +6,15 @@
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
+  color: #fff;
 
-  &__close {
+  .closeButton {
     @include closeButton(32px, 5px);
     top: 20px;
     right: 10px;
   }
 
-  &__transaction-list {
+  .transactionList {
     font-size: 16px;
     list-style: none;
     margin-top: 20px;

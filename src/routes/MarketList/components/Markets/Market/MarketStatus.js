@@ -1,12 +1,11 @@
-import cn from 'classnames'
-import Countdown from 'components/Countdown'
-import PropTypes from 'prop-types'
 import React from 'react'
+import PropTypes from 'prop-types'
+import Countdown from 'components/Countdown'
 import classNames from 'classnames/bind'
 import { RESOLUTION_TIME } from 'utils/constants'
 import Icon from 'components/Icon'
 
-import css from './Market.mod.scss'
+import css from './Market.scss'
 
 const cx = classNames.bind(css)
 
@@ -22,7 +21,7 @@ const MarketStatus = ({ resolved, closed, resolution }) => {
       <div className={cx('label')}>
         { hasStatus
           ? status
-          : <Countdown target={resolution} format={RESOLUTION_TIME.RELATIVE_FORMAT} />
+          : <Countdown target={resolution} format={RESOLUTION_TIME.RELATIVE_FORMAT} interval={10000} />
         }
       </div>
     </div>

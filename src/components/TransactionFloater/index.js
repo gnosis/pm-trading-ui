@@ -1,15 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import { NavLink } from 'react-router-dom'
-import { takeRight } from 'lodash'
+import { List, Map } from 'immutable'
 import moment from 'moment'
 import LabeledSpinner from 'components/Spinner/Labeled'
 import ProgressSpinner from 'components/Spinner/Transaction'
-import Notifications from 'components/Notifications'
 import Icon from 'components/Icon'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
-import style from './transactionFloater.mod.scss'
+import Notifications from './Notifications'
+import style from './transactionFloater.scss'
 
 const cx = cn.bind(style)
 
@@ -37,18 +38,18 @@ const TransactionFloater = ({
         showLabel={runningTransactions.length > 0}
       />
     </button>
-    {!showLogs &&
-      notifications.length > 0 && (
+    {!showLogs
+      && !notifications.isEmpty() && (
       <div className={cx('popover', 'notifications')}>
-        <Notifications notifications={takeRight(notifications, 5)} onClick={showTransactionLog} />
+        <Notifications notifications={notifications.takeLast(5)} onClick={showTransactionLog} />
       </div>
     )}
     <div className={cx('popover', showLogs ? 'visible' : 'hidden')}>
       <div className={cx('heading')}>Transactions</div>
       <button className={cx('closeButton')} onClick={() => hideTransactionLog()} />
       <div className={cx('logs')}>
-        {!runningTransactions.length &&
-          !completedTransactions.length && (
+        {runningTransactions.isEmpty()
+          && completedTransactions.isEmpty() && (
           <div className={cx('transactionLog', 'empty')}>
             <div className={cx('label')}>You have no active or past transactions.</div>
             <div className={cx('hint')}>
@@ -57,7 +58,7 @@ const TransactionFloater = ({
             </div>
           </div>
         )}
-        {runningTransactions.map((transaction) => {
+        {runningTransactions.toArray().map((transaction) => {
           const startTime = transaction.startTime ? moment(transaction.startTime).format('LLL') : ''
 
           return (
@@ -77,12 +78,11 @@ const TransactionFloater = ({
             </div>
           )
         })}
-        {completedTransactions.map((transaction) => {
+        {completedTransactions.toArray().map((transaction) => {
           const endTime = transaction.endTime ? moment(transaction.endTime).format('LLL') : ''
-          const timeDiff =
-            transaction.startTime && transaction.endTime
-              ? moment(transaction.startTime).to(moment(transaction.endTime), true)
-              : undefined
+          const timeDiff = transaction.startTime && transaction.endTime
+            ? moment(transaction.startTime).to(moment(transaction.endTime), true)
+            : undefined
 
           const icon = transaction.completionStatus === TRANSACTION_COMPLETE_STATUS.NO_ERROR ? 'checkmark' : 'cross'
           return (
@@ -107,18 +107,21 @@ const TransactionFloater = ({
 
 TransactionFloater.propTypes = {
   progress: PropTypes.number.isRequired,
-  runningTransactions: PropTypes.arrayOf(PropTypes.object),
-  completedTransactions: PropTypes.arrayOf(PropTypes.object),
-  notifications: PropTypes.arrayOf(PropTypes.object),
+  // eslint-disable-next-line
+  runningTransactions: ImmutablePropTypes.map,
+  // eslint-disable-next-line
+  completedTransactions: ImmutablePropTypes.map,
+  // eslint-disable-next-line
+  notifications: ImmutablePropTypes.list,
   showLogs: PropTypes.bool,
   hideTransactionLog: PropTypes.func.isRequired,
   showTransactionLog: PropTypes.func.isRequired,
 }
 
 TransactionFloater.defaultProps = {
-  notifications: [],
-  runningTransactions: [],
-  completedTransactions: [],
+  notifications: List(),
+  runningTransactions: Map({}),
+  completedTransactions: Map({}),
   showLogs: false,
 }
 

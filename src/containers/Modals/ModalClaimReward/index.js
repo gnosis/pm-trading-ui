@@ -1,5 +1,6 @@
 import ClaimReward from 'components/ModalContent/ClaimReward'
-import { requestGasPrice } from 'actions/blockchain'
+import { requestGasPrice } from 'store/actions/blockchain'
+import { closeModal } from 'store/actions/modal'
 import { connect } from 'react-redux'
 import {
   getCurrentAccount,
@@ -8,12 +9,12 @@ import {
   getCurrentNetworkId,
 } from 'integrations/store/selectors'
 import { getGasPrice } from 'routes/MarketDetails/store/selectors'
-import { claimUserRewards } from 'actions/rewards'
+import { claimUserRewards } from 'routes/Scoreboard/store/actions'
 import { getFeatureConfig } from 'utils/features'
 import { requestClaimRewardGasCost } from './action'
-import { getClaimRewardGasCost, getRewardValue } from './selectors'
+import { getClaimRewardGasCost, getRewardValue, hasClaimedReward } from './selectors'
 
-const { rewardToken } = getFeatureConfig('rewards')
+const { claimReward } = getFeatureConfig('rewardClaiming')
 
 const mapStateToProps = state => ({
   currentAccount: getCurrentAccount(state),
@@ -23,12 +24,14 @@ const mapStateToProps = state => ({
   currentNetworkId: getCurrentNetworkId(state),
   claimRewardGasCost: getClaimRewardGasCost(state),
   rewardValue: getRewardValue(state),
+  hasClaimedReward: hasClaimedReward(state),
 })
 
-const mapDispatchToProps = dispatch => ({
-  requestGasPrice: () => dispatch(requestGasPrice()),
-  requestClaimRewardGasCost: () => dispatch(requestClaimRewardGasCost()),
-  claimUserRewards: () => dispatch(claimUserRewards(rewardToken.address)),
-})
+const mapDispatchToProps = {
+  requestGasPrice,
+  requestClaimRewardGasCost,
+  closeModal,
+  claimUserRewards: rewardAmount => claimUserRewards(claimReward.contractAddress, rewardAmount),
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClaimReward)

@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 import { fieldPropTypes } from 'redux-form'
 
 import InputError from './InputError'
-import styles from './TextInput.mod.scss'
+import styles from './TextInput.scss'
 
 const cx = classNames.bind(styles)
 

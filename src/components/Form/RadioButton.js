@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { fieldPropTypes } from 'redux-form'
 import classNames from 'classnames/bind'
 
-import styles from './RadioButton.mod.scss'
+import styles from './RadioButton.scss'
 
 const cx = classNames.bind(styles)
 
@@ -13,6 +13,7 @@ class RadioButton extends PureComponent {
     onBlur()
     return onChange(value)
   }
+
   render() {
     const {
       input,

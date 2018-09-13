@@ -4,10 +4,12 @@ import cn from 'classnames/bind'
 import { schemeDark2 } from 'd3-scale-chromatic'
 import { scaleOrdinal } from 'd3'
 import { COLOR_SCHEME_DEFAULT } from 'utils/constants'
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import {
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
+} from 'recharts'
 import CustomTooltip from '../CustomTooltip'
 import DateAxisTick from '../DateAxisTick'
-import style from '../MarketGraph.mod.scss'
+import style from '../MarketGraph.scss'
 
 const cx = cn.bind(style)
 
@@ -21,7 +23,7 @@ const lineChartMargins = {
 }
 
 const CategoricalGraph = ({ data }) => {
-  const stacks = Object.keys(data[0]).slice(2)
+  const stacks = Object.keys(data[0]).filter(key => key !== 'date' && key !== 'scalarPoint')
   const z = scaleOrdinal(schemeDark2)
   z.domain(stacks)
   return (
@@ -38,7 +40,7 @@ const CategoricalGraph = ({ data }) => {
               ))}
             </defs>
             <XAxis className="axis axis--x" dataKey="date" tickSize={0} tick={DateAxisTick} />
-            <YAxis className="axis axis--y" tickFormatter={percentageFormatter} unit="%" type="number" />
+            <YAxis className="axis axis--y" padding={{ bottom: 30 }} tickFormatter={percentageFormatter} domain={[0, 1]} unit="%" type="number" />
             <Tooltip className="tooltip" content={<CustomTooltip />} />
             <Legend />
             {stacks.map((key, keyIndex) => (

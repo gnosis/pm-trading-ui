@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getTokenSymbol } from 'selectors/blockchain'
-import { requestTokenSymbol } from 'actions/blockchain'
+import { getTokenSymbol } from 'store/selectors/blockchain'
+import { requestTokenSymbol } from 'store/actions/blockchain'
 import PropTypes from 'prop-types'
 
 class CurrencyName extends Component {
   componentDidMount() {
-    const unknownTokenSymbol = !this.props.tokenSymbol && this.props.tokenAddress
+    const { tokenSymbol, tokenAddress, requestTokenSymbol: fetchTokenSymbol } = this.props
+    const unknownTokenSymbol = !tokenSymbol && tokenAddress
     if (unknownTokenSymbol) {
-      this.props.requestTokenSymbol()
+      fetchTokenSymbol()
     }
   }
 
@@ -42,4 +43,7 @@ CurrencyName.defaultProps = {
   className: '',
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CurrencyName)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CurrencyName)

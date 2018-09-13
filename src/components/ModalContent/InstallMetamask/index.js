@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import MetamaskIcon from 'assets/img/icons/icon_metamask_color.svg'
 import { getFeatureConfig } from 'utils/features'
-import css from './InstallMetamask.mod.scss'
+import css from './InstallMetamask.scss'
 
 const cx = cn.bind(css)
 

@@ -4,39 +4,41 @@ import cn from 'classnames'
 import Decimal from 'decimal.js'
 import { calcLMSRMarginalPrice } from 'api'
 import { Field } from 'redux-form'
-import { OutcomeSelection } from 'components/Form'
+import { OutcomeSelection, MandatoryHint } from 'components/Form'
 import { COLOR_SCHEME_SCALAR } from 'utils/constants'
 import { marketShape } from 'utils/shapes'
 import ScalarSlider from './ScalarSlider'
 
 const OutcomeSectionScalar = (props) => {
   const {
-    selectedBuyInvest,
     selectedOutcome,
     market: {
-      event: { lowerBound, upperBound }, eventDescription: { decimals, unit }, netOutcomeTokensSold, funding,
+      bounds: {
+        lower: lowerBound, upper: upperBound, unit, decimals,
+      },
+      outcomeTokensSold,
+      funding,
     },
     outcomeTokenCount,
+    valid,
   } = props
-  const canRunSimulation = selectedBuyInvest && selectedOutcome
+  const canRunSimulation = valid && selectedOutcome
 
-  const marketTokenCounts = netOutcomeTokensSold.map(value => Decimal(value))
-  const marginalPricesCurrent = marketTokenCounts.map((value, outcomeTokenIndex) =>
-    calcLMSRMarginalPrice({
-      netOutcomeTokensSold: marketTokenCounts,
-      outcomeTokenIndex,
-      funding,
-    }))
+  const marketTokenCounts = outcomeTokensSold.map(value => Decimal(value)).toArray()
+  const marginalPricesCurrent = calcLMSRMarginalPrice({
+    netOutcomeTokensSold: marketTokenCounts,
+    outcomeTokenIndex: 1,
+    funding,
+  })
   let marginalPriceSelected = marginalPricesCurrent
 
   if (canRunSimulation) {
     marketTokenCounts[selectedOutcome] = marketTokenCounts[selectedOutcome].add(outcomeTokenCount)
-    marginalPriceSelected = marketTokenCounts.map((value, outcomeTokenIndex) =>
-      calcLMSRMarginalPrice({
-        netOutcomeTokensSold: marketTokenCounts,
-        outcomeTokenIndex,
-        funding,
-      }))
+    marginalPriceSelected = calcLMSRMarginalPrice({
+      netOutcomeTokensSold: marketTokenCounts,
+      outcomeTokenIndex: 1,
+      funding,
+    })
   }
 
   const scalarOutcomes = [
@@ -44,13 +46,13 @@ const OutcomeSectionScalar = (props) => {
       index: 0,
       label: 'Short',
       color: COLOR_SCHEME_SCALAR[0],
-      probability: marginalPriceSelected[0].mul(100),
+      probability: Decimal(1).sub(marginalPriceSelected).mul(100),
     },
     {
       index: 1,
       label: 'Long',
       color: COLOR_SCHEME_SCALAR[1],
-      probability: marginalPriceSelected[1].mul(100),
+      probability: marginalPriceSelected.mul(100),
     },
   ]
 
@@ -58,8 +60,17 @@ const OutcomeSectionScalar = (props) => {
     <div className={cn('col-md-6')}>
       <div className={cn('row')}>
         <div className={cn('col-md-12')}>
-          <h2>Your Trade</h2>
-          <Field component={OutcomeSelection} name="selectedOutcome" outcomes={scalarOutcomes} hideBars />
+          <h2>
+            Your Trade
+            <MandatoryHint />
+          </h2>
+          <Field
+            component={OutcomeSelection}
+            name="selectedOutcome"
+            outcomes={scalarOutcomes}
+            hideBars
+            hidePercentage
+          />
         </div>
       </div>
       <div className={cn('row')}>
@@ -69,8 +80,8 @@ const OutcomeSectionScalar = (props) => {
             upperBound={parseInt(upperBound, 10)}
             unit={unit}
             decimals={decimals}
-            marginalPriceCurrent={marginalPricesCurrent[1].toString()}
-            marginalPriceSelected={marginalPriceSelected[1].toString()}
+            marginalPriceCurrent={marginalPricesCurrent.toString()}
+            marginalPriceSelected={marginalPriceSelected.toString()}
           />
         </div>
       </div>
@@ -81,12 +92,12 @@ const OutcomeSectionScalar = (props) => {
 OutcomeSectionScalar.propTypes = {
   market: marketShape.isRequired,
   selectedOutcome: PropTypes.string,
-  selectedBuyInvest: PropTypes.string,
+  valid: PropTypes.bool,
   outcomeTokenCount: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.number]).isRequired,
 }
 
 OutcomeSectionScalar.defaultProps = {
-  selectedBuyInvest: '0',
+  valid: false,
   selectedOutcome: undefined,
 }
 

@@ -7,7 +7,7 @@ import Icon from 'components/Icon'
 import InteractionButton from 'containers/InteractionButton'
 import CurrencyName from 'components/CurrencyName'
 import { weiToEth } from 'utils/helpers'
-import style from './RedeemWinnings.mod.scss'
+import style from './RedeemWinnings.scss'
 
 const cx = cn.bind(style)
 const iconSize = 64

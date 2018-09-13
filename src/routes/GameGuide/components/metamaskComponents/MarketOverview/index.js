@@ -27,7 +27,7 @@ const MarketOverview = () => (
       climb up the scoreboard.
     </Paragraph>
     <Paragraph>
-      The tournament runs for an entire month, after which the final scoreboard will be released and winners announced.
+      After the tournament ends, the final scoreboard will be released and winners will be announced.
     </Paragraph>
   </Block>
 )

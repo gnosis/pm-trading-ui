@@ -3,27 +3,24 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { isFeatureEnabled } from 'utils/features'
-import { triedToConnect } from 'selectors/blockchain'
-import { closeModal } from 'actions/modal'
+import { isConnectedToBlockchain } from 'store/selectors/blockchain'
+import { CSSTransition } from 'react-transition-group'
+import { closeModal } from 'store/actions/modal'
 import * as modals from 'containers/Modals'
-import style from './backdrop.mod.scss'
+import style from './backdrop.scss'
 
 const cx = cn.bind(style)
 
-const tournamentEnabled = isFeatureEnabled('tournament')
-
 class BackdropProvider extends Component {
   renderBackdropContent() {
-    const {
-      modal: { currentModal, isOpen, ...data },
-      closeModal: closeModalProp,
-      blockchainConnection,
-    } = this.props
+    const { modal, closeModal: closeModalProp, blockchainConnection } = this.props
+    const isOpen = modal.get('isOpen', false)
+    const currentModal = modal.get('currentModal')
+    const transactions = modal.get('transactions', [])
 
     if (isOpen && blockchainConnection) {
       /*
-       * Implement more modals here by adding to components/modals.js
+       * Implement more modals here by adding to components/ModalContent
        */
       const Modal = modals[currentModal]
 
@@ -31,33 +28,32 @@ class BackdropProvider extends Component {
         throw Error('Invalid Modal Type', currentModal)
       }
 
-      return <Modal {...data} closeModal={closeModalProp} />
+      return <Modal transactions={transactions} closeModal={closeModalProp} />
     }
 
     return undefined
   }
 
   render() {
-    const {
-      children,
-      modal: { isOpen },
-      blockchainConnection,
-    } = this.props
+    const { children, modal, blockchainConnection } = this.props
+    const isOpen = modal.get('isOpen', false)
+
+    const transitionClasses = {
+      enter: cx('fade-enter'),
+      enterActive: cx('fade-enter-active'),
+      exit: cx('fade-exit'),
+      exitActive: cx('fade-exit-active'),
+    }
+
     return (
       <div>
-        <div
-          className={cx({
-            filter: true,
-            visible: isOpen && blockchainConnection,
-          })}
-        >
-          {isOpen && blockchainConnection ? (
-            <div style={{ position: 'fixed', minWidth: '100vw' }}>{children}</div>
-          ) : (
-            children
-          )}
-        </div>
-        <div className={cx('above', { tournament: tournamentEnabled })}>{this.renderBackdropContent()}</div>
+        {children}
+        <CSSTransition in={isOpen && blockchainConnection} timeout={300} classNames={transitionClasses} unmountOnExit>
+          <div>
+            <div className={cx('below')} />
+            <div className={cx('above')}>{this.renderBackdropContent()}</div>
+          </div>
+        </CSSTransition>
       </div>
     )
   }
@@ -74,10 +70,15 @@ BackdropProvider.propTypes = {
 
 const mapStateToProps = state => ({
   modal: state.modal,
-  blockchainConnection: triedToConnect(state),
+  blockchainConnection: isConnectedToBlockchain(state),
 })
 
 const mapDispatchToProps = dispatch => ({
   closeModal: () => dispatch(closeModal()),
 })
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BackdropProvider))
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(BackdropProvider),
+)

@@ -8,15 +8,19 @@ const ScalarMarketRecord = Record({
   description: undefined, // string
   resolution: undefined, // moment
   volume: undefined, // decimal
-  winningOutcome: undefined, // int
   bounds: undefined, // BoundRecord
+  eventAddress: undefined, // string
+  winningOutcome: undefined, // int
   funding: undefined, // int
   creation: undefined, // moment
-  stage: undefined, // int
+  stage: undefined,
+  fee: undefined, // int
   resolved: undefined, // boolean
+  closed: undefined, // boolean
   creator: undefined, // string
   collateralToken: undefined, // string
   outcomeTokensSold: undefined, // List<int>
+  outcomes: undefined,
 }, 'Market')
 
 export default ScalarMarketRecord

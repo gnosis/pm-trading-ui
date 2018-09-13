@@ -1,0 +1,120 @@
+@import '~style/vars.scss';
+
+$market-border-radius: 12px;
+$market-highlight-stripe-width: 5px;
+$info-row-height: 25px;
+$expandable-arrow-size: 7px;
+$expandable-margin: 40px;
+
+.market {
+  width: 100%;
+  -webkit-appearance: none;
+  border: none;
+  display: block;
+  position: relative;
+  background-color: white;
+  padding: 20px 20px 10px 20px;
+  margin: 2px 0;
+  overflow: hidden;
+  text-align: left;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: $market-highlight-stripe-width;
+    background-color: $link-color;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .title {
+    margin: 0;
+    letter-spacing: 1px;
+    color: black;
+    font-weight: 400;
+    font-size: 22px;
+  }
+
+  &.resolved, &.closed {
+    .title {
+      color: $font-color-light;
+      opacity: 0.6;
+      font-weight: 300;
+    }
+  }
+
+  .resolve {
+    text-transform: uppercase;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: $link-color;
+    &:hover, &:focus {
+      color: $link-color-highlight;
+    }
+    &:visited, &:active {
+      color: $link-color;
+    }
+  }
+
+  &:first-child {
+    border-top-left-radius: $market-border-radius;
+    border-top-right-radius: $market-border-radius;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: $market-border-radius;
+    border-bottom-right-radius: $market-border-radius;
+  }
+
+  .info {
+    margin-top: 10px;
+  
+    .group {
+      display: inline-block;
+      color: darken($font-color-light, 30%);
+      opacity: 0.6;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 11px;
+      vertical-align: middle;
+
+      .title {
+        margin: 0;
+        text-transform: uppercase;
+        float: left;
+
+        &:after {
+          content: '';
+          display: table;
+          clear: both;
+        }
+      }
+
+    }
+  }
+}
+
+.marketInfo {
+  white-space: nowrap;
+  opacity: 0.6;
+
+  .label {
+    display: inline-block;
+    padding-left: 5px;
+
+    vertical-align: top;
+    line-height: $info-row-height;
+
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}

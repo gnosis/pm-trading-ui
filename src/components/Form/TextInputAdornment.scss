@@ -1,0 +1,20 @@
+@import "~style/vars.scss";
+
+.adornment {
+  display: block;
+
+  font-size: $font-size-inputs;
+  letter-spacing: $letter-spacing-inputs;
+  font-weight: $font-weight-inputs;
+  padding: $paddings-inputs;
+
+  margin: auto 0;
+}
+
+.end {
+  padding-right: 5px;
+}
+
+.start {
+  padding-left: 5px;
+}

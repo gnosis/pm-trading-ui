@@ -5,19 +5,11 @@ import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
 import { marketTradeShape } from 'utils/shapes'
 import Decimal from 'decimal.js'
-import style from '../marketMyTrades.mod.scss'
+import style from '../marketMyTrades.scss'
 
 const cx = cn.bind(style)
 
-const getAverageCost = (order) => {
-  if (order.orderType === 'BUY') {
-    return new Decimal(order.cost).div(order.outcomeTokenCount).toString()
-  } else if (order.orderType === 'SELL') {
-    return new Decimal(order.profit).div(order.outcomeTokenCount).toString()
-  }
-
-  return undefined
-}
+const getAverageCost = order => new Decimal(order.price).div(order.outcomeToken.outcomeTokenCount).toString()
 
 const TradeRow = ({
   trade, outcomeColorStyle, collateralToken, tradeDate, outcomeName, tradeCost,
@@ -28,9 +20,9 @@ const TradeRow = ({
     </td>
     <td>{trade.orderType}</td>
     <td>{outcomeName}</td>
-    <td>{decimalToText(new Decimal(trade.outcomeTokenCount).div(1e18), 4)}</td>
+    <td>{decimalToText(new Decimal(trade.outcomeToken.outcomeTokenCount).div(1e18), 4)}</td>
     <td>
-      {decimalToText(getAverageCost(trade))}
+      {decimalToText(getAverageCost(trade))}&nbsp;
       <CurrencyName tokenAddress={collateralToken} />
     </td>
     <td>{tradeDate}</td>

@@ -1,0 +1,18 @@
+.indefiniteSpinner {
+  &.centered {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  path {
+    fill: #000;
+  }
+
+  &.inverted {
+    path {
+      fill: #fff;
+    }
+  }
+}

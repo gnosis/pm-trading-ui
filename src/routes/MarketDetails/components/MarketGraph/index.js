@@ -5,20 +5,12 @@ import { marketShape } from 'utils/shapes'
 import CategoricalGraph from './CategoricalGraph'
 import ScalarGraph from './ScalarGraph'
 
-const MarketGraph = ({
-  data = [],
-  market: {
-    event: { type, lowerBound, upperBound },
-    eventDescription,
-  },
-}) => {
+const MarketGraph = ({ data = [], market: { type, bounds } }) => {
   if (data.length) {
     if (type === OUTCOME_TYPES.CATEGORICAL) {
       return <CategoricalGraph data={data} />
-    } else if (type === OUTCOME_TYPES.SCALAR) {
-      return (
-        <ScalarGraph data={data} eventDescription={eventDescription} lowerBound={lowerBound} upperBound={upperBound} />
-      )
+    } if (type === OUTCOME_TYPES.SCALAR) {
+      return <ScalarGraph data={data} bounds={bounds} />
     }
   }
 

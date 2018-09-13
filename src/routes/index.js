@@ -4,11 +4,12 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import web3 from 'web3'
 
 import GameGuidePage from 'routes/GameGuide/containers/GameGuide'
-import MarketListPage from 'routes/MarketList/containers/MarketList'
-import ScoreboardPage from 'routes/Scoreboard/containers/ScoreBoard'
-import MarketDetailPage from 'routes/MarketDetails/containers/MarketDetailPage'
-import TransactionsPage from 'containers/TransactionsPage'
-import DashboardPage from 'containers/DashboardPage'
+import MarketListPage from 'routes/MarketList/containers/'
+import ScoreboardPage from 'routes/Scoreboard/containers'
+import MarketDetailPage from 'routes/MarketDetails/containers'
+
+import TransactionsPage from 'routes/Transactions/containers'
+import DashboardPage from 'routes/Dashboard/containers'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
 
 const gameGuideConfig = getFeatureConfig('gameGuide')

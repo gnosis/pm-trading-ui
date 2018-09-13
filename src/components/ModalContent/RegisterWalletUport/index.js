@@ -4,15 +4,15 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import web3 from 'web3'
 
-import { updateMainnetAddress } from 'actions/account'
-import { closeModal as closeModalAction } from 'actions/modal'
+import { updateMainnetAddress } from 'store/actions/account'
+import { closeModal as closeModalAction } from 'store/actions/modal'
 import WalletIcon from 'assets/img/icons/icon_wallet.svg'
 
 import TextInput from 'components/Form/TextInput'
 import TextInputAdornment from 'components/Form/TextInputAdornment'
 import InteractionButton from 'containers/InteractionButton'
 
-import style from './RegisterWalletUport.mod.scss'
+import style from './RegisterWalletUport.scss'
 
 const cx = cn.bind(style)
 
@@ -49,11 +49,11 @@ const SetMainnetAddress = ({
           placeholder="Ethereum address"
           wrapperStyle={inputWrapperStyles}
           errorStyle={inputErrorStyles}
-          startAdornment={
+          startAdornment={(
             <TextInputAdornment position="start" style={textInputAdornmentStyles}>
               <img src={WalletIcon} alt="" />
             </TextInputAdornment>
-          }
+          )}
         />
         <InteractionButton
           type="submit"
@@ -64,8 +64,8 @@ const SetMainnetAddress = ({
           Save Address
         </InteractionButton>
         {error && <p className={cx('error')}>{error}</p>}
-        {submitFailed &&
-          !submitting && (
+        {submitFailed
+          && !submitting && (
           <p className={cx('error')}>Sorry, the transaction failed. Please try again later or contact us!</p>
         )}
       </form>
@@ -84,8 +84,7 @@ const FORM = {
     await dispatch(updateMainnetAddress(values.mainnetAddress))
     return dispatch(closeModalAction())
   },
-  validate: values =>
-    (web3.utils.isAddress(values.mainnetAddress) ? {} : { mainnetAddress: 'Please enter a valid address' }),
+  validate: values => (web3.utils.isAddress(values.mainnetAddress) ? {} : { mainnetAddress: 'Please enter a valid address' }),
 }
 
 export default reduxForm(FORM)(SetMainnetAddress)

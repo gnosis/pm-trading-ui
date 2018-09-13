@@ -14,7 +14,9 @@ export const decimalToText = (value, decimals = 4) => {
   try {
     decimalValue = Decimal(value)
   } catch (e) {
-    console.warn('Invalid prop given to <DecimalValue />: Using 0 as fallback. Please fix this, it causes massive performance issues')
+    console.warn(
+      'Invalid prop given to <DecimalValue />: Using 0 as fallback. Please fix this, it causes massive performance issues',
+    )
     decimalValue = Decimal(0)
   }
 
@@ -28,17 +30,36 @@ const DecimalValue = ({ value, decimals = 4, className }) => {
 
 // I don't use PropTypes.instanceOf because Decimal can be cloned with different default properties
 // and instanceOf doesn't deal with that situation. In fact, Decimal.clone is used in gnosis.js
-const decimalJsTest = (props, propName, componentName) => {
-  if (!/^(Decimal|(Big)?Number)$/.test(props[propName] && props[propName].constructor ? props[propName].constructor.name : null)) {
-    return new Error(`Non-numeric \`${propName}\` supplied to \`${componentName}\`. Validation failed.`)
+export const decimalJsTest = (props, propName, componentName) => {
+  const value = props[propName]
+
+  if (!value) {
+    return new Error(`Invalid prop ${propName}`)
   }
-  return undefined
+
+  const namesToCheck = []
+
+  if (value.constructor) {
+    namesToCheck.push(value.constructor.name)
+    namesToCheck.push(value.constructor.prototype.name)
+  }
+
+  const testResults = namesToCheck.map(name => /(Decimal|(Big)?Number)/.test(name))
+
+  return testResults.includes(true)
+    ? undefined
+    : new Error(`Non-numeric \`${propName}\` supplied to \`${componentName}\`. Validation failed.`)
 }
 
 DecimalValue.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.string, decimalJsTest]),
+  value: PropTypes.oneOfType([PropTypes.string, decimalJsTest, PropTypes.number]).isRequired,
   decimals: PropTypes.number,
   className: PropTypes.string,
+}
+
+DecimalValue.defaultProps = {
+  decimals: 4,
+  className: '',
 }
 
 export default DecimalValue
