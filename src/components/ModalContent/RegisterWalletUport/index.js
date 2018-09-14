@@ -39,7 +39,7 @@ const SetMainnetAddress = ({
         <h1 className={cx('heading')}>Setup claim Address</h1>
         <p className={cx('disclaimer')}>
           Please register your Metamask address, where we can send your winning GNO tokens in case you finished in the
-          top 100. <br /> Please note that you can register your address <em>only once</em>.
+          top 50. <br /> Please note that you can register your address <em>only once</em>.
         </p>
 
         <Field
