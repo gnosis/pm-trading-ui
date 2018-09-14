@@ -47,7 +47,7 @@ const ProfitsAndScoreboard = () => (
       <Img src={profits3} width="75%" bordered />
     </Block>
     <Paragraph>
-      <Bold>If you&apos;re among the top 100 predictors, you will be rewarded with GNO tokens.</Bold> The higher your
+      <Bold>If you&apos;re among the top 50 predictors, you will be rewarded with GNO tokens.</Bold> The higher your
       rank on the scoreboard, the more GNO you win.
     </Paragraph>
   </Block>

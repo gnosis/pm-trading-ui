@@ -15,11 +15,11 @@ const SignUp = () => (
     <Subtitle>Claim your Rewards</Subtitle>
     <Paragraph>
       When the tournament ends and all markets are resolved, the final scoreboard will be announced. If you make it to
-      the top 100 predictors, you will be able to claim rewards. You can claim your rewards within 30 days from the
+      the top 50 predictors, you will be able to claim rewards. You can claim your rewards within 30 days from the
       final scoreboard announcement.
     </Paragraph>
     <Paragraph>
-      If you ended up in the top 100 (congratulations!), your reward amount will be displayed next to your wallet
+      If you ended up in the top 50 (congratulations!), your reward amount will be displayed next to your wallet
       address on top of the scoreboard.
     </Paragraph>
     <br />
