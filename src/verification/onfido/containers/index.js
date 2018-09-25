@@ -51,6 +51,8 @@ const handleCreateVerification = async (result, dispatch, props) => {
   } catch (err) {
     await setStep({ page: 'denied', reason: err.message })
   }
+
+  return undefined
 }
 
 const enhancer = compose(
@@ -108,7 +110,7 @@ const enhancer = compose(
       let failure = false
 
       Object.keys(fields).forEach((fieldName) => {
-        if (fields[fieldName].trim().length == 0) {
+        if (fields[fieldName].trim().length === 0) {
           failure = true
         }
       })

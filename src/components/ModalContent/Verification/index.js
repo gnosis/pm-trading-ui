@@ -8,9 +8,10 @@ import styles from './Verification.scss'
 
 const cx = classnames.bind(styles)
 
-const ErrorComponent = () => (
+const ErrorComponent = ({ closeModal }) => (
   <>
     <h3 className={cx('heading')}>Our User Verification Integration could not be loaded.</h3>
+    <button type="button" className={cx('closeButton')} onClick={closeModal} />
     <p className={cx('text')}>Sorry for the inconvience, please try again later!</p>
   </>
 )

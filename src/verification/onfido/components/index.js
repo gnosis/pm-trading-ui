@@ -20,7 +20,7 @@ const SignMessage = () => (
 const DeniedMessage = ({
   reason, heading, canRetry, closeModal, setStep,
 }) => (
-  <div>
+  <div className={cx('denied')}>
     <button type="button" className={cx('closeButton')} onClick={closeModal} />
     <h2>{heading}</h2>
     <p>{reason}</p>
