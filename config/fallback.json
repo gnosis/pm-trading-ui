@@ -54,19 +54,19 @@
         "type": "TOS_DOCUMENT",
         "id": "terms_of_service",
         "title": "Terms of Service",
-        "file": "/assets/TermsOfService.html"
+        "file": "/assets/content/mainnet/TermsOfService.html"
       },
       {
         "type": "TOS_DOCUMENT",
         "id": "privacy_policy",
         "title": "Privacy Policy",
-        "file": "/assets/PrivacyPolicy.html"
+        "file": "/assets/content/PrivacyPolicy.html"
       },
       {
         "type": "TOS_DOCUMENT",
         "id": "risk_disclaimer",
         "title": "Risk Disclaimer",
-        "file": "/assets/RiskDisclaimerPolicy.html"
+        "file": "/assets/content/mainnetRiskDisclaimerPolicy.html"
       }
     ]
   },
