@@ -35,15 +35,10 @@ const ERROR_STYLE = {
 }
 
 const Welcome = ({
-  setLegalDocumentsAccepted, closeModal, invalid, submit, existingUser, tosAccepted,
+  setLegalDocumentsAccepted, closeModal, invalid, submit, tosAccepted,
 }) => (
   <div className={cx('modal', 'onfido', 'welcome')}>
     <h4 className={cx('heading')}>Start verification process</h4>
-    {existingUser && (
-      <p>
-        <strong>You already created a check before, if you finished the instructions in the E-Mail, please wait until the check is finished and come back to this screen later.</strong>
-      </p>
-    )}
     <button type="button" className={cx('closeButton')} onClick={closeModal} />
     <div className={cx('form')}>
       <div className={cx('row')}>
@@ -76,6 +71,7 @@ const Welcome = ({
             />
           ) : (
             <div>
+              <p>You already accepted the terms of conditions. Please start the verification process by following the instructions.</p>
               <br />
               <button type="button" className={cx('submitButton', { disabled: invalid })} disabled={invalid} onClick={submit}>Verify</button>
             </div>

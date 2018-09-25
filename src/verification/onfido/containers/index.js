@@ -67,18 +67,27 @@ const enhancer = compose(
 
       const applicantStatus = await updateUserVerification(account)
       if (tosAccepted) {
-        if (applicantStatus === 'PENDING') {
-          // TOS accepted or not required and application either not finished or waiting for response
+        if (applicantStatus === 'PENDING_DOCUMENT_UPLOAD') {
+          // TOS accepted or not required and process started but not finished - need to restart in order to get a new token
           return setStep({
-            page: 'welcome',
-            options: {
-              existingUser: true,
-            },
+            page: 'denied',
+            heading: 'Your Application was not completed',
+            reason: 'It seems your previous verification did not complete. Please try again.',
+          })
+        }
+        if (applicantStatus === 'WAITING_FOR_APPROVAL') {
+          return setStep({
+            page: 'denied',
+            heading: 'Your Application is pending with our Verification Service',
+            reason: 'Please try again later. Check your E-Mails to continue with the verification process if you have not done so. Additionally, if you didn\'t receive an E-Mail, you can retry the verification below.',
           })
         }
         if (applicantStatus === 'DENIED') {
           // TOS accepted or not required and application denied
-          return setStep({ page: 'denied', reason: 'Unfortunately, you didn’t pass the verification process. Please get in contact with OnFido.com for further information.' })
+          return setStep({
+            page: 'denied',
+            reason: 'Unfortunately, you didn’t pass the verification process. Please get in contact with OnFido.com for further information.',
+          })
         }
         if (applicantStatus === 'ACCEPTED') {
           // TOS accepted and application accepted - should be able to connect now
@@ -90,9 +99,6 @@ const enhancer = compose(
       // TOS not accepted but required, wait until signature and message signature to let the user know if their application was denied or accepted.
       return setStep({
         page: 'welcome',
-        options: {
-          existingUser: applicantStatus === 'PENDING',
-        },
       })
     },
   }),

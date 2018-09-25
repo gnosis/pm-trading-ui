@@ -8,18 +8,22 @@ const createUserVerification = (...args) => async () => api.createUserVerificati
 const startUserReport = (...args) => async () => api.startUserReport(...args)
 
 const updateUserVerification = account => async (dispatch) => {
-  const verificationUser = await api.requestUserVerification(account)
+  const pendingVerification = await api.requestUserVerification(account)
 
-  if (verificationUser) {
-    if (verificationUser.isVerified) {
-      // user is verified, close the modal and save the setting
-      dispatch(setVerificationStatus(account, 'onfido'))
-      return 'ACCEPTED'
+  if (pendingVerification) {
+    if (pendingVerification.status) {
+      if (pendingVerification.status === 'ACCEPTED') {
+        // user is verified, close the modal and save the setting
+        dispatch(setVerificationStatus(account, 'onfido'))
+        return 'ACCEPTED'
+      }
+
+      return pendingVerification.status
     }
 
-    // user exists but is not verified, push report generation (incase it didnt work the first time)
+    // in some weird case where we get an empty object?
     await api.startUserReport(account)
-    return 'DENIED'
+    return 'PENDING'
   }
 
   return 'PENDING'
