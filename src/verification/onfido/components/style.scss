@@ -1,0 +1,121 @@
+@import "~style/vars.scss";
+@import '~style/style.scss';
+
+.onfido-wrapper {
+  // Global Font
+  :global .onfido-sdk-ui-Modal-inner {
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  // To select which type of identification you want to use, the icons need to be replaced
+  :global .onfido-sdk-ui-DocumentSelector-option:hover {
+    :global .onfido-sdk-ui-DocumentSelector-icon {
+      &-passport {
+        background-image: url('~assets/verification/onfido/id-type-passport.svg');
+      }
+
+      &-license {
+        background-image: url('~assets/verification/onfido/id-type-driverlicense.svg');
+      }
+
+      &-identity {
+        background-image: url('~assets/verification/onfido/id-type-id.svg');
+      }
+
+      &::after {
+        border-color: $brand-primary;
+      }
+    }
+  }
+
+  // The Icons for the steps on how to use on mobile
+  :global .onfido-sdk-ui-Intro-stageIcon {
+    &-sms {
+      background-image: url('~assets/verification/onfido/step1.svg');
+    }
+
+    &-take-photos {
+      background-image: url('~assets/verification/onfido/step2.svg');
+    }
+
+    &-return-computer {
+      background-image: url('~assets/verification/onfido/step3.svg');
+    }
+  }
+
+  // "Switch to Mobile Icon"
+  :global .onfido-sdk-ui-SwitchDevice-icon {
+    background-color: $brand-primary;
+  }
+
+  // "Append"-Style button for mobile number
+  :global button.onfido-sdk-ui-CrossDeviceLink-btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 0;
+  }
+
+  // "Connected to mobile" icon
+  :global .onfido-sdk-ui-MobileConnected-icon {
+    background-image: url('~assets/verification/onfido/mobile-connected.svg')
+  }
+
+  /* We need to overwrite some styles from OnFido here */
+  :global .onfido-sdk-ui-Theme-btn-primary {
+    @include interfaceButton;
+  }
+}
+
+.modal.denied {
+  max-width: 960px;
+  margin: auto;
+}
+
+.modal.welcome {
+  position: relative;
+  max-width: 540px;
+  
+  border-radius: 9px;
+  background-color: #ffffff;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+
+  align-items: center;
+  padding: 24px 40px;
+  color: #666;
+}
+
+.heading {
+  font-size: 21px;
+  font-weight: 500;
+  text-align: center;
+  color: #333333;
+  margin-top: 45px;
+}
+
+.retryButton, .submitButton {
+  @include interfaceButton();
+
+  margin: auto;
+  display: block;
+  width: 200px;
+  cursor: pointer;
+
+  &.disabled {
+    opacity: 0.6;
+  }
+}
+
+.closeButton {
+  @include closeButton(32px, 5px);
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+
+  &:hover {
+    &::after,
+    &::before {
+      background-color: #fff;
+    }
+  }
+}

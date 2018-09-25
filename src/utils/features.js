@@ -32,7 +32,14 @@ export const getGasPriceConfig = () => config.gasPrice || {}
 
 export const isFeatureEnabled = feature => config[feature] && config[feature].enabled
 
-export const getFeatureConfig = feature => config?.[feature]
+export const getFeatureConfig = (feature) => {
+  if (typeof config[feature] !== 'object') {
+    console.warn(`invalid feature configuration "${feature}" was requested - not available`)
+    return {}
+  }
+
+  return config[feature]
+}
 
 export const getProviderConfig = () => config.providers
 
