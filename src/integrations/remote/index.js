@@ -7,11 +7,13 @@ const config = getConfiguration()
 
 class Remote extends InjectedWeb3 {
   static providerName = WALLET_PROVIDER.REMOTE
+
   /**
    * Provider with highest priority starts off as active, if other providers are also available.
    * This allows "fallback providers" like a remote etherium host to be used as a last resort.
    */
   static providerPriority = 1
+
   static watcherInterval = 1000
 
   constructor() {
