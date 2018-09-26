@@ -43,6 +43,8 @@ const waitForGnosisConnection = instance => new Promise((resolve, reject) => {
  * @param {*dictionary} GNOSIS_OPTIONS
  */
 export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
+  if (gnosisInstance) return
+
   try {
     const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
 
@@ -64,6 +66,8 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
 }
 
 export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
+  if (gnosisROInstance) return
+
   try {
     const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
 

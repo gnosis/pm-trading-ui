@@ -16,6 +16,7 @@ const cx = classnames.bind(style)
 const LegalCompliance = ({
   documents,
   fields,
+  className,
   showHeading,
   showExplanation,
   applicationName,
@@ -83,6 +84,7 @@ const LegalCompliance = ({
 }
 
 LegalCompliance.propTypes = {
+  className: PropTypes.string,
   documents: PropTypes.arrayOf(
     PropTypes.shape({
       type: PropTypes.string,
@@ -102,6 +104,7 @@ LegalCompliance.propTypes = {
 }
 
 LegalCompliance.defaultProps = {
+  className: '',
   showHeading: false,
   showExplanation: false,
   applicationName: 'the application',

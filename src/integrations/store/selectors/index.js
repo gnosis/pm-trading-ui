@@ -1,6 +1,7 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { List } from 'immutable'
 import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
+import { normalizeHex } from 'utils/helpers'
 
 const config = getConfiguration()
 
@@ -8,6 +9,8 @@ const legalComplianceConfig = getFeatureConfig('legalCompliance')
 const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
 const isTournament = isFeatureEnabled('tournament')
 const requireRegistration = isFeatureEnabled('registration')
+const requireVerification = isFeatureEnabled('verification')
+const verificationConfig = getFeatureConfig('verification')
 
 const legalDocuments = legalComplianceConfig.documents || []
 
@@ -41,7 +44,7 @@ export const getActiveProvider = (state) => {
 export const getCurrentAccount = (state) => {
   const provider = getActiveProvider(state)
   if (provider && provider.account) {
-    return provider.account.toLowerCase()
+    return provider.account
   }
 
   return undefined
@@ -168,4 +171,12 @@ export const isMetamaskLocked = (state) => {
   // Most likeliy it is locked
 
   return metamask && !metamask.account && !!metamask.network
+}
+
+export const isVerified = (state) => {
+  const account = getCurrentAccount(state)
+
+  if (!requireVerification) return true
+
+  return account && state.integrations.getIn(['accountSettings', normalizeHex(account), 'verificatedWith']) === verificationConfig.handler
 }

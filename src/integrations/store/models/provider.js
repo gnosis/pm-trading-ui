@@ -11,6 +11,7 @@ const ProviderRecord = Record(
     priority: 1,
     networkId: 0,
     mainnetAddress: undefined,
+    verificationHash: undefined,
   },
   'Provider',
 )
