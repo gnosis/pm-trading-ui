@@ -1,7 +1,11 @@
 version: '3'
 services:
   web:
-    command: npm run start-prod
+    command: npm run start
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - ./dist:/app/dist
+    ports:
+      - 5000:5000

@@ -7,6 +7,6 @@ RUN cd /tmp && npm install && npm install truffle-contract && npm install --only
 RUN mkdir -p /app && cp -a /tmp/node_modules /app/
 
 COPY . /app/
-RUN cd /app && npm run build
+RUN cd /app && NODE_ENV=development npm run build
 
 WORKDIR /app
