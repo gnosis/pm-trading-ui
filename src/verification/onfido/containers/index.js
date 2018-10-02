@@ -38,7 +38,7 @@ const handleCreateVerification = async (result, dispatch, props) => {
   await setStep({ page: 'signMessage' })
   let signature
   try {
-    signature = await promptSignMessage(`I hereby prove that I, ${firstName} ${lastName}, own the account "${account}" with this E-Mail Address "${email}"`)
+    signature = await promptSignMessage(`I hereby proof that I, ${firstName} ${lastName}, own the account "${account}" with this E-Mail Address "${email}"`)
   } catch (err) {
     console.error(err)
     return setStep({ page: 'denied', reason: 'Your Message Signature was rejected. Please try again, and make sure you\'re using the latest version of your wallet-provider.' })
