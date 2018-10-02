@@ -44,7 +44,7 @@ export const getActiveProvider = (state) => {
 export const getCurrentAccount = (state) => {
   const provider = getActiveProvider(state)
   if (provider && provider.account) {
-    return provider.account
+    return normalizeHex(provider.account)
   }
 
   return undefined
