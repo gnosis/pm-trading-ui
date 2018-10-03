@@ -83,7 +83,6 @@ class MarketDetail extends Component {
   async fetchMarketUpdates() {
     const {
       fetchMarket,
-      fetchMarketTrades,
       market,
       changeUrl,
       requestGasCost,
@@ -95,7 +94,6 @@ class MarketDetail extends Component {
     } = this.props
     return fetchMarket()
       .then(() => {
-        fetchMarketTrades(market)
         if (this.firstFetch && !view) {
           const availableView = this.getAvailableView()
           if (availableView) {
@@ -215,6 +213,7 @@ class MarketDetail extends Component {
       moderators,
       collateralTokenSymbol,
       hasWallet,
+      fetchMarketTrades,
     } = this.props
 
     const { marketFetchError } = this.state
@@ -266,7 +265,7 @@ class MarketDetail extends Component {
         >
           {this.renderExpandableContent()}
         </div>
-        <MarketGraph data={marketGraph} market={market} />
+        <MarketGraph data={marketGraph} market={market} fetchMarketTrades={fetchMarketTrades} />
       </div>
     )
   }
