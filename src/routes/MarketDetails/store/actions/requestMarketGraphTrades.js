@@ -39,7 +39,7 @@ export default ({ creation, resolution, address }) => async (dispatch) => {
   const requests = []
   // fetch all trades if they're in limit
   if (count <= TOTAL_TRADES_LIMIT) {
-    await fetchAllTrades(normalizedMarket, count, getRequestParameters(creation, resolution, 'ASC', 200), requests)
+    fetchAllTrades(normalizedMarket, count, getRequestParameters(creation, resolution, 'ASC', 200), requests)
   } else {
     const resolutionDatePassed = moment.utc().isBefore(moment.utc(resolution))
     const diff = moment.utc(resolutionDatePassed ? moment.utc() : resolution).diff(moment.utc(creation), 'days')
