@@ -4,7 +4,7 @@ import { hexWithoutPrefix } from 'utils/helpers'
 import { requestFromRestAPI } from 'api/utils/fetch'
 import { processTradesResponse } from 'store/actions/trades'
 
-const TOTAL_TRADES_LIMIT = 500
+const TOTAL_TRADES_LIMIT = 2000
 
 const getRequestParameters = (from, to, order = 'ASC', limit = 200, offset = 0) => ({
   creation_date_time_0: moment.utc(from).format('YYYY-MM-DD hh:mm:ss'),
