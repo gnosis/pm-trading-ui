@@ -5,4 +5,3 @@ export { default as requestMarketSharesForAccount } from './requestMarketSharesF
 export { default as requestMarket } from './requestMarket'
 export { default as requestMarketGraphTrades } from './requestMarketGraphTrades.js'
 export * from './requestGasCost'
-export * from './requestMarketGraphTrades'
