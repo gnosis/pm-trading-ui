@@ -1,7 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
-const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const AutoDllPlugin = require('autodll-webpack-plugin')
 
@@ -157,12 +157,10 @@ module.exports = (env = {}) => {
           ],
         },
         plugins: [
-          new UglifyJsWebpackPlugin({
+          new TerserPlugin({
             sourceMap: true,
             parallel: true,
-            uglifyOptions: {
-              compress: false,
-            },
+            cache: true,
           }),
           new webpack.EnvironmentPlugin({
             NODE_ENV: 'production',
@@ -177,12 +175,10 @@ module.exports = (env = {}) => {
       new webpack.DefinePlugin({
         'process.env.FALLBACK_CONFIG': `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
-      new UglifyJsWebpackPlugin({
+      new TerserPlugin({
         sourceMap: true,
         parallel: true,
-        uglifyOptions: {
-          compress: false,
-        },
+        cache: true,
       }),
       new CopyWebpackPlugin([{ from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` }]),
     ],
