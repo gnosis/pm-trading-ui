@@ -2,6 +2,7 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import { List } from 'immutable'
 import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
 import { normalizeHex } from 'utils/helpers'
+import { getCollateralToken } from 'store/selectors/blockchain'
 
 const config = getConfiguration()
 
@@ -11,6 +12,7 @@ const isTournament = isFeatureEnabled('tournament')
 const requireRegistration = isFeatureEnabled('registration')
 const requireVerification = isFeatureEnabled('verification')
 const verificationConfig = getFeatureConfig('verification')
+const collateralTokenConfig = getFeatureConfig('collateralToken')
 
 const legalDocuments = legalComplianceConfig.documents || []
 

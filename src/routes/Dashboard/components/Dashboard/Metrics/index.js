@@ -32,7 +32,7 @@ const Metrics = ({
         explanation={`${collateralToken.symbol} tokens`}
       >
         <DecimalValue value={collateralToken.balance} className={cx('metric-value')} />&nbsp;
-        <CurrencyName tokenAddress={collateralToken.address} />
+        {collateralToken.symbol}
       </Metric>
       <Metric
         isLoading={typeof predictedProfits === 'undefined'}
@@ -40,7 +40,7 @@ const Metrics = ({
         explanation="Predicted Profits"
       >
         <DecimalValue value={weiToEth(predictedProfits)} className={cx('metric-value')} />&nbsp;
-        <CurrencyName tokenAddress={collateralToken.address} />
+        {collateralToken.symbol}
       </Metric>
       {tournamentEnabled && (
         <>

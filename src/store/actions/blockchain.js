@@ -108,6 +108,7 @@ export const updateCollateralToken = () => async (dispatch) => {
 
   const { source, options } = collateralTokenFromConfig
 
+
   if (source === TOKEN_SOURCE_ETH) {
     // options are optional here
     const { icon = ETH_TOKEN_ICON, symbol = 'ETH' } = options || {}
@@ -118,7 +119,9 @@ export const updateCollateralToken = () => async (dispatch) => {
       icon,
     }))
   } if (source === TOKEN_SOURCE_CONTRACT) {
-    const { contractName, symbol, icon } = options
+    const {
+      contractName, symbol, icon, isWrappedEther = false,
+    } = options
 
     if (!contractName) {
       throw new Error(
@@ -154,14 +157,18 @@ export const updateCollateralToken = () => async (dispatch) => {
       address: hexWithoutPrefix(contractInstance.address),
       symbol: tokenSymbol,
       icon: icon || ETH_TOKEN_ICON,
+      isWrappedEther,
     }))
   } if (source === TOKEN_SOURCE_ADDRESS) {
-    const { address, symbol, icon } = options
+    const {
+      address, symbol, icon, isWrappedEther = false,
+    } = options
     return dispatch(setCollateralToken({
       source: TOKEN_SOURCE_ADDRESS,
       address: hexWithoutPrefix(address),
       symbol,
       icon,
+      isWrappedEther,
     }))
   }
 

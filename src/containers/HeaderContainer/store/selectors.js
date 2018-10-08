@@ -1,6 +1,7 @@
 import {
   getCurrentAccount,
   getCurrentNetwork,
+  getCurrentBalance,
   getActiveProvider,
   checkWalletConnection,
   hasAcceptedTermsAndConditions,
@@ -48,9 +49,11 @@ export default (state) => {
     showGameGuide: isFeatureEnabled('gameGuide'),
     gameGuideType: gameGuideConfig.type,
     gameGuideURL: gameGuideConfig.url,
+    etherBalance: getCurrentBalance(state),
     tokenAddress: collateralToken.address,
     tokenBalance: collateralToken.balance,
     tokenSymbol: collateralToken.symbol,
+    tokenBalanceIsWrappedEther: collateralToken.isWrappedEther,
     acceptedTOS: hasAcceptedTermsAndConditions(state),
     hasVerified: isVerified(state),
   }
