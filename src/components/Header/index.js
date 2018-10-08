@@ -2,18 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
-import { upperFirst } from 'lodash'
 import className from 'classnames/bind'
-import DecimalValue from 'components/DecimalValue'
+import Layout from 'components/Header/Layouts'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { hasMetamask } from 'integrations/metamask/utils'
 import { WALLET_PROVIDER } from 'integrations/constants'
-
-import Identicon from './Identicon'
-import ProviderIcon from './ProviderIcon'
-import BadgeIcon from './BadgeIcon'
-import MenuAccountDropdown from './MenuAccountDropdown'
 
 import css from './Header.scss'
 
@@ -104,26 +98,22 @@ class Header extends Component {
 
   render() {
     const {
-      version,
       hasWallet,
-      currentAccount,
-      currentNetwork,
-      tokenBalance,
       currentProvider,
       logoPath,
       smallLogoPath,
-      showScoreboard,
       showGameGuide,
       gameGuideType,
       gameGuideURL,
-      tokenSymbol,
       mainnetAddress,
-      userTournamentInfo,
       acceptedTOS,
       hasVerified,
     } = this.props
 
-    let canInteract = (acceptedTOS || !legalComplianceEnabled) && (hasVerified || !requireVerification) && hasWallet && !!currentProvider
+    let canInteract = (acceptedTOS || !legalComplianceEnabled)
+      && (hasVerified || !requireVerification)
+      && hasWallet
+      && !!currentProvider
 
     if (tournamentEnabled && useMetamask && requireRegistration) {
       canInteract = hasWallet && !!mainnetAddress
@@ -154,57 +144,14 @@ class Header extends Component {
 
     return (
       <div className={cx('headerContainer')}>
-        <div className={cx('container', 'containerFlex')}>
-          <div className={cx('group', 'logo')}>
-            <NavLink to="/markets/list">
-              <div className={cx('headerLogo', 'beta')} style={logoVars} />
-            </NavLink>
-          </div>
-          <div className={cx('group', 'left', 'version')}>
-            {version}
-          </div>
-          <div className={cx('group', 'left', 'navLinks')}>
-            <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
-              Markets
-            </NavLink>
-            {canInteract && (
-              <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
-                Dashboard
-              </NavLink>
-            )}
-            {showScoreboard && (
-              <NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink')}>
-                Scoreboard
-              </NavLink>
-            )}
-            {gameGuideLink}
-          </div>
-
-          <div className={cx('group', 'right')}>
-            {canInteract ? (
-              <div className={cx('account')}>
-                {currentNetwork
-                  && currentNetwork !== 'MAIN' && (
-                  <span className={cx('network', 'text')}>
-                      Network:
-                    {upperFirst(currentNetwork.toLowerCase())}
-                  </span>
-                )}
-                <DecimalValue value={tokenBalance} className={cx('text')} />
-                &nbsp;
-                {<span>{tokenSymbol || 'ETH'}</span>}
-                {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
-                <ProviderIcon provider={currentProvider} />
-                <Identicon account={currentAccount} />
-                {useUport && <MenuAccountDropdown />}
-              </div>
-            ) : (
-              <button type="button" className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
-                Connect a wallet
-              </button>
-            )}
-          </div>
-        </div>
+        <Layout
+          {...this.props}
+          logoVars={logoVars}
+          handleConnectWalletClick={this.handleConnectWalletClick}
+          canInteract={canInteract}
+          gameGuideLink={gameGuideLink}
+          badgesEnabled={badgesEnabled}
+        />
       </div>
     )
   }
