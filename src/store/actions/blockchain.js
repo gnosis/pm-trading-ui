@@ -220,4 +220,6 @@ export const initGnosis = () => async (dispatch, getState) => {
       return dispatch(setConnectionStatus({ connected: false }))
     }
   }
+
+  return undefined
 }

@@ -6,7 +6,6 @@ import classnames from 'classnames/bind'
 import outstandingPredictionsIcon from 'routes/Dashboard/assets/icon_outstandingPredictions.svg'
 import etherTokensIcon from 'routes/Dashboard/assets/icon_etherTokens.svg'
 
-import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import Block from 'components/layout/Block'
 import { weiToEth } from 'utils/helpers'

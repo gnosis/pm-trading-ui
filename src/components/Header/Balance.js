@@ -22,7 +22,17 @@ const Balance = ({
     const balanceTooltip = (
       <div className={cx('weth-explanation')}>
         <strong>{Decimal(tokenBalance).sub(etherBalance).toDP(3).toString()} {tokenSymbol}</strong> + <strong>{Decimal(etherBalance).toDP(3).toString()} ETH</strong>
-        <p>Your balance is calculated as the sum of your ETH and Wrapped-ETH balance.<br /> <a href="https://weth.io" target="_blank" rel="noopener noreferrer">What&apos;s wrapped ether?</a></p>
+        <p>
+          Your balance is calculated as the sum
+          of your ETH and Wrapped-ETH balance.<br />
+          <a
+            href="https://weth.io"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            What&apos;s wrapped ether?
+          </a>
+        </p>
       </div>
     )
 

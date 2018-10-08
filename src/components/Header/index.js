@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
 import { upperFirst } from 'lodash'
 import className from 'classnames/bind'
-import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { hasMetamask } from 'integrations/metamask/utils'
@@ -126,7 +125,9 @@ class Header extends Component {
       hasVerified,
     } = this.props
 
-    let canInteract = (acceptedTOS || !legalComplianceEnabled) && (hasVerified || !requireVerification) && hasWallet && !!currentProvider
+    let canInteract = (acceptedTOS || !legalComplianceEnabled)
+      && (hasVerified || !requireVerification)
+      && hasWallet && !!currentProvider
 
     if (tournamentEnabled && useMetamask && requireRegistration) {
       canInteract = hasWallet && !!mainnetAddress
