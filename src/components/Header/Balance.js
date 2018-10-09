@@ -21,7 +21,7 @@ const Balance = ({
   if (isWrappedEther) {
     const balanceTooltip = (
       <div className={cx('weth-explanation')}>
-        <strong>{Decimal(tokenBalance).sub(etherBalance).toDP(3).toString()} {tokenSymbol}</strong> + <strong>{Decimal(etherBalance).toDP(3).toString()} ETH</strong>
+        <strong>{Decimal(tokenBalance).sub(etherBalance).toDP(3).toString()} {tokenSymbol === 'ETH' ? 'WETH' : tokenSymbol}</strong> + <strong>{Decimal(etherBalance).toDP(3).toString()} ETH</strong>
         <p>
           Your balance is calculated as the sum
           of your ETH and Wrapped-ETH balance.<br />
