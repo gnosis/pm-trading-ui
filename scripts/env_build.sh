@@ -2,7 +2,7 @@
 
 export GNOSIS_ENV=olympia/staging;
 
-if [[ ${TRAVIS_BRANCH} == "master" ]]; then
+if [[ ${TRAVIS_BRANCH} == "master" ]] || [[ -n ${TRAVIS_TAG} ]]; then
   export NODE_ENV=production;
 else
   export NODE_ENV=development;

@@ -143,7 +143,8 @@ export const isConnectedToCorrectNetwork = (state) => {
 
 export const checkWalletConnection = (state) => {
   const provider = getActiveProvider(state)
-  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state) || (isTournament && !!getRegisteredMainnetAddress(state))
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
+    || (isTournament && !!getRegisteredMainnetAddress(state))
 
   if (termsNotRequiredOrAccepted && provider?.account) {
     return true
@@ -152,7 +153,9 @@ export const checkWalletConnection = (state) => {
   return false
 }
 
-export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
+export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state)
+  && checkWalletConnection(state)
+  && !isConnectedToCorrectNetwork(state)
 
 export const isOnWhitelist = (state) => {
   const account = getCurrentAccount(state)

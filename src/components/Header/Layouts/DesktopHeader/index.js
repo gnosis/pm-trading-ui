@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
-import DecimalValue from 'components/DecimalValue'
+import Balance from 'components/Header/Balance'
 import { NavLink } from 'react-router-dom'
 import { upperFirst } from 'lodash'
 import Identicon from '../../Identicon'
@@ -30,6 +30,8 @@ const DesktopHeader = ({
   showGameGuide,
   gameGuideType,
   gameGuideURL,
+  etherBalance,
+  tokenBalanceIsWrappedEther,
 }) => (
   <div className={cx('container', 'containerFlex')}>
     <div className={cx('group', 'logo')}>
@@ -74,9 +76,12 @@ const DesktopHeader = ({
               {upperFirst(currentNetwork.toLowerCase())}
             </span>
           )}
-          <DecimalValue value={tokenBalance} className={cx('text')} />
-          &nbsp;
-          {<span>{tokenSymbol || 'ETH'}</span>}
+          <Balance
+            etherBalance={etherBalance}
+            tokenBalance={tokenBalance}
+            tokenSymbol={tokenSymbol}
+            isWrappedEther={tokenBalanceIsWrappedEther}
+          />
           {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
           <ProviderIcon provider={currentProvider} />
           <Identicon account={currentAccount} />
