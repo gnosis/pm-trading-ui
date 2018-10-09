@@ -3,18 +3,20 @@ import { slide as Menu } from 'react-burger-menu'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import cn from 'classnames/bind'
-import style from '../Header.scss'
+import BurgerIcon from './BurgerIcon'
+import style from './MobileHeader.scss'
+import './BurgerMenuStyles.scss?raw'
 
 const cx = cn.bind(style)
 
 const MobileHeader = ({ logoVars }) => (
-  <div>
-    <div className={cx('group', 'logo')}>
+  <div className={cx('headerMobileContainer')}>
+    <div className={cx('logo')}>
       <NavLink to="/markets/list">
         <div className={cx('headerLogo', 'beta')} style={logoVars} />
       </NavLink>
     </div>
-    <Menu right>
+    <Menu right customBurgerIcon={<BurgerIcon />}>
       <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
         Markets
       </NavLink>

@@ -17,7 +17,6 @@ const DesktopHeader = ({
   logoVars,
   canInteract,
   showScoreboard,
-  gameGuideLink,
   currentNetwork,
   tokenBalance,
   tokenSymbol,
@@ -54,16 +53,20 @@ const DesktopHeader = ({
           Scoreboard
         </NavLink>
       )}
-      {gameGuideType === 'default' ? (
-        <NavLink to="/game-guide" activeClassName={cx('active')} className={cx('navLink')}>
-          Game guide
-        </NavLink>
-      ) : null}
-      {gameGuideType === 'link' ? (
-        <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
-          Game Guide
-        </a>
-      ) : null}
+      {showGameGuide && (
+        <>
+          {gameGuideType === 'default' ? (
+            <NavLink to="/game-guide" activeClassName={cx('active')} className={cx('navLink')}>
+              Game guide
+            </NavLink>
+          ) : null}
+          {gameGuideType === 'link' ? (
+            <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
+              Game Guide
+            </a>
+          ) : null}
+        </>
+      )}
     </div>
 
     <div className={cx('group', 'right')}>

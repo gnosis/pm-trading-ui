@@ -44,7 +44,7 @@ export const getCollateralToken = (state) => {
 
       if (isWrappedEther) {
         const etherBalance = getCurrentBalance(state)
-        tokenBalance += etherBalance
+        tokenBalance = Decimal(tokenBalance).add(etherBalance).toString()
       }
 
       return {
@@ -59,7 +59,7 @@ export const getCollateralToken = (state) => {
 
       if (isWrappedEther) {
         const etherBalance = getCurrentBalance(state)
-        tokenBalance += etherBalance
+        tokenBalance = Decimal(tokenBalance).add(etherBalance).toString()
       }
 
       return {

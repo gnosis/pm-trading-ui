@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import className from 'classnames/bind'
 import Tooltip from 'rc-tooltip'
 import Decimal from 'decimal.js'
@@ -6,7 +7,7 @@ import Decimal from 'decimal.js'
 import Indefinite from 'components/Spinner/Indefinite'
 import DecimalValue from 'components/DecimalValue'
 
-import css from './Header.scss'
+import css from './Balance.scss'
 
 const cx = className.bind(css)
 
@@ -62,10 +63,17 @@ const Balance = ({
   )
 }
 
+Balance.propTypes = {
+  tokenBalance: PropTypes.string.isRequired,
+  tokenSymbol: PropTypes.string,
+  etherBalance: PropTypes.string,
+  isWrappedEther: PropTypes.bool,
+}
+
 Balance.defaultProps = {
-  tokenBalance: undefined,
   tokenSymbol: 'ETH',
   etherBalance: '0',
+  isWrappedEther: false,
 }
 
 export default Balance

@@ -1,17 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
-import className from 'classnames/bind'
 import Layout from 'components/Header/Layouts'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { hasMetamask } from 'integrations/metamask/utils'
 import { WALLET_PROVIDER } from 'integrations/constants'
-
-import css from './Header.scss'
-
-const cx = className.bind(css)
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 const badgesEnabled = isFeatureEnabled('badges')
@@ -123,36 +117,14 @@ class Header extends Component {
     logoVars['--logoPath'] = `url("${logoPath}")`
     logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
 
-    let gameGuideLink = <div />
-    if (showGameGuide) {
-      if (gameGuideType === 'default') {
-        gameGuideLink = (
-          <NavLink to="/game-guide" activeClassName={cx('active')} className={cx('navLink')}>
-            Game guide
-          </NavLink>
-        )
-      }
-
-      if (gameGuideType === 'link') {
-        gameGuideLink = (
-          <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
-            Game Guide
-          </a>
-        )
-      }
-    }
-
     return (
-      <div className={cx('headerContainer')}>
-        <Layout
-          {...this.props}
-          logoVars={logoVars}
-          handleConnectWalletClick={this.handleConnectWalletClick}
-          canInteract={canInteract}
-          gameGuideLink={gameGuideLink}
-          badgesEnabled={badgesEnabled}
-        />
-      </div>
+      <Layout
+        {...this.props}
+        logoVars={logoVars}
+        handleConnectWalletClick={this.handleConnectWalletClick}
+        canInteract={canInteract}
+        badgesEnabled={badgesEnabled}
+      />
     )
   }
 }
