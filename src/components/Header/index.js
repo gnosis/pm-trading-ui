@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
 import { upperFirst } from 'lodash'
 import className from 'classnames/bind'
-import DecimalValue from 'components/DecimalValue'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { hasMetamask } from 'integrations/metamask/utils'
@@ -14,6 +13,7 @@ import Identicon from './Identicon'
 import ProviderIcon from './ProviderIcon'
 import BadgeIcon from './BadgeIcon'
 import MenuAccountDropdown from './MenuAccountDropdown'
+import Balance from './Balance'
 
 import css from './Header.scss'
 
@@ -108,7 +108,9 @@ class Header extends Component {
       hasWallet,
       currentAccount,
       currentNetwork,
+      etherBalance,
       tokenBalance,
+      tokenBalanceIsWrappedEther,
       currentProvider,
       logoPath,
       smallLogoPath,
@@ -123,7 +125,9 @@ class Header extends Component {
       hasVerified,
     } = this.props
 
-    let canInteract = (acceptedTOS || !legalComplianceEnabled) && (hasVerified || !requireVerification) && hasWallet && !!currentProvider
+    let canInteract = (acceptedTOS || !legalComplianceEnabled)
+      && (hasVerified || !requireVerification)
+      && hasWallet && !!currentProvider
 
     if (tournamentEnabled && useMetamask && requireRegistration) {
       canInteract = hasWallet && !!mainnetAddress
@@ -190,9 +194,12 @@ class Header extends Component {
                     {upperFirst(currentNetwork.toLowerCase())}
                   </span>
                 )}
-                <DecimalValue value={tokenBalance} className={cx('text')} />
-                &nbsp;
-                {<span>{tokenSymbol || 'ETH'}</span>}
+                <Balance
+                  etherBalance={etherBalance}
+                  tokenBalance={tokenBalance}
+                  tokenSymbol={tokenSymbol}
+                  isWrappedEther={tokenBalanceIsWrappedEther}
+                />
                 {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
                 <ProviderIcon provider={currentProvider} />
                 <Identicon account={currentAccount} />
@@ -214,7 +221,9 @@ Header.propTypes = {
   version: PropTypes.string,
   currentNetwork: PropTypes.string,
   hasWallet: PropTypes.bool,
+  etherBalance: PropTypes.string,
   tokenBalance: PropTypes.string,
+  tokenBalanceIsWrappedEther: PropTypes.bool,
   currentProvider: providerPropType,
   currentAccount: PropTypes.string,
   userTournamentInfo: PropTypes.shape({}),
@@ -241,6 +250,7 @@ Header.defaultProps = {
   currentNetwork: '',
   hasWallet: false,
   tokenBalance: '0',
+  etherBalance: '0',
   currentProvider: {},
   currentAccount: '',
   showScoreboard: false,
@@ -251,6 +261,7 @@ Header.defaultProps = {
   lockedMetamask: true,
   userTournamentInfo: undefined,
   tokenSymbol: 'ETH',
+  tokenBalanceIsWrappedEther: false,
   acceptedTOS: false,
   hasVerified: false,
 }

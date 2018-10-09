@@ -6,7 +6,6 @@ import classnames from 'classnames/bind'
 import outstandingPredictionsIcon from 'routes/Dashboard/assets/icon_outstandingPredictions.svg'
 import etherTokensIcon from 'routes/Dashboard/assets/icon_etherTokens.svg'
 
-import CurrencyName from 'components/CurrencyName'
 import DecimalValue from 'components/DecimalValue'
 import Block from 'components/layout/Block'
 import { weiToEth } from 'utils/helpers'
@@ -32,7 +31,7 @@ const Metrics = ({
         explanation={`${collateralToken.symbol} tokens`}
       >
         <DecimalValue value={collateralToken.balance} className={cx('metric-value')} />&nbsp;
-        <CurrencyName tokenAddress={collateralToken.address} />
+        {collateralToken.symbol}
       </Metric>
       <Metric
         isLoading={typeof predictedProfits === 'undefined'}
@@ -40,7 +39,7 @@ const Metrics = ({
         explanation="Predicted Profits"
       >
         <DecimalValue value={weiToEth(predictedProfits)} className={cx('metric-value')} />&nbsp;
-        <CurrencyName tokenAddress={collateralToken.address} />
+        {collateralToken.symbol}
       </Metric>
       {tournamentEnabled && (
         <>

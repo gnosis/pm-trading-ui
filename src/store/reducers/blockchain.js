@@ -29,7 +29,7 @@ const reducer = handleActions(
     [setTokenBalance]: (state, { payload: { tokenAddress, tokenBalance } }) => state.setIn(['tokenBalances', tokenAddress], tokenBalance),
     [setCollateralToken]: (state, {
       payload: {
-        address, symbol, icon, source,
+        address, symbol, icon, source, isWrappedEther,
       },
     }) => state.set(
       'collateralToken',
@@ -38,6 +38,7 @@ const reducer = handleActions(
         symbol,
         icon,
         source,
+        isWrappedEther,
       }),
     ),
   },

@@ -35,22 +35,36 @@ export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['
 export const getCollateralToken = (state) => {
   const collateralToken = state.blockchain.get('collateralToken').toJS()
 
-  const { source, address } = collateralToken
+  const { source, address, isWrappedEther } = collateralToken
 
   if (source === TOKEN_SOURCE_ADDRESS) {
     // hardcoded address for collateralToken contract
     if (address) {
+      let tokenBalance = weiToEth(getTokenAmount(state, normalizeHex(address)))
+
+      if (isWrappedEther) {
+        const etherBalance = getCurrentBalance(state)
+        tokenBalance += etherBalance
+      }
+
       return {
         ...collateralToken,
-        balance: weiToEth(getTokenAmount(state, normalizeHex(address))),
+        balance: tokenBalance,
       }
     }
   } else if (source === TOKEN_SOURCE_CONTRACT) {
     // might need to wait until address becomes available
     if (address) {
+      let tokenBalance = weiToEth(getTokenAmount(state, normalizeHex(address)))
+
+      if (isWrappedEther) {
+        const etherBalance = getCurrentBalance(state)
+        tokenBalance += etherBalance
+      }
+
       return {
         ...collateralToken,
-        balance: weiToEth(getTokenAmount(state, normalizeHex(address))),
+        balance: tokenBalance,
       }
     }
   } else if (source === TOKEN_SOURCE_ETH) {
