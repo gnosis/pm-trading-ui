@@ -8,7 +8,7 @@ import Identicon from '../../Identicon'
 import ProviderIcon from '../../ProviderIcon'
 import BadgeIcon from '../../BadgeIcon'
 import MenuAccountDropdown from '../../MenuAccountDropdown'
-import style from '../../Header.scss'
+import style from './DesktopHeader.scss'
 
 const cx = cn.bind(style)
 
@@ -27,6 +27,9 @@ const DesktopHeader = ({
   currentAccount,
   useUport,
   handleConnectWalletClick,
+  showGameGuide,
+  gameGuideType,
+  gameGuideURL,
 }) => (
   <div className={cx('container', 'containerFlex')}>
     <div className={cx('group', 'logo')}>
@@ -49,7 +52,16 @@ const DesktopHeader = ({
           Scoreboard
         </NavLink>
       )}
-      {gameGuideLink}
+      {gameGuideType === 'default' ? (
+        <NavLink to="/game-guide" activeClassName={cx('active')} className={cx('navLink')}>
+          Game guide
+        </NavLink>
+      ) : null}
+      {gameGuideType === 'link' ? (
+        <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
+          Game Guide
+        </a>
+      ) : null}
     </div>
 
     <div className={cx('group', 'right')}>
