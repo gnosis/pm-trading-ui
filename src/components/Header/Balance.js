@@ -42,7 +42,7 @@ const Balance = ({
   }
 
   return (
-    <>{balance} <span className={cx('symbol')}>{tokenBalance}</span></>
+    <>{balance} <span className={cx('symbol')}>{tokenSymbol}</span></>
   )
 }
 
