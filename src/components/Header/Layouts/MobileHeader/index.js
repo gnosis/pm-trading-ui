@@ -3,11 +3,10 @@ import { slide as Menu } from 'react-burger-menu'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import cn from 'classnames/bind'
-import Balance from 'components/Header/Balance'
 import Hairline from 'components/layout/Hairline'
 import Identicon from 'components/Header/Identicon'
+import AccountOverview from './AccountOverview'
 
-import CopyIcon from './assets/icon_copy.svg'
 import BurgerIcon from './BurgerIcon'
 import style from './MobileHeader.scss'
 import './BurgerMenuStyles.scss?raw'
@@ -21,14 +20,6 @@ const HairlineStyle = {
   marginBottom: '15px',
   marginTop: '5px',
 }
-
-const copyIconStyle = {
-  width: 15,
-  height: 15,
-  marginLeft: 5,
-}
-
-const formatAddress = address => `${address.slice(0, 10)}...${address.slice(35)}`
 
 class MobileHeader extends Component {
   copyAddress = () => {
@@ -53,13 +44,8 @@ class MobileHeader extends Component {
       showGameGuide,
       gameGuideType,
       gameGuideURL,
-      currentAccount,
-      etherBalance,
-      tokenBalance,
-      tokenSymbol,
-      tokenBalanceIsWrappedEther,
-      currentNetwork,
     } = this.props
+
     return (
       <div className={cx('headerMobileContainer')}>
         <div className={cx('logo')}>
@@ -68,24 +54,7 @@ class MobileHeader extends Component {
           </NavLink>
         </div>
         <Menu right customBurgerIcon={<BurgerIcon />}>
-          <div className={cx('overviewContainer')}>
-            <div className={cx('networkBalanceWrapper')}>
-              <span className={cx('network')}>{currentNetwork}</span>
-              <Balance
-                etherBalance={etherBalance}
-                tokenBalance={tokenBalance}
-                tokenSymbol={tokenSymbol}
-                isWrappedEther={tokenBalanceIsWrappedEther}
-              />
-            </div>
-            <Identicon account={currentAccount} className={cx('identicon')} />
-            <div className={cx('addressWrapper')}>
-              <button type="button" className={cx('address')} onClick={this.copyAddress}>
-                {formatAddress(currentAccount)}
-              </button>
-              <img src={CopyIcon} style={copyIconStyle} alt="Click to copy" />
-            </div>
-          </div>
+          <AccountOverview {...this.props} copyAddress={this.copyAddress} />
           <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink', 'bm-item')}>
             Markets
           </NavLink>
