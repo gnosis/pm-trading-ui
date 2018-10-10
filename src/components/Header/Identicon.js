@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import createIcon from 'blockies'
-import Tooltip from 'rc-tooltip'
 
-import { generateWalletName, hexWithoutPrefix } from 'utils/helpers'
+import { hexWithoutPrefix } from 'utils/helpers'
 
-const Identicon = ({ account }) => {
+const Identicon = ({ account, className }) => {
   const canvas = createIcon({
     // All options are optional
     seed: hexWithoutPrefix(account).toLowerCase(), // seed used to generate icon data, default: random
@@ -18,11 +17,7 @@ const Identicon = ({ account }) => {
     // that look like eyes, mouths and noses.
   })
 
-  return (
-    <Tooltip placement="left" overlay={`"${generateWalletName(account)}" (${hexWithoutPrefix(account)})`}>
-      <img src={canvas.toDataURL()} alt={account} />
-    </Tooltip>
-  )
+  return <img className={className} src={canvas.toDataURL()} alt={account} />
 }
 
 Identicon.propTypes = {

@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
-import Balance from 'components/Header/Balance'
 import { NavLink } from 'react-router-dom'
+import Tooltip from 'rc-tooltip'
 import { upperFirst } from 'lodash'
+import Balance from 'components/Header/Balance'
+import { generateWalletName, hexWithoutPrefix } from 'utils/helpers'
 import Identicon from '../../Identicon'
 import ProviderIcon from '../../ProviderIcon'
 import BadgeIcon from '../../BadgeIcon'
@@ -87,7 +89,12 @@ const DesktopHeader = ({
           />
           {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
           <ProviderIcon provider={currentProvider} />
-          <Identicon account={currentAccount} />
+          <Tooltip
+            placement="left"
+            overlay={`"${generateWalletName(currentAccount)}" (${hexWithoutPrefix(currentAccount)})`}
+          >
+            <Identicon account={currentAccount} />
+          </Tooltip>
           {useUport && <MenuAccountDropdown />}
         </div>
       ) : (
