@@ -44,6 +44,7 @@
     "options": {
       "address": "0x645f854cd7dedc5ecd51f4ae02fcf871b982a2b6",
       "symbol": "OLY",
+      "isWrappedEther": false,
       "icon": "/assets/img/icons/icon_oly.png"
     }
   },

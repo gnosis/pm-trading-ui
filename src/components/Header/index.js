@@ -1,23 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { NavLink } from 'react-router-dom'
 import autobind from 'autobind-decorator'
-import { upperFirst } from 'lodash'
-import className from 'classnames/bind'
+import Layout from 'components/Header/Layouts'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { hasMetamask } from 'integrations/metamask/utils'
 import { WALLET_PROVIDER } from 'integrations/constants'
-
-import Identicon from './Identicon'
-import ProviderIcon from './ProviderIcon'
-import BadgeIcon from './BadgeIcon'
-import MenuAccountDropdown from './MenuAccountDropdown'
-import Balance from './Balance'
-
-import css from './Header.scss'
-
-const cx = className.bind(css)
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 const badgesEnabled = isFeatureEnabled('badges')
@@ -104,30 +92,19 @@ class Header extends Component {
 
   render() {
     const {
-      version,
       hasWallet,
-      currentAccount,
-      currentNetwork,
-      etherBalance,
-      tokenBalance,
-      tokenBalanceIsWrappedEther,
       currentProvider,
       logoPath,
       smallLogoPath,
-      showScoreboard,
-      showGameGuide,
-      gameGuideType,
-      gameGuideURL,
-      tokenSymbol,
       mainnetAddress,
-      userTournamentInfo,
       acceptedTOS,
       hasVerified,
     } = this.props
 
     let canInteract = (acceptedTOS || !legalComplianceEnabled)
       && (hasVerified || !requireVerification)
-      && hasWallet && !!currentProvider
+      && hasWallet
+      && !!currentProvider
 
     if (tournamentEnabled && useMetamask && requireRegistration) {
       canInteract = hasWallet && !!mainnetAddress
@@ -137,82 +114,14 @@ class Header extends Component {
     logoVars['--logoPath'] = `url("${logoPath}")`
     logoVars['--smallLogoPath'] = `url("${smallLogoPath}")`
 
-    let gameGuideLink = <div />
-    if (showGameGuide) {
-      if (gameGuideType === 'default') {
-        gameGuideLink = (
-          <NavLink to="/game-guide" activeClassName={cx('active')} className={cx('navLink')}>
-            Game guide
-          </NavLink>
-        )
-      }
-
-      if (gameGuideType === 'link') {
-        gameGuideLink = (
-          <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
-            Game Guide
-          </a>
-        )
-      }
-    }
-
     return (
-      <div className={cx('headerContainer')}>
-        <div className={cx('container', 'containerFlex')}>
-          <div className={cx('group', 'logo')}>
-            <NavLink to="/markets/list">
-              <div className={cx('headerLogo', 'beta')} style={logoVars} />
-            </NavLink>
-          </div>
-          <div className={cx('group', 'left', 'version')}>
-            {version}
-          </div>
-          <div className={cx('group', 'left', 'navLinks')}>
-            <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
-              Markets
-            </NavLink>
-            {canInteract && (
-              <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
-                Dashboard
-              </NavLink>
-            )}
-            {showScoreboard && (
-              <NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink')}>
-                Scoreboard
-              </NavLink>
-            )}
-            {gameGuideLink}
-          </div>
-
-          <div className={cx('group', 'right')}>
-            {canInteract ? (
-              <div className={cx('account')}>
-                {currentNetwork
-                  && currentNetwork !== 'MAIN' && (
-                  <span className={cx('network', 'text')}>
-                      Network:
-                    {upperFirst(currentNetwork.toLowerCase())}
-                  </span>
-                )}
-                <Balance
-                  etherBalance={etherBalance}
-                  tokenBalance={tokenBalance}
-                  tokenSymbol={tokenSymbol}
-                  isWrappedEther={tokenBalanceIsWrappedEther}
-                />
-                {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
-                <ProviderIcon provider={currentProvider} />
-                <Identicon account={currentAccount} />
-                {useUport && <MenuAccountDropdown />}
-              </div>
-            ) : (
-              <button type="button" className={cx('connect-wallet')} onClick={this.handleConnectWalletClick}>
-                Connect a wallet
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+      <Layout
+        {...this.props}
+        logoVars={logoVars}
+        handleConnectWalletClick={this.handleConnectWalletClick}
+        canInteract={canInteract}
+        badgesEnabled={badgesEnabled}
+      />
     )
   }
 }

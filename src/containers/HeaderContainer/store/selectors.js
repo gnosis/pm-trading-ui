@@ -56,5 +56,6 @@ export default (state) => {
     tokenBalanceIsWrappedEther: collateralToken.isWrappedEther,
     acceptedTOS: hasAcceptedTermsAndConditions(state),
     hasVerified: isVerified(state),
+    modal: state.modal,
   }
 }

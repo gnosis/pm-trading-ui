@@ -1,9 +1,11 @@
 @import '~style/vars.scss';
 
 $navbarHeight: 40px;
-.headerContainer {
-  vertical-align: middle;
+
+.containerFlex {
   padding: 30px 0 40px;
+  display: flex;
+  position: relative;
 
   @media (min-width: 768px) {
     .navLinks {
@@ -32,12 +34,6 @@ $navbarHeight: 40px;
     padding: 0;
     color: #00a6c4;
   }
-
-  .containerFlex {
-    display: flex;
-    position: relative;
-  }
-
   .account {
     display: flex;
     align-items: center;
@@ -141,7 +137,7 @@ $navbarHeight: 40px;
   display: inline-block;
   height: 25px;
   width: 70px;
-  background-image: var(--smallLogoPath, url('../../assets/img/gnosis_logo_icon.svg'));
+  background-image: var(--smallLogoPath, url('../../../../assets/img/gnosis_logo_icon.svg'));
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;
@@ -149,7 +145,7 @@ $navbarHeight: 40px;
   @media (min-width: $screen-sm) {
     height: 40px;
     width: 130px;
-    background-image: var(--logoPath, url('../../assets/img/gnosis_logo.svg'));
+    background-image: var(--logoPath, url('../../../../assets/img/gnosis_logo.svg'));
   }
 
   &.beta {
@@ -171,14 +167,4 @@ $navbarHeight: 40px;
       }
     }
   }
-}
-
-.weth-explanation {
-  max-width: 250px;
-  text-align: center;
-}
-
-.symbol {
-  text-decoration: underline; 
-  text-decoration-style: dotted;
 }
