@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import cn from 'classnames/bind'
 import Hairline from 'components/layout/Hairline'
-import Identicon from 'components/Header/Identicon'
 import AccountOverview from './AccountOverview'
 
 import BurgerIcon from './BurgerIcon'
@@ -22,6 +21,25 @@ const HairlineStyle = {
 }
 
 class MobileHeader extends Component {
+  state = {
+    menuOpen: false,
+  }
+
+  handleStateChange = (state) => {
+    this.setState({ menuOpen: state.isOpen })
+  }
+
+  closeMenu = () => {
+    this.setState({ menuOpen: false })
+  }
+
+  connectWalletClick = () => {
+    const { handleConnectWalletClick } = this.props
+    this.closeMenu()
+
+    handleConnectWalletClick()
+  }
+
   copyAddress = () => {
     const { currentAccount } = this.props
     if (!navigator.clipboard) {
@@ -44,7 +62,14 @@ class MobileHeader extends Component {
       showGameGuide,
       gameGuideType,
       gameGuideURL,
+      currentAccount,
+      modal,
     } = this.props
+    const { menuOpen } = this.state
+
+    const isModalOpen = modal.get('isOpen', false)
+    console.log(isModalOpen)
+    const onStateChangeHandler = state => this.handleStateChange(state)
 
     return (
       <div className={cx('headerMobileContainer')}>
@@ -53,15 +78,36 @@ class MobileHeader extends Component {
             <div className={cx('headerLogo', 'beta')} style={logoVars} />
           </NavLink>
         </div>
-        <Menu right customBurgerIcon={<BurgerIcon />}>
-          <AccountOverview {...this.props} copyAddress={this.copyAddress} />
-          <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink', 'bm-item')}>
+        <Menu
+          right
+          customBurgerIcon={<BurgerIcon addClass={cx({ hiddenIcon: isModalOpen })} />}
+          isOpen={menuOpen}
+          onStateChange={onStateChangeHandler}
+        >
+          {currentAccount ? (
+            <AccountOverview {...this.props} copyAddress={this.copyAddress} />
+          ) : (
+            <button type="button" className={cx('connect-wallet')} onClick={this.connectWalletClick}>
+              Connect a wallet
+            </button>
+          )}
+          <NavLink
+            to="/markets/list"
+            activeClassName={cx('active')}
+            className={cx('navLink', 'bm-item')}
+            onClick={this.closeMenu}
+          >
             Markets
           </NavLink>
           <Hairline style={HairlineStyle} />
           {canInteract && (
             <>
-              <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink', 'bm-item')}>
+              <NavLink
+                to="/dashboard"
+                activeClassName={cx('active')}
+                className={cx('navLink', 'bm-item')}
+                onClick={this.closeMenu}
+              >
                 Dashboard
               </NavLink>
               <Hairline style={HairlineStyle} />
@@ -69,7 +115,12 @@ class MobileHeader extends Component {
           )}
           {showScoreboard && (
             <>
-              <NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink', 'bm-item')}>
+              <NavLink
+                to="/scoreboard"
+                activeClassName={cx('active')}
+                className={cx('navLink', 'bm-item')}
+                onClick={this.closeMenu}
+              >
                 Scoreboard
               </NavLink>
               <Hairline style={HairlineStyle} />
@@ -79,7 +130,12 @@ class MobileHeader extends Component {
             <>
               {gameGuideType === 'default' ? (
                 <>
-                  <NavLink to="/game-guide" activeClassName={cx('active')} className={cx('navLink', 'bm-item')}>
+                  <NavLink
+                    to="/game-guide"
+                    activeClassName={cx('active')}
+                    className={cx('navLink', 'bm-item')}
+                    onClick={this.closeMenu}
+                  >
                     Game guide
                   </NavLink>
                   <Hairline style={HairlineStyle} />
@@ -87,7 +143,13 @@ class MobileHeader extends Component {
               ) : null}
               {gameGuideType === 'link' ? (
                 <>
-                  <a href={gameGuideURL} className={cx('navLink', 'bm-item')} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={gameGuideURL}
+                    className={cx('navLink', 'bm-item')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={this.closeMenu}
+                  >
                     Game Guide
                   </a>
                   <Hairline style={HairlineStyle} />

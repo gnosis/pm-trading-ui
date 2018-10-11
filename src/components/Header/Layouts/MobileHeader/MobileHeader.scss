@@ -1,6 +1,14 @@
 .headerMobileContainer {
   display: flex;
 
+  .hiddenIcon {
+    display: none;
+
+    & ~ button {
+      display: none;
+    }
+  }
+
   .logo {
     margin-right: auto;
 
@@ -31,5 +39,24 @@
         }
       }
     }
+  }
+
+  .connect-wallet {
+    background-color: #00a6c3;
+    color: #fdfdfd;
+    border: 0;
+    padding: 15px 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    transition: background-color 0.2s ease-in-out;
+
+    &:focus,
+    &:hover {
+      background-color: darken(#00a6c3, 10%);
+    }
+  }
+
+  .navLink {
+    color: #dadadd;
   }
 }
