@@ -1,8 +1,7 @@
 import React from 'react'
 import Tooltip from 'rc-tooltip'
-import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
 import Icon from 'components/Icon'
-import { UserRecord } from 'routes/Scoreboard/store'
 import { badgeOf } from 'routes/Scoreboard/components/Table/ScoreTable/table'
 
 const BadgeIcon = ({ userTournamentInfo }) => {
@@ -26,11 +25,11 @@ const BadgeIcon = ({ userTournamentInfo }) => {
 }
 
 BadgeIcon.propTypes = {
-  userTournamentInfo: ImmutablePropTypes.record,
+  userTournamentInfo: PropTypes.shape({}),
 }
 
 BadgeIcon.defaultProps = {
-  userTournamentInfo: new UserRecord(),
+  userTournamentInfo: {},
 }
 
 export default BadgeIcon

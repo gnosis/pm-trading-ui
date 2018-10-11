@@ -22,10 +22,12 @@ const Identicon = ({ account, className }) => {
 
 Identicon.propTypes = {
   account: PropTypes.string,
+  className: PropTypes.string,
 }
 
 Identicon.defaultProps = {
   account: '',
+  className: '',
 }
 
 export default Identicon

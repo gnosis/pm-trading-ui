@@ -18,7 +18,7 @@ const Layout = props => (
       <LoadableDesktop />
     </Desktop>
     <Tablet {...props}>
-      <LoadableDesktop />
+      <LoadableMobile />
     </Tablet>
     <Mobile {...props}>
       <LoadableMobile />

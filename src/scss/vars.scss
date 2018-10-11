@@ -62,6 +62,8 @@ $paddings-inputs: 5px 0;
   height: $size;
   text-align: left;
   cursor: pointer;
+  padding: 0;
+  z-index: 1001;
   
   &::after, &::before {
     content: '';

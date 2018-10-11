@@ -5,6 +5,9 @@
   height: 41px;
   right: 20px;
   top: 24px;
+  z-index: auto !important;
+
+  // !important is here because it adds zIndex 1000 in the code and it conflicts with modal close button
 }
 
 /* Color/shape of burger icon bars */

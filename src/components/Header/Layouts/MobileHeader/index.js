@@ -68,7 +68,6 @@ class MobileHeader extends Component {
     const { menuOpen } = this.state
 
     const isModalOpen = modal.get('isOpen', false)
-    console.log(isModalOpen)
     const onStateChangeHandler = state => this.handleStateChange(state)
 
     return (

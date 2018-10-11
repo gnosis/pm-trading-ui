@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import Balance from 'components/Header/Balance'
 import Identicon from 'components/Header/Identicon'
@@ -43,5 +44,21 @@ const AccountOverview = ({
     </div>
   </div>
 )
+
+AccountOverview.propTypes = {
+  currentAccount: PropTypes.string.isRequired,
+  currentNetwork: PropTypes.string,
+  etherBalance: PropTypes.string.isRequired,
+  tokenBalance: PropTypes.string,
+  tokenSymbol: PropTypes.string,
+  tokenBalanceIsWrappedEther: PropTypes.bool.isRequired,
+  copyAddress: PropTypes.func.isRequired,
+}
+
+AccountOverview.defaultProps = {
+  currentNetwork: '',
+  tokenBalance: '0',
+  tokenSymbol: '',
+}
 
 export default AccountOverview

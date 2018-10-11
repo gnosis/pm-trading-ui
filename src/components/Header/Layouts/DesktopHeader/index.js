@@ -6,6 +6,7 @@ import Tooltip from 'rc-tooltip'
 import { upperFirst } from 'lodash'
 import Balance from 'components/Header/Balance'
 import { generateWalletName, hexWithoutPrefix } from 'utils/helpers'
+import { providerPropType } from 'utils/shapes'
 import Identicon from '../../Identicon'
 import ProviderIcon from '../../ProviderIcon'
 import BadgeIcon from '../../BadgeIcon'
@@ -105,5 +106,46 @@ const DesktopHeader = ({
     </div>
   </div>
 )
+
+DesktopHeader.propTypes = {
+  version: PropTypes.string,
+  currentNetwork: PropTypes.string,
+  etherBalance: PropTypes.string,
+  tokenBalance: PropTypes.string,
+  tokenBalanceIsWrappedEther: PropTypes.bool,
+  currentProvider: providerPropType,
+  currentAccount: PropTypes.string,
+  userTournamentInfo: PropTypes.shape({}),
+  showScoreboard: PropTypes.bool,
+  showGameGuide: PropTypes.bool,
+  gameGuideType: PropTypes.string,
+  gameGuideURL: PropTypes.string,
+  tokenSymbol: PropTypes.string,
+  handleConnectWalletClick: PropTypes.func.isRequired,
+  useUport: PropTypes.bool,
+  logoVars: PropTypes.shape({
+    '--logoPath': PropTypes.string,
+    '-smallLogoPath': PropTypes.string,
+  }).isRequired,
+  canInteract: PropTypes.bool.isRequired,
+  badgesEnabled: PropTypes.bool.isRequired,
+}
+
+DesktopHeader.defaultProps = {
+  version: '',
+  currentNetwork: '',
+  tokenBalance: '0',
+  etherBalance: '0',
+  currentProvider: {},
+  currentAccount: '',
+  showScoreboard: false,
+  showGameGuide: false,
+  gameGuideType: 'default',
+  gameGuideURL: '',
+  userTournamentInfo: undefined,
+  tokenSymbol: 'ETH',
+  useUport: false,
+  tokenBalanceIsWrappedEther: false,
+}
 
 export default DesktopHeader
