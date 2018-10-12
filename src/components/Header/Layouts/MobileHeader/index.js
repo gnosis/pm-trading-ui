@@ -8,7 +8,8 @@ import AccountOverview from './AccountOverview'
 
 import BurgerIcon from './BurgerIcon'
 import style from './MobileHeader.scss'
-import './BurgerMenuStyles.scss?raw'
+
+import('components/Header/Layouts/MobileHeader/BurgerMenuStyles.scss?raw')
 
 const cx = cn.bind(style)
 
