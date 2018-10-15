@@ -102,7 +102,7 @@
     "sha1": "^1.1.1",
     "uport-connect": "^0.7.2",
     "uuid": "^3.3.2",
-    "web3": "1.0.0-beta.33"
+    "web3": "1.0.0-beta.36"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta",
