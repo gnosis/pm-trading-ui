@@ -2,7 +2,7 @@ pm-trading-ui
 ------
 
 [![Join the chat at https://gitter.im/gnosis/pm-trading-ui](https://badges.gitter.im/gnosis/pm-trading-ui.svg)](https://gitter.im/gnosis/pm-trading-ui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Builds at Travis-CI](https://travis-ci.org/gnosis/pm-trading-ui.svg?branch=master)](https://travis-ci.org/gnosis/pm-trading-ui)
+[![Builds at Travis-CI](https://travis-ci.org/gnosis/pm-trading-ui.svg?branch=master)](https://travis-ci.org/gnosis/pm-trading-ui) [![Greenkeeper badge](https://badges.greenkeeper.io/gnosis/pm-trading-ui.svg)](https://greenkeeper.io/)
 
 Start with `npm start`, server available under `http://localhost:5000/`
 
