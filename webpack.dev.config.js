@@ -24,13 +24,16 @@ module.exports = (env = {}) => {
 
   return {
     context: `${__dirname}/src`,
-    entry: ['bootstrap-loader', 'index.js'],
+    entry: {
+      interface: ['bootstrap-loader', 'index.js'],
+      embedded: 'embedded/index.js',
+    },
     devtool: 'eval-source-map',
     mode: 'development',
     output: {
       publicPath: '/',
       path: `${__dirname}/dist`,
-      filename: '[hash].js',
+      filename: '[name].js',
     },
     resolve: {
       symlinks: false,
@@ -119,7 +122,12 @@ module.exports = (env = {}) => {
     },
     devServer: {
       disableHostCheck: true,
-      historyApiFallback: true,
+      historyApiFallback: {
+        rewrites: [
+          { from: /^\/embedded.*/, to: '/embedded/index.html' },
+          { from: /./, to: '/index.html' },
+        ],
+      },
       hot: true,
       port: 5000,
       proxy: {
@@ -156,6 +164,12 @@ module.exports = (env = {}) => {
       }),
       new HtmlWebpackPlugin({
         template: `${__dirname}/src/html/index.html`,
+        chunks: ['interface', 'bootstrap-loader'],
+      }),
+      new HtmlWebpackPlugin({
+        filename: 'embedded/index.html',
+        template: `${__dirname}/src/embedded/html/index.html`,
+        chunks: ['embedded'],
       }),
       new AutoDllPlugin({
         inject: true, // will inject the DLL bundles to index.html
