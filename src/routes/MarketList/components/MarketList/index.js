@@ -27,11 +27,11 @@ class MarketList extends Component {
           endingSoon={endingSoonMarkets}
         />
         <MarketOverview>
-          <div className="col-md-9">
-            { markets ? <Markets markets={markets} userAccount={userAccount} viewMarket={viewMarket} /> : <NoMarkets /> }
-          </div>
-          <div className="col-md-3">
+          <div className="col-md-3 col-md-push-9">
             <Filter userAccount={userAccount} />
+          </div>
+          <div className="col-md-9 col-md-pull-3">
+            { markets ? <Markets markets={markets} userAccount={userAccount} viewMarket={viewMarket} /> : <NoMarkets /> }
           </div>
         </MarketOverview>
       </div>

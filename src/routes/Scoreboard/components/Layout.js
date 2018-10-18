@@ -100,6 +100,7 @@ Layout.propTypes = {
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
   rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  hasClaimedReward: PropTypes.bool.isRequired,
 }
 
 Layout.defaultProps = {
