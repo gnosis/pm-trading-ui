@@ -6,10 +6,10 @@ const UserRecord = Record(
     diffRank: undefined,
     pastRank: undefined,
     account: undefined,
-    score: undefined,
     balance: undefined,
-    predictedProfit: undefined,
-    predictions: undefined,
+    score: 0,
+    predictedProfit: 0,
+    predictions: 0,
   },
   'User',
 )
