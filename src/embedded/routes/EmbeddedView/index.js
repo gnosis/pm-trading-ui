@@ -1,5 +1,3 @@
-import React from 'react'
+import EmbeddedViewContainer from './containers'
 
-const EmbeddedView = () => (<h1>Hallo!!!!</h1>)
-
-export default EmbeddedView
+export default EmbeddedViewContainer
