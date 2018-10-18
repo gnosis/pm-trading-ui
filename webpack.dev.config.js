@@ -2,7 +2,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const AutoDllPlugin = require('autodll-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -14,9 +13,9 @@ const configLoader = require('./scripts/configuration')
 module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
 
-  const gnosisEnv = process.env.GNOSIS_ENV || 'development'
+  const gnosisEnv = process.env.GNOSIS_ENV
 
-  console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv}'`)
+  console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv || 'default configuration (local)'}'`)
   const config = configLoader(gnosisEnv, configEnvVars)
 
   const version = env.BUILD_VERSION || pkg.version
