@@ -1,16 +1,14 @@
 import { WALLET_PROVIDER } from './constants'
 
-// eslint-disable-next-line
-let providers = {}
+import METAMASK from './metamask'
+import PARITY from './parity'
+import REMOTE from './remote'
 
-Object.keys(WALLET_PROVIDER).forEach((integrationName) => {
-  // eslint-disable-next-line
-  const providerInstance = require(`./${integrationName.toLowerCase()}/index.js`).default
-  if (providerInstance != null) {
-    providers[providerInstance.constructor.providerName] = providerInstance
-  } else {
-    throw new Error(`Could not load provider ${integrationName}`)
-  }
-})
+// eslint-disable-next-line
+let providers = {
+  [WALLET_PROVIDER.METAMASK]: METAMASK,
+  [WALLET_PROVIDER.PARITY]: PARITY,
+  [WALLET_PROVIDER.REMOTE]: REMOTE,
+}
 
 export default providers
