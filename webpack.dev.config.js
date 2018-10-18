@@ -157,38 +157,12 @@ module.exports = (env = {}) => {
       new HtmlWebpackPlugin({
         template: `${__dirname}/src/html/index.html`,
       }),
-      new AutoDllPlugin({
-        inject: true, // will inject the DLL bundles to index.html
-        filename: '[name]_[hash].js',
-        entry: {
-          vendor: [
-            'react',
-            'react-dom',
-            'moment',
-            'lodash',
-            'redux',
-            'react-redux',
-            'immutable',
-            'react-router-dom',
-            'recharts',
-            'redux-actions',
-            'reselect',
-            'web3',
-            'moment-duration-format',
-            '@gnosis.pm/pm-js',
-          ],
-        },
-        plugins: [
-          new webpack.EnvironmentPlugin({
-            NODE_ENV: 'development',
-          }),
-        ],
-      }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
         NODE_ENV: 'development',
       }),
       new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
         'process.env.FALLBACK_CONFIG': `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
