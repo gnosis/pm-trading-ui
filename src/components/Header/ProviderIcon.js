@@ -6,14 +6,11 @@ import Icon from 'components/Icon'
 import { providerPropType } from 'utils/shapes'
 import { upperFirst } from 'lodash'
 
-const PROVIDER_METAMASK = 'METAMASK'
-const PROVIDER_PARITY = 'PARITY'
-const PROVIDER_REMOTE = 'REMOTE'
+import { WALLET_PROVIDER } from 'integrations/constants'
 
 const PROVIDER_ICONS = {
-  [PROVIDER_METAMASK]: 'metamask',
-  [PROVIDER_PARITY]: 'parity',
-  [PROVIDER_REMOTE]: 'etherTokens',
+  ...WALLET_PROVIDER,
+  [WALLET_PROVIDER.REMOTE]: 'etherTokens',
 }
 
 const providerIconStyle = {
@@ -22,7 +19,7 @@ const providerIconStyle = {
 
 const ProviderIcon = ({ provider }) => (
   <Tooltip placement="left" overlay={`You are using ${upperFirst(provider.name.toLowerCase())} to connect to Gnosis`}>
-    <Icon type={PROVIDER_ICONS[provider.name]} size={35} style={providerIconStyle} />
+    <Icon type={PROVIDER_ICONS[provider.name]?.toLowerCase()} size={35} style={providerIconStyle} />
   </Tooltip>
 )
 

@@ -21,44 +21,50 @@ const badgesEnabled = isFeatureEnabled('badges')
 const cx = classnames.bind(style)
 
 const Metrics = ({
-  collateralToken = {}, predictedProfits, badge, rank,
+  collateralToken, predictedProfits, badge, rank,
 }) => (
   <div className={cx('metrics')}>
     <div className={cx('container')}>
-      <Metric
-        isLoading={collateralToken.symbol === '/'}
-        src={collateralToken.icon}
-        explanation={`${collateralToken.symbol} tokens`}
-      >
-        <DecimalValue value={collateralToken.balance} className={cx('metric-value')} />&nbsp;
-        {collateralToken.symbol}
-      </Metric>
-      <Metric
-        isLoading={typeof predictedProfits === 'undefined'}
-        src={outstandingPredictionsIcon}
-        explanation="Predicted Profits"
-      >
-        <DecimalValue value={weiToEth(predictedProfits)} className={cx('metric-value')} />&nbsp;
-        {collateralToken.symbol}
-      </Metric>
-      {tournamentEnabled && (
-        <>
-          <Metric isLoading={typeof rank === 'undefined'} src={arrows} explanation="YOUR RANK">
-            <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
-          </Metric>
-          {badgesEnabled && (
+      <div className={cx('row')}>
+        <div className={cx('col-xs-12')}>
+          <div className={cx('inner')}>
             <Metric
-              isLoading={typeof badge.icon === 'undefined'}
-              src={badge.icon}
-              width={47}
-              height={42}
-              explanation="BADGE"
+              isLoading={collateralToken.symbol === '/'}
+              src={collateralToken.icon}
+              explanation={`${collateralToken.symbol} tokens`}
             >
-              <Block className={cx('badgeTitle')}>{badge.rank}</Block>
+              <DecimalValue value={collateralToken.balance} className={cx('metric-value')} />&nbsp;
+              {collateralToken.symbol}
             </Metric>
-          )}
-        </>
-      )}
+            <Metric
+              isLoading={typeof predictedProfits === 'undefined'}
+              src={outstandingPredictionsIcon}
+              explanation="Predicted Profits"
+            >
+              <DecimalValue value={weiToEth(predictedProfits)} className={cx('metric-value')} />&nbsp;
+              {collateralToken.symbol}
+            </Metric>
+            {tournamentEnabled && (
+              <>
+                <Metric isLoading={typeof rank === 'undefined'} src={arrows} explanation="YOUR RANK">
+                  <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
+                </Metric>
+                {badgesEnabled && (
+                  <Metric
+                    isLoading={typeof badge.icon === 'undefined'}
+                    src={badge.icon}
+                    width={47}
+                    height={42}
+                    explanation="BADGE"
+                  >
+                    <Block className={cx('badgeTitle')}>{badge.rank}</Block>
+                  </Metric>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 )

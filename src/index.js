@@ -9,7 +9,6 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 import 'scss/style.scss'
-import initAnalytics from 'utils/analytics'
 import { isFeatureEnabled, getProviderConfig } from 'utils/features'
 import store from 'store'
 import { WALLET_PROVIDER } from 'integrations/constants'
