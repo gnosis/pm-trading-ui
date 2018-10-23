@@ -16,7 +16,7 @@ const {
 } = getProviderIntegrationConfig('uport')
 const tournamentEnabled = isFeatureEnabled('tournament')
 
-export const UPORT_KEY = `${appName.replace(' ', '_')}_USER`
+export const UPORT_KEY = `${appName?.replace(' ', '_')}_USER`
 
 const UPORT_QR_TEXT = 'uport-qr-text'
 
