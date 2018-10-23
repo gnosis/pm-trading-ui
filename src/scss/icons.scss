@@ -62,6 +62,7 @@
 @include svgIcon('user');
 @include svgIcon('gear');
 @include svgIcon('logout');
+@include svgIcon('share');
 
 .icon--error {
   $url: '/assets/img/icons/icon_cross.svg';
