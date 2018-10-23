@@ -5,6 +5,9 @@ import Decimal from 'decimal.js'
 import { marketShape } from 'utils/shapes'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { decimalToText } from 'components/DecimalValue'
+import Icon from 'components/Icon'
+import Tooltip from 'rc-tooltip'
+import { Link } from 'react-router-dom'
 import style from './Infos.scss'
 
 const cx = cn.bind(style)
@@ -42,6 +45,8 @@ const Infos = ({
     marketInfos.creator = moderators[market.creator] || market.creator
   }
 
+  const marketUrl = `${window.location.origin}/markets/${market.address}`
+
   return (
     <div className={cx('marketInfoСontainer', 'col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0')}>
       {Object.keys(marketInfos).map(label => (
@@ -50,6 +55,20 @@ const Infos = ({
           <p className={cx('infoText', 'label')}>{label}</p>
         </div>
       ))}
+      <div>
+        <Tooltip
+          trigger="click"
+          overlay={(
+            <ul className={cx('share', 'list')}>
+              <li><a href={marketUrl} rel="noreferrer noopener" target="_blank">Link to Market</a></li>
+              <li><a href={marketUrl} rel="noreferrer noopener" target="_blank">Embedding Code</a></li>
+            </ul>
+          )}
+          placement="bottom"
+        >
+          <button className="btn btn-link" type="button"><Icon type="share" size={16} /> Share</button>
+        </Tooltip>
+      </div>
     </div>
   )
 }
