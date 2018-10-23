@@ -8,7 +8,6 @@ import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { decimalToText } from 'components/DecimalValue'
 import Icon from 'components/Icon'
 import Tooltip from 'rc-tooltip'
-import { Link } from 'react-router-dom'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import style from './Infos.scss'
 
