@@ -2,7 +2,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const AutoDllPlugin = require('autodll-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -14,9 +13,9 @@ const configLoader = require('./scripts/configuration')
 module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
 
-  const gnosisEnv = process.env.GNOSIS_ENV || 'development'
+  const gnosisEnv = process.env.GNOSIS_ENV
 
-  console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv}'`)
+  console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv || 'default configuration (local)'}'`)
   const config = configLoader(gnosisEnv, configEnvVars)
 
   const version = env.BUILD_VERSION || pkg.version
@@ -157,38 +156,12 @@ module.exports = (env = {}) => {
       new HtmlWebpackPlugin({
         template: `${__dirname}/src/html/index.html`,
       }),
-      new AutoDllPlugin({
-        inject: true, // will inject the DLL bundles to index.html
-        filename: '[name]_[hash].js',
-        entry: {
-          vendor: [
-            'react',
-            'react-dom',
-            'moment',
-            'lodash',
-            'redux',
-            'react-redux',
-            'immutable',
-            'react-router-dom',
-            'recharts',
-            'redux-actions',
-            'reselect',
-            'web3',
-            'moment-duration-format',
-            '@gnosis.pm/pm-js',
-          ],
-        },
-        plugins: [
-          new webpack.EnvironmentPlugin({
-            NODE_ENV: 'development',
-          }),
-        ],
-      }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
         NODE_ENV: 'development',
       }),
       new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
         'process.env.FALLBACK_CONFIG': `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
