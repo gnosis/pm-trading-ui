@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 
 import Market from 'routes/MarketList/components/Markets/Market'
@@ -6,9 +7,8 @@ import NoMatch from './NoMatch'
 
 
 const EmbeddedView = ({ requestStatus, market }) => {
-  console.log(requestStatus)
   if (requestStatus === 'SUCCESS') {
-    console.log(market)
+    const marketUrl = `${window.location.origin}/market/${market.address}`
     return (
       <Market
         market={market}
@@ -18,9 +18,8 @@ const EmbeddedView = ({ requestStatus, market }) => {
         isOwner={false}
         title={market.title}
         resolution={market.resolution}
-        volume={market.volume}
         collateralToken={market.collateralToken}
-        viewMarket={() => window.open('https://google.com')}
+        viewMarket={() => window.open(marketUrl)}
       />
     )
   }
@@ -29,6 +28,11 @@ const EmbeddedView = ({ requestStatus, market }) => {
   }
 
   return <IndefiniteSpinner width={50} height={50} />
+}
+
+EmbeddedView.propTypes = {
+  requestStatus: PropTypes.string.isRequired,
+  market: PropTypes.shape({}).isRequired,
 }
 
 export default EmbeddedView
