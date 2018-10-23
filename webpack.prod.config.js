@@ -17,9 +17,9 @@ const commitId = `${process.env.TRAVIS_BRANCH}@${process.env.TRAVIS_COMMIT}`
 module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
 
-  const gnosisEnv = process.env.GNOSIS_ENV || 'development'
+  const gnosisEnv = process.env.GNOSIS_ENV
 
-  console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv}'`)
+  console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv || 'default configuration (local)'}`)
   const config = configLoader(gnosisEnv, configEnvVars)
 
   return {
