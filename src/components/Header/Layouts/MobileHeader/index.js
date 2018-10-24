@@ -84,7 +84,7 @@ class MobileHeader extends Component {
           isOpen={menuOpen}
           onStateChange={onStateChangeHandler}
         >
-          {currentAccount ? (
+          {canInteract ? (
             <AccountOverview {...this.props} copyAddress={this.copyAddress} />
           ) : (
             <button type="button" className={cx('connect-wallet')} onClick={this.connectWalletClick}>
