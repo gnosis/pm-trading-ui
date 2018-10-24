@@ -63,7 +63,6 @@ class MobileHeader extends Component {
       showGameGuide,
       gameGuideType,
       gameGuideURL,
-      currentAccount,
       modal,
     } = this.props
     const { menuOpen } = this.state
@@ -164,7 +163,6 @@ class MobileHeader extends Component {
 }
 
 MobileHeader.propTypes = {
-  currentAccount: PropTypes.string,
   showGameGuide: PropTypes.bool,
   showScoreboard: PropTypes.bool,
   canInteract: PropTypes.bool.isRequired,
@@ -176,7 +174,6 @@ MobileHeader.propTypes = {
 }
 
 MobileHeader.defaultProps = {
-  currentAccount: undefined,
   showGameGuide: false,
   showScoreboard: false,
 }
