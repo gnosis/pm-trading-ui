@@ -32,7 +32,7 @@ module.exports = (env = {}) => {
     output: {
       publicPath: '/',
       path: `${__dirname}/dist`,
-      filename: '[name].js',
+      filename: '[hash].js',
     },
     resolve: {
       symlinks: false,
