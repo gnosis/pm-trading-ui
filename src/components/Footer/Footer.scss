@@ -22,5 +22,9 @@
     &:hover, &:visited, &:active {
       color: #00a6c4
     }
-  }  
+  }
+  
+  @media (max-width: 992px) {
+    position: static;
+  }
 }
