@@ -22,16 +22,36 @@
     }
   },
   "verification": {
-    "enabled": true,
+    "enabled": false,
     "handler": "onfido",
     "options": {
       "url": "https://kyc.staging.gnosisdev.com/v1"
     }
   },
+  "legalCompliance": {
+    "enabled": true,
+    "documents": [
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "terms_of_service",
+        "title": "Terms of Service",
+        "file": "/assets/content/mainnet/TermsOfService.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "privacy_policy",
+        "title": "Privacy Policy",
+        "file": "/assets/content/PrivacyPolicy.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "risk_disclaimer",
+        "title": "Risk Disclaimer",
+        "file": "/assets/content/mainnet/RiskDisclaimerPolicy.html"
+      }
+    ]
+  },
   "providers": {
     "default": "METAMASK"
-  },
-  "legalCompliance": {
-    "enabled": true
   }
 }
