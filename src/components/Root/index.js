@@ -1,22 +1,22 @@
 import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
 import { hot } from 'react-hot-loader'
-import { ConnectedRouter } from 'react-router-redux'
 import BackdropProvider from 'containers/BackdropProvider'
 import AppContainer from 'containers/App'
-import store, { history } from 'store'
+import store from 'store'
 import { Provider } from 'react-redux'
 import AppRouter from 'routes'
 
 const RootComponent = () => (
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
+  <BrowserRouter>
+    <Provider store={store}>
       <BackdropProvider>
         <AppContainer>
           <AppRouter />
         </AppContainer>
       </BackdropProvider>
-    </ConnectedRouter>
-  </Provider>
+    </Provider>
+  </BrowserRouter>
 )
 
 export default hot(module)(RootComponent)

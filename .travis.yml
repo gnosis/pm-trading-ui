@@ -11,17 +11,19 @@ before_install:
 - npm i -g babel-cli webpack truffle-contract npm@latest
 after_success:
 - ./scripts/env_build.sh
+before_deploy:
+- pip install --user awscli
 deploy:
 ### OLYMPIA DEPLOYMENTS
   # https://olympia.dev.gnosisdev.com/
-- provider: s3
-  bucket: olympia-development
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  access_key_id: $AWS_ACCESS_KEY_ID
-  local_dir: dist
+- provider: script
+  script: ~/.local/bin/aws s3 cp dist/index.html s3://olympia-development/index.html --region eu-west-1 --cache-control 'max-age=0,no-cache,no-store,must-revalidate'
   skip_cleanup: true
-  #before_deploy:
-  #  - npm run build-config olympia/development
+  on:
+    branch: development
+- provider: script
+  script: ~/.local/bin/aws s3 sync dist s3://olympia-development --region eu-west-1 --cache-control 'public, max-age=2592000' --exclude "index.html"
+  skip_cleanup: true
   on:
     branch: development
   # https://olympia.staging.gnosisdev.com/

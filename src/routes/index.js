@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import {
+  BrowserRouter, Switch, Route, Redirect,
+} from 'react-router-dom'
 import web3 from 'web3'
 
 import GameGuidePage from 'routes/GameGuide/containers/GameGuide'
