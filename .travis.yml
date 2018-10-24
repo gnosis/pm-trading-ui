@@ -11,6 +11,8 @@ before_install:
 - npm i -g babel-cli webpack truffle-contract npm@latest
 after_success:
 - ./scripts/env_build.sh
+before_deploy:
+- pip install --user awscli
 deploy:
 ### OLYMPIA DEPLOYMENTS
   # https://olympia.dev.gnosisdev.com/
