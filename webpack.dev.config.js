@@ -2,7 +2,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const AutoDllPlugin = require('autodll-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -14,9 +13,9 @@ const configLoader = require('./scripts/configuration')
 module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
 
-  const gnosisEnv = process.env.GNOSIS_ENV || 'development'
+  const gnosisEnv = process.env.GNOSIS_ENV
 
-  console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv}'`)
+  console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv || 'default configuration (local)'}'`)
   const config = configLoader(gnosisEnv, configEnvVars)
 
   const version = env.BUILD_VERSION || pkg.version
@@ -24,13 +23,16 @@ module.exports = (env = {}) => {
 
   return {
     context: `${__dirname}/src`,
-    entry: ['bootstrap-loader', 'index.js'],
+    entry: {
+      interface: ['bootstrap-loader', 'index.js'],
+      embedded: 'embedded/index.js',
+    },
     devtool: 'eval-source-map',
     mode: 'development',
     output: {
       publicPath: '/',
       path: `${__dirname}/dist`,
-      filename: '[hash].js',
+      filename: '[name].js',
     },
     resolve: {
       symlinks: false,
@@ -119,7 +121,12 @@ module.exports = (env = {}) => {
     },
     devServer: {
       disableHostCheck: true,
-      historyApiFallback: true,
+      historyApiFallback: {
+        rewrites: [
+          { from: /^\/embedded.*/, to: '/embedded/index.html' },
+          { from: /./, to: '/index.html' },
+        ],
+      },
       hot: true,
       port: 5000,
       proxy: {
@@ -156,6 +163,12 @@ module.exports = (env = {}) => {
       }),
       new HtmlWebpackPlugin({
         template: `${__dirname}/src/html/index.html`,
+        chunks: ['interface', 'bootstrap-loader'],
+      }),
+      new HtmlWebpackPlugin({
+        filename: 'embedded/index.html',
+        template: `${__dirname}/src/embedded/html/index.html`,
+        chunks: ['embedded'],
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,

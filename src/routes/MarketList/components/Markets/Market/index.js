@@ -37,7 +37,6 @@ class Market extends React.PureComponent {
       collateralToken,
     } = this.props
     const resolutionDate = moment(resolution).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)
-    const tradingVolume = decimalToText(new Decimal(volume).div(1e18))
 
     const bounds = market.bounds ? {
       upperBound: market.bounds.upper,
@@ -81,9 +80,11 @@ class Market extends React.PureComponent {
           <div className={cx('group', 'col-md-3')}>
             <MarketResolution resolution={resolutionDate} />
           </div>
-          <div className={cx('group', 'col-md-3')}>
-            <MarketTrading volume={tradingVolume} collateralToken={collateralToken} />
-          </div>
+          {volume && (
+            <div className={cx('group', 'col-md-3')}>
+              <MarketTrading volume={decimalToText(new Decimal(volume).div(1e18))} collateralToken={collateralToken} />
+            </div>
+          )}
         </div>
       </button>
     )
@@ -98,9 +99,13 @@ Market.propTypes = {
   isOwner: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   resolution: PropTypes.string.isRequired,
-  volume: PropTypes.string.isRequired,
+  volume: PropTypes.string,
   collateralToken: PropTypes.string.isRequired,
   viewMarket: PropTypes.func.isRequired,
+}
+
+Market.defaultProps = {
+  volume: undefined,
 }
 
 export default Market

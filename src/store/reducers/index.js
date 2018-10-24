@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux'
-import { routerReducer } from 'react-router-redux'
 import { reducer as formReducer } from 'redux-form'
 import { isFeatureEnabled } from 'utils/features'
 
@@ -18,7 +17,6 @@ import interfaceState from './interface'
 const tournamentEnabled = isFeatureEnabled('tournament')
 
 const reducers = {
-  routing: routerReducer,
   form: formReducer,
   modal,
   transactions,

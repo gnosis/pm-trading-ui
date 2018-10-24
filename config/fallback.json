@@ -21,6 +21,9 @@
       "enabled": true
     }
   },
+  "registration": {
+    "enabled": false
+  },
   "logo": {
     "regular": "assets/img/gnosis_logo.svg",
     "small": "assets/img/gnosis_logo_icon.svg",
