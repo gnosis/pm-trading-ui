@@ -39,7 +39,7 @@ const App = (props) => {
 
   const isModalOpen = modal.get('isOpen', false)
 
-  if (!false) {
+  if (!blockchainConnection) {
     return (
       <div className={cx('appContainer')}>
         <div className={cx('loader-container')}>
