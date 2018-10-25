@@ -12,6 +12,7 @@ export const WALLET_PROVIDER = {
   PARITY: 'PARITY',
   REMOTE: 'REMOTE',
   UPORT: 'UPORT',
+  TRUST: 'TRUST',
 }
 
 export const ETHEREUM_NETWORK_IDS = {

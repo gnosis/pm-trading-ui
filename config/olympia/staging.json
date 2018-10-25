@@ -49,7 +49,7 @@
     }
   },
   "providers": {
-    "default": "METAMASK",
+    "default": "TRUST",
     "options": {
       "UPORT": {
         "appName": "Olympia",
