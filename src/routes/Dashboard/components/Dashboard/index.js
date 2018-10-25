@@ -3,8 +3,11 @@ import Decimal from 'decimal.js'
 import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
+import { withRouter } from 'react-router-dom'
 import classNames from 'classnames/bind'
-import { compose, lifecycle, withState } from 'recompose'
+import {
+  compose, lifecycle, withState, withProps,
+} from 'recompose'
 import { marketRecordListShape } from 'utils/shapes'
 import { setRequestStateWrap } from 'utils/helpers'
 import { isFeatureEnabled } from 'utils/features'
@@ -100,6 +103,11 @@ Dashboard.defaultProps = {
 }
 
 const enhancer = compose(
+  withRouter,
+  withProps(({ history }) => ({
+    viewMarket: address => history.push(`/markets/${address}`),
+    viewMarketList: () => history.replace('/markets'),
+  })),
   withState('marketState', 'setMarketState', REQUEST_STATES.UNKNOWN),
   withState('tournamentUserDataState', 'setTournamentUserDataState', REQUEST_STATES.UNKNOWN),
   lifecycle({

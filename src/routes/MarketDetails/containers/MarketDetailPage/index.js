@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { formValueSelector, getFormSyncErrors } from 'redux-form'
-import { replace } from 'react-router-redux'
+import { withRouter } from 'react-router-dom'
+import { compose, withProps } from 'recompose'
 import { requestGasPrice, requestTokenSymbol } from 'store/actions/blockchain'
 
 import redeemMarket from 'store/actions/market/redeemMarket'
@@ -82,14 +83,21 @@ const mapDispatchToProps = dispatch => ({
   fetchMarketTrades: market => dispatch(requestMarketGraphTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
   sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
-  changeUrl: url => dispatch(replace(url)),
   redeemWinnings: market => dispatch(redeemMarket(market)),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
   requestTokenSymbol: tokenAddress => dispatch(requestTokenSymbol(tokenAddress)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MarketDetails)
+const enhancer = compose(
+  withRouter,
+  withProps(({ history }) => ({
+    changeUrl: url => history.replace(url),
+  })),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)
+
+export default enhancer(MarketDetails)

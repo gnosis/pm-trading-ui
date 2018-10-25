@@ -113,7 +113,7 @@ module.exports = (env = {}) => {
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: 'styles.css',
+        filename: '[hash].css',
       }),
       new FaviconsWebpackPlugin({
         logo: config.logo.favicon,

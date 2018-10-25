@@ -28,12 +28,12 @@ const Balance = ({
             .toDP(3)
             .toString()}{' '}
           {tokenSymbol === 'ETH' ? 'WETH' : tokenSymbol}
-        </strong>{' '}
+        </strong>&nbsp;
         +{' '}
         <strong>
           {Decimal(etherBalance)
             .toDP(3)
-            .toString()}{' '}
+            .toString()}&nbsp;
           ETH
         </strong>
         <p>
@@ -48,7 +48,7 @@ const Balance = ({
 
     return (
       <>
-        {balance}{' '}
+        {balance}&nbsp;
         <Tooltip overlay={balanceTooltip} placement="bottom">
           <span className={cx('symbol', 'wrapped')}>{tokenSymbol}</span>
         </Tooltip>
@@ -58,7 +58,7 @@ const Balance = ({
 
   return (
     <div>
-      {balance} <span className={cx('symbol')}>{tokenSymbol}</span>
+      {balance}&nbsp;<span className={cx('symbol')}>{tokenSymbol}</span>
     </div>
   )
 }

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { List } from 'immutable'
+import { compose, withProps } from 'recompose'
+import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import MarketOverview from '../MarketOverview'
 import Markets from '../Markets'
@@ -55,4 +57,11 @@ MarketList.defaultProps = {
   userAccount: undefined,
 }
 
-export default MarketList
+const enhancer = compose(
+  withRouter,
+  withProps(({ history }) => ({
+    viewMarket: address => history.push(`/markets/${address}`),
+  })),
+)
+
+export default enhancer(MarketList)
