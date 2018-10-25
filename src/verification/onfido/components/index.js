@@ -20,7 +20,7 @@ const SignMessage = () => (
 const DeniedMessage = ({
   reason, heading, canRetry, closeModal, setStep,
 }) => (
-  <div className={cx('denied')}>
+  <div className={cx('modal', 'denied')}>
     <button type="button" className={cx('closeButton')} onClick={closeModal} />
     <h2>{heading}</h2>
     <p>{reason}</p>
@@ -34,6 +34,7 @@ DeniedMessage.propTypes = {
   heading: PropTypes.node,
   closeModal: PropTypes.func.isRequired,
   canRetry: PropTypes.bool,
+  setStep: PropTypes.func.isRequired,
 }
 
 DeniedMessage.defaultProps = {
