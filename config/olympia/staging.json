@@ -49,7 +49,7 @@
     }
   },
   "providers": {
-    "default": "TRUST",
+    "default": "STATUS",
     "options": {
       "UPORT": {
         "appName": "Olympia",

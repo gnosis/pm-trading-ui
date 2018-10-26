@@ -13,6 +13,7 @@ export const WALLET_PROVIDER = {
   REMOTE: 'REMOTE',
   UPORT: 'UPORT',
   TRUST: 'TRUST',
+  STATUS: 'STATUS',
 }
 
 export const ETHEREUM_NETWORK_IDS = {
