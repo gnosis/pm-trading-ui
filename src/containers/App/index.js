@@ -34,8 +34,11 @@ const cx = cn.bind(style)
 
 const App = (props) => {
   const {
-    provider, blockchainConnection, children, location, intercomReminderVisible,
+    provider, blockchainConnection, children, location, intercomReminderVisible, modal,
   } = props
+
+  const isModalOpen = modal.get('isOpen', false)
+
   if (!blockchainConnection) {
     return (
       <div className={cx('appContainer')}>
@@ -59,7 +62,7 @@ const App = (props) => {
     <div className={cx('appContainer')}>
       {isFeatureEnabled('cookieBanner') && <CookieBannerContainer />}
       <HeaderContainer version={process.env.VERSION} />
-      {provider && provider.account && <TransactionFloaterContainer />}
+      {provider && provider.account && !isModalOpen && <TransactionFloaterContainer />}
       <TransitionGroup>
         <CSSTransition key={location.pathname.split('/')[1]} classNames={transitionClassNames} timeout={timeout}>
           {children}
@@ -82,6 +85,9 @@ App.propTypes = {
   }),
   provider: providerPropType,
   intercomReminderVisible: PropTypes.bool,
+  modal: PropTypes.shape({
+    isOpen: PropTypes.bool,
+  }).isRequired,
 }
 
 App.defaultProps = {
@@ -97,6 +103,7 @@ const mapStateToProps = state => ({
   blockchainConnection: isConnectedToBlockchain(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
   intercomReminderVisible: getUiState(state, 'showIntercomReminder'),
+  modal: state.modal,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -104,7 +111,10 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(
     lifecycle({
       componentDidMount() {
         const { changeIntercomReminderVisibility } = this.props
