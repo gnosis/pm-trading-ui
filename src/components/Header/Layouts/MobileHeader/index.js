@@ -65,6 +65,7 @@ class MobileHeader extends Component {
       gameGuideURL,
       currentAccount,
       modal,
+      t,
     } = this.props
     const { menuOpen } = this.state
 
@@ -97,7 +98,7 @@ class MobileHeader extends Component {
             className={cx('navLink', 'bm-item')}
             onClick={this.closeMenu}
           >
-            Markets
+            {t('markets')}
           </NavLink>
           <Hairline style={HairlineStyle} />
           {canInteract && (
