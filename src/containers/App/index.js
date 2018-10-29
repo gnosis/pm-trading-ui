@@ -58,7 +58,7 @@ const App = (props) => {
   return (
     <div className={cx('appContainer')}>
       {isFeatureEnabled('cookieBanner') && <CookieBannerContainer />}
-      <HeaderContainer version={process.env.VERSION} />
+      <HeaderContainer />
       {provider && provider.account && <TransactionFloaterContainer />}
       <TransitionGroup>
         <CSSTransition key={location.pathname.split('/')[1]} classNames={transitionClassNames} timeout={timeout}>
@@ -66,7 +66,7 @@ const App = (props) => {
         </CSSTransition>
       </TransitionGroup>
       {intercomReminderVisible && <EnableIntercom />}
-      <Footer />
+      <Footer version={process.env.VERSION} />
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
 import cn from 'classnames/bind'
 import Paragraph from 'components/layout/Paragraph'
@@ -14,7 +15,7 @@ const {
 
 const footerText = require(`assets/content/${fileName || 'footer'}.md`)
 
-const Footer = () => {
+const Footer = ({ version }) => {
   let text
 
   if (type === 'text') {
@@ -28,6 +29,7 @@ const Footer = () => {
       <div className={cx('container')}>
         <div className={cx('row')}>
           <div className={cx('col-xs-12')}>
+            <p className={cx('version')}>Interface Version: {version}</p>
 
             {markdown ? (
               <Markdown source={text} className={cx('footerContainer')} />
@@ -41,6 +43,14 @@ const Footer = () => {
       </div>
     </div>
   )
+}
+
+Footer.propTypes = {
+  version: PropTypes.string,
+}
+
+Footer.defaultProps = {
+  version: '',
 }
 
 export default Footer
