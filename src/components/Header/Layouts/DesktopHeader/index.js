@@ -126,6 +126,7 @@ DesktopHeader.propTypes = {
   }).isRequired,
   canInteract: PropTypes.bool.isRequired,
   badgesEnabled: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 DesktopHeader.defaultProps = {

@@ -174,6 +174,7 @@ MobileHeader.propTypes = {
     '-smallLogoPath': PropTypes.string,
   }).isRequired,
   tokenBalanceIsWrappedEther: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 MobileHeader.defaultProps = {

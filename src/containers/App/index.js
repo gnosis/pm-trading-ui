@@ -83,6 +83,7 @@ App.propTypes = {
   }),
   provider: providerPropType,
   intercomReminderVisible: PropTypes.bool,
+  t: PropTypes.func.isRequired,
 }
 
 App.defaultProps = {
