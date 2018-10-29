@@ -17,12 +17,24 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 0 27px;
+    padding: 0 15px;
     text-align: center;
     color: #666;
 
+    @media (max-width: 767px) {
+      width: 100%;
+      height: 100%;
+
+      justify-content: center;
+
+    }
+
     .annotation {
       margin: 15px 0 15px 0;
+
+      @media (max-width: 767px) {
+        font-size: 14px;
+      }
     }
 
     .insufficientETH {
@@ -57,31 +69,45 @@
       text-align: center;
       color: #333333;
       margin-top: 45px;
+
+      @media (max-width: 767px) {
+        margin-top: 0;
+        font-size: 18px;
+      }
     }
 
     .walletAddressContainer {
       font-weight: 500;
       border-radius: 2px;
       border: solid 2px #b7bfc4;
-      padding: 14px 21px 14px 14px;
+      padding: 10px;
       display: flex;
       align-items: center;
 
       .walletIcon {
-        width: 20px;
-        height: 20px;
+        width: 15px;
+        height: 15px;
       }
 
       .walletAddress {
         font-weight: 500;
-        margin-left: 18px;
-        font-size: 14px;
+        margin-left: 6px;
+        font-size: 12px;
         color: #333;
+
+        // iPhone 5/SE
+        @media (max-width: 320px) {
+          font-size: 10px;
+        }
       }
     }
 
     .rinkebyEthAnnotation {
       margin: 23px 0 3px 0;
+
+      @media (max-width: 767px) {
+        font-size: 13px;
+      }
 
       .linkIcon {
         width: 10px;
@@ -96,6 +122,14 @@
 
     .actionButton {
       margin-bottom: 25px;
+    }
+  }
+
+  label {
+    font-size: 12px;
+
+    input {
+      width: 15px;
     }
   }
 

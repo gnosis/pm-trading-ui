@@ -9,10 +9,14 @@
   align-items: center;
   color: #fff;
 
+  @media (max-width: 767px) {
+    text-align: center;
+  }
+
   .installText {
-      font-size: 21px;
-      margin: 33px 0px 20px 0px;
-      font-weight: 500;
+    font-size: 21px;
+    margin: 33px 0px 20px 0px;
+    font-weight: 500;
   }
 
   .downloadText {
@@ -20,12 +24,12 @@
     line-height: 1.5;
 
     .downloadLink {
-        &:hover {
-            color: #fff;
-            opacity: 0.6;
-        }
+      &:hover {
+        color: #fff;
+        opacity: 0.6;
+      }
 
-        text-decoration: underline;
+      text-decoration: underline;
     }
   }
 
@@ -37,9 +41,10 @@
     border: none;
 
     &:hover {
-        &::after, &::before {
-          background-color: #fff;
-        }
+      &::after,
+      &::before {
+        background-color: #fff;
       }
+    }
   }
 }

@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { TOKEN_SOURCE_ADDRESS, TOKEN_SOURCE_CONTRACT, TOKEN_SOURCE_ETH } from 'store/actions/blockchain'
-import { getCurrentBalance } from 'integrations/store/selectors'
+import { getCurrentBalance, getCurrentAccount } from 'integrations/store/selectors'
 import { weiToEth, hexWithPrefix, normalizeHex } from 'utils/helpers'
 
 /**
@@ -34,6 +34,7 @@ export const getTokenSymbol = (state, tokenAddress) => state.blockchain.getIn(['
  */
 export const getCollateralToken = (state) => {
   const collateralToken = state.blockchain.get('collateralToken').toJS()
+  const accountConnected = !!getCurrentAccount(state)
 
   const { source, address, isWrappedEther } = collateralToken
 
@@ -42,7 +43,7 @@ export const getCollateralToken = (state) => {
     if (address) {
       let tokenBalance = weiToEth(getTokenAmount(state, normalizeHex(address)))
 
-      if (isWrappedEther) {
+      if (isWrappedEther && accountConnected) {
         const etherBalance = getCurrentBalance(state)
         tokenBalance = Decimal(tokenBalance).add(etherBalance).toString()
       }
@@ -57,7 +58,7 @@ export const getCollateralToken = (state) => {
     if (address) {
       let tokenBalance = weiToEth(getTokenAmount(state, normalizeHex(address)))
 
-      if (isWrappedEther) {
+      if (isWrappedEther && accountConnected) {
         const etherBalance = getCurrentBalance(state)
         tokenBalance = Decimal(tokenBalance).add(etherBalance).toString()
       }

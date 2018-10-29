@@ -47,12 +47,12 @@ const Balance = ({
     )
 
     return (
-      <>
+      <span>
         {balance}{' '}
-        <Tooltip overlay={balanceTooltip} placement="bottom">
+        <Tooltip overlay={balanceTooltip} placement="bottom" trigger={['hover', 'focus']}>
           <span className={cx('symbol', 'wrapped')}>{tokenSymbol}</span>
         </Tooltip>
-      </>
+      </span>
     )
   }
 
