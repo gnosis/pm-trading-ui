@@ -127,7 +127,6 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  version: PropTypes.string,
   currentNetwork: PropTypes.string,
   hasWallet: PropTypes.bool,
   etherBalance: PropTypes.string,
@@ -155,7 +154,6 @@ Header.propTypes = {
 }
 
 Header.defaultProps = {
-  version: '',
   currentNetwork: '',
   hasWallet: false,
   tokenBalance: '0',
