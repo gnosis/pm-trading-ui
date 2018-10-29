@@ -129,7 +129,6 @@ DesktopHeader.propTypes = {
 }
 
 DesktopHeader.defaultProps = {
-  version: '',
   currentNetwork: '',
   tokenBalance: '0',
   etherBalance: '0',
