@@ -8,6 +8,15 @@
   min-height: 100vh;
   color: #fff;
 
+  @media (max-width: 767px) {
+    text-align: center;
+  }
+
+  @media (max-width: 320px) {
+    font-size: 12px;
+  }
+
+
   .closeButton {
     @include closeButton(32px, 5px);
     top: 20px;
