@@ -89,7 +89,7 @@ class MobileHeader extends Component {
             <AccountOverview {...this.props} copyAddress={this.copyAddress} />
           ) : (
             <button type="button" className={cx('connect-wallet')} onClick={this.connectWalletClick}>
-              Connect a wallet
+              {t('connect_wallet')}
             </button>
           )}
           <NavLink
@@ -109,7 +109,7 @@ class MobileHeader extends Component {
                 className={cx('navLink', 'bm-item')}
                 onClick={this.closeMenu}
               >
-                Dashboard
+                {t('dashboard')}
               </NavLink>
               <Hairline style={HairlineStyle} />
             </>
@@ -122,7 +122,7 @@ class MobileHeader extends Component {
                 className={cx('navLink', 'bm-item')}
                 onClick={this.closeMenu}
               >
-                Scoreboard
+                {t('scoreboard')}
               </NavLink>
               <Hairline style={HairlineStyle} />
             </>
@@ -137,7 +137,7 @@ class MobileHeader extends Component {
                     className={cx('navLink', 'bm-item')}
                     onClick={this.closeMenu}
                   >
-                    Game guide
+                    {t('gameguide')}
                   </NavLink>
                   <Hairline style={HairlineStyle} />
                 </>
@@ -151,7 +151,7 @@ class MobileHeader extends Component {
                     rel="noopener noreferrer"
                     onClick={this.closeMenu}
                   >
-                    Game Guide
+                    {t('gameguide')}
                   </a>
                   <Hairline style={HairlineStyle} />
                 </>

@@ -4,5 +4,6 @@
   "scoreboard": "Bestenliste",
   "gameguide": "Spiel-Anleitung",
   "network": "Netzwerk",
+  "connecting_blockchain": "Verbindung mit der Blockchain wird hergestellt...",
   "connect_wallet": "Mit Wallet verbinden"
 }
