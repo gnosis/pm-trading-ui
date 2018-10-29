@@ -10,7 +10,7 @@
     "port": 443
   },
   "whitelist": {
-    "0x30c2674afc792c7cbb4154352c594811b82264fa": "Gnosis"
+    "0xa0d26f5f9d825bdf0f6c1431719bdc34aca7d54c": "Gnosis"
   },
   "htmlConfig": {
     "title": "Gnosis Olympia"
@@ -37,7 +37,7 @@
   },
   "registration": {
     "enabled": true,
-    "contractAddress": "0x938315974063b9bbe278632352d56128e1f17e95"
+    "contractAddress": "0x645f854cd7dedc5ecd51f4ae02fcf871b982a2b6"
   },
   "collateralToken": {
     "source": "address",
@@ -48,18 +48,7 @@
       "icon": "/assets/img/icons/icon_oly.png"
     }
   },
-  "providers": {
-    "default": "STATUS",
-    "options": {
-      "UPORT": {
-        "appName": "Olympia",
-        "clientId": "2ooNzwDvjgZTPswkrewUnxokRUH8KYpRNNL",
-        "network": "rinkeby",
-        "privateKey": "a42611a039cad931c41e072953cb7dcaaa6b2dfefeff6a459d9ce4281acf0c01",
-        "useNotifications": false
-      }
-    }
-  },
+  "providers": ["METAMASK", "STATUS"],
   "scoreboard": {
     "enabled": true
   },

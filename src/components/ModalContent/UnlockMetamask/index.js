@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import { getFeatureConfig } from 'utils/features'
-import MetamaskIcon from 'assets/img/icons/icon_metamask_color.svg'
+import MetamaskIcon from 'integrations/metamask/assets/metamask-logo.svg'
 import css from './UnlockMetamask.scss'
 
 const cx = cn.bind(css)

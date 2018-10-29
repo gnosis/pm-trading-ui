@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import MetamaskIcon from 'assets/img/icons/icon_metamask_color.svg'
+import MetamaskIcon from 'integrations/metamask/assets/metamask-logo.svg'
 import cn from 'classnames/bind'
 import { getFeatureConfig } from 'utils/features'
 import style from './SwitchNetwork.scss'

@@ -7,7 +7,7 @@ import TRUST from './trustApp'
 import STATUS from './status'
 
 // eslint-disable-next-line
-let providers = {
+const providers = {
   [WALLET_PROVIDER.METAMASK]: METAMASK,
   [WALLET_PROVIDER.PARITY]: PARITY,
   [WALLET_PROVIDER.REMOTE]: REMOTE,

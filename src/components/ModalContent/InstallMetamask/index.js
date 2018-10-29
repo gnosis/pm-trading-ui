@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
-import MetamaskIcon from 'assets/img/icons/icon_metamask_color.svg'
+import MetamaskIcon from 'integrations/metamask/assets/metamask-logo.svg'
 import { getFeatureConfig } from 'utils/features'
 import css from './InstallMetamask.scss'
 
