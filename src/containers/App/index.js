@@ -3,10 +3,11 @@ import { withRouter } from 'react-router-dom'
 import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { lifecycle } from 'recompose'
+import { compose, lifecycle } from 'recompose'
 import Cookies from 'js-cookie'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition'
+import { withNamespaces } from 'react-i18next'
 
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import Footer from 'components/Footer'
@@ -34,7 +35,7 @@ const cx = cn.bind(style)
 
 const App = (props) => {
   const {
-    provider, blockchainConnection, children, location, intercomReminderVisible, modal,
+    provider, blockchainConnection, children, location, intercomReminderVisible, modal, t,
   } = props
 
   const isModalOpen = modal.get('isOpen', false)
@@ -44,7 +45,7 @@ const App = (props) => {
       <div className={cx('appContainer')}>
         <div className={cx('loader-container')}>
           <IndefiniteSpinner width={100} height={100} />
-          <h1>Connecting to the blockchain</h1>
+          <h1>{t('connecting_blockchain')}</h1>
         </div>
       </div>
     )
@@ -61,7 +62,7 @@ const App = (props) => {
   return (
     <div className={cx('appContainer')}>
       {isFeatureEnabled('cookieBanner') && <CookieBannerContainer />}
-      <HeaderContainer version={process.env.VERSION} />
+      <HeaderContainer />
       {provider && provider.account && !isModalOpen && <TransactionFloaterContainer />}
       <TransitionGroup>
         <CSSTransition key={location.pathname.split('/')[1]} classNames={transitionClassNames} timeout={timeout}>
@@ -69,7 +70,7 @@ const App = (props) => {
         </CSSTransition>
       </TransitionGroup>
       {intercomReminderVisible && <EnableIntercom />}
-      <Footer />
+      <Footer version={process.env.VERSION} />
     </div>
   )
 }
@@ -85,6 +86,7 @@ App.propTypes = {
   }),
   provider: providerPropType,
   intercomReminderVisible: PropTypes.bool,
+  t: PropTypes.func.isRequired,
   modal: PropTypes.shape({
     isOpen: PropTypes.bool,
   }).isRequired,
@@ -110,20 +112,20 @@ const mapDispatchToProps = dispatch => ({
   changeIntercomReminderVisibility: () => dispatch(changeUiState({ showIntercomReminder: true })),
 })
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(
-    lifecycle({
-      componentDidMount() {
-        const { changeIntercomReminderVisibility } = this.props
-        document.title = getHtmlConfig().title || 'Gnosis Trading Interface'
-
-        if (Cookies.get('Chat support') === 'no') {
-          changeIntercomReminderVisibility(true)
-        }
-      },
-    })(App),
-  ),
+const enhancer = compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps),
+  lifecycle({
+    componentDidMount() {
+      const { changeIntercomReminderVisibility } = this.props
+      document.title = getHtmlConfig().title || 'Gnosis Trading Interface'
+      
+      if (Cookies.get('Chat support') === 'no') {
+        changeIntercomReminderVisibility(true)
+      }
+    },
+  }),
+  withNamespaces(),
 )
+
+export default enhancer(App)

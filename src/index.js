@@ -10,9 +10,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import 'scss/style.scss'
 import { isFeatureEnabled, getProviderConfig } from 'utils/features'
-import store from 'store'
+
 import { WALLET_PROVIDER } from 'integrations/constants'
+
+import store from './store'
 import { setMomentRelativeTime, setMomentDurationFormat } from './setup'
+import './i18n'
 
 const providerConfig = getProviderConfig()
 const tournamentEnabled = isFeatureEnabled('tournament')
