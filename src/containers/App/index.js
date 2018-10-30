@@ -35,8 +35,11 @@ const cx = cn.bind(style)
 
 const App = (props) => {
   const {
-    provider, blockchainConnection, children, location, intercomReminderVisible, t,
+    provider, blockchainConnection, children, location, intercomReminderVisible, modal, t,
   } = props
+
+  const isModalOpen = modal.get('isOpen', false)
+
   if (!blockchainConnection) {
     return (
       <div className={cx('appContainer')}>
@@ -60,7 +63,7 @@ const App = (props) => {
     <div className={cx('appContainer')}>
       {isFeatureEnabled('cookieBanner') && <CookieBannerContainer />}
       <HeaderContainer />
-      {provider && provider.account && <TransactionFloaterContainer />}
+      {provider && provider.account && !isModalOpen && <TransactionFloaterContainer />}
       <TransitionGroup>
         <CSSTransition key={location.pathname.split('/')[1]} classNames={transitionClassNames} timeout={timeout}>
           {children}
@@ -84,6 +87,9 @@ App.propTypes = {
   provider: providerPropType,
   intercomReminderVisible: PropTypes.bool,
   t: PropTypes.func.isRequired,
+  modal: PropTypes.shape({
+    isOpen: PropTypes.bool,
+  }).isRequired,
 }
 
 App.defaultProps = {
@@ -99,6 +105,7 @@ const mapStateToProps = state => ({
   blockchainConnection: isConnectedToBlockchain(state),
   isConnectedToCorrectNetwork: isConnectedToCorrectNetwork(state),
   intercomReminderVisible: getUiState(state, 'showIntercomReminder'),
+  modal: state.modal,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -112,7 +119,7 @@ const enhancer = compose(
     componentDidMount() {
       const { changeIntercomReminderVisibility } = this.props
       document.title = getHtmlConfig().title || 'Gnosis Trading Interface'
-
+      
       if (Cookies.get('Chat support') === 'no') {
         changeIntercomReminderVisibility(true)
       }

@@ -63,7 +63,6 @@ class MobileHeader extends Component {
       showGameGuide,
       gameGuideType,
       gameGuideURL,
-      currentAccount,
       modal,
       t,
     } = this.props
@@ -85,7 +84,7 @@ class MobileHeader extends Component {
           isOpen={menuOpen}
           onStateChange={onStateChangeHandler}
         >
-          {currentAccount ? (
+          {canInteract ? (
             <AccountOverview {...this.props} copyAddress={this.copyAddress} />
           ) : (
             <button type="button" className={cx('connect-wallet')} onClick={this.connectWalletClick}>
@@ -165,7 +164,6 @@ class MobileHeader extends Component {
 }
 
 MobileHeader.propTypes = {
-  currentAccount: PropTypes.string,
   showGameGuide: PropTypes.bool,
   showScoreboard: PropTypes.bool,
   canInteract: PropTypes.bool.isRequired,
@@ -178,7 +176,6 @@ MobileHeader.propTypes = {
 }
 
 MobileHeader.defaultProps = {
-  currentAccount: undefined,
   showGameGuide: false,
   showScoreboard: false,
 }
