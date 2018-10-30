@@ -26,6 +26,10 @@ class Status extends InjectedWeb3 {
     }
   }
 
+  checkAvailability() {
+    return hasStatus()
+  }
+
   /**
    * Tries to set connection to the blockchain
    */

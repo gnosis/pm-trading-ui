@@ -26,6 +26,10 @@ class TrustApp extends InjectedWeb3 {
     }
   }
 
+  checkAvailability() {
+    return hasTrust()
+  }
+
   /**
    * Tries to set connection to the blockchain
    */

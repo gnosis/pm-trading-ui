@@ -3,7 +3,7 @@ import { WALLET_PROVIDER } from './constants'
 import METAMASK from './metamask'
 import PARITY from './parity'
 import REMOTE from './remote'
-import TRUST from './trustApp'
+import TRUST from './trust'
 import STATUS from './status'
 
 // eslint-disable-next-line

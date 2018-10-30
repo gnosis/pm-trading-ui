@@ -20,6 +20,14 @@ class InjectedWeb3 {
   runProviderRegister() {}
 
   /**
+   * Checks if provider is available and can be used to login
+   * @virtual
+  */
+  checkAvailability() {
+    return false
+  }
+
+  /**
    * Initializes the Integration
    * @param {object} opts - Integration Options
    * @param {function} opts.runProviderUpdate - Function to run when this provider updates

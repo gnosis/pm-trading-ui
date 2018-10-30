@@ -11,29 +11,64 @@
 
   .heading {
     font-size: 21px;
-    margin: 33px 0px 20px 0px;
+    margin: 20px 0px;
     font-weight: 500;
     color: #000;
     text-align: center;
+    text-transform: uppercase;
   }
 
   .providersContainer {
     background-color: #fff;
-    padding: 15px;
+    padding: 15px 30px 30px;
     border-radius: 10px;
 
     .providersList {
       display: flex;
+      width: 100%;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
 
       .provider {
-        border: 1px solid;
         border-radius: 10px;
-        padding: 5px;
+        padding: 15px;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border: 1px solid black;
+        cursor: pointer;
+
+        margin-top: 15px;
+
         .providerLogo {
-          width: 150px;
-          height: 150px;
+          width: 30px;
+          height: 30px;
+        }
+
+        .providerName {
+          margin-left: 20px;
+          color: #000;
+          font-weight: 600;
+        }
+
+        .nextIcon {
+          margin-left: auto;
+          transition: all .1s ease-in-out;
+        }
+
+        &:hover {
+          background-color: #f3f0f0;
+
+          .nextIcon {
+            margin-right: 8px;
+          }
+        }
+
+        &:first-child {
+          margin-left: 0;
         }
       }
     }

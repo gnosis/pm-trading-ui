@@ -26,6 +26,10 @@ class Metamask extends InjectedWeb3 {
     }
   }
 
+  checkAvailability() {
+    return hasMetamask()
+  }
+
   /**
    * Tries to set connection to the blockchain
    */
