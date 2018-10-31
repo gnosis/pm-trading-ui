@@ -1,4 +1,3 @@
-import { push, replace } from 'react-router-redux'
 import { fetchMarkets } from 'store/actions/market'
 import redeemMarket from 'store/actions/market/redeemMarket'
 import { requestTrades } from 'store/actions/trades'
@@ -10,7 +9,5 @@ export default {
   requestTrades,
   fetchMarkets,
   fetchTournamentUserData,
-  viewMarket: address => push(`/markets/${address}`),
-  viewMarketList: () => replace('/markets/list'),
   redeemWinnings: market => redeemMarket(market),
 }

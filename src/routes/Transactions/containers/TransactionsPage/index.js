@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
+import { withRouter } from 'react-router-dom'
+import { compose, withProps } from 'recompose'
 
 import { getRunningTransactions, getCompletedTransactions } from 'routes/Transactions/store/selectors/transactions'
 import { getCurrentAccount } from 'integrations/store/selectors'
@@ -11,11 +12,14 @@ const mapStateToProps = state => ({
   completedTransactions: getCompletedTransactions(state),
 })
 
-const mapDispatchToProps = {
-  changeUrl: push,
-}
+const enhancer = compose(
+  withRouter,
+  withProps(({ history }) => ({
+    changeUrl: url => history.push(url),
+  })),
+  connect(
+    mapStateToProps,
+  ),
+)
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Transactions)
+export default enhancer(Transactions)

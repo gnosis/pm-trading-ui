@@ -77,10 +77,11 @@ export const hasAcceptedTermsAndConditions = (state) => {
 export const getCurrentBalance = (state) => {
   const provider = getActiveProvider(state)
 
-  if (provider) {
+  if (provider && provider.balance) {
     return provider.balance
   }
-  return undefined
+
+  return '0'
 }
 
 /**

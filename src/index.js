@@ -11,7 +11,9 @@ import ReactDOM from 'react-dom'
 import 'scss/style.scss'
 import store from 'store'
 import { WALLET_PROVIDER } from 'integrations/constants'
+
 import { setMomentRelativeTime, setMomentDurationFormat } from './setup'
+import './i18n'
 
 setMomentRelativeTime()
 setMomentDurationFormat()

@@ -64,6 +64,7 @@ class MobileHeader extends Component {
       gameGuideType,
       gameGuideURL,
       modal,
+      t,
     } = this.props
     const { menuOpen } = this.state
 
@@ -87,7 +88,7 @@ class MobileHeader extends Component {
             <AccountOverview {...this.props} copyAddress={this.copyAddress} />
           ) : (
             <button type="button" className={cx('connect-wallet')} onClick={this.connectWalletClick}>
-              Connect a wallet
+              {t('connect_wallet')}
             </button>
           )}
           <NavLink
@@ -96,7 +97,7 @@ class MobileHeader extends Component {
             className={cx('navLink', 'bm-item')}
             onClick={this.closeMenu}
           >
-            Markets
+            {t('markets')}
           </NavLink>
           <Hairline style={HairlineStyle} />
           {canInteract && (
@@ -107,7 +108,7 @@ class MobileHeader extends Component {
                 className={cx('navLink', 'bm-item')}
                 onClick={this.closeMenu}
               >
-                Dashboard
+                {t('dashboard')}
               </NavLink>
               <Hairline style={HairlineStyle} />
             </>
@@ -120,7 +121,7 @@ class MobileHeader extends Component {
                 className={cx('navLink', 'bm-item')}
                 onClick={this.closeMenu}
               >
-                Scoreboard
+                {t('scoreboard')}
               </NavLink>
               <Hairline style={HairlineStyle} />
             </>
@@ -135,7 +136,7 @@ class MobileHeader extends Component {
                     className={cx('navLink', 'bm-item')}
                     onClick={this.closeMenu}
                   >
-                    Game guide
+                    {t('gameguide')}
                   </NavLink>
                   <Hairline style={HairlineStyle} />
                 </>
@@ -149,7 +150,7 @@ class MobileHeader extends Component {
                     rel="noopener noreferrer"
                     onClick={this.closeMenu}
                   >
-                    Game Guide
+                    {t('gameguide')}
                   </a>
                   <Hairline style={HairlineStyle} />
                 </>
@@ -171,6 +172,7 @@ MobileHeader.propTypes = {
     '-smallLogoPath': PropTypes.string,
   }).isRequired,
   tokenBalanceIsWrappedEther: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 MobileHeader.defaultProps = {
