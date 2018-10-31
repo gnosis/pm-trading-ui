@@ -23,7 +23,14 @@ const handleCreateVerification = async (result, dispatch, props) => {
   } = props
 
   // might only needed to accept docs, check if verification was successful already
-  const applicantStatus = await updateUserVerification(account)
+  let applicantStatus
+  try {
+    console.log('do fetch verification')
+    applicantStatus = await updateUserVerification(account)
+    console.log(applicantStatus)
+  } catch (err) {
+    return setStep({ page: 'denied', reason: err.message })
+  }
 
   if (applicantStatus === 'ACCEPTED') {
     return props.closeModal()
@@ -31,7 +38,7 @@ const handleCreateVerification = async (result, dispatch, props) => {
 
   if (applicantStatus === 'DENIED') {
     // TOS accepted or not required and application denied
-    await setStep({ page: 'denied', reason: 'Unfortunately, you didn’t pass the verification process. Please get in contact with OnFido.com for further information.' })
+    return setStep({ page: 'denied', reason: 'Unfortunately, you didn’t pass the verification process. Please get in contact with OnFido.com for further information.' })
   }
 
   // request signature of a specified message or show denied screen with information about signing messages
@@ -47,6 +54,8 @@ const handleCreateVerification = async (result, dispatch, props) => {
   // start verification or show error message in "denied" modal
   try {
     const { token } = await createUserVerification(firstName, lastName, email, signature, account)
+
+
     await setStep({ page: 'integration', options: { signature, ...values, token } })
   } catch (err) {
     await setStep({ page: 'denied', reason: err.message })

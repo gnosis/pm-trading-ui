@@ -29,6 +29,8 @@ const validators = funcs => (val) => {
 const { name = 'the application' } = getFeatureConfig('tournament')
 const cx = classnames.bind(style)
 
+const emailValidations = validators([required, isEmail])
+
 const ERROR_STYLE = {
   fontSize: '10px',
   marginBottom: '2px',
@@ -51,7 +53,7 @@ const Welcome = ({
       </div>
       <div className={cx('row')}>
         <div className={cx('col-md-12')}>
-          <Field component={TextInput} name="email" validate={validators([required, isEmail])} errorStyle={ERROR_STYLE} label={<span>E-Mail<MandatoryHint /></span>} />
+          <Field component={TextInput} name="email" validate={emailValidations} errorStyle={ERROR_STYLE} label={<span>E-Mail<MandatoryHint /></span>} />
         </div>
       </div>
       <div className={cx('row')}>
