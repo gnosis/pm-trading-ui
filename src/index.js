@@ -1,4 +1,4 @@
-import 'babel-polyfill'
+import '@babel/polyfill'
 import 'whatwg-fetch'
 import Raven from 'raven-js'
 import RootComponent from 'components/Root'
@@ -22,7 +22,7 @@ setMomentDurationFormat()
 store.dispatch({ type: 'INIT' })
 store.dispatch(initReadOnlyGnosis())
 
-store.dispatch(initProviders({ provider: WALLET_PROVIDER.REMOTE }))
+// store.dispatch(initProviders({ provider: WALLET_PROVIDER.REMOTE }))
 
 Decimal.set({ toExpPos: 9999, precision: 50 })
 

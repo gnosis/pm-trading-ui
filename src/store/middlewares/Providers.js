@@ -16,6 +16,10 @@ export default store => next => (action) => {
   const { dispatch } = store
   const { type, payload } = action
 
+  if (type === 'CHECK_AVAILABLE_PROVIDERS') {
+
+  }
+
   if (type === 'INIT_PROVIDERS') {
     const providerOptions = {
       runProviderUpdate: (provider, data) => dispatch(runProviderUpdate(provider, data)),

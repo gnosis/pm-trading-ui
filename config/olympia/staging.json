@@ -48,7 +48,7 @@
       "icon": "/assets/img/icons/icon_oly.png"
     }
   },
-  "providers": ["METAMASK", "STATUS", "TRUST"],
+  "providers": ["METAMASK", "STATUS"],
   "scoreboard": {
     "enabled": true
   },

@@ -1,7 +1,7 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import { timeoutCondition } from 'utils/helpers'
-import { hasTrust } from 'integrations/trustApp/utils'
+import { hasTrust } from 'integrations/trust/utils'
 import Web3 from 'web3'
 
 const NETWORK_TIMEOUT = 10000
