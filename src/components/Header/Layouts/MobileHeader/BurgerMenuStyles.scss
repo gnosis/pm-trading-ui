@@ -50,6 +50,10 @@
   text-transform: uppercase;
 }
 
+.bm-menu-wrap {
+  z-index: 1050;
+}
+
 /* Styling of overlay */
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);

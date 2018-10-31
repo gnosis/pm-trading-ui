@@ -9,6 +9,10 @@
   align-items: center;
   color: #fff;
 
+  @media (max-width: 767px) {
+    text-align: center;
+  }
+
   .heading {
     font-size: 21px;
     margin: 33px 0px 20px 0px;

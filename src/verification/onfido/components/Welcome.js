@@ -10,7 +10,7 @@ import LegalCompliance from 'containers/LegalCompliance'
 import style from './style.scss'
 
 const required = val => (val && val.length > 0 ? undefined : 'This field is required')
-const isEmail = val => ((!val || EMAIL_REGEXP.test(val)) ? undefined : 'Requires a valid E-Mail address')
+const isEmail = val => (val && EMAIL_REGEXP.test(val) ? undefined : 'Requires a valid E-Mail address')
 
 const validators = funcs => (val) => {
   let foundError

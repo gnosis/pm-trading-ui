@@ -16,7 +16,6 @@ import style from './DesktopHeader.scss'
 const cx = cn.bind(style)
 
 const DesktopHeader = ({
-  version,
   logoVars,
   canInteract,
   showScoreboard,
@@ -34,6 +33,7 @@ const DesktopHeader = ({
   gameGuideURL,
   etherBalance,
   tokenBalanceIsWrappedEther,
+  t,
 }) => (
   <div className={cx('container', 'containerFlex')}>
     <div className={cx('group', 'logo')}>
@@ -41,31 +41,30 @@ const DesktopHeader = ({
         <div className={cx('headerLogo', 'beta')} style={logoVars} />
       </NavLink>
     </div>
-    <div className={cx('group', 'left', 'version')}>{version}</div>
     <div className={cx('group', 'left', 'navLinks')}>
       <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
-        Markets
+        {t('markets')}
       </NavLink>
       {canInteract && (
         <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
-          Dashboard
+          {t('dashboard')}
         </NavLink>
       )}
       {showScoreboard && (
         <NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink')}>
-          Scoreboard
+          {t('scoreboard')}
         </NavLink>
       )}
       {showGameGuide && (
         <>
           {gameGuideType === 'default' ? (
             <NavLink to="/game-guide" activeClassName={cx('active')} className={cx('navLink')}>
-              Game guide
+              {t('gameguide')}
             </NavLink>
           ) : null}
           {gameGuideType === 'link' ? (
             <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
-              Game Guide
+              {t('gameguide')}
             </a>
           ) : null}
         </>
@@ -78,8 +77,7 @@ const DesktopHeader = ({
           {currentNetwork
             && currentNetwork !== 'MAIN' && (
             <span className={cx('network', 'text')}>
-                Network:
-              {upperFirst(currentNetwork.toLowerCase())}
+              {t('network')}: {upperFirst(currentNetwork.toLowerCase())}
             </span>
           )}
           <Balance
@@ -100,7 +98,7 @@ const DesktopHeader = ({
         </div>
       ) : (
         <button type="button" className={cx('connect-wallet')} onClick={handleConnectWalletClick}>
-          Connect a wallet
+          {t('connect_wallet')}
         </button>
       )}
     </div>
@@ -108,7 +106,6 @@ const DesktopHeader = ({
 )
 
 DesktopHeader.propTypes = {
-  version: PropTypes.string,
   currentNetwork: PropTypes.string,
   etherBalance: PropTypes.string,
   tokenBalance: PropTypes.string,
@@ -129,10 +126,10 @@ DesktopHeader.propTypes = {
   }).isRequired,
   canInteract: PropTypes.bool.isRequired,
   badgesEnabled: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 DesktopHeader.defaultProps = {
-  version: '',
   currentNetwork: '',
   tokenBalance: '0',
   etherBalance: '0',
