@@ -136,6 +136,12 @@ module.exports = (env = {}) => {
       }),
       new HtmlWebpackPlugin({
         template: `${__dirname}/src/html/index.html`,
+        chunks: ['interface', 'bootstrap-loader'],
+      }),
+      new HtmlWebpackPlugin({
+        filename: 'embedded/index.html',
+        template: `${__dirname}/src/embedded/html/index.html`,
+        chunks: ['embedded'],
       }),
       new AutoDllPlugin({
         inject: true, // will inject the DLL bundles to index.html
