@@ -25,9 +25,7 @@ const handleCreateVerification = async (result, dispatch, props) => {
   // might only needed to accept docs, check if verification was successful already
   let applicantStatus
   try {
-    console.log('do fetch verification')
     applicantStatus = await updateUserVerification(account)
-    console.log(applicantStatus)
   } catch (err) {
     return setStep({ page: 'denied', reason: err.message })
   }
