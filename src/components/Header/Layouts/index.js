@@ -1,7 +1,6 @@
 import React from 'react'
 import Loadable from 'react-loadable'
 import { Desktop, Tablet, Mobile } from 'components/Responsive'
-import MobileHeader from './MobileHeader'
 
 const LoadableDesktop = Loadable({
   loader: () => import('./DesktopHeader'),
@@ -22,7 +21,7 @@ const Layout = props => (
       <LoadableMobile {...props} />
     </Tablet>
     <Mobile>
-      <MobileHeader {...props} />
+      <LoadableMobile {...props} />
     </Mobile>
   </>
 )
