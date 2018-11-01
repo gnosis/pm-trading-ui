@@ -34,7 +34,7 @@ const embeddedConfig = {
   ],
 }
 
-const getConfig = project => (project === 'embedded ' ? embeddedConfig : interfaceConfig)
+const getConfig = project => (project === 'embedded' ? embeddedConfig : interfaceConfig)
 
 module.exports = (env = {}) => {
   if (!process.env.PROJECT) {
@@ -46,7 +46,6 @@ module.exports = (env = {}) => {
 
   const baseConfig = getBase(process.env.NODE_ENV)(env)
   const projectConfig = getConfig(process.env.PROJECT)
-  console.log(projectConfig)
 
   return {
     ...baseConfig,
