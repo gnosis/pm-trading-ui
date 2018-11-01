@@ -1,5 +1,6 @@
 /* globals fetch */
 import { getFeatureConfig } from 'utils/features'
+import { handleResponse } from './utils/checks'
 
 const verificationConfig = getFeatureConfig('verification') || {}
 
@@ -16,7 +17,7 @@ export const createUserVerification = async (firstName, lastName, email, signatu
     }),
   })
 
-  const body = await response.json()
+  const body = await handleResponse(response)
 
   return body
 }
@@ -24,7 +25,8 @@ export const createUserVerification = async (firstName, lastName, email, signatu
 export const requestUserVerification = async (account) => {
   try {
     const response = await fetch(`${API_URL}/users/${account}`)
-    const body = await response.json()
+
+    const body = await handleResponse(response)
 
     return body
   } catch (err) {

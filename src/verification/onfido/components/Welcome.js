@@ -26,10 +26,10 @@ const validators = funcs => (val) => {
   return foundError
 }
 
-const emailValidators = validators([required, isEmail])
-
 const { name = 'the application' } = getFeatureConfig('tournament')
 const cx = classnames.bind(style)
+
+const emailValidations = validators([required, isEmail])
 
 const ERROR_STYLE = {
   fontSize: '10px',
@@ -53,7 +53,7 @@ const Welcome = ({
       </div>
       <div className={cx('row')}>
         <div className={cx('col-md-12')}>
-          <Field component={TextInput} name="email" validate={emailValidators} errorStyle={ERROR_STYLE} label={<span>E-Mail<MandatoryHint /></span>} />
+          <Field component={TextInput} name="email" validate={emailValidations} errorStyle={ERROR_STYLE} label={<span>E-Mail<MandatoryHint /></span>} />
         </div>
       </div>
       <div className={cx('row')}>

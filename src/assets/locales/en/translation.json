@@ -1,7 +1,9 @@
 {
-  "translation": {
-  },
-  "header": {
-    "markets": "Markets"
-  }
+  "markets": "Markets",
+  "dashboard": "Dashboard",
+  "scoreboard": "Scoreboard",
+  "gameguide": "Gameguide",
+  "network": "Network",
+  "connecting_blockchain": "Connecting to the Blockchain...",
+  "connect_wallet": "Connect a Wallet"
 }
