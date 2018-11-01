@@ -1,39 +1,30 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const AutoDllPlugin = require('autodll-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
-
 const pkg = require('./package.json')
 
 const configLoader = require('./scripts/configuration')
+
+const version = process.env.BUILD_VERSION || pkg.version
+const commitId = `${process.env.TRAVIS_BRANCH}@${process.env.TRAVIS_COMMIT}`
 
 module.exports = (env = {}) => {
   const configEnvVars = env.GNOSIS_CONFIG || {}
 
   const gnosisEnv = process.env.GNOSIS_ENV
 
-  console.info(`[WEBPACK-DEV]: using env configuration: '${gnosisEnv || 'default configuration (local)'}'`)
+  console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv || 'default configuration (local)'}'`)
   const config = configLoader(gnosisEnv, configEnvVars)
 
-  const version = env.BUILD_VERSION || pkg.version
-  const commitId = `${env.TRAVIS_BRANCH || 'local'}@${env.TRAVIS_COMMIT || 'SNAPSHOT'}`
-
   return {
+    devtool: 'source-map',
     context: `${__dirname}/src`,
-    entry: {
-      interface: ['bootstrap-loader', 'index.js'],
-      embedded: 'embedded/index.js',
-    },
-    devtool: 'eval-source-map',
-    mode: 'development',
-    output: {
-      publicPath: '/',
-      path: `${__dirname}/dist`,
-      filename: '[hash].js',
-    },
+    mode: 'production',
     resolve: {
       symlinks: false,
       alias: {
@@ -50,23 +41,18 @@ module.exports = (env = {}) => {
     },
     module: {
       rules: [
-        {
-          test: /\.(js|jsx)$/,
-          exclude: /(node_modules)/,
-          use: 'babel-loader',
-        },
+        { test: /\.(js|jsx)$/, exclude: /(node_modules)/, loader: 'babel-loader' },
         {
           test: /\.(jpe?g|png|svg)$/i,
           loader: 'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
         },
-
         {
           test: /\.(scss|css)$/,
           oneOf: [
             {
               resourceQuery: /^\?raw$/,
               use: [
-                'style-loader',
+                MiniCssExtractPlugin.loader,
                 {
                   loader: 'css-loader',
                   options: {
@@ -88,23 +74,22 @@ module.exports = (env = {}) => {
             },
             {
               use: [
-                'style-loader',
+                MiniCssExtractPlugin.loader,
                 {
                   loader: 'css-loader',
                   options: {
-                    sourceMap: true,
                     modules: true,
-                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                    localIdentName: '[name]__[local]__[hash:base64:5]',
                     importLoaders: 2,
                   },
                 },
                 {
                   loader: 'postcss-loader',
-                  options: {
-                    sourceMap: true,
-                  },
                 },
-                { loader: 'sass-loader', options: { sourceMap: true } },
+                {
+                  loader: 'sass-loader',
+                  options: { includePaths: [path.resolve(`${__dirname}/src`)] },
+                },
               ],
             },
           ],
@@ -119,29 +104,10 @@ module.exports = (env = {}) => {
         },
       ],
     },
-    devServer: {
-      disableHostCheck: true,
-      historyApiFallback: {
-        rewrites: [
-          { from: /^\/embedded.*/, to: '/embedded/index.html' },
-          { from: /./, to: '/index.html' },
-        ],
-      },
-      hot: true,
-      port: 5000,
-      proxy: {
-        '/api': {
-          target: config.gnosisdb.host,
-          secure: false,
-        },
-      },
-      watchOptions: {
-        ignored: /node_modules/,
-      },
-      contentBase: [`${__dirname}/src`],
-    },
     plugins: [
-      new CaseSensitivePathsPlugin(),
+      new MiniCssExtractPlugin({
+        filename: '[contenthash].css',
+      }),
       new FaviconsWebpackPlugin({
         logo: config.logo.favicon,
         // Generate a cache file with control hashes and
@@ -161,24 +127,49 @@ module.exports = (env = {}) => {
         },
         inject: true,
       }),
-      new HtmlWebpackPlugin({
-        template: `${__dirname}/src/html/index.html`,
-        chunks: ['interface', 'bootstrap-loader'],
-      }),
-      new HtmlWebpackPlugin({
-        filename: 'embedded/index.html',
-        template: `${__dirname}/src/embedded/html/index.html`,
-        chunks: ['embedded'],
+      new AutoDllPlugin({
+        inject: true, // will inject the DLL bundles to index.html
+        filename: '[name]_[contenthash].js',
+        entry: {
+          vendor: [
+            'react',
+            'react-dom',
+            'redux',
+            'react-redux',
+            'immutable',
+            'react-router-dom',
+            'recharts',
+            'redux-actions',
+            'reselect',
+            'web3',
+            'moment-duration-format',
+            '@gnosis.pm/pm-js',
+          ],
+        },
+        plugins: [
+          new TerserPlugin({
+            sourceMap: true,
+            parallel: true,
+            cache: true,
+          }),
+          new webpack.EnvironmentPlugin({
+            NODE_ENV: 'production',
+          }),
+          new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+        ],
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,
-        NODE_ENV: 'development',
+        NODE_ENV: 'production',
       }),
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
         'process.env.FALLBACK_CONFIG': `"${Buffer.from(JSON.stringify(config)).toString('base64')}"`,
       }),
-      new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+      new TerserPlugin({
+        sourceMap: true,
+        parallel: true,
+        cache: true,
+      }),
       new CopyWebpackPlugin([{ from: `${__dirname}/src/assets`, to: `${__dirname}/dist/assets` }]),
     ],
   }

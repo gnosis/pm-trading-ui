@@ -9,3 +9,4 @@ else
 fi
 
 npm run build
+PROJECT=embedded npm run build
