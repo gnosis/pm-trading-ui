@@ -18,7 +18,7 @@ module.exports = (env = {}) => {
 
   const gnosisEnv = process.env.GNOSIS_ENV
 
-  console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv || 'default configuration (local)'}`)
+  console.info(`[WEBPACK-PROD]: using env configuration: '${gnosisEnv || 'default configuration (local)'}'`)
   const config = configLoader(gnosisEnv, configEnvVars)
 
   return {
@@ -106,7 +106,7 @@ module.exports = (env = {}) => {
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: '[hash].css',
+        filename: '[contenthash].css',
       }),
       new FaviconsWebpackPlugin({
         logo: config.logo.favicon,
@@ -129,7 +129,7 @@ module.exports = (env = {}) => {
       }),
       new AutoDllPlugin({
         inject: true, // will inject the DLL bundles to index.html
-        filename: '[name]_[hash].js',
+        filename: '[name]_[contenthash].js',
         entry: {
           vendor: [
             'react',

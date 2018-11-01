@@ -6,11 +6,11 @@ const getBase = env => (env === 'production' ? webpackBaseProd : webpackBaseDev)
 
 const interfaceConfig = {
   name: 'Interface',
-  entry: 'embedded/index.js',
+  entry: ['bootstrap-loader', 'index.js'],
   output: {
     publicPath: '/',
     path: `${__dirname}/dist/interface`,
-    filename: '[hash].js',
+    filename: '[name]_[hash].js',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -20,12 +20,12 @@ const interfaceConfig = {
 }
 
 const embeddedConfig = {
-  name: 'Embedded view',
-  entry: ['bootstrap-loader', 'index.js'],
+  name: 'Embedded_Market',
+  entry: 'embedded/index.js',
   output: {
     publicPath: '/',
-    path: `${__dirname}/embedded`,
-    filename: '[hash].js',
+    path: `${__dirname}/dist/embedded`,
+    filename: '[name]_[hash].js',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -46,6 +46,7 @@ module.exports = (env = {}) => {
 
   const baseConfig = getBase(process.env.NODE_ENV)(env)
   const projectConfig = getConfig(process.env.PROJECT)
+  console.log(projectConfig)
 
   return {
     ...baseConfig,
