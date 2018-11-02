@@ -29,7 +29,7 @@ const DecimalValue = ({ value, decimals = 4, className }) => {
 }
 
 // I don't use PropTypes.instanceOf because Decimal can be cloned with different default properties
-// and instanceOf doesn't deal with that situation. In fact, Decimal.clone is used in gnosis.js
+// and instanceOf doesn't deal with that situation. In fact, Decimal.clone is used in pm-js
 export const decimalJsTest = (props, propName, componentName) => {
   const value = props[propName]
 
