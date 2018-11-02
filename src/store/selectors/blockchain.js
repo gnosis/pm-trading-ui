@@ -4,7 +4,7 @@ import { getCurrentBalance, getCurrentAccount } from 'integrations/store/selecto
 import { weiToEth, hexWithPrefix, normalizeHex } from 'utils/helpers'
 
 /**
- * Returns if gnosis.js is initialized or not
+ * Returns if pm-js is initialized or not
  * @param {*} state - redux state
  */
 export const isGnosisInitialized = state => !!state.blockchain.get('gnosisInitialized')

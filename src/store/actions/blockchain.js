@@ -95,7 +95,7 @@ export const initReadOnlyGnosis = () => async (dispatch) => {
     })
     await dispatch(setGnosisROInitialized({ initialized: true }))
   } catch (error) {
-    console.error(`Gnosis.js RO initialization Error: ${error}`)
+    console.error(`PM-js RO initialization Error: ${error}`)
   }
 }
 
@@ -176,7 +176,7 @@ export const updateCollateralToken = () => async (dispatch) => {
 }
 
 /**
- * (Re)-Initializes Gnosis.js connection according to current providers settings
+ * (Re)-Initializes PM-js connection according to current providers settings
  */
 export const initGnosis = () => async (dispatch, getState) => {
   // initialize
@@ -198,7 +198,7 @@ export const initGnosis = () => async (dispatch, getState) => {
       await dispatch(setGnosisInitialized({ initialized: true }))
     }
   } catch (error) {
-    console.warn(`Gnosis.js initialization Error: ${error}`)
+    console.warn(`pm-js initialization Error: ${error}`)
     dispatch(setConnectionStatus({ connected: false }))
     return dispatch(setGnosisInitialized({ initialized: false, error }))
   }
@@ -216,7 +216,7 @@ export const initGnosis = () => async (dispatch, getState) => {
       await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
       await dispatch(setConnectionStatus({ connected: true }))
     } catch (error) {
-      console.warn(`Gnosis.js connection Error: ${error}`)
+      console.warn(`pm-js connection Error: ${error}`)
       return dispatch(setConnectionStatus({ connected: false }))
     }
   }
