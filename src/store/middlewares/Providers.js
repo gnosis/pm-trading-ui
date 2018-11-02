@@ -17,10 +17,10 @@ export default store => next => (action) => {
   const { type, payload } = action
 
   if (type === 'CHECK_AVAILABLE_PROVIDERS') {
-
+    providers.map(provider => checkAvailableProviders(integrations[provider]))
   }
 
-  if (type === 'INIT_PROVIDERS') {
+  if (type === 'REGISTER_PROVIDERS') {
     const providerOptions = {
       runProviderUpdate: (provider, data) => dispatch(runProviderUpdate(provider, data)),
       runProviderRegister: (provider, data) => dispatch(runProviderRegister(provider, data)),

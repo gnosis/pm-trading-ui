@@ -1,5 +1,5 @@
 import Gnosis from '@gnosis.pm/pm-js'
-import olympiaArtifacts from '@gnosis.pm/olympia-token'
+import apolloArtifacts from '@gnosis.pm/pm-apollo-contracts'
 import { NETWORK_TIMEOUT } from 'store/actions/blockchain'
 import { isFeatureEnabled } from 'utils/features'
 
@@ -12,8 +12,8 @@ export const {
   calcLMSRCost, calcLMSROutcomeTokenCount, calcLMSRMarginalPrice, calcLMSRProfit,
 } = Gnosis
 
-const addOlympiaContracts = async (gnosisJsInstance) => {
-  await gnosisJsInstance.importContracts(olympiaArtifacts, {
+const addApolloContracts = async (gnosisJsInstance) => {
+  await gnosisJsInstance.importContracts(apolloArtifacts, {
     OlympiaToken: 'olympiaToken',
     AddressRegistry: 'olympiaAddressRegistry',
     RewardClaimHandler: 'rewardClaimHandler',
@@ -33,7 +33,7 @@ const waitForGnosisConnection = instance => new Promise((resolve, reject) => {
   setTimeout(() => {
     if (stillRunning) {
       clearInterval(instanceCheck)
-      reject(new Error('Connection to RO Gnosis.js timed out'))
+      reject(new Error('Connection to RO pm-js timed out'))
     }
   }, NETWORK_TIMEOUT)
 })
@@ -49,7 +49,7 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
     const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
 
     if (tournamentEnabled) {
-      await addOlympiaContracts(gnosis)
+      await addApolloContracts(gnosis)
     }
 
     gnosisInstance = gnosis
@@ -72,7 +72,7 @@ export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
     const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
 
     if (tournamentEnabled) {
-      await addOlympiaContracts(gnosis)
+      await addApolloContracts(gnosis)
     }
 
     gnosisROInstance = gnosis

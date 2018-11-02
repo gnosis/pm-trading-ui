@@ -6,6 +6,7 @@ import { WALLET_PROVIDER } from 'integrations/constants'
 import { initGnosis } from 'store/actions/blockchain'
 import { isFeatureEnabled } from 'utils/features'
 
+export const checkAvailableProviders = createAction('CHECK_AVAILABLE_PROVIDERS')
 export const registerProvider = createAction('REGISTER_PROVIDER')
 export const updateProvider = createAction('UPDATE_PROVIDER')
 export const logout = createAction('PROVIDER_LOGOUT')

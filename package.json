@@ -56,8 +56,8 @@
   ],
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "@gnosis.pm/olympia-token": "^1.4.0",
-    "@gnosis.pm/pm-contracts": "^1.0.4",
+    "@gnosis.pm/pm-apollo-contracts": "^1.4.1",
+    "@gnosis.pm/pm-contracts": "1.0.4",
     "@gnosis.pm/pm-js": "^2.1.0",
     "autobind-decorator": "^2.1.0",
     "blockies": "0.0.2",
