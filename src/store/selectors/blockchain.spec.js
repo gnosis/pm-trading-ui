@@ -26,7 +26,7 @@ describe('Blockchain selectors', () => {
   })
 
   describe('isConnectedToBlockchain', () => {
-    it('Should return falsy if none or one of gnosis.js instances was initialized', () => {
+    it('Should return falsy if none or one of pm-js instances was initialized', () => {
       const state = { blockchain: Map({ gnosisInitialized: false, gnosisROInitialized: false }) }
 
       expect(isConnectedToBlockchain(state)).toBe(false)
@@ -34,7 +34,7 @@ describe('Blockchain selectors', () => {
       expect(isConnectedToBlockchain(state)).toBe(false)
     })
 
-    it('Should return truthy value if both gnosis.js instances are initialized', () => {
+    it('Should return truthy value if both pm-js instances are initialized', () => {
       const state = { blockchain: Map({ gnosisInitialized: true, gnosisROInitialized: true }) }
 
       expect(isConnectedToBlockchain(state)).toBe(true)
