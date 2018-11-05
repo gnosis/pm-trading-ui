@@ -9,13 +9,6 @@
     "0x95db47d3e9d574cd15b0f02c845bc2971b0fc3e1":"Lauti",
     "0x13a1d49d0f5285586373755ec96d0ac81e7a1928": "Lautaro"
   },
-  "verification": {
-    "enabled": true,
-    "handler": "onfido",
-    "options": {
-      "url": "https://kyc.staging.gnosisdev.com/v1"
-    }
-  },
   "collateralToken":{
     "source":"contract",
     "options":{
