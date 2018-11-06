@@ -17,12 +17,12 @@ deploy:
 ### OLYMPIA DEPLOYMENTS
   # https://olympia.dev.gnosisdev.com/
 - provider: script
-  script: ~/.local/bin/aws s3 cp dist/index.html s3://olympia-development/index.html --region eu-west-1 --cache-control 'max-age=0,no-cache,no-store,must-revalidate'
+  script: ~/.local/bin/aws s3 cp dist/interface/index.html s3://olympia-development/interface/index.html --region eu-west-1 --cache-control 'max-age=0,no-cache,no-store,must-revalidate'
   skip_cleanup: true
   on:
     branch: development
 - provider: script
-  script: ~/.local/bin/aws s3 sync dist s3://olympia-development --region eu-west-1 --cache-control 'public, max-age=2592000' --exclude "index.html"
+  script: ~/.local/bin/aws s3 sync dist s3://olympia-development --region eu-west-1 --cache-control 'public, max-age=2592000' --exclude "interface/index.html"
   skip_cleanup: true
   on:
     branch: development
