@@ -5,5 +5,6 @@
   "gameguide": "Gameguide",
   "network": "Network",
   "connecting_blockchain": "Connecting to the Blockchain...",
-  "connect_wallet": "Connect a Wallet"
+  "connect_wallet": "Connect a Wallet",
+  "using_provider": "You are connected via {{provider}}"
 }
