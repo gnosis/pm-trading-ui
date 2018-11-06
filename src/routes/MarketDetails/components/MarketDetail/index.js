@@ -16,7 +16,7 @@ import expandableViews, { EXPAND_MY_SHARES } from 'routes/MarketDetails/componen
 import Controls from './Controls'
 import Details from './Details'
 import Infos from './Infos'
-import style from './marketDetail.mod.scss'
+import style from './marketDetail.scss'
 
 const cx = cn.bind(style)
 
@@ -83,7 +83,6 @@ class MarketDetail extends Component {
   async fetchMarketUpdates() {
     const {
       fetchMarket,
-      fetchMarketTrades,
       market,
       changeUrl,
       requestGasCost,
@@ -95,7 +94,6 @@ class MarketDetail extends Component {
     } = this.props
     return fetchMarket()
       .then(() => {
-        fetchMarketTrades(market)
         if (this.firstFetch && !view) {
           const availableView = this.getAvailableView()
           if (availableView) {
@@ -214,6 +212,8 @@ class MarketDetail extends Component {
       defaultAccount,
       moderators,
       collateralTokenSymbol,
+      hasWallet,
+      fetchMarketTrades,
     } = this.props
 
     const { marketFetchError } = this.state
@@ -246,6 +246,7 @@ class MarketDetail extends Component {
               gasCosts={gasCosts}
               gasPrice={gasPrice}
               handleRedeemWinnings={this.handleRedeemWinnings}
+              hasWallet={hasWallet}
             />
             <Infos
               market={market}
@@ -264,7 +265,7 @@ class MarketDetail extends Component {
         >
           {this.renderExpandableContent()}
         </div>
-        <MarketGraph data={marketGraph} market={market} />
+        <MarketGraph data={marketGraph} market={market} fetchMarketTrades={fetchMarketTrades} />
       </div>
     )
   }

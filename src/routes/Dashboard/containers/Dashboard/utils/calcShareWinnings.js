@@ -3,23 +3,22 @@ import { OUTCOME_TYPES } from 'utils/constants'
 
 const SCALAR_OUTCOME_RANGE = 1000000
 
-const calcShareWinningsCategorical = (share, market) => {
-  const { winningOutcome } = market
+const calcShareWinningsCategorical = (share, { winningOutcome }) => {
   const shareOutcome = share.outcomeToken.index
-  if (shareOutcome !== winningOutcome) {
+  if (shareOutcome !== winningOutcome.index) {
     return '0'
   }
 
   return Decimal(share.balance).toString()
 }
 
-const calcShareWinningsScalar = (share, market) => {
+const calcShareWinningsScalar = (share, { bounds, winningOutcome }) => {
   const outcomeRange = Decimal(SCALAR_OUTCOME_RANGE)
-  const outcome = Decimal(parseInt(share.outcomeToken.index, 10))
-  const lowerBound = Decimal(market.bounds.lower)
-  const upperBound = Decimal(market.bounds.upper)
+  const outcome = Decimal(winningOutcome)
+  const lowerBound = Decimal(bounds.lower)
+  const upperBound = Decimal(bounds.upper)
   const isShort = parseInt(share.outcomeToken.index, 10) === 0
-  const isLong = parseInt(share.outcomeToken.index, 10)
+  const isLong = !!parseInt(share.outcomeToken.index, 10)
 
   let outcomeClamped = Decimal(0)
 
@@ -28,11 +27,11 @@ const calcShareWinningsScalar = (share, market) => {
   } else if (outcome.gt(upperBound)) {
     outcomeClamped = outcomeRange
   } else {
-    outcomeClamped = outcomeRange.mul(outcome.sub(lowerBound).toString()).div(upperBound.sub(lowerBound).toString())
+    outcomeClamped = outcomeRange.mul(outcome.sub(lowerBound)).div(upperBound.sub(lowerBound))
   }
 
   const factorShort = outcomeRange.sub(outcomeClamped)
-  const factorLong = outcomeRange.sub(factorShort.toString())
+  const factorLong = outcomeRange.sub(factorShort)
 
   if (isShort) {
     return Decimal(share.balance)
@@ -53,9 +52,7 @@ const calcShareWinningsScalar = (share, market) => {
 const calcShareWinnings = (share, market) => {
   const isCategorical = market.type === OUTCOME_TYPES.CATEGORICAL
 
-  return isCategorical
-    ? calcShareWinningsCategorical(share, market)
-    : calcShareWinningsScalar(share, market)
+  return isCategorical ? calcShareWinningsCategorical(share, market) : calcShareWinningsScalar(share, market)
 }
 
 export default calcShareWinnings

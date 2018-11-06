@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { formValueSelector, getFormSyncErrors } from 'redux-form'
-import { replace } from 'react-router-redux'
+import { withRouter } from 'react-router-dom'
+import { compose, withProps } from 'recompose'
 import { requestGasPrice, requestTokenSymbol } from 'store/actions/blockchain'
-import MarketDetail from 'routes/MarketDetails/components/MarketDetail'
 
 import redeemMarket from 'store/actions/market/redeemMarket'
 import {
@@ -32,6 +32,7 @@ import {
 } from 'integrations/store/selectors'
 import { isModerator, getModerators } from 'utils/helpers'
 import { getTokenSymbol, getTokenAmount } from 'store/selectors/blockchain'
+import MarketDetails from '../../components/MarketDetail'
 
 let marketId
 
@@ -79,17 +80,24 @@ const mapDispatchToProps = dispatch => ({
   fetchMarket: () => dispatch(requestMarket(marketId)),
   fetchMarketShares: accountAddress => dispatch(requestMarketSharesForAccount(marketId, accountAddress)),
   fetchMarketTradesForAccount: accountAddress => dispatch(requestMarketTradesForAccount(marketId, accountAddress)),
-  fetchMarketTrades: () => dispatch(requestMarketGraphTrades(marketId)),
+  fetchMarketTrades: market => dispatch(requestMarketGraphTrades(market)),
   buyShares: (market, outcomeIndex, outcomeTokenCount, cost) => dispatch(buyMarketShares(market, outcomeIndex, outcomeTokenCount, cost)),
   sellShares: (market, outcomeIndex, outcomeTokenCount, earnings) => dispatch(sellMarketShares(market, outcomeIndex, outcomeTokenCount, earnings)),
-  changeUrl: url => dispatch(replace(url)),
-  redeemWinnings: market => redeemMarket(market),
+  redeemWinnings: market => dispatch(redeemMarket(market)),
   requestGasCost: (contractType, opts) => dispatch(requestGasCost(contractType, opts)),
   requestGasPrice: () => dispatch(requestGasPrice()),
   requestTokenSymbol: tokenAddress => dispatch(requestTokenSymbol(tokenAddress)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MarketDetail)
+const enhancer = compose(
+  withRouter,
+  withProps(({ history }) => ({
+    changeUrl: url => history.replace(url),
+  })),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)
+
+export default enhancer(MarketDetails)

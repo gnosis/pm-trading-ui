@@ -7,7 +7,7 @@ import { getFeatureConfig } from 'utils/features'
 import DocumentExplanation from './DocumentExplanation'
 import DocumentField from './DocumentField'
 
-import style from './Form.mod.scss'
+import style from './Form.scss'
 
 const legalComplianceEnabled = getFeatureConfig('legalCompliance')
 
@@ -16,6 +16,7 @@ const cx = classnames.bind(style)
 const LegalCompliance = ({
   documents,
   fields,
+  className,
   showHeading,
   showExplanation,
   applicationName,
@@ -29,11 +30,28 @@ const LegalCompliance = ({
 }) => {
   if (!legalComplianceEnabled) {
     return (
-      <ButtonComponent className={cx(submitButtonClassName)} onClick={() => onSubmitAcceptedDocs()} {...submitButtonOpts}>
+      <ButtonComponent
+        className={cx(submitButtonClassName)}
+        onClick={() => onSubmitAcceptedDocs()}
+        {...submitButtonOpts}
+      >
         {submitButtonLabel}
       </ButtonComponent>
     )
   }
+
+  const documentList = []
+  documents.forEach((doc, index) => {
+    documentList.push(<DocumentExplanation key={doc.id} {...doc} />)
+    if (index === documents.length - 2) {
+      documentList.push(<span key={`${doc.id}-separator`}> and </span>)
+      return
+    }
+
+    if (index !== documents.length - 1) {
+      documentList.push(<span key={`${doc.id}-separator`}>, </span>)
+    }
+  })
 
   const documentIds = documents.map(doc => doc.id)
   const hasAcceptedAll = documentIds.every(docId => !!fields[docId])
@@ -41,27 +59,18 @@ const LegalCompliance = ({
 
   return (
     <div>
-      {showHeading && (
-        <h4 className={cx('heading')}>
-Terms of service and privacy policy
-        </h4>
-      )}
+      {showHeading && <h4 className={cx('heading')}>Terms of service and privacy policy</h4>}
       {showExplanation && (
         <p className={cx('explanation')}>
           For using {applicationName}, you have to agree with our&nbsp;
-          <React.Fragment>
-            {documents
-              .map(doc => <DocumentExplanation key={doc.id} {...doc} />)
-              .reduce((acc, elem) => [...acc, <span>
-                {' '}
-                  and
-                {' '}
-              </span>, elem], [])}
-          </React.Fragment>
-          .
+          <>{documentList}</>.
         </p>
       )}
-      <div className={cx('checks')}>{documents.map(doc => <DocumentField {...doc} className={cx('checkBox')} />)}</div>
+      <div className={cx('checks')}>
+        {documents.map(doc => (
+          <DocumentField key={doc.id} {...doc} className={cx('checkBox')} />
+        ))}
+      </div>
       <ButtonComponent
         className={cx(submitButtonClassName, { [submitButtonDisabledClassName]: !canSubmit })}
         disabled={!canSubmit}
@@ -75,6 +84,7 @@ Terms of service and privacy policy
 }
 
 LegalCompliance.propTypes = {
+  className: PropTypes.string,
   documents: PropTypes.arrayOf(
     PropTypes.shape({
       type: PropTypes.string,
@@ -94,6 +104,7 @@ LegalCompliance.propTypes = {
 }
 
 LegalCompliance.defaultProps = {
+  className: '',
   showHeading: false,
   showExplanation: false,
   applicationName: 'the application',

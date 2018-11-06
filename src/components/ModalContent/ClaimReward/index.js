@@ -10,7 +10,7 @@ import 'rc-tooltip/assets/bootstrap.css'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import { getFeatureConfig } from 'utils/features'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import style from './ClaimReward.mod.scss'
+import style from './ClaimReward.scss'
 
 const cx = cn.bind(style)
 const { rewardToken } = getFeatureConfig('rewards')
@@ -33,10 +33,10 @@ class ClaimReward extends React.Component {
   }
 
   async handleClaim() {
-    const { closeModal, claimUserRewards } = this.props
+    const { closeModal, claimUserRewards, rewardValue } = this.props
     await this.setState({ claimState: 'loading' })
     try {
-      await claimUserRewards()
+      await claimUserRewards(rewardValue)
       await this.setState({ claimState: 'success' })
     } catch (e) {
       await this.setState({ claimState: 'error' })
@@ -55,6 +55,7 @@ class ClaimReward extends React.Component {
       claimRewardGasCost,
       currentBalance,
       rewardValue,
+      hasClaimedReward,
     } = this.props
 
     const { claimState } = this.state
@@ -83,12 +84,15 @@ class ClaimReward extends React.Component {
     const canClaim = sufficentFunds && !isWrongNetwork
 
     let claimButton
-    if (claimState === 'loading') {
+    if (hasClaimedReward) {
       claimButton = (
-        <button
-          className={cx('btn', 'btn-primary', 'claim', 'disabled')}
-          disabled
-        >
+        <button className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
+          ALREADY CLAIMED
+        </button>
+      )
+    } else if (claimState === 'loading') {
+      claimButton = (
+        <button className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
           <IndefiniteSpinner width={16} height={16} />
         </button>
       )
@@ -101,20 +105,14 @@ class ClaimReward extends React.Component {
     } else if (!canClaim) {
       claimButton = (
         <Tooltip overlay={problemMessage}>
-          <button
-            className={cx('btn', 'btn-primary', 'claim', 'disabled')}
-            disabled
-          >
+          <button className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
             CLAIM
           </button>
         </Tooltip>
       )
     } else {
       claimButton = (
-        <button
-          onClick={this.handleClaim}
-          className={cx('btn', 'btn-primary', 'claim')}
-        >
+        <button onClick={this.handleClaim} className={cx('btn', 'btn-primary', 'claim')}>
           CLAIM
         </button>
       )
@@ -124,19 +122,15 @@ class ClaimReward extends React.Component {
       <div className={cx('claimRewards')}>
         <button className={cx('closeButton')} onClick={closeModal} />
         <div className={cx('claimContainer')}>
-          <h4 className={cx('heading')}>
-            Claim
-            {rewardToken.symbol}
-          </h4>
+          <h4 className={cx('heading')}>Claim {rewardToken.symbol}</h4>
           <p className={cx('annotation')}>
             In order to claim your{' '}
             <span className={cx('rewardInfo')}>
               {rewardValue} {rewardToken.symbol}
             </span>{' '}
-            tokens, you first have to switch to the{' '}
-            <span className={cx('network')}>{targetNetwork}</span> network in
-            your MetaMask wallet. Also make sure you have enough ETH to submit
-            the transaction with the claim request. More information in{' '}
+            tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in
+            your MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request.
+            More information in{' '}
             <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
               FAQ
             </Link>
@@ -144,9 +138,7 @@ class ClaimReward extends React.Component {
           </p>
           <div className={cx('currentNetworkContainer')}>
             Current network:
-            <span className={cx('network', { wrongNetwork: isWrongNetwork })}>
-              {currentNetwork}
-            </span>
+            <span className={cx('network', { wrongNetwork: isWrongNetwork })}>{currentNetwork}</span>
           </div>
           {!isWrongNetwork && (
             <p className={cx('gasCosts')}>
@@ -174,11 +166,7 @@ ClaimReward.propTypes = {
   currentNetwork: PropTypes.string,
   currentNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   gasPrice: PropTypes.instanceOf(Decimal),
-  claimRewardGasCost: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    decimalJsTest,
-  ]),
+  claimRewardGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number, decimalJsTest]),
   rewardValue: PropTypes.number.isRequired,
 }
 

@@ -1,0 +1,150 @@
+@import '~style/vars.scss';
+
+.registerWallet {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .registerContainer {
+    width: 520px;
+    border-radius: 9px;
+    background-color: #ffffff;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 15px;
+    text-align: center;
+    color: #666;
+
+    @media (max-width: 767px) {
+      width: 100%;
+      height: 100%;
+
+      justify-content: center;
+
+    }
+
+    .annotation {
+      margin: 15px 0 15px 0;
+
+      @media (max-width: 767px) {
+        font-size: 14px;
+      }
+    }
+
+    .insufficientETH {
+      color: #d34730;
+      margin: 10px 0;
+    }
+
+    .checkBoxContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .checkBox {
+        margin: 2px 0;
+        input {
+          border: 1px solid #09697b;
+        }
+
+        &:last-child {
+          margin-bottom: 25px;
+        }
+      }
+    }
+
+    a {
+      text-decoration: underline;
+    }
+
+    .heading {
+      font-size: 21px;
+      font-weight: 500;
+      text-align: center;
+      color: #333333;
+      margin-top: 45px;
+
+      @media (max-width: 767px) {
+        margin-top: 0;
+        font-size: 18px;
+      }
+    }
+
+    .walletAddressContainer {
+      font-weight: 500;
+      border-radius: 2px;
+      border: solid 2px #b7bfc4;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+
+      .walletIcon {
+        width: 15px;
+        height: 15px;
+      }
+
+      .walletAddress {
+        font-weight: 500;
+        margin-left: 6px;
+        font-size: 12px;
+        color: #333;
+
+        // iPhone 5/SE
+        @media (max-width: 320px) {
+          font-size: 10px;
+        }
+      }
+    }
+
+    .rinkebyEthAnnotation {
+      margin: 23px 0 3px 0;
+
+      @media (max-width: 767px) {
+        font-size: 13px;
+      }
+
+      .linkIcon {
+        width: 10px;
+        height: 10px;
+        margin-left: 5px;
+      }
+
+      .walletBalance {
+        color: #333;
+      }
+    }
+
+    .actionButton {
+      margin-bottom: 25px;
+    }
+  }
+
+  label {
+    font-size: 12px;
+
+    input {
+      width: 15px;
+    }
+  }
+
+  .closeButton {
+    @include closeButton(32px, 5px);
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+
+    &:hover {
+      &::after,
+      &::before {
+        background-color: #fff;
+      }
+    }
+  }
+}

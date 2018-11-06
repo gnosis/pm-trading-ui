@@ -2,8 +2,21 @@ import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 
 import { weiToEth } from 'utils/helpers'
 
-class BaseIntegration {
+class InjectedWeb3 {
+  /**
+   * Handles updates of the current integrations, passed during initialization.
+   * @virtual
+   * @param {function} instance - Instance of the current provider, used to determine name of changes provider and various class properties
+   * @param {object} data - Data to update in wallets redux-store in `store.integrations.providers[PROVIDER_NAME]`
+   */
   runProviderUpdate() {}
+
+  /**
+   * Handles registering the integration in the redux-store and thus the interface.
+   * @virtual
+   * @param {function} instance - Instance of the current provider, used to determine name of changes provider and various class properties
+   * @param {object} data - Data to write in this providers redux store. Usually includes provider priority
+   */
   runProviderRegister() {}
 
   /**
@@ -13,10 +26,8 @@ class BaseIntegration {
    * @param {function} opts.runProviderRegister - Function to run when this provider registers
    */
   async initialize(opts) {
-    this.runProviderUpdate =
-      typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
-    this.runProviderRegister =
-      typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
+    this.runProviderUpdate = typeof opts.runProviderUpdate === 'function' ? opts.runProviderUpdate : this.runProviderUpdate
+    this.runProviderRegister = typeof opts.runProviderRegister === 'function' ? opts.runProviderRegister : this.runProviderRegister
   }
 
   /**
@@ -110,13 +121,17 @@ class BaseIntegration {
     this.runProviderUpdate(this, providerUpdate)
   }
 
-  logout() {
+  /**
+   * Clears this provider of all data, updating the store with the changes properties
+   * @async
+   */
+  async logout() {
     this.balance = undefined
     this.network = undefined
     this.account = undefined
     this.walletEnabled = false
 
-    this.runProviderUpdate(this, {
+    await this.runProviderUpdate(this, {
       account: undefined,
       balance: undefined,
       network: undefined,
@@ -125,4 +140,4 @@ class BaseIntegration {
   }
 }
 
-export default BaseIntegration
+export default InjectedWeb3

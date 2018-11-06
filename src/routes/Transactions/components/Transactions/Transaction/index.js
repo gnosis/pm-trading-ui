@@ -6,7 +6,7 @@ import TransactionSpinner from 'components/Spinner/Transaction'
 import moment from 'moment'
 import { TRANSACTION_COMPLETE_STATUS } from 'utils/constants'
 import DetailLabel from './DetailLabel'
-import style from '../Transactions.mod.scss'
+import style from '../Transactions.scss'
 
 const cx = cn.bind(style)
 

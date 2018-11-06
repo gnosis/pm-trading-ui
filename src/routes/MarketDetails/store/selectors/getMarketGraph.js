@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import moment from 'moment'
 import { normalizeScalarPoint, getOutcomeName, normalizeHex } from 'utils/helpers'
 import { OUTCOME_TYPES } from 'utils/constants'
 import tradeSelector from 'store/selectors/account/trades'
@@ -49,9 +50,13 @@ const getMarketGraph = market => createSelector(tradeSelector, (trades) => {
     },
   ))
 
-  const lastPoint = { ...graphPoints.get(graphPoints.size - 1), date: new Date().valueOf() }
+  const marketGraphTrades = [firstPoint, ...graphPoints]
 
-  return [firstPoint, ...graphPoints, lastPoint]
+  if (moment.utc().isBefore(moment.utc(market.resolution))) {
+    marketGraphTrades.push({ ...graphPoints.get(graphPoints.size - 1), date: new Date().valueOf() })
+  }
+
+  return marketGraphTrades
 })
 
 export default getMarketGraph

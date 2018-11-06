@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { marketRecordListShape } from 'utils/shapes'
 import classname from 'classnames/bind'
 
-import style from './Markets.mod.scss'
+import style from './Markets.scss'
 
 import MarketCategory from './Category'
 import { NewMarket, ClosingSoonMarket } from './Market'
@@ -37,4 +37,3 @@ Markets.defaultProps = {
 }
 
 export default Markets
-

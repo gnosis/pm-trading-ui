@@ -6,7 +6,7 @@ import { List } from 'immutable'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
 import ScoreTable from './ScoreTable'
-import style from './Table.mod.scss'
+import style from './Table.scss'
 
 const cx = cn.bind(style)
 

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 
 import classnames from 'classnames/bind'
-import styles from './Category.mod.scss'
+import styles from './Category.scss'
 
 const cx = classnames.bind(styles)
 

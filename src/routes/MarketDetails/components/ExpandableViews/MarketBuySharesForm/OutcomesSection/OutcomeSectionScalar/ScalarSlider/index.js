@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import cn from 'classnames/bind'
 import { decimalToText } from 'components/DecimalValue'
-import style from './scalarSlider.mod.scss'
+import style from './scalarSlider.scss'
 
 const cx = cn.bind(style)
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import sha1 from 'sha1'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import moment from 'moment'
@@ -9,30 +8,27 @@ import Span from 'components/layout/Span'
 import Countdown from 'components/Countdown'
 import Paragraph from 'components/layout/Paragraph'
 import { getFeatureConfig } from 'utils/features'
-import { connect } from 'react-redux'
-import { areRewardsClaimed } from '../../store'
-import style from './ClaimReward.mod.scss'
+import style from './ClaimReward.scss'
 
 const rewardsConfig = getFeatureConfig('rewards')
-const { rewardToken, claimReward } = rewardsConfig
+const rewardClaimingConfig = getFeatureConfig('rewardClaiming')
+const { rewardToken } = rewardsConfig
+const { claimReward } = rewardClaimingConfig
 const claimUntilFormat = 'y[Y] M[M] D[d] h[h] m[m]'
 const cx = cn.bind(style)
 
 const claimStartDate = moment.utc(claimReward.claimStart)
 const claimEndDate = moment.utc(claimReward.claimUntil)
 
-const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardClaimHash }) => {
+const ClaimReward = ({ openClaimRewardModal, rewardValue, alreadyClaimed }) => {
   const isInTimeframe = moment.utc().isBetween(claimStartDate, claimEndDate)
   const hasRewards = Decimal(rewardValue || 0).gt(0)
   const claimRewardEnabled = claimReward.enabled
 
-  const currentRewardClaimHash = sha1(claimReward.claimUntil + rewardValue)
-  const hasClaimedRewards = rewardClaimHash === currentRewardClaimHash
+  const showRewardValue = claimRewardEnabled && isInTimeframe && !alreadyClaimed
+  const showAlreadyClaimed = isInTimeframe && alreadyClaimed
 
-  const showRewardValue = claimRewardEnabled && isInTimeframe && !hasClaimedRewards
-  const showAlreadyClaimed = isInTimeframe && hasClaimedRewards
-
-  const claimingDisabled = !claimRewardEnabled || !isInTimeframe || !hasClaimedRewards || !hasRewards
+  const claimingDisabled = !claimRewardEnabled || !isInTimeframe || alreadyClaimed || !hasRewards
 
   let rewardValueDisplay = 'N/A'
   if (showRewardValue) {
@@ -85,15 +81,11 @@ const ClaimReward = ({ openClaimRewardModal, rewardValue, rewardClaimHash }) => 
 ClaimReward.propTypes = {
   openClaimRewardModal: PropTypes.func.isRequired,
   rewardValue: PropTypes.number.isRequired,
-  rewardClaimHash: PropTypes.string,
+  alreadyClaimed: PropTypes.bool,
 }
 
 ClaimReward.defaultProps = {
-  rewardClaimHash: '',
+  alreadyClaimed: false,
 }
 
-const mapStateToProps = state => ({
-  rewardsClaimed: areRewardsClaimed(state),
-})
-
-export default connect(mapStateToProps, null)(ClaimReward)
+export default ClaimReward

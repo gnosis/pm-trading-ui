@@ -21,7 +21,7 @@ describe('Integrations selectors related to user data', () => {
       expect(getCurrentBalance(state)).toEqual(balance)
     })
 
-    it('Should return undefined when active provider is not set', () => {
+    it('Should return \'0\' when active provider is not set', () => {
       const balance = '180000000'
       const state = generateState({
         providers: Map({
@@ -31,7 +31,7 @@ describe('Integrations selectors related to user data', () => {
         }),
       })
 
-      expect(getCurrentBalance(state)).toBeUndefined()
+      expect(getCurrentBalance(state)).toEqual('0')
     })
   })
 

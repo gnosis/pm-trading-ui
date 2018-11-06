@@ -1,0 +1,32 @@
+@import "~style/vars.scss";
+
+.formSelect {
+  .Select-control {
+    border: 0;
+    border-bottom: 1px solid $bg-color-muted;
+    border-radius: unset;
+  }
+
+  .Select-menu-outer {
+    border-radius: unset;
+  }
+
+  label {
+    margin: 20px 0 6px 0;
+    display: block;
+  }
+
+  &.error {
+    .Select-value span {
+      color: $active-highlight-error !important;
+    }
+  
+    label {
+      color: $active-highlight-error;
+    }
+
+    .Select-control {
+      border-color: lighten($color: $active-highlight-error, $amount: 30);
+    }
+  }
+}

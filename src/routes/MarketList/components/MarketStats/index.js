@@ -4,14 +4,14 @@ import classNames from 'classnames/bind'
 
 import Icon from 'components/Icon'
 
-import css from './MarketStats.mod.scss'
+import css from './MarketStats.scss'
 
 const cx = classNames.bind(css)
 
 const Stat = ({ name, value, icon }) => (
-  <div className={cx('stat', 'col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0')}>
+  <div className={cx('stat')}>
     <Icon type={icon} size={50} float="left" />
-    <div className={cx('inner')}>
+    <div className={cx('content')}>
       <span className={cx('value')}>{value}</span>
       <div className={cx('label')}>{name}</div>
     </div>
@@ -27,10 +27,14 @@ Stat.propTypes = {
 const MarketStats = ({ open, newMarkets, endingSoon }) => (
   <div className={cx('marketStats')}>
     <div className="container">
-      <div className="row marketStats">
-        <Stat name="Open Markets" value={open} icon="market" />
-        <Stat name="Ending Soon" value={endingSoon} icon="market--countdown" />
-        <Stat name="New Markets" value={newMarkets} icon="new" />
+      <div className="row">
+        <div className={cx('col-xs-12')}>
+          <div className={cx('inner')}>
+            <Stat name="Open Markets" value={open} icon="market" />
+            <Stat name="Ending Soon" value={endingSoon} icon="market--countdown" />
+            <Stat name="New Markets" value={newMarkets} icon="new" />
+          </div>
+        </div>
       </div>
     </div>
   </div>

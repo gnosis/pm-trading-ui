@@ -6,7 +6,7 @@ import { fieldPropTypes } from 'redux-form'
 import { omit } from 'lodash'
 
 import InputError from './InputError'
-import styles from './Checkbox.mod.scss'
+import styles from './Checkbox.scss'
 
 const cx = classNames.bind(styles)
 
@@ -27,7 +27,7 @@ const Checkbox = ({
 
   return (
     <div className={checkboxClasses}>
-      <label htmlFor={inputId}>{ label }</label>
+      {label && <label htmlFor={inputId}>{ label }</label>}
       <label htmlFor={inputId} className={cx('formCheckboxLabel')}>
         <input
           id={inputId}

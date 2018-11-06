@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 
 import classnames from 'classnames/bind'
-import style from './Metrics.mod.scss'
+import style from './Metrics.scss'
 
 const cx = classnames.bind(style)
 
@@ -12,9 +12,9 @@ const Metric = ({
   src, explanation, children, isLoading,
 }) => (
   <div className={cx('metric')}>
-    <img className={cx('img')} src={src} width={45} height={45} alt={explanation} />
+    <img className={cx('img')} src={src} width={50} height={50} alt={explanation} />
     {isLoading ? (
-      <IndefiniteSpinner width={45} height={45} />
+      <IndefiniteSpinner width={50} height={50} />
     ) : (
       <div className={cx('panel')}>
         {children}

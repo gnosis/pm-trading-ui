@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { List } from 'immutable'
+import { compose, withProps } from 'recompose'
+import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import MarketOverview from '../MarketOverview'
 import Markets from '../Markets'
@@ -27,11 +29,11 @@ class MarketList extends Component {
           endingSoon={endingSoonMarkets}
         />
         <MarketOverview>
-          <div className="col-md-9">
-            { markets ? <Markets markets={markets} userAccount={userAccount} viewMarket={viewMarket} /> : <NoMarkets /> }
-          </div>
-          <div className="col-md-3">
+          <div className="col-md-3 col-md-push-9">
             <Filter userAccount={userAccount} />
+          </div>
+          <div className="col-md-9 col-md-pull-3">
+            { markets ? <Markets markets={markets} userAccount={userAccount} viewMarket={viewMarket} /> : <NoMarkets /> }
           </div>
         </MarketOverview>
       </div>
@@ -55,4 +57,11 @@ MarketList.defaultProps = {
   userAccount: undefined,
 }
 
-export default MarketList
+const enhancer = compose(
+  withRouter,
+  withProps(({ history }) => ({
+    viewMarket: address => history.push(`/markets/${address}`),
+  })),
+)
+
+export default enhancer(MarketList)

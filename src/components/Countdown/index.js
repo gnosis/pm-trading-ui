@@ -14,7 +14,8 @@ class Countdown extends Component {
   }
 
   componentDidMount() {
-    this.updateInterval = setInterval(this.updateDuration, 1000)
+    const { interval = 1000 } = this.props
+    this.updateInterval = setInterval(this.updateDuration, interval)
     this.updateDuration()
   }
 
@@ -24,7 +25,7 @@ class Countdown extends Component {
 
   @autobind
   updateDuration() {
-    const { target, format = RESOLUTION_TIME.RELATIVE_LONG_FORMAT } = this.props
+    const { target, format } = this.props
     const duration = moment.duration(moment.utc(target).diff(moment()))
 
     this.setState({ output: duration.format(format) })
@@ -45,11 +46,13 @@ Countdown.propTypes = {
   target: PropTypes.string.isRequired,
   format: PropTypes.string,
   className: PropTypes.string,
+  interval: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 Countdown.defaultProps = {
   className: '',
-  format: undefined,
+  interval: 1000,
+  format: RESOLUTION_TIME.RELATIVE_LONG_FORMAT,
 }
 
 export default Countdown

@@ -6,14 +6,24 @@
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
+  color: #fff;
 
-  &__close {
+  @media (max-width: 767px) {
+    text-align: center;
+  }
+
+  @media (max-width: 320px) {
+    font-size: 12px;
+  }
+
+
+  .closeButton {
     @include closeButton(32px, 5px);
     top: 20px;
     right: 10px;
   }
 
-  &__transaction-list {
+  .transactionList {
     font-size: 16px;
     list-style: none;
     margin-top: 20px;

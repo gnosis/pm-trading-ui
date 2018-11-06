@@ -20,7 +20,7 @@ import {
 import OutcomeSection from './OutcomesSection'
 import SubmitError from './SubmitError'
 import LimitMarginAnnotation from './LimitMarginAnnotation'
-import style from './marketBuySharesForm.mod.scss'
+import style from './marketBuySharesForm.scss'
 
 const cx = cn.bind(style)
 
@@ -47,7 +47,8 @@ class MarketBuySharesForm extends Component {
       return 'Enter the investment value'
     }
 
-    const validInvestment = NUMBER_REGEXP.test(investmentValue)
+    const validInvestment = NUMBER_REGEXP.test(investmentValue) && Decimal(investmentValue).gte(1e-18)
+
     if (!validInvestment) {
       return 'Invalid amount'
     }

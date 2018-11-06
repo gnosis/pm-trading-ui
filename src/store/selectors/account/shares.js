@@ -3,6 +3,7 @@ import { createSelector } from 'reselect'
 import Decimal from 'decimal.js'
 import { getCollateralToken } from 'store/selectors/blockchain'
 import { normalizeHex } from 'utils/helpers'
+import { calcShareWinnings } from 'routes/Dashboard/containers/Dashboard/utils'
 
 export const sharesWithMarketsSelector = createSelector(
   state => state.marketList,
@@ -22,6 +23,15 @@ const shareSelector = createSelector(sharesWithMarketsSelector, getCollateralTok
           && typeof share.market !== 'undefined'
           && normalizeHex(share.collateralTokenAddress) === normalizeHex(collateralToken.address),
     )
+    .map((share) => {
+      let shareWinnings = '0'
+
+      if (share.market.resolved) {
+        shareWinnings = calcShareWinnings(share, share.market)
+      }
+
+      return share.set('winnings', shareWinnings)
+    })
     .sortBy(share => share.marketResolution, (dateA, dateB) => (dateA.isBefore(dateB) ? -1 : 1))
     .values(),
 ))

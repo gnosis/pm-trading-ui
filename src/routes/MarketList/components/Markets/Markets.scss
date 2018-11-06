@@ -1,0 +1,14 @@
+@import '~style/vars.scss';
+
+.markets {
+  .title {
+    margin: 12px 0;
+    text-transform: uppercase;
+    color: $font-color-light;
+    font-weight: 400;
+  }
+
+  .container {
+    min-height: 420px;
+  }
+}

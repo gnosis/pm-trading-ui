@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import { getFeatureConfig } from 'utils/features'
 import MetamaskIcon from 'assets/img/icons/icon_metamask_color.svg'
-import css from './UnlockMetamask.mod.scss'
+import css from './UnlockMetamask.scss'
 
 const cx = cn.bind(css)
 
@@ -20,9 +20,7 @@ const UnlockMetamask = ({ closeModal }) => (
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
     <h3 className={cx('heading')}>Unlock your MetaMask wallet</h3>
     <p className={cx('text')}>
-      Please unlock your MetaMask wallet to start using
-      {tournamentConfig.name || 'the application'}
-      .
+      Please unlock your MetaMask wallet to start using {tournamentConfig.name || 'the application'}.
     </p>
   </div>
 )

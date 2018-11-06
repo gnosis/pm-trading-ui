@@ -9,16 +9,19 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 import 'scss/style.scss'
-import initAnalytics from 'utils/analytics'
 import { isFeatureEnabled, getProviderConfig } from 'utils/features'
-import store from 'store'
+
 import { WALLET_PROVIDER } from 'integrations/constants'
-import { setMomentRelativeTime } from './setup'
+
+import store from './store'
+import { setMomentRelativeTime, setMomentDurationFormat } from './setup'
+import './i18n'
 
 const providerConfig = getProviderConfig()
 const tournamentEnabled = isFeatureEnabled('tournament')
 
 setMomentRelativeTime()
+setMomentDurationFormat()
 
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
@@ -30,7 +33,6 @@ if (!tournamentEnabled) {
   store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE, tournamentProvider] }))
 }
 
-initAnalytics()
 Decimal.set({ toExpPos: 9999, precision: 50 })
 
 /* global document */

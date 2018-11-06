@@ -3,7 +3,7 @@ import cn from 'classnames/bind'
 import PropTypes from 'prop-types'
 import { getFeatureConfig } from 'utils/features'
 import LegalCompliance from 'containers/LegalCompliance'
-import style from './AcceptTOS.mod.scss'
+import style from './AcceptTOS.scss'
 
 const { name = 'the application' } = getFeatureConfig('tournament')
 

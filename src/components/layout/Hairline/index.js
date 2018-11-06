@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const hairlineStyle = {
   width: '100%',
@@ -7,8 +8,16 @@ const hairlineStyle = {
   marginBottom: '20px',
 }
 
-const Hairline = () => (
-  <div style={hairlineStyle} />
+const Hairline = ({ style = hairlineStyle }) => (
+  <div style={style} />
 )
+
+Hairline.propTypes = {
+  style: PropTypes.object,
+}
+
+Hairline.defaultProps = {
+  style: undefined,
+}
 
 export default Hairline

@@ -6,7 +6,7 @@ import classname from 'classnames/bind'
 import Outcome from 'components/Outcome'
 import { OUTCOME_TYPES } from 'utils/constants'
 
-import style from './Market.mod.scss'
+import style from './Market.scss'
 
 const cx = classname.bind(style)
 
@@ -57,4 +57,3 @@ ClosingSoonMarket.propTypes = {
 }
 
 export default ClosingSoonMarket
-

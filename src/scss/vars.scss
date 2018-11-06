@@ -1,6 +1,6 @@
-$font-color-light: #182a36;
-$font-color-dark: #87949c;
-$font-color-muted: lighten($font-color-dark, 10%);
+$font-color-dark: #182a36;
+$font-color-light: #87949c;
+$font-color-muted: lighten($font-color-light, 10%);
 $font-color-bright: #f0f1f1;
 
 $brand-primary: #00a6c4;
@@ -62,6 +62,8 @@ $paddings-inputs: 5px 0;
   height: $size;
   text-align: left;
   cursor: pointer;
+  padding: 0;
+  z-index: 1001;
   
   &::after, &::before {
     content: '';

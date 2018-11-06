@@ -20,7 +20,7 @@ import { NUMBER_REGEXP } from 'routes/MarketDetails/components/ExpandableViews/M
 import {
   calculateCurrentProbability, calculateEarnings, calculateNewProbability, validateTokenCount,
 } from './utils'
-import style from './ShareSellView.mod.scss'
+import style from './ShareSellView.scss'
 
 const cx = cn.bind(style)
 
@@ -147,6 +147,12 @@ class ShareSellView extends Component {
     }
     const submitHandler = handleSubmit(() => handleSellShare(share.id, selectedSellAmount, earnings))
 
+    const hairlineStyle = {
+      backgroundColor: '#d5d4d6',
+      height: '0.5px',
+      marginTop: '40px',
+    }
+
     return (
       <tr className={cx('sellView')}>
         <td colSpan={5}>
@@ -169,39 +175,28 @@ class ShareSellView extends Component {
 
                 {market.type === 'SCALAR' ? (
                   <div className={cx('col-md-4', 'sellColumn')}>
-                    <label>
-                      New predicted value
-                    </label>
+                    <label>New predicted value</label>
                     <span>
                       <DecimalValue value={newScalarPredictedValue} />
                       &nbsp;
-                      <span>
-                        {market.eventDescription.unit}
-                      </span>
+                      <span>{market.bounds.unit}</span>
                     </span>
                   </div>
                 ) : (
                   <div className={cx('col-md-4', 'sellColumn')}>
-                    <label>
-                      New Probability
-                    </label>
+                    <label>New Probability</label>
                     <span>
-                      <DecimalValue value={newProbability.mul(100)} />
-                      {' '}
-                      %
+                      <DecimalValue value={newProbability.mul(100)} /> %
                     </span>
                   </div>
                 )}
                 <div className={cx('col-md-3', 'sellColumn')}>
-                  <label>
-                    Gas costs
-                  </label>
+                  <label>Gas costs</label>
                   <span>
                     {isGasPriceFetched && isGasCostFetched(GAS_COST.SELL_SHARES) ? (
                       <>
                         <DecimalValue value={gasCostEstimation} decimals={5} />
-                        &nbsp;
-                        <CurrencyName tokenAddress={market.collateralToken} />
+                        &nbsp;ETH
                       </>
                     ) : (
                       <IndefiniteSpinner width={16} height={16} />
@@ -209,14 +204,10 @@ class ShareSellView extends Component {
                   </span>
                 </div>
               </div>
-              <Hairline />
+              <Hairline style={hairlineStyle} />
               <div className={cx('row', 'sellRow')}>
-                <div className={cx('col-md-2')}>
-                  <label htmlFor="limitMargin">
-                    Limit Margin
-                  </label>
-                </div>
-                <div className={cx('col-md-3')}>
+                <div className={cx('col-md-4')} style={{ paddingLeft: 8 }}>
+                  <label htmlFor="limitMargin">Limit Margin</label>
                   <Field
                     name="limitMargin"
                     component={Slider}
@@ -230,14 +221,13 @@ class ShareSellView extends Component {
                     light
                   />
                 </div>
+                <div className={cx('col-md-2')} />
                 <div className={cx('col-md-4', 'sellColumn')}>
                   <div className={cx('sellColumnInfo')}>
-                    <label>
-                      Earnings
-                    </label>
+                    <label>Earnings</label>
                     <span>
                       <DecimalValue value={earnings} />
-                        &nbsp;
+                      &nbsp;
                       <CurrencyName tokenAddress={market.collateralToken} />
                     </span>
                   </div>

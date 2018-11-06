@@ -11,7 +11,7 @@ import { RESOLUTION_TIME } from 'utils/constants'
 import { ORDER_TYPE_BUY, ORDER_TYPE_SELL } from 'store/models/trade'
 import { OutcomeRecord } from 'store/models/market'
 
-import style from './style.mod.scss'
+import style from './style.scss'
 
 const cx = className.bind(style)
 
@@ -29,21 +29,23 @@ const Trade = ({
         {marketTitle}
       </Link>
     </div>
-    <div className={cx('outcome', 'row')}>
-      <div className={cx('tradeOutcome', 'col-md-3')}>
-        <OutcomeColorBox scheme={marketType} outcomeIndex={outcomeToken.index} />&nbsp;
+    <div className={cx('outcome')}>
+      <div className={cx('tradeOutcome')}>
+        <OutcomeColorBox scheme={marketType} outcomeIndex={outcomeToken.index} />
+        &nbsp;
         {outcomeToken.name}
       </div>
-      <div className={cx('tradeAmount', 'col-md-4')}>
-        <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokenCount)} />&nbsp;
-        {collateralTokenAddress ? <CurrencyName tokenAddress={collateralTokenAddress} /> : <span>ETH</span> }
+      <div className={cx('tradeAmount')}>
+        <DecimalValue value={Decimal(price).div(outcomeToken.outcomeTokenCount)} />
+        &nbsp;
+        {collateralTokenAddress ? <CurrencyName tokenAddress={collateralTokenAddress} /> : <span>ETH</span>}
       </div>
-      <div className={cx('tradePrice', 'col-md-5')}>
+      <div className={cx('tradeDate')}>
         <span title={moment.utc(date).format(RESOLUTION_TIME.RELATIVE_LONG_FORMAT)}>
           {moment.utc(date).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
         </span>
       </div>
-      <div className={cx('orderType', 'col-md-1')}>{WORDING_ORDER_TYPE[orderType]}</div>
+      <div className={cx('orderType')}>{WORDING_ORDER_TYPE[orderType]}</div>
     </div>
   </div>
 )

@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 import { fieldPropTypes } from 'redux-form'
 
 import InputError from './InputError'
-import styles from './TextInput.mod.scss'
+import styles from './TextInput.scss'
 
 const cx = classNames.bind(styles)
 
@@ -43,9 +43,9 @@ const TextInput = ({
 }
 
 TextInput.propTypes = {
-  input: PropTypes.shape(fieldPropTypes.input).isRequired,
-  meta: PropTypes.shape(fieldPropTypes.meta).isRequired,
-  label: PropTypes.string,
+  input: PropTypes.shape(fieldPropTypes.input),
+  meta: PropTypes.shape(fieldPropTypes.meta),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   type: PropTypes.string,
   className: PropTypes.string,
   placeholder: PropTypes.string,
@@ -59,6 +59,8 @@ TextInput.propTypes = {
 }
 
 TextInput.defaultProps = {
+  input: {},
+  meta: {},
   label: '',
   type: 'text',
   className: undefined,

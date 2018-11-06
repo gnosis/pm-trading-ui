@@ -1,6 +1,7 @@
 import { WALLET_PROVIDER } from 'integrations/constants'
 import { List } from 'immutable'
 import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
+import { normalizeHex } from 'utils/helpers'
 
 const config = getConfiguration()
 
@@ -8,6 +9,8 @@ const legalComplianceConfig = getFeatureConfig('legalCompliance')
 const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
 const isTournament = isFeatureEnabled('tournament')
 const requireRegistration = isFeatureEnabled('registration')
+const requireVerification = isFeatureEnabled('verification')
+const verificationConfig = getFeatureConfig('verification')
 
 const legalDocuments = legalComplianceConfig.documents || []
 
@@ -41,7 +44,7 @@ export const getActiveProvider = (state) => {
 export const getCurrentAccount = (state) => {
   const provider = getActiveProvider(state)
   if (provider && provider.account) {
-    return provider.account.toLowerCase()
+    return normalizeHex(provider.account)
   }
 
   return undefined
@@ -74,10 +77,11 @@ export const hasAcceptedTermsAndConditions = (state) => {
 export const getCurrentBalance = (state) => {
   const provider = getActiveProvider(state)
 
-  if (provider) {
+  if (provider && provider.balance) {
     return provider.balance
   }
-  return undefined
+
+  return '0'
 }
 
 /**
@@ -140,7 +144,8 @@ export const isConnectedToCorrectNetwork = (state) => {
 
 export const checkWalletConnection = (state) => {
   const provider = getActiveProvider(state)
-  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state) || !!getRegisteredMainnetAddress(state)
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
+    || (isTournament && !!getRegisteredMainnetAddress(state))
 
   if (termsNotRequiredOrAccepted && provider?.account) {
     return true
@@ -149,7 +154,9 @@ export const checkWalletConnection = (state) => {
   return false
 }
 
-export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
+export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state)
+  && checkWalletConnection(state)
+  && !isConnectedToCorrectNetwork(state)
 
 export const isOnWhitelist = (state) => {
   const account = getCurrentAccount(state)
@@ -168,4 +175,12 @@ export const isMetamaskLocked = (state) => {
   // Most likeliy it is locked
 
   return metamask && !metamask.account && !!metamask.network
+}
+
+export const isVerified = (state) => {
+  const account = getCurrentAccount(state)
+
+  if (!requireVerification) return true
+
+  return account && state.integrations.getIn(['accountSettings', normalizeHex(account), 'verificatedWith']) === verificationConfig.handler
 }

@@ -6,7 +6,7 @@ import DecimalValue from 'components/DecimalValue'
 import OutcomeColorBox from 'components/Outcome/OutcomeColorBox'
 import { marketShareShape } from 'utils/shapes'
 import { LOWEST_VALUE } from 'utils/constants'
-import style from './ShareRow.mod.scss'
+import style from './ShareRow.scss'
 
 const cx = cn.bind(style)
 

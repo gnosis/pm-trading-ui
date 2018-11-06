@@ -1,0 +1,2 @@
+Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as "play money" no one will face any financial risks.  
+Please read our full [Privacy Policy](/assets/content/PrivacyPolicy.html), [Cookie Policy](/assets/content/olympia/CookiePolicy.html) and [Terms of Service](/assets/content/olympia/TermsOfService.html) before trading. – [Imprint](/assets/content/olympia/Imprint.html)

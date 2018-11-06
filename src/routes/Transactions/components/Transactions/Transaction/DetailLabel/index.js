@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import moment from 'moment'
 import { RESOLUTION_TIME } from 'utils/constants'
-import style from './DetailLabel.mod.scss'
+import style from './DetailLabel.scss'
 
 const cx = cn.bind(style)
 

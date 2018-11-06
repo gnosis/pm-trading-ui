@@ -1,0 +1,13 @@
+.burgerIcon {
+  display: flex;
+  flex-direction: column;
+
+  .icon {
+    height: 30px;
+    width: 30px;
+  }
+
+  .menuLabel {
+    font-size: 10px;
+  }
+}

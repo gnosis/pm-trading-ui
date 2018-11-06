@@ -4,7 +4,7 @@ import cn from 'classnames/bind'
 import Block from 'components/layout/Block'
 import Paragraph from 'components/layout/Paragraph'
 import Title from 'components/layout/Title'
-import style from './AddressSection.mod.scss'
+import style from './AddressSection.scss'
 
 const cx = cn.bind(style)
 

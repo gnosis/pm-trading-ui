@@ -1,33 +1,45 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import { OUTCOME_TYPES } from 'utils/constants'
-import { marketShape } from 'utils/shapes'
 import CategoricalGraph from './CategoricalGraph'
 import ScalarGraph from './ScalarGraph'
 
-const MarketGraph = ({ data = [], market: { type, bounds: { lower, upper } = {}, description } }) => {
-  if (data.length) {
-    if (type === OUTCOME_TYPES.CATEGORICAL) {
-      return <CategoricalGraph data={data} />
-    } if (type === OUTCOME_TYPES.SCALAR) {
-      return <ScalarGraph data={data} eventDescription={description} lowerBound={lower} upperBound={upper} />
-    }
+const MARKET_GRAPH_FETCH_INTERVAL = 25000
+
+class MarketGraph extends Component {
+  componentDidMount() {
+    const { fetchMarketTrades, market } = this.props
+
+    fetchMarketTrades(market)
+    this.tradesFetchInterval = setInterval(() => fetchMarketTrades(market), MARKET_GRAPH_FETCH_INTERVAL)
   }
 
-  return null
+  componentWillUnmount() {
+    clearInterval(this.tradesFetchInterval)
+  }
+
+  render() {
+    const { data, market } = this.props
+    if (market.type === OUTCOME_TYPES.CATEGORICAL) {
+      return <CategoricalGraph data={data} />
+    }
+    if (market.type === OUTCOME_TYPES.SCALAR) {
+      return <ScalarGraph data={data} bounds={market.bounds} />
+    }
+
+    return null
+  }
 }
 
 MarketGraph.propTypes = {
+  fetchMarketTrades: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(PropTypes.object),
-  market: marketShape,
+  market: ImmutablePropTypes.record.isRequired,
 }
 
 MarketGraph.defaultProps = {
   data: [],
-  market: {
-    event: {},
-    eventDescription: {},
-  },
 }
 
 export default MarketGraph

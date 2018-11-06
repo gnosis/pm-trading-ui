@@ -9,7 +9,7 @@ import {
 } from 'recharts'
 import CustomTooltip from '../CustomTooltip'
 import DateAxisTick from '../DateAxisTick'
-import style from '../MarketGraph.mod.scss'
+import style from '../MarketGraph.scss'
 
 const cx = cn.bind(style)
 

@@ -11,7 +11,7 @@ import { LOWEST_VALUE } from 'utils/constants'
 import { marketShape, ReactRouterMatchShape } from 'utils/shapes'
 import ShareRow from './ShareRow'
 import ShareSellView from './ShareSellView'
-import style from './SharesTable.mod.scss'
+import style from './SharesTable.scss'
 
 const cx = cn.bind(style)
 

@@ -95,7 +95,7 @@ export const initReadOnlyGnosis = () => async (dispatch) => {
     })
     await dispatch(setGnosisROInitialized({ initialized: true }))
   } catch (error) {
-    console.error(`Gnosis.js RO initialization Error: ${error}`)
+    console.error(`PM-js RO initialization Error: ${error}`)
   }
 }
 
@@ -108,6 +108,7 @@ export const updateCollateralToken = () => async (dispatch) => {
 
   const { source, options } = collateralTokenFromConfig
 
+
   if (source === TOKEN_SOURCE_ETH) {
     // options are optional here
     const { icon = ETH_TOKEN_ICON, symbol = 'ETH' } = options || {}
@@ -118,7 +119,9 @@ export const updateCollateralToken = () => async (dispatch) => {
       icon,
     }))
   } if (source === TOKEN_SOURCE_CONTRACT) {
-    const { contractName, symbol, icon } = options
+    const {
+      contractName, symbol, icon, isWrappedEther = false,
+    } = options
 
     if (!contractName) {
       throw new Error(
@@ -154,14 +157,18 @@ export const updateCollateralToken = () => async (dispatch) => {
       address: hexWithoutPrefix(contractInstance.address),
       symbol: tokenSymbol,
       icon: icon || ETH_TOKEN_ICON,
+      isWrappedEther,
     }))
   } if (source === TOKEN_SOURCE_ADDRESS) {
-    const { address, symbol, icon } = options
+    const {
+      address, symbol, icon, isWrappedEther = false,
+    } = options
     return dispatch(setCollateralToken({
       source: TOKEN_SOURCE_ADDRESS,
       address: hexWithoutPrefix(address),
       symbol,
       icon,
+      isWrappedEther,
     }))
   }
 
@@ -169,7 +176,7 @@ export const updateCollateralToken = () => async (dispatch) => {
 }
 
 /**
- * (Re)-Initializes Gnosis.js connection according to current providers settings
+ * (Re)-Initializes PM-js connection according to current providers settings
  */
 export const initGnosis = () => async (dispatch, getState) => {
   // initialize
@@ -191,7 +198,7 @@ export const initGnosis = () => async (dispatch, getState) => {
       await dispatch(setGnosisInitialized({ initialized: true }))
     }
   } catch (error) {
-    console.warn(`Gnosis.js initialization Error: ${error}`)
+    console.warn(`pm-js initialization Error: ${error}`)
     dispatch(setConnectionStatus({ connected: false }))
     return dispatch(setGnosisInitialized({ initialized: false, error }))
   }
@@ -209,8 +216,10 @@ export const initGnosis = () => async (dispatch, getState) => {
       await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
       await dispatch(setConnectionStatus({ connected: true }))
     } catch (error) {
-      console.warn(`Gnosis.js connection Error: ${error}`)
+      console.warn(`pm-js connection Error: ${error}`)
       return dispatch(setConnectionStatus({ connected: false }))
     }
   }
+
+  return undefined
 }

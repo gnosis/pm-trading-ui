@@ -9,19 +9,21 @@ import autobind from 'autobind-decorator'
 import Decimal from 'decimal.js'
 import moment from 'moment'
 import React from 'react'
-import { RESOLUTION_TIME, OUTCOME_TYPES } from 'utils/constants'
+import { RESOLUTION_TIME } from 'utils/constants'
 import MarketResolution from './MarketResolution'
 import MarketStatus from './MarketStatus'
 import MarketTrading from './MarketTrading'
 
-import css from './Market.mod.scss'
+import css from './Market.scss'
 
 const cx = classNames.bind(css)
 
 class Market extends React.PureComponent {
   @autobind
   handleViewMarket() {
-    this.props.viewMarket(this.props.address)
+    const { viewMarket, address } = this.props
+
+    viewMarket(address)
   }
 
   render() {
@@ -35,7 +37,6 @@ class Market extends React.PureComponent {
       collateralToken,
     } = this.props
     const resolutionDate = moment(resolution).format(RESOLUTION_TIME.ABSOLUTE_FORMAT)
-    const tradingVolume = decimalToText(new Decimal(volume).div(1e18))
 
     const bounds = market.bounds ? {
       upperBound: market.bounds.upper,
@@ -45,8 +46,6 @@ class Market extends React.PureComponent {
     } : {}
 
     const outcomes = market.outcomes ? market.outcomes.map(outcome => outcome.name).toArray() : []
-
-    const winningOutcome = market.type === OUTCOME_TYPES.CATEGORICAL ? market.outcomes.keyOf(market.winningOutcome) : market.winningOutcome
 
     return (
       <button
@@ -67,7 +66,7 @@ class Market extends React.PureComponent {
           resolution={market.resolution}
           funding={market.funding}
           outcomes={outcomes}
-          winningOutcome={winningOutcome}
+          winningOutcome={market.winningOutcome}
           {...bounds}
         />
         <div className={cx('info', 'row')}>
@@ -81,9 +80,11 @@ class Market extends React.PureComponent {
           <div className={cx('group', 'col-md-3')}>
             <MarketResolution resolution={resolutionDate} />
           </div>
-          <div className={cx('group', 'col-md-3')}>
-            <MarketTrading volume={tradingVolume} collateralToken={collateralToken} />
-          </div>
+          {volume && (
+            <div className={cx('group', 'col-md-3')}>
+              <MarketTrading volume={decimalToText(new Decimal(volume).div(1e18))} collateralToken={collateralToken} />
+            </div>
+          )}
         </div>
       </button>
     )
@@ -98,9 +99,13 @@ Market.propTypes = {
   isOwner: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   resolution: PropTypes.string.isRequired,
-  volume: PropTypes.string.isRequired,
+  volume: PropTypes.string,
   collateralToken: PropTypes.string.isRequired,
   viewMarket: PropTypes.func.isRequired,
+}
+
+Market.defaultProps = {
+  volume: undefined,
 }
 
 export default Market

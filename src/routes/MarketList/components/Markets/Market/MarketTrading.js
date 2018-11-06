@@ -6,7 +6,7 @@ import { hexWithPrefix } from 'utils/helpers'
 
 import Icon from 'components/Icon'
 
-import css from './Market.mod.scss'
+import css from './Market.scss'
 
 const cx = classNames.bind(css)
 
@@ -14,7 +14,7 @@ const MarketTrading = ({ volume, collateralToken }) => (
   <div className={cx('marketInfo')}>
     <Icon type="currency" size={25} />
     <div className={cx('label')}>
-      {volume} <CurrencyName tokenAddress={hexWithPrefix(collateralToken)} /> Volume
+      {volume} {collateralToken && <CurrencyName tokenAddress={hexWithPrefix(collateralToken)} />} Volume
     </div>
   </div>
 )

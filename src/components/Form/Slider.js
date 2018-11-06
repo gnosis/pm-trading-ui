@@ -6,7 +6,7 @@ import classNames from 'classnames/bind'
 
 import InputError from './InputError'
 import TextInput from './TextInput'
-import css from './Slider.mod.scss'
+import css from './Slider.scss'
 
 const cx = classNames.bind(css)
 

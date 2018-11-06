@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import { getProviderConfig, isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { WALLET_PROVIDER } from 'integrations/constants'
-import css from './Layout.mod.scss'
+import css from './Layout.scss'
 import Table from './Table'
 import RewardClaimAddress from './RewardClaimAddress'
 import ClaimReward from './ClaimReward'
@@ -23,16 +23,12 @@ const providerConfig = getProviderConfig()
 const rewardsEnabled = isFeatureEnabled('rewards')
 const { levels } = getFeatureConfig('rewards')
 
-const NoRows = () => (
-  <Paragraph className={cx('norows')}>
-    No rows found
-  </Paragraph>
-)
+const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
 
 class Layout extends React.PureComponent {
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank, hasClaimedReward,
     } = this.props
     const hasRows = data && data.size > 0
     let rewardValue = 0
@@ -53,20 +49,26 @@ class Layout extends React.PureComponent {
       <Block>
         <PageFrame>
           {showRewardInfo && (
-            <Block className={cx('rewardContainer')}>
-              <RewardClaimAddress
-                mainnetAddress={mainnetAddress}
-                openSetMainnetAddressModal={openSetMainnetAddressModal}
-              />
-              {showRewardClaim && <ClaimReward openClaimRewardModal={openClaimRewardModal} rewardValue={rewardValue} />}
-            </Block>
+            <>
+              <Block className={cx('rewardContainer')}>
+                <RewardClaimAddress
+                  mainnetAddress={mainnetAddress}
+                  openSetMainnetAddressModal={openSetMainnetAddressModal}
+                />
+                {showRewardClaim && (
+                  <ClaimReward
+                    openClaimRewardModal={openClaimRewardModal}
+                    rewardValue={rewardValue}
+                    alreadyClaimed={hasClaimedReward}
+                  />
+                )}
+              </Block>
+              <Hairline />
+            </>
           )}
-          {showRewardInfo && <Hairline />}
           <Block className={cx('trophy')}>
             <Img src={trophy} width="100" />
-            <Paragraph>
-              Scoreboard
-            </Paragraph>
+            <Paragraph>Scoreboard</Paragraph>
           </Block>
           <Paragraph className={cx('explanation')}>
             The total score is calculated based on the sum of predicted profits and OLY tokens each wallet holds. Scores
@@ -98,6 +100,7 @@ Layout.propTypes = {
   myAccount: PropTypes.string,
   mainnetAddress: PropTypes.string,
   rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  hasClaimedReward: PropTypes.bool.isRequired,
 }
 
 Layout.defaultProps = {
