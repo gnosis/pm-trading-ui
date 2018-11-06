@@ -1,6 +1,6 @@
 import integrations from 'integrations'
 import { initGnosis } from 'store/actions/blockchain'
-import { runProviderRegister, runProviderUpdate } from 'integrations/store/actions'
+import { runProviderRegister, runProviderUpdate, updateProvider } from 'integrations/store/actions'
 import { getProviderConfig } from 'utils/features'
 import { map } from 'lodash'
 
@@ -16,17 +16,19 @@ export default store => next => (action) => {
   const { dispatch } = store
   const { type, payload } = action
 
+  const providerOptions = {
+    runProviderUpdate: (provider, data) => dispatch(runProviderUpdate(provider, data)),
+    runProviderRegister: (provider, data) => dispatch(runProviderRegister(provider, data)),
+    initGnosis: () => dispatch(initGnosis()),
+    dispatch,
+  }
+
   if (type === 'CHECK_AVAILABLE_PROVIDERS') {
-    providers.map(provider => checkAvailableProviders(integrations[provider]))
+    const opts = { ...providerOptions, runProviderUpdate: (provider, data) => dispatch(updateProvider(provider, data)) }
+    providers.map(provider => integrations[provider].checkAvailability(opts))
   }
 
   if (type === 'REGISTER_PROVIDERS') {
-    const providerOptions = {
-      runProviderUpdate: (provider, data) => dispatch(runProviderUpdate(provider, data)),
-      runProviderRegister: (provider, data) => dispatch(runProviderRegister(provider, data)),
-      initGnosis: () => dispatch(initGnosis()),
-      dispatch,
-    }
     if (payload && payload.provider) {
       integrations[payload.provider].initialize(providerOptions)
     } else {

@@ -9,6 +9,10 @@ const NETWORK_TIMEOUT = 10000
 class Metamask extends InjectedWeb3 {
   static providerName = WALLET_PROVIDER.METAMASK
 
+  checkIfInstalled() {
+    return hasMetamask()
+  }
+
   /**
    * Provider with highest priority starts off as active, if other providers are also available.
    * This allows "fallback providers" like a remote etherium host to be used as a last resort.
@@ -24,10 +28,6 @@ class Metamask extends InjectedWeb3 {
       this.watch('balance', this.getBalance)
       this.watch('networkId', this.getNetworkId)
     }
-  }
-
-  checkAvailability() {
-    return hasMetamask()
   }
 
   /**

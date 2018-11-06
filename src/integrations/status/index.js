@@ -7,7 +7,11 @@ import Web3 from 'web3'
 const NETWORK_TIMEOUT = 10000
 
 class Status extends InjectedWeb3 {
-  static providerName = WALLET_PROVIDER.METAMASK
+  static providerName = WALLET_PROVIDER.STATUS
+
+  checkIfInstalled() {
+    return hasStatus()
+  }
 
   /**
    * Provider with highest priority starts off as active, if other providers are also available.
@@ -24,10 +28,6 @@ class Status extends InjectedWeb3 {
       this.watch('balance', this.getBalance)
       this.watch('networkId', this.getNetworkId)
     }
-  }
-
-  checkAvailability() {
-    return hasStatus()
   }
 
   /**

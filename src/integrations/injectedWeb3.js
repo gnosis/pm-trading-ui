@@ -1,4 +1,4 @@
-import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
+import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS, WALLET_STATUS } from 'integrations/constants'
 
 import { weiToEth } from 'utils/helpers'
 
@@ -22,9 +22,14 @@ class InjectedWeb3 {
   /**
    * Checks if provider is available and can be used to login
    * @virtual
-  */
-  checkAvailability() {
-    return false
+   */
+  checkAvailability({ runProviderRegister, runProviderUpdate }) {
+    runProviderRegister(this)
+
+    const providerInstalled = this.checkIfInstalled()
+    const status = providerInstalled ? WALLET_STATUS.READY_TO_INIT : WALLET_STATUS.NOT_INSTALLED
+
+    return runProviderUpdate({ provider: this.constructor.providerName, status })
   }
 
   /**

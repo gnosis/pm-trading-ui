@@ -10,7 +10,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import 'scss/style.scss'
 import store from 'store'
-import { WALLET_PROVIDER } from 'integrations/constants'
 
 import { setMomentRelativeTime, setMomentDurationFormat } from './setup'
 import './i18n'
@@ -21,6 +20,7 @@ setMomentDurationFormat()
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 store.dispatch(initReadOnlyGnosis())
+store.dispatch({ type: 'CHECK_AVAILABLE_PROVIDERS' })
 
 // store.dispatch(initProviders({ provider: WALLET_PROVIDER.REMOTE }))
 
