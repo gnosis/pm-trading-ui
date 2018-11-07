@@ -30,6 +30,10 @@ class Uport extends InjectedWeb3 {
     }, Uport.watcherInterval)
   }
 
+  checkIfInstalled() {
+    return true
+  }
+
   /**
    * Tries to initialize and enable the current provider
    * @param {object} opts - Integration Options

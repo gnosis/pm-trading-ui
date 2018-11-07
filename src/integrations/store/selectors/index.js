@@ -26,6 +26,8 @@ export const findDefaultProvider = (state) => {
 
 export const getActiveProviderName = state => state && state.integrations && state.integrations.get('activeProvider')
 
+export const getProvidersList = state => state && state.integrations && state.integrations.get('providers')
+
 export const getActiveProvider = (state) => {
   const activeProviderName = getActiveProviderName(state)
 
@@ -111,7 +113,7 @@ export const getCurrentNetworkId = (state) => {
 }
 
 export const initializedAllProviders = (state) => {
-  const providers = state.integrations.get('providers')
+  const providers = getProvidersList(state)
 
   const allProvidersLoaded = providers.every(({ loaded }) => loaded)
   const providersAreRegistered = !!providers.size

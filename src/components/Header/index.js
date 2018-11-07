@@ -64,31 +64,9 @@ class Header extends Component {
     const shouldAcceptTOS = !acceptedTOS || !legalComplianceEnabled
 
     openModal('ModalSelectProvider')
-    // if (shouldInstallProviders) {
-    //   openModal('ModalInstallMetamask')
-    // } else if (useMetamask) {
-    //   if (lockedMetamask) {
-    //     openModal('ModalUnlockMetamask')
-    //   } else if (!isConnectedToCorrectNetwork) {
-    //     openModal('ModalSwitchNetwork')
-    //   } else if (requireVerification) {
-    //     // Verification has to implement the modals below:
-    //     // - Registration
-    //     // - Accept TOS
-    //     openModal('ModalVerification')
-    //   } else if (requireRegistration) {
-    //     // Registration has to implement the modals below
-    //     // - Accept TOS
-    //     openModal('ModalRegisterWallet')
-    //   } else if (shouldAcceptTOS) {
-    //     openModal('ModalAcceptTOS')
-    //   } else {
-    //     console.warn('should be connected, try refresh')
-    //     window.location.reload()
-    //   }
-    // } else if (useUport) {
-    //   initUport()
-    // }
+    // openModal('ModalVerification')
+    // openModal('ModalAcceptTOS')
+    // openModal('ModalRegisterWallet')
   }
 
   render() {
