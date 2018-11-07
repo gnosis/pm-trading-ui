@@ -20,7 +20,7 @@ const providerIconStyle = {
 }
 
 const ProviderIcon = ({ provider, t }) => (
-  <Tooltip placement="left" overlay={t('using_provider', { provider: upperFirst(provider.name.toLowerCase()) })}>
+  <Tooltip placement="left" overlay={t('header.using_provider', { provider: upperFirst(provider.name.toLowerCase()) })}>
     <Icon type={PROVIDER_ICONS[provider.name]?.toLowerCase()} size={35} style={providerIconStyle} />
   </Tooltip>
 )

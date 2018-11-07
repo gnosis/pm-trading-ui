@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import className from 'classnames/bind'
 import Tooltip from 'rc-tooltip'
 import Decimal from 'decimal.js'
+import { withNamespaces } from 'react-i18next'
 
 import Indefinite from 'components/Spinner/Indefinite'
 import DecimalValue from 'components/DecimalValue'
@@ -12,7 +13,7 @@ import css from './Balance.scss'
 const cx = className.bind(css)
 
 const Balance = ({
-  tokenBalance, tokenSymbol, etherBalance, isWrappedEther,
+  tokenBalance, tokenSymbol, etherBalance, isWrappedEther, t,
 }) => {
   if (!tokenBalance) {
     return <Indefinite width={24} height={24} />
@@ -37,10 +38,10 @@ const Balance = ({
           ETH
         </strong>
         <p>
-          Your balance is calculated as the sum of your ETH and Wrapped-ETH balance.
+          {t('header.wrapped_ether_title')}
           <br />
           <a href="https://weth.io" target="_blank" rel="noopener noreferrer">
-            What&apos;s wrapped ether?
+            {t('header.wrapped_ether_weth_link')}
           </a>
         </p>
       </div>
@@ -68,6 +69,7 @@ Balance.propTypes = {
   tokenSymbol: PropTypes.string,
   etherBalance: PropTypes.string,
   isWrappedEther: PropTypes.bool,
+  t: PropTypes.func.isRequired,
 }
 
 Balance.defaultProps = {
@@ -76,4 +78,4 @@ Balance.defaultProps = {
   isWrappedEther: false,
 }
 
-export default Balance
+export default withNamespaces()(Balance)
