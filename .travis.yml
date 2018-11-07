@@ -22,7 +22,13 @@ deploy:
   on:
     branch: development
 - provider: script
-  script: ~/.local/bin/aws s3 sync dist/interface s3://olympia-development --region eu-west-1 --cache-control 'public, max-age=2592000' --exclude "index.html" && ~/.local/bin/aws s3 sync dist/embedded s3://olympia-embedded-development --region eu-west-1 --cache-control 'public, max-age=2592000'
+  script: ~/.local/bin/aws s3 sync dist/interface s3://olympia-development --region eu-west-1 --cache-control 'public, max-age=2592000' --exclude "index.html"
+  skip_cleanup: true
+  on:
+    branch: development
+  # embedded app deployment
+- provider: script
+  script:  ~/.local/bin/aws s3 sync dist/embedded s3://olympia-embedded-development --region eu-west-1 --cache-control 'public, max-age=2592000'
   skip_cleanup: true
   on:
     branch: development
