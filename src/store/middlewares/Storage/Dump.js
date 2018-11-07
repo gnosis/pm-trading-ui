@@ -31,7 +31,6 @@ const saveStorage = throttle((store, storage, options) => {
 
   const stringStorage = JSON.stringify(payload)
   const encoded = Buffer.from(stringStorage).toString('base64')
-
   storage.setItem(STORAGE_KEY, encoded)
 }, STORAGE_SAVE_INTERVAL)
 
@@ -45,11 +44,13 @@ const middleware = (storage, whitelist) => {
   }
 
   return store => next => (action) => {
+    next(action)
+
+    // save after action has been finished
     const isActionIgnored = IGNORE_ACTIONS.indexOf(action) === -1
     if (isActionIgnored) {
       saveStorage(store, storage, whitelist)
     }
-    next(action)
   }
 }
 

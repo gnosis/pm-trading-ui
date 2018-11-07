@@ -9,7 +9,6 @@ import './scss/style.scss'
 import 'normalize.css'
 
 import { setMomentRelativeTime, setMomentDurationFormat } from '../setup'
-import '../i18n'
 
 import RootComponent from './components/Root'
 
