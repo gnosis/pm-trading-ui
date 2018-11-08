@@ -10,5 +10,25 @@
     "using_provider": "Du bist verbunden via {{provider}}",
     "wrapped_ether_title": "Deine Bilanz wird aus der Summe deines ETH und gewrapptem Ether errechnet.",
     "wrapped_ether_weth_link": "Was ist gewrapptes Ether?"
+  },
+  "markets": {
+    "list_title": "Marktübersicht",
+    "open_markets": "Offener Märkte",
+    "open_markets_plural": "Offene Märkte",
+    "ending_soon": "Schließt bald",
+    "ending_soon_plural": "Schließen bald",
+    "new_markets": "Neu eröffnet",
+    "new_markets_plural": "Neu eröffnete",
+    "limit_description": "Zeige {{current}} von {{total}}",
+    "filter_search": "Suche",
+    "filter_search_hint": "Titel, Beschreibung, Schlüsselwörter",
+    "filter_status": "Markt Status",
+    "filter_status_open": "Offene Märkte",
+    "filter_status_closed": "Geschlossene Markets",
+    "filter_sortby": "Sortiere nach",
+    "filter_resolution_date_asc": "AUFLÖSUNGS DATUM ↑",
+    "filter_resolution_date_desc": "AUFLÖSUNGS DATUM ↓",
+    "filter_trading_volume_asc": "HANDELSVOLUMEN ↑",
+    "filter_trading_volume_desc": "HANDELSVOLUMEN ↓"
   }
 }

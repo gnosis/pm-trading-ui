@@ -10,5 +10,18 @@
     "using_provider": "You are connected via {{provider}}",
     "wrapped_ether_title": "Your balance is calculated as the sum of your ETH and Wrapped-ETH balance.",
     "wrapped_ether_weth_link": "What's wrapped Ether?"
+  },
+  "markets": {
+    "list_title": "Market Overview",
+    "open_markets": "Open Market",
+    "open_markets_plural": "Open Markets",
+    "ending_soon": "Closing Soon",
+    "ending_soon_plural": "Closing Soon",
+    "new_markets": "New",
+    "new_markets_plural": "New",
+    "limit_description": "Showing {{current}} of {{total}}",
+    "filter_search": "Search",
+    "filter_status": "Market Status",
+    "filter_sortby": "Sort By"
   }
 }
