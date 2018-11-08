@@ -80,7 +80,6 @@ class Status extends InjectedWeb3 {
     }
 
     return this.runProviderUpdate(this, {
-      available: this.walletEnabled && !!this.account,
       networkId: this.networkId,
       network: this.network,
       account: this.account,

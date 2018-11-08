@@ -60,7 +60,6 @@ class Uport extends InjectedWeb3 {
     }
 
     return this.runProviderUpdate(this, {
-      available: true,
       network: this.network,
       networkId: this.networkId,
       account: this.account,

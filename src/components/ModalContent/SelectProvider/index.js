@@ -21,8 +21,11 @@ class SelectProvider extends Component {
 
   handleInit = (provider) => {
     const { initProviders, closeModal } = this.props
-
-    initProviders(provider)
+    try {
+      initProviders(provider)
+    } catch (err) {
+      console.log(error)
+    }
   }
 
   render() {

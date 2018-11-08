@@ -11,7 +11,7 @@ if (!providers.length) {
   You need to configure providers, please check our docs for details: https://gnosis-apollo.readthedocs.io/en/latest/index.html`)
 }
 
-export default store => next => (action) => {
+export default store => next => async (action) => {
   const handledAction = next(action)
   const { dispatch } = store
   const { type, payload } = action

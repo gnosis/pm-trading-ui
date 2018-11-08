@@ -111,7 +111,7 @@ class InjectedWeb3 {
       if (this.walletEnabled) {
         this.walletEnabled = false
         this[property] = undefined
-        await this.runProviderUpdate(this, { available: false, [property]: undefined })
+        await this.runProviderUpdate(this, { status: WALLET_STATUS.ERROR, [property]: undefined })
       }
 
       return
@@ -148,7 +148,7 @@ class InjectedWeb3 {
       account: undefined,
       balance: undefined,
       network: undefined,
-      available: false,
+      status: WALLET_STATUS.READY_TO_INIT,
     })
   }
 }

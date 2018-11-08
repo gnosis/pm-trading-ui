@@ -33,17 +33,27 @@ class Metamask extends InjectedWeb3 {
   /**
    * Tries to set connection to the blockchain
    */
-  initWeb3() {
-    try {
-      if (hasMetamask()) {
+  async initWeb3() {
+    if (hasMetamask()) {
+      if (window.ethereum) {
+        window.web3 = new Web3(window.ethereum)
+        try {
+          console.log('trying to get account')
+          await window.ethereum.enable()
+          console.log('getting web3')
+          this.web3 = window.web3
+          return true
+        } catch (error) {
+          console.log(error)
+          return false
+        }
+      } else if (window.web3) {
         this.web3 = new Web3(window.web3.currentProvider)
         window.web3 = this.web3
         return true
       }
-      return false
-    } catch (err) {
-      return false
     }
+    return false
   }
 
   /**
@@ -56,11 +66,7 @@ class Metamask extends InjectedWeb3 {
     super.initialize(opts)
     this.runProviderRegister(this, { priority: Metamask.providerPriority })
 
-    this.walletEnabled = this.initWeb3()
-
-    if (this.watcher) {
-      setInterval(this.watcher, Metamask.watcherInterval)
-    }
+    this.walletEnabled = await this.initWeb3()
 
     if (this.walletEnabled) {
       const checks = async () => {
@@ -77,9 +83,15 @@ class Metamask extends InjectedWeb3 {
         console.warn(err)
         this.walletEnabled = false
       }
+    } else {
+      throw new Error('Initialization failed')
     }
 
-    return this.runProviderUpdate(this, {
+    if (this.watcher) {
+      setInterval(this.watcher, Metamask.watcherInterval)
+    }
+
+    this.runProviderUpdate(this, {
       networkId: this.networkId,
       network: this.network,
       account: this.account,
