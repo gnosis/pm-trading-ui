@@ -28,11 +28,9 @@ export default store => next => (action) => {
     providers.map(provider => integrations[provider].checkAvailability(opts))
   }
 
-  if (type === 'REGISTER_PROVIDERS') {
+  if (type === 'INIT_PROVIDERS') {
     if (payload && payload.provider) {
       integrations[payload.provider].initialize(providerOptions)
-    } else {
-      Promise.all(map(integrations, integration => integration.initialize(providerOptions)))
     }
   }
 
