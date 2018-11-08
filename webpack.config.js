@@ -23,7 +23,7 @@ const embeddedConfig = {
   name: 'Embedded_Market',
   entry: 'embedded/index.js',
   output: {
-    publicPath: '/',
+    publicPath: '',
     path: `${__dirname}/dist/embedded`,
     filename: '[name]_[hash].js',
   },
