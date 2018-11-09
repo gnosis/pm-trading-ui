@@ -54,7 +54,7 @@ const Form = ({ t }) => {
         label={t('markets.filter_search')}
         name="filterQuery"
         component={TextInput}
-        placeholder="Title, Description, Keywords"
+        placeholder={t('markets.filter_search_hint')}
         decoration="underlined"
         className={cx('filterInput')}
       />
