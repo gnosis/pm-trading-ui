@@ -19,6 +19,7 @@
     "ending_soon_plural": "Schließen bald",
     "new_markets": "Neu eröffnet",
     "new_markets_plural": "Neu eröffnete",
+    "no_markets": "Keine Märkte vorhanden",
     "limit_description": "Zeige {{current}} von {{total}}",
     "filter_search": "Suche",
     "filter_search_hint": "Titel, Beschreibung, Schlüsselwörter",

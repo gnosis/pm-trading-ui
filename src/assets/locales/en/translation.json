@@ -19,9 +19,18 @@
     "ending_soon_plural": "Closing Soon",
     "new_markets": "New",
     "new_markets_plural": "New",
+    "no_markets": "No Markets available",
     "limit_description": "Showing {{current}} of {{total}}",
     "filter_search": "Search",
+    "filter_search_hint": "Title, Description, Keywords",
     "filter_status": "Market Status",
-    "filter_sortby": "Sort By"
+    "filter_status_all": "All",
+    "filter_status_open": "Open Markets",
+    "filter_status_closed": "Closed Markets",
+    "filter_sortby": "Sort By",
+    "filter_resolution_date_asc": "RESOLUTION DATE ↑",
+    "filter_resolution_date_desc": "RESOLUTION DATE ↓",
+    "filter_trading_volume_asc": "TRADING VOLUME ↑",
+    "filter_trading_volume_desc": "TRADING VOLUME ↓"
   }
 }
