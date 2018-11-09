@@ -5,7 +5,7 @@ import React from 'react'
 import { render } from 'react-dom'
 
 import 'normalize.css'
-import './style/embedded.css'
+import './style/embedded.css?raw'
 
 import { setMomentRelativeTime, setMomentDurationFormat } from '../setup'
 
