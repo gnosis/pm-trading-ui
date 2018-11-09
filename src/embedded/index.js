@@ -5,8 +5,8 @@ import React from 'react'
 import { render } from 'react-dom'
 
 
-import './scss/style.scss'
 import 'normalize.css'
+import './scss/style.scss'
 
 import { setMomentRelativeTime, setMomentDurationFormat } from '../setup'
 
