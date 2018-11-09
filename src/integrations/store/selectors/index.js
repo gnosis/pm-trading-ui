@@ -1,4 +1,4 @@
-import { WALLET_PROVIDER } from 'integrations/constants'
+import { WALLET_PROVIDER, WALLET_STATUS } from 'integrations/constants'
 import { List } from 'immutable'
 import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
 import { normalizeHex } from 'utils/helpers'
@@ -18,15 +18,15 @@ const legalDocuments = legalComplianceConfig.documents || []
  * Finds a default provider from all currently available providers. Determined by provider integrations `priority`
  * @param {*} state - redux state
  */
-export const findDefaultProvider = (state) => {
-  const providers = state.integrations.get('providers')
-  const providersSorted = providers.sort((a, b) => b.priority - a.priority)
-  return providersSorted.find(({ available, loaded }) => available && loaded)
-}
 
 export const getActiveProviderName = state => state && state.integrations && state.integrations.get('activeProvider')
 
 export const getProvidersList = state => state && state.integrations && state.integrations.get('providers')
+
+export const findDefaultProvider = (state) => {
+  const providers = getProvidersList(state)
+  return providers && providers.find(({ status }) => status === WALLET_STATUS.INITIALIZED)
+}
 
 export const getActiveProvider = (state) => {
   const activeProviderName = getActiveProviderName(state)

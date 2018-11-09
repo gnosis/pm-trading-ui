@@ -1,8 +1,9 @@
-import { WALLET_PROVIDER } from 'integrations/constants'
+import Web3 from 'web3'
+import { WALLET_PROVIDER, WALLET_STATUS } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import { timeoutCondition } from 'utils/helpers'
+import { openModal, closeModal } from 'store/actions/modal'
 import { hasMetamask } from 'integrations/metamask/utils'
-import Web3 from 'web3'
 
 const NETWORK_TIMEOUT = 10000
 
@@ -33,15 +34,19 @@ class Metamask extends InjectedWeb3 {
   /**
    * Tries to set connection to the blockchain
    */
-  async initWeb3() {
+  async initWeb3(dispatch) {
     if (hasMetamask()) {
       if (window.ethereum) {
         window.web3 = new Web3(window.ethereum)
         try {
-          console.log('trying to get account')
+          setTimeout(() => {
+            if (!this.web3) {
+              dispatch(openModal({ modalName: 'ModalUnlockMetamask' }))
+            }
+          }, 600)
           await window.ethereum.enable()
-          console.log('getting web3')
           this.web3 = window.web3
+          dispatch(closeModal())
           return true
         } catch (error) {
           console.log(error)
@@ -66,7 +71,7 @@ class Metamask extends InjectedWeb3 {
     super.initialize(opts)
     this.runProviderRegister(this, { priority: Metamask.providerPriority })
 
-    this.walletEnabled = await this.initWeb3()
+    this.walletEnabled = await this.initWeb3(opts.dispatch)
 
     if (this.walletEnabled) {
       const checks = async () => {
@@ -84,6 +89,9 @@ class Metamask extends InjectedWeb3 {
         this.walletEnabled = false
       }
     } else {
+      this.runProviderUpdate(this, {
+        status: WALLET_STATUS.ERROR,
+      })
       throw new Error('Initialization failed')
     }
 
@@ -96,6 +104,7 @@ class Metamask extends InjectedWeb3 {
       network: this.network,
       account: this.account,
       balance: this.balance,
+      status: WALLET_STATUS.INITIALIZED,
     })
   }
 }

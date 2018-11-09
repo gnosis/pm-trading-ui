@@ -1,3 +1,3 @@
-import UnlockMetamask from 'components/ModalContent/UnlockMetamask'
+import UnlockMetamask from 'integrations/metamask/components/UnlockMetamask'
 
 export default UnlockMetamask

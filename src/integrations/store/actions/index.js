@@ -2,9 +2,7 @@ import { createAction } from 'redux-actions'
 
 import { isGnosisInitialized } from 'store/selectors/blockchain'
 import { getActiveProvider, initializedAllProviders } from 'integrations/store/selectors'
-import { WALLET_PROVIDER } from 'integrations/constants'
 import { initGnosis } from 'store/actions/blockchain'
-import { isFeatureEnabled } from 'utils/features'
 
 export const checkAvailability = createAction('CHECK_PROVIDER_AVAILABILITY')
 export const registerProvider = createAction('REGISTER_PROVIDER')

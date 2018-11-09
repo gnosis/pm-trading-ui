@@ -126,7 +126,6 @@ class InjectedWeb3 {
 
     if (!this.walletEnabled) {
       this.walletEnabled = true
-      providerUpdate.available = true
     }
 
     this[property] = value
