@@ -4,7 +4,7 @@ import 'whatwg-fetch'
 import React from 'react'
 import { render } from 'react-dom'
 
-import 'normalize.css'
+import 'normalize.css?raw'
 import './style/embedded.css?raw'
 
 import { setMomentRelativeTime, setMomentDurationFormat } from '../setup'
