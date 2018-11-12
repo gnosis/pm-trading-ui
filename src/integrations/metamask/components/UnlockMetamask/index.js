@@ -16,7 +16,7 @@ const tournamentConfig = getFeatureConfig('tournament')
 
 const UnlockMetamask = ({ closeModal }) => (
   <div className={cx('unlockMetamask')}>
-    <button className={cx('closeButton')} onClick={closeModal} />
+    <button type="button" className={cx('closeButton')} onClick={closeModal} />
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
     <h3 className={cx('heading')}>Unlock your MetaMask wallet</h3>
     <p className={cx('text')}>
