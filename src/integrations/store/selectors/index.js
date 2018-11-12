@@ -23,7 +23,7 @@ export const getActiveProviderName = state => state && state.integrations && sta
 
 export const getProvidersList = state => state && state.integrations && state.integrations.get('providers')
 
-export const findDefaultProvider = (state) => {
+export const findActiveProvider = (state) => {
   const providers = getProvidersList(state)
   return providers && providers.find(({ status }) => status === WALLET_STATUS.INITIALIZED)
 }

@@ -13,7 +13,7 @@ import Web3 from 'web3'
 import {
   timeoutCondition, getGnosisJsOptions, hexWithoutPrefix, hexWithPrefix,
 } from 'utils/helpers'
-import { findDefaultProvider } from 'integrations/store/selectors'
+import { findActiveProvider } from 'integrations/store/selectors'
 import { createAction } from 'redux-actions'
 import { setActiveProvider } from 'integrations/store/actions'
 import { getFeatureConfig, getConfiguration } from 'utils/features'
@@ -187,7 +187,7 @@ export const initGnosis = () => async (dispatch, getState) => {
     const state = getState()
 
     // determine new provider
-    newProvider = findDefaultProvider(state)
+    newProvider = findActiveProvider(state)
 
     if (newProvider) {
       await dispatch(setActiveProvider(newProvider.name))
