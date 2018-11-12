@@ -1,7 +1,8 @@
-import { List } from 'immutable'
-import PropTypes from 'prop-types'
 import React from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
+import { withNamespaces } from 'react-i18next'
+import { List } from 'immutable'
 
 import { isMarketClosedOrResolved } from 'store/utils/marketStatus'
 
@@ -10,10 +11,12 @@ import css from './Markets.scss'
 
 const cx = classNames.bind(css)
 
-const Markets = ({ markets, userAccount, viewMarket }) => (
+const Markets = ({
+  markets, userAccount, viewMarket, t,
+}) => (
   <div className={cx('markets')}>
     <div className={cx('title')}>
-      Showing {markets.size} of {markets.size}
+      {t('markets.limit_description', { total: markets.size, current: markets.size })}
     </div>
     <div>
       {markets.map((market) => {
@@ -45,6 +48,7 @@ Markets.propTypes = {
   viewMarket: PropTypes.func.isRequired,
   markets: PropTypes.instanceOf(List),
   userAccount: PropTypes.string,
+  t: PropTypes.func.isRequired,
 }
 
 Markets.defaultProps = {
@@ -52,4 +56,4 @@ Markets.defaultProps = {
   userAccount: undefined,
 }
 
-export default Markets
+export default withNamespaces()(Markets)

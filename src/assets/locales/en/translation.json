@@ -10,5 +10,27 @@
     "using_provider": "You are connected via {{provider}}",
     "wrapped_ether_title": "Your balance is calculated as the sum of your ETH and Wrapped-ETH balance.",
     "wrapped_ether_weth_link": "What's wrapped Ether?"
+  },
+  "markets": {
+    "list_title": "Market Overview",
+    "open_markets": "Open Market",
+    "open_markets_plural": "Open Markets",
+    "ending_soon": "Closing Soon",
+    "ending_soon_plural": "Closing Soon",
+    "new_markets": "New",
+    "new_markets_plural": "New",
+    "no_markets": "No Markets available",
+    "limit_description": "Showing {{current}} of {{total}}",
+    "filter_search": "Search",
+    "filter_search_hint": "Title, Description, Keywords",
+    "filter_status": "Market Status",
+    "filter_status_all": "All",
+    "filter_status_open": "Open Markets",
+    "filter_status_closed": "Closed Markets",
+    "filter_sortby": "Sort By",
+    "filter_resolution_date_asc": "RESOLUTION DATE ↑",
+    "filter_resolution_date_desc": "RESOLUTION DATE ↓",
+    "filter_trading_volume_asc": "TRADING VOLUME ↑",
+    "filter_trading_volume_desc": "TRADING VOLUME ↓"
   }
 }
