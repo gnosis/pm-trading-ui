@@ -11,7 +11,6 @@ import 'scss/style.scss'
 import store from 'store'
 
 import { setMomentRelativeTime, setMomentDurationFormat } from './setup'
-import './i18n'
 
 setMomentRelativeTime()
 setMomentDurationFormat()
