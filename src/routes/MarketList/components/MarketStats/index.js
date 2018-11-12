@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types'
 import React from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
+import { withNamespaces } from 'react-i18next'
 
 import Icon from 'components/Icon'
 
@@ -24,15 +25,17 @@ Stat.propTypes = {
   icon: PropTypes.string.isRequired,
 }
 
-const MarketStats = ({ open, newMarkets, endingSoon }) => (
+const MarketStats = ({
+  open, newMarkets, endingSoon, t,
+}) => (
   <div className={cx('marketStats')}>
     <div className="container">
       <div className="row">
         <div className={cx('col-xs-12')}>
           <div className={cx('inner')}>
-            <Stat name="Open Markets" value={open} icon="market" />
-            <Stat name="Ending Soon" value={endingSoon} icon="market--countdown" />
-            <Stat name="New Markets" value={newMarkets} icon="new" />
+            <Stat name={t('markets.open_markets', { count: open })} value={open} icon="market" />
+            <Stat name={t('markets.ending_soon', { count: endingSoon })} value={endingSoon} icon="market--countdown" />
+            <Stat name={t('markets.new_markets', { count: newMarkets })} value={newMarkets} icon="new" />
           </div>
         </div>
       </div>
@@ -44,6 +47,7 @@ MarketStats.propTypes = {
   open: PropTypes.number.isRequired,
   newMarkets: PropTypes.number.isRequired,
   endingSoon: PropTypes.number.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
-export default MarketStats
+export default withNamespaces()(MarketStats)
