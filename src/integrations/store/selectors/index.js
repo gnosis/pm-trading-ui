@@ -112,13 +112,12 @@ export const getCurrentNetworkId = (state) => {
   return undefined
 }
 
-export const initializedAllProviders = (state) => {
+export const isThereActiveProvider = (state) => {
   const providers = getProvidersList(state)
 
-  const allProvidersLoaded = providers.every(({ loaded }) => loaded)
-  const providersAreRegistered = !!providers.size
+  const activeProvider = providers.find(({ status }) => status === WALLET_STATUS.INITIALIZED)
 
-  return providersAreRegistered && allProvidersLoaded
+  return !!activeProvider
 }
 
 export const getTargetNetworkId = (state) => {

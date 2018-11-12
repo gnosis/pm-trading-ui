@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions'
 
 import { isGnosisInitialized } from 'store/selectors/blockchain'
-import { getActiveProvider, initializedAllProviders } from 'integrations/store/selectors'
+import { getActiveProvider, isThereActiveProvider } from 'integrations/store/selectors'
 import { initGnosis } from 'store/actions/blockchain'
 
 export const checkAvailability = createAction('CHECK_PROVIDER_AVAILABILITY')
@@ -47,9 +47,10 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
   }
 
   if (!isInitialized) {
-    const providersLoaded = initializedAllProviders(state)
+    const providerInitialized = isThereActiveProvider(state)
+    console.log(isThereActiveProvider(state))
 
-    if (providersLoaded) {
+    if (providerInitialized) {
       await dispatch(initGnosis())
     }
   }

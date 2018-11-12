@@ -20,7 +20,8 @@ const UnlockMetamask = ({ closeModal }) => (
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
     <h3 className={cx('heading')}>Unlock your MetaMask wallet</h3>
     <p className={cx('text')}>
-      Please unlock your MetaMask wallet to start using {tournamentConfig.name || 'the application'}.
+      Please accept connecting your MetaMask account to start using {tournamentConfig.name || 'the application'}. Your
+      wallet needs to be unlocked.
     </p>
   </div>
 )

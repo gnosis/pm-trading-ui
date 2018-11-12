@@ -49,7 +49,7 @@ class Metamask extends InjectedWeb3 {
           dispatch(closeModal())
           return true
         } catch (error) {
-          console.log(error)
+          console.error(error)
           return false
         }
       } else if (window.web3) {
@@ -74,6 +74,7 @@ class Metamask extends InjectedWeb3 {
     this.walletEnabled = await this.initWeb3(opts.dispatch)
 
     if (this.walletEnabled) {
+      console.log('entering checks')
       const checks = async () => {
         this.networkId = await this.getNetworkId()
         this.network = await this.getNetwork()
