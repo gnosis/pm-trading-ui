@@ -41,7 +41,9 @@ class Metamask extends InjectedWeb3 {
         try {
           setTimeout(() => {
             if (!this.web3) {
-              dispatch(openModal({ modalName: 'ModalUnlockMetamask' }))
+              this.runProviderUpdate(this, {
+                status: WALLET_STATUS.USER_ACTION_REQUIRED,
+              })
             }
           }, 600)
           await window.ethereum.enable()
@@ -69,12 +71,11 @@ class Metamask extends InjectedWeb3 {
    */
   async initialize(opts) {
     super.initialize(opts)
-    this.runProviderRegister(this, { priority: Metamask.providerPriority })
+    this.runProviderRegister(this)
 
     this.walletEnabled = await this.initWeb3(opts.dispatch)
 
     if (this.walletEnabled) {
-      console.log('entering checks')
       const checks = async () => {
         this.networkId = await this.getNetworkId()
         this.network = await this.getNetwork()

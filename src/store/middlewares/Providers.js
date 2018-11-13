@@ -3,6 +3,8 @@ import { initGnosis } from 'store/actions/blockchain'
 import { runProviderRegister, runProviderUpdate, updateProvider } from 'integrations/store/actions'
 import { getProviderConfig } from 'utils/features'
 import { map } from 'lodash'
+import { WALLET_STATUS, WALLET_PROVIDER } from 'integrations/constants'
+import { openModal } from '../actions/modal'
 
 const providers = getProviderConfig()
 
@@ -42,6 +44,16 @@ export default store => next => async (action) => {
         integration.logout()
       }
     })
+  }
+
+  if (type === 'UPDATE_PROVIDER') {
+    if (payload) {
+      const { provider, status } = payload
+
+      if (provider === WALLET_PROVIDER.METAMASK && status === WALLET_STATUS.USER_ACTION_REQUIRED) {
+        dispatch(openModal({ modalName: 'ModalUnlockMetamask' }))
+      }
+    }
   }
 
   return handledAction

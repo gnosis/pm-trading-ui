@@ -22,7 +22,7 @@ import { getActiveProvider, isConnectedToCorrectNetwork } from 'integrations/sto
 import { changeUiState } from 'store/actions/interface'
 import { getUiState } from 'store/selectors/interface'
 
-import 'normalize.css'
+import 'normalize.css?raw'
 import style from './app.scss'
 import transitionStyles from './transitions.scss'
 import 'rc-tooltip/assets/bootstrap.css?raw'

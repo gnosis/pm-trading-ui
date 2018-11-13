@@ -48,7 +48,6 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
 
   if (!isInitialized) {
     const providerInitialized = isThereActiveProvider(state)
-    console.log(isThereActiveProvider(state))
 
     if (providerInitialized) {
       await dispatch(initGnosis())

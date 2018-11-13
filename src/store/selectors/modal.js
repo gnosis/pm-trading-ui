@@ -1,1 +1,1 @@
-export const getTransactions = state => state.modal.get('transactions', [])
+export const getModalData = state => state.modal.get('modalData', [])

@@ -20,9 +20,15 @@ class SelectProvider extends Component {
   componentDidMount = () => {}
 
   handleInit = (provider) => {
-    const { initProviders, closeModal } = this.props
+    const { initProviders, closeModal, openModal } = this.props
+
+    if (provider.status !== WALLET_STATUS.READY_TO_INIT) {
+      openModal('ModalInitialisationError', { provider: provider.name })
+      return
+    }
+
     try {
-      initProviders(provider)
+      initProviders(provider.name)
     } catch (err) {
       console.log(error)
     }
@@ -37,26 +43,23 @@ class SelectProvider extends Component {
       logo: getLogo(key.toLowerCase()),
     }))
 
-    const availableProviders = providersWithLogos.filter(({ status }) => status === WALLET_STATUS.READY_TO_INIT)
-    const unavailableProviders = providersWithLogos.filter(
-      ({ status }) => status === WALLET_STATUS.NOT_INSTALLED || status === WALLET_STATUS.ERROR,
-    )
-
     return (
       <div className={cx('selectProvider')}>
         <button className={cx('closeButton')} onClick={closeModal} type="button" />
         <div className={cx('providersContainer')}>
           <h3 className={cx('heading')}>How would you like to access your wallet?</h3>
           <div className={cx('providersList')}>
-            {providersWithLogos.map(({ name, logo }) => {
-              const handleClick = () => this.handleInit(name)
+            {providersWithLogos.map((provider) => {
+              const { name, logo } = provider
+              const handleClick = () => this.handleInit(provider)
+
               return (
-                <div key={name} className={cx('provider')} onClick={handleClick}>
+                <button type="button" key={name} className={cx('provider')} onClick={handleClick}>
                   <img src={logo} className={cx('providerLogo')} alt="Logo" />
                   <span className={cx('providerName')}>{name}</span>
                   <Icon type="link" className={cx('linkIcon')} style={nextIconStyle} />
                   <Icon type="next" className={cx('nextIcon')} style={nextIconStyle} />
-                </div>
+                </button>
               )
             })}
           </div>

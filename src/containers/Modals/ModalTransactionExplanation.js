@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 import TransactionsExplanation from 'components/ModalContent/TransactionsExplanation'
-import { getTransactions } from 'store/selectors/modal'
+import { getModalData } from 'store/selectors/modal'
 
 const mapStateToProps = state => ({
-  transactions: getTransactions(state),
+  transactions: getModalData(state),
 })
 
 export default connect(mapStateToProps)(TransactionsExplanation)
