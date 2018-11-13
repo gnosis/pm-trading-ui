@@ -31,5 +31,22 @@
     "filter_resolution_date_desc": "AUFLÖSUNGS DATUM ↓",
     "filter_trading_volume_asc": "HANDELSVOLUMEN ↑",
     "filter_trading_volume_desc": "HANDELSVOLUMEN ↓"
+  },
+  "dashboard": {
+    "collateral_token_balance": "{{symbol}} Token",
+    "predicted_profits": "Vorhersehbarer Profit",
+    "badge": "Abzeichen",
+    "your_rank": "Dein Rank",
+    "new_markets": "Neuste Märkte",
+    "closing_soon": "Bald Schließend",
+    "redeem_winnings": "Gewinne Einlösen",
+    "sell": "Verkaufen",
+    "sold": "Verkauft",
+    "bought": "Gekauft",
+    "my_tokens": "Meine Token",
+    "my_trades": "Meine Aktivitäten",
+    "no_tokens": "Du besitzt derzeit keine Token.",
+    "no_trades": "Du hast noch keine Token gehandelt in letzter Zeit.",
+    "no_markets": "Noch keine Märkte verfügbar"
   }
 }

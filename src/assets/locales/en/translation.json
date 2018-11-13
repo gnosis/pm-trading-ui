@@ -32,5 +32,21 @@
     "filter_resolution_date_desc": "RESOLUTION DATE ↓",
     "filter_trading_volume_asc": "TRADING VOLUME ↑",
     "filter_trading_volume_desc": "TRADING VOLUME ↓"
-  }
+  ,
+  "dashboard": {
+    "collateral_token_balance": "{{symbol}} tokens",
+    "predicted_profits": "predicted profits",
+    "badge": "Badge",
+    "your_rank": "Your Rank",
+    "new_markets": "Newest Markets",
+    "closing_soon": "Closing Soon",
+    "redeem_winnings": "Redeem Winnings",
+    "sell": "Sell",
+    "sold": "Sold",
+    "bought": "Bought",
+    "my_tokens": "My Tokens",
+    "my_trades": "My Trades",
+    "no_tokens": "You don't own any tokens.",
+    "no_trades": "You haven't made any trades recently."
+  }}
 }
