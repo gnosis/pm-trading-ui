@@ -1,10 +1,10 @@
 import integrations from 'integrations'
 import { initGnosis } from 'store/actions/blockchain'
 import { runProviderRegister, runProviderUpdate, updateProvider } from 'integrations/store/actions'
+import { getProvider } from 'integrations/store/selectors'
 import { getProviderConfig } from 'utils/features'
-import { map } from 'lodash'
 import { WALLET_STATUS, WALLET_PROVIDER } from 'integrations/constants'
-import { openModal } from '../actions/modal'
+import { openModal, closeModal } from 'store/actions/modal'
 
 const providers = getProviderConfig()
 
@@ -14,8 +14,9 @@ if (!providers.length) {
 }
 
 export default store => next => async (action) => {
+  const { dispatch, getState } = store
+  const prevState = getState()
   const handledAction = next(action)
-  const { dispatch } = store
   const { type, payload } = action
 
   const providerOptions = {
@@ -50,8 +51,34 @@ export default store => next => async (action) => {
     if (payload) {
       const { provider, status } = payload
 
-      if (provider === WALLET_PROVIDER.METAMASK && status === WALLET_STATUS.USER_ACTION_REQUIRED) {
-        dispatch(openModal({ modalName: 'ModalUnlockMetamask' }))
+      if (provider === WALLET_PROVIDER.METAMASK) {
+        if (status === WALLET_STATUS.USER_ACTION_REQUIRED) {
+          dispatch(openModal({ modalName: 'ModalUnlockMetamask' }))
+        }
+
+        if (status === WALLET_STATUS.INITIALIZED) {
+          const prevStatus = getProvider(prevState, provider).status
+
+          if (
+            prevStatus === WALLET_STATUS.USER_ACTION_REQUIRED
+            || prevStatus === WALLET_STATUS.READY_TO_INIT
+            || prevStatus === WALLET_STATUS.REGISTERED
+          ) {
+            dispatch(closeModal())
+          }
+        }
+
+        if (status === WALLET_STATUS.ERROR) {
+          const prevStatus = getProvider(prevState, provider).status
+
+          if (
+            prevStatus === WALLET_STATUS.USER_ACTION_REQUIRED
+            || prevStatus === WALLET_STATUS.READY_TO_INIT
+            || prevStatus === WALLET_STATUS.REGISTERED
+          ) {
+            dispatch(openModal({ modalName: 'ModalInitialisationError', modalData: { provider } }))
+          }
+        }
       }
     }
   }

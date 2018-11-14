@@ -1,4 +1,5 @@
 import { Record } from 'immutable'
+import { WALLET_STATUS } from 'integrations/constants'
 
 const ProviderRecord = Record(
   {
@@ -9,7 +10,7 @@ const ProviderRecord = Record(
     networkId: 0,
     mainnetAddress: undefined,
     verificationHash: undefined,
-    status: undefined,
+    status: WALLET_STATUS.REGISTERED,
   },
   'Provider',
 )

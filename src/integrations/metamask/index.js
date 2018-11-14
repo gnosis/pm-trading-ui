@@ -34,7 +34,7 @@ class Metamask extends InjectedWeb3 {
   /**
    * Tries to set connection to the blockchain
    */
-  async initWeb3(dispatch) {
+  async initWeb3() {
     if (hasMetamask()) {
       if (window.ethereum) {
         window.web3 = new Web3(window.ethereum)
@@ -48,7 +48,6 @@ class Metamask extends InjectedWeb3 {
           }, 600)
           await window.ethereum.enable()
           this.web3 = window.web3
-          dispatch(closeModal())
           return true
         } catch (error) {
           console.error(error)

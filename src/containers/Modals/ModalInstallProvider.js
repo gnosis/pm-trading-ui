@@ -1,4 +1,4 @@
-import InitialisationError from 'components/ModalContent/InitialisationError'
+import InstallProvider from 'components/ModalContent/InstallProvider'
 import { connect } from 'react-redux'
 import { getProviderModalData } from 'store/selectors/modal'
 
@@ -9,4 +9,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   null,
-)(InitialisationError)
+)(InstallProvider)

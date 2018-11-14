@@ -1,13 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
-import style from './SelectProvider.scss'
+import { getLogo } from 'integrations/utils'
+import style from './InitialisationError.scss'
 
 const cx = cn.bind(style)
-
-// eslint-disable-next-line
-const getLogo = providerName => require(`integrations/${providerName}/assets/${providerName}-logo.svg`)
 
 const logoStyle = {
   width: 100,
@@ -15,23 +12,29 @@ const logoStyle = {
 }
 
 const InitialisationError = ({ closeModal, providerName }) => {
-  const logo = getLogo(providerName)
+  const lowercaseProviderName = providerName.toLowerCase()
+  const logo = lowercaseProviderName && getLogo(lowercaseProviderName)
+  const firstLetterCapitalizedProvider = `${providerName[0]}${lowercaseProviderName.slice(1)}`
+
   return (
-    <div className={cx('unlockMetamask')}>
+    <div className={cx('initialisationError')}>
       <button className={cx('closeButton')} onClick={closeModal} type="button" />
       {logo && <img src={logo} alt="logo" style={logoStyle} />}
-      <h3 className={cx('heading')}>Oops! There was an error</h3>
-      <p className={cx('text')}>
-        Please unlock your MetaMask wallet to start using {tournamentConfig.name || 'the application'}.
-      </p>
+      <h3 className={cx('heading')}>
+        Oops! There was an error initialising {firstLetterCapitalizedProvider || 'wallet provider'}.
+      </h3>
+      <p className={cx('text')}>Wop Wop</p>
     </div>
   )
 }
 
 InitialisationError.propTypes = {
   closeModal: PropTypes.func.isRequired,
-  initProviders: PropTypes.func.isRequired,
-  providersList: ImmutablePropTypes.map.isRequired,
+  providerName: PropTypes.string,
+}
+
+InitialisationError.defaultProps = {
+  providerName: '',
 }
 
 export default InitialisationError

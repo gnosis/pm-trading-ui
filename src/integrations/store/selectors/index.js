@@ -23,6 +23,8 @@ export const getActiveProviderName = state => state && state.integrations && sta
 
 export const getProvidersList = state => state && state.integrations && state.integrations.get('providers')
 
+export const getProvider = (state, provider) => state && state.integrations && state.integrations.getIn(['providers', provider], {})
+
 export const findActiveProvider = (state) => {
   const providers = getProvidersList(state)
   return providers && providers.find(({ status }) => status === WALLET_STATUS.INITIALIZED)
@@ -145,8 +147,7 @@ export const isConnectedToCorrectNetwork = (state) => {
 
 export const checkWalletConnection = (state) => {
   const provider = getActiveProvider(state)
-  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state)
-    || (isTournament && !!getRegisteredMainnetAddress(state))
+  const termsNotRequiredOrAccepted = hasAcceptedTermsAndConditions(state) || (isTournament && !!getRegisteredMainnetAddress(state))
 
   if (termsNotRequiredOrAccepted && provider?.account) {
     return true
@@ -155,9 +156,7 @@ export const checkWalletConnection = (state) => {
   return false
 }
 
-export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state)
-  && checkWalletConnection(state)
-  && !isConnectedToCorrectNetwork(state)
+export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
 
 export const isOnWhitelist = (state) => {
   const account = getCurrentAccount(state)
@@ -183,5 +182,9 @@ export const isVerified = (state) => {
 
   if (!requireVerification) return true
 
-  return account && state.integrations.getIn(['accountSettings', normalizeHex(account), 'verificatedWith']) === verificationConfig.handler
+  return (
+    account
+    && state.integrations.getIn(['accountSettings', normalizeHex(account), 'verificatedWith'])
+      === verificationConfig.handler
+  )
 }

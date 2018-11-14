@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import Icon from 'components/Icon'
 import { WALLET_STATUS } from 'integrations/constants'
+import { getLogo } from 'integrations/utils'
 import style from './SelectProvider.scss'
 
 const cx = cn.bind(style)
@@ -13,17 +14,14 @@ const nextIconStyle = {
   height: 25,
 }
 
-// eslint-disable-next-line
-const getLogo = providerName => require(`integrations/${providerName}/assets/${providerName}-logo.svg`)
-
 class SelectProvider extends Component {
   componentDidMount = () => {}
 
   handleInit = (provider) => {
-    const { initProviders, closeModal, openModal } = this.props
+    const { initProviders, openModal } = this.props
 
-    if (provider.status !== WALLET_STATUS.READY_TO_INIT) {
-      openModal('ModalInitialisationError', { provider: provider.name })
+    if (provider.status === WALLET_STATUS.NOT_INSTALLED) {
+      openModal('ModalInstallProvider', { provider: provider.name })
       return
     }
 
@@ -57,7 +55,6 @@ class SelectProvider extends Component {
                 <button type="button" key={name} className={cx('provider')} onClick={handleClick}>
                   <img src={logo} className={cx('providerLogo')} alt="Logo" />
                   <span className={cx('providerName')}>{name}</span>
-                  <Icon type="link" className={cx('linkIcon')} style={nextIconStyle} />
                   <Icon type="next" className={cx('nextIcon')} style={nextIconStyle} />
                 </button>
               )
@@ -73,6 +70,7 @@ SelectProvider.propTypes = {
   closeModal: PropTypes.func.isRequired,
   initProviders: PropTypes.func.isRequired,
   providersList: ImmutablePropTypes.map.isRequired,
+  openModal: PropTypes.func.isRequired,
 }
 
 export default SelectProvider
