@@ -1,4 +1,5 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import Decimal from 'decimal.js'
@@ -21,6 +22,7 @@ const OutcomeSectionScalar = (props) => {
     },
     outcomeTokenCount,
     valid,
+    t,
   } = props
   const canRunSimulation = valid && selectedOutcome
 
@@ -44,13 +46,13 @@ const OutcomeSectionScalar = (props) => {
   const scalarOutcomes = [
     {
       index: 0,
-      label: 'Short',
+      label: t('market.short'),
       color: COLOR_SCHEME_SCALAR[0],
       probability: Decimal(1).sub(marginalPriceSelected).mul(100),
     },
     {
       index: 1,
-      label: 'Long',
+      label: t('market.long'),
       color: COLOR_SCHEME_SCALAR[1],
       probability: marginalPriceSelected.mul(100),
     },
@@ -61,7 +63,7 @@ const OutcomeSectionScalar = (props) => {
       <div className={cn('row')}>
         <div className={cn('col-md-12')}>
           <h2>
-            Your Trade
+            {t('market.your_trade')}
             <MandatoryHint />
           </h2>
           <Field
@@ -94,6 +96,7 @@ OutcomeSectionScalar.propTypes = {
   selectedOutcome: PropTypes.string,
   valid: PropTypes.bool,
   outcomeTokenCount: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.number]).isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 OutcomeSectionScalar.defaultProps = {
@@ -101,4 +104,4 @@ OutcomeSectionScalar.defaultProps = {
   selectedOutcome: undefined,
 }
 
-export default OutcomeSectionScalar
+export default withNamespaces()(OutcomeSectionScalar)

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import cn from 'classnames/bind'
 import { Field, reduxForm, propTypes } from 'redux-form'
+import { compose } from 'recompose'
 import Decimal from 'decimal.js'
 import autobind from 'autobind-decorator'
 import { weiToEth } from 'utils/helpers'
@@ -40,22 +42,24 @@ class MarketBuySharesForm extends Component {
   // redux-form validate field function. Return undefined if it is ok or a string with an error.
   validateInvestment = (value = '') => {
     const investmentValue = value.trim()
-    const { currentBalance = 0, collateralTokenBalance, collateralTokenSymbol } = this.props
+    const {
+      currentBalance = 0, collateralTokenBalance, collateralTokenSymbol, t,
+    } = this.props
 
     // check if investment is not undefined and test it against number regexp to prevent errors from decimal.js
     if (!investmentValue) {
-      return 'Enter the investment value'
+      return t('market.errors.no_investment_entered')
     }
 
     const validInvestment = NUMBER_REGEXP.test(investmentValue) && Decimal(investmentValue).gte(1e-18)
 
     if (!validInvestment) {
-      return 'Invalid amount'
+      return t('market.errors.invalid_amount')
     }
 
     const decimalValue = Decimal(investmentValue)
     if (decimalValue.lte(0)) {
-      return "Number can't be negative or equal to zero."
+      return t('market.errors.negative_number')
     }
 
     let balance = currentBalance
@@ -67,7 +71,7 @@ class MarketBuySharesForm extends Component {
     }
 
     if (decimalValue.gt(balance)) {
-      return "You're trying to invest more than you have."
+      return t('market.errors.not_enough_balance')
     }
 
     return undefined
@@ -119,6 +123,7 @@ class MarketBuySharesForm extends Component {
       selectedOutcome,
       market,
       valid,
+      t,
     } = this.props
     const investmentAmount = selectedBuyInvest.trim()
     const isValid = this.validateInvestment(investmentAmount) === undefined
@@ -131,11 +136,11 @@ class MarketBuySharesForm extends Component {
     let submitDisabledReason
 
     if (!selectedBuyInvest && !selectedOutcome) {
-      submitDisabledReason = 'Please fill all mandatory fields'
+      submitDisabledReason = t('market.errors.no_selection_made')
     } else if (!selectedBuyInvest) {
-      submitDisabledReason = 'Please enter an investment amount'
+      submitDisabledReason = t('market.errors.no_investment_entered')
     } else if (!selectedOutcome) {
-      submitDisabledReason = 'Please select an outcome'
+      submitDisabledReason = t('markets.errors.no_outcome_selected')
     }
 
     let outcomeTokenCount = 0
@@ -243,7 +248,7 @@ class MarketBuySharesForm extends Component {
                     loading={submitting}
                     type="submit"
                   >
-                    Buy Tokens
+                    {t('market.buy_tokens')}
                   </InteractionButton>
                 </div>
               </div>
@@ -271,6 +276,7 @@ MarketBuySharesForm.propTypes = {
     source: PropTypes.string,
     symbol: PropTypes.string,
   }),
+  t: PropTypes.func.isRequired,
 }
 
 MarketBuySharesForm.defaultProps = {
@@ -284,4 +290,9 @@ const form = {
   form: 'marketBuyShares',
 }
 
-export default reduxForm(form)(MarketBuySharesForm)
+const enhancer = compose(
+  reduxForm(form),
+  withNamespaces(),
+)
+
+export default enhancer(MarketBuySharesForm)

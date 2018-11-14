@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import cn from 'classnames/bind'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
@@ -11,7 +12,7 @@ import style from './ShareRow.scss'
 const cx = cn.bind(style)
 
 const ShareRow = ({
-  ableToSell, share, outcomeName, onSellClick,
+  ableToSell, share, outcomeName, onSellClick, t,
 }) => {
   const shareBalance = Decimal(share.balance)
     .div(1e18)
@@ -35,8 +36,8 @@ const ShareRow = ({
       </td>
       <td>
         {ableToSell && (
-          <button className={cx('ShareSellButton')} onClick={onClickHandler}>
-            Sell
+          <button type="button" className={cx('ShareSellButton')} onClick={onClickHandler}>
+            {t('market.sell_tokens')}
           </button>
         )}
       </td>
@@ -49,6 +50,7 @@ ShareRow.propTypes = {
   share: marketShareShape,
   outcomeName: PropTypes.string,
   onSellClick: PropTypes.func,
+  t: PropTypes.func.isRequired,
 }
 
 ShareRow.defaultProps = {
@@ -58,4 +60,4 @@ ShareRow.defaultProps = {
   onSellClick: () => {},
 }
 
-export default ShareRow
+export default withNamespaces()(ShareRow)

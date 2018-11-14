@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import 'moment-duration-format'
 import autobind from 'autobind-decorator'
 import ImmutablePropTypes from 'react-immutable-proptypes'
@@ -170,9 +171,10 @@ class MarketDetail extends Component {
   }
 
   renderLoading() {
+    const { t } = this.props
     return (
       <div className={cx('container')}>
-        <div>Loading...</div>
+        <div>{t('loading')}</div>
       </div>
     )
   }
@@ -214,13 +216,14 @@ class MarketDetail extends Component {
       collateralTokenSymbol,
       hasWallet,
       fetchMarketTrades,
+      t,
     } = this.props
 
     const { marketFetchError } = this.state
     if (marketFetchError) {
       return (
         <div className={cx('container')}>
-          <div>This market could not be found.</div>
+          <div>{t('market.not_found')}</div>
         </div>
       )
     }
@@ -291,6 +294,7 @@ MarketDetail.propTypes = {
   match: ReactRouterMatchShape.isRequired,
   collateralTokenSymbol: PropTypes.string,
   requestTokenSymbol: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 MarketDetail.defaultProps = {
@@ -304,4 +308,4 @@ MarketDetail.defaultProps = {
   collateralTokenSymbol: '',
 }
 
-export default MarketDetail
+export default withNamespaces()(MarketDetail)

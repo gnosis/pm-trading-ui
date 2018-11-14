@@ -1,15 +1,21 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import cn from 'classnames/bind'
 import style from '../marketBuySharesForm.scss'
 
 const cx = cn.bind(style)
 
-const LimitMarginAnnotation = () => (
+const LimitMarginAnnotation = ({ t }) => (
   <div className={cx('row', 'infoRow', 'limitMarginAnnotation')}>
     <div className={cx('col-md-12')}>
-      <span>The actual cost you will pay might be less by 5% depending on the market price at the time of trading</span>
+      <span>{t('market.limit_margin_warning')}</span>
     </div>
   </div>
 )
 
-export default LimitMarginAnnotation
+LimitMarginAnnotation.propTypes = {
+  t: PropTypes.func.isRequired,
+}
+
+export default withNamespaces()(LimitMarginAnnotation)
