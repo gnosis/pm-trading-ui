@@ -47,6 +47,7 @@
     "my_tokens": "My Tokens",
     "my_trades": "My Trades",
     "no_tokens": "You don't own any tokens.",
-    "no_trades": "You haven't made any trades recently."
+    "no_trades": "You haven't made any trades recently.",
+    "no_markets": "No Markets available"
   }}
 }
