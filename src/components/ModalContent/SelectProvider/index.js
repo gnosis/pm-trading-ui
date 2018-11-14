@@ -28,7 +28,7 @@ class SelectProvider extends Component {
     try {
       initProviders(provider.name)
     } catch (err) {
-      console.log(error)
+      console.error(err)
     }
   }
 

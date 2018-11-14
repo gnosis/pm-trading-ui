@@ -2,7 +2,6 @@ import Web3 from 'web3'
 import { WALLET_PROVIDER, WALLET_STATUS } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import { timeoutCondition } from 'utils/helpers'
-import { openModal, closeModal } from 'store/actions/modal'
 import { hasMetamask } from 'integrations/metamask/utils'
 
 const NETWORK_TIMEOUT = 10000
