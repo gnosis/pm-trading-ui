@@ -32,3 +32,12 @@ export const WALLET_STATUS = {
   ERROR: 'ERROR',
   USER_ACTION_REQUIRED: 'USER_ACTION_REQUIRED',
 }
+
+export const WALLET_WEBSITES = {
+  [WALLET_PROVIDER.METAMASK]: 'https://metamask.io',
+  [WALLET_PROVIDER.STATUS]: 'https://status.im/',
+  [WALLET_PROVIDER.PARITY]: 'https://www.parity.io/',
+  [WALLET_PROVIDER.TRUST]: 'https://trustwallet.com/',
+  [WALLET_PROVIDER.UPORT]: 'https://www.uport.me/',
+  [WALLET_PROVIDER.REMOTE]: 'https://truffleframework.com/docs/ganache/quickstart',
+}

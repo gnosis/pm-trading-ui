@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import { getLogo } from 'integrations/utils'
+import { WALLET_WEBSITES } from 'integrations/constants'
 import { getFeatureConfig } from 'utils/features'
 import css from './InstallProvider.scss'
 
@@ -15,6 +16,7 @@ const logoStyle = {
 const { name = 'the application' } = getFeatureConfig('tournament')
 
 const InstallProvider = ({ closeModal, providerName }) => {
+  const downloadLink = WALLET_WEBSITES[providerName]
   const lowercaseProviderName = providerName.toLowerCase()
   const logo = lowercaseProviderName && getLogo(lowercaseProviderName)
   const firstLetterCapitalizedProvider = `${providerName[0]}${lowercaseProviderName.slice(1)}`
@@ -26,7 +28,7 @@ const InstallProvider = ({ closeModal, providerName }) => {
       <h3 className={cx('installText')}>Install {providerName}</h3>
       <p className={cx('downloadText')}>
         {firstLetterCapitalizedProvider} is not currently installed or detected.{' '}
-        <a className={cx('downloadLink')} href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
+        <a className={cx('downloadLink')} href={downloadLink} target="_blank" rel="noopener noreferrer">
           Please download and install {firstLetterCapitalizedProvider}
         </a>{' '}
         to start using {name}.
