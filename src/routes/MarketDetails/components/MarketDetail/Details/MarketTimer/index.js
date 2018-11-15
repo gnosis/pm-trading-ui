@@ -1,4 +1,5 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import moment from 'moment'
@@ -10,7 +11,7 @@ import style from './MarketTimer.scss'
 const cx = cn.bind(style)
 
 const MarketTimer = ({
-  market, showCountdown, marketStatus, showStatus,
+  market, showCountdown, marketStatus, showStatus, t,
 }) => (
   <div className={cx('marketTimer')}>
     <div
@@ -22,7 +23,7 @@ const MarketTimer = ({
       {showCountdown ? (
         <Countdown target={market.resolution} />
       ) : (
-        <div className={cx('timerLabel')}>Resolution Time</div>
+        <div className={cx('timerLabel')}>{t('market.resolution_time')}</div>
       )}
     </div>
     <div className={cx({ marketTimerLive: !showCountdown, marketTimerAbsolute: showCountdown })}>
@@ -31,7 +32,7 @@ const MarketTimer = ({
         .local()
         .format(RESOLUTION_TIME.ABSOLUTE_FORMAT)}
     </div>
-    {showStatus && <div className={cx('marketStatus')}>{`This market was ${marketStatus}`}</div>}
+    {showStatus && <div className={cx('marketStatus')}>{t(`market.market_status_${marketStatus}`)}</div>}
   </div>
 )
 
@@ -40,6 +41,7 @@ MarketTimer.propTypes = {
   showCountdown: PropTypes.bool,
   marketStatus: PropTypes.string,
   showStatus: PropTypes.bool,
+  t: PropTypes.func.isRequired,
 }
 
 MarketTimer.defaultProps = {
@@ -48,4 +50,4 @@ MarketTimer.defaultProps = {
   showStatus: false,
 }
 
-export default MarketTimer
+export default withNamespaces()(MarketTimer)

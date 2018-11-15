@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import Decimal from 'decimal.js'
 import { Field } from 'redux-form'
 import { marketShape } from 'utils/shapes'
@@ -13,6 +14,7 @@ const OutcomesSectionCategorical = (props) => {
     market: { funding, outcomeTokensSold, outcomes },
     outcomeTokenCount,
     valid,
+    t,
   } = props
 
   const canRunSimulation = valid && selectedOutcome
@@ -46,7 +48,7 @@ const OutcomesSectionCategorical = (props) => {
       <div className="row">
         <div className="col-md-12">
           <h2>
-            Your Trade
+            {t('market.your_trade')}
             <MandatoryHint />
           </h2>
         </div>
@@ -70,6 +72,7 @@ OutcomesSectionCategorical.propTypes = {
   selectedOutcome: PropTypes.string,
   valid: PropTypes.bool,
   outcomeTokenCount: PropTypes.oneOfType([PropTypes.instanceOf(Decimal), PropTypes.number]).isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 OutcomesSectionCategorical.defaultProps = {
@@ -77,4 +80,4 @@ OutcomesSectionCategorical.defaultProps = {
   selectedOutcome: undefined,
 }
 
-export default OutcomesSectionCategorical
+export default withNamespaces()(OutcomesSectionCategorical)

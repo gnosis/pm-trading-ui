@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import expandableViews from 'routes/MarketDetails/components/ExpandableViews'
 import { ReactRouterMatchShape } from 'utils/shapes'
@@ -23,7 +24,7 @@ const Controls = props => (
             })}
             onClick={() => props.handleExpand(view)}
           >
-            {expandableViews[view].label}
+            {props.t(expandableViews[view].label)}
           </button>
         ))}
     </div>
@@ -32,6 +33,8 @@ const Controls = props => (
 
 Controls.propTypes = {
   match: ReactRouterMatchShape,
+  handleExpand: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 Controls.defaultProps = {

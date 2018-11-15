@@ -1,4 +1,5 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import cn from 'classnames/bind'
@@ -13,7 +14,7 @@ const cx = cn.bind(style)
 const iconSize = 64
 
 const RedeemWinnings = ({
-  collateralToken, winningsAmount, handleRedeemWinnings, transactionGas,
+  collateralToken, winningsAmount, handleRedeemWinnings, transactionGas, t,
 }) => (
   <div className={cx('redeemWinning')}>
     <div className={cx('detailsContainer')}>
@@ -22,14 +23,14 @@ const RedeemWinnings = ({
         <div className={cx('heading')}>
           <DecimalValue value={weiToEth(winningsAmount)} /> <CurrencyName tokenAddress={collateralToken} />
         </div>
-        <div className={cx('label')}>Your Winnings</div>
+        <div className={cx('label')}>{t('market.your_winnings')}</div>
       </div>
     </div>
     <div className={cx('action')}>
       <InteractionButton className={cx('redeemButton', 'btn btn-primary')} onClick={handleRedeemWinnings}>
-        Redeem Winnings
+        {t('market.redeem_winnings')}
       </InteractionButton>
-      <span className={cx('gasCost')}>Gas cost: {transactionGas} ETH</span>
+      <span className={cx('gasCost')}>{t('market.gas_cost', { cost: transactionGas })}</span>
     </div>
   </div>
 )
@@ -39,6 +40,7 @@ RedeemWinnings.propTypes = {
   winningsAmount: PropTypes.instanceOf(Decimal).isRequired,
   handleRedeemWinnings: PropTypes.func.isRequired,
   transactionGas: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
-export default RedeemWinnings
+export default withNamespaces()(RedeemWinnings)
