@@ -67,17 +67,17 @@ export default store => next => async (action) => {
             dispatch(closeModal())
           }
         }
+      }
 
-        if (status === WALLET_STATUS.ERROR) {
-          const prevStatus = getProvider(prevState, provider).status
+      if (status === WALLET_STATUS.ERROR) {
+        const prevStatus = getProvider(prevState, provider).status
 
-          if (
-            prevStatus === WALLET_STATUS.USER_ACTION_REQUIRED
-            || prevStatus === WALLET_STATUS.READY_TO_INIT
-            || prevStatus === WALLET_STATUS.REGISTERED
-          ) {
-            dispatch(openModal({ modalName: 'ModalInitialisationError', modalData: { provider } }))
-          }
+        if (
+          prevStatus === WALLET_STATUS.USER_ACTION_REQUIRED
+          || prevStatus === WALLET_STATUS.READY_TO_INIT
+          || prevStatus === WALLET_STATUS.REGISTERED
+        ) {
+          dispatch(openModal({ modalName: 'ModalInitialisationError', modalData: { provider } }))
         }
       }
     }

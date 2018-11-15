@@ -17,7 +17,7 @@ class BackdropProvider extends Component {
     const isOpen = modal.get('isOpen', false)
     const currentModal = modal.get('currentModal')
     const transactions = modal.get('transactions', [])
-
+    console.log(currentModal)
     if (isOpen && blockchainConnection) {
       /*
        * Implement more modals here by adding to components/ModalContent

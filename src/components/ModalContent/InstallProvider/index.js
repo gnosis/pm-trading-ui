@@ -23,7 +23,7 @@ const InstallProvider = ({ closeModal, providerName }) => {
 
   return (
     <div className={cx('installProvider')}>
-      <button type="button" className={cx('closeButton')} onClick={() => closeModal()} />
+      <button type="button" className={cx('closeButton')} onClick={closeModal} />
       <img src={logo} alt="logo" style={logoStyle} />
       <h3 className={cx('installText')}>Install {providerName}</h3>
       <p className={cx('downloadText')}>
