@@ -5,6 +5,7 @@ import { getProvider } from 'integrations/store/selectors'
 import { getProviderConfig } from 'utils/features'
 import { WALLET_STATUS, WALLET_PROVIDER } from 'integrations/constants'
 import { openModal, closeModal } from 'store/actions/modal'
+import { getTargetNetworkId } from 'api'
 
 const providers = getProviderConfig()
 
@@ -49,7 +50,17 @@ export default store => next => async (action) => {
 
   if (type === 'UPDATE_PROVIDER') {
     if (payload) {
-      const { provider, status } = payload
+      const { provider, status, networkId } = payload
+
+      if (networkId) {
+        const targetNetworkId = getTargetNetworkId()
+
+        if (!!targetNetworkId && +networkId !== +targetNetworkId) {
+          dispatch(openModal({ modalName: 'ModalSwitchNetwork', modalData: { provider } }))
+          dispatch(updateProvider(provider, { status: WALLET_STATUS.ERROR }))
+          return
+        }
+      }
 
       if (provider === WALLET_PROVIDER.METAMASK) {
         if (status === WALLET_STATUS.USER_ACTION_REQUIRED) {

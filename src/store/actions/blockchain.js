@@ -63,6 +63,10 @@ export const requestTokenBalance = (uTokenAddress, accountAddress) => async (dis
   dispatch(setTokenBalance({ tokenAddress, tokenBalance }))
 }
 
+export const requestTargetNetworkId = () => async (dispatch) => {
+  const targetNetworkId = getTargetNetworkId()
+}
+
 /**
  * Requests the configured tournaments collateralToken balance. If none is set, does nothing
  * @param {function} dispatch

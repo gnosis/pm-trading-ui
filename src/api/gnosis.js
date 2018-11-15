@@ -7,6 +7,7 @@ const tournamentEnabled = isFeatureEnabled('tournament')
 
 let gnosisInstance
 let gnosisROInstance
+let targetNetworkId
 
 export const {
   calcLMSRCost, calcLMSROutcomeTokenCount, calcLMSRMarginalPrice, calcLMSRProfit,
@@ -75,6 +76,9 @@ export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
       await addApolloContracts(gnosis)
     }
 
+    gnosis.web3.version.getNetwork((err, id) => {
+      targetNetworkId = id
+    })
     gnosisROInstance = gnosis
 
     if (process.env.NODE_ENV === 'development') {
@@ -106,5 +110,7 @@ export const getROGnosisConnection = async () => {
 
   return waitForGnosisConnection(gnosisROInstance)
 }
+
+export const getTargetNetworkId = () => targetNetworkId
 
 export default Gnosis
