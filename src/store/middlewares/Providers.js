@@ -55,17 +55,17 @@ export default store => next => async (action) => {
         if (status === WALLET_STATUS.USER_ACTION_REQUIRED) {
           dispatch(openModal({ modalName: 'ModalUnlockMetamask' }))
         }
+      }
 
-        if (status === WALLET_STATUS.INITIALIZED) {
-          const prevStatus = getProvider(prevState, provider).status
+      if (status === WALLET_STATUS.INITIALIZED) {
+        const prevStatus = getProvider(prevState, provider).status
 
-          if (
-            prevStatus === WALLET_STATUS.USER_ACTION_REQUIRED
-            || prevStatus === WALLET_STATUS.READY_TO_INIT
-            || prevStatus === WALLET_STATUS.REGISTERED
-          ) {
-            dispatch(closeModal())
-          }
+        if (
+          prevStatus === WALLET_STATUS.USER_ACTION_REQUIRED
+          || prevStatus === WALLET_STATUS.READY_TO_INIT
+          || prevStatus === WALLET_STATUS.REGISTERED
+        ) {
+          dispatch(closeModal())
         }
       }
 
