@@ -20,7 +20,7 @@ const legalDocuments = legalComplianceConfig.documents || []
  * @param {*} state - redux state
  */
 
-export const getActiveProviderName = state => state.integrations.get('activeProvider')
+export const getActiveProviderName = state => state.integrations && state.integrations.get('activeProvider')
 
 export const getProvidersList = state => state.integrations.get('providers')
 

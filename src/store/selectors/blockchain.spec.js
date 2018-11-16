@@ -30,40 +30,43 @@ describe('Blockchain selectors', () => {
     })
   })
 
-  // describe('isConnectedToCorrectNetwork', () => {
-  //   it('Should return true if networkIds are equal', () => {
-  //     const state = generateState({
-  //       providers: Map({
-  //         [WALLET_PROVIDER.REMOTE]: new ProviderRecord({
-  //           networkId: 4,
-  //           available: true,
-  //         }),
-  //         [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
-  //           networkId: 4,
-  //         }),
-  //       }),
-  //       activeProvider: WALLET_PROVIDER.METAMASK,
-  //     })
+  describe('isConnectedToCorrectNetwork', () => {
+    it('Should return true if networkIds are equal', () => {
+      const state = {
+        integrations: Map({
+          providers: Map({
+            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
+              networkId: 4,
+            }),
+          }),
+          activeProvider: WALLET_PROVIDER.METAMASK,
+        }),
+        blockchain: Map({
+          targetNetworkId: 4,
+        }),
+      }
 
-  //     expect(isConnectedToCorrectNetwork(state)).toEqual(true)
-  //   })
+      expect(isConnectedToCorrectNetwork(state)).toEqual(true)
+    })
 
-  //   it("Should return false if networkIds aren't equal", () => {
-  //     const state = generateState({
-  //       providers: Map({
-  //         [WALLET_PROVIDER.REMOTE]: new ProviderRecord({
-  //           networkId: 4,
-  //         }),
-  //         [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
-  //           networkId: 3,
-  //         }),
-  //       }),
-  //       activeProvider: WALLET_PROVIDER.METAMASK,
-  //     })
+    it("Should return false if networkIds aren't equal", () => {
+      const state = {
+        integrations: Map({
+          providers: Map({
+            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
+              networkId: 4,
+            }),
+          }),
+          activeProvider: WALLET_PROVIDER.METAMASK,
+        }),
+        blockchain: Map({
+          targetNetworkId: 3,
+        }),
+      }
 
-  //     expect(isConnectedToCorrectNetwork(state)).toEqual(false)
-  //   })
-  // })
+      expect(isConnectedToCorrectNetwork(state)).toEqual(false)
+    })
+  })
 
   describe('isConnectedToBlockchain', () => {
     it('Should return falsy if none or one of pm-js instances was initialized', () => {
