@@ -94,7 +94,8 @@ class InteractionButton extends Component {
     }
 
     const btn = (
-      <button className={classNames} type={type || 'button'} onClick={onClickHandler} disabled={isDisabled}>
+      // eslint-disable-next-line
+      <button className={classNames} type={type} onClick={onClickHandler} disabled={isDisabled}>
         <div className={cx('interactionButtonInner')}>{children}</div>
       </button>
     )
