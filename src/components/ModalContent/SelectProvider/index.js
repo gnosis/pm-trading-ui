@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import Icon from 'components/Icon'
-import { WALLET_STATUS } from 'integrations/constants'
+import { WALLET_STATUS, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import { getLogo } from 'integrations/utils'
 import style from './SelectProvider.scss'
 
@@ -15,7 +15,11 @@ const nextIconStyle = {
 }
 
 class SelectProvider extends Component {
-  componentDidMount = () => {}
+  componentDidMount = () => {
+    const { requestTargetNetworkId } = this.props
+
+    requestTargetNetworkId()
+  }
 
   handleInit = (provider) => {
     const { initProviders, openModal } = this.props
@@ -33,19 +37,23 @@ class SelectProvider extends Component {
   }
 
   render() {
-    const { closeModal, providersList } = this.props
+    const { closeModal, providersList, targetNetworkId } = this.props
     const providersObject = providersList.toJS()
     const providersWithLogos = Object.keys(providersObject).map(key => ({
       name: key,
       ...providersObject[key],
       logo: getLogo(key.toLowerCase()),
     }))
+    const targetNetwork = ETHEREUM_NETWORK_IDS[targetNetworkId]
 
     return (
       <div className={cx('selectProvider')}>
         <button className={cx('closeButton')} onClick={closeModal} type="button" />
         <div className={cx('providersContainer')}>
           <h3 className={cx('heading')}>How would you like to access your wallet?</h3>
+          {targetNetwork && (
+            <span className={cx('annotation')}>Make sure your wallet is connected to the {targetNetwork} network.</span>
+          )}
           <div className={cx('providersList')}>
             {providersWithLogos.map((provider) => {
               const { name, logo } = provider
@@ -71,6 +79,12 @@ SelectProvider.propTypes = {
   initProviders: PropTypes.func.isRequired,
   providersList: ImmutablePropTypes.map.isRequired,
   openModal: PropTypes.func.isRequired,
+  requestTargetNetworkId: PropTypes.func.isRequired,
+  targetNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+}
+
+SelectProvider.defaultProps = {
+  targetNetworkId: undefined,
 }
 
 export default SelectProvider

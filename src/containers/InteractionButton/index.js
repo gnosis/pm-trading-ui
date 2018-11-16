@@ -7,14 +7,8 @@ import { upperFirst } from 'lodash'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import { isGnosisInitialized } from 'store/selectors/blockchain'
-import {
-  isConnectedToCorrectNetwork,
-  isOnWhitelist,
-  checkWalletConnection,
-  hasAcceptedTermsAndConditions,
-  getTargetNetworkId,
-} from 'integrations/store/selectors'
+import { isGnosisInitialized, getTargetNetworkId, isConnectedToCorrectNetwork } from 'store/selectors/blockchain'
+import { isOnWhitelist, checkWalletConnection, hasAcceptedTermsAndConditions } from 'integrations/store/selectors'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import style from './interactionButton.scss'
 
@@ -125,10 +119,15 @@ class InteractionButton extends Component {
       })
       return (
         <Tooltip overlay={error}>
-          <span style={{
-            display: 'inline-block', cursor: 'not-allowed', width: '100%', height: '100%',
-          }}
-          >{button}
+          <span
+            style={{
+              display: 'inline-block',
+              cursor: 'not-allowed',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            {button}
           </span>
         </Tooltip>
       )

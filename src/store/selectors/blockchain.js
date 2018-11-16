@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js'
+import { createSelector } from 'reselect'
 import { TOKEN_SOURCE_ADDRESS, TOKEN_SOURCE_CONTRACT, TOKEN_SOURCE_ETH } from 'store/actions/blockchain'
-import { getCurrentBalance, getCurrentAccount } from 'integrations/store/selectors'
+import { getCurrentBalance, getCurrentAccount, getCurrentNetworkId } from 'integrations/store/selectors'
 import { weiToEth, hexWithPrefix, normalizeHex } from 'utils/helpers'
 
 /**
@@ -10,6 +11,13 @@ import { weiToEth, hexWithPrefix, normalizeHex } from 'utils/helpers'
 export const isGnosisInitialized = state => !!state.blockchain.get('gnosisInitialized')
 
 export const isConnectedToBlockchain = state => !!state.blockchain.get('gnosisROInitialized')
+
+export const getTargetNetworkId = state => state.blockchain.get('targetNetworkId')
+
+export const isConnectedToCorrectNetwork = createSelector(
+  [getTargetNetworkId, getCurrentNetworkId],
+  (targetNetworkId, currentNetworkId) => targetNetworkId === currentNetworkId,
+)
 
 export const isGasCostFetched = (state, property) => state.blockchain.getIn(['gasCosts', property]) !== undefined
 

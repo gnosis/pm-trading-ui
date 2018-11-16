@@ -1,5 +1,6 @@
 import { WALLET_PROVIDER, WALLET_STATUS } from 'integrations/constants'
 import { List } from 'immutable'
+import { createSelector } from 'reselect'
 import { getConfiguration, getFeatureConfig, isFeatureEnabled } from 'utils/features'
 import { normalizeHex } from 'utils/helpers'
 
@@ -19,11 +20,13 @@ const legalDocuments = legalComplianceConfig.documents || []
  * @param {*} state - redux state
  */
 
-export const getActiveProviderName = state => state && state.integrations && state.integrations.get('activeProvider')
+export const getActiveProviderName = state => state.integrations.get('activeProvider')
 
-export const getProvidersList = state => state && state.integrations && state.integrations.get('providers')
+export const getProvidersList = state => state.integrations.get('providers')
 
-export const getProvider = (state, provider) => state && state.integrations && state.integrations.getIn(['providers', provider], {})
+export const getProvider = (state, provider) => state.integrations.getIn(['providers', provider], {})
+
+export const getTargetNetworkId = state => state.integrations.get('targetNetworkId')
 
 export const findActiveProvider = (state) => {
   const providers = getProvidersList(state)
@@ -122,15 +125,6 @@ export const isThereActiveProvider = (state) => {
   return !!activeProvider
 }
 
-export const getTargetNetworkId = (state) => {
-  const remoteProvider = state.integrations.getIn(['providers', WALLET_PROVIDER.REMOTE])
-
-  if (remoteProvider) {
-    return remoteProvider.networkId
-  }
-  return undefined
-}
-
 export const isRemoteConnectionEstablished = (state) => {
   const remoteProvider = state.integrations.getIn(['providers', WALLET_PROVIDER.REMOTE])
   const remoteProviderRegistered = !!remoteProvider
@@ -138,12 +132,10 @@ export const isRemoteConnectionEstablished = (state) => {
   return remoteProviderRegistered && !!remoteProvider.network
 }
 
-export const isConnectedToCorrectNetwork = (state) => {
-  const targetNetworkId = getTargetNetworkId(state)
-  const currentNetworkId = getCurrentNetworkId(state)
-
-  return targetNetworkId === currentNetworkId
-}
+export const isConnectedToCorrectNetwork = createSelector(
+  [getTargetNetworkId, getCurrentNetworkId],
+  (targetNetworkId, currentNetworkId) => targetNetworkId === currentNetworkId,
+)
 
 export const checkWalletConnection = (state) => {
   const provider = getActiveProvider(state)

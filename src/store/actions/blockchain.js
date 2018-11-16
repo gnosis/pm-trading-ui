@@ -7,6 +7,7 @@ import {
   getGasPrice,
   getTokenSymbol,
   getTokenBalance,
+  getROGnosisNetworkId,
 } from 'api'
 import Web3 from 'web3'
 
@@ -31,6 +32,7 @@ export const setGasPrice = createAction('SET_GAS_PRICE')
 export const setTokenBalance = createAction('SET_TOKEN_BALANCE')
 export const setTokenSymbol = createAction('SET_TOKEN_NAME')
 export const setCollateralToken = createAction('SET_COLLATERAL_TOKEN')
+export const setTargetNetworkId = createAction('SET_TARGET_NETWORK_ID')
 
 export const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
 
@@ -64,7 +66,8 @@ export const requestTokenBalance = (uTokenAddress, accountAddress) => async (dis
 }
 
 export const requestTargetNetworkId = () => async (dispatch) => {
-  const targetNetworkId = getTargetNetworkId()
+  const targetNetworkId = await getROGnosisNetworkId()
+  dispatch(setTargetNetworkId({ targetNetworkId }))
 }
 
 /**
