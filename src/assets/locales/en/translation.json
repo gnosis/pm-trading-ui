@@ -1,5 +1,7 @@
 {
   "loading": "Loading...",
+  "application": "the Application",
+  "and": "and",
   "header": {
     "markets": "Markets",
     "dashboard": "Dashboard",
@@ -107,5 +109,28 @@
       "no_outcome_selected": "Please select an Outcome",
       "loss_detected": "This transaction is not permitted because it will result in a loss of an outcome token."
     }
-  }  
+  },
+  "legal": {
+    "heading": "Terms of service and privacy policy",
+    "to_use_app": "For using {{appName}}, you have to agree with our",
+    "read_and_understood": "I have read and understood",
+    "documents": {
+      "terms_of_service": "Terms of Service",
+      "privacy_policy": "Privacy Policy",
+      "risk_disclaimer": "Terms of Service",
+      "address_public_description": "I understand and agree that my wallet address will be publicly displayed on the scoreboard"
+    }
+  },
+  "reward_claim": {
+    "info": "In order to claim your <1>{{value}} {{symbol}}</1> tokens, you first have to switch to the <2>{{targetNetwork}</span> network in your current wallet. Also make sure you have enough ETH to submit the transaction with the claim request. More information in our <3>FAQ</3>.",
+    "already_claimed": "Already Claimed",
+    "claim": "Claim",
+    "current_network": "Current network: ",
+    "gas_estimation": "Estimated Gas Costs: ",
+    "errors": {
+      "wrong_network": "Please connect to the mentioned network, before you can claim your reward.",
+      "not_enough_balance": "You do not have enough ETH for this transaction to cover the gas costs.",
+      "failed_tx_ask_support": "Unfortunately, the transaction failed. Please try again or contact our support for further assistance."
+    }
+  }
 }
