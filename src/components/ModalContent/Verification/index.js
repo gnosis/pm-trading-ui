@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 
 import VerificationHandler from 'verification'
 
@@ -8,11 +9,11 @@ import styles from './Verification.scss'
 
 const cx = classnames.bind(styles)
 
-const ErrorComponent = ({ closeModal }) => (
+const ErrorComponent = ({ closeModal, t }) => (
   <>
-    <h3 className={cx('heading')}>Our User Verification Integration could not be loaded.</h3>
+    <h3 className={cx('heading')}>{t('verification.errors.not_loaded')}</h3>
     <button type="button" className={cx('closeButton')} onClick={closeModal} />
-    <p className={cx('text')}>Sorry for the inconvience, please try again later!</p>
+    <p className={cx('text')}>{t('verification.errors.not_found')}</p>
   </>
 )
 
@@ -24,9 +25,7 @@ const ModalVerification = props => (
 
 ModalVerification.propTypes = {
   closeModal: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
-ModalVerification.defaultProps = {
-}
-
-export default ModalVerification
+export default withNamespaces()(ModalVerification)

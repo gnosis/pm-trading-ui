@@ -145,5 +145,33 @@
     "rinkeby_eth_request": "Request Rinkeby Ether",
     "not_enough_balance": "Note: Not enough ETH balance in your MetaMask wallet to submit this transaction.",
     "register_wallet": "Register Wallet"
+  },
+  "register_uport": {
+    "heading": "Setup claim Address",
+    "disclaimer": "Please register your Metamask address, where we can send your winning GNO tokens in case you finished in the top 50. <br /> Please note that you can register your address <em>only once</em>.",
+    "save_address": "Save Address",
+    "failed_tx_ask_support": "Sorry, the transaction failed. Please try again later or contact us!",
+    "ethereum_wallet_address": "Ethereum Address",
+    "enter_valid_address": "Please enter a valid address"
+  },
+  "switch_network": {
+    "heading": "Switch to the {{targetNetwork}} Network",
+    "instructions": "Your provider is not currently set to the {{targetNetwork}} network. Please switch to {{targetNetwork}} and make sure your wallet is unlocked to start using {{applicationName}}."
+  },
+  "transaction_explanations": {
+    "heading": "We will ask you to approve the following transactions:"
+  },
+  "unlock": {
+    "heading": "Unlock your MetaMask wallet",
+    "instructions": "Please unlock your MetaMask wallet to start using {applicationName}."
+  },
+  "verification": {
+    "errors": {
+      "not_loaded": "Our User Verification Integration could not be loaded.",
+      "not_found": "Sorry for the inconvience, please try again later!"
+    }
+  },
+  "warning": {
+    "price_changed": "The transaction could not be processed because the trading price changed. <br />Please check the new price and try again."
   }
 }
