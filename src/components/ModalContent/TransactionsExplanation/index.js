@@ -21,6 +21,7 @@ const TransactionsExplanation = ({ transactions, closeModal, t }) => (
 TransactionsExplanation.propTypes = {
   transactions: PropTypes.arrayOf(PropTypes.string).isRequired,
   closeModal: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 export default withNamespaces()(TransactionsExplanation)
