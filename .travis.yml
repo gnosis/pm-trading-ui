@@ -38,7 +38,7 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   access_key_id: $AWS_ACCESS_KEY_ID
   skip_cleanup: true
-  local_dir: dist
+  local_dir: dist/interface
   upload-dir: current
   on:
     branch: master
@@ -48,7 +48,7 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   access_key_id: $AWS_ACCESS_KEY_ID
   skip_cleanup: true
-  local_dir: dist
+  local_dir: dist/interface
   upload-dir: releases/$TRAVIS_TAG
   on:
     tags: true
@@ -59,7 +59,7 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   access_key_id: $AWS_ACCESS_KEY_ID
   skip_cleanup: true
-  local_dir: dist
+  local_dir: dist/interface
   upload-dir: current
   #before_deploy:
   #  - npm run build-config mainnet/production
@@ -71,7 +71,7 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   access_key_id: $AWS_ACCESS_KEY_ID
   skip_cleanup: true
-  local_dir: dist
+  local_dir: dist/interface
   #before_deploy:
   #  - npm run build-config mainnet/development
   on:
@@ -82,7 +82,7 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   access_key_id: $AWS_ACCESS_KEY_ID
   skip_cleanup: true
-  local_dir: dist
+  local_dir: dist/interface
   upload-dir: current
   #before_deploy:
   #  - npm run build-config mainnet/staging
@@ -94,7 +94,7 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   access_key_id: $AWS_ACCESS_KEY_ID
   skip_cleanup: true
-  local_dir: dist
+  local_dir: dist/interface
   upload-dir: releases/$TRAVIS_TAG
   on:
     tags: true
