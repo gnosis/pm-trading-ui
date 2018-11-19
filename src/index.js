@@ -2,7 +2,7 @@ import '@babel/polyfill'
 import 'whatwg-fetch'
 import Raven from 'raven-js'
 import RootComponent from 'components/Root'
-import { initReadOnlyGnosis } from 'store/actions/blockchain'
+import { initReadOnlyGnosis, requestTargetNetworkId } from 'store/actions/blockchain'
 import Decimal from 'decimal.js'
 import React from 'react'
 
@@ -19,6 +19,8 @@ setMomentDurationFormat()
 store.dispatch({ type: 'INIT' })
 store.dispatch(initReadOnlyGnosis())
 store.dispatch({ type: 'CHECK_AVAILABLE_PROVIDERS' })
+store.dispatch(requestTargetNetworkId())
+
 
 // store.dispatch(initProviders({ provider: WALLET_PROVIDER.REMOTE }))
 

@@ -14,6 +14,12 @@ const nextIconStyle = {
   height: 25,
 }
 
+const attentionIconStyle = {
+  width: 20,
+  height: 20,
+  marginRight: 5,
+}
+
 class SelectProvider extends Component {
   componentDidMount = () => {
     const { requestTargetNetworkId } = this.props
@@ -52,7 +58,10 @@ class SelectProvider extends Component {
         <div className={cx('providersContainer')}>
           <h3 className={cx('heading')}>How would you like to access your wallet?</h3>
           {targetNetwork && (
-            <span className={cx('annotation')}>Make sure your wallet is connected to the {targetNetwork} network.</span>
+            <div className={cx('networkAnnotation')}>
+              <Icon type="attention" className={cx('nextIcon')} style={attentionIconStyle} />
+              {targetNetwork && `To use the interface, your wallet has to be connected to the ${targetNetwork} network.`}
+            </div>
           )}
           <div className={cx('providersList')}>
             {providersWithLogos.map((provider) => {

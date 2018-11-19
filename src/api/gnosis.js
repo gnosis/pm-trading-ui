@@ -8,6 +8,11 @@ const tournamentEnabled = isFeatureEnabled('tournament')
 let gnosisInstance
 let gnosisROInstance
 
+const gnosisInstances = {
+  main: undefined,
+  readOnly: undefined,
+}
+
 export const {
   calcLMSRCost, calcLMSROutcomeTokenCount, calcLMSRMarginalPrice, calcLMSRProfit,
 } = Gnosis
@@ -20,9 +25,10 @@ const addApolloContracts = async (gnosisJsInstance) => {
   })
 }
 
-const waitForGnosisConnection = instance => new Promise((resolve, reject) => {
+const waitForGnosisConnection = type => new Promise((resolve, reject) => {
   let stillRunning = true
   const instanceCheck = setInterval(() => {
+    const instance = gnosisInstances[type]
     if (instance) {
       stillRunning = false
       clearInterval(instanceCheck)
@@ -43,7 +49,7 @@ const waitForGnosisConnection = instance => new Promise((resolve, reject) => {
  * @param {*dictionary} GNOSIS_OPTIONS
  */
 export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
-  if (gnosisInstance) return
+  if (gnosisInstances.main) return
 
   try {
     const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
@@ -52,10 +58,10 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
       await addApolloContracts(gnosis)
     }
 
-    gnosisInstance = gnosis
+    gnosisInstances.main = gnosis
 
     if (process.env.NODE_ENV === 'development') {
-      window.gnosis = gnosisInstance
+      window.gnosis = gnosis
     }
 
     console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
@@ -66,7 +72,7 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
 }
 
 export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
-  if (gnosisROInstance) return
+  if (gnosisInstances.readOnly) return
 
   try {
     const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
@@ -75,10 +81,10 @@ export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
       await addApolloContracts(gnosis)
     }
 
-    gnosisROInstance = gnosis
+    gnosisInstances.readOnly = gnosis
 
     if (process.env.NODE_ENV === 'development') {
-      window.gnosisRO = gnosisROInstance
+      window.gnosisRO = gnosis
     }
 
     console.info('Gnosis RO Integration: connection established') // eslint-disable-line no-console
@@ -92,19 +98,19 @@ export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
  * Returns an instance of the connection to GnosisJS
  */
 export const getGnosisConnection = async () => {
-  if (gnosisInstance) {
-    return gnosisInstance
+  if (gnosisInstances.main) {
+    return gnosisInstances.main
   }
 
-  return waitForGnosisConnection(gnosisInstance)
+  return waitForGnosisConnection('main')
 }
 
 export const getROGnosisConnection = async () => {
-  if (gnosisROInstance) {
-    return gnosisROInstance
+  if (gnosisInstances.readOnly) {
+    return gnosisInstances.readOnly
   }
 
-  return waitForGnosisConnection(gnosisROInstance)
+  return waitForGnosisConnection('readOnly')
 }
 
 export const getROGnosisNetworkId = () => new Promise(async (resolve, reject) => {

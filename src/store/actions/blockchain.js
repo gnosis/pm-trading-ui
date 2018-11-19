@@ -34,7 +34,7 @@ export const setTokenSymbol = createAction('SET_TOKEN_NAME')
 export const setCollateralToken = createAction('SET_COLLATERAL_TOKEN')
 export const setTargetNetworkId = createAction('SET_TARGET_NETWORK_ID')
 
-export const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 2000
+export const NETWORK_TIMEOUT = process.env.NODE_ENV === 'production' ? 10000 : 10000
 
 export const TOKEN_SOURCE_CONTRACT = 'contract'
 export const TOKEN_SOURCE_ETH = 'eth'

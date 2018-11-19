@@ -59,7 +59,7 @@
     "@gnosis.pm/pm-apollo-contracts": "^1.4.1",
     "@gnosis.pm/pm-contracts": "1.0.4",
     "@gnosis.pm/pm-js": "^2.1.0",
-    "autobind-decorator": "^2.2.1",
+    "autobind-decorator": "^2.3.1",
     "blockies": "0.0.2",
     "classnames": "^2.2.5",
     "d3": "^5.4.0",
@@ -170,7 +170,7 @@
     "terser-webpack-plugin": "^1.1.0",
     "truffle-hdwallet-provider": "0.0.6",
     "url-loader": "^1.1.1",
-    "webpack": "^4.25.1",
+    "webpack": "^4.26.0",
     "webpack-cli": "^3.0.4",
     "webpack-dev-server": "^3.1.4"
   }

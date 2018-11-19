@@ -57,10 +57,9 @@ class Header extends Component {
   @autobind
   async handleConnectWalletClick() {
     const {
-      isConnectedToCorrectNetwork, lockedMetamask, acceptedTOS, openModal, initUport,
+      lockedMetamask, acceptedTOS, openModal, initUport,
     } = this.props
 
-    const shouldInstallProviders = !hasMetamask() && !useUport
     const shouldAcceptTOS = !acceptedTOS || !legalComplianceEnabled
 
     openModal('ModalSelectProvider')

@@ -24,10 +24,13 @@
     border-radius: 10px;
     color: #000;
     
-    .annotation {
-      display: block;
+    .networkAnnotation {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 13px;
       width: 100%;
-      text-align: center;
+      margin-bottom: 10px;
     }
 
     .providersList {
