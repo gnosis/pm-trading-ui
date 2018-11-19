@@ -5,9 +5,6 @@ import { isFeatureEnabled } from 'utils/features'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 
-let gnosisInstance
-let gnosisROInstance
-
 const gnosisInstances = {
   main: undefined,
   readOnly: undefined,
