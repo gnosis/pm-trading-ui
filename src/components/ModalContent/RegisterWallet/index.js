@@ -26,6 +26,7 @@ const RegisterMainnetAddress = ({
   gasPrice,
   registrationGasCost,
   collateralToken: { symbol: collateralTokenSymbol },
+  t,
 }) => {
   const handleRegistration = async (documentsAccepted) => {
     await updateMainnetAddress(currentAccount)
@@ -93,13 +94,12 @@ RegisterMainnetAddress.propTypes = {
   collateralToken: PropTypes.shape({
     symbol: PropTypes.string,
   }).isRequired,
-  mainnetAddress: PropTypes.string,
+  t: PropTypes.func.isRequired,
 }
 
 RegisterMainnetAddress.defaultProps = {
   gasPrice: Decimal(0),
   registrationGasCost: 0,
-  mainnetAddress: undefined,
 }
 
 const enhancer = compose(
