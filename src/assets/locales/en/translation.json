@@ -132,5 +132,18 @@
       "not_enough_balance": "You do not have enough ETH for this transaction to cover the gas costs.",
       "failed_tx_ask_support": "Unfortunately, the transaction failed. Please try again or contact our support for further assistance."
     }
+  },
+  "metamask": {
+    "install_metamask": "Install Metamask",
+    "missing": "Metamask is currently not installed or detected. <1>Please download and install Metamask</1> to start using {{name}}"
+  },
+  "register_wallet": {
+    "heading": "Register wallet address",
+    "instructions": "Please register your wallet address, where we can send you {{symbol} tokens, and subsequently your {{rewardSymbol}} reward. Read our terms of service for more information",
+    "eth_required": "You need Rinkeby ETH to register your wallet address.",
+    "rinkeby_eth_balance": "Rinkeby ETH balance:",
+    "rinkeby_eth_request": "Request Rinkeby Ether",
+    "not_enough_balance": "Note: Not enough ETH balance in your MetaMask wallet to submit this transaction.",
+    "register_wallet": "Register Wallet"
   }
 }
