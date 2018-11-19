@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import classnames from 'classnames/bind'
+import { withNamespaces } from 'react-i18next'
 
 import outstandingPredictionsIcon from 'routes/Dashboard/assets/icon_outstandingPredictions.svg'
 import etherTokensIcon from 'routes/Dashboard/assets/icon_etherTokens.svg'
@@ -21,7 +22,7 @@ const badgesEnabled = isFeatureEnabled('badges')
 const cx = classnames.bind(style)
 
 const Metrics = ({
-  collateralToken, predictedProfits, badge, rank,
+  collateralToken, predictedProfits, badge, rank, t,
 }) => (
   <div className={cx('metrics')}>
     <div className={cx('container')}>
@@ -31,7 +32,7 @@ const Metrics = ({
             <Metric
               isLoading={collateralToken.symbol === '/'}
               src={collateralToken.icon}
-              explanation={`${collateralToken.symbol} tokens`}
+              explanation={t('dashboard.collateral_token_balance', { symbol: collateralToken.symbol })}
             >
               <DecimalValue value={collateralToken.balance} className={cx('metric-value')} />&nbsp;
               {collateralToken.symbol}
@@ -39,14 +40,14 @@ const Metrics = ({
             <Metric
               isLoading={typeof predictedProfits === 'undefined'}
               src={outstandingPredictionsIcon}
-              explanation="Predicted Profits"
+              explanation={(t('dashboard.predicted_profits'))}
             >
               <DecimalValue value={weiToEth(predictedProfits)} className={cx('metric-value')} />&nbsp;
               {collateralToken.symbol}
             </Metric>
             {tournamentEnabled && (
               <>
-                <Metric isLoading={typeof rank === 'undefined'} src={arrows} explanation="YOUR RANK">
+                <Metric isLoading={typeof rank === 'undefined'} src={arrows} explanation={t('dashboard.your_rank')}>
                   <Block className={cx('ol-db-title')}>{rank || '--'}</Block>
                 </Metric>
                 {badgesEnabled && (
@@ -55,7 +56,7 @@ const Metrics = ({
                     src={badge.icon}
                     width={47}
                     height={42}
-                    explanation="BADGE"
+                    explanation={(t('dashboard.badge'))}
                   >
                     <Block className={cx('badgeTitle')}>{badge.rank}</Block>
                   </Metric>
@@ -81,6 +82,7 @@ Metrics.propTypes = {
     minPredictions: PropTypes.number,
     rank: PropTypes.string,
   }),
+  t: PropTypes.func.isRequired,
 }
 
 Metrics.defaultProps = {
@@ -95,4 +97,4 @@ Metrics.defaultProps = {
   badge: {},
 }
 
-export default Metrics
+export default withNamespaces()(Metrics)

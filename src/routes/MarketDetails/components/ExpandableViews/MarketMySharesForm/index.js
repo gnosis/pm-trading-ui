@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import Decimal from 'decimal.js'
@@ -6,8 +7,6 @@ import Decimal from 'decimal.js'
 import { marketShape } from 'utils/shapes'
 import { GAS_COST } from 'utils/constants'
 import SharesTable from './SharesTable'
-
-export const MY_TOKENS = 'My Tokens'
 
 class MarketMySharesForm extends Component {
   componentDidMount() {
@@ -28,15 +27,15 @@ class MarketMySharesForm extends Component {
   }
 
   render() {
-    const { marketShares, market } = this.props
+    const { marketShares, market, t } = this.props
     if (!marketShares.size) {
       return (
         <div>
           <h2>
-            You don&apos;t hold any shares for this market.
+            {t('market.no_shares')}
             <br />
             <small>
-              It may take some time for the blockchain to mine your share purchase.
+              {t('market.no_shares_hint')}
             </small>
           </h2>
         </div>
@@ -46,7 +45,7 @@ class MarketMySharesForm extends Component {
     return (
       <div>
         <h2>
-          {MY_TOKENS}
+          {t('market.my_shares')}
         </h2>
         <SharesTable marketShares={marketShares} market={market} {...this.props} />
       </div>
@@ -68,6 +67,7 @@ MarketMySharesForm.propTypes = {
   isGasPriceFetched: PropTypes.bool,
   gasCosts: ImmutablePropTypes.map,
   gasPrice: PropTypes.instanceOf(Decimal),
+  t: PropTypes.func.isRequired,
 }
 
 MarketMySharesForm.defaultProps = {
@@ -81,4 +81,4 @@ MarketMySharesForm.defaultProps = {
   gasPrice: undefined,
 }
 
-export default MarketMySharesForm
+export default withNamespaces()(MarketMySharesForm)

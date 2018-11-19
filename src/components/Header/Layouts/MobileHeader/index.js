@@ -88,7 +88,7 @@ class MobileHeader extends Component {
             <AccountOverview {...this.props} copyAddress={this.copyAddress} />
           ) : (
             <button type="button" className={cx('connect-wallet')} onClick={this.connectWalletClick}>
-              {t('connect_wallet')}
+              {t('header.connect_wallet')}
             </button>
           )}
           <NavLink
@@ -97,7 +97,7 @@ class MobileHeader extends Component {
             className={cx('navLink', 'bm-item')}
             onClick={this.closeMenu}
           >
-            {t('markets')}
+            {t('header.markets')}
           </NavLink>
           <Hairline style={HairlineStyle} />
           {canInteract && (
@@ -108,7 +108,7 @@ class MobileHeader extends Component {
                 className={cx('navLink', 'bm-item')}
                 onClick={this.closeMenu}
               >
-                {t('dashboard')}
+                {t('header.dashboard')}
               </NavLink>
               <Hairline style={HairlineStyle} />
             </>
@@ -121,7 +121,7 @@ class MobileHeader extends Component {
                 className={cx('navLink', 'bm-item')}
                 onClick={this.closeMenu}
               >
-                {t('scoreboard')}
+                {t('header.scoreboard')}
               </NavLink>
               <Hairline style={HairlineStyle} />
             </>
@@ -136,7 +136,7 @@ class MobileHeader extends Component {
                     className={cx('navLink', 'bm-item')}
                     onClick={this.closeMenu}
                   >
-                    {t('gameguide')}
+                    {t('header.gameguide')}
                   </NavLink>
                   <Hairline style={HairlineStyle} />
                 </>
@@ -150,7 +150,7 @@ class MobileHeader extends Component {
                     rel="noopener noreferrer"
                     onClick={this.closeMenu}
                   >
-                    {t('gameguide')}
+                    {t('header.gameguide')}
                   </a>
                   <Hairline style={HairlineStyle} />
                 </>

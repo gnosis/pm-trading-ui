@@ -43,28 +43,28 @@ const DesktopHeader = ({
     </div>
     <div className={cx('group', 'left', 'navLinks')}>
       <NavLink to="/markets/list" activeClassName={cx('active')} className={cx('navLink')}>
-        {t('markets')}
+        {t('header.markets')}
       </NavLink>
       {canInteract && (
         <NavLink to="/dashboard" activeClassName={cx('active')} className={cx('navLink')}>
-          {t('dashboard')}
+          {t('header.dashboard')}
         </NavLink>
       )}
       {showScoreboard && (
         <NavLink to="/scoreboard" activeClassName={cx('active')} className={cx('navLink')}>
-          {t('scoreboard')}
+          {t('header.scoreboard')}
         </NavLink>
       )}
       {showGameGuide && (
         <>
           {gameGuideType === 'default' ? (
             <NavLink to="/game-guide" activeClassName={cx('active')} className={cx('navLink')}>
-              {t('gameguide')}
+              {t('header.gameguide')}
             </NavLink>
           ) : null}
           {gameGuideType === 'link' ? (
             <a href={gameGuideURL} className={cx('navLink')} target="_blank" rel="noopener noreferrer">
-              {t('gameguide')}
+              {t('header.gameguide')}
             </a>
           ) : null}
         </>
@@ -77,7 +77,7 @@ const DesktopHeader = ({
           {currentNetwork
             && currentNetwork !== 'MAIN' && (
             <span className={cx('network', 'text')}>
-              {t('network')}: {upperFirst(currentNetwork.toLowerCase())}
+              {t('header.network')}: {upperFirst(currentNetwork.toLowerCase())}
             </span>
           )}
           <Balance
@@ -98,7 +98,7 @@ const DesktopHeader = ({
         </div>
       ) : (
         <button type="button" className={cx('connect-wallet')} onClick={handleConnectWalletClick}>
-          {t('connect_wallet')}
+          {t('header.connect_wallet')}
         </button>
       )}
     </div>

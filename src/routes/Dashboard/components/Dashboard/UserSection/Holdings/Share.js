@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import className from 'classnames/bind'
 import OutcomeColorBox from 'components/Outcome/OutcomeColorBox'
@@ -24,6 +25,7 @@ const Share = ({
   marginalPrice,
   redeemWinnings,
   winnings,
+  t,
 }) => {
   const showSellLink = !market.closed && !market.resolved
   const showRedeemLink = market.resolved && winnings >= LOWEST_VALUE
@@ -52,10 +54,10 @@ const Share = ({
           {collateralTokenAddress ? <CurrencyName tokenAddress={collateralTokenAddress} /> : <span>ETH</span>}
         </div>
         <div className={cx('shareAction')}>
-          {showSellLink && <Link to={`/markets/${market.address}/my-shares/${id}`}>SELL</Link>}
+          {showSellLink && <Link to={`/markets/${market.address}/my-shares/${id}`}>{t('dashboard.sell')}</Link>}
           {showRedeemLink && (
             <button className={cx('redeemWinnings', 'btn', 'btn-link')} type="button" onClick={handleRedeemWinnings}>
-              REDEEM WINNINGS
+              {t('dashboard.redeem_winnings')}
             </button>
           )}
         </div>
@@ -75,6 +77,7 @@ Share.propTypes = {
   collateralTokenAddress: PropTypes.string.isRequired,
   redeemWinnings: PropTypes.func.isRequired,
   winnings: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  t: PropTypes.func.isRequired,
 }
 
-export default Share
+export default withNamespaces()(Share)

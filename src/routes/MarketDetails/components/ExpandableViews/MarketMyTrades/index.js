@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import cn from 'classnames/bind'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Decimal from 'decimal.js'
 import moment from 'moment'
 import { List } from 'immutable'
 import CurrencyName from 'components/CurrencyName'
-import DecimalValue from 'components/DecimalValue'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
 import {
@@ -85,11 +85,11 @@ class MarketMyTrades extends Component {
   }
 
   render() {
-    const { marketTrades } = this.props
+    const { marketTrades, t } = this.props
     if (marketTrades && !marketTrades.isEmpty()) {
       return (
         <div className={cx('marketMyTrades')}>
-          <h2>My Trades</h2>
+          <h2>{t('market.my_trades')}</h2>
           <table className={cx('shareTable', 'table')}>
             <TableHeader />
             <tbody>{this.renderTrades()}</tbody>
@@ -101,13 +101,20 @@ class MarketMyTrades extends Component {
     return (
       <div className={cx('marketMyTrades')}>
         <h2>
-          You haven&apos;t interacted with this market yet.
+          {t('market.no_trades')}
           <br />
-          <small>Every transaction that happens on this market will be shown here.</small>
+          <small>
+            {t('market.no_trades_hint')}
+          </small>
         </h2>
       </div>
     )
   }
 }
 
-export default MarketMyTrades
+MarketMyTrades.propTypes = {
+  marketTrades: PropTypes.any,
+  t: PropTypes.func.isRequired,
+}
+
+export default withNamespaces()(MarketMyTrades)

@@ -97,22 +97,22 @@ const validateTokenCount = (values, props) => {
   const { share, market } = props
 
   if (!sellAmount || !NUMBER_REGEXP.test(sellAmount) || Decimal(sellAmount).lt(1e-18)) {
-    return { sellAmount: 'Invalid amount' }
+    return { sellAmount: 'market.errors.invalid_amount' }
   }
 
   const decimalValue = Decimal(sellAmount)
   const earnings = calculateEarnings(market, share, web3.utils.toWei(sellAmount))
 
   if (decimalValue.lt(0)) {
-    return { sellAmount: "Number can't be negative." }
+    return { sellAmount: 'market.errors.negative_number' }
   }
 
   if (decimalValue.gt(Decimal(share.balance).div(1e18))) {
-    return { sellAmount: "You're trying to sell more than you invested." }
+    return { sellAmount: 'market.errors.not_enough_balance' }
   }
 
   if (Decimal(0).eq(earnings)) {
-    return { sellAmount: 'This transaction is not permitted because it will result in a loss of an outcome token.' }
+    return { sellAmount: 'market.errors.loss_detected' }
   }
 
   return {}
