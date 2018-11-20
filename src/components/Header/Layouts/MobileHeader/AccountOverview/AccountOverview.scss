@@ -1,6 +1,14 @@
 .overviewContainer {
   text-align: center;
   margin-bottom: 30px;
+  
+  .wrongNetwork {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
 
   .identicon {
     width: 90px;

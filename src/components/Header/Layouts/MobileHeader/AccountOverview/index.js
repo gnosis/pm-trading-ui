@@ -18,6 +18,7 @@ const copyIconStyle = {
 }
 const attentionIconStyle = {
   backgroundSize: 'cover',
+  marginRight: 5,
 }
 
 const AccountOverview = ({
@@ -32,7 +33,8 @@ const AccountOverview = ({
 }) => (
   <div className={cx('overviewContainer')}>
     <div className={cx('wrongNetwork')}>
-      {!isConnectedToCorrectNetwork && <Icon type="attention-mobile-header" style={attentionIconStyle} />} Looks like you are connected to wrong network
+      {!isConnectedToCorrectNetwork && <Icon type="attention-mobile-header" style={attentionIconStyle} />}Switch to the
+      RINKEBY network
     </div>
     <div className={cx('networkBalanceWrapper')}>
       <div className={cx('network')}>{currentNetwork} </div>
