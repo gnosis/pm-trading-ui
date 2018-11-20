@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import { NavLink } from 'react-router-dom'
 import Tooltip from 'rc-tooltip'
-import { upperFirst } from 'lodash'
 import Balance from 'components/Header/Balance'
 import { generateWalletName, hexWithoutPrefix } from 'utils/helpers'
 import { providerPropType } from 'utils/shapes'
+import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
+import WrongNetwork from './components/WrongNetwork'
 import Identicon from '../../Identicon'
 import ProviderIcon from '../../ProviderIcon'
 import BadgeIcon from '../../BadgeIcon'
@@ -19,7 +20,7 @@ const DesktopHeader = ({
   logoVars,
   canInteract,
   showScoreboard,
-  currentNetwork,
+  targetNetworkId,
   tokenBalance,
   tokenSymbol,
   badgesEnabled,
@@ -33,6 +34,7 @@ const DesktopHeader = ({
   gameGuideURL,
   etherBalance,
   tokenBalanceIsWrappedEther,
+  isConnectedToCorrectNetwork,
   t,
 }) => (
   <div className={cx('container', 'containerFlex')}>
@@ -74,12 +76,7 @@ const DesktopHeader = ({
     <div className={cx('group', 'right')}>
       {canInteract ? (
         <div className={cx('account')}>
-          {currentNetwork
-            && currentNetwork !== 'MAIN' && (
-            <span className={cx('network', 'text')}>
-              {t('header.network')}: {upperFirst(currentNetwork.toLowerCase())}
-            </span>
-          )}
+          {!isConnectedToCorrectNetwork && <WrongNetwork targetNetwork={ETHEREUM_NETWORK_IDS[targetNetworkId]} />}
           <Balance
             etherBalance={etherBalance}
             tokenBalance={tokenBalance}
@@ -127,6 +124,7 @@ DesktopHeader.propTypes = {
   canInteract: PropTypes.bool.isRequired,
   badgesEnabled: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
+  targetNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 DesktopHeader.defaultProps = {
@@ -143,6 +141,7 @@ DesktopHeader.defaultProps = {
   tokenSymbol: 'ETH',
   useUport: false,
   tokenBalanceIsWrappedEther: false,
+  targetNetworkId: undefined,
 }
 
 export default DesktopHeader

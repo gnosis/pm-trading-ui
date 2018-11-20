@@ -26,7 +26,7 @@ export const getProvidersList = state => state.integrations.get('providers')
 
 export const getProvider = (state, provider) => state.integrations.getIn(['providers', provider], {})
 
-export const getTargetNetworkId = state => state.integrations.get('targetNetworkId')
+export const getTargetNetworkId = state => state.blockchain.get('targetNetworkId')
 
 export const findActiveProvider = (state) => {
   const providers = getProvidersList(state)
@@ -134,7 +134,7 @@ export const isRemoteConnectionEstablished = (state) => {
 
 export const isConnectedToCorrectNetwork = createSelector(
   [getTargetNetworkId, getCurrentNetworkId],
-  (targetNetworkId, currentNetworkId) => targetNetworkId === currentNetworkId,
+  (targetNetworkId, currentNetworkId) => parseInt(targetNetworkId, 10) === parseInt(currentNetworkId, 10),
 )
 
 export const checkWalletConnection = (state) => {
