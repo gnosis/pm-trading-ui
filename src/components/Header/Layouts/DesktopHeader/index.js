@@ -103,7 +103,7 @@ const DesktopHeader = ({
 )
 
 DesktopHeader.propTypes = {
-  currentNetwork: PropTypes.string,
+  isConnectedToCorrectNetwork: PropTypes.bool.isRequired,
   etherBalance: PropTypes.string,
   tokenBalance: PropTypes.string,
   tokenBalanceIsWrappedEther: PropTypes.bool,
@@ -128,7 +128,6 @@ DesktopHeader.propTypes = {
 }
 
 DesktopHeader.defaultProps = {
-  currentNetwork: '',
   tokenBalance: '0',
   etherBalance: '0',
   currentProvider: {},

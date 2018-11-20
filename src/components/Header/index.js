@@ -4,7 +4,6 @@ import autobind from 'autobind-decorator'
 import Layout from 'components/Header/Layouts'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
-import { hasMetamask } from 'integrations/metamask/utils'
 import { WALLET_PROVIDER } from 'integrations/constants'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
@@ -16,7 +15,6 @@ const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
 const { default: defaultProvider } = providerConfig
 
 const useMetamask = defaultProvider === WALLET_PROVIDER.METAMASK
-const useUport = defaultProvider === WALLET_PROVIDER.UPORT
 
 const BALANCE_FETCH_INTERVAL = 5000
 
@@ -56,27 +54,14 @@ class Header extends Component {
 
   @autobind
   async handleConnectWalletClick() {
-    const {
-      lockedMetamask, acceptedTOS, openModal, initUport,
-    } = this.props
-
-    const shouldAcceptTOS = !acceptedTOS || !legalComplianceEnabled
+    const { openModal } = this.props
 
     openModal('ModalSelectProvider')
-    // openModal('ModalVerification')
-    // openModal('ModalAcceptTOS')
-    // openModal('ModalRegisterWallet')
   }
 
   render() {
     const {
-      hasWallet,
-      currentProvider,
-      logoPath,
-      smallLogoPath,
-      mainnetAddress,
-      acceptedTOS,
-      hasVerified,
+      hasWallet, currentProvider, logoPath, smallLogoPath, mainnetAddress, acceptedTOS, hasVerified,
     } = this.props
 
     let canInteract = (acceptedTOS || !legalComplianceEnabled)
