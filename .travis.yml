@@ -14,6 +14,13 @@ after_success:
 before_deploy:
 - pip install --user awscli
 deploy:
+### EMBEDDED app deployment
+- provider: script
+  script:  ~/.local/bin/aws s3 sync dist/embedded s3://trading-embedded-development/embedded --region eu-west-1 --cache-control 'public, max-age=2592000'
+  skip_cleanup: true
+  on:
+    branch: development
+
 ### OLYMPIA DEPLOYMENTS
   # https://olympia.dev.gnosisdev.com/
 - provider: script
@@ -23,12 +30,6 @@ deploy:
     branch: development
 - provider: script
   script: ~/.local/bin/aws s3 sync dist/interface s3://olympia-development --region eu-west-1 --cache-control 'public, max-age=2592000' --exclude "index.html"
-  skip_cleanup: true
-  on:
-    branch: development
-  # embedded app deployment
-- provider: script
-  script:  ~/.local/bin/aws s3 sync dist/embedded s3://olympia-embedded-development/embedded --region eu-west-1 --cache-control 'public, max-age=2592000'
   skip_cleanup: true
   on:
     branch: development
@@ -54,6 +55,18 @@ deploy:
     tags: true
 
 ### MANAGEMENT DEPLOYMENTS
+  # https://trading.dev.gnosisdev.com/
+- provider: script
+  script: ~/.local/bin/aws s3 cp dist/interface/index.html s3://management-development/index.html --region eu-west-1 --cache-control 'max-age=0,no-cache,no-store,must-revalidate'
+  skip_cleanup: true
+  on:
+    branch: development
+- provider: script
+  script: ~/.local/bin/aws s3 sync dist/interface s3://management-development --region eu-west-1 --cache-control 'public, max-age=2592000' --exclude "index.html"
+  skip_cleanup: true
+  on:
+    branch: development
+  # https://trading.staging.gnosisdev.com/
 - provider: s3
   bucket: management-mainnet
   secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -65,17 +78,17 @@ deploy:
   #  - npm run build-config mainnet/production
   on:
     branch: master
+
   # https://trading.dev.gnosisdev.com/
-- provider: s3
-  bucket: management-development
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  access_key_id: $AWS_ACCESS_KEY_ID
-  skip_cleanup: true
-  local_dir: dist/interface
-  #before_deploy:
-  #  - npm run build-config mainnet/development
-  on:
-    branch: development
+# - provider: s3
+#   bucket: management-development
+#   secret_access_key: $AWS_SECRET_ACCESS_KEY
+#   access_key_id: $AWS_ACCESS_KEY_ID
+#   skip_cleanup: true
+#   local_dir: dist/interface
+#   on:
+#     branch: development
+
   # https://trading.staging.gnosisdev.com/
 - provider: s3
   bucket: management-staging
