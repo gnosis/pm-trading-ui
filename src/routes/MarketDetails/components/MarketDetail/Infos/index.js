@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
+import { withNamespaces } from 'react-i18next'
 import Decimal from 'decimal.js'
-import { withState } from 'recompose'
+import { compose, withState } from 'recompose'
 import { marketShape } from 'utils/shapes'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
 import { decimalToText } from 'components/DecimalValue'
@@ -18,12 +19,12 @@ const NOOP = (e) => { e.preventDefault() }
 const cx = cn.bind(style)
 
 const Infos = ({
-  market, defaultAccount, moderators, collateralTokenSymbol, hasCopied, setHasCopied,
+  market, defaultAccount, moderators, collateralTokenSymbol, hasCopied, setHasCopied, t,
 }) => {
   const marketInfos = {
-    Token: collateralTokenSymbol || <IndefiniteSpinner width={20} height={20} />,
-    Fee: `${decimalToText(market.fee, 2) / 10000} %`,
-    Funding: (
+    [t('market.token')]: collateralTokenSymbol || <IndefiniteSpinner width={20} height={20} />,
+    [t('market.fee')]: `${decimalToText(market.fee, 2) / 10000} %`,
+    [t('market.funding')]: (
       <span>
         {decimalToText(Decimal(market.funding).div(1e18))}{' '}
         {collateralTokenSymbol || (
@@ -33,7 +34,7 @@ const Infos = ({
         )}
       </span>
     ),
-    'Trading Volume': (
+    [t('market.trading_volume')]: (
       <span>
         {decimalToText(Decimal(market.volume).div(1e18))}{' '}
         {collateralTokenSymbol || (
@@ -47,7 +48,7 @@ const Infos = ({
 
   if (moderators[defaultAccount]) {
     // Show creator String
-    marketInfos.creator = moderators[market.creator] || market.creator
+    marketInfos[t('market.creator')] = moderators[market.creator] || market.creator
   }
 
   const embeddingCode = generateEmbeddingCode(market.address)
@@ -71,16 +72,16 @@ const Infos = ({
             <div>
               <ul className={cx('share', 'list')}>
                 <li>
-                  {hasCopied === 'market' ? <strong>Copied to Clipboard!</strong> : (
+                  {hasCopied === 'market' ? <strong>{t('market.copied_to_clipboard')}</strong> : (
                     <CopyToClipboard text={marketUrl} onCopy={() => setHasCopied('market')}>
-                      <a onClick={NOOP} href={marketUrl} rel="noreferrer noopener" target="_blank">Link to Market</a>
+                      <a onClick={NOOP} href={marketUrl} rel="noreferrer noopener" target="_blank">{t('market.link_to_market')}</a>
                     </CopyToClipboard>
                   )}
                 </li>
                 <li>
-                  {hasCopied === 'embedded' ? <strong>Copied to Clipboard!</strong> : (
+                  {hasCopied === 'embedded' ? <strong>{t('market.copied_to_clipboard')}</strong> : (
                     <CopyToClipboard text={embeddingCode} onCopy={() => setHasCopied('embedded')}>
-                      <a onClick={NOOP} href={embeddingUrl} rel="noreferrer noopener" target="_blank">Embedding Code</a>
+                      <a onClick={NOOP} href={embeddingUrl} rel="noreferrer noopener" target="_blank">{t('market.embedding_code')}</a>
                     </CopyToClipboard>
                   )}
                 </li>
@@ -88,7 +89,7 @@ const Infos = ({
             </div>
           )}
         >
-          <button className={cx('btn', 'btn-link', 'sharebutton')} type="button"><Icon type="share" size={16} /> Share</button>
+          <button className={cx('btn', 'btn-link', 'sharebutton')} type="button"><Icon type="share" size={16} /> {t('market.share')}</button>
         </Tooltip>
       </div>
     </div>
@@ -102,6 +103,7 @@ Infos.propTypes = {
   collateralTokenSymbol: PropTypes.string.isRequired,
   hasCopied: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
   setHasCopied: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 Infos.defaultProps = {
@@ -109,4 +111,9 @@ Infos.defaultProps = {
   moderators: {},
 }
 
-export default withState('hasCopied', 'setHasCopied', false)(Infos)
+const enhancer = compose(
+  withState('hasCopied', 'setHasCopied', false),
+  withNamespaces(),
+)
+
+export default enhancer(Infos)

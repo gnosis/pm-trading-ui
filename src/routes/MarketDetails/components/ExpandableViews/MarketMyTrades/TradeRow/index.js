@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import cn from 'classnames/bind'
 import CurrencyName from 'components/CurrencyName'
 import { decimalToText } from 'components/DecimalValue'
@@ -18,7 +19,7 @@ const TradeRow = ({
     <td>
       <div className={cx('shareOutcomeColor')} style={outcomeColorStyle} />
     </td>
-    <td>{trade.orderType}</td>
+    <td>{t(`market.order_type_${trade.orderType.toLowerCase()}`)}</td>
     <td>{outcomeName}</td>
     <td>{decimalToText(new Decimal(trade.outcomeToken.outcomeTokenCount).div(1e18), 4)}</td>
     <td>
@@ -39,6 +40,7 @@ TradeRow.propTypes = {
   tradeDate: PropTypes.string,
   outcomeName: PropTypes.string,
   tradeCost: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  t: PropTypes.func.isRequired,
 }
 
 TradeRow.defaultProps = {
@@ -50,4 +52,4 @@ TradeRow.defaultProps = {
   tradeCost: '',
 }
 
-export default TradeRow
+export default withNamespaces()(TradeRow)

@@ -2,7 +2,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const AutoDllPlugin = require('autodll-webpack-plugin')
 
 const path = require('path')
 const webpack = require('webpack')
@@ -126,37 +125,6 @@ module.exports = (env = {}) => {
           windows: false,
         },
         inject: true,
-      }),
-      new AutoDllPlugin({
-        inject: true, // will inject the DLL bundles to index.html
-        filename: '[name]_[contenthash].js',
-        entry: {
-          vendor: [
-            'react',
-            'react-dom',
-            'redux',
-            'react-redux',
-            'immutable',
-            'react-router-dom',
-            'recharts',
-            'redux-actions',
-            'reselect',
-            'web3',
-            'moment-duration-format',
-            '@gnosis.pm/pm-js',
-          ],
-        },
-        plugins: [
-          new TerserPlugin({
-            sourceMap: true,
-            parallel: true,
-            cache: true,
-          }),
-          new webpack.EnvironmentPlugin({
-            NODE_ENV: 'production',
-          }),
-          new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-        ],
       }),
       new webpack.EnvironmentPlugin({
         VERSION: `${version}#${commitId}`,

@@ -130,7 +130,6 @@
     "@storybook/addon-knobs": "^4.0.7",
     "@storybook/addon-links": "^4.0.7",
     "@storybook/react": "^4.0.7",
-    "autodll-webpack-plugin": "^0.4.2",
     "autoprefixer": "^9.1.4",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^10.0.1",

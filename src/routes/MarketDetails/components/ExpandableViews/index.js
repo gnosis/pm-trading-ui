@@ -31,7 +31,7 @@ const showExpandableTournament = (props) => {
 
 const expandableViews = {
   [EXPAND_BUY_SHARES]: {
-    label: 'Buy Tokens',
+    label: 'market.buy_tokens',
     className: 'btn btn-default',
     component: MarketBuySharesForm,
     showCondition: props => props.market
@@ -42,13 +42,13 @@ const expandableViews = {
       && props.hasWallet,
   },
   [EXPAND_MY_SHARES]: {
-    label: MY_TOKENS,
+    label: 'market.my_shares',
     className: 'btn btn-default',
     component: MarketMySharesForm,
     showCondition: props => props.market && !!props.defaultAccount && props.hasWallet && showExpandableTournament(props),
   },
   [EXPAND_MY_TRADES]: {
-    label: 'My Trades',
+    label: 'market.my_trades',
     className: 'btn btn-default',
     component: MarketMyTrades,
     showCondition: props => props.market && !!props.defaultAccount && props.hasWallet && showExpandableTournament(props),

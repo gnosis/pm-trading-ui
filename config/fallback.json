@@ -51,6 +51,10 @@
   "gameGuide": {
     "enabled": false
   },
+  "i18n": {
+    "enabled": false,
+    "forceLanguage": "en"
+  },
   "legalCompliance": {
     "enabled": false,
     "documents": [

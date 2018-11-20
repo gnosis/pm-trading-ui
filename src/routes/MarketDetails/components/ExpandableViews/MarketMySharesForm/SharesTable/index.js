@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import cn from 'classnames/bind'
 import autobind from 'autobind-decorator'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { Map, List } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
@@ -101,16 +102,17 @@ class SharesTable extends Component {
   }
 
   render() {
+    const { t } = this.props
     return (
       <table className={cx('table', 'sharesTable')}>
         <thead>
           <tr>
             <th className={cx('sharesTableHeading', 'index')} />
             <th className={cx('sharesTableHeading', 'group')}>
-              Outcome
+              {t('market.outcome')}
             </th>
             <th className={cx('sharesTableHeading', 'group')}>
-              Outcome Token Count
+              {t('market.outcome_count')}
             </th>
             <th className={cx('sharesTableHeading', 'group')} />
           </tr>
@@ -134,6 +136,7 @@ SharesTable.propTypes = {
   sellShares: PropTypes.func,
   match: ReactRouterMatchShape,
   changeUrl: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 SharesTable.defaultProps = {
@@ -147,4 +150,4 @@ SharesTable.defaultProps = {
   isGasPriceFetched: false,
 }
 
-export default SharesTable
+export default withNamespaces()(SharesTable)
