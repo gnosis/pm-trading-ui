@@ -21,6 +21,22 @@ deploy:
   on:
     branch: development
 
+- provider: script
+  script:  ~/.local/bin/aws s3 sync dist/embedded s3://trading-embedded-staging/embedded --region eu-west-1 --cache-control 'public, max-age=2592000'
+  skip_cleanup: true
+  on:
+    branch: master
+
+- provider: s3
+  bucket: trading-embedded-development
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  access_key_id: $AWS_ACCESS_KEY_ID
+  skip_cleanup: true
+  local_dir: dist/embedded
+  upload-dir: releases/$TRAVIS_TAG
+  on:
+    tags: true
+
 ### OLYMPIA DEPLOYMENTS
   # https://olympia.dev.gnosisdev.com/
 - provider: script
@@ -66,6 +82,7 @@ deploy:
   skip_cleanup: true
   on:
     branch: development
+
   # https://trading.staging.gnosisdev.com/
 - provider: s3
   bucket: management-mainnet
@@ -78,16 +95,6 @@ deploy:
   #  - npm run build-config mainnet/production
   on:
     branch: master
-
-  # https://trading.dev.gnosisdev.com/
-# - provider: s3
-#   bucket: management-development
-#   secret_access_key: $AWS_SECRET_ACCESS_KEY
-#   access_key_id: $AWS_ACCESS_KEY_ID
-#   skip_cleanup: true
-#   local_dir: dist/interface
-#   on:
-#     branch: development
 
   # https://trading.staging.gnosisdev.com/
 - provider: s3
