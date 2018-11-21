@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames/bind'
+import { withNamespaces } from 'react-i18next'
 
 import { getFeatureConfig } from 'utils/features'
 
@@ -16,7 +17,6 @@ const cx = classnames.bind(style)
 const LegalCompliance = ({
   documents,
   fields,
-  className,
   showHeading,
   showExplanation,
   applicationName,
@@ -27,6 +27,7 @@ const LegalCompliance = ({
   submitButtonOpts,
   disabled,
   onSubmitAcceptedDocs,
+  t,
 }) => {
   if (!legalComplianceEnabled) {
     return (
@@ -42,9 +43,9 @@ const LegalCompliance = ({
 
   const documentList = []
   documents.forEach((doc, index) => {
-    documentList.push(<DocumentExplanation key={doc.id} {...doc} />)
+    documentList.push(<DocumentExplanation t={t} key={doc.id} {...doc} />)
     if (index === documents.length - 2) {
-      documentList.push(<span key={`${doc.id}-separator`}> and </span>)
+      documentList.push(<span key={`${doc.id}-separator`}> {t('and')} </span>)
       return
     }
 
@@ -59,16 +60,16 @@ const LegalCompliance = ({
 
   return (
     <div>
-      {showHeading && <h4 className={cx('heading')}>Terms of service and privacy policy</h4>}
+      {showHeading && <h4 className={cx('heading')}>{t('legal.heading')}</h4>}
       {showExplanation && (
         <p className={cx('explanation')}>
-          For using {applicationName}, you have to agree with our&nbsp;
+          {t('legal.to_use_app', { appName: applicationName || t('application') })}&nbsp;
           <>{documentList}</>.
         </p>
       )}
       <div className={cx('checks')}>
         {documents.map(doc => (
-          <DocumentField key={doc.id} {...doc} className={cx('checkBox')} />
+          <DocumentField t={t} key={doc.id} {...doc} className={cx('checkBox')} />
         ))}
       </div>
       <ButtonComponent
@@ -88,6 +89,8 @@ LegalCompliance.propTypes = {
   documents: PropTypes.arrayOf(
     PropTypes.shape({
       type: PropTypes.string,
+      id: PropTypes.id,
+      title: PropTypes.string,
     }),
   ).isRequired,
   fields: PropTypes.objectOf(PropTypes.bool).isRequired,
@@ -98,16 +101,17 @@ LegalCompliance.propTypes = {
   submitButtonComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   submitButtonClassName: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   submitButtonDisabledClassName: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
-  submitButtonOpts: PropTypes.object,
+  submitButtonOpts: PropTypes.shape({}),
   disabled: PropTypes.bool,
   onSubmitAcceptedDocs: PropTypes.func,
+  t: PropTypes.func.isRequired,
 }
 
 LegalCompliance.defaultProps = {
   className: '',
   showHeading: false,
   showExplanation: false,
-  applicationName: 'the application',
+  applicationName: undefined,
   submitButtonLabel: 'LOGIN',
   submitButtonComponent: 'button',
   submitButtonClassName: '',
@@ -117,4 +121,4 @@ LegalCompliance.defaultProps = {
   onSubmitAcceptedDocs: () => {},
 }
 
-export default LegalCompliance
+export default withNamespaces()(LegalCompliance)

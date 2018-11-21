@@ -1,5 +1,7 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import { reduxForm, Field, propTypes as reduxFormPropTypes } from 'redux-form'
+import { compose } from 'recompose'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import web3 from 'web3'
@@ -30,23 +32,22 @@ const inputErrorStyles = {
 }
 
 const SetMainnetAddress = ({
-  submitting, handleSubmit, error, submitFailed, closeModal, invalid,
+  submitting, handleSubmit, error, submitFailed, closeModal, invalid, t,
 }) => (
   <div className={cx('setMainnetAddress')}>
     <div className={cx('setMainnetAddressModal')}>
-      <button className={cx('closeButton')} onClick={closeModal} />
+      <button type="button" className={cx('closeButton')} onClick={closeModal} />
       <form onSubmit={handleSubmit}>
-        <h1 className={cx('heading')}>Setup claim Address</h1>
+        <h1 className={cx('heading')}>{t('register_uport.heading')}</h1>
         <p className={cx('disclaimer')}>
-          Please register your Metamask address, where we can send your winning GNO tokens in case you finished in the
-          top 50. <br /> Please note that you can register your address <em>only once</em>.
+          {t('register_uport.disclaimer')}
         </p>
 
         <Field
           component={TextInput}
           className={cx('input')}
           name="mainnetAddress"
-          placeholder="Ethereum address"
+          placeholder={t('register_uport.ethereum_wallet_address')}
           wrapperStyle={inputWrapperStyles}
           errorStyle={inputErrorStyles}
           startAdornment={(
@@ -61,12 +62,12 @@ const SetMainnetAddress = ({
           loading={submitting}
           disabled={invalid}
         >
-          Save Address
+          {t('register_uport.save_address')}
         </InteractionButton>
         {error && <p className={cx('error')}>{error}</p>}
         {submitFailed
           && !submitting && (
-          <p className={cx('error')}>Sorry, the transaction failed. Please try again later or contact us!</p>
+          <p className={cx('error')}>{t('register_uport.failed_tx_ask_support')}</p>
         )}
       </form>
     </div>
@@ -84,7 +85,12 @@ const FORM = {
     await dispatch(updateMainnetAddress(values.mainnetAddress))
     return dispatch(closeModalAction())
   },
-  validate: values => (web3.utils.isAddress(values.mainnetAddress) ? {} : { mainnetAddress: 'Please enter a valid address' }),
+  validate: values => (web3.utils.isAddress(values.mainnetAddress) ? {} : { mainnetAddress: 'register_uport.enter_valid_address' }),
 }
 
-export default reduxForm(FORM)(SetMainnetAddress)
+const enhancer = compose(
+  withNamespaces(),
+  reduxForm(FORM),
+)
+
+export default enhancer(SetMainnetAddress)
