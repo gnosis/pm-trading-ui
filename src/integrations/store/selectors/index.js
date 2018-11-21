@@ -117,7 +117,7 @@ export const getCurrentNetworkId = (state) => {
   return undefined
 }
 
-export const isThereActiveProvider = (state) => {
+export const hasActiveProvider = (state) => {
   const providers = getProvidersList(state)
 
   const activeProvider = providers.find(({ status }) => status === WALLET_STATUS.INITIALIZED)
