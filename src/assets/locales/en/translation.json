@@ -109,6 +109,7 @@
       "no_outcome_selected": "Please select an Outcome",
       "loss_detected": "This transaction is not permitted because it will result in a loss of an outcome token."
     }
+<<<<<<< HEAD
   },
   "legal": {
     "heading": "Terms of service and privacy policy",
@@ -174,4 +175,7 @@
   "warning": {
     "price_changed": "The transaction could not be processed because the trading price changed. <br />Please check the new price and try again."
   }
+=======
+  }  
+>>>>>>> 81d74fc99b0d5105fd56c0c94d9c4f4aa63423da
 }
