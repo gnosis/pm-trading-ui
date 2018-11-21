@@ -10,6 +10,10 @@ const gnosisInstances = {
   readOnly: undefined,
 }
 
+if (window && process.env.NODE_ENV === 'development') {
+  window.gnosisInstances = {}
+}
+
 export const {
   calcLMSRCost, calcLMSROutcomeTokenCount, calcLMSRMarginalPrice, calcLMSRProfit,
 } = Gnosis
@@ -45,8 +49,8 @@ const waitForGnosisConnection = type => new Promise((resolve, reject) => {
  * Initializes connection to GnosisJS
  * @param {*dictionary} GNOSIS_OPTIONS
  */
-export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
-  if (gnosisInstances.main) return
+export const initGnosisConnection = type => async (GNOSIS_OPTIONS) => {
+  if (gnosisInstances[type]) return
 
   try {
     const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
@@ -55,38 +59,15 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
       await addApolloContracts(gnosis)
     }
 
-    gnosisInstances.main = gnosis
+    gnosisInstances[type] = gnosis
 
     if (process.env.NODE_ENV === 'development') {
-      window.gnosis = gnosis
+      window.gnosisInstances[type] = gnosis
     }
 
-    console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
+    console.info(`Gnosis ${type} Integration: connection established`) // eslint-disable-line no-console
   } catch (err) {
-    console.error('Gnosis Integration: connection failed') // eslint-disable-line no-console
-    console.error(err) // eslint-disable-line no-console
-  }
-}
-
-export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
-  if (gnosisInstances.readOnly) return
-
-  try {
-    const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
-
-    if (tournamentEnabled) {
-      await addApolloContracts(gnosis)
-    }
-
-    gnosisInstances.readOnly = gnosis
-
-    if (process.env.NODE_ENV === 'development') {
-      window.gnosisRO = gnosis
-    }
-
-    console.info('Gnosis RO Integration: connection established') // eslint-disable-line no-console
-  } catch (err) {
-    console.error('Gnosis RO Integration: connection failed') // eslint-disable-line no-console
+    console.error(`Gnosis ${type} Integration: connection failed`) // eslint-disable-line no-console
     console.error(err) // eslint-disable-line no-console
   }
 }

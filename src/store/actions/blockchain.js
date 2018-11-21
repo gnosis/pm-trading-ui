@@ -1,6 +1,5 @@
 import {
   initGnosisConnection,
-  initReadOnlyGnosisConnection,
   getROGnosisConnection,
   getCurrentBalance,
   getCurrentAccount,
@@ -97,7 +96,7 @@ export const requestCollateralTokenBalance = account => (dispatch, getState) => 
 export const initReadOnlyGnosis = () => async (dispatch) => {
   // initialize
   try {
-    await initReadOnlyGnosisConnection({
+    await initGnosisConnection('readOnly')({
       ethereum: new Web3(new Web3.providers.HttpProvider(ethereumUrl)).currentProvider,
     })
     await dispatch(setGnosisROInitialized({ initialized: true }))
@@ -108,24 +107,28 @@ export const initReadOnlyGnosis = () => async (dispatch) => {
 
 export const updateCollateralToken = () => async (dispatch) => {
   if (!collateralTokenFromConfig) {
-    return dispatch(setCollateralToken({
-      source: TOKEN_SOURCE_ETH,
-    }))
+    return dispatch(
+      setCollateralToken({
+        source: TOKEN_SOURCE_ETH,
+      }),
+    )
   }
 
   const { source, options } = collateralTokenFromConfig
-
 
   if (source === TOKEN_SOURCE_ETH) {
     // options are optional here
     const { icon = ETH_TOKEN_ICON, symbol = 'ETH' } = options || {}
 
-    return dispatch(setCollateralToken({
-      source: TOKEN_SOURCE_ETH,
-      symbol,
-      icon,
-    }))
-  } if (source === TOKEN_SOURCE_CONTRACT) {
+    return dispatch(
+      setCollateralToken({
+        source: TOKEN_SOURCE_ETH,
+        symbol,
+        icon,
+      }),
+    )
+  }
+  if (source === TOKEN_SOURCE_CONTRACT) {
     const {
       contractName, symbol, icon, isWrappedEther = false,
     } = options
@@ -159,24 +162,29 @@ export const updateCollateralToken = () => async (dispatch) => {
       tokenSymbol = await contractInstance.symbol()
     }
 
-    return dispatch(setCollateralToken({
-      source: TOKEN_SOURCE_CONTRACT,
-      address: hexWithoutPrefix(contractInstance.address),
-      symbol: tokenSymbol,
-      icon: icon || ETH_TOKEN_ICON,
-      isWrappedEther,
-    }))
-  } if (source === TOKEN_SOURCE_ADDRESS) {
+    return dispatch(
+      setCollateralToken({
+        source: TOKEN_SOURCE_CONTRACT,
+        address: hexWithoutPrefix(contractInstance.address),
+        symbol: tokenSymbol,
+        icon: icon || ETH_TOKEN_ICON,
+        isWrappedEther,
+      }),
+    )
+  }
+  if (source === TOKEN_SOURCE_ADDRESS) {
     const {
       address, symbol, icon, isWrappedEther = false,
     } = options
-    return dispatch(setCollateralToken({
-      source: TOKEN_SOURCE_ADDRESS,
-      address: hexWithoutPrefix(address),
-      symbol,
-      icon,
-      isWrappedEther,
-    }))
+    return dispatch(
+      setCollateralToken({
+        source: TOKEN_SOURCE_ADDRESS,
+        address: hexWithoutPrefix(address),
+        symbol,
+        icon,
+        isWrappedEther,
+      }),
+    )
   }
 
   return undefined
@@ -201,7 +209,7 @@ export const initGnosis = () => async (dispatch, getState) => {
       // init Gnosis connection
 
       const opts = getGnosisJsOptions(newProvider)
-      await initGnosisConnection(opts)
+      await initGnosisConnection('main')(opts)
       await dispatch(setGnosisInitialized({ initialized: true }))
     }
   } catch (error) {
