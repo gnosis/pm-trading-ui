@@ -4,35 +4,32 @@ import { Field } from 'redux-form'
 import { Checkbox } from 'components/Form'
 
 const DocumentField = ({
-  id, type, title, text, className, file,
+  id, type, className, file, t,
 }) => (
   <Field name={id} component={Checkbox} className={className}>
     {type === 'TOS_DOCUMENT' && (
       <span>
-        I have read and understood the{' '}
+        {t('legal.read_and_understood')}&nbsp;
         <a href={`${file}`} target="_blank" rel="noopener noreferrer">
-          {title}
+          {t(`legal.documents.${id}`)}
         </a>
       </span>
     )}
-    {type === 'TOS_TEXT' && <span>{text}</span>}
+    {type === 'TOS_TEXT' && <span>{t(`legal.documents.${id}_description`)}</span>}
   </Field>
 )
 
 DocumentField.propTypes = {
+  t: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  title: PropTypes.string,
   file: PropTypes.string,
-  text: PropTypes.string,
   className: PropTypes.string,
 }
 
 DocumentField.defaultProps = {
   className: '',
-  title: '',
   file: '',
-  text: '',
 }
 
 export default DocumentField

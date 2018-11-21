@@ -1,5 +1,7 @@
 {
   "loading": "Loading...",
+  "application": "the Application",
+  "and": "and",
   "header": {
     "markets": "Markets",
     "dashboard": "Dashboard",
@@ -107,5 +109,69 @@
       "no_outcome_selected": "Please select an Outcome",
       "loss_detected": "This transaction is not permitted because it will result in a loss of an outcome token."
     }
-  }  
+  },
+  "legal": {
+    "heading": "Terms of service and privacy policy",
+    "to_use_app": "For using {{appName}}, you have to agree with our",
+    "read_and_understood": "I have read and understood",
+    "documents": {
+      "terms_of_service": "Terms of Service",
+      "privacy_policy": "Privacy Policy",
+      "risk_disclaimer": "Terms of Service",
+      "address_public_description": "I understand and agree that my wallet address will be publicly displayed on the scoreboard"
+    }
+  },
+  "reward_claim": {
+    "info": "In order to claim your <1>{{value}} {{symbol}}</1> tokens, you first have to switch to the <2>{{targetNetwork}</span> network in your current wallet. Also make sure you have enough ETH to submit the transaction with the claim request. More information in our <3>FAQ</3>.",
+    "already_claimed": "Already Claimed",
+    "claim": "Claim",
+    "current_network": "Current network: ",
+    "gas_estimation": "Estimated Gas Costs: ",
+    "errors": {
+      "wrong_network": "Please connect to the mentioned network, before you can claim your reward.",
+      "not_enough_balance": "You do not have enough ETH for this transaction to cover the gas costs.",
+      "failed_tx_ask_support": "Unfortunately, the transaction failed. Please try again or contact our support for further assistance."
+    }
+  },
+  "metamask": {
+    "install_metamask": "Install Metamask",
+    "missing": "Metamask is currently not installed or detected. <1>Please download and install Metamask</1> to start using {{name}}"
+  },
+  "register_wallet": {
+    "heading": "Register wallet address",
+    "instructions": "Please register your wallet address, where we can send you {{symbol} tokens, and subsequently your {{rewardSymbol}} reward. Read our terms of service for more information",
+    "eth_required": "You need Rinkeby ETH to register your wallet address.",
+    "rinkeby_eth_balance": "Rinkeby ETH balance:",
+    "rinkeby_eth_request": "Request Rinkeby Ether",
+    "not_enough_balance": "Note: Not enough ETH balance in your MetaMask wallet to submit this transaction.",
+    "register_wallet": "Register Wallet"
+  },
+  "register_uport": {
+    "heading": "Setup claim Address",
+    "disclaimer": "Please register your Metamask address, where we can send your winning GNO tokens in case you finished in the top 50. <br /> Please note that you can register your address <em>only once</em>.",
+    "save_address": "Save Address",
+    "failed_tx_ask_support": "Sorry, the transaction failed. Please try again later or contact us!",
+    "ethereum_wallet_address": "Ethereum Address",
+    "enter_valid_address": "Please enter a valid address"
+  },
+  "switch_network": {
+    "heading": "Switch to the {{targetNetwork}} Network",
+    "instructions": "Your provider is not currently set to the {{targetNetwork}} network. Please switch to {{targetNetwork}} and make sure your wallet is unlocked to start using {{applicationName}}."
+  },
+  "transaction_explanations": {
+    "heading": "We will ask you to approve the following transactions:"
+  },
+  "unlock": {
+    "heading": "Unlock your MetaMask wallet",
+    "instructions": "Please unlock your MetaMask wallet to start using {applicationName}."
+  },
+  "verification": {
+    "errors": {
+      "not_loaded": "Our User Verification Integration could not be loaded.",
+      "not_found": "Sorry for the inconvience, please try again later!"
+    }
+  },
+  "warning": {
+    "price_changed": "The transaction could not be processed because the trading price changed. <br />Please check the new price and try again."
+  }
 }
