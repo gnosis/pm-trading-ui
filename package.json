@@ -8,7 +8,7 @@
   "main": "src/index.js",
   "scripts": {
     "build-dev": "NODE_ENV=development node --max_old_space_size=8192 ./node_modules/.bin/webpack -p --config webpack.config.js",
-    "build-prod": "NODE_ENV=production --max_old_space_size=8192 ./node_modules/.bin/webpack -p",
+    "build-prod": "NODE_ENV=production node --max_old_space_size=8192 ./node_modules/.bin/webpack -p",
     "build": "if test \"$NODE_ENV\" = \"production\" ; then npm run build-prod; else npm run build-dev; fi ",
     "build-config": "node scripts/configuration.browser.js",
     "start": "NODE_ENV=development node --max_old_space_size=8192 node_modules/.bin/webpack-dev-server --hot --host 0.0.0.0 --client-log-level info --progress",
