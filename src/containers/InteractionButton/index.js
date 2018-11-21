@@ -171,7 +171,7 @@ InteractionButton.propTypes = {
   type: PropTypes.oneOf(['button', 'submit']),
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
-  targetNetworkId: PropTypes.number,
+  targetNetworkId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   termsNotRequiredOrAccepted: PropTypes.bool,
   disableLegalCheck: PropTypes.bool,
   disableWalletCheck: PropTypes.bool,

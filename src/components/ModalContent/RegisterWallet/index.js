@@ -93,17 +93,18 @@ RegisterMainnetAddress.propTypes = {
   collateralToken: PropTypes.shape({
     symbol: PropTypes.string,
   }).isRequired,
-  mainnetAddress: PropTypes.string,
 }
 
 RegisterMainnetAddress.defaultProps = {
   gasPrice: Decimal(0),
   registrationGasCost: 0,
-  mainnetAddress: undefined,
 }
 
 export default lifecycle({
   componentDidMount() {
+    if (!this.props.currentAccount) {
+      this.props.closeModal()
+    }
     this.props.requestRegistrationGasCost()
     this.props.requestGasPrice()
   },
