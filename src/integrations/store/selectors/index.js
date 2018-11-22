@@ -148,8 +148,6 @@ export const checkWalletConnection = (state) => {
   return false
 }
 
-export const shouldOpenNetworkModal = state => isRemoteConnectionEstablished(state) && checkWalletConnection(state) && !isConnectedToCorrectNetwork(state)
-
 export const isOnWhitelist = (state) => {
   const account = getCurrentAccount(state)
 
