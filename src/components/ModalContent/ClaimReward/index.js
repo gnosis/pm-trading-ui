@@ -1,5 +1,7 @@
 import React from 'react'
 import cn from 'classnames/bind'
+import { compose } from 'recompose'
+import { Trans, withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import Decimal from 'decimal.js'
@@ -56,6 +58,7 @@ class ClaimReward extends React.Component {
       currentBalance,
       rewardValue,
       hasClaimedReward,
+      t,
     } = this.props
 
     const { claimState } = this.state
@@ -76,9 +79,9 @@ class ClaimReward extends React.Component {
 
     let problemMessage
     if (isWrongNetwork) {
-      problemMessage = 'Please connect to the mentioned network, before you can claim your reward.'
+      problemMessage = t('reward_claim.errors.wrong_network')
     } else if (!sufficentFunds) {
-      problemMessage = 'You do not have enough ETH for this transaction to cover the gas costs.'
+      problemMessage = t('reward_claim.errors.not_enough_balance')
     }
 
     const canClaim = sufficentFunds && !isWrongNetwork
@@ -86,63 +89,65 @@ class ClaimReward extends React.Component {
     let claimButton
     if (hasClaimedReward) {
       claimButton = (
-        <button className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
-          ALREADY CLAIMED
+        <button type="button" className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
+          {t('reward_claim.already_claimed').toUpperCase()}
         </button>
       )
     } else if (claimState === 'loading') {
       claimButton = (
-        <button className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
+        <button type="button" className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
           <IndefiniteSpinner width={16} height={16} />
         </button>
       )
     } else if (claimState === 'error') {
       claimButton = (
-        <Tooltip overlay="Unfortunately, the transaction failed. Please try again or contact our support for further assistance.">
-          <button className={cx('btn', 'btn-primary', 'claim')}>CLAIM</button>
+        <Tooltip overlay={t('reward_claim.errors.failed_tx_ask_support')}>
+          <button type="button" className={cx('btn', 'btn-primary', 'claim')}>CLAIM</button>
         </Tooltip>
       )
     } else if (!canClaim) {
       claimButton = (
         <Tooltip overlay={problemMessage}>
-          <button className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
-            CLAIM
+          <button type="button" className={cx('btn', 'btn-primary', 'claim', 'disabled')} disabled>
+            {t('reward_claim.claim').toUpperCase()}
           </button>
         </Tooltip>
       )
     } else {
       claimButton = (
-        <button onClick={this.handleClaim} className={cx('btn', 'btn-primary', 'claim')}>
-          CLAIM
+        <button type="button" onClick={this.handleClaim} className={cx('btn', 'btn-primary', 'claim')}>
+          {t('reward_claim.claim').toUpperCase()}
         </button>
       )
     }
 
     return (
       <div className={cx('claimRewards')}>
-        <button className={cx('closeButton')} onClick={closeModal} />
+        <button type="button" className={cx('closeButton')} onClick={closeModal} />
         <div className={cx('claimContainer')}>
           <h4 className={cx('heading')}>Claim {rewardToken.symbol}</h4>
           <p className={cx('annotation')}>
-            In order to claim your{' '}
-            <span className={cx('rewardInfo')}>
-              {rewardValue} {rewardToken.symbol}
-            </span>{' '}
-            tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in
-            your MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request.
-            More information in{' '}
-            <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
-              FAQ
-            </Link>
-            .
+            <Trans key="reward_claim.info">
+              In order to claim your&nbsp;
+              <span className={cx('rewardInfo')}>
+                {rewardValue} {rewardToken.symbol}
+              </span>&nbsp;
+              tokens, you first have to switch to the <span className={cx('network')}>{targetNetwork}</span> network in
+              your MetaMask wallet. Also make sure you have enough ETH to submit the transaction with the claim request.
+              More information in our&nbsp;
+              <Link to="/game-guide" href="/game-guide" className={cx('faqLink')}>
+                FAQ
+              </Link>
+              .
+            </Trans>
           </p>
           <div className={cx('currentNetworkContainer')}>
-            Current network:
+            {t('reward_claim.current_network')}
             <span className={cx('network', { wrongNetwork: isWrongNetwork })}>{currentNetwork}</span>
           </div>
           {!isWrongNetwork && (
             <p className={cx('gasCosts')}>
-              Estimated Gas Costs:{' '}
+              {t('reward_claim.gas_estimation')}
               {hasGasCosts ? (
                 <b className={cx('gasEstimation')}>{decimalToText(gasCosts)}</b>
               ) : (
@@ -168,6 +173,8 @@ ClaimReward.propTypes = {
   gasPrice: PropTypes.instanceOf(Decimal),
   claimRewardGasCost: PropTypes.oneOfType([PropTypes.string, PropTypes.number, decimalJsTest]),
   rewardValue: PropTypes.number.isRequired,
+  hasClaimedReward: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 ClaimReward.defaultProps = {
@@ -178,4 +185,9 @@ ClaimReward.defaultProps = {
   claimRewardGasCost: Decimal(0),
 }
 
-export default withRouter(ClaimReward)
+const enhancer = compose(
+  withRouter,
+  withNamespaces(),
+)
+
+export default enhancer(ClaimReward)

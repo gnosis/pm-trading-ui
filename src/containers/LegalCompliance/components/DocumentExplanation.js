@@ -10,19 +10,19 @@ const DOCUMENT_TYPES = {
 }
 
 const LegalDocumentTitle = ({
-  type, title, file, short,
+  type, file, id, t,
 }) => {
   if (type === DOCUMENT_TYPES.FILE) {
     return (
       <span>
         <a href={`${file}`} target="_blank" rel="noopener noreferrer">
-          {title}
+          {t(`legal.documents.${id}`)}
         </a>
       </span>
     )
   }
   if (type === DOCUMENT_TYPES.TEXT) {
-    return <span>{short}</span>
+    return <span>{t(`legal.documents.${id}_short`)}</span>
   }
 
   return null
@@ -30,15 +30,13 @@ const LegalDocumentTitle = ({
 
 LegalDocumentTitle.propTypes = {
   type: PropTypes.string.isRequired,
-  title: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   file: PropTypes.string,
-  short: PropTypes.string,
 }
 
 LegalDocumentTitle.defaultProps = {
-  title: '',
   file: '',
-  short: '',
 }
 
 export default LegalDocumentTitle

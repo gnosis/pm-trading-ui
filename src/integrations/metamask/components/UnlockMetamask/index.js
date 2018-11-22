@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import cn from 'classnames/bind'
 import { getFeatureConfig } from 'utils/features'
 import MetamaskIcon from 'integrations/metamask/assets/metamask-logo.svg'
@@ -12,22 +13,22 @@ const logoStyle = {
   height: 100,
 }
 
-const tournamentConfig = getFeatureConfig('tournament')
+const { name } = getFeatureConfig('tournament')
 
-const UnlockMetamask = ({ closeModal }) => (
+const UnlockMetamask = ({ closeModal, t }) => (
   <div className={cx('unlockMetamask')}>
     <button type="button" className={cx('closeButton')} onClick={closeModal} />
     <img src={MetamaskIcon} alt="logo" style={logoStyle} />
-    <h3 className={cx('heading')}>Unlock your MetaMask wallet</h3>
+    <h3 className={cx('heading')}>{t('unlock.heading')}</h3>
     <p className={cx('text')}>
-      Please accept connecting your MetaMask account to start using {tournamentConfig.name || 'the application'}. Your
-      wallet needs to be unlocked.
+      {t('unlock.instructions', { applicationName: name || t('application') })}
     </p>
   </div>
 )
 
 UnlockMetamask.propTypes = {
   closeModal: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
-export default UnlockMetamask
+export default withNamespaces()(UnlockMetamask)

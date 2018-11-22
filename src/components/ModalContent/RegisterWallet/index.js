@@ -1,7 +1,8 @@
 import React from 'react'
 import cn from 'classnames/bind'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
-import { lifecycle } from 'recompose'
+import { compose, lifecycle } from 'recompose'
 import Decimal from 'decimal.js'
 import DecimalValue from 'components/DecimalValue'
 import InteractionButton from 'containers/InteractionButton'
@@ -25,6 +26,7 @@ const RegisterMainnetAddress = ({
   gasPrice,
   registrationGasCost,
   collateralToken: { symbol: collateralTokenSymbol },
+  t,
 }) => {
   const handleRegistration = async (documentsAccepted) => {
     await updateMainnetAddress(currentAccount)
@@ -41,32 +43,28 @@ const RegisterMainnetAddress = ({
 
   return (
     <div className={cx('registerWallet')}>
-      <button className={cx('closeButton')} onClick={closeModal} />
+      <button type="button" className={cx('closeButton')} onClick={closeModal} />
       <div className={cx('registerContainer')}>
-        <h4 className={cx('heading')}>Register wallet address</h4>
+        <h4 className={cx('heading')}>{t('register_wallet.heading')}</h4>
         <p className={cx('annotation')}>
-          Please register your wallet address, where we can send you {collateralTokenSymbol} tokens, and subsequently
-          your {rewardTokenSymbol} reward. Read our terms of service for more information
+          {t('register_wallet.instructions', { symbol: collateralTokenSymbol, rewardSymbol: rewardTokenSymbol })}
         </p>
         <div className={cx('walletAddressContainer')}>
           <img src={WalletIcon} className={cx('walletIcon')} alt="" />
           <h4 className={cx('walletAddress')}>{currentAccount}</h4>
         </div>
         <p className={cx('rinkebyEthAnnotation')}>
-          You need Rinkeby ETH to register your wallet address. <br />
-          Rinkeby ETH balance: <DecimalValue value={currentBalance} className={cx('walletBalance')} /> -{' '}
+          {t('register_wallet.eth_required')} <br />
+          {t('register_wallet.rinkeby_eth_balance')}{' '}
+          <DecimalValue value={currentBalance} className={cx('walletBalance')} /> -{' '}
           <a className={cx('faucetLink')} href="https://faucet.rinkeby.io/" target="_blank" rel="noopener noreferrer">
-            Request Rinkeby Ether
+            {t('register_wallet.rinkeby_eth_request')}
           </a>
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
         </p>
-        {insufficientFunds && (
-          <span className={cx('insufficientETH')}>
-            Note: Not enough ETH balance in your MetaMask wallet to submit this transaction.
-          </span>
-        )}
+        {insufficientFunds && <span className={cx('insufficientETH')}>{t('register_wallet.not_enough_balance')}</span>}
         <LegalCompliance
-          submitButtonLabel="REGISTER ADDRESS"
+          submitButtonLabel={t('register_wallet.register_wallet').toUpperCase()}
           submitButtonClassName={cx('btn', 'btn-primary', 'actionButton')}
           submitButtonDisabledClassName={cx('disabled')}
           submitButtonOpts={{
@@ -93,6 +91,7 @@ RegisterMainnetAddress.propTypes = {
   collateralToken: PropTypes.shape({
     symbol: PropTypes.string,
   }).isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 RegisterMainnetAddress.defaultProps = {
@@ -100,17 +99,22 @@ RegisterMainnetAddress.defaultProps = {
   registrationGasCost: 0,
 }
 
-export default lifecycle({
-  componentDidMount() {
-    if (!this.props.currentAccount) {
-      this.props.closeModal()
-    }
-    this.props.requestRegistrationGasCost()
-    this.props.requestGasPrice()
-  },
-  componentDidUpdate() {
-    if (this.props.mainnetAddress) {
-      this.props.closeModal()
-    }
-  },
-})(RegisterMainnetAddress)
+const enhancer = compose(
+  withNamespaces(),
+  lifecycle({
+    componentDidMount() {
+      if (!this.props.currentAccount) {
+        this.props.closeModal()
+      }
+      this.props.requestRegistrationGasCost()
+      this.props.requestGasPrice()
+    },
+    componentDidUpdate() {
+      if (this.props.mainnetAddress) {
+        this.props.closeModal()
+      }
+    },
+  }),
+)
+
+export default enhancer(RegisterMainnetAddress)
