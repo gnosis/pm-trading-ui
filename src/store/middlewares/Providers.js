@@ -92,6 +92,8 @@ export default store => next => async (action) => {
             if (!mainnetAddress) {
               // setTimeout because 'ModalRegisterWallet needs to know wallet address but doesn't have it yet
               setTimeout(() => dispatch(openModal({ modalName: 'ModalRegisterWallet' }), 1000))
+            } else {
+              dispatch(closeModal())
             }
 
             return handledAction

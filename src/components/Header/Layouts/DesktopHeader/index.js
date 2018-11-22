@@ -86,7 +86,7 @@ const DesktopHeader = ({
           {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
           <ProviderIcon provider={currentProvider} />
           <Tooltip
-            placement="left"
+            placement="bottom"
             overlay={`"${generateWalletName(currentAccount)}" (${hexWithoutPrefix(currentAccount)})`}
           >
             <Identicon account={currentAccount} />

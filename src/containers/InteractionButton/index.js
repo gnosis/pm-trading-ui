@@ -7,8 +7,10 @@ import { upperFirst } from 'lodash'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import { isGnosisInitialized, getTargetNetworkId, isConnectedToCorrectNetwork } from 'store/selectors/blockchain'
-import { isOnWhitelist, checkWalletConnection, hasAcceptedTermsAndConditions } from 'integrations/store/selectors'
+import { isGnosisInitialized, getTargetNetworkId } from 'store/selectors/blockchain'
+import {
+  isOnWhitelist, checkWalletConnection, hasAcceptedTermsAndConditions, isConnectedToCorrectNetwork,
+} from 'integrations/store/selectors'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import style from './interactionButton.scss'
 

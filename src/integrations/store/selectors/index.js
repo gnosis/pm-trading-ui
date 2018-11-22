@@ -125,13 +125,6 @@ export const hasActiveProvider = (state) => {
   return !!activeProvider
 }
 
-export const isRemoteConnectionEstablished = (state) => {
-  const remoteProvider = state.integrations.getIn(['providers', WALLET_PROVIDER.REMOTE])
-  const remoteProviderRegistered = !!remoteProvider
-
-  return remoteProviderRegistered && !!remoteProvider.network
-}
-
 export const isConnectedToCorrectNetwork = createSelector(
   [getTargetNetworkId, getCurrentNetworkId],
   (targetNetworkId, currentNetworkId) => parseInt(targetNetworkId, 10) === parseInt(currentNetworkId, 10),
