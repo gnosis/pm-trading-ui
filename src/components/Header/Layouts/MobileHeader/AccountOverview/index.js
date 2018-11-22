@@ -33,8 +33,12 @@ const AccountOverview = ({
 }) => (
   <div className={cx('overviewContainer')}>
     <div className={cx('wrongNetwork')}>
-      {!isConnectedToCorrectNetwork && <Icon type="attention-mobile-header" style={attentionIconStyle} />}Switch to the
-      RINKEBY network
+      {!isConnectedToCorrectNetwork && (
+        <>
+          <Icon type="attention-mobile-header" style={attentionIconStyle} />
+          Switch to the RINKEBY network
+        </>
+      )}
     </div>
     <div className={cx('networkBalanceWrapper')}>
       <div className={cx('network')}>{currentNetwork} </div>

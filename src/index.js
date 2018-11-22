@@ -3,6 +3,7 @@ import 'whatwg-fetch'
 import Raven from 'raven-js'
 import RootComponent from 'components/Root'
 import { initReadOnlyGnosis, requestTargetNetworkId } from 'store/actions/blockchain'
+import { getLastUsedProvider } from 'integrations/utils'
 import Decimal from 'decimal.js'
 import React from 'react'
 
@@ -11,6 +12,8 @@ import 'scss/style.scss'
 import store from 'store'
 
 import { setMomentRelativeTime, setMomentDurationFormat } from './setup'
+
+const lastUsedProvider = getLastUsedProvider()
 
 setMomentRelativeTime()
 setMomentDurationFormat()
@@ -21,7 +24,11 @@ store.dispatch(initReadOnlyGnosis())
 store.dispatch({ type: 'CHECK_AVAILABLE_PROVIDERS' })
 store.dispatch(requestTargetNetworkId())
 
+if (lastUsedProvider) {
+  store.dispatch({ type: 'TRY_TO_INIT_LAST_USED_PROVIDER', payload: lastUsedProvider })
+}
 
+// TODO: Add remote provider for NODE_ENV=development
 // store.dispatch(initProviders({ provider: WALLET_PROVIDER.REMOTE }))
 
 Decimal.set({ toExpPos: 9999, precision: 50 })

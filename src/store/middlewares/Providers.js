@@ -39,6 +39,13 @@ export default store => next => async (action) => {
     providers.map(provider => integrations[provider].checkAvailability(opts))
   }
 
+  if (type === 'TRY_TO_INIT_LAST_USED_PROVIDER') {
+    const providerAvailable = integrations[payload].checkIfInstalled()
+    if (providerAvailable) {
+      integrations[payload].initialize({ ...providerOptions, silent: true })
+    }
+  }
+
   if (type === 'INIT_PROVIDERS') {
     if (payload && payload.provider) {
       integrations[payload.provider].initialize(providerOptions)

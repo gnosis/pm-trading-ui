@@ -88,7 +88,7 @@ class Metamask extends InjectedWeb3 {
         console.warn(err)
         this.walletEnabled = false
       }
-    } else {
+    } else if (!opts.silent) {
       this.runProviderUpdate(this, {
         status: WALLET_STATUS.ERROR,
       })
