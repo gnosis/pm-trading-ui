@@ -1,10 +1,15 @@
 import {
-  isGnosisInitialized, isConnectedToBlockchain, getTokenAmount, getCollateralToken,
+  isGnosisInitialized,
+  isConnectedToBlockchain,
+  getTokenAmount,
+  getCollateralToken,
+  isConnectedToCorrectNetwork,
 } from 'store/selectors/blockchain'
 import {
   getGasPrice, getGasCosts, isGasCostFetched, isGasPriceFetched,
 } from 'routes/MarketDetails/store/selectors'
 import { ProviderRecord } from 'integrations/store/models'
+import { WALLET_PROVIDER } from 'integrations/constants'
 
 import { Map } from 'immutable'
 
@@ -22,6 +27,44 @@ describe('Blockchain selectors', () => {
       const state = { blockchain: Map({ gnosisInitialized: true }) }
 
       expect(isGnosisInitialized(state)).toBeTruthy()
+    })
+  })
+
+  describe('isConnectedToCorrectNetwork', () => {
+    it('Should return true if networkIds are equal', () => {
+      const state = {
+        integrations: Map({
+          providers: Map({
+            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
+              networkId: 4,
+            }),
+          }),
+          activeProvider: WALLET_PROVIDER.METAMASK,
+        }),
+        blockchain: Map({
+          targetNetworkId: 4,
+        }),
+      }
+
+      expect(isConnectedToCorrectNetwork(state)).toEqual(true)
+    })
+
+    it("Should return false if networkIds aren't equal", () => {
+      const state = {
+        integrations: Map({
+          providers: Map({
+            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
+              networkId: 4,
+            }),
+          }),
+          activeProvider: WALLET_PROVIDER.METAMASK,
+        }),
+        blockchain: Map({
+          targetNetworkId: 3,
+        }),
+      }
+
+      expect(isConnectedToCorrectNetwork(state)).toEqual(false)
     })
   })
 
@@ -225,7 +268,7 @@ describe('Blockchain selectors', () => {
               source: 'contract',
             }),
             tokenBalances: Map({
-              '0x123': 1e18.toString(), // 1 eth
+              '0x123': (1e18).toString(), // 1 eth
             }),
           }),
         }
@@ -274,7 +317,7 @@ describe('Blockchain selectors', () => {
               source: 'address',
             }),
             tokenBalances: Map({
-              '0x123': 1e18.toString(), // 1 eth
+              '0x123': (1e18).toString(), // 1 eth
             }),
           }),
         }

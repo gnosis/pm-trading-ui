@@ -1,11 +1,10 @@
 import { createAction } from 'redux-actions'
 
 import { isGnosisInitialized } from 'store/selectors/blockchain'
-import { getActiveProvider, initializedAllProviders } from 'integrations/store/selectors'
-import { WALLET_PROVIDER } from 'integrations/constants'
+import { getActiveProvider, hasActiveProvider } from 'integrations/store/selectors'
 import { initGnosis } from 'store/actions/blockchain'
-import { isFeatureEnabled } from 'utils/features'
 
+export const checkAvailability = createAction('CHECK_PROVIDER_AVAILABILITY')
 export const registerProvider = createAction('REGISTER_PROVIDER')
 export const updateProvider = createAction('UPDATE_PROVIDER')
 export const logout = createAction('PROVIDER_LOGOUT')
@@ -14,7 +13,7 @@ export const initProviders = createAction('INIT_PROVIDERS')
 export const setLegalDocumentsAccepted = createAction('SET_LEGAL_DOCUMENTS_ACCEPTED')
 export const saveWalletSetting = createAction('SAVE_WALLET_SETTING')
 
-const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
+const GNOSIS_REINIT_KEYS = ['network', 'account']
 
 export const logoutProvider = () => async (dispatch, getState) => {
   const state = getState()
@@ -26,15 +25,6 @@ export const logoutProvider = () => async (dispatch, getState) => {
 }
 
 export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
-  if (provider.constructor.providerName === WALLET_PROVIDER.METAMASK && isFeatureEnabled('tournament')) {
-    if (data.account === null) {
-      dispatch(updateProvider({
-        provider: provider.constructor.providerName,
-        mainnetAddress: null,
-      }))
-    }
-  }
-
   await dispatch(updateProvider({
     provider: provider.constructor.providerName,
     ...data,
@@ -57,9 +47,9 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
   }
 
   if (!isInitialized) {
-    const providersLoaded = initializedAllProviders(state)
+    const providerInitialized = hasActiveProvider(state)
 
-    if (providersLoaded) {
+    if (providerInitialized) {
       await dispatch(initGnosis())
     }
   }

@@ -5,6 +5,7 @@ import Balance from 'components/Header/Balance'
 import Identicon from 'components/Header/Identicon'
 import CopyIcon from '../assets/icon_copy.svg'
 import style from './AccountOverview.scss'
+import Icon from '../../../../Icon'
 
 const cx = cn.bind(style)
 
@@ -15,6 +16,10 @@ const copyIconStyle = {
   height: 15,
   marginLeft: 5,
 }
+const attentionIconStyle = {
+  backgroundSize: 'cover',
+  marginRight: 5,
+}
 
 const AccountOverview = ({
   currentAccount,
@@ -24,10 +29,15 @@ const AccountOverview = ({
   tokenSymbol,
   tokenBalanceIsWrappedEther,
   copyAddress,
+  isConnectedToCorrectNetwork,
 }) => (
   <div className={cx('overviewContainer')}>
+    <div className={cx('wrongNetwork')}>
+      {!isConnectedToCorrectNetwork && <Icon type="attention-mobile-header" style={attentionIconStyle} />}Switch to the
+      RINKEBY network
+    </div>
     <div className={cx('networkBalanceWrapper')}>
-      <span className={cx('network')}>{currentNetwork}</span>
+      <div className={cx('network')}>{currentNetwork} </div>
       <Balance
         etherBalance={etherBalance}
         tokenBalance={tokenBalance}
@@ -53,6 +63,7 @@ AccountOverview.propTypes = {
   tokenSymbol: PropTypes.string,
   tokenBalanceIsWrappedEther: PropTypes.bool.isRequired,
   copyAddress: PropTypes.func.isRequired,
+  isConnectedToCorrectNetwork: PropTypes.bool.isRequired,
 }
 
 AccountOverview.defaultProps = {
