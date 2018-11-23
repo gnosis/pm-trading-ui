@@ -1,4 +1,6 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
+import { capitalize } from 'lodash'
 import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import { getLogo } from 'integrations/utils'
@@ -11,19 +13,18 @@ const logoStyle = {
   height: 100,
 }
 
-const InitialisationError = ({ closeModal, providerName }) => {
+const InitialisationError = ({ closeModal, providerName, t }) => {
   const lowercaseProviderName = providerName.toLowerCase()
   const logo = lowercaseProviderName && getLogo(lowercaseProviderName)
-  const firstLetterCapitalizedProvider = `${providerName[0]}${lowercaseProviderName.slice(1)}`
 
   return (
     <div className={cx('initialisationError')}>
       <button className={cx('closeButton')} onClick={closeModal} type="button" />
       {logo && <img src={logo} alt="logo" style={logoStyle} />}
       <h3 className={cx('heading')}>
-        Oops! There was an error initialising {firstLetterCapitalizedProvider || 'wallet provider'}.
+        {t('initialisation_error.heading', { provider: capitalize(providerName) })}
       </h3>
-      <p className={cx('text')}>Wop Wop</p>
+      <p className={cx('text')}>{t('initialisation_error.instructions')}</p>
     </div>
   )
 }
@@ -31,10 +32,11 @@ const InitialisationError = ({ closeModal, providerName }) => {
 InitialisationError.propTypes = {
   closeModal: PropTypes.func.isRequired,
   providerName: PropTypes.string,
+  t: PropTypes.func.isRequired,
 }
 
 InitialisationError.defaultProps = {
   providerName: '',
 }
 
-export default InitialisationError
+export default withNamespaces()(InitialisationError)
