@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import Balance from 'components/Header/Balance'
 import Identicon from 'components/Header/Identicon'
+import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import CopyIcon from '../assets/icon_copy.svg'
 import style from './AccountOverview.scss'
 import Icon from '../../../../Icon'
@@ -30,13 +31,14 @@ const AccountOverview = ({
   tokenBalanceIsWrappedEther,
   copyAddress,
   isConnectedToCorrectNetwork,
+  targetNetworkId,
 }) => (
   <div className={cx('overviewContainer')}>
     <div className={cx('wrongNetwork')}>
       {!isConnectedToCorrectNetwork && (
         <>
           <Icon type="attention-mobile-header" style={attentionIconStyle} />
-          Switch to the RINKEBY network
+          Switch to the {ETHEREUM_NETWORK_IDS[ETHtargetNetworkId] || ''} network
         </>
       )}
     </div>
