@@ -3,13 +3,11 @@ import {
   isConnectedToBlockchain,
   getTokenAmount,
   getCollateralToken,
-  isConnectedToCorrectNetwork,
 } from 'store/selectors/blockchain'
 import {
   getGasPrice, getGasCosts, isGasCostFetched, isGasPriceFetched,
 } from 'routes/MarketDetails/store/selectors'
 import { ProviderRecord } from 'integrations/store/models'
-import { WALLET_PROVIDER } from 'integrations/constants'
 
 import { Map } from 'immutable'
 
@@ -27,44 +25,6 @@ describe('Blockchain selectors', () => {
       const state = { blockchain: Map({ gnosisInitialized: true }) }
 
       expect(isGnosisInitialized(state)).toBeTruthy()
-    })
-  })
-
-  describe('isConnectedToCorrectNetwork', () => {
-    it('Should return true if networkIds are equal', () => {
-      const state = {
-        integrations: Map({
-          providers: Map({
-            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
-              networkId: 4,
-            }),
-          }),
-          activeProvider: WALLET_PROVIDER.METAMASK,
-        }),
-        blockchain: Map({
-          targetNetworkId: 4,
-        }),
-      }
-
-      expect(isConnectedToCorrectNetwork(state)).toEqual(true)
-    })
-
-    it("Should return false if networkIds aren't equal", () => {
-      const state = {
-        integrations: Map({
-          providers: Map({
-            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
-              networkId: 4,
-            }),
-          }),
-          activeProvider: WALLET_PROVIDER.METAMASK,
-        }),
-        blockchain: Map({
-          targetNetworkId: 3,
-        }),
-      }
-
-      expect(isConnectedToCorrectNetwork(state)).toEqual(false)
     })
   })
 

@@ -33,18 +33,26 @@ class Metamask extends InjectedWeb3 {
   /**
    * Tries to set connection to the blockchain
    */
-  async initWeb3() {
+  async initWeb3(silent) {
     if (hasMetamask()) {
       if (window.ethereum) {
         window.web3 = new Web3(window.ethereum)
         try {
-          setTimeout(() => {
-            if (!this.web3) {
+          if (!silent) {
+            if (!window.ethereum.selectedAccount) {
               this.runProviderUpdate(this, {
                 status: WALLET_STATUS.USER_ACTION_REQUIRED,
               })
+            } else {
+              setTimeout(() => {
+                if (!this.web3) {
+                  this.runProviderUpdate(this, {
+                    status: WALLET_STATUS.USER_ACTION_REQUIRED,
+                  })
+                }
+              }, 5000)
             }
-          }, 1000)
+          }
           await window.ethereum.enable()
           this.web3 = window.web3
           return true
@@ -71,7 +79,7 @@ class Metamask extends InjectedWeb3 {
     super.initialize(opts)
     this.runProviderRegister(this)
 
-    this.walletEnabled = await this.initWeb3(opts.dispatch)
+    this.walletEnabled = await this.initWeb3(opts.silent)
 
     if (this.walletEnabled) {
       const checks = async () => {
@@ -88,7 +96,7 @@ class Metamask extends InjectedWeb3 {
         console.warn(err)
         this.walletEnabled = false
       }
-    } else {
+    } else if (!opts.silent) {
       this.runProviderUpdate(this, {
         status: WALLET_STATUS.ERROR,
       })

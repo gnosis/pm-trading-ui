@@ -26,10 +26,11 @@ class InjectedWeb3 {
   checkAvailability({ runProviderRegister, runProviderUpdate }) {
     runProviderRegister(this)
 
+    const { providerName } = this.constructor
     const providerInstalled = this.checkIfInstalled()
     const status = providerInstalled ? WALLET_STATUS.READY_TO_INIT : WALLET_STATUS.NOT_INSTALLED
 
-    return runProviderUpdate({ provider: this.constructor.providerName, status })
+    return runProviderUpdate({ provider: providerName, status })
   }
 
   /**

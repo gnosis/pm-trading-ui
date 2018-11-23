@@ -2,8 +2,8 @@ import {
   findActiveProvider,
   getActiveProviderName,
   getActiveProvider,
-  isRemoteConnectionEstablished,
   checkWalletConnection,
+  isConnectedToCorrectNetwork,
 } from 'integrations/store/selectors'
 import { ProviderRecord } from 'integrations/store/models'
 import { Map } from 'immutable'
@@ -59,6 +59,44 @@ describe('Integrations selectors', () => {
     })
   })
 
+  describe('isConnectedToCorrectNetwork', () => {
+    it('Should return true if networkIds are equal', () => {
+      const state = {
+        integrations: Map({
+          providers: Map({
+            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
+              networkId: 4,
+            }),
+          }),
+          activeProvider: WALLET_PROVIDER.METAMASK,
+        }),
+        blockchain: Map({
+          targetNetworkId: 4,
+        }),
+      }
+
+      expect(isConnectedToCorrectNetwork(state)).toEqual(true)
+    })
+
+    it("Should return false if networkIds aren't equal", () => {
+      const state = {
+        integrations: Map({
+          providers: Map({
+            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
+              networkId: 4,
+            }),
+          }),
+          activeProvider: WALLET_PROVIDER.METAMASK,
+        }),
+        blockchain: Map({
+          targetNetworkId: 3,
+        }),
+      }
+
+      expect(isConnectedToCorrectNetwork(state)).toEqual(false)
+    })
+  })
+
   describe('getActiveProviderName', () => {
     it("It should return active provider's name", () => {
       const activeProvider = 'METAMASK'
@@ -102,40 +140,6 @@ describe('Integrations selectors', () => {
       })
 
       expect(getActiveProvider(state)).toBeUndefined()
-    })
-  })
-
-  describe('isRemoteConnectionEstablished', () => {
-    it('Should return true if remote connection is established', () => {
-      const state = generateState({
-        providers: Map({
-          [WALLET_PROVIDER.REMOTE]: {
-            network: 'RINKEBY',
-          },
-        }),
-      })
-
-      expect(isRemoteConnectionEstablished(state)).toEqual(true)
-    })
-
-    it('Should return false if remote connection is not established', () => {
-      const state = generateState({
-        providers: Map({
-          [WALLET_PROVIDER.REMOTE]: {
-            network: undefined,
-          },
-        }),
-      })
-
-      expect(isRemoteConnectionEstablished(state)).toEqual(false)
-    })
-
-    it('Should return false if there are no registered providers', () => {
-      const state = generateState({
-        providers: Map({}),
-      })
-
-      expect(isRemoteConnectionEstablished(state)).toEqual(false)
     })
   })
 

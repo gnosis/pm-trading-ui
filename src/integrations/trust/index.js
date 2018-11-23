@@ -1,4 +1,4 @@
-import { WALLET_PROVIDER } from 'integrations/constants'
+import { WALLET_PROVIDER, WALLET_STATUS } from 'integrations/constants'
 import InjectedWeb3 from 'integrations/injectedWeb3'
 import { timeoutCondition } from 'utils/helpers'
 import { hasTrust } from 'integrations/trust/utils'
@@ -78,7 +78,13 @@ class TrustApp extends InjectedWeb3 {
         console.warn(err)
         this.walletEnabled = false
       }
+    } else if (!opts.silent) {
+      this.runProviderUpdate(this, {
+        status: WALLET_STATUS.ERROR,
+      })
+      throw new Error('Initialization failed')
     }
+
 
     return this.runProviderUpdate(this, {
       networkId: this.networkId,

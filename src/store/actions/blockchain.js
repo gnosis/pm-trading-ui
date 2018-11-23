@@ -210,7 +210,11 @@ export const initGnosis = () => async (dispatch, getState) => {
 
       const opts = getGnosisJsOptions(newProvider)
       await initGnosisConnection('main')(opts)
-      await dispatch(setGnosisInitialized({ initialized: true }))
+      dispatch(setGnosisInitialized({ initialized: true }))
+
+      if (window && window.localStorage) {
+        localStorage.setItem('LAST_USED_PROVIDER', newProvider.name)
+      }
     }
   } catch (error) {
     console.warn(`pm-js initialization Error: ${error}`)

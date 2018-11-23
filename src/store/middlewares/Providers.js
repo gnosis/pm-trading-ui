@@ -1,5 +1,5 @@
 import integrations from 'integrations'
-import { getMainnetAddressForRinkebyAccount, zeroAccount } from 'api'
+import { getMainnetAddressForRinkebyAccount } from 'api'
 import { initGnosis } from 'store/actions/blockchain'
 import { setMainnetAddress } from 'store/actions/account'
 import { runProviderRegister, runProviderUpdate, updateProvider } from 'integrations/store/actions'
@@ -37,6 +37,13 @@ export default store => next => async (action) => {
   if (type === 'CHECK_AVAILABLE_PROVIDERS') {
     const opts = { ...providerOptions, runProviderUpdate: (provider, data) => dispatch(updateProvider(provider, data)) }
     providers.map(provider => integrations[provider].checkAvailability(opts))
+  }
+
+  if (type === 'TRY_TO_INIT_LAST_USED_PROVIDER') {
+    const providerAvailable = integrations[payload].checkIfInstalled()
+    if (providerAvailable) {
+      integrations[payload].initialize({ ...providerOptions, silent: true })
+    }
   }
 
   if (type === 'INIT_PROVIDERS') {
@@ -92,6 +99,8 @@ export default store => next => async (action) => {
             if (!mainnetAddress) {
               // setTimeout because 'ModalRegisterWallet needs to know wallet address but doesn't have it yet
               setTimeout(() => dispatch(openModal({ modalName: 'ModalRegisterWallet' }), 1000))
+            } else {
+              dispatch(closeModal())
             }
 
             return handledAction
