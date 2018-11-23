@@ -38,7 +38,7 @@ const AccountOverview = ({
       {!isConnectedToCorrectNetwork && (
         <>
           <Icon type="attention-mobile-header" style={attentionIconStyle} />
-          Switch to the {ETHEREUM_NETWORK_IDS[ETHtargetNetworkId] || ''} network
+          Switch to the {ETHEREUM_NETWORK_IDS[targetNetworkId] || ''} network
         </>
       )}
     </div>
@@ -70,11 +70,13 @@ AccountOverview.propTypes = {
   tokenBalanceIsWrappedEther: PropTypes.bool.isRequired,
   copyAddress: PropTypes.func.isRequired,
   isConnectedToCorrectNetwork: PropTypes.bool.isRequired,
+  targetNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 AccountOverview.defaultProps = {
   currentNetwork: '',
   tokenBalance: '0',
+  targetNetworkId: undefined,
   tokenSymbol: '',
 }
 
