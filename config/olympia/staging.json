@@ -15,6 +15,9 @@
   "htmlConfig": {
     "title": "Gnosis Olympia"
   },
+  "i18n": {
+    "enabled": true
+  },
   "hiddenMarkets": [],
   "thirdparty": {
     "googleAnalytics": {

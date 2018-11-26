@@ -2,6 +2,7 @@ import { createSelector, createStructuredSelector } from 'reselect'
 import { getCurrentAccount, getRegisteredMainnetAddress } from 'integrations/store/selectors'
 import { rankSelector } from 'routes/Scoreboard/store/selectors'
 import { hasClaimedReward } from 'containers/Modals/ModalClaimReward/selectors'
+import { getCollateralToken } from 'store/selectors/blockchain'
 import { firstTournamentUsersSelectorAsList, meSelector } from '../store/selectors'
 
 const usersSelector = createSelector(firstTournamentUsersSelectorAsList, meSelector, (firstUsers, me) => {
@@ -25,4 +26,5 @@ export default createStructuredSelector({
   myAccount: getCurrentAccount,
   rank: rankSelector,
   hasClaimedReward,
+  collateralToken: getCollateralToken,
 })
