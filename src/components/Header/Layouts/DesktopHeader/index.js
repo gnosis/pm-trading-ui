@@ -27,7 +27,6 @@ const DesktopHeader = ({
   userTournamentInfo,
   currentProvider,
   currentAccount,
-  useUport,
   handleConnectWalletClick,
   showGameGuide,
   gameGuideType,
@@ -116,7 +115,6 @@ DesktopHeader.propTypes = {
   gameGuideURL: PropTypes.string,
   tokenSymbol: PropTypes.string,
   handleConnectWalletClick: PropTypes.func.isRequired,
-  useUport: PropTypes.bool,
   logoVars: PropTypes.shape({
     '--logoPath': PropTypes.string,
     '-smallLogoPath': PropTypes.string,
@@ -138,7 +136,6 @@ DesktopHeader.defaultProps = {
   gameGuideURL: '',
   userTournamentInfo: undefined,
   tokenSymbol: 'ETH',
-  useUport: false,
   tokenBalanceIsWrappedEther: false,
   targetNetworkId: undefined,
 }
