@@ -91,7 +91,7 @@ const DesktopHeader = ({
           >
             <Identicon account={currentAccount} />
           </Tooltip>
-          {useUport && <MenuAccountDropdown />}
+          <MenuAccountDropdown />
         </div>
       ) : (
         <button type="button" className={cx('connect-wallet')} onClick={handleConnectWalletClick}>

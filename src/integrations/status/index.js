@@ -59,7 +59,7 @@ class Status extends InjectedWeb3 {
     this.walletEnabled = this.initWeb3()
 
     if (this.watcher) {
-      setInterval(this.watcher, Status.watcherInterval)
+      this.watcherInterval = setInterval(this.watcher, Status.watcherInterval)
     }
 
     if (this.walletEnabled) {

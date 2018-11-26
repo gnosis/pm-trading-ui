@@ -2,7 +2,9 @@ import integrations from 'integrations'
 import { getMainnetAddressForRinkebyAccount } from 'api'
 import { initGnosis } from 'store/actions/blockchain'
 import { setMainnetAddress } from 'store/actions/account'
-import { runProviderRegister, runProviderUpdate, updateProvider } from 'integrations/store/actions'
+import {
+  runProviderRegister, runProviderUpdate, updateProvider, setActiveProvider,
+} from 'integrations/store/actions'
 import { getProvider, hasAcceptedTermsAndConditions } from 'integrations/store/selectors'
 import { getProviderConfig, isFeatureEnabled, getFeatureConfig } from 'utils/features'
 import { WALLET_STATUS, WALLET_PROVIDER } from 'integrations/constants'
@@ -53,13 +55,8 @@ export default store => next => async (action) => {
   }
 
   if (type === 'PROVIDER_LOGOUT') {
-    Object.keys(integrations).forEach((providerName) => {
-      const integration = integrations[providerName]
-
-      if (integration.constructor.providerName === payload) {
-        integration.logout()
-      }
-    })
+    integrations[payload].logout()
+    dispatch(setActiveProvider(''))
   }
 
   if (type === 'UPDATE_PROVIDER') {

@@ -144,6 +144,10 @@ class InjectedWeb3 {
     this.account = undefined
     this.walletEnabled = false
 
+    if (this.watcherInterval) {
+      clearInterval(this.watcherInterval)
+    }
+
     await this.runProviderUpdate(this, {
       account: undefined,
       balance: undefined,

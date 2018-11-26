@@ -9,8 +9,8 @@ import style from './dropdown.scss'
 const cx = cn.bind(style)
 
 const LogOut = ({ logout }) => (
-  <li key="action-logout" className={cx('action')}>
-    <button type="button" onClick={() => logout()}>
+  <li key="action-logout" className={cx('action')} onClick={logout}>
+    <button type="button">
       <Icon type="logout" size={13} /> Logout
     </button>
   </li>
@@ -20,6 +20,9 @@ LogOut.propTypes = {
   logout: PropTypes.func.isRequired,
 }
 
-export default connect(null, {
-  logout: logoutProvider,
-})(LogOut)
+export default connect(
+  null,
+  {
+    logout: logoutProvider,
+  },
+)(LogOut)

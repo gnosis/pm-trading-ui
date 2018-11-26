@@ -6,7 +6,7 @@
   height: 32px;
 
   &:hover {
-    .menuAccountDropdown__arrow {
+    .arrow {
       &::after {
         border-color: lighten(black, 50%);
       }
@@ -37,38 +37,6 @@
       transform-origin: 50% 50%;
     }
   }
-
-  &.rc-tooltip {
-    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.24));
-  }
-
-  .rc-tooltip-inner {
-    background-color: #fafafa;
-    width: 140px;
-    border-radius: 2px;
-
-    z-index: 5;
-  }
-
-  .rc-tooltip,
-  .rc-tooltip-inner,
-  .rc-tooltip-content {
-    box-shadow: none;
-  }
-
-  &.rc-tooltip .rc-tooltip-content .rc-tooltip-arrow {
-    background: none;
-    height: 0;
-    width: 0;
-    top: -21px;
-    margin-right: -7.5px;
-    position: absolute;
-    pointer-events: none;
-    border: transparent 15px solid;
-    border-bottom: #fafafa 15px solid;
-
-    z-index: 1;
-  }
 }
 
 .list {
@@ -91,6 +59,7 @@
     &:hover,
     &:active {
       color: lighten(black, 50%);
+      cursor: pointer;
       text-decoration: underline;
     }
   }

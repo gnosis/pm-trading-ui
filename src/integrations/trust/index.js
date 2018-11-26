@@ -60,7 +60,7 @@ class TrustApp extends InjectedWeb3 {
     this.walletEnabled = this.initWeb3()
 
     if (this.watcher) {
-      setInterval(this.watcher, TrustApp.watcherInterval)
+      this.watcherInterval = setInterval(this.watcher, TrustApp.watcherInterval)
     }
 
     if (this.walletEnabled) {
