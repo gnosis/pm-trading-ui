@@ -1,6 +1,6 @@
 import integrations from 'integrations'
 import { getMainnetAddressForRinkebyAccount } from 'api'
-import { initGnosis } from 'store/actions/blockchain'
+import { initGnosis, updateCollateralToken } from 'store/actions/blockchain'
 import { setMainnetAddress } from 'store/actions/account'
 import { runProviderRegister, runProviderUpdate, updateProvider } from 'integrations/store/actions'
 import { getProvider, hasAcceptedTermsAndConditions } from 'integrations/store/selectors'

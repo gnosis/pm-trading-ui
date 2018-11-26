@@ -1,6 +1,6 @@
 import Gnosis from '@gnosis.pm/pm-js'
 import apolloArtifacts from '@gnosis.pm/pm-apollo-contracts'
-import { NETWORK_TIMEOUT } from 'store/actions/blockchain'
+import { NETWORK_TIMEOUT, updateCollateralToken } from 'store/actions/blockchain'
 import { isFeatureEnabled } from 'utils/features'
 
 const tournamentEnabled = isFeatureEnabled('tournament')

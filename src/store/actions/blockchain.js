@@ -93,18 +93,6 @@ export const requestCollateralTokenBalance = account => (dispatch, getState) => 
   return dispatch(requestTokenBalance(collateralToken.address, account))
 }
 
-export const initReadOnlyGnosis = () => async (dispatch) => {
-  // initialize
-  try {
-    await initGnosisConnection('readOnly')({
-      ethereum: new Web3(new Web3.providers.HttpProvider(ethereumUrl)).currentProvider,
-    })
-    await dispatch(setGnosisROInitialized({ initialized: true }))
-  } catch (error) {
-    console.error(`PM-js RO initialization Error: ${error}`)
-  }
-}
-
 export const updateCollateralToken = () => async (dispatch) => {
   if (!collateralTokenFromConfig) {
     return dispatch(
@@ -190,13 +178,25 @@ export const updateCollateralToken = () => async (dispatch) => {
   return undefined
 }
 
+export const initReadOnlyGnosis = () => async (dispatch) => {
+  // initialize
+  try {
+    await initGnosisConnection('readOnly')({
+      ethereum: new Web3(new Web3.providers.HttpProvider(ethereumUrl)).currentProvider,
+    })
+
+    await dispatch(setGnosisROInitialized({ initialized: true }))
+  } catch (error) {
+    console.error(`PM-js RO initialization Error: ${error}`)
+  }
+}
+
 /**
  * (Re)-Initializes PM-js connection according to current providers settings
  */
 export const initGnosis = () => async (dispatch, getState) => {
   // initialize
   let newProvider
-  await dispatch(updateCollateralToken())
 
   try {
     const state = getState()
@@ -210,6 +210,7 @@ export const initGnosis = () => async (dispatch, getState) => {
 
       const opts = getGnosisJsOptions(newProvider)
       await initGnosisConnection('main')(opts)
+
       dispatch(setGnosisInitialized({ initialized: true }))
 
       if (window && window.localStorage) {
