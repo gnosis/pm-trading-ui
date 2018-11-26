@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import Icon from 'components/Icon'
@@ -43,7 +44,9 @@ class SelectProvider extends Component {
   }
 
   render() {
-    const { closeModal, providersList, targetNetworkId } = this.props
+    const {
+      closeModal, providersList, targetNetworkId, t,
+    } = this.props
     const providersObject = providersList.toJS()
     const providersWithLogos = Object.keys(providersObject).map(key => ({
       name: key,
@@ -56,11 +59,11 @@ class SelectProvider extends Component {
       <div className={cx('selectProvider')}>
         <button className={cx('closeButton')} onClick={closeModal} type="button" />
         <div className={cx('providersContainer')}>
-          <h3 className={cx('heading')}>How would you like to access your wallet?</h3>
+          <h3 className={cx('heading')}>{t('select_provider.heading')}</h3>
           {targetNetwork && (
             <div className={cx('networkAnnotation')}>
               <Icon type="attention" className={cx('nextIcon')} style={attentionIconStyle} />
-              {targetNetwork && `To use the interface, your wallet has to be connected to the ${targetNetwork} network.`}
+              {targetNetwork && t('select_provider.switch_network', { targetNetwork })}
             </div>
           )}
           <div className={cx('providersList')}>
@@ -90,10 +93,11 @@ SelectProvider.propTypes = {
   openModal: PropTypes.func.isRequired,
   requestTargetNetworkId: PropTypes.func.isRequired,
   targetNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  t: PropTypes.func.isRequired,
 }
 
 SelectProvider.defaultProps = {
   targetNetworkId: undefined,
 }
 
-export default SelectProvider
+export default withNamespaces()(SelectProvider)
