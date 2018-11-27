@@ -115,6 +115,10 @@ class Metamask extends InjectedWeb3 {
       status: WALLET_STATUS.INITIALIZED,
     })
   }
+
+  onLogout() {
+    clearInterval(this.watcherInterval)
+  }
 }
 
 export default new Metamask()

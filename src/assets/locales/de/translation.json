@@ -1,5 +1,7 @@
 {
   "loading": "Wird geladen...",
+  "application": "Die Anwendung",
+  "and": "und",
   "header": {
     "markets": "Märkte",
     "dashboard": "Dashboard",
@@ -106,5 +108,77 @@
       "no_outcome_selected": "Bitte wählen Sie einen Ausgang",
       "loss_detected": "Diese Transaktion wird nicht zugelassen, da Sie garantiert einen Verlust machen."
     }
-  }  
+  },
+  "legal": {
+    "heading": "AGB und Datenschutzerklärung",
+    "to_use_app": "Um {{appName}} zu nutzen, müssen Sie folgenden Punkten zustimmen",
+    "read_and_understood": "Ich stimme den <1>{{document}}</1> zu",
+    "documents": {
+      "terms_of_service": "Allgemeinen Geschäftsbedingungen",
+      "privacy_policy": "Datenschutzerklärung",
+      "risk_disclaimer": "Risikoerklärung",
+      "address_public_description": "Ich verstehe und stimme zu, dass meine Ethereum Adresse öffentlich dargestellt wird auf der Bestenliste"
+    }
+  },
+  "reward_claim": {
+    "info": "Um Ihre <1>{{value}} {{symbol}}</1> tokens zu beanspruchen, müssen Sie erst zum <2>{{targetNetwork}</span> Netzwerk wechseln mit Ihrem Wallet. Bitte stellen Sie sicher, dass Sie genügend ETH besitzen für die Gas-Kosten. Mehr dazu in unseren <3>FAQ</3>.",
+    "already_claimed": "Bereits beansprucht",
+    "claim": "Benaspruchen",
+    "current_network": "Derzeitiges Netzwerk: ",
+    "gas_estimation": "Geschätzte Gas-Kosten: ",
+    "errors": {
+      "wrong_network": "Bitte verbinden Sie sich zum oben genannten Netzwerk um Ihre Gewinne zu beanspruchen.",
+      "not_enough_balance": "Sie besitzen nicht genügend ETH um die Gas-Kosten für diese Transaktion zu decken.",
+      "failed_tx_ask_support": "Leider ist die Transaktion fehlgeschlagen. Bitte probieren Sie es erneut oder wenden Sie sich an unseren Support."
+    }
+  },
+  "initialisation_error": {
+    "heading": "Entschluldigung, es ist ein Fehler aufgetreten beim starten von {{provider}}.",
+    "instructions": "Bitte versichern Sie sich, dass Sie die neuste Version von {{provider}} nutzen oder kontaktieren Sie den Support."
+  },
+  "install_provider": {
+    "heading": "{{provider}} Installation",
+    "instructions": "{{provider}} ist derzeit nicht installiert oder wird nicht erkannt. <1>Bitte installieren Sie {{provider}}</1> um {{application}} zu verwenden."
+  },
+  "select_provider": {
+    "heading": "Wie möchten Sie Ihr Wallet verwenden?",
+    "switch_network": "Um die Anwendung zu verwenden, müssen Sie mit dem {{targetNetwork}} netzwerk verbunden sein."
+  },
+  "register_wallet": {
+    "heading": "Ihr Wallet registrieren",
+    "instructions": "Bitte registrieren Sie Ihr Wallet, an welches wir Ihre {{symbol} tokens gewinne, sowie anschließende {{rewardSymbol}} gewinne schicken können. Bitte lesen Sie unsere Geschäftsbedingungen für mehr Informationen.",
+    "eth_required": "Um Ihr Wallet zu registrieren brauchen Sie Rinkeby ETH.",
+    "rinkeby_eth_balance": "Rinkeby ETH Kontostand:",
+    "rinkeby_eth_request": "Rinkeby ETH beantragen",
+    "not_enough_balance": "Warnung: Nicht genügend Rinkeby ETH um die Transaktion durchzuführen.",
+    "register_wallet": "Wallet registrieren"
+  },
+  "register_uport": {
+    "heading": "Wallet für Ihre Gewinne angeben",
+    "disclaimer": "Bitte Geben Sie Ihre Wallet adresse an, an die wir Ihre GNO Gewinne schicken können, falls Sie es in die Top 50 schaffen. <br /> Bitte beachten Sie, dass Sie Ihr Wallet nur <em>einmal</em> registrieren können.",
+    "save_address": "Adresse Speichern",
+    "failed_tx_ask_support": "Entschuldigung, die Transaktion ist leider fehlgeschlagen. Bitte probieren Sie es erneut und wenden Sie sich dann an den Support!",
+    "ethereum_wallet_address": "Ethereum-Wallet Adresse",
+    "enter_valid_address": "Bitte geben Sie eine gültige Adresse ein"
+  },
+  "switch_network": {
+    "heading": "Wechseln Sie zum {{targetNetwork}} Netzwerk",
+    "instructions": "Ihr Wallet ist derzeit auf das {{currentNetwork}} Netzwerk eingestellt. Bitte wechseln Sie zum {{targetNetwork}} netzwerk und stellen Sie sicher, dass Ihr Wallet nicht gesperrt ist, um {{applicationName}} zu nutzen."
+  },
+  "transaction_explanations": {
+    "heading": "Wir werden Sie bitten folgende Transaktionen zu akzeptieren:"
+  },
+  "unlock": {
+    "heading": "Entsperren Sie Ihren Metamask Account",
+    "instructions": "Bitte entsperren Sie Ihren Metamask Zugang, damit {{applicationName}} nutzen zu können."
+  },
+  "verification": {
+    "errors": {
+      "not_loaded": "Unser Benutzerverifizierungsservice konnte nicht geladen werden.",
+      "not_found": "Entschuldigen Sie die unanehmlichkeiten und probieren Sie es später noch einmal!"
+    }
+  },
+  "warning": {
+    "price_changed": "Ihre Transaktion wurde nicht verarbeitet weil sich die potentielle Marge verändert hat, durch den handel anderer Nutzer. <br />Bitte überprüfen Sie die Preise und versuchen sie es erneut."
+  }
 }
