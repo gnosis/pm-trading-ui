@@ -20,6 +20,7 @@ export const logoutProvider = () => async (dispatch, getState) => {
   const { name: providerName } = getActiveProvider(state)
 
   localStorage.removeItem(`GNOSIS_${process.env.VERSION}`)
+  localStorage.removeItem('LAST_USED_PROVIDER')
 
   await dispatch(logout(providerName))
 }
