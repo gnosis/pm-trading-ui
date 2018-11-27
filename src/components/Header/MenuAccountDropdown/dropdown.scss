@@ -48,13 +48,14 @@
 .action {
   color: black;
   font-size: 15px;
-  padding: 8px;
 
   button {
     appearance: none;
     display: block;
     background: none;
     border: none;
+    width: 100%;
+    padding: 8px;
 
     &:hover,
     &:active {

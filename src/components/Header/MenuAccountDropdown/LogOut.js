@@ -9,8 +9,8 @@ import style from './dropdown.scss'
 const cx = cn.bind(style)
 
 const LogOut = ({ logout }) => (
-  <li key="action-logout" className={cx('action')} onClick={logout}>
-    <button type="button">
+  <li key="action-logout" className={cx('action')}>
+    <button type="button" onClick={logout}>
       <Icon type="logout" size={13} /> Logout
     </button>
   </li>
