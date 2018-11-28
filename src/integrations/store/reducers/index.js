@@ -20,7 +20,7 @@ export default handleActions(
     },
     [updateProvider]: (state, { payload }) => {
       const { provider: name, ...provider } = payload
-      const updatedProvider = { name, ...provider }
+      const updatedProvider = { name, loaded: true, ...provider }
       return state.mergeIn(['providers', name], updatedProvider)
     },
     [setLegalDocumentsAccepted]: (state, { payload: docs }) => state.set('documentsAccepted', List(docs)),

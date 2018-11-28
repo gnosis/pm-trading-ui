@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withNamespaces } from 'react-i18next'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import cn from 'classnames/bind'
 import { List } from 'immutable'
@@ -11,15 +10,13 @@ import style from './Table.scss'
 
 const cx = cn.bind(style)
 
-const Table = ({
-  data, myAccount, collateralToken, t,
-}) => (
+const Table = ({ data, myAccount }) => (
   <Block>
-    <ScoreTable tableData={data} myAccount={myAccount} collateralToken={collateralToken} />
+    <ScoreTable tableData={data} myAccount={myAccount} />
     {myAccount && (
       <Block className={cx('ol-account')}>
         <Block className={cx('dot')} />
-        <Paragraph className={cx('your')}>{t('scoreboard.your_account')}</Paragraph>
+        <Paragraph className={cx('your')}>= YOUR ACCOUNT</Paragraph>
       </Block>
     )}
   </Block>
@@ -36,11 +33,7 @@ Table.propTypes = {
     predictedProfit: PropTypes.string.isRequired,
     predictions: PropTypes.string.number,
   })),
-  collateralToken: PropTypes.shape({
-    symbol: PropTypes.string,
-  }).isRequired,
   myAccount: PropTypes.string,
-  t: PropTypes.func.isRequired,
 }
 
 Table.defaultProps = {
@@ -48,4 +41,4 @@ Table.defaultProps = {
   myAccount: '',
 }
 
-export default withNamespaces()(Table)
+export default Table

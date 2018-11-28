@@ -1,8 +1,5 @@
 import {
-  isGnosisInitialized,
-  isConnectedToBlockchain,
-  getTokenAmount,
-  getCollateralToken,
+  isGnosisInitialized, isConnectedToBlockchain, getTokenAmount, getCollateralToken,
 } from 'store/selectors/blockchain'
 import {
   getGasPrice, getGasCosts, isGasCostFetched, isGasPriceFetched,
@@ -228,7 +225,7 @@ describe('Blockchain selectors', () => {
               source: 'contract',
             }),
             tokenBalances: Map({
-              '0x123': (1e18).toString(), // 1 eth
+              '0x123': 1e18.toString(), // 1 eth
             }),
           }),
         }
@@ -277,7 +274,7 @@ describe('Blockchain selectors', () => {
               source: 'address',
             }),
             tokenBalances: Map({
-              '0x123': (1e18).toString(), // 1 eth
+              '0x123': 1e18.toString(), // 1 eth
             }),
           }),
         }

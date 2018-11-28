@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 import cn from 'classnames/bind'
 import { NavLink } from 'react-router-dom'
 import Tooltip from 'rc-tooltip'
+import { upperFirst } from 'lodash'
 import Balance from 'components/Header/Balance'
 import { generateWalletName, hexWithoutPrefix } from 'utils/helpers'
 import { providerPropType } from 'utils/shapes'
-import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
-import WrongNetwork from './components/WrongNetwork'
 import Identicon from '../../Identicon'
 import ProviderIcon from '../../ProviderIcon'
 import BadgeIcon from '../../BadgeIcon'
@@ -20,20 +19,20 @@ const DesktopHeader = ({
   logoVars,
   canInteract,
   showScoreboard,
-  targetNetworkId,
+  currentNetwork,
   tokenBalance,
   tokenSymbol,
   badgesEnabled,
   userTournamentInfo,
   currentProvider,
   currentAccount,
+  useUport,
   handleConnectWalletClick,
   showGameGuide,
   gameGuideType,
   gameGuideURL,
   etherBalance,
   tokenBalanceIsWrappedEther,
-  isConnectedToCorrectNetwork,
   t,
 }) => (
   <div className={cx('container', 'containerFlex')}>
@@ -75,7 +74,12 @@ const DesktopHeader = ({
     <div className={cx('group', 'right')}>
       {canInteract ? (
         <div className={cx('account')}>
-          {!isConnectedToCorrectNetwork && <WrongNetwork targetNetwork={ETHEREUM_NETWORK_IDS[targetNetworkId]} />}
+          {currentNetwork
+            && currentNetwork !== 'MAIN' && (
+            <span className={cx('network', 'text')}>
+              {t('header.network')}: {upperFirst(currentNetwork.toLowerCase())}
+            </span>
+          )}
           <Balance
             etherBalance={etherBalance}
             tokenBalance={tokenBalance}
@@ -85,12 +89,12 @@ const DesktopHeader = ({
           {badgesEnabled && <BadgeIcon userTournamentInfo={userTournamentInfo} />}
           <ProviderIcon provider={currentProvider} />
           <Tooltip
-            placement="bottom"
+            placement="left"
             overlay={`"${generateWalletName(currentAccount)}" (${hexWithoutPrefix(currentAccount)})`}
           >
             <Identicon account={currentAccount} />
           </Tooltip>
-          <MenuAccountDropdown />
+          {useUport && <MenuAccountDropdown />}
         </div>
       ) : (
         <button type="button" className={cx('connect-wallet')} onClick={handleConnectWalletClick}>
@@ -102,7 +106,7 @@ const DesktopHeader = ({
 )
 
 DesktopHeader.propTypes = {
-  isConnectedToCorrectNetwork: PropTypes.bool.isRequired,
+  currentNetwork: PropTypes.string,
   etherBalance: PropTypes.string,
   tokenBalance: PropTypes.string,
   tokenBalanceIsWrappedEther: PropTypes.bool,
@@ -115,6 +119,7 @@ DesktopHeader.propTypes = {
   gameGuideURL: PropTypes.string,
   tokenSymbol: PropTypes.string,
   handleConnectWalletClick: PropTypes.func.isRequired,
+  useUport: PropTypes.bool,
   logoVars: PropTypes.shape({
     '--logoPath': PropTypes.string,
     '-smallLogoPath': PropTypes.string,
@@ -122,10 +127,10 @@ DesktopHeader.propTypes = {
   canInteract: PropTypes.bool.isRequired,
   badgesEnabled: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
-  targetNetworkId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 DesktopHeader.defaultProps = {
+  currentNetwork: '',
   tokenBalance: '0',
   etherBalance: '0',
   currentProvider: {},
@@ -136,8 +141,8 @@ DesktopHeader.defaultProps = {
   gameGuideURL: '',
   userTournamentInfo: undefined,
   tokenSymbol: 'ETH',
+  useUport: false,
   tokenBalanceIsWrappedEther: false,
-  targetNetworkId: undefined,
 }
 
 export default DesktopHeader

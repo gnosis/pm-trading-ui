@@ -1,6 +1,6 @@
 @import '~style/vars.scss';
 
-.initialisationError {
+.switchNetwork {
   width: 100%;
   height: 100%;
   display: flex;
@@ -8,10 +8,6 @@
   justify-content: center;
   align-items: center;
   color: #fff;
-
-  @media (max-width: 767px) {
-    text-align: center;
-  }
 
   .heading {
     font-size: 21px;
@@ -22,6 +18,12 @@
   .text {
     font-size: 14px;
     line-height: 1.5;
+    width: 465px;
+    text-align: center;
+
+    @media (max-width: 767px) {
+      width: 100%;
+    }
   }
 
   .closeButton {

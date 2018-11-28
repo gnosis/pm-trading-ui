@@ -12,8 +12,6 @@ export const WALLET_PROVIDER = {
   PARITY: 'PARITY',
   REMOTE: 'REMOTE',
   UPORT: 'UPORT',
-  TRUST: 'TRUST',
-  STATUS: 'STATUS',
 }
 
 export const ETHEREUM_NETWORK_IDS = {
@@ -22,22 +20,4 @@ export const ETHEREUM_NETWORK_IDS = {
   3: ETHEREUM_NETWORK.ROPSTEN,
   4: ETHEREUM_NETWORK.RINKEBY,
   42: ETHEREUM_NETWORK.KOVAN,
-}
-
-export const WALLET_STATUS = {
-  REGISTERED: 'REGISTERED',
-  INITIALIZED: 'INITALIZED',
-  NOT_INSTALLED: 'NOT_INSTALLED',
-  READY_TO_INIT: 'READY_TO_INIT',
-  ERROR: 'ERROR',
-  USER_ACTION_REQUIRED: 'USER_ACTION_REQUIRED',
-}
-
-export const WALLET_WEBSITES = {
-  [WALLET_PROVIDER.METAMASK]: 'https://metamask.io',
-  [WALLET_PROVIDER.STATUS]: 'https://status.im/',
-  [WALLET_PROVIDER.PARITY]: 'https://www.parity.io/',
-  [WALLET_PROVIDER.TRUST]: 'https://trustwallet.com/',
-  [WALLET_PROVIDER.UPORT]: 'https://www.uport.me/',
-  [WALLET_PROVIDER.REMOTE]: 'https://truffleframework.com/docs/ganache/quickstart',
 }

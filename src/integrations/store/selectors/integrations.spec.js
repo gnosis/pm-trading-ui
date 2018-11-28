@@ -1,27 +1,34 @@
 import {
-  findActiveProvider,
+  findDefaultProvider,
   getActiveProviderName,
   getActiveProvider,
+  initializedAllProviders,
+  isRemoteConnectionEstablished,
   checkWalletConnection,
-  isConnectedToCorrectNetwork,
 } from 'integrations/store/selectors'
 import { ProviderRecord } from 'integrations/store/models'
 import { Map } from 'immutable'
-import { WALLET_PROVIDER, WALLET_STATUS } from 'integrations/constants'
+import { WALLET_PROVIDER } from 'integrations/constants'
 
 const generateState = providerState => ({ integrations: Map({ ...providerState }) })
 
 describe('Integrations selectors', () => {
-  describe('findActiveProvider', () => {
-    it('Should return correct active provider', () => {
+  describe('findDefaultProvider', () => {
+    it('Should return correct default provider (available and true) with the highest priority', () => {
       const METAMASK = new ProviderRecord({
-        status: WALLET_STATUS.INITIALIZED,
+        available: true,
+        loaded: true,
+        priority: 100,
       })
       const PARITY = new ProviderRecord({
-        status: WALLET_STATUS.READY_TO_INIT,
+        available: true,
+        loaded: true,
+        priority: 99,
       })
       const REMOTE = new ProviderRecord({
-        status: WALLET_STATUS.NOT_INSTALLED,
+        available: false,
+        loaded: true,
+        priority: 50,
       })
 
       const state = generateState({
@@ -31,69 +38,31 @@ describe('Integrations selectors', () => {
           REMOTE,
         }),
       })
-      expect(findActiveProvider(state).equals(METAMASK)).toEqual(true)
+      expect(findDefaultProvider(state).equals(METAMASK)).toEqual(true)
     })
 
     it('Should return undefined when there are no available providers / no providers at all', () => {
       const METAMASK = new ProviderRecord({
-        status: WALLET_STATUS.ERROR,
+        available: false,
+        loaded: true,
+        priority: 100,
       })
       const PARITY = new ProviderRecord({
-        status: WALLET_STATUS.READY_TO_INIT,
-      })
-      const REMOTE = new ProviderRecord({
-        status: WALLET_STATUS.NOT_INSTALLED,
+        available: true,
+        loaded: false,
+        priority: 99,
       })
 
       const state = generateState({
         providers: Map({
           METAMASK,
           PARITY,
-          REMOTE,
         }),
       })
 
-      expect(findActiveProvider(state)).toBeUndefined()
+      expect(findDefaultProvider(state)).toBeUndefined()
       state.integrations.get('providers').clear()
-      expect(findActiveProvider(state)).toBeUndefined()
-    })
-  })
-
-  describe('isConnectedToCorrectNetwork', () => {
-    it('Should return true if networkIds are equal', () => {
-      const state = {
-        integrations: Map({
-          providers: Map({
-            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
-              networkId: 4,
-            }),
-          }),
-          activeProvider: WALLET_PROVIDER.METAMASK,
-        }),
-        blockchain: Map({
-          targetNetworkId: 4,
-        }),
-      }
-
-      expect(isConnectedToCorrectNetwork(state)).toEqual(true)
-    })
-
-    it("Should return false if networkIds aren't equal", () => {
-      const state = {
-        integrations: Map({
-          providers: Map({
-            [WALLET_PROVIDER.METAMASK]: new ProviderRecord({
-              networkId: 4,
-            }),
-          }),
-          activeProvider: WALLET_PROVIDER.METAMASK,
-        }),
-        blockchain: Map({
-          targetNetworkId: 3,
-        }),
-      }
-
-      expect(isConnectedToCorrectNetwork(state)).toEqual(false)
+      expect(findDefaultProvider(state)).toBeUndefined()
     })
   })
 
@@ -140,6 +109,93 @@ describe('Integrations selectors', () => {
       })
 
       expect(getActiveProvider(state)).toBeUndefined()
+    })
+  })
+
+  describe('initializedAllProviders', () => {
+    it('Should return true if all providers are initialized', () => {
+      const METAMASK = new ProviderRecord({
+        loaded: true,
+      })
+
+      const REMOTE = new ProviderRecord({
+        loaded: true,
+      })
+
+      const state = generateState({
+        providers: Map({
+          METAMASK,
+          REMOTE,
+        }),
+      })
+
+      expect(initializedAllProviders(state)).toEqual(true)
+    })
+
+    it('Should return false if atleast one provider is not initialized', () => {
+      const METAMASK = new ProviderRecord({
+        loaded: false,
+      })
+
+      const REMOTE = new ProviderRecord({
+        loaded: true,
+      })
+
+      const PARITY = new ProviderRecord({
+        loaded: false,
+      })
+
+      const state = generateState({
+        providers: Map({
+          METAMASK,
+          REMOTE,
+          PARITY,
+        }),
+      })
+
+      expect(initializedAllProviders(state)).toEqual(false)
+    })
+
+    it('Should return false if there are no registered providers', () => {
+      const state = generateState({
+        providers: Map({}),
+      })
+
+      expect(initializedAllProviders(state)).toEqual(false)
+    })
+  })
+
+  describe('isRemoteConnectionEstablished', () => {
+    it('Should return true if remote connection is established', () => {
+      const state = generateState({
+        providers: Map({
+          [WALLET_PROVIDER.REMOTE]: {
+            network: 'RINKEBY',
+          },
+        }),
+      })
+
+      expect(isRemoteConnectionEstablished(state)).toEqual(true)
+    })
+
+    it('Should return false if remote connection is not established', () => {
+      const state = generateState({
+        providers: Map({
+          [WALLET_PROVIDER.REMOTE]: {
+            network: undefined,
+          },
+        }),
+      })
+
+      expect(isRemoteConnectionEstablished(state)).toEqual(false)
+    })
+
+    it('Should return false if there are no registered providers', () => {
+      const state = generateState({
+        providers: Map({}),
+      })
+
+      expect(isRemoteConnectionEstablished(state)).toEqual(false)
     })
   })
 

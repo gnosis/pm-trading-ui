@@ -52,7 +52,7 @@ class Remote extends InjectedWeb3 {
    */
   async initialize(opts) {
     super.initialize(opts)
-    this.runProviderRegister(this)
+    this.runProviderRegister(this, { priority: Remote.providerPriority })
 
     this.walletEnabled = await this.initWeb3()
 
@@ -62,6 +62,7 @@ class Remote extends InjectedWeb3 {
 
     try {
       await this.runProviderUpdate(this, {
+        available: this.walletEnabled && this.account != null,
         networkId: this.networkId,
         network: this.network,
         account: this.account,

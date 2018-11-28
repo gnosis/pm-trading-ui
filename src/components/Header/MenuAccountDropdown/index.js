@@ -3,14 +3,13 @@ import Tooltip from 'rc-tooltip'
 import cn from 'classnames/bind'
 import MenuActions from './MenuActions'
 import style from './dropdown.scss'
-import './tooltip.scss?raw'
 
 const cx = cn.bind(style)
 
 const MenuAccountDropdown = () => (
   <Tooltip
     placement="bottomRight"
-    overlayClassName="menuAccountDropdown"
+    overlayClassName={cx('menuAccountDropdown')}
     overlay={<MenuActions />}
     align={{
       offset: ['10%', 20],

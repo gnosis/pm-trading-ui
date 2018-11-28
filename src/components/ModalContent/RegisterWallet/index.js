@@ -55,14 +55,17 @@ const RegisterMainnetAddress = ({
         </div>
         <p className={cx('rinkebyEthAnnotation')}>
           {t('register_wallet.eth_required')} <br />
-          {t('register_wallet.rinkeby_eth_balance')}{' '}
-          <DecimalValue value={currentBalance} className={cx('walletBalance')} /> -{' '}
+          {t('register_wallet.rinkeby_eth_balance')} <DecimalValue value={currentBalance} className={cx('walletBalance')} /> -{' '}
           <a className={cx('faucetLink')} href="https://faucet.rinkeby.io/" target="_blank" rel="noopener noreferrer">
             {t('register_wallet.rinkeby_eth_request')}
           </a>
           <img src={LinkIcon} className={cx('linkIcon')} alt="" />
         </p>
-        {insufficientFunds && <span className={cx('insufficientETH')}>{t('register_wallet.not_enough_balance')}</span>}
+        {insufficientFunds && (
+          <span className={cx('insufficientETH')}>
+            {t('register_wallet.not_enough_balance')}
+          </span>
+        )}
         <LegalCompliance
           submitButtonLabel={t('register_wallet.register_wallet').toUpperCase()}
           submitButtonClassName={cx('btn', 'btn-primary', 'actionButton')}
@@ -103,9 +106,6 @@ const enhancer = compose(
   withNamespaces(),
   lifecycle({
     componentDidMount() {
-      if (!this.props.currentAccount) {
-        this.props.closeModal()
-      }
       this.props.requestRegistrationGasCost()
       this.props.requestGasPrice()
     },

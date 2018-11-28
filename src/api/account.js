@@ -1,8 +1,8 @@
-import { weiToEth, hexWithPrefix } from 'utils/helpers'
+import { weiToEth, hexWithPrefix, hexWithoutPrefix } from 'utils/helpers'
 import Gnosis from '@gnosis.pm/pm-js/'
 import * as api from 'api'
 
-export const zeroAccount = '0x'
+const zeroAccount = '0x0000000000000000000000000000000000000000'
 
 /**
  * Returns the default node account

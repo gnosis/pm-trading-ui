@@ -4,7 +4,7 @@ import createIcon from 'blockies'
 
 import { hexWithoutPrefix } from 'utils/helpers'
 
-const Identicon = ({ account, className, ...props }) => {
+const Identicon = ({ account, className }) => {
   const canvas = createIcon({
     // All options are optional
     seed: hexWithoutPrefix(account).toLowerCase(), // seed used to generate icon data, default: random
@@ -17,7 +17,7 @@ const Identicon = ({ account, className, ...props }) => {
     // that look like eyes, mouths and noses.
   })
 
-  return <img className={className} src={canvas.toDataURL()} alt={account} {...props} />
+  return <img className={className} src={canvas.toDataURL()} alt={account} />
 }
 
 Identicon.propTypes = {

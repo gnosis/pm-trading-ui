@@ -1,14 +1,10 @@
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
-import { withNamespaces } from 'react-i18next'
 import 'react-table/react-table.css'
 import * as React from 'react'
 import ReactTable from 'react-table'
-import { snakeCase } from 'lodash'
 import { isFeatureEnabled } from 'utils/features'
-import {
-  badgeCell, rankCell, olyCell, rewardCell, userAddressCell, ownTrCallback, ownTheadCallback,
-} from './table'
+import { badgeCell, rankCell, olyCell, rewardCell, userAddressCell, ownTrCallback, ownTheadCallback } from './table'
 
 const rewardsEnabled = isFeatureEnabled('rewards')
 const badgesEnabled = isFeatureEnabled('badges')
@@ -48,7 +44,7 @@ const columnBold = {
 
 const columns = [
   {
-    Header: '#', // scoreboard.table.current_rank
+    Header: '#',
     id: 'currentRank',
     accessor: 'currentRank',
     headerStyle,
@@ -58,7 +54,7 @@ const columns = [
   {
     Header: 'Change (24h)',
     accessor: 'diffRank',
-    id: 'diffRank', // scoreboard.table.diff_rank
+    id: 'diffRank',
     Cell: rankCell,
     headerStyle,
     style: columnBold,
@@ -66,7 +62,7 @@ const columns = [
   },
   {
     Header: 'User',
-    accessor: 'account', // scoreboard.table.account
+    accessor: 'account',
     headerStyle: headerLeft,
     style: { ...columnStyle, textAlign: 'left' },
     width: 150,
@@ -74,21 +70,21 @@ const columns = [
   },
   {
     Header: 'Total Score (OLY)',
-    accessor: 'score', // scoreboard.table.score
+    accessor: 'score',
     headerStyle,
     style: { ...columnBold, color: '#000000', letterSpacing: '0.5px' },
     Cell: olyCell('score'),
   },
   {
     Header: 'Total Balance (OLY)',
-    accessor: 'balance', // scoreboard.table.balance
+    accessor: 'balance',
     headerStyle,
     style: columnStyle,
     Cell: olyCell('balance'),
   },
   {
     Header: 'Predicted Profits (OLY)',
-    accessor: 'predictedProfit', // scoreboard.table.predicted_profit
+    accessor: 'predictedProfit',
     headerStyle,
     style: columnStyle,
     Cell: olyCell('predictedProfit'),
@@ -97,18 +93,13 @@ const columns = [
 
 const EmptyData = () => <div />
 
-const ScoreTable = ({
-  tableData, myAccount, collateralToken, t,
-}) => {
+const ScoreTable = ({ tableData, myAccount }) => {
   const size = tableData ? tableData.size : 0
 
-  const tableColumns = [...columns.map(column => ({
-    ...column,
-    Header: t(`scoreboard.table.${snakeCase(column.accessor)}`, { tokenSymbol: collateralToken.symbol }),
-  }))]
+  const tableColumns = [...columns]
   if (badgesEnabled) {
     tableColumns.push({
-      Header: t('scoreboard.table.badge'),
+      Header: 'Badge',
       accessor: 'predictions',
       id: 'predictions',
       Cell: badgeCell,
@@ -118,7 +109,7 @@ const ScoreTable = ({
   }
   if (rewardsEnabled) {
     tableColumns.push({
-      Header: t('scoreboard.table.reward'),
+      Header: 'Reward',
       accesor: 'currentRank',
       id: 'reward',
       headerStyle,
@@ -160,9 +151,6 @@ ReactTable.propTypes = {
 
 ScoreTable.propTypes = {
   tableData: dataType,
-  collateralToken: PropTypes.shape({
-    symbol: PropTypes.string,
-  }).isRequired,
   myAccount: PropTypes.string,
 }
 
@@ -171,4 +159,4 @@ ScoreTable.defaultProps = {
   myAccount: 'Unknown',
 }
 
-export default withNamespaces()(ScoreTable)
+export default ScoreTable

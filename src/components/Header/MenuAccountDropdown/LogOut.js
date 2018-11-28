@@ -10,7 +10,7 @@ const cx = cn.bind(style)
 
 const LogOut = ({ logout }) => (
   <li key="action-logout" className={cx('action')}>
-    <button type="button" onClick={logout}>
+    <button type="button" onClick={() => logout()}>
       <Icon type="logout" size={13} /> Logout
     </button>
   </li>
@@ -20,9 +20,6 @@ LogOut.propTypes = {
   logout: PropTypes.func.isRequired,
 }
 
-export default connect(
-  null,
-  {
-    logout: logoutProvider,
-  },
-)(LogOut)
+export default connect(null, {
+  logout: logoutProvider,
+})(LogOut)

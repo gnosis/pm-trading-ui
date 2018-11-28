@@ -113,11 +113,11 @@
   "legal": {
     "heading": "Terms of service and privacy policy",
     "to_use_app": "For using {{appName}}, you have to agree with our",
-    "read_and_understood": "I read and understood <1>{{document}}</1>",
+    "read_and_understood": "I have read and understood",
     "documents": {
       "terms_of_service": "Terms of Service",
       "privacy_policy": "Privacy Policy",
-      "risk_disclaimer": "Risk Disclaimer",
+      "risk_disclaimer": "Terms of Service",
       "address_public_description": "I understand and agree that my wallet address will be publicly displayed on the scoreboard"
     }
   },
@@ -132,6 +132,10 @@
       "not_enough_balance": "You do not have enough ETH for this transaction to cover the gas costs.",
       "failed_tx_ask_support": "Unfortunately, the transaction failed. Please try again or contact our support for further assistance."
     }
+  },
+  "metamask": {
+    "install_metamask": "Install Metamask",
+    "missing": "Metamask is currently not installed or detected. <1>Please download and install Metamask</1> to start using {{name}}"
   },
   "register_wallet": {
     "heading": "Register wallet address",
@@ -150,24 +154,16 @@
     "ethereum_wallet_address": "Ethereum Address",
     "enter_valid_address": "Please enter a valid address"
   },
+  "switch_network": {
+    "heading": "Switch to the {{targetNetwork}} Network",
+    "instructions": "Your provider is not currently set to the {{targetNetwork}} network. Please switch to {{targetNetwork}} and make sure your wallet is unlocked to start using {{applicationName}}."
+  },
   "transaction_explanations": {
     "heading": "We will ask you to approve the following transactions:"
   },
-  "initialisation_error": {
-    "heading": "Oops! There was an error initialising {{provider}}.",
-    "instructions": "Please make sure you're using an up-to-date version of your wallet or contact our support."
-  },
-  "install_provider": {
-    "heading": "Install {{provider}}",
-    "instructions": "{{provider}} is currently not installed or detected. <1>Please download and install {{provider}}</1> to start using {{application}}"
-  },
-  "select_provider": {
-    "heading": "How would you like to access your wallet?",
-    "switch_network": "To use the interface, your wallet has to be connected to the {{targetNetwork}} network."
-  },
   "unlock": {
     "heading": "Unlock your MetaMask wallet",
-    "instructions": "Please unlock your MetaMask wallet to start using {{applicationName}}."
+    "instructions": "Please unlock your MetaMask wallet to start using {applicationName}."
   },
   "verification": {
     "errors": {
@@ -177,21 +173,5 @@
   },
   "warning": {
     "price_changed": "The transaction could not be processed because the trading price changed. <br />Please check the new price and try again."
-  },
-  "scoreboard": {
-    "heading": "Scoreboard",
-    "explanation_ranking": "The total score is calculated based on the sum of predicted profits and {{tokenSymbol}} tokens each wallet holds. Scores are updated every hour.",
-    "no_entries": "No entries in Scoreboard yet",
-    "your_account": "= YOUR ACCOUNT",
-    "table": {
-      "current_rank": "#",
-      "diff_rank": "Change (24h)",
-      "account": "User",
-      "score": "Total Score ({{tokenSymbol}})",
-      "balance": "Total Balance ({{tokenSymbol}})",
-      "predicted_profit": "Predicted Profits ({{tokenSymbol}})",
-      "badge": "Badge",
-      "reward": "Reward"
-    }
   }
 }

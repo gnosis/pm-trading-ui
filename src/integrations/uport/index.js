@@ -30,10 +30,6 @@ class Uport extends InjectedWeb3 {
     }, Uport.watcherInterval)
   }
 
-  checkIfInstalled() {
-    return true
-  }
-
   /**
    * Tries to initialize and enable the current provider
    * @param {object} opts - Integration Options
@@ -60,6 +56,7 @@ class Uport extends InjectedWeb3 {
     }
 
     return this.runProviderUpdate(this, {
+      available: true,
       network: this.network,
       networkId: this.networkId,
       account: this.account,

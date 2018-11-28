@@ -1,10 +1,11 @@
 import { createAction } from 'redux-actions'
 
 import { isGnosisInitialized } from 'store/selectors/blockchain'
-import { getActiveProvider, hasActiveProvider } from 'integrations/store/selectors'
+import { getActiveProvider, initializedAllProviders } from 'integrations/store/selectors'
+import { WALLET_PROVIDER } from 'integrations/constants'
 import { initGnosis } from 'store/actions/blockchain'
+import { isFeatureEnabled } from 'utils/features'
 
-export const checkAvailability = createAction('CHECK_PROVIDER_AVAILABILITY')
 export const registerProvider = createAction('REGISTER_PROVIDER')
 export const updateProvider = createAction('UPDATE_PROVIDER')
 export const logout = createAction('PROVIDER_LOGOUT')
@@ -13,19 +14,27 @@ export const initProviders = createAction('INIT_PROVIDERS')
 export const setLegalDocumentsAccepted = createAction('SET_LEGAL_DOCUMENTS_ACCEPTED')
 export const saveWalletSetting = createAction('SAVE_WALLET_SETTING')
 
-const GNOSIS_REINIT_KEYS = ['network', 'account']
+const GNOSIS_REINIT_KEYS = ['network', 'account', 'available']
 
 export const logoutProvider = () => async (dispatch, getState) => {
   const state = getState()
   const { name: providerName } = getActiveProvider(state)
 
   localStorage.removeItem(`GNOSIS_${process.env.VERSION}`)
-  localStorage.removeItem('LAST_USED_PROVIDER')
 
   await dispatch(logout(providerName))
 }
 
 export const runProviderUpdate = (provider, data) => async (dispatch, getState) => {
+  if (provider.constructor.providerName === WALLET_PROVIDER.METAMASK && isFeatureEnabled('tournament')) {
+    if (data.account === null) {
+      dispatch(updateProvider({
+        provider: provider.constructor.providerName,
+        mainnetAddress: null,
+      }))
+    }
+  }
+
   await dispatch(updateProvider({
     provider: provider.constructor.providerName,
     ...data,
@@ -48,9 +57,9 @@ export const runProviderUpdate = (provider, data) => async (dispatch, getState) 
   }
 
   if (!isInitialized) {
-    const providerInitialized = hasActiveProvider(state)
+    const providersLoaded = initializedAllProviders(state)
 
-    if (providerInitialized) {
+    if (providersLoaded) {
       await dispatch(initGnosis())
     }
   }

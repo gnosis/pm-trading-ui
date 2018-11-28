@@ -1,5 +1,4 @@
 import React from 'react'
-import { Trans } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { Field } from 'redux-form'
 import { Checkbox } from 'components/Form'
@@ -9,12 +8,12 @@ const DocumentField = ({
 }) => (
   <Field name={id} component={Checkbox} className={className}>
     {type === 'TOS_DOCUMENT' && (
-      <Trans key="legal.read_and_understood" document={t(`legal.documents.${id}`)}>
-        I have read and understood the &nbsp;
+      <span>
+        {t('legal.read_and_understood')}&nbsp;
         <a href={`${file}`} target="_blank" rel="noopener noreferrer">
           {t(`legal.documents.${id}`)}
         </a>
-      </Trans>
+      </span>
     )}
     {type === 'TOS_TEXT' && <span>{t(`legal.documents.${id}_description`)}</span>}
   </Field>
