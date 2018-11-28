@@ -58,7 +58,7 @@ export const signMessage = async (message) => {
   const v = gnosis.web3.toBigNumber(`0x${signature.slice(130, 132)}`)
 
   return {
-    termsHash: gnosis.web3.sha3(`\x19Ethereum Signed Message:\n${message.length}${message}`),
+    termsHash: gnosis.web3.utils.sha3(`\x19Ethereum Signed Message:\n${message.length}${message}`),
     r: r.toString(10),
     s: s.toString(10),
     v: v.toString(10),
