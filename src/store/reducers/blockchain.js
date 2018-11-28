@@ -14,6 +14,7 @@ import {
 import { setGasCost } from 'routes/MarketDetails/store/actions'
 
 import { GAS_COST } from 'utils/constants'
+import { setTargetNetworkId } from '../actions/blockchain'
 
 const reducer = handleActions(
   {
@@ -25,6 +26,7 @@ const reducer = handleActions(
     [setGnosisROInitialized]: (state, { payload: { initialized } }) => state.set('gnosisROInitialized', initialized),
     [setGasCost]: (state, { payload: { contractType, gasCost } }) => state.setIn(['gasCosts', contractType], gasCost),
     [setGasPrice]: (state, { payload: { entityType, gasPrice } }) => state.set(entityType, gasPrice),
+    [setTargetNetworkId]: (state, { payload: { targetNetworkId } }) => state.set('targetNetworkId', targetNetworkId),
     [setTokenSymbol]: (state, { payload: { tokenAddress, tokenSymbol } }) => state.setIn(['tokenSymbols', tokenAddress], tokenSymbol),
     [setTokenBalance]: (state, { payload: { tokenAddress, tokenBalance } }) => state.setIn(['tokenBalances', tokenAddress], tokenBalance),
     [setCollateralToken]: (state, {
@@ -50,6 +52,7 @@ const reducer = handleActions(
     gnosisROInitialized: false,
     tokenSymbols: Map(),
     tokenBalances: Map(),
+    targetNetworkId: undefined,
     collateralToken: Map({
       source: undefined,
       address: undefined,

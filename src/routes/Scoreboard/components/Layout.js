@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames/bind'
+import { withNamespaces } from 'react-i18next'
 import Block from 'components/layout/Block'
 import Img from 'components/layout/Img'
 import Hairline from 'components/layout/Hairline'
@@ -23,12 +24,12 @@ const providerConfig = getProviderConfig()
 const rewardsEnabled = isFeatureEnabled('rewards')
 const { levels } = getFeatureConfig('rewards')
 
-const NoRows = () => <Paragraph className={cx('norows')}>No rows found</Paragraph>
+const NoRows = ({ t }) => <Paragraph className={cx('norows')}>{t('scoreboard.no_entries')}</Paragraph>
 
 class Layout extends React.PureComponent {
   render() {
     const {
-      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank, hasClaimedReward,
+      data, myAccount, mainnetAddress, openSetMainnetAddressModal, openClaimRewardModal, rank, hasClaimedReward, collateralToken, t,
     } = this.props
     const hasRows = data && data.size > 0
     let rewardValue = 0
@@ -68,13 +69,12 @@ class Layout extends React.PureComponent {
           )}
           <Block className={cx('trophy')}>
             <Img src={trophy} width="100" />
-            <Paragraph>Scoreboard</Paragraph>
+            <Paragraph>{t('scoreboard.heading')}</Paragraph>
           </Block>
           <Paragraph className={cx('explanation')}>
-            The total score is calculated based on the sum of predicted profits and OLY tokens each wallet holds. Scores
-            are updated every hour.
+            {t('scoreboard.explanation_ranking', { tokenSymbol: collateralToken.symbol })}
           </Paragraph>
-          {hasRows ? <Table data={data} myAccount={myAccount} /> : <NoRows />}
+          {hasRows ? <Table data={data} myAccount={myAccount} collateralToken={collateralToken} /> : <NoRows t={t} />}
           <Block margin="xl" />
         </PageFrame>
       </Block>
@@ -101,6 +101,10 @@ Layout.propTypes = {
   mainnetAddress: PropTypes.string,
   rank: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   hasClaimedReward: PropTypes.bool.isRequired,
+  collateralToken: PropTypes.shape({
+    symbol: PropTypes.string,
+  }).isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 Layout.defaultProps = {
@@ -110,4 +114,4 @@ Layout.defaultProps = {
   rank: '',
 }
 
-export default Layout
+export default withNamespaces()(Layout)
