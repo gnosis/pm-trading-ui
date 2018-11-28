@@ -7,9 +7,13 @@ import { upperFirst } from 'lodash'
 import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 import IndefiniteSpinner from 'components/Spinner/Indefinite'
-import { isGnosisInitialized, getTargetNetworkId } from 'store/selectors/blockchain'
+import { isGnosisInitialized } from 'store/selectors/blockchain'
 import {
-  isOnWhitelist, checkWalletConnection, hasAcceptedTermsAndConditions, isConnectedToCorrectNetwork,
+  isConnectedToCorrectNetwork,
+  isOnWhitelist,
+  checkWalletConnection,
+  hasAcceptedTermsAndConditions,
+  getTargetNetworkId,
 } from 'integrations/store/selectors'
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import style from './interactionButton.scss'
@@ -96,8 +100,7 @@ class InteractionButton extends Component {
     }
 
     const btn = (
-      // eslint-disable-next-line
-      <button className={classNames} type={type} onClick={onClickHandler} disabled={isDisabled}>
+      <button className={classNames} type={type || 'button'} onClick={onClickHandler} disabled={isDisabled}>
         <div className={cx('interactionButtonInner')}>{children}</div>
       </button>
     )
@@ -122,15 +125,10 @@ class InteractionButton extends Component {
       })
       return (
         <Tooltip overlay={error}>
-          <span
-            style={{
-              display: 'inline-block',
-              cursor: 'not-allowed',
-              width: '100%',
-              height: '100%',
-            }}
-          >
-            {button}
+          <span style={{
+            display: 'inline-block', cursor: 'not-allowed', width: '100%', height: '100%',
+          }}
+          >{button}
           </span>
         </Tooltip>
       )
@@ -173,7 +171,7 @@ InteractionButton.propTypes = {
   type: PropTypes.oneOf(['button', 'submit']),
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
-  targetNetworkId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  targetNetworkId: PropTypes.number,
   termsNotRequiredOrAccepted: PropTypes.bool,
   disableLegalCheck: PropTypes.bool,
   disableWalletCheck: PropTypes.bool,

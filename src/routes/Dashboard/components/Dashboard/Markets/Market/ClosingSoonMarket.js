@@ -20,19 +20,16 @@ const ClosingSoonMarket = ({ market, viewMarket }) => {
 
   const outcomeOptions = { showOnlyTrendingOutcome: true }
   const outcomes = market.outcomes ? market.outcomes.map(outcome => outcome.name).toArray() : []
-  const bounds = market.bounds
-    ? {
-      upperBound: market.bounds.upper,
-      lowerBound: market.bounds.lower,
-      unit: market.bounds.unit,
-      decimals: market.bounds.decimals,
-    }
-    : {}
+  const bounds = market.bounds ? {
+    upperBound: market.bounds.upper,
+    lowerBound: market.bounds.lower,
+    unit: market.bounds.unit,
+    decimals: market.bounds.decimals,
+  } : {}
   const winningOutcome = market.type === OUTCOME_TYPES.CATEGORICAL ? market.outcomes.keyOf(market.winningOutcome) : market.winningOutcome
-  const handleViewMarket = () => viewMarket(market.address)
 
   return (
-    <button type="button" className={cx('market', 'closingSoon')} onClick={handleViewMarket}>
+    <button type="button" className={cx('market', 'closingSoon')} onClick={() => viewMarket(market.address)}>
       <div className={cx('timeUntilResolution')}>
         <span className={cx('value')}>{timeUntilResolution}</span>
       </div>

@@ -7,7 +7,7 @@ import { Link, withRouter } from 'react-router-dom'
 import Decimal from 'decimal.js'
 import { decimalToText, decimalJsTest } from 'components/DecimalValue'
 import Tooltip from 'rc-tooltip'
-import 'rc-tooltip/assets/bootstrap.css?raw'
+import 'rc-tooltip/assets/bootstrap.css'
 
 import { ETHEREUM_NETWORK_IDS } from 'integrations/constants'
 import { getFeatureConfig } from 'utils/features'

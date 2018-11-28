@@ -25,7 +25,6 @@ const Icon = ({
     ...style,
   }
 
-
   return <div {...props} className={cx('icon', className)} style={iconStyle} />
 }
 

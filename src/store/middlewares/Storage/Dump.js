@@ -34,6 +34,7 @@ const saveStorage = throttle((store, storage, options) => {
   storage.setItem(STORAGE_KEY, encoded)
 }, STORAGE_SAVE_INTERVAL)
 
+
 const middleware = (storage, whitelist) => {
   const storageIsValid = storage instanceof Storage
 

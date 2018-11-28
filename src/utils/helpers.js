@@ -82,6 +82,28 @@ export const restFetch = url => fetch(url)
       reject(err)
     }),
   )
+export const bemifyClassName = (className, element, modifier) => {
+  const classNameDefined = className || ''
+  const classNames = isArray(classNameDefined) ? classNameDefined : classNameDefined.split(' ')
+
+  if (classNames && classNames.length) {
+    let classPath = ''
+
+    if (element) {
+      classPath += `__${element}`
+    }
+    if (element && modifier) {
+      classPath += `--${modifier}`
+    }
+
+    return classNames
+      .filter(s => s.length)
+      .map(cls => `${cls}${classPath}`)
+      .join(' ')
+  }
+
+  return ''
+}
 
 export const timeoutCondition = (timeout, rejectReason) => new Promise((_, reject) => {
   setTimeout(() => {

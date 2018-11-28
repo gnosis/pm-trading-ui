@@ -6,6 +6,7 @@ import {
   checkWalletConnection,
   hasAcceptedTermsAndConditions,
   isConnectedToCorrectNetwork,
+  getTargetNetworkId,
   getRegisteredMainnetAddress,
   isVerified,
   isMetamaskLocked,
@@ -17,7 +18,7 @@ import {
   getFeatureConfig,
 } from 'utils/features'
 
-import { getCollateralToken, getTargetNetworkId } from 'store/selectors/blockchain'
+import { getCollateralToken } from 'store/selectors/blockchain'
 
 import { meSelector } from 'routes/Scoreboard/store/selectors'
 

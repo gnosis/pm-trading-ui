@@ -13,17 +13,17 @@ const LoadableMobile = Loadable({
 })
 
 const Layout = props => (
-  <>
-    <Desktop>
-      <LoadableDesktop {...props} />
+  <div>
+    <Desktop {...props}>
+      <LoadableDesktop />
     </Desktop>
-    <Tablet>
-      <LoadableMobile {...props} />
+    <Tablet {...props}>
+      <LoadableMobile />
     </Tablet>
-    <Mobile>
-      <LoadableMobile {...props} />
+    <Mobile {...props}>
+      <LoadableMobile />
     </Mobile>
-  </>
+  </div>
 )
 
 export default Layout
