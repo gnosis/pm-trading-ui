@@ -99,10 +99,64 @@ export const initReadOnlyGnosis = () => async (dispatch) => {
     await initGnosisConnection('readOnly')({
       ethereum: new Web3(new Web3.providers.HttpProvider(ethereumUrl)).currentProvider,
     })
+
     await dispatch(setGnosisROInitialized({ initialized: true }))
   } catch (error) {
     console.error(`PM-js RO initialization Error: ${error}`)
   }
+}
+
+/**
+ * (Re)-Initializes PM-js connection according to current providers settings
+ */
+export const initGnosis = () => async (dispatch, getState) => {
+  // initialize
+  let newProvider
+
+  try {
+    const state = getState()
+
+    // determine new provider
+    newProvider = findActiveProvider(state)
+
+    if (newProvider) {
+      await dispatch(setActiveProvider(newProvider.name))
+      // init Gnosis connection
+
+      const opts = getGnosisJsOptions(newProvider)
+      await initGnosisConnection('main')(opts)
+
+      dispatch(setGnosisInitialized({ initialized: true }))
+
+      if (window && window.localStorage) {
+        localStorage.setItem('LAST_USED_PROVIDER', newProvider.name)
+      }
+    }
+  } catch (error) {
+    console.warn(`pm-js initialization Error: ${error}`)
+    dispatch(setConnectionStatus({ connected: false }))
+    return dispatch(setGnosisInitialized({ initialized: false, error }))
+  }
+
+  if (newProvider) {
+    // connect
+    try {
+      // runs test executions on gnosisjs
+      const getConnection = async () => {
+        // these throw if they're not available, meaning we don't have a connection
+        const account = await getCurrentAccount()
+        await getCurrentBalance(account)
+      }
+
+      await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
+      await dispatch(setConnectionStatus({ connected: true }))
+    } catch (error) {
+      console.warn(`pm-js connection Error: ${error}`)
+      return dispatch(setConnectionStatus({ connected: false }))
+    }
+  }
+
+  return undefined
 }
 
 export const updateCollateralToken = () => async (dispatch) => {
@@ -185,59 +239,6 @@ export const updateCollateralToken = () => async (dispatch) => {
         isWrappedEther,
       }),
     )
-  }
-
-  return undefined
-}
-
-/**
- * (Re)-Initializes PM-js connection according to current providers settings
- */
-export const initGnosis = () => async (dispatch, getState) => {
-  // initialize
-  let newProvider
-  await dispatch(updateCollateralToken())
-
-  try {
-    const state = getState()
-
-    // determine new provider
-    newProvider = findActiveProvider(state)
-
-    if (newProvider) {
-      await dispatch(setActiveProvider(newProvider.name))
-      // init Gnosis connection
-
-      const opts = getGnosisJsOptions(newProvider)
-      await initGnosisConnection('main')(opts)
-      dispatch(setGnosisInitialized({ initialized: true }))
-
-      if (window && window.localStorage) {
-        localStorage.setItem('LAST_USED_PROVIDER', newProvider.name)
-      }
-    }
-  } catch (error) {
-    console.warn(`pm-js initialization Error: ${error}`)
-    dispatch(setConnectionStatus({ connected: false }))
-    return dispatch(setGnosisInitialized({ initialized: false, error }))
-  }
-
-  if (newProvider) {
-    // connect
-    try {
-      // runs test executions on gnosisjs
-      const getConnection = async () => {
-        // these throw if they're not available, meaning we don't have a connection
-        const account = await getCurrentAccount()
-        await getCurrentBalance(account)
-      }
-
-      await Promise.race([getConnection(), timeoutCondition(NETWORK_TIMEOUT, 'connection timed out')])
-      await dispatch(setConnectionStatus({ connected: true }))
-    } catch (error) {
-      console.warn(`pm-js connection Error: ${error}`)
-      return dispatch(setConnectionStatus({ connected: false }))
-    }
   }
 
   return undefined

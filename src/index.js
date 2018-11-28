@@ -2,7 +2,7 @@ import '@babel/polyfill'
 import 'whatwg-fetch'
 import Raven from 'raven-js'
 import RootComponent from 'components/Root'
-import { initReadOnlyGnosis, requestTargetNetworkId } from 'store/actions/blockchain'
+import { initReadOnlyGnosis, updateCollateralToken, requestTargetNetworkId } from 'store/actions/blockchain'
 import { getLastUsedProvider } from 'integrations/utils'
 import Decimal from 'decimal.js'
 import React from 'react'
@@ -21,6 +21,7 @@ setMomentDurationFormat()
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 store.dispatch(initReadOnlyGnosis())
+store.dispatch(updateCollateralToken())
 store.dispatch({ type: 'CHECK_AVAILABLE_PROVIDERS' })
 store.dispatch(requestTargetNetworkId())
 

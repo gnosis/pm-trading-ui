@@ -177,5 +177,21 @@
   },
   "warning": {
     "price_changed": "The transaction could not be processed because the trading price changed. <br />Please check the new price and try again."
+  },
+  "scoreboard": {
+    "heading": "Scoreboard",
+    "explanation_ranking": "The total score is calculated based on the sum of predicted profits and {{tokenSymbol}} tokens each wallet holds. Scores are updated every hour.",
+    "no_entries": "No entries in Scoreboard yet",
+    "your_account": "= YOUR ACCOUNT",
+    "table": {
+      "current_rank": "#",
+      "diff_rank": "Change (24h)",
+      "account": "User",
+      "score": "Total Score ({{tokenSymbol}})",
+      "balance": "Total Balance ({{tokenSymbol}})",
+      "predicted_profit": "Predicted Profits ({{tokenSymbol}})",
+      "badge": "Badge",
+      "reward": "Reward"
+    }
   }
 }
