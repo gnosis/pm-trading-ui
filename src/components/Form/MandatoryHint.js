@@ -1,4 +1,6 @@
 import React from 'react'
+imoprt PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import classnames from 'classnames/bind'
 import Tooltip from 'rc-tooltip'
 
@@ -6,10 +8,10 @@ import styles from './MandatoryHint.scss'
 
 const cx = classnames.bind(styles)
 
-const MandatoryHint = () => (
+const MandatoryHint = ({ t }) => (
   <Tooltip overlay={(
     <span>
-This field is required
+      {t('form.field_required')};
     </span>
   )}
   >
@@ -19,4 +21,8 @@ This field is required
   </Tooltip>
 )
 
-export default MandatoryHint
+MandatoryHint.propTypes = {
+  t: PropTypes.func.isRequired,
+}
+
+export default withNamespaces()(MandatoryHint)

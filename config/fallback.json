@@ -84,8 +84,8 @@
   "footer": {
     "enabled": true,
     "content": {
-      "type": "file",
-      "fileName": "footer",
+      "type": "translation",
+      "key": "footer_md",
       "markdown": true
     }
   },
