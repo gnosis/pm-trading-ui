@@ -170,9 +170,26 @@
     "instructions": "Please unlock your MetaMask wallet to start using {{applicationName}}."
   },
   "verification": {
+    "try_again": "Try again",
+    "sign_message": "Please sign the Metamask message in order to continue the verification process.",
+    "documents_submitted": "Documents submitted",
+    "check_email": "Please check your email to continue with the process.",
+    "have_to_verify_identity": "In order to interact with {{appName}} you have to verify your Identity with OnFido.",
     "errors": {
       "not_loaded": "Our User Verification Integration could not be loaded.",
       "not_found": "Sorry for the inconvience, please try again later!"
+    },
+    "reasons": {
+      "application_denied": "Unfortunately, you didn’t pass the verification process. Please get in contact with OnFido.com for further information.",
+      "signature_failed": "Your Message Signature was rejected. Please try again, and make sure you're using the latest version of your wallet-provider.",
+      "previous_not_completed": "It seems your previous verification did not complete. Please try again.",
+      "verification_pending": "Please try again later. Check your E-Mails to continue with the verification process if you have not done so. Additionally, if you didn't receive an E-Mail, you can retry the verification below."
+    },
+    "headings": {
+      "application_not_completed": "Your application was not completed",
+      "waiting_for_approval": "Your application is pending with our Verification Service",
+      "denied_default": "Sorry, you currently can't interact with {{applicationName}}",
+      "confirm_identity": "Confirm your Identity"
     }
   },
   "warning": {

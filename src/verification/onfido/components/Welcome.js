@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import classnames from 'classnames/bind'
 import { getFeatureConfig } from 'utils/features'
 import { EMAIL_REGEXP } from 'utils/constants'
@@ -83,5 +84,17 @@ const Welcome = ({
     </div>
   </div>
 )
+
+Welcome.propTypes = {
+  setLegalDocumentsAccepted: PropTypes.func.isRequired,
+  submit: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  invalid: PropTypes.bool,
+  tosAccepted: PropTypes.bool.isRequired,
+}
+
+Welcome.defaultProps = {
+  invalid: true,
+}
 
 export default Welcome
