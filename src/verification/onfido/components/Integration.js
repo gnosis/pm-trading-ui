@@ -44,10 +44,12 @@ const enhancer = lifecycle({
         {
           type: 'welcome',
           options: {
-            title: t('verification.confirm_identity'),
-            descriptions: t('verification.have_to_verify_identity', {
-              appName: tournamentConfig.name || 'the application',
-            }),
+            title: t('verification.headings.confirm_identity'),
+            descriptions: [
+              t('verification.have_to_verify_identity', {
+                appName: tournamentConfig.name || 'the application',
+              }),
+            ],
           },
         },
         'document',

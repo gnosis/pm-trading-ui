@@ -175,6 +175,13 @@
     "documents_submitted": "Documents submitted",
     "check_email": "Please check your email to continue with the process.",
     "have_to_verify_identity": "In order to interact with {{appName}} you have to verify your Identity with OnFido.",
+    "form": {
+      "firstname": "First Name",
+      "lastname": "Last Name",
+      "email": "E-Mail",
+      "verify": "Verify",
+      "already_accepted_tos": "You already accepted the terms of conditions. Please start the verification process by following the instructions."
+    },
     "errors": {
       "not_loaded": "Our User Verification Integration could not be loaded.",
       "not_found": "Sorry for the inconvience, please try again later!"
@@ -190,6 +197,10 @@
       "waiting_for_approval": "Your application is pending with our Verification Service",
       "denied_default": "Sorry, you currently can't interact with {{applicationName}}",
       "confirm_identity": "Confirm your Identity"
+    },
+    "validation": {
+      "required": "This field is required",
+      "valid_email": "Requires a valid E-Mail address"
     }
   },
   "warning": {

@@ -7,11 +7,12 @@ import { Field } from 'redux-form'
 
 import { TextInput, MandatoryHint } from 'components/Form'
 import LegalCompliance from 'containers/LegalCompliance'
+import i18n from 'i18n'
 
 import style from './style.scss'
 
-const required = val => (val && val.length > 0 ? undefined : 'This field is required')
-const isEmail = val => (val && EMAIL_REGEXP.test(val) ? undefined : 'Requires a valid E-Mail address')
+const required = val => (val && val.length > 0 ? undefined : i18n.t('verification.validation.required'))
+const isEmail = val => (val && EMAIL_REGEXP.test(val) ? undefined : i18n.t('verification.validation.valid_email'))
 
 const validators = funcs => (val) => {
   let foundError
@@ -38,7 +39,7 @@ const ERROR_STYLE = {
 }
 
 const Welcome = ({
-  setLegalDocumentsAccepted, closeModal, invalid, submit, tosAccepted,
+  setLegalDocumentsAccepted, closeModal, invalid, submit, tosAccepted, t,
 }) => (
   <div className={cx('modal', 'onfido', 'welcome')}>
     <h4 className={cx('heading')}>Start verification process</h4>
@@ -46,15 +47,48 @@ const Welcome = ({
     <div className={cx('form')}>
       <div className={cx('row')}>
         <div className={cx('col-md-6')}>
-          <Field component={TextInput} name="firstName" validate={required} errorStyle={ERROR_STYLE} label={<span>First Name<MandatoryHint /></span>} />
+          <Field
+            component={TextInput}
+            name="firstName"
+            validate={required}
+            errorStyle={ERROR_STYLE}
+            label={(
+              <span>
+                {t('verification.form.firstname')}
+                <MandatoryHint />
+              </span>
+            )}
+          />
         </div>
         <div className={cx('col-md-6')}>
-          <Field component={TextInput} name="lastName" validate={required} errorStyle={ERROR_STYLE} label={<span>Last Name<MandatoryHint /></span>} />
+          <Field
+            component={TextInput}
+            name="lastName"
+            validate={required}
+            errorStyle={ERROR_STYLE}
+            label={(
+              <span>
+                {t('verification.form.lastname')}
+                <MandatoryHint />
+              </span>
+            )}
+          />
         </div>
       </div>
       <div className={cx('row')}>
         <div className={cx('col-md-12')}>
-          <Field component={TextInput} name="email" validate={emailValidations} errorStyle={ERROR_STYLE} label={<span>E-Mail<MandatoryHint /></span>} />
+          <Field
+            component={TextInput}
+            name="email"
+            validate={emailValidations}
+            errorStyle={ERROR_STYLE}
+            label={(
+              <span>
+                {t('verification.form.email')}
+                <MandatoryHint />
+              </span>
+            )}
+          />
         </div>
       </div>
       <div className={cx('row')}>
@@ -74,9 +108,16 @@ const Welcome = ({
             />
           ) : (
             <div>
-              <p>You already accepted the terms of conditions. Please start the verification process by following the instructions.</p>
+              <p>{t('verification.form.already_accepted_tos')}</p>
               <br />
-              <button type="button" className={cx('submitButton', { disabled: invalid })} disabled={invalid} onClick={submit}>Verify</button>
+              <button
+                type="button"
+                className={cx('submitButton', { disabled: invalid })}
+                disabled={invalid}
+                onClick={submit}
+              >
+                {t('verification.form.verify')}
+              </button>
             </div>
           )}
         </div>
@@ -91,6 +132,7 @@ Welcome.propTypes = {
   closeModal: PropTypes.func.isRequired,
   invalid: PropTypes.bool,
   tosAccepted: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 Welcome.defaultProps = {
