@@ -1,5 +1,5 @@
 import React from 'react'
-imoprt PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { withNamespaces } from 'react-i18next'
 import classnames from 'classnames/bind'
 import Tooltip from 'rc-tooltip'
