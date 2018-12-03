@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
 
@@ -42,13 +43,13 @@ class WalletAddress extends Component {
   render() {
     const { showAddress } = this.state
 
-    const changeToVarText = showAddress ? 'deterministic name' : 'address'
+    const changeToVarText = showAddress ? 'deterministic' : 'address'
     const text = this.getText()
     return (
       <Span
         className={cx('walletAddress')}
         onClick={this.onAddressClick}
-        title={`${text} (Click to see ${changeToVarText})`}
+        title={t('wallet_display_type', { text, otherType: changeToVarText })}
       >
         {text}
       </Span>
@@ -57,7 +58,8 @@ class WalletAddress extends Component {
 }
 
 WalletAddress.propTypes = {
+  t: PropTypes.func.isRequired,
   address: PropTypes.string,
 }
 
-export default WalletAddress
+export default withNamespaces()(WalletAddress)
