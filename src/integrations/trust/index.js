@@ -91,6 +91,7 @@ class TrustApp extends InjectedWeb3 {
       network: this.network,
       account: this.account,
       balance: this.balance,
+      status: WALLET_STATUS.INITIALIZED,
     })
   }
 }
