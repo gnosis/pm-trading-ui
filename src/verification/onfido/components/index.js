@@ -13,19 +13,23 @@ const { name: applicationName = 'the application' } = getFeatureConfig('tourname
 
 const cx = classnames.bind(styles)
 
-const SignMessage = () => (
-  <p>Please sign the Metamask message in order to continue the verification process.</p>
+const SignMessage = ({ t }) => (
+  <p>{t('verification.sign_message')}</p>
 )
 
+SignMessage.propTypes = {
+  t: PropTypes.func.isRequired,
+}
+
 const DeniedMessage = ({
-  reason, heading, canRetry, closeModal, setStep,
+  reason, heading, canRetry, closeModal, setStep, t,
 }) => (
   <div className={cx('modal', 'denied')}>
     <button type="button" className={cx('closeButton')} onClick={closeModal} />
-    <h2>{heading}</h2>
+    <h2>{heading || t('verification.headings.denied_default', { applicationName })}</h2>
     <p>{reason}</p>
 
-    {canRetry && <button type="button" className={cx('retryButton')} onClick={() => setStep({ page: 'welcome' })}>Try again</button>}
+    {canRetry && <button type="button" className={cx('retryButton')} onClick={() => setStep({ page: 'welcome' })}>{t('verification.try_again')}</button>}
   </div>
 )
 
@@ -35,11 +39,12 @@ DeniedMessage.propTypes = {
   closeModal: PropTypes.func.isRequired,
   canRetry: PropTypes.bool,
   setStep: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 DeniedMessage.defaultProps = {
   reason: '',
-  heading: `Sorry, you currently can't interact with ${applicationName}`,
+  heading: undefined,
   canRetry: true,
 }
 

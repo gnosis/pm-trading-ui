@@ -31,9 +31,9 @@ OnFidoIntegration.defaultProps = {
 const enhancer = lifecycle({
   async componentDidMount() {
     const {
-      token, startUserReport, account, setStep,
+      token, startUserReport, account, setStep, t,
     } = this.props
-    
+
     Onfido.init({
       // the JWT token that you generated earlier on
       token,
@@ -44,8 +44,12 @@ const enhancer = lifecycle({
         {
           type: 'welcome',
           options: {
-            title: 'Confirm your Identity',
-            descriptions: [`In order to interact with ${tournamentConfig.name || 'the application'} you have to verify your Identity with OnFido.`],
+            title: t('verification.headings.confirm_identity'),
+            descriptions: [
+              t('verification.have_to_verify_identity', {
+                appName: tournamentConfig.name || 'the application',
+              }),
+            ],
           },
         },
         'document',
@@ -53,8 +57,8 @@ const enhancer = lifecycle({
         {
           type: 'complete',
           options: {
-            message: 'Documents submitted',
-            submessage: 'Please check your email to continue with the process.',
+            message: t('verification.documents_submitted'),
+            submessage: t('verification.check_email'),
           },
         },
       ],

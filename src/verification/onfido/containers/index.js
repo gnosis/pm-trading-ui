@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
+import { withNamespaces } from 'react-i18next'
 import { compose, withState, lifecycle } from 'recompose'
 
 import actions from './store/actions'
@@ -11,15 +12,12 @@ const handleCreateVerification = async (result, dispatch, props) => {
   const {
     setStep,
     values,
-    values: {
-      firstName,
-      lastName,
-      email,
-    },
+    values: { firstName, lastName, email },
     promptSignMessage,
     createUserVerification,
     updateUserVerification,
     account,
+    t,
   } = props
 
   // might only needed to accept docs, check if verification was successful already
@@ -36,23 +34,30 @@ const handleCreateVerification = async (result, dispatch, props) => {
 
   if (applicantStatus === 'DENIED') {
     // TOS accepted or not required and application denied
-    return setStep({ page: 'denied', reason: 'Unfortunately, you didn’t pass the verification process. Please get in contact with OnFido.com for further information.' })
+    return setStep({
+      page: 'denied',
+      reason: t('verification.reasons.application_denied'),
+    })
   }
 
   // request signature of a specified message or show denied screen with information about signing messages
   await setStep({ page: 'signMessage' })
   let signature
   try {
-    signature = await promptSignMessage(`I hereby prove that I, ${firstName} ${lastName}, own the account "${account}" with this E-Mail Address "${email}"`)
+    signature = await promptSignMessage(
+      `I hereby prove that I, ${firstName} ${lastName}, own the account "${account}" with this E-Mail Address "${email}"`,
+    )
   } catch (err) {
     console.error(err)
-    return setStep({ page: 'denied', reason: 'Your Message Signature was rejected. Please try again, and make sure you\'re using the latest version of your wallet-provider.' })
+    return setStep({
+      page: 'denied',
+      reason: t('verification.reasons.signature_failed'),
+    })
   }
 
   // start verification or show error message in "denied" modal
   try {
     const { token } = await createUserVerification(firstName, lastName, email, signature, account)
-
 
     await setStep({ page: 'integration', options: { signature, ...values, token } })
   } catch (err) {
@@ -64,14 +69,14 @@ const handleCreateVerification = async (result, dispatch, props) => {
 
 const enhancer = compose(
   withState('step', 'setStep', { page: 'loading', options: {} }),
-  connect(selectors, actions),
+  connect(
+    selectors,
+    actions,
+  ),
   lifecycle({
     async componentDidMount() {
       const {
-        updateUserVerification,
-        setStep,
-        account,
-        tosAccepted,
+        updateUserVerification, setStep, account, tosAccepted, t,
       } = this.props
 
       const applicantStatus = await updateUserVerification(account)
@@ -80,22 +85,22 @@ const enhancer = compose(
           // TOS accepted or not required and process started but not finished - need to restart in order to get a new token
           return setStep({
             page: 'denied',
-            heading: 'Your Application was not completed',
-            reason: 'It seems your previous verification did not complete. Please try again.',
+            heading: t('verification.headings.application_not_completed'),
+            reason: t('verification.reasons.previous_not_completed'),
           })
         }
         if (applicantStatus === 'WAITING_FOR_APPROVAL') {
           return setStep({
             page: 'denied',
-            heading: 'Your Application is pending with our Verification Service',
-            reason: 'Please try again later. Check your E-Mails to continue with the verification process if you have not done so. Additionally, if you didn\'t receive an E-Mail, you can retry the verification below.',
+            heading: t('verification.headings.waiting_for_approval'),
+            reason: t('verification.reasons.verification_pending'),
           })
         }
         if (applicantStatus === 'DENIED') {
           // TOS accepted or not required and application denied
           return setStep({
             page: 'denied',
-            reason: 'Unfortunately, you didn’t pass the verification process. Please get in contact with OnFido.com for further information.',
+            reason: t('verification.reasons.application_denied'),
           })
         }
         if (applicantStatus === 'ACCEPTED') {
@@ -132,6 +137,7 @@ const enhancer = compose(
       }
     },
   }),
+  withNamespaces(),
 )
 
 export default enhancer(OnFido)
