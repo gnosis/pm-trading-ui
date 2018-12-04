@@ -16,7 +16,7 @@ const {
 
 const footerText = require(`assets/content/${fileName || 'footer'}.md`)
 
-const Footer = ({ version }) => {
+const Footer = ({ version, t }) => {
   let text
 
   if (type === 'text') {

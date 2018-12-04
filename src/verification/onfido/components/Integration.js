@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import classnames from 'classnames/bind'
-import { lifecycle } from 'recompose'
+import { compose, lifecycle } from 'recompose'
 import { getFeatureConfig } from 'utils/features'
 
 import Onfido from 'onfido-sdk-ui'
@@ -12,9 +13,11 @@ const cx = classnames.bind(styles)
 
 const tournamentConfig = getFeatureConfig('tournament')
 
-const OnFidoIntegration = ({ closeModal, canClose }) => (
+const dontCloseWarning = (msg, close) => () => (window.confirm(msg) ? close() : undefined) // sorry
+
+const OnFidoIntegration = ({ closeModal, canClose, t }) => (
   <>
-    {canClose && <button type="button" className={cx('closeButton')} onClick={closeModal} />}
+    <button type="button" className={cx('closeButton')} onClick={canClose ? closeModal : dontCloseWarning(t('verification.dont_close'), closeModal)} />
     <div id="onfido-mount" className={cx('onfido-wrapper')} />
   </>
 )
@@ -28,47 +31,49 @@ OnFidoIntegration.defaultProps = {
   canClose: false,
 }
 
-const enhancer = lifecycle({
-  async componentDidMount() {
-    const {
-      token, startUserReport, account, setStep, t,
-    } = this.props
+const enhancer = compose(
+  lifecycle({
+    async componentDidMount() {
+      const {
+        token, startUserReport, account, setStep, t,
+      } = this.props
 
-    Onfido.init({
-      // the JWT token that you generated earlier on
-      token,
-      // id of the element you want to mount the component on
-      containerId: 'onfido-mount',
-      useModal: false,
-      steps: [
-        {
-          type: 'welcome',
-          options: {
-            title: t('verification.headings.confirm_identity'),
-            descriptions: [
-              t('verification.have_to_verify_identity', {
-                appName: tournamentConfig.name || 'the application',
-              }),
-            ],
+      Onfido.init({
+        // the JWT token that you generated earlier on
+        token,
+        // id of the element you want to mount the component on
+        containerId: 'onfido-mount',
+        useModal: false,
+        steps: [
+          {
+            type: 'welcome',
+            options: {
+              title: t('verification.headings.confirm_identity'),
+              descriptions: [
+                t('verification.have_to_verify_identity', {
+                  appName: tournamentConfig.name || 'the application',
+                }),
+              ],
+            },
           },
-        },
-        'document',
-        'face',
-        {
-          type: 'complete',
-          options: {
-            message: t('verification.documents_submitted'),
-            submessage: t('verification.check_email'),
+          'document',
+          'face',
+          {
+            type: 'complete',
+            options: {
+              message: t('verification.documents_submitted'),
+              submessage: t('verification.check_email'),
+            },
           },
+        ],
+        onComplete: async () => {
+          await startUserReport(account)
+          setStep({ page: 'integration', options: { canClose: true, token } })
+          // You can now trigger your backend to start a new check
         },
-      ],
-      onComplete: async () => {
-        await startUserReport(account)
-        setStep({ page: 'integration', options: { canClose: true, token } })
-        // You can now trigger your backend to start a new check
-      },
-    })
-  },
-})
-
+      })
+    },
+  }),
+  withNamespaces(),
+)
 export default enhancer(OnFidoIntegration)
