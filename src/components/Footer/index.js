@@ -50,6 +50,7 @@ const Footer = ({ version, t }) => {
 
 Footer.propTypes = {
   version: PropTypes.string,
+  t: PropTypes.func.isRequired,
 }
 
 Footer.defaultProps = {
