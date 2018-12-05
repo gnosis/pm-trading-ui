@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import autobind from 'autobind-decorator'
 import classnames from 'classnames/bind'
 import Indefinite from 'components/Spinner/Indefinite'
 import { getFeatureConfig } from 'utils/features'
