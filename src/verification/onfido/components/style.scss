@@ -7,18 +7,24 @@
     font-family: "Montserrat", sans-serif !important;
   }
 
+  :global .onfido-sdk-ui-crossDevice-SwitchDevice-icon {
+    background-color: $brand-primary;
+  }
+
   // To select which type of identification you want to use, the icons need to be replaced
-  :global .onfido-sdk-ui-DocumentSelector-option:hover {
+  :global .onfido-sdk-ui-DocumentSelector-option {
     :global .onfido-sdk-ui-DocumentSelector-icon {
+      border-radius: 100%;
+
       &-passport {
         background-image: url('~assets/verification/onfido/id-type-passport.svg');
       }
 
-      &-license {
+      &-driving-licence {
         background-image: url('~assets/verification/onfido/id-type-driverlicense.svg');
       }
 
-      &-identity {
+      &-national-identity-card {
         background-image: url('~assets/verification/onfido/id-type-id.svg');
       }
 
@@ -29,7 +35,7 @@
   }
 
   // The Icons for the steps on how to use on mobile
-  :global .onfido-sdk-ui-Intro-stageIcon {
+  :global .onfido-sdk-ui-crossDevice-Intro-stageIcon {
     &-sms {
       background-image: url('~assets/verification/onfido/step1.svg');
     }
@@ -41,6 +47,10 @@
     &-return-computer {
       background-image: url('~assets/verification/onfido/step3.svg');
     }
+  }
+
+  :global .onfido-sdk-ui-crossDevice-MobileNotificationSent-icon {
+    background-image: url('~assets/verification/onfido/step1.svg');
   }
 
   // "Switch to Mobile Icon"
@@ -63,6 +73,12 @@
   /* We need to overwrite some styles from OnFido here */
   :global .onfido-sdk-ui-Theme-btn-primary {
     @include interfaceButton;
+  }
+
+  :global .onfido-sdk-ui-crossDevice-CrossDeviceLink-btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    font-size: 10px;
   }
 }
 

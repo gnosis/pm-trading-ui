@@ -180,6 +180,7 @@
     "try_again": "Try again",
     "sign_message": "Please sign the Metamask message in order to continue the verification process.",
     "documents_submitted": "Documents submitted",
+    "dont_close": "If you close the Modal, you'll have to enter your data again. Are you sure?",
     "check_email": "Please check your email to continue with the process.",
     "have_to_verify_identity": "In order to interact with {{appName}} you have to verify your Identity with OnFido.",
     "form": {

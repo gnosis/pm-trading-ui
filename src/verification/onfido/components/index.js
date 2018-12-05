@@ -13,10 +13,16 @@ const { name: applicationName = 'the application' } = getFeatureConfig('tourname
 
 const cx = classnames.bind(styles)
 
-const SignMessage = ({ t }) => <p>{t('verification.sign_message')}</p>
+const SignMessage = ({ t, closeModal }) => (
+  <div>
+    <button type="button" className={cx('closeButton')} onClick={closeModal} />
+    <p>{t('verification.sign_message')}</p>
+  </div>
+)
 
 SignMessage.propTypes = {
   t: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
 }
 
 const DeniedMessage = ({
