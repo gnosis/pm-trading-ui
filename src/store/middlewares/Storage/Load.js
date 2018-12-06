@@ -17,7 +17,6 @@ const middleware = (storage) => {
         let payload
         try {
           const decoded = Buffer.from(stringPayload, 'base64').toString('ascii')
-
           payload = JSON.parse(decoded)
           store.dispatch(actions.loadStorage(payload))
         } catch (e) {
