@@ -30,7 +30,6 @@ const saveStorage = throttle((store, storage, options) => {
   }
 
   const stringStorage = JSON.stringify(payload)
-
   const encoded = Buffer.from(stringStorage).toString('base64')
   storage.setItem(STORAGE_KEY, encoded)
 }, STORAGE_SAVE_INTERVAL)
