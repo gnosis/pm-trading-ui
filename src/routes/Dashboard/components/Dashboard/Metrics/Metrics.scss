@@ -4,16 +4,18 @@
   width: 100%;
   margin-bottom: 96px;
 
+  @media (max-width: $screen-sm) {
+    margin-bottom: 30px;
+  }
+
   .inner {
     width: 100%;
     max-width: 100%;
     display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    
+
     @media (max-width: $screen-sm) {
       flex-direction: column;
-      align-items: baseline;
+      align-items: center;
     }
 
     .metric {
@@ -22,7 +24,12 @@
       
       width: auto;
       margin-bottom: 12px;
-  
+      margin-right: 90px;
+
+      @media (max-width: $screen-sm) {
+        margin-right: 0;
+      }
+      
       .img {
         margin-right: 7px;
       }
