@@ -77,42 +77,51 @@ class OnFido extends Component {
 
   navigateUser = async () => {
     const {
-      tosAccepted, t, closeModal, setStep, updateUserVerification, account,
+      tosAccepted, t, closeModal, setStep, updateUserVerification, account, openModal,
     } = this.props
     const applicantStatus = await updateUserVerification(account)
+
+    if (applicantStatus === 'ACCEPTED' && !tosAccepted) {
+      openModal('ModalAcceptTOS')
+      return
+    }
 
     if (tosAccepted) {
       if (applicantStatus === 'PENDING_DOCUMENT_UPLOAD') {
         // TOS accepted or not required and process started but not finished - need to restart in order to get a new token
-        return setStep({
+        setStep({
           page: 'denied',
           heading: t('verification.headings.application_not_completed'),
           reason: t('verification.reasons.previous_not_completed'),
         })
+        return
       }
       if (applicantStatus === 'WAITING_FOR_APPROVAL') {
-        return setStep({
+        setStep({
           page: 'denied',
           heading: t('verification.headings.waiting_for_approval'),
           reason: t('verification.reasons.verification_pending'),
         })
+        return
       }
       if (applicantStatus === 'DENIED') {
         // TOS accepted or not required and application denied
-        return setStep({
+        setStep({
           page: 'denied',
           reason: t('verification.reasons.application_denied'),
         })
+        return
       }
       if (applicantStatus === 'ACCEPTED') {
         // TOS accepted and application accepted - should be able to connect now
         // updateUserVerification will set the state entry about a finished verification if it wasnt set before.
-        return closeModal()
+        closeModal()
+        return
       }
     }
 
     // TOS not accepted but required, wait until signature and message signature to let the user know if their application was denied or accepted.
-    return setStep({
+    setStep({
       page: 'welcome',
     })
   }

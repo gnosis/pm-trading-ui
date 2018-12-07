@@ -9,8 +9,8 @@ import actions from './store/actions'
 import selectors from './store/selectors'
 
 const enhancer = compose(
-  connect(selectors, actions),
   withRouter,
+  connect(selectors, actions),
   withNamespaces(),
 )
 
