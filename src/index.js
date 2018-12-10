@@ -1,23 +1,19 @@
-import 'babel-polyfill'
+import '@babel/polyfill'
 import 'whatwg-fetch'
 import Raven from 'raven-js'
 import RootComponent from 'components/Root'
-import { initProviders } from 'integrations/store/actions'
-import { initReadOnlyGnosis } from 'store/actions/blockchain'
+import { initReadOnlyGnosis, updateCollateralToken, requestTargetNetworkId } from 'store/actions/blockchain'
+import { getLastUsedProvider } from 'integrations/utils'
 import Decimal from 'decimal.js'
 import React from 'react'
 
 import ReactDOM from 'react-dom'
 import 'scss/style.scss'
-import { isFeatureEnabled, getProviderConfig } from 'utils/features'
+import store from 'store'
 
-import { WALLET_PROVIDER } from 'integrations/constants'
-
-import store from './store'
 import { setMomentRelativeTime, setMomentDurationFormat } from './setup'
 
-const providerConfig = getProviderConfig()
-const tournamentEnabled = isFeatureEnabled('tournament')
+const lastUsedProvider = getLastUsedProvider()
 
 setMomentRelativeTime()
 setMomentDurationFormat()
@@ -25,12 +21,16 @@ setMomentDurationFormat()
 // load data from localstorage
 store.dispatch({ type: 'INIT' })
 store.dispatch(initReadOnlyGnosis())
-if (!tournamentEnabled) {
-  store.dispatch(initProviders())
-} else {
-  const tournamentProvider = WALLET_PROVIDER[providerConfig.default]
-  store.dispatch(initProviders({ providers: [WALLET_PROVIDER.REMOTE, tournamentProvider] }))
+store.dispatch(updateCollateralToken())
+store.dispatch({ type: 'CHECK_AVAILABLE_PROVIDERS' })
+store.dispatch(requestTargetNetworkId())
+
+if (lastUsedProvider) {
+  store.dispatch({ type: 'TRY_TO_INIT_LAST_USED_PROVIDER', payload: lastUsedProvider })
 }
+
+// TODO: Add remote provider for NODE_ENV=development
+// store.dispatch(initProviders({ provider: WALLET_PROVIDER.REMOTE }))
 
 Decimal.set({ toExpPos: 9999, precision: 50 })
 

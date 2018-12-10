@@ -9,16 +9,6 @@ const NETWORK_TIMEOUT = 10000
 class Status extends InjectedWeb3 {
   static providerName = WALLET_PROVIDER.STATUS
 
-  checkIfInstalled() {
-    return hasStatus()
-  }
-
-  /**
-   * Provider with highest priority starts off as active, if other providers are also available.
-   * This allows "fallback providers" like a remote etherium host to be used as a last resort.
-   */
-  static providerPriority = 90
-
   static watcherInterval = 1000
 
   constructor() {
@@ -28,6 +18,10 @@ class Status extends InjectedWeb3 {
       this.watch('balance', this.getBalance)
       this.watch('networkId', this.getNetworkId)
     }
+  }
+
+  checkIfInstalled() {
+    return hasStatus()
   }
 
   /**

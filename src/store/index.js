@@ -1,8 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 // import RavenIntegration from 'utils/raven'
-
-import Blockchain from 'store/middlewares/Blockchain'
 import Providers from 'store/middlewares/Providers'
 // import Intercom from 'middlewares/Intercom'
 
@@ -17,7 +15,6 @@ import reducer from 'store/reducers'
 const middlewares = [
   thunk,
   Notifications,
-  Blockchain,
   Providers,
   SessionStorageLoad,
   LocalStorageLoad,
