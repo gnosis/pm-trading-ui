@@ -7,10 +7,7 @@ import Providers from 'store/middlewares/Providers'
 // import Intercom from 'middlewares/Intercom'
 
 import {
-  LocalStorageLoad,
-  LocalStorageDump,
-  SessionStorageLoad,
-  SessionStorageDump,
+  LocalStorageLoad, LocalStorageDump, SessionStorageLoad, SessionStorageDump,
 } from 'store/middlewares/Storage'
 
 import Notifications from 'store/middlewares/Notifications'
@@ -30,15 +27,13 @@ const middlewares = [
   // Intercom,
 ]
 
-const enhancers = [
-  applyMiddleware(...middlewares),
-]
+const enhancers = [applyMiddleware(...middlewares)]
 
 /* global window */
-if (window.devToolsExtension) {
-  enhancers.push(window.devToolsExtension())
-}
+const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ // eslint-disable-line
+  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) // eslint-disable-line
+  : compose
 
-const store = createStore(reducer, compose(...enhancers))
+const store = createStore(reducer, composeEnhancers(...enhancers))
 
 export default store

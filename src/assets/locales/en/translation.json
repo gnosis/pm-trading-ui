@@ -2,6 +2,11 @@
   "loading": "Loading...",
   "application": "the Application",
   "and": "and",
+  "deterministic": "deterministic name",
+  "address": "address",
+  "wallet_display_type": "{{text}} (Click to display {{otherType}})",
+  "footer_md": "Trading on prediction markets carries a high degree of financial risk to your capital.  Please read our full [Risk Disclaimer](/assets/content/mainnet/RiskDisclaimerPolicy.html), [Privacy Policy](/assets/PrivacyPolicy.html) and [Terms of Service](/assets/content/mainnet/TermsOfService.html) before trading. – [Imprint](/assets/content/mainnet/Imprint.html)",
+  "footer_tournament_md": "Olympia tournament is a testnet alpha for the sole purpose of collecting user experience feedback. Due to the stake of OLY as \"play money\" no one will face any financial risks. Please read our full [Privacy Policy](/assets/content/PrivacyPolicy.html), [Cookie Policy](/assets/content/olympia/CookiePolicy.html) and [Terms of Service](/assets/content/olympia/TermsOfService.html) before trading. – [Imprint](/assets/content/olympia/Imprint.html)",
   "header": {
     "markets": "Markets",
     "dashboard": "Dashboard",
@@ -12,7 +17,9 @@
     "connect_wallet": "Connect a Wallet",
     "using_provider": "You are connected via {{provider}}",
     "wrapped_ether_title": "Your balance is calculated as the sum of your ETH and Wrapped-ETH balance.",
-    "wrapped_ether_weth_link": "What's wrapped Ether?"
+    "wrapped_ether_weth_link": "What's wrapped Ether?",
+    "cookie_disclaimer": "We use cookies to give you the best experience and to help improve our website. Please read our <1>Cookie Policy</1> for more information. By clicking \"Accept Cookies\", you agree to the storing of cookies on your device to enhance site navigation and analyze site usage.",
+    "accept_cookies": "Accept Cookies"
   },
   "markets": {
     "list_title": "Market Overview",
@@ -166,12 +173,60 @@
     "instructions": "Please unlock your MetaMask wallet to start using {applicationName}."
   },
   "verification": {
+    "try_again": "Try again",
+    "sign_message": "Please sign the Metamask message in order to continue the verification process.",
+    "documents_submitted": "Documents submitted",
+    "dont_close": "If you close the Modal, you'll have to enter your data again. Are you sure?",
+    "check_email": "Please check your email to continue with the process.",
+    "have_to_verify_identity": "In order to interact with {{appName}} you have to verify your Identity with OnFido.",
+    "form": {
+      "firstname": "First Name",
+      "lastname": "Last Name",
+      "email": "E-Mail",
+      "verify": "Verify",
+      "already_accepted_tos": "You already accepted the terms of conditions. Please start the verification process by following the instructions."
+    },
     "errors": {
       "not_loaded": "Our User Verification Integration could not be loaded.",
       "not_found": "Sorry for the inconvience, please try again later!"
+    },
+    "reasons": {
+      "application_denied": "Unfortunately, you didn’t pass the verification process. Please get in contact with OnFido.com for further information.",
+      "signature_failed": "Your Message Signature was rejected. Please try again, and make sure you're using the latest version of your wallet-provider.",
+      "previous_not_completed": "It seems your previous verification did not complete. Please try again.",
+      "verification_pending": "Please try again later. Check your E-Mails to continue with the verification process if you have not done so. Additionally, if you didn't receive an E-Mail, you can retry the verification below."
+    },
+    "headings": {
+      "application_not_completed": "Your application was not completed",
+      "waiting_for_approval": "Your application is pending with our Verification Service",
+      "denied_default": "Sorry, you currently can't interact with {{applicationName}}",
+      "confirm_identity": "Confirm your Identity"
+    },
+    "validation": {
+      "required": "This field is required",
+      "valid_email": "Requires a valid E-Mail address"
     }
   },
   "warning": {
     "price_changed": "The transaction could not be processed because the trading price changed. <br />Please check the new price and try again."
+  },
+  "scoreboard": {
+    "heading": "Scoreboard",
+    "explanation_ranking": "The total score is calculated based on the sum of predicted profits and {{tokenSymbol}} tokens each wallet holds. Scores are updated every hour.",
+    "no_entries": "No entries in Scoreboard yet",
+    "your_account": "= YOUR ACCOUNT",
+    "table": {
+      "current_rank": "#",
+      "diff_rank": "Change (24h)",
+      "account": "User",
+      "score": "Total Score ({{tokenSymbol}})",
+      "balance": "Total Balance ({{tokenSymbol}})",
+      "predicted_profit": "Predicted Profits ({{tokenSymbol}})",
+      "badge": "Badge",
+      "reward": "Reward"
+    }
+  },
+  "form": {
+    "field_required": "This field is required"
   }
 }

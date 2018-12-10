@@ -28,9 +28,7 @@
       "url": "https://kyc.staging.gnosisdev.com/v1"
     }
   },
-  "providers": {
-    "default": "METAMASK"
-  },
+  "providers": ["METAMASK", "STATUS", "TRUST"],
   "legalCompliance": {
     "enabled": true
   }
