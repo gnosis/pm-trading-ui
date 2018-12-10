@@ -53,7 +53,7 @@ const Infos = ({
 
   const embeddingCode = generateEmbeddingCode(market.address)
   const marketUrl = `${window.location.origin}/markets/${market.address}`
-  const embeddingUrl = `${window.location.origin}/embedded/${market.address}`
+  const embeddingUrl = `${window.location.origin}/embedded/#/${market.address}`
 
   return (
     <div className={cx('marketInfoСontainer', 'col-xs-10 col-xs-offset-1 col-sm-3 col-sm-offset-0')}>
