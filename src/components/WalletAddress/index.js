@@ -22,7 +22,7 @@ class WalletAddress extends Component {
   }
 
   onAddressClick = () => {
-    this.setState(() => ({ showAddress: !this.state.showAddress }))
+    this.setState((prevState) => ({ showAddress: !prevState.showAddress}))
   }
 
   getText() {
@@ -41,7 +41,7 @@ class WalletAddress extends Component {
   }
 
   render() {
-    const { showAddress } = this.state
+    const { showAddress, t } = this.state
 
     const changeToVarText = showAddress ? 'deterministic' : 'address'
     const text = this.getText()
@@ -59,7 +59,7 @@ class WalletAddress extends Component {
 
 WalletAddress.propTypes = {
   t: PropTypes.func.isRequired,
-  address: PropTypes.string,
+  address: PropTypes.string,isRequired,,
 }
 
 export default withNamespaces()(WalletAddress)

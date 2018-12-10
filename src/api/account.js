@@ -1,4 +1,4 @@
-import { weiToEth, hexWithPrefix, hexWithoutPrefix } from 'utils/helpers'
+import { weiToEth, hexWithPrefix } from 'utils/helpers'
 import Gnosis from '@gnosis.pm/pm-js/'
 import * as api from 'api'
 
