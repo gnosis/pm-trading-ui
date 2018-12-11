@@ -82,6 +82,11 @@ deploy:
   skip_cleanup: true
   on:
     branch: development
+- provider: script
+  script: ~/.local/bin/aws s3 sync dist/assets s3://trading-assets-development/assets
+  skip_cleanup: true
+  on:
+    branch: development
 
   # https://trading.staging.gnosisdev.com/
 - provider: s3
@@ -108,13 +113,32 @@ deploy:
   #  - npm run build-config mainnet/staging
   on:
     branch: master
-  # Prepare releases
+- provider: s3
+  bucket: trading-assets-staging
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  access_key_id: $AWS_ACCESS_KEY_ID
+  skip_cleanup: true
+  local_dir: dist/assets
+  upload-dir: assets
+  #before_deploy:
+  #  - npm run build-config mainnet/staging
+  on:
+    branch: master
 - provider: s3
   bucket: management-staging
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   access_key_id: $AWS_ACCESS_KEY_ID
   skip_cleanup: true
   local_dir: dist/interface
+  upload-dir: releases/$TRAVIS_TAG
+  on:
+    tags: true
+- provider: s3
+  bucket: management-staging
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  access_key_id: $AWS_ACCESS_KEY_ID
+  skip_cleanup: true
+  local_dir: dist/assets
   upload-dir: releases/$TRAVIS_TAG
   on:
     tags: true
