@@ -55,6 +55,7 @@ export const signMessage = async (rawMessage) => {
   const s = gnosis.web3.toBigNumber(`0x${signature.slice(66, 130)}`)
   const v = gnosis.web3.toBigNumber(`0x${signature.slice(130, 132)}`)
 
+  /*
   const validation = web3.eth.accounts.recover({
     messageHash: web3.utils.sha3(`\x19Ethereum Signed Message:\n${message.length}${message}`),
     r: `0x${signature.slice(2, 66)}`,
@@ -62,7 +63,6 @@ export const signMessage = async (rawMessage) => {
     v: `0x${signature.slice(130, 132)}`,
   })
 
-  /*
   if (validation.toLowerCase() !== account.toLowerCase()) {
     console.log(`GOT ACCOUNT: ${validation}`)
     console.log(`EXPECTED: ${account}`)
