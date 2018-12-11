@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Trans, withNamespaces } from 'react-i18next'
 import cn from 'classnames/bind'
 import autobind from 'autobind-decorator'
 import CSSTransition from 'react-transition-group/CSSTransition'
@@ -98,7 +99,7 @@ class CookieBanner extends Component {
   }
 
   render() {
-    const { options, selected } = this.props
+    const { options, selected, t } = this.props
     const { shown } = this.state
 
     const animationClassNames = {
@@ -112,9 +113,11 @@ class CookieBanner extends Component {
       <CSSTransition in={shown} classNames={animationClassNames} timeout={300} unmountOnExit>
         <div className={cx('cookieBar')}>
           <p>
-            We use cookies to give you the best experience and to help improve our website. Please read our{' '}
-            <a href="/assets/content/CookiePolicy.html">Cookie Policy</a> for more information. By clicking &quot;Accept Cookies,&quot; you agree
-            to the storing of cookies on your device to enhance site navigation and analyze site usage.
+            <Trans key="header.cookie_disclaimer">
+              We use cookies to give you the best experience and to help improve our website. Please read our
+              <a href="/assets/content/CookiePolicy.html">Cookie Policy</a> for more information. By clicking &quot;Accept Cookies,&quot; you agree
+              to the storing of cookies on your device to enhance site navigation and analyze site usage.
+            </Trans>
           </p>
           <div className={cx('settings')}>
             <span className={cx('options')}>
@@ -131,7 +134,7 @@ class CookieBanner extends Component {
               ))}
             </span>
             <button type="button" onClick={this.handleAcceptCookies} className={cx('button', 'accept')}>
-              Accept Cookies
+              {t('header.accept_cookies')}
             </button>
           </div>
           <div className={cx('closeButton')} onClick={this.handleClose} />
@@ -148,6 +151,7 @@ CookieBanner.propTypes = {
       initFunc: PropTypes.func.isRequired,
     }),
   ).isRequired,
+  t: PropTypes.func.isRequired,
   selected: PropTypes.arrayOf(PropTypes.string),
   display: PropTypes.bool,
   onChange: PropTypes.func,
@@ -163,4 +167,4 @@ CookieBanner.defaultProps = {
   onHide: () => {},
 }
 
-export default CookieBanner
+export default withNamespaces()(CookieBanner)

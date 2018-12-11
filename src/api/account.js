@@ -1,4 +1,4 @@
-import { weiToEth, hexWithPrefix, hexWithoutPrefix } from 'utils/helpers'
+import { weiToEth, hexWithPrefix } from 'utils/helpers'
 import Gnosis from '@gnosis.pm/pm-js/'
 import * as api from 'api'
 
@@ -43,7 +43,7 @@ export const signMessage = async (message) => {
   const gnosis = await api.getGnosisConnection()
   const account = await getCurrentAccount()
 
-  const hashedMessage = (Buffer.from(message)).toString('hex')
+  const hashedMessage = (Buffer.from(message, 'utf8')).toString('hex')
 
   const signature = await new Promise((resolve, reject) => gnosis.web3.personal.sign(hashedMessage, account, 'no-password', (error, data) => {
     if (error) {

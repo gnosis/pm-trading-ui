@@ -4,13 +4,18 @@ import StorageDumper from './Dump'
 export * from './actions'
 
 const localstorageOptions = {
-  whitelist: ['transactions.log', 'integrations.accountSettings'],
+  whitelist: [
+    'transactions.log',
+    'integrations.accountSettings',
+    'blockchain.targetNetworkId',
+    'integrations.documentsAccepted',
+  ],
 }
 export const LocalStorageDump = StorageDumper(window.localStorage, localstorageOptions)
 export const LocalStorageLoad = StorageLoader(window.localStorage, localstorageOptions)
 
 const sessionstorageOptions = {
-  whitelist: ['modal', 'integrations.documentsAccepted'],
+  whitelist: ['modal'],
 }
 export const SessionStorageDump = StorageDumper(window.sessionStorage, sessionstorageOptions)
 export const SessionStorageLoad = StorageLoader(window.sessionStorage, sessionstorageOptions)

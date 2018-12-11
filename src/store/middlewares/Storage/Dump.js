@@ -47,8 +47,8 @@ const middleware = (storage, whitelist) => {
     next(action)
 
     // save after action has been finished
-    const isActionIgnored = IGNORE_ACTIONS.indexOf(action) === -1
-    if (isActionIgnored) {
+    const isActionIgnored = IGNORE_ACTIONS.indexOf(action.type) !== -1
+    if (!isActionIgnored) {
       saveStorage(store, storage, whitelist)
     }
   }
