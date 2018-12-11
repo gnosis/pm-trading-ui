@@ -140,9 +140,9 @@
       "failed_tx_ask_support": "Unfortunately, the transaction failed. Please try again or contact our support for further assistance."
     }
   },
-  "metamask": {
-    "install_metamask": "Install Metamask",
-    "missing": "Metamask is currently not installed or detected. <1>Please download and install Metamask</1> to start using {{name}}"
+  "install_provider": {
+    "heading": "Install {{provider}}",
+    "instructions": "{{provider}} is currently not installed or detected. <1>Please download and install {{provider}}</1> to start using {{application}}"
   },
   "register_wallet": {
     "heading": "Register wallet address",
@@ -160,10 +160,6 @@
     "failed_tx_ask_support": "Sorry, the transaction failed. Please try again later or contact us!",
     "ethereum_wallet_address": "Ethereum Address",
     "enter_valid_address": "Please enter a valid address"
-  },
-  "switch_network": {
-    "heading": "Switch to the {{targetNetwork}} Network",
-    "instructions": "Your provider is not currently set to the {{targetNetwork}} network. Please switch to {{targetNetwork}} and make sure your wallet is unlocked to start using {{applicationName}}."
   },
   "transaction_explanations": {
     "heading": "We will ask you to approve the following transactions:"
@@ -225,6 +221,10 @@
       "badge": "Badge",
       "reward": "Reward"
     }
+  },
+  "select_provider": {
+    "heading": "How would you like to access your wallet?",
+    "switch_network": "To use the interface, your wallet has to be connected to the {{targetNetwork}} network."
   },
   "form": {
     "field_required": "This field is required"

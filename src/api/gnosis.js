@@ -5,8 +5,14 @@ import { isFeatureEnabled } from 'utils/features'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
 
-let gnosisInstance
-let gnosisROInstance
+const gnosisInstances = {
+  main: undefined,
+  readOnly: undefined,
+}
+
+if (window && process.env.NODE_ENV === 'development') {
+  window.gnosisInstances = {}
+}
 
 export const {
   calcLMSRCost, calcLMSROutcomeTokenCount, calcLMSRMarginalPrice, calcLMSRProfit,
@@ -20,14 +26,17 @@ const addApolloContracts = async (gnosisJsInstance) => {
   })
 }
 
-const waitForGnosisConnection = instance => new Promise((resolve, reject) => {
+const waitForGnosisConnection = type => new Promise((resolve, reject) => {
   let stillRunning = true
   const instanceCheck = setInterval(() => {
+    const instance = gnosisInstances[type]
     if (instance) {
       stillRunning = false
       clearInterval(instanceCheck)
       return resolve(instance)
     }
+
+    return undefined
   }, 50)
 
   setTimeout(() => {
@@ -42,8 +51,8 @@ const waitForGnosisConnection = instance => new Promise((resolve, reject) => {
  * Initializes connection to GnosisJS
  * @param {*dictionary} GNOSIS_OPTIONS
  */
-export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
-  if (gnosisInstance) return
+export const initGnosisConnection = type => async (GNOSIS_OPTIONS) => {
+  if (gnosisInstances[type]) return
 
   try {
     const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
@@ -52,38 +61,15 @@ export const initGnosisConnection = async (GNOSIS_OPTIONS) => {
       await addApolloContracts(gnosis)
     }
 
-    gnosisInstance = gnosis
+    gnosisInstances[type] = gnosis
 
     if (process.env.NODE_ENV === 'development') {
-      window.gnosis = gnosisInstance
+      window.gnosisInstances[type] = gnosis
     }
 
-    console.info('Gnosis Integration: connection established') // eslint-disable-line no-console
+    console.info(`Gnosis ${type} Integration: connection established`) // eslint-disable-line no-console
   } catch (err) {
-    console.error('Gnosis Integration: connection failed') // eslint-disable-line no-console
-    console.error(err) // eslint-disable-line no-console
-  }
-}
-
-export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
-  if (gnosisROInstance) return
-
-  try {
-    const gnosis = await Gnosis.create(GNOSIS_OPTIONS)
-
-    if (tournamentEnabled) {
-      await addApolloContracts(gnosis)
-    }
-
-    gnosisROInstance = gnosis
-
-    if (process.env.NODE_ENV === 'development') {
-      window.gnosisRO = gnosisROInstance
-    }
-
-    console.info('Gnosis RO Integration: connection established') // eslint-disable-line no-console
-  } catch (err) {
-    console.error('Gnosis RO Integration: connection failed') // eslint-disable-line no-console
+    console.error(`Gnosis ${type} Integration: connection failed`) // eslint-disable-line no-console
     console.error(err) // eslint-disable-line no-console
   }
 }
@@ -92,19 +78,31 @@ export const initReadOnlyGnosisConnection = async (GNOSIS_OPTIONS) => {
  * Returns an instance of the connection to GnosisJS
  */
 export const getGnosisConnection = async () => {
-  if (gnosisInstance) {
-    return gnosisInstance
+  if (gnosisInstances.main) {
+    return gnosisInstances.main
   }
 
-  return waitForGnosisConnection(gnosisInstance)
+  return waitForGnosisConnection('main')
 }
 
 export const getROGnosisConnection = async () => {
-  if (gnosisROInstance) {
-    return gnosisROInstance
+  if (gnosisInstances.readOnly) {
+    return gnosisInstances.readOnly
   }
 
-  return waitForGnosisConnection(gnosisROInstance)
+  return waitForGnosisConnection('readOnly')
 }
+
+export const getROGnosisNetworkId = () => new Promise(async (resolve, reject) => {
+  const gnosisRO = await getROGnosisConnection()
+
+  gnosisRO.web3.version.getNetwork((err, network) => {
+    if (err) {
+      reject(err)
+    }
+
+    resolve(network)
+  })
+})
 
 export default Gnosis

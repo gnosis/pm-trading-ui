@@ -1,4 +1,4 @@
-import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS } from 'integrations/constants'
+import { ETHEREUM_NETWORK, ETHEREUM_NETWORK_IDS, WALLET_STATUS } from 'integrations/constants'
 
 import { weiToEth } from 'utils/helpers'
 
@@ -18,6 +18,20 @@ class InjectedWeb3 {
    * @param {object} data - Data to write in this providers redux store. Usually includes provider priority
    */
   runProviderRegister() {}
+
+  /**
+   * Checks if provider is available and can be used to login
+   * @virtual
+   */
+  checkAvailability({ runProviderRegister, runProviderUpdate }) {
+    runProviderRegister(this)
+
+    const { providerName } = this.constructor
+    const providerInstalled = this.checkIfInstalled()
+    const status = providerInstalled ? WALLET_STATUS.READY_TO_INIT : WALLET_STATUS.NOT_INSTALLED
+
+    return runProviderUpdate({ provider: providerName, status })
+  }
 
   /**
    * Initializes the Integration
@@ -98,7 +112,7 @@ class InjectedWeb3 {
       if (this.walletEnabled) {
         this.walletEnabled = false
         this[property] = undefined
-        await this.runProviderUpdate(this, { available: false, [property]: undefined })
+        await this.runProviderUpdate(this, { status: WALLET_STATUS.ERROR, [property]: undefined })
       }
 
       return
@@ -113,7 +127,6 @@ class InjectedWeb3 {
 
     if (!this.walletEnabled) {
       this.walletEnabled = true
-      providerUpdate.available = true
     }
 
     this[property] = value
@@ -131,11 +144,15 @@ class InjectedWeb3 {
     this.account = undefined
     this.walletEnabled = false
 
+    if (this.watcherInterval) {
+      clearInterval(this.watcherInterval)
+    }
+
     await this.runProviderUpdate(this, {
       account: undefined,
       balance: undefined,
       network: undefined,
-      available: false,
+      status: WALLET_STATUS.READY_TO_INIT,
     })
   }
 }

@@ -9,16 +9,6 @@ const NETWORK_TIMEOUT = 10000
 class TrustApp extends InjectedWeb3 {
   static providerName = WALLET_PROVIDER.TRUST
 
-  checkIfInstalled() {
-    return hasTrust()
-  }
-
-  /**
-   * Provider with highest priority starts off as active, if other providers are also available.
-   * This allows "fallback providers" like a remote etherium host to be used as a last resort.
-   */
-  static providerPriority = 90
-
   static watcherInterval = 1000
 
   constructor() {
@@ -30,6 +20,9 @@ class TrustApp extends InjectedWeb3 {
     }
   }
 
+  checkIfInstalled() {
+    return hasTrust()
+  }
 
   /**
    * Tries to set connection to the blockchain
@@ -55,7 +48,7 @@ class TrustApp extends InjectedWeb3 {
    */
   async initialize(opts) {
     super.initialize(opts)
-    this.runProviderRegister(this, { priority: TrustApp.providerPriority })
+    this.runProviderRegister(this)
 
     this.walletEnabled = this.initWeb3()
 

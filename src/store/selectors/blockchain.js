@@ -9,7 +9,9 @@ import { weiToEth, hexWithPrefix, normalizeHex } from 'utils/helpers'
  */
 export const isGnosisInitialized = state => !!state.blockchain.get('gnosisInitialized')
 
-export const isConnectedToBlockchain = state => !!state.blockchain.get('gnosisInitialized') && !!state.blockchain.get('gnosisROInitialized')
+export const isConnectedToBlockchain = state => !!state.blockchain.get('gnosisROInitialized')
+
+export const getTargetNetworkId = state => state.blockchain.get('targetNetworkId')
 
 export const isGasCostFetched = (state, property) => state.blockchain.getIn(['gasCosts', property]) !== undefined
 
