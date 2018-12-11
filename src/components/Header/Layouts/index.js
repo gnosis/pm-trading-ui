@@ -14,14 +14,14 @@ const LoadableMobile = Loadable({
 
 const Layout = props => (
   <div>
-    <Desktop {...props}>
-      <LoadableDesktop />
+    <Desktop>
+      <LoadableDesktop {...props} />
     </Desktop>
-    <Tablet {...props}>
-      <LoadableMobile />
+    <Tablet>
+      <LoadableMobile {...props} />
     </Tablet>
-    <Mobile {...props}>
-      <LoadableMobile />
+    <Mobile>
+      <LoadableMobile {...props} />
     </Mobile>
   </div>
 )
