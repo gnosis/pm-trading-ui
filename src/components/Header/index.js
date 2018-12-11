@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import autobind from 'autobind-decorator'
 import Layout from 'components/Header/Layouts'
 import { providerPropType } from 'utils/shapes'
@@ -120,6 +121,7 @@ Header.propTypes = {
   acceptedTOS: PropTypes.bool,
   hasVerified: PropTypes.bool,
   fetchTournamentUserData: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 }
 
 Header.defaultProps = {
@@ -142,4 +144,4 @@ Header.defaultProps = {
   hasVerified: false,
 }
 
-export default Header
+export default withNamespaces()(Header)
