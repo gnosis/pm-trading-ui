@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { isConnectedToBlockchain } from 'store/selectors/blockchain'
 import { CSSTransition } from 'react-transition-group'
-import { closeModal } from 'store/actions/modal'
+import { openModal, closeModal } from 'store/actions/modal'
 import * as modals from 'containers/Modals'
 import style from './backdrop.scss'
 
@@ -13,7 +13,9 @@ const cx = cn.bind(style)
 
 class BackdropProvider extends Component {
   renderBackdropContent() {
-    const { modal, closeModal: closeModalProp, blockchainConnection } = this.props
+    const {
+      modal, closeModal: closeModalProp, openModal: openModalProp, blockchainConnection,
+    } = this.props
     const isOpen = modal.get('isOpen', false)
     const currentModal = modal.get('currentModal')
     const transactions = modal.get('transactions', [])
@@ -28,7 +30,7 @@ class BackdropProvider extends Component {
         throw Error('Invalid Modal Type', currentModal)
       }
 
-      return <Modal transactions={transactions} closeModal={closeModalProp} />
+      return <Modal transactions={transactions} closeModal={closeModalProp} openModal={openModalProp} />
     }
 
     return undefined
@@ -65,6 +67,7 @@ BackdropProvider.propTypes = {
   }).isRequired,
   children: PropTypes.node.isRequired,
   closeModal: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
   blockchainConnection: PropTypes.bool.isRequired,
 }
 
@@ -75,6 +78,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   closeModal: () => dispatch(closeModal()),
+  openModal: (modalName, modalData) => dispatch(openModal({ modalName, modalData })),
 })
 export default withRouter(
   connect(

@@ -1,9 +1,10 @@
-@import "~style/vars.scss";
+@import '~style/vars.scss';
 
 .marketList {
   min-height: 200px;
   margin-bottom: 30px;
-  >.title {
+
+  > .title {
     margin: 0 0 12px 0;
     font-size: 12px;
     text-transform: uppercase;
@@ -11,5 +12,9 @@
 
     font-weight: 400;
     letter-spacing: 0.5px;
-  } 
+  }
+
+  @media (max-width: $screen-sm) {
+    min-height: auto;
+  }
 }

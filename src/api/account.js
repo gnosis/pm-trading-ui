@@ -47,7 +47,6 @@ export const signMessage = async (rawMessage) => {
   const account = await getCurrentAccount()
 
   const message = rawMessage.replace(/[\u00A0-\u9999<>\&]/gim, i => `\\${i.charCodeAt(0)}`)
-
   web3.setProvider(gnosis.web3.currentProvider)
   const signature = await web3.eth.personal.sign(web3.utils.utf8ToHex(message), account, 'no-password')
 

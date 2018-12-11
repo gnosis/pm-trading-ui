@@ -2,4 +2,8 @@
 
 .category {
   min-height: 200px;
+
+  @media (max-width: $screen-sm) {
+    min-height: auto;
+  }
 }

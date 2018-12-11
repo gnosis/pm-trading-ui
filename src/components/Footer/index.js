@@ -1,4 +1,5 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
 import cn from 'classnames/bind'
@@ -9,19 +10,21 @@ import style from './Footer.scss'
 const cx = cn.bind(style)
 const {
   content: {
-    type, fileName, source, markdown,
+    type, fileName, key, source, markdown,
   },
 } = getFeatureConfig('footer')
 
 const footerText = require(`assets/content/${fileName || 'footer'}.md`)
 
-const Footer = ({ version }) => {
+const Footer = ({ version, t }) => {
   let text
 
   if (type === 'text') {
     text = source
   } else if (type === 'file') {
     text = footerText
+  } else if (type === 'translation') {
+    text = t(key)
   }
 
   return (
@@ -47,10 +50,11 @@ const Footer = ({ version }) => {
 
 Footer.propTypes = {
   version: PropTypes.string,
+  t: PropTypes.func.isRequired,
 }
 
 Footer.defaultProps = {
   version: '',
 }
 
-export default Footer
+export default withNamespaces()(Footer)

@@ -5,7 +5,6 @@ import autobind from 'autobind-decorator'
 import Layout from 'components/Header/Layouts'
 import { providerPropType } from 'utils/shapes'
 import { isFeatureEnabled, getFeatureConfig } from 'utils/features'
-import { hasMetamask } from 'integrations/metamask/utils'
 import { WALLET_PROVIDER } from 'integrations/constants'
 
 const tournamentEnabled = isFeatureEnabled('tournament')
@@ -17,7 +16,6 @@ const legalComplianceEnabled = isFeatureEnabled('legalCompliance')
 const { default: defaultProvider } = providerConfig
 
 const useMetamask = defaultProvider === WALLET_PROVIDER.METAMASK
-const useUport = defaultProvider === WALLET_PROVIDER.UPORT
 
 const BALANCE_FETCH_INTERVAL = 5000
 
@@ -57,38 +55,9 @@ class Header extends Component {
 
   @autobind
   async handleConnectWalletClick() {
-    const {
-      isConnectedToCorrectNetwork, lockedMetamask, acceptedTOS, openModal, initUport,
-    } = this.props
+    const { openModal } = this.props
 
-    const shouldInstallProviders = !hasMetamask() && !useUport
-    const shouldAcceptTOS = !acceptedTOS || !legalComplianceEnabled
-
-    if (shouldInstallProviders) {
-      openModal('ModalInstallMetamask')
-    } else if (useMetamask) {
-      if (lockedMetamask) {
-        openModal('ModalUnlockMetamask')
-      } else if (!isConnectedToCorrectNetwork) {
-        openModal('ModalSwitchNetwork')
-      } else if (requireVerification) {
-        // Verification has to implement the modals below:
-        // - Registration
-        // - Accept TOS
-        openModal('ModalVerification')
-      } else if (requireRegistration) {
-        // Registration has to implement the modals below
-        // - Accept TOS
-        openModal('ModalRegisterWallet')
-      } else if (shouldAcceptTOS) {
-        openModal('ModalAcceptTOS')
-      } else {
-        console.warn('should be connected, try refresh')
-        window.location.reload()
-      }
-    } else if (useUport) {
-      initUport()
-    }
+    openModal('ModalSelectProvider')
   }
 
   render() {
