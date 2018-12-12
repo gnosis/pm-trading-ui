@@ -49,6 +49,11 @@ deploy:
   skip_cleanup: true
   on:
     branch: development
+- provider: script
+  script: ~/.local/bin/aws s3 sync dist/assets s3://olympia-assets-development/assets
+  skip_cleanup: true
+  on:
+    branch: development
   # https://olympia.staging.gnosisdev.com/
 - provider: s3
   bucket: olympia-staging
@@ -59,6 +64,15 @@ deploy:
   upload-dir: current
   on:
     branch: master
+- provider: s3
+  bucket: olympia-assets-staging
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  access_key_id: $AWS_ACCESS_KEY_ID
+  skip_cleanup: true
+  local_dir: dist/assets
+  upload-dir: assets
+  on:
+    branch: master
   # Prepare releases
 - provider: s3
   bucket: olympia-staging
@@ -66,6 +80,15 @@ deploy:
   access_key_id: $AWS_ACCESS_KEY_ID
   skip_cleanup: true
   local_dir: dist/interface
+  upload-dir: releases/$TRAVIS_TAG
+  on:
+    tags: true
+- provider: s3
+  bucket: olympia-staging
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  access_key_id: $AWS_ACCESS_KEY_ID
+  skip_cleanup: true
+  local_dir: dist/assets
   upload-dir: releases/$TRAVIS_TAG
   on:
     tags: true
