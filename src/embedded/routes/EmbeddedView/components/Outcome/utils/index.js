@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 
 export const calcLMSRMarginalPrice = ({ netOutcomeTokensSold, funding, outcomeTokenIndex }) => {
-  const noTokensSold = netOutcomeTokensSold.filter(quantity => quantity === 0).length === 0
+  const noTokensSold = netOutcomeTokensSold.every(quantity => quantity === 0)
   if (funding === 0 && noTokensSold) {
     return new Decimal(1).div(netOutcomeTokensSold.length)
   }
