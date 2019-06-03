@@ -40,7 +40,7 @@ const buyMarketShares = (market, outcomeIndex, outcomeTokenCount, cost) => async
   const marketAllowance = await gnosis.etherToken.allowance(currentAccount, market.address)
   const approvalResetAmount = transactionCost.gte(marketAllowance.toString()) ? MAX_ALLOWANCE_WEI : null
 
-  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(
+  const collateralToken = await gnosis.contracts.ERC20.at(
     await gnosis.contracts.Event.at(market.eventAddress).collateralToken(),
   )
   const userCollateralTokenBalance = (await collateralToken.balanceOf(currentAccount)).toString()

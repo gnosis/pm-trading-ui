@@ -176,5 +176,5 @@
   },
   "warning": {
     "price_changed": "Ihre Transaktion wurde nicht verarbeitet weil sich die potentielle Marge verändert hat, durch den handel anderer Nutzer. <br />Bitte überprüfen Sie die Preise und versuchen sie es erneut."
-  },
+  }
 }

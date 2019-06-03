@@ -52,6 +52,7 @@ export const requestTokenSymbol = uTokenAddress => async (dispatch) => {
   try {
     tokenSymbol = await getTokenSymbol(tokenAddress)
   } catch (e) {
+    console.warn('Could not get token', e)
     tokenSymbol = ''
   } finally {
     dispatch(setTokenSymbol({ tokenAddress, tokenSymbol }))

@@ -19,8 +19,9 @@ const buyShares = async (
     .toString()
 
   // The user needs to deposit amount of collateral tokens willing to pay before performing the buy
-  const collateralToken = await gnosis.contracts.HumanFriendlyToken.at(await gnosis.contracts.Event.at(market.eventAddress).collateralToken())
+  const collateralToken = await gnosis.contracts.DetailedERC20.at(await gnosis.contracts.Event.at(market.eventAddress).collateralToken())
 
+  const defaultAccount = await api.getCurrentAccount()
   const collateralTokenName = await collateralToken.name()
 
   if ((collateralTokenName === 'Ether Token' || collateralTokenName === 'Wrapped Ether') && neededDepositAmount.gt(0)) {
@@ -32,8 +33,9 @@ const buyShares = async (
     market: market.address,
     outcomeTokenIndex,
     outcomeTokenCount: outcomeTokenCount.toString(),
-    cost: collateralTokenWei,
+    cost: collateralTokenWei.toString(),
     approvalResetAmount,
+    from: defaultAccount,
   })
 
   return collateralTokensPaid
