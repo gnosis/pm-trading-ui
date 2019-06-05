@@ -4,10 +4,10 @@
     "host": "tradingdb.staging.gnosisdev.com",
     "port": 443
   },
-  "ethereum": {
-    "protocol": "https",
-    "host": "rinkeby.infura.io",
-    "port": 443
+  "ethereum":{
+    "protocol":"https",
+    "host":"rinkeby.infura.io/v3/5e7a225e60184afaa7b888303def93b8",
+    "port":443
   },
   "htmlConfig": {
     "title": "Gnosis Trading Interface"

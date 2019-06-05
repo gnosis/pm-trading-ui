@@ -1,35 +1,122 @@
 {
-  "gnosisdb": {
-    "protocol": "https",
-    "host": "tradingdb.staging.gnosisdev.com",
-    "port": 443
+  "gnosisdb":{
+    "protocol":"https",
+    "host":"tradingdb.staging.gnosisdev.com",
+    "port":443
   },
-  "ethereum": {
-    "protocol": "https",
-    "host": "rinkeby.infura.io",
-    "port": 443
+  "ethereum":{
+    "protocol":"https",
+    "host":"rinkeby.infura.io/v3/5e7a225e60184afaa7b888303def93b8",
+    "port":443
   },
-  "htmlConfig": {
-    "title": "Gnosis Trading Interface"
-  },
-  "whitelist": {
-    "0x9eab578556de5782445ec036f25a41902ba19eeb": "Gnosis",
-    "0xe7e3272a84cf3fe180345b9f7234ba705eb5e2ca": "Mikhail"
-  },
-  "thirdparty": {
-    "googleAnalytics": {
-      "enabled": false
+  "gasPrice":{
+    "external":{
+      "url":"https://ethgasstation.info/json/ethgasAPI.json",
+      "type":"ETH_GAS_STATION"
     }
   },
+  "whitelist":{
+    "0x9eab578556de5782445ec036f25a41902ba19eeb":"Gnosis",
+    "0x12e9a5f7114ec981c37b1f5c4c63bcae8061760c": "Denis",
+    "0x3b376a725a36147db5d4b91abf1f3fdf97122f0d": "Devops"
+  },
+  "thirdparty":{
+    "googleAnalytics":{
+      "enabled":false
+    }
+  },
+  "logo":{
+    "regular":"assets/img/gnosis_logo.svg",
+    "small":"assets/img/gnosis_logo_icon.svg",
+    "favicon":"assets/img/gnosis_logo_favicon.png"
+  },
+  "tournament":{
+    "enabled":false
+  },
+  "collateralToken":{
+    "source":"address",
+    "options":{
+        "address": "0xc778417e063141139fce010982780140aa0cd5ab",
+        "isWrappedEther": true,
+        "symbol":"WETH",
+        "icon":"/assets/img/icons/icon_etherTokens.svg"
+    }
+  },
+  "providers": ["METAMASK", "STATUS", "TRUST"],
+  "scoreboard":{
+    "enabled":false
+  },
+  "gameGuide":{
+    "enabled":false
+  },
+  "legalCompliance": {
+    "enabled": false,
+    "documents": [
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "terms_of_service",
+        "title": "Terms of Service",
+        "file": "/assets/content/mainnet/TermsOfService.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "privacy_policy",
+        "title": "Privacy Policy",
+        "file": "/assets/content/PrivacyPolicy.html"
+      },
+      {
+        "type": "TOS_DOCUMENT",
+        "id": "risk_disclaimer",
+        "title": "Risk Disclaimer",
+        "file": "/assets/content/mainnet/RiskDisclaimerPolicy.html"
+      }
+    ]
+  },
   "verification": {
-    "enabled": true,
+    "enabled": false,
     "handler": "onfido",
     "options": {
       "url": "https://kyc.staging.gnosisdev.com/v1"
     }
   },
-  "providers": ["METAMASK", "STATUS", "TRUST"],
-  "legalCompliance": {
-    "enabled": true
+  "footer":{
+    "enabled":true,
+    "content":{
+      "type":"file",
+      "fileName":"footer",
+      "markdown":true
+    }
+  },
+  "rewardClaiming":{
+    "enabled":false,
+    "claimReward":{
+      "enabled":false,
+      "claimStart":"2018-06-01T12:00:00",
+      "claimUntil":"2018-07-01T12:00:00",
+      "contractAddress":"0xe89f27dafb9ba68c864e47a0bf1e430664e419af",
+      "networkId":42
+    }
+  },
+  "rewards":{
+    "enabled":false,
+    "rewardToken":{
+      "symbol":"RWD",
+      "contractAddress":"0x84b06a41095be5536b3e6db1ee641ebc2f38cfcb",
+      "networkId":3
+    }
+  },
+  "badges":{
+    "enabled":false,
+    "ranks":[
+
+    ]
+  },
+  "constants":{
+    "LIMIT_MARGIN":5,
+    "NOTIFICATION_TIMEOUT":60000,
+    "LOWEST_VALUE":0.001
+  },
+  "htmlConfig":{
+    "title":"Gnosis Trading Interface"
   }
 }
