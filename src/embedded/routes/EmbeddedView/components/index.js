@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import IndefiniteSpinner from 'components/Spinner/Indefinite'
+import Spinner from 'components/Spinner/Indefinite'
 
-import Market from 'routes/MarketList/components/Markets/Market'
+import Market from './Market'
 import NoMatch from './NoMatch'
 
 
@@ -27,7 +27,7 @@ const EmbeddedView = ({ requestStatus, market }) => {
     return <NoMatch />
   }
 
-  return <IndefiniteSpinner width={50} height={50} />
+  return <Spinner width={50} height={50} />
 }
 
 EmbeddedView.propTypes = {
