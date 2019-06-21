@@ -13,7 +13,7 @@ const cx = cn.bind(style)
 const getAverageCost = order => new Decimal(order.price).div(order.outcomeToken.outcomeTokenCount).toString()
 
 const TradeRow = ({
-  trade, outcomeColorStyle, collateralToken, tradeDate, outcomeName, tradeCost,
+  trade, outcomeColorStyle, collateralToken, tradeDate, outcomeName, tradeCost, t,
 }) => (
   <tr className={cx('shareTableRow')}>
     <td>

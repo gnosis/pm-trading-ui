@@ -107,6 +107,8 @@
     "order_type_sell": "Sell",
     "order_type_buy": "Buy",
     "submit_error": "Sorry - your investment couldn't be processed. Please ensure you have enough balance and filled all fields correctly",
+    "short": "Short",
+    "long": "Long",
     "errors": {
       "no_investment_entered": "Please enter an investment amount'",
       "invalid_amount": "Invalid amount entered",
